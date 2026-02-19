@@ -1,0 +1,23 @@
+{
+  "challenge_name": "Stellar Instant $2000",
+  "account_size": 2000,
+  "currency": "USD",
+  "profit_target_percent": 10,
+  "profit_target_amount": 200,
+  "max_daily_drawdown_percent": 5,
+  "max_daily_drawdown_amount": 100,
+  "max_total_drawdown_percent": 10,
+  "max_total_drawdown_amount": 200,
+  "min_trading_days": 5,
+  "leverage": 100,
+  "ea_allowed": true,
+  "news_trading_allowed": true,
+  "weekend_holding_allowed": false,
+  "min_trade_duration_seconds": 120,
+  "max_open_lots": 5.0,
+  "challenge_mode": {
+    "auto_stop_on_target": true,
+    "maintain_min_trading_days": true,
+    "min_lot_for_day_count": 0.01
+  }
+}
