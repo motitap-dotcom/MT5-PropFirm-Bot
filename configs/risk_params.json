@@ -1,23 +1,21 @@
 {
-  "_mode": "LIVE_CHALLENGE",
-  "_warning": "These are TIGHTENED parameters for real money challenge",
+  "_mode": "FUNDED_INSTANT",
+  "_warning": "TIGHTENED for 6% trailing drawdown - Stellar Instant. BE VERY CONSERVATIVE.",
 
   "risk_per_trade_percent": 0.5,
   "max_risk_per_trade_percent": 0.75,
   "min_risk_per_trade_percent": 0.25,
   "max_open_positions": 2,
-  "max_daily_trades": 8,
-  "max_consecutive_losses": 5,
+  "max_daily_trades": 6,
+  "max_consecutive_losses": 4,
   "min_risk_reward_ratio": 2.0,
 
   "drawdown_guards": {
-    "hard_daily_dd_percent": 5.0,
-    "hard_total_dd_percent": 10.0,
-    "soft_daily_dd_percent": 3.0,
-    "critical_daily_dd_percent": 4.0,
-    "soft_total_dd_percent": 7.0,
-    "critical_total_dd_percent": 9.0,
-    "_note": "Soft=halt new trades | Critical=close all | Hard=prop firm limit (never touch)"
+    "hard_total_dd_percent": 6.0,
+    "soft_total_dd_percent": 3.5,
+    "critical_total_dd_percent": 5.0,
+    "trailing_drawdown": true,
+    "_note": "6% TRAILING DD. Soft=reduce lot size | Critical=close all & halt | Hard=account blown (never reach)"
   },
 
   "spread_filter": {
@@ -30,7 +28,8 @@
     "minutes_before": 30,
     "minutes_after": 30,
     "filter_high_impact": true,
-    "filter_medium_impact": false
+    "filter_medium_impact": false,
+    "_note": "FundedNext caps profit at 40% for trades within 5 min of news"
   },
 
   "trailing_stop": {
@@ -56,12 +55,18 @@
   },
 
   "flash_crash_guard": {
-    "max_equity_drop_pct_per_tick": 2.0,
+    "max_equity_drop_pct_per_tick": 1.5,
     "connection_timeout_seconds": 120
   },
 
   "caution_mode": {
     "_note": "When approaching DD limits, lot size is halved automatically",
     "trigger_at_percent_of_soft_limit": 60
+  },
+
+  "consistency_rule": {
+    "enabled": true,
+    "max_single_day_profit_percent": 40,
+    "_note": "No single day can be more than 40% of total profit for payout eligibility"
   }
 }

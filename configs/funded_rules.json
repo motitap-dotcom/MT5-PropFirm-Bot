@@ -1,44 +1,54 @@
 {
-  "_description": "Rules for FUNDED account phase (after passing challenge)",
-  "_note": "Update these values when you receive your funded account",
+  "_description": "Rules for FundedNext Stellar Instant account",
 
   "account_size": 2000,
   "currency": "USD",
   "leverage": 100,
 
-  "max_daily_drawdown_percent": 5,
-  "max_total_drawdown_percent": 10,
+  "max_daily_drawdown_percent": 0,
+  "max_total_drawdown_percent": 6,
+  "trailing_drawdown": true,
+  "_dd_note": "6% trailing drawdown. No daily DD limit.",
 
-  "profit_split_percent": 80,
-  "min_withdrawal_amount": 50,
+  "profit_split_percent": 70,
+  "max_profit_split_percent": 80,
+  "min_withdrawal_amount": 250,
+  "min_profit_to_withdraw": 500,
   "has_profit_target": false,
   "profit_target_percent": 0,
 
   "ea_allowed": true,
   "news_trading_allowed": true,
-  "weekend_holding_allowed": false,
+  "news_profit_cap_percent": 40,
+  "weekend_holding_allowed": true,
 
   "risk_adjustments": {
-    "_note": "More conservative in funded mode to protect capital",
+    "_note": "Conservative for 6% trailing DD - protect capital",
     "risk_multiplier": 0.7,
-    "risk_per_trade_percent": 0.35,
-    "max_risk_per_trade_percent": 0.5,
+    "risk_per_trade_percent": 0.5,
+    "max_risk_per_trade_percent": 0.75,
     "max_open_positions": 2,
     "max_daily_trades": 6,
     "min_risk_reward_ratio": 2.0
   },
 
   "drawdown_guards": {
-    "soft_daily_dd_percent": 2.5,
-    "critical_daily_dd_percent": 3.5,
-    "soft_total_dd_percent": 6.0,
-    "critical_total_dd_percent": 8.0
+    "soft_total_dd_percent": 3.5,
+    "critical_total_dd_percent": 5.0,
+    "hard_total_dd_percent": 6.0,
+    "trailing_drawdown": true
+  },
+
+  "consistency_rule": {
+    "enabled": true,
+    "max_single_day_profit_percent": 40,
+    "_note": "Required for payout eligibility"
   },
 
   "scaling_rules": {
-    "_note": "Conditions for scaling up the account",
-    "enabled": false,
-    "profit_threshold_for_scaling": 10,
-    "scaling_increase_percent": 25
+    "enabled": true,
+    "every_months": 4,
+    "scaling_increase_percent": 40,
+    "max_account_size": 4000000
   }
 }

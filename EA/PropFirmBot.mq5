@@ -32,19 +32,19 @@
 input long     InpMagicNumber     = 202502;    // Magic Number
 input string   InpTradeComment    = "PFBot";   // Trade Comment
 
-// --- Account Phase ---
-input ENUM_ACCOUNT_PHASE InpAccountPhase = PHASE_CHALLENGE; // Account Phase
+// --- Account Phase (FundedNext Stellar Instant = FUNDED) ---
+input ENUM_ACCOUNT_PHASE InpAccountPhase = PHASE_FUNDED;  // Account Phase
 input double   InpAccountSize     = 2000;      // Account Size ($)
-input double   InpProfitTarget    = 10.0;      // Profit Target (%)
-input double   InpHardDailyDD     = 5.0;       // HARD Daily DD Limit (%) [PROP FIRM]
-input double   InpHardTotalDD     = 10.0;      // HARD Total DD Limit (%) [PROP FIRM]
-input bool     InpChallengeMode   = true;       // Challenge Mode (auto-stop at target)
-input int      InpMinTradingDays  = 5;          // Min Trading Days (Challenge)
+input double   InpProfitTarget    = 0;         // Profit Target (%) [0=none]
+input double   InpHardDailyDD     = 0;         // HARD Daily DD Limit (%) [0=none, Stellar Instant]
+input double   InpHardTotalDD     = 6.0;       // HARD Total DD Limit (%) [6% trailing]
+input bool     InpChallengeMode   = false;     // Challenge Mode (auto-stop at target)
+input int      InpMinTradingDays  = 0;         // Min Trading Days [0=none]
 
-// --- Funded Account Settings (used when phase=FUNDED) ---
-input double   InpFundedDailyDD   = 5.0;       // Funded: Daily DD (%)
-input double   InpFundedTotalDD   = 10.0;      // Funded: Total DD (%)
-input double   InpFundedProfitSplit = 80.0;     // Funded: Profit Split (%)
+// --- Funded Account Settings (FundedNext Stellar Instant) ---
+input double   InpFundedDailyDD   = 0;         // Funded: Daily DD (%) [0=none]
+input double   InpFundedTotalDD   = 6.0;       // Funded: Total DD (%) [6% trailing]
+input double   InpFundedProfitSplit = 70.0;    // Funded: Profit Split (%)
 
 // --- Strategy ---
 input ENUM_STRATEGY_TYPE InpStrategy = STRATEGY_SMC; // Primary Strategy

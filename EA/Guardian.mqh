@@ -53,15 +53,16 @@ private:
    datetime m_ea_start_time;
 
    // Hard limits (prop firm rules - NEVER breach)
-   double   m_hard_daily_dd_pct;    // 5%
-   double   m_hard_total_dd_pct;    // 10%
-   double   m_profit_target_pct;    // 10%
+   double   m_hard_daily_dd_pct;    // 0 = disabled (Stellar Instant)
+   double   m_hard_total_dd_pct;    // 6% for Stellar Instant
+   double   m_profit_target_pct;    // 0 = no target (Stellar Instant)
+   bool     m_trailing_dd;          // true = DD measured from equity high water mark
 
    // Soft limits (our safety buffers)
-   double   m_soft_daily_dd_pct;    // 3%
-   double   m_crit_daily_dd_pct;    // 4%
-   double   m_soft_total_dd_pct;    // 7%
-   double   m_crit_total_dd_pct;    // 9%
+   double   m_soft_daily_dd_pct;
+   double   m_crit_daily_dd_pct;
+   double   m_soft_total_dd_pct;    // 3.5% for 6% trailing
+   double   m_crit_total_dd_pct;    // 5.0% for 6% trailing
 
    // Circuit breakers
    int      m_max_consec_losses;
@@ -150,13 +151,14 @@ CGuardian::CGuardian()
    m_equity_high_water = 0;
    m_daily_reset_time = 0;
    m_ea_start_time = 0;
-   m_hard_daily_dd_pct = 5.0;
-   m_hard_total_dd_pct = 10.0;
-   m_profit_target_pct = 10.0;
-   m_soft_daily_dd_pct = 3.0;
-   m_crit_daily_dd_pct = 4.0;
-   m_soft_total_dd_pct = 7.0;
-   m_crit_total_dd_pct = 9.0;
+   m_hard_daily_dd_pct = 0;
+   m_hard_total_dd_pct = 6.0;
+   m_profit_target_pct = 0;
+   m_trailing_dd = true;
+   m_soft_daily_dd_pct = 0;
+   m_crit_daily_dd_pct = 0;
+   m_soft_total_dd_pct = 3.5;
+   m_crit_total_dd_pct = 5.0;
    m_max_consec_losses = 5;
    m_consec_losses = 0;
    m_max_daily_trades = 10;
@@ -190,17 +192,43 @@ bool CGuardian::Init(double balance, double hard_daily, double hard_total,
    m_hard_total_dd_pct  = hard_total;
    m_profit_target_pct  = target;
 
+   // Detect trailing DD mode (when daily DD is 0 or disabled)
+   m_trailing_dd = (hard_daily <= 0);
+
    // Auto-calculate safety buffers
-   m_soft_daily_dd_pct  = hard_daily - 2.0;   // 3% for 5% limit
-   m_crit_daily_dd_pct  = hard_daily - 1.0;   // 4% for 5% limit
-   m_soft_total_dd_pct  = hard_total - 3.0;   // 7% for 10% limit
-   m_crit_total_dd_pct  = hard_total - 1.0;   // 9% for 10% limit
+   if(hard_daily > 0)
+   {
+      m_soft_daily_dd_pct  = hard_daily - 2.0;
+      m_crit_daily_dd_pct  = hard_daily - 1.0;
+   }
+   else
+   {
+      // No daily DD limit (Stellar Instant)
+      m_soft_daily_dd_pct  = 0;
+      m_crit_daily_dd_pct  = 0;
+   }
+
+   if(m_trailing_dd)
+   {
+      // Trailing DD: tighter buffers since DD is from equity high water
+      m_soft_total_dd_pct  = hard_total * 0.58;  // ~3.5% for 6%
+      m_crit_total_dd_pct  = hard_total * 0.83;  // ~5.0% for 6%
+   }
+   else
+   {
+      m_soft_total_dd_pct  = hard_total - 3.0;
+      m_crit_total_dd_pct  = hard_total - 1.0;
+   }
 
    m_state = GUARDIAN_ACTIVE;
 
-   Log(StringFormat("INIT | Bal=$%.2f | Hard DD: %.1f%%/%.1f%% | Soft: %.1f%%/%.1f%% | Target: %.1f%%",
-       m_initial_balance, hard_daily, hard_total,
-       m_soft_daily_dd_pct, m_soft_total_dd_pct, target));
+   Log(StringFormat("INIT | Bal=$%.2f | %s DD: %.1f%% | Soft: %.1f%% | Crit: %.1f%% | Daily: %s | Target: %.1f%%",
+       m_initial_balance,
+       m_trailing_dd ? "TRAILING" : "FIXED",
+       hard_total,
+       m_soft_total_dd_pct, m_crit_total_dd_pct,
+       hard_daily > 0 ? StringFormat("%.1f%%", hard_daily) : "NONE",
+       target));
 
    return true;
 }
@@ -218,9 +246,21 @@ double CGuardian::CalcDailyDD()
 double CGuardian::CalcTotalDD()
 {
    double eq = AccountInfoDouble(ACCOUNT_EQUITY);
-   if(m_initial_balance <= 0) return 0;
-   double dd = m_initial_balance - eq;
-   return (dd > 0) ? (dd / m_initial_balance) * 100.0 : 0;
+
+   if(m_trailing_dd)
+   {
+      // TRAILING DD: measured from equity high water mark
+      if(m_equity_high_water <= 0) return 0;
+      double dd = m_equity_high_water - eq;
+      return (dd > 0) ? (dd / m_equity_high_water) * 100.0 : 0;
+   }
+   else
+   {
+      // FIXED DD: measured from initial balance
+      if(m_initial_balance <= 0) return 0;
+      double dd = m_initial_balance - eq;
+      return (dd > 0) ? (dd / m_initial_balance) * 100.0 : 0;
+   }
 }
 
 //+------------------------------------------------------------------+
@@ -252,7 +292,8 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
    double total_dd = CalcTotalDD();
 
    // ===== LAYER 1: ABSOLUTE HARD LIMITS (emergency) =====
-   if(daily_dd >= m_hard_daily_dd_pct - 0.5)
+   // Daily DD check (skip if no daily DD limit, e.g. Stellar Instant)
+   if(m_hard_daily_dd_pct > 0 && daily_dd >= m_hard_daily_dd_pct - 0.5)
    {
       m_state = GUARDIAN_SHUTDOWN;
       m_halt_reason = HALT_DAILY_DD_CRITICAL;
@@ -266,14 +307,15 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
    {
       m_state = GUARDIAN_SHUTDOWN;
       m_halt_reason = HALT_TOTAL_DD_CRITICAL;
-      m_halt_message = StringFormat("FATAL: Total DD %.2f%% near hard limit %.1f%%!", total_dd, m_hard_total_dd_pct);
+      m_halt_message = StringFormat("FATAL: %s DD %.2f%% near hard limit %.1f%%!",
+                       m_trailing_dd ? "Trailing" : "Total", total_dd, m_hard_total_dd_pct);
       DoAlert(m_halt_message, true);
-      ForceCloseAll("Hard total DD");
+      ForceCloseAll(m_trailing_dd ? "Hard trailing DD" : "Hard total DD");
       return m_state;
    }
 
-   // ===== LAYER 2: PROFIT TARGET =====
-   if(ProfitPct() >= m_profit_target_pct)
+   // ===== LAYER 2: PROFIT TARGET (skip if no target, e.g. Stellar Instant) =====
+   if(m_profit_target_pct > 0 && ProfitPct() >= m_profit_target_pct)
    {
       m_state = GUARDIAN_SHUTDOWN;
       m_halt_reason = HALT_TARGET_REACHED;
@@ -283,7 +325,8 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
    }
 
    // ===== LAYER 3: CRITICAL LIMITS (close all, halt) =====
-   if(daily_dd >= m_crit_daily_dd_pct)
+   // Daily DD critical (skip if disabled)
+   if(m_crit_daily_dd_pct > 0 && daily_dd >= m_crit_daily_dd_pct)
    {
       m_state = GUARDIAN_EMERGENCY;
       m_halt_reason = HALT_DAILY_DD_CRITICAL;
@@ -297,9 +340,10 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
    {
       m_state = GUARDIAN_EMERGENCY;
       m_halt_reason = HALT_TOTAL_DD_CRITICAL;
-      m_halt_message = StringFormat("Total DD %.2f%% >= critical %.1f%%", total_dd, m_crit_total_dd_pct);
+      m_halt_message = StringFormat("%s DD %.2f%% >= critical %.1f%%",
+                       m_trailing_dd ? "Trailing" : "Total", total_dd, m_crit_total_dd_pct);
       DoAlert(m_halt_message, true);
-      ForceCloseAll("Critical total DD");
+      ForceCloseAll("Critical trailing DD");
       return m_state;
    }
 
@@ -321,7 +365,7 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
    m_last_equity = eq;
 
    // ===== LAYER 4: SOFT LIMITS (halt new trades) =====
-   if(daily_dd >= m_soft_daily_dd_pct)
+   if(m_soft_daily_dd_pct > 0 && daily_dd >= m_soft_daily_dd_pct)
    {
       m_state = GUARDIAN_HALTED;
       m_halt_reason = HALT_DAILY_DD_SOFT;
@@ -334,7 +378,8 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
    {
       m_state = GUARDIAN_HALTED;
       m_halt_reason = HALT_TOTAL_DD_SOFT;
-      m_halt_message = StringFormat("Total DD %.2f%% >= soft %.1f%%", total_dd, m_soft_total_dd_pct);
+      m_halt_message = StringFormat("%s DD %.2f%% >= soft %.1f%%",
+                       m_trailing_dd ? "Trailing" : "Total", total_dd, m_soft_total_dd_pct);
       DoAlert(m_halt_message);
       return m_state;
    }
@@ -368,7 +413,7 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
    }
 
    // ===== LAYER 5: CAUTION (reduce risk) =====
-   if(daily_dd >= m_soft_daily_dd_pct * 0.6 || total_dd >= m_soft_total_dd_pct * 0.6)
+   if((m_soft_daily_dd_pct > 0 && daily_dd >= m_soft_daily_dd_pct * 0.6) || total_dd >= m_soft_total_dd_pct * 0.6)
    {
       m_state = GUARDIAN_CAUTION;
       m_halt_message = "Approaching DD limits - reduced risk";
@@ -587,17 +632,26 @@ string CGuardian::FullStatus()
       default:                st="???";        break;
    }
 
+   string dd_type = m_trailing_dd ? "Trailing" : "Total";
+   string daily_str = m_hard_daily_dd_pct > 0
+      ? StringFormat("Daily DD: %.2f%% [soft %.1f%% | crit %.1f%% | HARD %.1f%%]",
+                     CalcDailyDD(), m_soft_daily_dd_pct, m_crit_daily_dd_pct, m_hard_daily_dd_pct)
+      : "Daily DD: N/A (no limit)";
+   string target_str = m_profit_target_pct > 0
+      ? StringFormat("%.1f%%", m_profit_target_pct)
+      : "NONE";
+
    return StringFormat(
-      "%s | Bal $%.2f | Eq $%.2f\n"
-      "Daily DD: %.2f%% [soft %.1f%% | crit %.1f%% | HARD %.1f%%]\n"
-      "Total DD: %.2f%% [soft %.1f%% | crit %.1f%% | HARD %.1f%%]\n"
-      "Profit: %.2f%% / %.1f%% target\n"
+      "%s | Bal $%.2f | Eq $%.2f | HWM $%.2f\n"
+      "%s\n"
+      "%s DD: %.2f%% [soft %.1f%% | crit %.1f%% | HARD %.1f%%]\n"
+      "Profit: %.2f%% / %s target\n"
       "Today: %d trades | W%d L%d | +$%.2f -$%.2f\n"
       "ConsecL: %d/%d | Conn: %s%s",
-      st, AccountInfoDouble(ACCOUNT_BALANCE), AccountInfoDouble(ACCOUNT_EQUITY),
-      CalcDailyDD(), m_soft_daily_dd_pct, m_crit_daily_dd_pct, m_hard_daily_dd_pct,
-      CalcTotalDD(), m_soft_total_dd_pct, m_crit_total_dd_pct, m_hard_total_dd_pct,
-      ProfitPct(), m_profit_target_pct,
+      st, AccountInfoDouble(ACCOUNT_BALANCE), AccountInfoDouble(ACCOUNT_EQUITY), m_equity_high_water,
+      daily_str,
+      dd_type, CalcTotalDD(), m_soft_total_dd_pct, m_crit_total_dd_pct, m_hard_total_dd_pct,
+      ProfitPct(), target_str,
       m_daily_trade_count, m_today_wins, m_today_losses, m_today_profit, m_today_loss,
       m_consec_losses, m_max_consec_losses,
       m_conn_healthy ? "OK" : "BAD",

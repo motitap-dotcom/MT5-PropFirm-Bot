@@ -1,23 +1,50 @@
 {
-  "challenge_name": "Stellar Instant $2000",
+  "challenge_name": "FundedNext Stellar Instant $2000",
+  "account_type": "INSTANT_FUNDED",
   "account_size": 2000,
   "currency": "USD",
-  "profit_target_percent": 10,
-  "profit_target_amount": 200,
-  "max_daily_drawdown_percent": 5,
-  "max_daily_drawdown_amount": 100,
-  "max_total_drawdown_percent": 10,
-  "max_total_drawdown_amount": 200,
-  "min_trading_days": 5,
+
+  "profit_target_percent": 0,
+  "profit_target_amount": 0,
+  "_profit_note": "No profit target - instant funded account",
+
+  "max_daily_drawdown_percent": 0,
+  "max_daily_drawdown_amount": 0,
+  "_daily_dd_note": "Stellar Instant has NO daily drawdown limit",
+
+  "max_total_drawdown_percent": 6,
+  "max_total_drawdown_amount": 120,
+  "trailing_drawdown": true,
+  "_trailing_dd_note": "6% TRAILING drawdown from highest equity. Minimum equity = highest balance - 6%",
+
+  "min_trading_days": 0,
+  "_min_days_note": "No minimum trading days for Stellar Instant",
+
   "leverage": 100,
   "ea_allowed": true,
   "news_trading_allowed": true,
-  "weekend_holding_allowed": false,
-  "min_trade_duration_seconds": 120,
+  "news_profit_cap_percent": 40,
+  "_news_note": "Profit from trades within 5 min of high-impact news capped at 40%",
+
+  "weekend_holding_allowed": true,
+  "min_trade_duration_seconds": 0,
   "max_open_lots": 5.0,
-  "challenge_mode": {
-    "auto_stop_on_target": true,
-    "maintain_min_trading_days": true,
-    "min_lot_for_day_count": 0.01
+
+  "payout_rules": {
+    "on_demand_above_5_percent": true,
+    "minimum_14_days_below_5_percent": true,
+    "min_profit_to_withdraw": 500,
+    "min_withdrawal_amount": 250,
+    "profit_split_percent": 70,
+    "max_profit_split_percent": 80,
+    "consistency_rule_max_day_percent": 40,
+    "_note": "No single day can be more than 40% of total profit"
+  },
+
+  "scaling": {
+    "enabled": true,
+    "increase_percent": 40,
+    "every_months": 4,
+    "max_account_size": 4000000
   }
 }
