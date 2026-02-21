@@ -79,6 +79,10 @@ if (!(Test-Path $eaSourceDir)) {
     Write-Host "  C:\PropFirmBot\EA\Guardian.mqh" -ForegroundColor White
     Write-Host "  C:\PropFirmBot\EA\Dashboard.mqh" -ForegroundColor White
     Write-Host "  C:\PropFirmBot\EA\TradeJournal.mqh" -ForegroundColor White
+    Write-Host "  C:\PropFirmBot\EA\Notifications.mqh" -ForegroundColor White
+    Write-Host "  C:\PropFirmBot\EA\NewsFilter.mqh" -ForegroundColor White
+    Write-Host "  C:\PropFirmBot\EA\TradeAnalyzer.mqh" -ForegroundColor White
+    Write-Host "  C:\PropFirmBot\EA\AccountStateManager.mqh" -ForegroundColor White
     exit 1
 }
 
@@ -89,7 +93,11 @@ $eaFiles = @(
     "TradeManager.mqh",
     "Guardian.mqh",
     "Dashboard.mqh",
-    "TradeJournal.mqh"
+    "TradeJournal.mqh",
+    "Notifications.mqh",
+    "NewsFilter.mqh",
+    "TradeAnalyzer.mqh",
+    "AccountStateManager.mqh"
 )
 
 $copied = 0
@@ -176,9 +184,13 @@ Write-Host "6. Enable 'Allow Algo Trading' (top toolbar)" -ForegroundColor White
 Write-Host ""
 Write-Host "IMPORTANT SETTINGS when attaching EA:" -ForegroundColor Yellow
 Write-Host "  - Common tab: Allow Algo Trading = YES" -ForegroundColor White
-Write-Host "  - Inputs tab: Set your account size" -ForegroundColor White
-Write-Host "  - Inputs tab: Challenge Mode = true" -ForegroundColor White
+Write-Host "  - Inputs tab: Account Phase = FUNDED" -ForegroundColor White
+Write-Host "  - Inputs tab: Account Size = 2000" -ForegroundColor White
+Write-Host "  - Inputs tab: Hard Daily DD = 0 (no daily limit)" -ForegroundColor White
+Write-Host "  - Inputs tab: Hard Total DD = 6.0 (trailing)" -ForegroundColor White
 Write-Host "  - Inputs tab: Risk Per Trade = 0.5" -ForegroundColor White
+Write-Host "  - Tools > Options > Expert Advisors > Allow WebRequest:" -ForegroundColor White
+Write-Host "    Add: https://api.telegram.org" -ForegroundColor White
 Write-Host ""
 Write-Host "Run 03_monitor.ps1 to set up monitoring" -ForegroundColor Cyan
 Write-Host ""
