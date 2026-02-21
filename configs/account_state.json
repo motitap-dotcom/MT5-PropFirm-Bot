@@ -1,0 +1,54 @@
+{
+  "_description": "Current account state - UPDATE THIS when switching phases",
+  "_important": "Always verify these values match your prop firm dashboard",
+
+  "current_phase": "CHALLENGE",
+  "last_updated": "2026-02-21",
+
+  "challenge": {
+    "name": "Stellar Instant $2000",
+    "account_number": "",
+    "server": "",
+    "account_size": 2000,
+    "profit_target_percent": 10,
+    "max_daily_drawdown_percent": 5,
+    "max_total_drawdown_percent": 10,
+    "min_trading_days": 5,
+    "start_date": "",
+    "trading_days_completed": 0,
+    "current_profit_percent": 0
+  },
+
+  "funded": {
+    "_note": "Fill in when you pass the challenge",
+    "account_number": "",
+    "server": "",
+    "account_size": 0,
+    "max_daily_drawdown_percent": 5,
+    "max_total_drawdown_percent": 10,
+    "profit_split_percent": 80,
+    "start_date": ""
+  },
+
+  "phase_history": [
+    {
+      "phase": "CHALLENGE",
+      "start_date": "2026-02-21",
+      "end_date": null,
+      "result": null,
+      "notes": "Initial challenge start"
+    }
+  ],
+
+  "checklist_before_going_live": [
+    "[ ] Verify account credentials are correct",
+    "[ ] Test on demo first for at least 1 week",
+    "[ ] Confirm all drawdown limits match prop firm rules",
+    "[ ] Set up Telegram notifications",
+    "[ ] Verify VPS is stable (24/7 uptime)",
+    "[ ] Check broker spreads during London/NY sessions",
+    "[ ] Confirm EA is allowed by prop firm",
+    "[ ] Set up monitoring scripts",
+    "[ ] Take screenshot of starting balance"
+  ]
+}

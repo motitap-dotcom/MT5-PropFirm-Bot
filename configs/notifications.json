@@ -1,0 +1,42 @@
+{
+  "_description": "Notification settings for PropFirmBot",
+
+  "telegram": {
+    "enabled": false,
+    "token": "",
+    "chat_id": "",
+    "_setup_instructions": [
+      "1. Open Telegram and search for @BotFather",
+      "2. Send /newbot and follow instructions to create a bot",
+      "3. Copy the bot token and paste it here",
+      "4. Start a chat with your bot, then visit:",
+      "   https://api.telegram.org/bot<TOKEN>/getUpdates",
+      "5. Send a message to your bot, refresh the page,",
+      "   and copy your chat_id from the response",
+      "6. Set enabled to true"
+    ]
+  },
+
+  "push_notifications": {
+    "enabled": true,
+    "_note": "Uses MT5 built-in push notifications to mobile app"
+  },
+
+  "email": {
+    "enabled": false,
+    "_note": "Configure email in MT5 Terminal -> Tools -> Options -> Email"
+  },
+
+  "notify_on": {
+    "trade_open": true,
+    "trade_close": true,
+    "state_change": true,
+    "daily_report": true,
+    "emergency": true,
+    "target_reached": true,
+    "analysis_report": true
+  },
+
+  "daily_report_time_utc": "17:00",
+  "weekly_report_day": "Friday"
+}

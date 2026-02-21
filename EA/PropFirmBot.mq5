@@ -1,12 +1,15 @@
 //+------------------------------------------------------------------+
 //|                                              PropFirmBot.mq5      |
-//|                     PROP FIRM CHALLENGE BOT v2.0 - LIVE READY     |
-//|                     Guardian + Dashboard + Journal integrated     |
+//|                     PROP FIRM CHALLENGE BOT v3.0 - FULL SYSTEM    |
+//|                     Guardian + Dashboard + Journal + Analytics     |
+//|                     News Filter + Notifications + Self-Learning   |
 //+------------------------------------------------------------------+
 #property copyright   "PropFirmBot"
-#property version     "2.00"
-#property description "Prop firm challenge bot with full protection system"
-#property description "Guardian watchdog | Dashboard | Trade journal"
+#property version     "3.00"
+#property description "Complete prop firm trading system with:"
+#property description "  Guardian watchdog | News filter | Trade analyzer"
+#property description "  Telegram alerts | Account state management"
+#property description "  Self-learning risk adaptation"
 #property strict
 
 // Include all modules
@@ -16,6 +19,10 @@
 #include "Guardian.mqh"
 #include "Dashboard.mqh"
 #include "TradeJournal.mqh"
+#include "NewsFilter.mqh"
+#include "AccountStateManager.mqh"
+#include "Notifications.mqh"
+#include "TradeAnalyzer.mqh"
 
 //+------------------------------------------------------------------+
 //| INPUT PARAMETERS                                                  |
@@ -25,12 +32,19 @@
 input long     InpMagicNumber     = 202502;    // Magic Number
 input string   InpTradeComment    = "PFBot";   // Trade Comment
 
-// --- Challenge Settings ---
-input double   InpAccountSize     = 2000;      // Challenge Account Size ($)
+// --- Account Phase ---
+input ENUM_ACCOUNT_PHASE InpAccountPhase = PHASE_CHALLENGE; // Account Phase
+input double   InpAccountSize     = 2000;      // Account Size ($)
 input double   InpProfitTarget    = 10.0;      // Profit Target (%)
 input double   InpHardDailyDD     = 5.0;       // HARD Daily DD Limit (%) [PROP FIRM]
 input double   InpHardTotalDD     = 10.0;      // HARD Total DD Limit (%) [PROP FIRM]
-input bool     InpChallengeMode   = true;       // Challenge Mode ON
+input bool     InpChallengeMode   = true;       // Challenge Mode (auto-stop at target)
+input int      InpMinTradingDays  = 5;          // Min Trading Days (Challenge)
+
+// --- Funded Account Settings (used when phase=FUNDED) ---
+input double   InpFundedDailyDD   = 5.0;       // Funded: Daily DD (%)
+input double   InpFundedTotalDD   = 10.0;      // Funded: Total DD (%)
+input double   InpFundedProfitSplit = 80.0;     // Funded: Profit Split (%)
 
 // --- Strategy ---
 input ENUM_STRATEGY_TYPE InpStrategy = STRATEGY_SMC; // Primary Strategy
@@ -58,6 +72,13 @@ input int      InpMaxConsecLosses = 5;          // Max Consecutive Losses
 input double   InpMaxSpreadMajor  = 2.5;        // Max Spread Major (pips)
 input double   InpMaxSpreadXAU    = 4.0;        // Max Spread XAUUSD (pips)
 
+// --- News Filter ---
+input bool     InpNewsFilterOn    = true;        // News Filter Enabled
+input int      InpNewsBefore      = 30;          // News: Minutes Before
+input int      InpNewsAfter       = 30;          // News: Minutes After
+input bool     InpNewsHighImpact  = true;        // News: Filter High Impact
+input bool     InpNewsMedImpact   = false;       // News: Filter Medium Impact
+
 // --- Session Filter (UTC) ---
 input int      InpLondonStart     = 7;          // London Start
 input int      InpLondonEnd       = 11;         // London End
@@ -78,20 +99,34 @@ input bool     InpTradeGBPUSD     = true;       // Trade GBPUSD
 input bool     InpTradeUSDJPY     = true;       // Trade USDJPY
 input bool     InpTradeXAUUSD     = false;      // Trade XAUUSD
 
+// --- Notifications ---
+input string   InpTelegramToken   = "";          // Telegram Bot Token
+input string   InpTelegramChatID  = "";          // Telegram Chat ID
+input bool     InpNotifyTrades    = true;        // Notify on Trades
+input bool     InpNotifyDaily     = true;        // Send Daily Report
+
 // --- Dashboard ---
 input bool     InpShowDashboard   = true;       // Show On-Chart Dashboard
 input int      InpDashboardX      = 10;         // Dashboard X Position
 input int      InpDashboardY      = 30;         // Dashboard Y Position
 
+// --- Self-Learning ---
+input bool     InpSelfLearning    = true;        // Enable Self-Learning
+input bool     InpAutoBlockSymbol = true;        // Auto-block losing symbols
+
 //+------------------------------------------------------------------+
 //| GLOBAL OBJECTS                                                    |
 //+------------------------------------------------------------------+
-CGuardian      g_guardian;        // MASTER WATCHDOG - highest authority
-CDashboard     g_dashboard;       // On-chart monitoring panel
-CTradeJournal  g_journal;         // Trade log & audit trail
-CSignalEngine  g_signals[];       // Signal engines (one per symbol)
-CRiskManager   g_risk;            // Risk calculations
-CTradeManager  g_trade;           // Order execution
+CGuardian             g_guardian;        // MASTER WATCHDOG - highest authority
+CDashboard            g_dashboard;       // On-chart monitoring panel
+CTradeJournal         g_journal;         // Trade log & audit trail
+CSignalEngine         g_signals[];       // Signal engines (one per symbol)
+CRiskManager          g_risk;            // Risk calculations
+CTradeManager         g_trade;           // Order execution
+CNewsFilter           g_news;            // News event filter
+CAccountStateManager  g_account;         // Account phase management
+CNotifications        g_notify;          // Telegram + push alerts
+CTradeAnalyzer        g_analyzer;        // Self-learning trade analysis
 
 string         g_symbols[];
 int            g_symbol_count = 0;
@@ -99,6 +134,10 @@ int            g_symbol_count = 0;
 datetime       g_last_bar_time = 0;
 datetime       g_last_dashboard_update = 0;
 int            g_dashboard_interval = 2;  // Update dashboard every 2 seconds
+datetime       g_last_daily_report = 0;
+
+// Guardian state tracking for notifications
+ENUM_GUARDIAN_STATE g_prev_guardian_state = GUARDIAN_ACTIVE;
 
 // Position tracking for close detection
 struct PositionSnapshot
@@ -110,6 +149,7 @@ struct PositionSnapshot
    double  open_price;
    double  sl;
    double  tp;
+   datetime open_time;
 };
 PositionSnapshot g_prev_positions[];
 int              g_prev_pos_count = 0;
@@ -120,8 +160,8 @@ int              g_prev_pos_count = 0;
 int OnInit()
 {
    Print("==============================================");
-   Print("  PropFirmBot v2.0 - LIVE CHALLENGE MODE");
-   Print("  GUARDIAN PROTECTION SYSTEM ACTIVE");
+   Print("  PropFirmBot v3.0 - FULL TRADING SYSTEM");
+   Print("  ALL MODULES ACTIVE");
    Print("==============================================");
 
    // Build symbol list
@@ -132,9 +172,25 @@ int OnInit()
       return INIT_FAILED;
    }
 
-   // === GUARDIAN: Initialize first - it protects everything ===
-   if(!g_guardian.Init(InpAccountSize, InpHardDailyDD, InpHardTotalDD,
-                        InpProfitTarget, InpMagicNumber))
+   // === ACCOUNT STATE MANAGER ===
+   g_account.InitChallenge(InpAccountSize, InpProfitTarget,
+                            InpHardDailyDD, InpHardTotalDD, InpMinTradingDays);
+   g_account.InitFunded(InpAccountSize, InpFundedDailyDD, InpFundedTotalDD,
+                          InpFundedProfitSplit);
+
+   // If user selected funded mode, switch
+   if(InpAccountPhase == PHASE_FUNDED)
+      g_account.SwitchToFunded(InpAccountSize);
+
+   PrintFormat("[INIT] Account Phase: %s", g_account.GetPhaseString());
+   Print(g_account.GetRulesForCurrentPhase());
+
+   // === GUARDIAN: Initialize with phase-appropriate limits ===
+   if(!g_guardian.Init(g_account.GetAccountSize(),
+                        g_account.GetDailyDDLimit(),
+                        g_account.GetTotalDDLimit(),
+                        g_account.GetProfitTarget(),
+                        InpMagicNumber))
    {
       Print("[FATAL] Guardian initialization failed!");
       return INIT_FAILED;
@@ -146,23 +202,35 @@ int OnInit()
       Print("[WARNING] Journal init failed - continuing without CSV logging");
    }
    g_journal.LogEvent("STARTUP", StringFormat(
-      "Challenge: $%.0f | Target: %.1f%% | DD limits: %.1f%%/%.1f%% | Symbols: %d",
-      InpAccountSize, InpProfitTarget, InpHardDailyDD, InpHardTotalDD, g_symbol_count));
+      "Phase: %s | Account: $%.0f | Target: %.1f%% | DD: %.1f%%/%.1f%% | Symbols: %d",
+      g_account.GetPhaseString(), g_account.GetAccountSize(),
+      g_account.GetProfitTarget(), g_account.GetDailyDDLimit(),
+      g_account.GetTotalDDLimit(), g_symbol_count));
 
    // === RISK MANAGER ===
-   g_risk.Init(InpAccountSize, InpRiskPercent, InpMaxRiskPercent,
-               InpMaxPositions, InpHardDailyDD - 2.0, InpHardTotalDD - 3.0, InpMagicNumber);
+   double risk_pct = InpRiskPercent * g_account.GetRiskMultiplier();
+   double max_risk = InpMaxRiskPercent * g_account.GetRiskMultiplier();
+   g_risk.Init(g_account.GetAccountSize(), risk_pct, max_risk,
+               g_account.GetMaxPositions(),
+               g_account.GetDailyDDLimit() - 2.0,
+               g_account.GetTotalDDLimit() - 3.0,
+               InpMagicNumber);
    g_risk.SetSpreadFilter(InpMaxSpreadMajor, InpMaxSpreadXAU);
    g_risk.SetSessionFilter(InpLondonStart, InpLondonEnd, InpNYStart, InpNYEnd);
    g_risk.SetWeekendGuard(5, 20);
    g_risk.SetTrailingStop(InpTrailingActivation, InpTrailingDistance);
    g_risk.SetBreakeven(InpBEActivation, InpBEOffset);
-   if(InpChallengeMode)
-      g_risk.SetChallengeMode(InpProfitTarget);
+   if(g_account.HasProfitTarget())
+      g_risk.SetChallengeMode(g_account.GetProfitTarget());
 
    // === TRADE MANAGER ===
    g_trade.Init(InpMagicNumber, InpSlippage, InpTradeComment);
    g_trade.SetMinBarGap(InpMinBarGap);
+
+   // === NEWS FILTER ===
+   g_news.Init(InpNewsBefore, InpNewsAfter, InpNewsHighImpact, InpNewsMedImpact);
+   g_news.Enable(InpNewsFilterOn);
+   g_news.SetSymbols(g_symbols, g_symbol_count);
 
    // === SIGNAL ENGINES ===
    ArrayResize(g_signals, g_symbol_count);
@@ -177,6 +245,18 @@ int OnInit()
       }
    }
 
+   // === NOTIFICATIONS ===
+   g_notify.Init(InpTelegramToken, InpTelegramChatID);
+   if(InpTelegramToken != "" && InpTelegramChatID != "")
+   {
+      g_notify.TestTelegram();
+      g_notify.NotifyPhaseChange(g_account.GetPhaseString(),
+         g_account.GetRulesForCurrentPhase());
+   }
+
+   // === TRADE ANALYZER (Self-Learning) ===
+   g_analyzer.Init(500);
+
    // === DASHBOARD ===
    if(InpShowDashboard)
       g_dashboard.Init(InpDashboardX, InpDashboardY);
@@ -184,8 +264,14 @@ int OnInit()
    // Take initial position snapshot
    TakePositionSnapshot();
 
-   Print("[INIT] ALL SYSTEMS GO - Guardian active, Dashboard on, Journal logging");
-   Print("[INIT] >>> REAL CHALLENGE MODE - EVERY DOLLAR COUNTS <<<");
+   Print("[INIT] ALL SYSTEMS GO:");
+   Print("  - Guardian: ACTIVE");
+   Print("  - News Filter: " + (InpNewsFilterOn ? "ON" : "OFF"));
+   Print("  - Notifications: " + (InpTelegramToken != "" ? "TELEGRAM ON" : "OFF"));
+   Print("  - Self-Learning: " + (InpSelfLearning ? "ON" : "OFF"));
+   Print("  - Account Phase: " + g_account.GetPhaseString());
+   PrintFormat("  - Risk multiplier: %.0f%%", g_account.GetRiskMultiplier() * 100);
+   Print("[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<");
 
    return INIT_SUCCEEDED;
 }
@@ -195,8 +281,13 @@ int OnInit()
 //+------------------------------------------------------------------+
 void OnDeinit(const int reason)
 {
+   // Send shutdown notification
+   g_notify.Send(StringFormat("Bot stopping (reason %d)\n%s",
+      reason, g_journal.GetSummary()), NOTIFY_WARNING);
+
    g_journal.LogEvent("SHUTDOWN", StringFormat(
-      "Reason=%d | Journal: %s", reason, g_journal.GetSummary()));
+      "Reason=%d | Phase=%s | Journal: %s",
+      reason, g_account.GetPhaseString(), g_journal.GetSummary()));
 
    for(int i = 0; i < g_symbol_count; i++)
       g_signals[i].Deinit();
@@ -220,12 +311,32 @@ void OnTick()
    // ============================================
    ENUM_GUARDIAN_STATE state = g_guardian.RunChecks();
 
+   // Detect state changes for notifications
+   if(state != g_prev_guardian_state)
+   {
+      string old_st = EnumToString(g_prev_guardian_state);
+      string new_st = EnumToString(state);
+      g_notify.NotifyStateChange(old_st, new_st, g_guardian.GetHaltMessage());
+      g_journal.LogEvent("STATE_CHANGE", StringFormat("%s -> %s: %s",
+         old_st, new_st, g_guardian.GetHaltMessage()));
+      g_prev_guardian_state = state;
+   }
+
+   // Target reached
+   if(state == GUARDIAN_SHUTDOWN && g_guardian.GetHaltReason() == HALT_TARGET_REACHED)
+   {
+      double profit_pct = g_guardian.ProfitPct();
+      double profit_amt = AccountInfoDouble(ACCOUNT_EQUITY) - g_guardian.InitialBalance();
+      g_notify.NotifyTargetReached(profit_pct, profit_amt);
+   }
+
    // Emergency: force close everything
    if(g_guardian.MustCloseAll())
    {
       if(g_trade.CountOpenPositions() > 0)
       {
          g_journal.LogEvent("EMERGENCY", g_guardian.GetHaltMessage());
+         g_notify.NotifyEmergency(g_guardian.GetHaltMessage());
          g_trade.CloseAllPositions();
       }
    }
@@ -253,7 +364,12 @@ void OnTick()
    UpdateDashboard();
 
    // ============================================
-   // STEP 5: NEW BAR LOGIC (signal scanning)
+   // STEP 5: DAILY REPORT CHECK
+   // ============================================
+   CheckDailyReport();
+
+   // ============================================
+   // STEP 6: NEW BAR LOGIC (signal scanning)
    // ============================================
    datetime current_bar = iTime(_Symbol, InpEntryTF, 0);
    if(current_bar == g_last_bar_time)
@@ -263,6 +379,13 @@ void OnTick()
    // Only scan for signals if Guardian says we can trade
    if(!g_guardian.CanTrade())
       return;
+
+   // NEWS FILTER: Check if safe to trade
+   if(InpNewsFilterOn && !g_news.IsSafeToTrade())
+   {
+      PrintFormat("[NEWS] Blocked: %s", g_news.GetBlockReason());
+      return;
+   }
 
    // CAUTION mode: reduce risk (halve lot size)
    bool caution_mode = g_guardian.IsCaution();
@@ -291,11 +414,36 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
       return;
    }
 
+   // News filter: per-symbol check
+   if(InpNewsFilterOn && !g_news.IsSafeToTradeSymbol(symbol))
+   {
+      PrintFormat("[NEWS] %s blocked: %s", symbol, g_news.GetBlockReason());
+      return;
+   }
+
+   // Self-learning: check if symbol is auto-blocked
+   if(InpSelfLearning && InpAutoBlockSymbol && g_analyzer.IsSymbolBlocked(symbol))
+   {
+      PrintFormat("[ANALYZER] %s blocked due to poor performance", symbol);
+      return;
+   }
+
    double sl_price = 0, tp_price = 0;
    ENUM_SIGNAL_TYPE signal = SIGNAL_NONE;
 
    // Primary strategy
    signal = g_signals[signal_index].GetSignal(InpStrategy, sl_price, tp_price);
+
+   // Check if strategy is working (self-learning)
+   if(signal != SIGNAL_NONE && InpSelfLearning)
+   {
+      string strat_name = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
+      if(!g_analyzer.IsStrategyWorking(strat_name))
+      {
+         PrintFormat("[ANALYZER] %s strategy underperforming - checking fallback", strat_name);
+         signal = SIGNAL_NONE; // Force fallback
+      }
+   }
 
    // Fallback
    if(signal == SIGNAL_NONE && InpUseFallback && InpStrategy == STRATEGY_SMC)
@@ -323,14 +471,36 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
    double lot = g_risk.CalculateLotSize(symbol, sl_dist);
    if(lot <= 0) return;
 
+   // SELF-LEARNING: Apply risk adjustment
+   if(InpSelfLearning)
+   {
+      double risk_adj = g_analyzer.GetRiskAdjustment();
+      double sym_adj = g_analyzer.GetSymbolRiskMultiplier(symbol);
+      lot = lot * risk_adj * sym_adj;
+
+      // Re-clamp to symbol constraints
+      double min_lot = SymbolInfoDouble(symbol, SYMBOL_VOLUME_MIN);
+      double lot_step = SymbolInfoDouble(symbol, SYMBOL_VOLUME_STEP);
+      if(lot_step > 0) lot = MathFloor(lot / lot_step) * lot_step;
+      if(lot < min_lot) lot = min_lot;
+   }
+
+   // ACCOUNT PHASE: Apply phase risk multiplier
+   lot = lot * g_account.GetRiskMultiplier();
+   {
+      double min_lot = SymbolInfoDouble(symbol, SYMBOL_VOLUME_MIN);
+      double lot_step = SymbolInfoDouble(symbol, SYMBOL_VOLUME_STEP);
+      if(lot_step > 0) lot = MathFloor(lot / lot_step) * lot_step;
+      if(lot < min_lot) lot = min_lot;
+   }
+
    // CAUTION MODE: halve the lot size
    if(caution_mode)
    {
       lot = lot * 0.5;
       double min_lot = SymbolInfoDouble(symbol, SYMBOL_VOLUME_MIN);
       double lot_step = SymbolInfoDouble(symbol, SYMBOL_VOLUME_STEP);
-      if(lot_step > 0)
-         lot = MathFloor(lot / lot_step) * lot_step;
+      if(lot_step > 0) lot = MathFloor(lot / lot_step) * lot_step;
       if(lot < min_lot) lot = min_lot;
    }
 
@@ -348,6 +518,9 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
       // Notify Guardian
       g_guardian.OnTradeOpened();
 
+      // Record trading day
+      g_account.RecordTradingActivity();
+
       // Log to Journal
       g_journal.LogTradeOpen(symbol,
          signal == SIGNAL_BUY ? "BUY" : "SELL",
@@ -355,13 +528,22 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
          ticket, strategy_name,
          caution_mode ? "CAUTION_MODE" : "NORMAL");
 
+      // Send notification
+      if(InpNotifyTrades)
+      {
+         g_notify.NotifyTradeOpen(symbol,
+            signal == SIGNAL_BUY ? "BUY" : "SELL",
+            lot, entry_price, sl_price, tp_price, rr);
+      }
+
       // Update position snapshot
       TakePositionSnapshot();
 
-      PrintFormat("[TRADE] %s %s | Lot=%.2f | SL=%.5f | TP=%.5f | RR=%.1f | #%d%s",
+      PrintFormat("[TRADE] %s %s | Lot=%.2f | SL=%.5f | TP=%.5f | RR=%.1f | #%d%s%s",
                   symbol, signal == SIGNAL_BUY ? "BUY" : "SELL",
                   lot, sl_price, tp_price, rr, ticket,
-                  caution_mode ? " [CAUTION]" : "");
+                  caution_mode ? " [CAUTION]" : "",
+                  g_analyzer.ShouldReduceRisk() ? " [REDUCED_RISK]" : "");
    }
 }
 
@@ -484,6 +666,23 @@ void DetectClosedTrades()
             pnl, pnl_pips, closed_ticket,
             exit_reason, AccountInfoDouble(ACCOUNT_BALANCE));
 
+         // SELF-LEARNING: Record trade in analyzer
+         if(InpSelfLearning)
+         {
+            string strategy_name = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
+            int duration = (int)(TimeCurrent() - g_prev_positions[p].open_time);
+            g_analyzer.RecordTrade(symbol, direction, strategy_name,
+               pnl, pnl_pips, lot,
+               MathAbs(open_price - sl), MathAbs(tp - open_price),
+               duration);
+         }
+
+         // Send notification
+         if(InpNotifyTrades)
+         {
+            g_notify.NotifyTradeClose(symbol, direction, pnl, pnl_pips, exit_reason);
+         }
+
          PrintFormat("[CLOSED] #%d %s %s | PnL=$%.2f (%.1f pips) | %s",
                      closed_ticket, direction, symbol, pnl, pnl_pips, exit_reason);
       }
@@ -515,9 +714,48 @@ void TakePositionSnapshot()
       g_prev_positions[g_prev_pos_count].open_price  = PositionGetDouble(POSITION_PRICE_OPEN);
       g_prev_positions[g_prev_pos_count].sl          = PositionGetDouble(POSITION_SL);
       g_prev_positions[g_prev_pos_count].tp          = PositionGetDouble(POSITION_TP);
+      g_prev_positions[g_prev_pos_count].open_time   = (datetime)PositionGetInteger(POSITION_TIME);
       g_prev_pos_count++;
    }
    ArrayResize(g_prev_positions, g_prev_pos_count);
+}
+
+//+------------------------------------------------------------------+
+//| Check if it's time for daily report                               |
+//+------------------------------------------------------------------+
+void CheckDailyReport()
+{
+   if(!InpNotifyDaily) return;
+
+   MqlDateTime dt;
+   TimeToStruct(TimeGMT(), dt);
+
+   // Send daily report at 17:00 UTC (after NY close)
+   if(dt.hour == 17 && dt.min == 0)
+   {
+      datetime today = iTime(_Symbol, PERIOD_D1, 0);
+      if(today > g_last_daily_report)
+      {
+         g_last_daily_report = today;
+
+         g_notify.NotifyDailyReport(
+            AccountInfoDouble(ACCOUNT_BALANCE),
+            AccountInfoDouble(ACCOUNT_EQUITY),
+            g_guardian.TodayProfit() - g_guardian.TodayLoss(),
+            g_guardian.TodayWins(),
+            g_guardian.TodayLosses(),
+            g_guardian.DailyDD(),
+            g_guardian.TotalDD());
+
+         // Log analysis summary
+         if(InpSelfLearning)
+         {
+            g_journal.LogEvent("ANALYSIS", g_analyzer.GetShortReport());
+            string recs = g_analyzer.GetRecommendations();
+            g_notify.Send("🔍 " + g_analyzer.GetShortReport(), NOTIFY_INFO);
+         }
+      }
+   }
 }
 
 //+------------------------------------------------------------------+

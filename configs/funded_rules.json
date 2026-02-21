@@ -1,0 +1,44 @@
+{
+  "_description": "Rules for FUNDED account phase (after passing challenge)",
+  "_note": "Update these values when you receive your funded account",
+
+  "account_size": 2000,
+  "currency": "USD",
+  "leverage": 100,
+
+  "max_daily_drawdown_percent": 5,
+  "max_total_drawdown_percent": 10,
+
+  "profit_split_percent": 80,
+  "min_withdrawal_amount": 50,
+  "has_profit_target": false,
+  "profit_target_percent": 0,
+
+  "ea_allowed": true,
+  "news_trading_allowed": true,
+  "weekend_holding_allowed": false,
+
+  "risk_adjustments": {
+    "_note": "More conservative in funded mode to protect capital",
+    "risk_multiplier": 0.7,
+    "risk_per_trade_percent": 0.35,
+    "max_risk_per_trade_percent": 0.5,
+    "max_open_positions": 2,
+    "max_daily_trades": 6,
+    "min_risk_reward_ratio": 2.0
+  },
+
+  "drawdown_guards": {
+    "soft_daily_dd_percent": 2.5,
+    "critical_daily_dd_percent": 3.5,
+    "soft_total_dd_percent": 6.0,
+    "critical_total_dd_percent": 8.0
+  },
+
+  "scaling_rules": {
+    "_note": "Conditions for scaling up the account",
+    "enabled": false,
+    "profit_threshold_for_scaling": 10,
+    "scaling_increase_percent": 25
+  }
+}

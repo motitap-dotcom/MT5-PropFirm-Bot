@@ -119,6 +119,9 @@ public:
    bool     IsDead()                   { return m_state == GUARDIAN_SHUTDOWN; }
    bool     IsCaution()                { return m_state == GUARDIAN_CAUTION; }
 
+   // Spread anomaly check
+   bool     CheckSpreadAnomaly(string symbol);
+
    // Metrics
    double   DailyDD()                  { return CalcDailyDD(); }
    double   TotalDD()                  { return CalcTotalDD(); }
@@ -539,6 +542,35 @@ void CGuardian::Log(string msg)
 {
    PrintFormat("[GUARDIAN %s] %s",
       TimeToString(TimeCurrent(), TIME_DATE|TIME_MINUTES|TIME_SECONDS), msg);
+}
+
+//+------------------------------------------------------------------+
+//+------------------------------------------------------------------+
+bool CGuardian::CheckSpreadAnomaly(string symbol)
+{
+   // Check if current spread is abnormally high (3x normal)
+   double spread_points = (double)SymbolInfoInteger(symbol, SYMBOL_SPREAD);
+   double point = SymbolInfoDouble(symbol, SYMBOL_POINT);
+   int digits = (int)SymbolInfoInteger(symbol, SYMBOL_DIGITS);
+
+   double pip_size = (digits == 3 || digits == 5) ? point * 10 : point;
+   double spread_pips = spread_points * point / pip_size;
+
+   // Normal max spread thresholds
+   double normal_max;
+   if(StringFind(symbol, "XAU") >= 0 || StringFind(symbol, "GOLD") >= 0)
+      normal_max = 5.0;  // Gold
+   else
+      normal_max = 3.0;  // Majors
+
+   // Anomaly = 3x normal
+   if(spread_pips > normal_max * 3.0)
+   {
+      Log(StringFormat("SPREAD ANOMALY %s: %.1f pips (normal max %.1f)", symbol, spread_pips, normal_max));
+      return false;
+   }
+
+   return true;
 }
 
 //+------------------------------------------------------------------+
