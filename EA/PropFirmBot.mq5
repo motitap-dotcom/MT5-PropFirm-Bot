@@ -100,8 +100,8 @@ input bool     InpTradeUSDJPY     = true;       // Trade USDJPY
 input bool     InpTradeXAUUSD     = false;      // Trade XAUUSD
 
 // --- Notifications ---
-input string   InpTelegramToken   = "";          // Telegram Bot Token
-input string   InpTelegramChatID  = "";          // Telegram Chat ID
+input string   InpTelegramToken   = "8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g";  // Telegram Bot Token
+input string   InpTelegramChatID  = "7013213983";                                      // Telegram Chat ID
 input bool     InpNotifyTrades    = true;        // Notify on Trades
 input bool     InpNotifyDaily     = true;        // Send Daily Report
 

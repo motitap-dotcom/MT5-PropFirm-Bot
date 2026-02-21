@@ -323,8 +323,9 @@ class ReportGenerator:
             print("'requests' package not installed. Cannot send Telegram messages.")
             return False
 
-        token = self.config.get("telegram_token", "")
-        chat_id = self.config.get("telegram_chat_id", "")
+        tg = self.config.get("telegram", {})
+        token = tg.get("token", "") or self.config.get("telegram_token", "")
+        chat_id = tg.get("chat_id", "") or self.config.get("telegram_chat_id", "")
 
         if not token or not chat_id:
             print("Telegram not configured. Set token and chat_id in configs/notifications.json")

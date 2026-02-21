@@ -2,9 +2,9 @@
   "_description": "Notification settings for PropFirmBot",
 
   "telegram": {
-    "enabled": false,
-    "token": "",
-    "chat_id": "",
+    "enabled": true,
+    "token": "8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g",
+    "chat_id": "7013213983",
     "_setup_instructions": [
       "1. Open Telegram and search for @BotFather",
       "2. Send /newbot and follow instructions to create a bot",
