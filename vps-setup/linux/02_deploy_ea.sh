@@ -104,6 +104,10 @@ EA_FILES=(
     "Guardian.mqh"
     "Dashboard.mqh"
     "TradeJournal.mqh"
+    "Notifications.mqh"
+    "NewsFilter.mqh"
+    "TradeAnalyzer.mqh"
+    "AccountStateManager.mqh"
 )
 
 COPIED=0
