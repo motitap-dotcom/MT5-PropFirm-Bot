@@ -161,6 +161,7 @@ void CRiskManager::Init(double account_size,
 {
    m_account_size       = account_size;
    m_initial_balance    = AccountInfoDouble(ACCOUNT_BALANCE);
+   if(m_initial_balance <= 0) m_initial_balance = account_size;  // Fallback to configured size
    m_risk_per_trade     = risk_pct;
    m_max_risk_per_trade = max_risk_pct;
    m_max_open_positions = max_positions;

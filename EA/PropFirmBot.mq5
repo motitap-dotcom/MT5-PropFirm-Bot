@@ -164,6 +164,20 @@ int OnInit()
    Print("  ALL MODULES ACTIVE");
    Print("==============================================");
 
+   // Wait for account data to load (common issue with Wine/MT5)
+   int wait_attempts = 0;
+   while(AccountInfoDouble(ACCOUNT_BALANCE) <= 0 && wait_attempts < 20)
+   {
+      Sleep(500);
+      wait_attempts++;
+   }
+   if(AccountInfoDouble(ACCOUNT_BALANCE) <= 0)
+      PrintFormat("[WARNING] Account balance still 0 after %d attempts. Using configured size: $%.0f",
+                  wait_attempts, InpAccountSize);
+   else
+      PrintFormat("[INIT] Account balance loaded: $%.2f (after %d waits)",
+                  AccountInfoDouble(ACCOUNT_BALANCE), wait_attempts);
+
    // Build symbol list
    BuildSymbolList();
    if(g_symbol_count == 0)
@@ -197,7 +211,9 @@ int OnInit()
    }
 
    // === JOURNAL: Start logging immediately ===
-   if(!g_journal.Init(InpMagicNumber, AccountInfoDouble(ACCOUNT_BALANCE)))
+   double journal_balance = AccountInfoDouble(ACCOUNT_BALANCE);
+   if(journal_balance <= 0) journal_balance = InpAccountSize;
+   if(!g_journal.Init(InpMagicNumber, journal_balance))
    {
       Print("[WARNING] Journal init failed - continuing without CSV logging");
    }

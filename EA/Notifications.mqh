@@ -141,7 +141,17 @@ bool CNotifications::SendTelegram(string message)
 
    string headers = "Content-Type: application/x-www-form-urlencoded\r\n";
 
-   int res = WebRequest("POST", url, headers, 5000, post_data, result, result_headers);
+   int res = WebRequest("POST", url, headers, 10000, post_data, result, result_headers);
+
+   if(res == -1)
+   {
+      int err = GetLastError();
+      if(err == 4014)
+         Print("[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest");
+      else
+         PrintFormat("[Notify] Telegram connection failed: error %d. Check internet connection.", err);
+      return false;
+   }
 
    if(res != 200)
    {
