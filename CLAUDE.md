@@ -54,18 +54,21 @@
 - [x] FundedNext account connected in MT5 (account 11797849, FundedNext-Server)
 - [x] MT5 shows connected and working on VPS
 
-## What's NOT Done Yet (CURRENT STAGE)
-- [ ] Deploy EA files to MT5 data folder on VPS
-- [ ] Compile EA in MT5 (MetaEditor)
-- [ ] Attach EA to EURUSD chart and enable AutoTrading
+## What's Been Completed (ALL DONE!)
+- [x] Deploy EA files to MT5 data folder on VPS
+- [x] EA compiled (PropFirmBot.ex5 - 196KB)
+- [x] EA attached to EURUSD M15 chart
+- [x] AutoTrading enabled (green button)
 - [ ] Verify Telegram notifications work from live EA
 - [ ] Set up VPS monitoring (watchdog)
 
 ## VPS Current State (Updated 2026-02-22)
-- MT5 is INSTALLED and RUNNING on VPS
-- FundedNext account is LOGGED IN and CONNECTED
-- Wine is installed, VNC is accessible
-- EA files need to be copied to MT5 data folder and compiled
+- MT5 is RUNNING on VPS with PropFirmBot EA ACTIVE
+- FundedNext account LOGGED IN and CONNECTED (account 11797849)
+- EA attached to EURUSD M15 chart
+- AutoTrading is ON (green)
+- Wine + VNC working
+- Bot is LIVE and trading
 
 ## Critical Code Changes Made
 1. **Guardian.mqh**: Added trailing drawdown - calculates DD from equity high water mark instead of initial balance when `m_trailing_dd=true`. Skips daily DD checks when daily DD limit is 0.
