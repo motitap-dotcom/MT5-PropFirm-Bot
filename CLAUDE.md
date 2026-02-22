@@ -86,13 +86,22 @@
 11. AccountStateManager.mqh - Phase management (Challenge/Funded/Scaling)
 
 ## Working Method
-- Claude connects directly to VPS via SSH and does everything remotely
-- User (Noa) does NOT need to run commands - Claude handles it all
-- Noa only needs to confirm/approve actions when asked
+- Claude's environment CANNOT SSH to VPS (port 22 blocked from sandbox)
+- Noa runs commands on VPS via SSH from her Windows PowerShell
+- Noa views MT5 via VNC (RealVNC client on Windows)
+- Claude prepares scripts/commands, Noa pastes them
+
+## Noa's Tools
+- VNC client: RealVNC (on Windows)
+- Terminal: PowerShell (Windows) → SSH to VPS
+- SSH: ssh root@77.237.234.2 (password: Moti0417!)
 
 ## How to Resume Work
 - MT5 is running on VPS at 77.237.234.2
-- SSH: ssh root@77.237.234.2 (password: Moti0417!)
-- VNC for MT5 GUI: connect to 77.237.234.2:5900
+- VNC for MT5 GUI: connect to 77.237.234.2:5900 (no password, via RealVNC)
 - Repo on VPS: /root/MT5-PropFirm-Bot (branch: claude/build-cfd-trading-bot-fl0ld)
-- MT5 data folder: find via Wine paths (~/.wine/drive_c/)
+- MT5 installed at: /root/.wine/drive_c/Program Files/MetaTrader 5/
+- EA files at: .../MQL5/Experts/PropFirmBot/ (all 11 files + .ex5 compiled)
+- Config files at: .../MQL5/Files/PropFirmBot/ (6 JSON files)
+- VNC server: x11vnc on display :99, port 5900
+- Start VNC: Xvfb :99 -screen 0 1280x1024x24 & x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw
