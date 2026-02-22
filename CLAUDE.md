@@ -49,16 +49,23 @@
 - [x] Linux VPS setup scripts ready (Wine + MT5 + monitoring)
 - [x] Deploy script updated with all 11 EA files
 - [x] All code pushed to branch claude/build-cfd-trading-bot-fl0ld
+- [x] VPS setup complete - Wine + MT5 installed on Contabo VPS
+- [x] MT5 running on VPS (accessible via VNC)
+- [x] FundedNext account connected in MT5 (account 11797849, FundedNext-Server)
+- [x] MT5 shows connected and working on VPS
 
-## What's NOT Done Yet
-- [ ] SSH into VPS and run setup scripts
-- [ ] Install Wine + MT5 on VPS
-- [ ] Deploy EA files to MT5 on VPS
-- [ ] Log into FundedNext account in MT5 (via VNC)
-- [ ] Compile EA in MT5
-- [ ] Attach EA to chart and enable AutoTrading
+## What's NOT Done Yet (CURRENT STAGE)
+- [ ] Deploy EA files to MT5 data folder on VPS
+- [ ] Compile EA in MT5 (MetaEditor)
+- [ ] Attach EA to EURUSD chart and enable AutoTrading
 - [ ] Verify Telegram notifications work from live EA
 - [ ] Set up VPS monitoring (watchdog)
+
+## VPS Current State (Updated 2026-02-22)
+- MT5 is INSTALLED and RUNNING on VPS
+- FundedNext account is LOGGED IN and CONNECTED
+- Wine is installed, VNC is accessible
+- EA files need to be copied to MT5 data folder and compiled
 
 ## Critical Code Changes Made
 1. **Guardian.mqh**: Added trailing drawdown - calculates DD from equity high water mark instead of initial balance when `m_trailing_dd=true`. Skips daily DD checks when daily DD limit is 0.
@@ -78,11 +85,14 @@
 10. TradeAnalyzer.mqh - Performance analytics
 11. AccountStateManager.mqh - Phase management (Challenge/Funded/Scaling)
 
-## Next Steps for VPS Setup
-User needs to run these commands from their local PowerShell:
-```
-ssh root@77.237.234.2
-# password: Moti0417!
-apt-get install -y git && git clone https://github.com/motitap-dotcom/MT5-PropFirm-Bot.git && cd MT5-PropFirm-Bot && git checkout claude/build-cfd-trading-bot-fl0ld
-cd vps-setup/linux && chmod +x setup_all.sh && sudo ./setup_all.sh
-```
+## Working Method
+- Claude connects directly to VPS via SSH and does everything remotely
+- User (Noa) does NOT need to run commands - Claude handles it all
+- Noa only needs to confirm/approve actions when asked
+
+## How to Resume Work
+- MT5 is running on VPS at 77.237.234.2
+- SSH: ssh root@77.237.234.2 (password: Moti0417!)
+- VNC for MT5 GUI: connect to 77.237.234.2:5900
+- Repo on VPS: /root/MT5-PropFirm-Bot (branch: claude/build-cfd-trading-bot-fl0ld)
+- MT5 data folder: find via Wine paths (~/.wine/drive_c/)
