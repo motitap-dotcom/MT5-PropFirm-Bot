@@ -102,7 +102,7 @@ for file in "${EA_FILES[@]}"; do
     if [ -f "$EA_SOURCE/$file" ]; then
         cp -f "$EA_SOURCE/$file" "$EA_DEST/$file"
         echo -e "  ${GREEN}✓ $file${NC}"
-        ((COPIED++))
+        COPIED=$((COPIED + 1))
     else
         echo -e "  ${RED}✗ $file (NOT FOUND!)${NC}"
     fi
@@ -123,7 +123,7 @@ if [ -d "$CONFIG_SOURCE" ]; then
         if [ -f "$json_file" ]; then
             cp -f "$json_file" "$CONFIG_DEST/"
             echo -e "  ${GREEN}✓ $(basename "$json_file")${NC}"
-            ((CONFIG_COUNT++))
+            CONFIG_COUNT=$((CONFIG_COUNT + 1))
         fi
     done
     echo -e "${GREEN}[OK] Copied $CONFIG_COUNT config files${NC}"
