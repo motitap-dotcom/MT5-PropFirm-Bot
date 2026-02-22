@@ -35,6 +35,7 @@
 - Provider: Contabo
 - IP: 77.237.234.2
 - OS: LINUX (Ubuntu) - NOT Windows!
+- SSH root password: Moti0417!
 - Contabo panel password: qA4P9f3ra5bw
 - Connection method: SSH (not RDP!)
 - Connect: ssh root@77.237.234.2
@@ -81,7 +82,7 @@
 User needs to run these commands from their local PowerShell:
 ```
 ssh root@77.237.234.2
-# password: qA4P9f3ra5bw
+# password: Moti0417!
 apt-get install -y git && git clone https://github.com/motitap-dotcom/MT5-PropFirm-Bot.git && cd MT5-PropFirm-Bot && git checkout claude/build-cfd-trading-bot-fl0ld
 cd vps-setup/linux && chmod +x setup_all.sh && sudo ./setup_all.sh
 ```
