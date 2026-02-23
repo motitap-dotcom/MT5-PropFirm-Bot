@@ -1,109 +1,86 @@
-=== CLEAN RESTART 2026-02-23 07:45:16 UTC ===
---- 1. Kill ALL Wine processes ---
-Before:
-15
-root       11857  0.3  0.1  12328  9384 ?        Ss   Feb22   4:03 /opt/wine-stable/lib/wine/../../bin/wineserver
-root       11876  0.1  0.2 360768 17056 ?        S<sl Feb22   1:17 C:\windows\system32\winedevice.exe
-root       19750  0.3  0.1  12064  9084 ?        Ss   Feb22   3:25 /opt/wine-stable/lib/wine/../../bin/wineserver
-root       19770  0.1  0.1 355596 16240 ?        S<sl Feb22   1:11 C:\windows\system32\winedevice.exe
-root       20026  0.3  0.1  12064  9184 ?        Ss   Feb22   3:24 /opt/wine-stable/lib/wine/../../bin/wineserver
-root       20045  0.1  0.1 355596 16188 ?        S<sl Feb22   1:10 C:\windows\system32\winedevice.exe
-root       20761  0.3  0.1  12064  9188 ?        Ss   Feb22   3:21 /opt/wine-stable/lib/wine/../../bin/wineserver
-root       20780  0.1  0.1 355596 16200 ?        S<sl Feb22   1:10 C:\windows\system32\winedevice.exe
-root       26050  0.3  0.1  12064  9188 ?        Ss   Feb22   2:52 /opt/wine-stable/lib/wine/../../bin/wineserver
-root       26069  0.1  0.1 355596 16180 ?        S<sl Feb22   1:02 C:\windows\system32\winedevice.exe
-root       75517  0.0  0.1 2669780 13816 ?       S    07:39   0:00 start.exe /exec terminal64.exe /login:11797849 /password:gazDE62##
-root       75520  1.9  0.1  15648 14268 ?        Ss   07:39   0:07 /usr/lib/wine/wineserver64 -p0
-root       75531  0.2  0.2 359472 23404 ?        Ssl  07:39   0:00 C:\windows\system32\winedevice.exe
-root       75543  3.8  0.3 574240 27424 ?        Ssl  07:39   0:14 C:\windows\system32\winedevice.exe
-root       75582  5.4  2.7 640324 219696 ?       Sl   07:39   0:19 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
+=== WINE UPGRADE 2026-02-23 07:49:25 UTC ===
+--- 1. Stop MT5 ---
+Stopped
 
-Killing all Wine processes...
+--- 2. Current Wine ---
+wine-9.0 (Ubuntu 9.0~repack-4build3)
+opt wine-stable not found
+wine-9.0 (Ubuntu 9.0~repack-4build3)
+ii  fonts-wine                           9.0~repack-4build3                      all          Windows API implementation - fonts
+ii  libwine:amd64                        9.0~repack-4build3                      amd64        Windows API implementation - library
+ii  libwine:i386                         9.0~repack-4build3                      i386         Windows API implementation - library
+ii  wine                                 9.0~repack-4build3                      all          Windows API implementation - standard suite
+ii  wine32:i386                          9.0~repack-4build3                      i386         Windows API implementation - 32-bit binary loader
+ii  wine64                               9.0~repack-4build3                      amd64        Windows API implementation - 64-bit binary loader
 
-After cleanup:
-0
-ALL CLEAN!
+--- 3. Add WineHQ repo ---
+Ubuntu: noble
+Repo added
 
---- 2. Clean Wine sockets ---
-Wine temp files cleaned
+--- 4. Install Wine ---
+W: Target Translations (main/i18n/Translation-en) is configured multiple times in /etc/apt/sources.list.d/winehq-noble.sources:1 and /etc/apt/sources.list.d/winehq.list:1
+W: Target DEP-11 (main/dep11/Components-amd64.yml) is configured multiple times in /etc/apt/sources.list.d/winehq-noble.sources:1 and /etc/apt/sources.list.d/winehq.list:1
+W: Target DEP-11 (main/dep11/Components-all.yml) is configured multiple times in /etc/apt/sources.list.d/winehq-noble.sources:1 and /etc/apt/sources.list.d/winehq.list:1
+W: Target CNF (main/cnf/Commands-amd64) is configured multiple times in /etc/apt/sources.list.d/winehq-noble.sources:1 and /etc/apt/sources.list.d/winehq.list:1
+W: Target CNF (main/cnf/Commands-all) is configured multiple times in /etc/apt/sources.list.d/winehq-noble.sources:1 and /etc/apt/sources.list.d/winehq.list:1
+Installing winehq-stable...
+Preparing to unpack .../winehq-stable_11.0.0.0~noble-1_amd64.deb ...
+Unpacking winehq-stable (11.0.0.0~noble-1) ...
+Setting up wine-stable-amd64 (11.0.0.0~noble-1) ...
+Setting up wine-stable-i386:i386 (11.0.0.0~noble-1) ...
+Setting up wine-stable (11.0.0.0~noble-1) ...
+Setting up winehq-stable (11.0.0.0~noble-1) ...
+Processing triggers for hicolor-icon-theme (0.17-2) ...
+Processing triggers for man-db (2.12.0-4build2) ...
 
---- 3. Display ---
-Display: OK
+Running kernel seems to be up-to-date.
 
---- 4. Start MT5 (clean) ---
-MT5 started (clean, PID: 76778)
+No services need to be restarted.
 
---- 5. Waiting 30 seconds for connection ---
+No containers need to be restarted.
+
+User sessions running outdated binaries:
+ root @ session #24: explorer.exe[19763,20036,20771,26061], services.exe[19755,20030,20765,26054]
+ root @ session #8: explorer.exe[11869], plugplay.exe[13581], services.exe[11861], svchost.exe[13575]
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+
+--- 5. Verify new Wine ---
+wine-11.0
+Wine binary: /usr/bin/wine
+Wine version: wine-11.0
+
+--- 6. Restart MT5 with new Wine ---
+MT5 started
+
+--- 7. Wait 30 seconds... ---
 MT5 running: YES
 
-Wine processes:
-root       76778  0.5  0.1 2669716 13796 ?       S    07:45   0:00 start.exe /exec terminal64.exe /login:11797849 /password:gazDE62##
-root       76781  9.3  0.1  15656 14228 ?        Rs   07:45   0:02 /usr/lib/wine/wineserver64 -p0
-root       76791  0.4  0.2 359472 23400 ?        Ssl  07:45   0:00 C:\windows\system32\winedevice.exe
-root       76801  4.0  0.3 574240 27428 ?        Ssl  07:45   0:01 C:\windows\system32\winedevice.exe
-root       76840 17.2  2.7 639560 220644 ?       Sl   07:45   0:05 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
-
-Network connections from Wine/MT5:
-No wine connections in ss
-
-All outbound TCP connections (not SSH/VNC/DNS):
-Recv-Q Send-Q Local Address:Port   Peer Address:Port Process
-
---- 6. Terminal log ---
-Size: 6510 bytes
-KE	0	07:15:18.743	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-DR	0	07:15:18.743	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-LE	0	07:15:18.743	Terminal	C:\Program Files\MetaTrader 5
-RS	2	07:15:19.258	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-NR	2	07:15:19.258	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-OM	0	07:15:23.057	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-OH	2	07:20:33.102	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
-DH	0	07:20:33.107	Experts	expert PropFirmBot (EURUSD,M15) removed
-IL	0	07:39:10.769	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-JI	0	07:39:10.770	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-RL	0	07:39:10.770	Terminal	C:\Program Files\MetaTrader 5
-GH	2	07:39:11.266	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-CI	2	07:39:11.266	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-ID	0	07:39:13.126	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-NR	0	07:45:27.325	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-RH	0	07:45:27.328	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-FS	0	07:45:27.328	Terminal	C:\Program Files\MetaTrader 5
-PF	2	07:45:27.917	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-LH	2	07:45:27.917	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-RJ	0	07:45:30.819	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-
---- 7. Wait 30 more seconds... ---
-Terminal log after 60s:
-Size: 6510 bytes
-KE	0	07:15:18.743	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-DR	0	07:15:18.743	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-LE	0	07:15:18.743	Terminal	C:\Program Files\MetaTrader 5
-RS	2	07:15:19.258	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-NR	2	07:15:19.258	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-OM	0	07:15:23.057	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-OH	2	07:20:33.102	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
-DH	0	07:20:33.107	Experts	expert PropFirmBot (EURUSD,M15) removed
-IL	0	07:39:10.769	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-JI	0	07:39:10.770	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-RL	0	07:39:10.770	Terminal	C:\Program Files\MetaTrader 5
-GH	2	07:39:11.266	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-CI	2	07:39:11.266	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-ID	0	07:39:13.126	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-NR	0	07:45:27.325	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-RH	0	07:45:27.328	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-FS	0	07:45:27.328	Terminal	C:\Program Files\MetaTrader 5
-PF	2	07:45:27.917	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-LH	2	07:45:27.917	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-RJ	0	07:45:30.819	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-
-EA log:
-No EA log yet
+Wine version running:
+wine-11.0
 
 Outbound connections:
 Recv-Q Send-Q Local Address:Port   Peer Address:Port Process
 
---- 8. Telegram ---
-Sent
+Terminal log (last 15 lines):
+GH	2	07:39:11.266	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
+CI	2	07:39:11.266	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+ID	0	07:39:13.126	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+NR	0	07:45:27.325	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+RH	0	07:45:27.328	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
+FS	0	07:45:27.328	Terminal	C:\Program Files\MetaTrader 5
+PF	2	07:45:27.917	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
+LH	2	07:45:27.917	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+RJ	0	07:45:30.819	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+JQ	0	07:50:05.644	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+RN	0	07:50:05.645	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
+RQ	0	07:50:05.645	Terminal	C:\Program Files\MetaTrader 5
+NG	2	07:50:06.202	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
+RF	2	07:50:06.202	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+PI	0	07:50:09.622	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+
+EA log:
+Not yet (waiting for symbol sync...)
 
 === DONE ===
 EXIT_CODE=0
