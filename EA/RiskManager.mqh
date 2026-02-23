@@ -350,7 +350,7 @@ bool CRiskManager::IsSessionActive()
 //+------------------------------------------------------------------+
 bool CRiskManager::IsSpreadAcceptable(string symbol)
 {
-   double spread_points = SymbolInfoInteger(symbol, SYMBOL_SPREAD);
+   long spread_points = SymbolInfoInteger(symbol, SYMBOL_SPREAD);
    double point = SymbolInfoDouble(symbol, SYMBOL_POINT);
    int digits = (int)SymbolInfoInteger(symbol, SYMBOL_DIGITS);
 
