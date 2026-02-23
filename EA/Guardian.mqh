@@ -239,7 +239,7 @@ bool CGuardian::Init(double balance, double hard_daily, double hard_total,
 double CGuardian::CalcDailyDD()
 {
    double eq = AccountInfoDouble(ACCOUNT_EQUITY);
-   if(m_daily_open_balance <= 0) return 0;
+   if(eq <= 0 || m_daily_open_balance <= 0) return 0;  // Safety: bad equity = no DD
    double dd = m_daily_open_balance - eq;
    return (dd > 0) ? (dd / m_daily_open_balance) * 100.0 : 0;
 }
@@ -248,6 +248,7 @@ double CGuardian::CalcDailyDD()
 double CGuardian::CalcTotalDD()
 {
    double eq = AccountInfoDouble(ACCOUNT_EQUITY);
+   if(eq <= 0) return 0;  // Safety: bad equity = no DD (prevents false SHUTDOWN)
 
    if(m_trailing_dd)
    {
@@ -288,6 +289,20 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
 
    // Update equity tracking
    double eq = AccountInfoDouble(ACCOUNT_EQUITY);
+
+   // SAFETY: If equity returns 0 (Wine/MT5 glitch), skip all DD checks
+   // to prevent false SHUTDOWN. Use last known equity instead.
+   if(eq <= 0)
+   {
+      static datetime last_eq_warn = 0;
+      if(TimeCurrent() - last_eq_warn > 60)
+      {
+         Log("WARNING: Equity returned 0 - skipping DD checks (Wine glitch)");
+         last_eq_warn = TimeCurrent();
+      }
+      return m_state;  // Keep current state, don't make decisions with bad data
+   }
+
    if(eq > m_equity_high_water) m_equity_high_water = eq;
 
    double daily_dd = CalcDailyDD();

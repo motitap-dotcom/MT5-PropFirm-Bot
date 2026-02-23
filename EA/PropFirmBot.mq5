@@ -82,9 +82,9 @@ input bool     InpNewsMedImpact   = false;       // News: Filter Medium Impact
 
 // --- Session Filter (UTC) ---
 input int      InpLondonStart     = 7;          // London Start
-input int      InpLondonEnd       = 11;         // London End
+input int      InpLondonEnd       = 16;         // London End (covers overlap with NY)
 input int      InpNYStart         = 12;         // NY Start
-input int      InpNYEnd           = 16;         // NY End
+input int      InpNYEnd           = 20;         // NY End (extended)
 
 // --- Trade Management ---
 input double   InpTrailingActivation = 30.0;    // Trailing Activation (pips)
@@ -137,6 +137,8 @@ datetime       g_last_bar_time = 0;
 datetime       g_last_dashboard_update = 0;
 int            g_dashboard_interval = 2;  // Update dashboard every 2 seconds
 datetime       g_last_daily_report = 0;
+datetime       g_last_heartbeat = 0;      // Heartbeat log every 15 minutes
+int            g_tick_count = 0;           // Total ticks received
 
 // Guardian state tracking for notifications
 ENUM_GUARDIAN_STATE g_prev_guardian_state = GUARDIAN_ACTIVE;
@@ -346,6 +348,24 @@ void OnTimer()
 //+------------------------------------------------------------------+
 void OnTick()
 {
+   g_tick_count++;
+
+   // ============================================
+   // HEARTBEAT: Log every 15 minutes so we know EA is alive
+   // ============================================
+   if(TimeCurrent() - g_last_heartbeat >= 900)  // 900 seconds = 15 minutes
+   {
+      double eq = AccountInfoDouble(ACCOUNT_EQUITY);
+      double bal = AccountInfoDouble(ACCOUNT_BALANCE);
+      PrintFormat("[HEARTBEAT] Ticks=%d | State=%s | Bal=$%.2f | Eq=$%.2f | DD=%.2f%% | Positions=%d",
+                  g_tick_count,
+                  EnumToString(g_guardian.GetState()),
+                  bal, eq,
+                  g_guardian.TotalDD(),
+                  g_trade.CountOpenPositions());
+      g_last_heartbeat = TimeCurrent();
+   }
+
    // ============================================
    // STEP 1: GUARDIAN CHECK (every single tick!)
    // ============================================
@@ -416,9 +436,16 @@ void OnTick()
       return;  // Same bar - no new signal scan
    g_last_bar_time = current_bar;
 
+   PrintFormat("[NEWBAR] %s | Guardian=%s | Scanning %d symbols...",
+              TimeToString(current_bar, TIME_DATE|TIME_MINUTES),
+              EnumToString(g_guardian.GetState()), g_symbol_count);
+
    // Only scan for signals if Guardian says we can trade
    if(!g_guardian.CanTrade())
+   {
+      PrintFormat("[NEWBAR] Blocked by Guardian: %s", g_guardian.GetHaltMessage());
       return;
+   }
 
    // NEWS FILTER: Check if safe to trade
    if(InpNewsFilterOn && !g_news.IsSafeToTrade())
