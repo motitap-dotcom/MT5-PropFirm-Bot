@@ -8,6 +8,7 @@ on:
       - 'scripts/clean_restart.sh'
       - 'scripts/upgrade_wine.sh'
       - 'scripts/fix_wine_version.sh'
+      - 'scripts/force_wine11.sh'
 
 permissions:
   contents: write
@@ -25,7 +26,7 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
           chmod +x scripts/fix_and_restart.sh scripts/clean_restart.sh
-          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/fix_wine_version.sh root@77.237.234.2:/tmp/fix.sh
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/force_wine11.sh root@77.237.234.2:/tmp/fix.sh
           sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 "bash /tmp/fix.sh" > vps_fix_report.txt 2>&1 || true
           echo "EXIT_CODE=$?" >> vps_fix_report.txt
           cat vps_fix_report.txt
