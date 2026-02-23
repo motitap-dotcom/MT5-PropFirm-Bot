@@ -297,6 +297,9 @@ int OnInit()
    PrintFormat("  - Risk multiplier: %.0f%%", g_account.GetRiskMultiplier() * 100);
    Print("[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<");
 
+   // Timer for status updates (works even when market is closed / no ticks)
+   EventSetTimer(5);
+
    return INIT_SUCCEEDED;
 }
 
@@ -318,11 +321,24 @@ void OnDeinit(const int reason)
 
    g_journal.Deinit();
 
+   EventKillTimer();
+
    if(InpShowDashboard)
       g_dashboard.Destroy();
 
    Comment("");
    PrintFormat("[DEINIT] PropFirmBot stopped. Reason: %d", reason);
+}
+
+//+------------------------------------------------------------------+
+//| TIMER HANDLER - writes status even when market is closed          |
+//+------------------------------------------------------------------+
+void OnTimer()
+{
+   // Always write status JSON (independent of dashboard/ticks)
+   int open_pos = g_trade.CountOpenPositions();
+   double floating = g_trade.GetTotalProfit();
+   g_status.WriteStatus(g_guardian, open_pos, floating);
 }
 
 //+------------------------------------------------------------------+
@@ -787,8 +803,6 @@ void CheckDailyReport()
 //+------------------------------------------------------------------+
 void UpdateDashboard()
 {
-   if(!InpShowDashboard) return;
-
    // Throttle updates
    if(TimeCurrent() - g_last_dashboard_update < g_dashboard_interval) return;
    g_last_dashboard_update = TimeCurrent();
@@ -796,9 +810,11 @@ void UpdateDashboard()
    int open_pos = g_trade.CountOpenPositions();
    double floating = g_trade.GetTotalProfit();
 
-   g_dashboard.Update(g_guardian, open_pos, floating);
+   // Update visual dashboard if enabled
+   if(InpShowDashboard)
+      g_dashboard.Update(g_guardian, open_pos, floating);
 
-   // Write status JSON for web dashboard
+   // Always write status JSON for web dashboard
    g_status.WriteStatus(g_guardian, open_pos, floating);
 }
 

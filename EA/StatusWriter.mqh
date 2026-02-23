@@ -217,13 +217,29 @@ void CStatusWriter::WriteStatus(CGuardian &guardian, int open_positions, double 
       guardian.ConsecLosses(),
       pos_count, positions_json);
 
-   // Write to file (overwrite)
+   // Write to file (overwrite) - writes to MQL5/Files/PropFirmBot/status.json
    string filepath = m_folder + "\\" + m_filename;
    int handle = FileOpen(filepath, FILE_WRITE|FILE_TXT|FILE_ANSI);
    if(handle != INVALID_HANDLE)
    {
       FileWriteString(handle, json);
       FileClose(handle);
+   }
+   else
+   {
+      int err = GetLastError();
+      PrintFormat("[StatusWriter] ERROR: Cannot write %s (error %d) - retrying with FolderCreate", filepath, err);
+      // Retry: recreate folder and try again
+      FolderCreate(m_folder);
+      handle = FileOpen(filepath, FILE_WRITE|FILE_TXT|FILE_ANSI);
+      if(handle != INVALID_HANDLE)
+      {
+         FileWriteString(handle, json);
+         FileClose(handle);
+         Print("[StatusWriter] Retry succeeded");
+      }
+      else
+         PrintFormat("[StatusWriter] ERROR: Retry also failed (error %d)", GetLastError());
    }
 }
 //+------------------------------------------------------------------+
