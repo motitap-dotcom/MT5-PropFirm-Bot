@@ -1,0 +1,95 @@
+name: VPS Status Check
+
+on:
+  push:
+    paths:
+      - '.github/workflows/vps-check.yml'
+      - 'trigger-check.txt'
+
+jobs:
+  check-vps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/build-cfd-trading-bot-fl0ld
+
+      - name: Check VPS and MT5 Status
+        run: |
+          # Install sshpass
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass
+
+          # SSH to VPS and run diagnostics
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 root@77.237.234.2 bash <<'REMOTE_SCRIPT'
+          echo "╔══════════════════════════════════════════════════╗"
+          echo "║  PropFirmBot - VPS Status Report                 ║"
+          echo "║  $(date '+%Y-%m-%d %H:%M:%S UTC')                       ║"
+          echo "╚══════════════════════════════════════════════════╝"
+          echo ""
+
+          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+
+          echo "=== 1. MT5 PROCESS ==="
+          ps aux | grep -i terminal64 | grep -v grep || echo "MT5 NOT RUNNING!"
+          echo ""
+
+          echo "=== 2. VNC ==="
+          pgrep -a x11vnc && echo "VNC OK" || echo "VNC NOT RUNNING"
+          echo ""
+
+          echo "=== 3. EA FILES ==="
+          ls -la "$MT5/MQL5/Experts/PropFirmBot/" 2>&1
+          echo ""
+
+          echo "=== 4. MT5 LOG (last 50 lines) ==="
+          LOGFILE=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+          if [ -n "$LOGFILE" ]; then
+            echo "File: $LOGFILE"
+            echo "Size: $(stat -c%s "$LOGFILE") bytes"
+            echo "Modified: $(stat -c%y "$LOGFILE")"
+            echo "---"
+            cat "$LOGFILE" | tr -d '\0' | tail -50
+          else
+            echo "No log files found!"
+          fi
+          echo ""
+
+          echo "=== 5. EA SPECIFIC LOGS ==="
+          if [ -n "$LOGFILE" ]; then
+            cat "$LOGFILE" | tr -d '\0' | grep -i "TRADE\|SIGNAL\|GUARDIAN\|CLOSED\|EMERGENCY\|ERROR\|WARNING\|BUY\|SELL\|INIT\|TICK\|NEWS" | tail -30
+          fi
+          echo ""
+
+          echo "=== 6. TRADE JOURNAL ==="
+          find "$MT5/MQL5/Files/" -name "*journal*" -o -name "*trade*" -o -name "*.csv" 2>/dev/null | head -5
+          for f in $(find "$MT5/MQL5/Files/" -name "*.csv" 2>/dev/null); do
+            echo "--- $f ---"
+            tail -10 "$f" 2>/dev/null
+          done
+          echo ""
+
+          echo "=== 7. TELEGRAM TEST ==="
+          curl -s -4 "https://api.telegram.org/bot8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g/sendMessage" \
+            -d "chat_id=7013213983" \
+            -d "text=🤖 VPS Status Check (GitHub Actions) - $(date '+%H:%M:%S')" 2>&1 | head -3
+          echo ""
+
+          echo "=== 8. DNS ==="
+          echo "nameserver 8.8.8.8" > /etc/resolv.conf
+          echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+          ping -c1 -W3 -4 google.com 2>&1 | head -3
+          echo ""
+
+          echo "=== 9. SYSTEM ==="
+          echo "Uptime: $(uptime -p)"
+          free -m | head -2
+          df -h / | tail -1
+          echo ""
+
+          echo "=== 10. MT5 CONNECTION ==="
+          cat "$MT5/config/common.ini" 2>/dev/null | head -20
+          echo ""
+
+          echo "=== DONE ==="
+          REMOTE_SCRIPT
