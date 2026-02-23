@@ -23,6 +23,7 @@
 #include "AccountStateManager.mqh"
 #include "Notifications.mqh"
 #include "TradeAnalyzer.mqh"
+#include "StatusWriter.mqh"
 
 //+------------------------------------------------------------------+
 //| INPUT PARAMETERS                                                  |
@@ -127,6 +128,7 @@ CNewsFilter           g_news;            // News event filter
 CAccountStateManager  g_account;         // Account phase management
 CNotifications        g_notify;          // Telegram + push alerts
 CTradeAnalyzer        g_analyzer;        // Self-learning trade analysis
+CStatusWriter         g_status;          // Web dashboard status writer
 
 string         g_symbols[];
 int            g_symbol_count = 0;
@@ -272,6 +274,9 @@ int OnInit()
 
    // === TRADE ANALYZER (Self-Learning) ===
    g_analyzer.Init(500);
+
+   // === STATUS WRITER (Web Dashboard) ===
+   g_status.Init(InpMagicNumber, "PropFirmBot");
 
    // === DASHBOARD ===
    if(InpShowDashboard)
@@ -792,6 +797,9 @@ void UpdateDashboard()
    double floating = g_trade.GetTotalProfit();
 
    g_dashboard.Update(g_guardian, open_pos, floating);
+
+   // Write status JSON for web dashboard
+   g_status.WriteStatus(g_guardian, open_pos, floating);
 }
 
 //+------------------------------------------------------------------+
