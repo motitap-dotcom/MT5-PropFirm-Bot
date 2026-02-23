@@ -1,70 +1,53 @@
-=== WINE UPGRADE 2026-02-23 07:49:25 UTC ===
---- 1. Stop MT5 ---
+=== INSTALL MT5 LINUX 2026-02-23 08:18:47 UTC ===
+--- 1. Stop everything ---
 Stopped
 
---- 2. Current Wine ---
-wine-9.0 (Ubuntu 9.0~repack-4build3)
-opt wine-stable not found
-wine-9.0 (Ubuntu 9.0~repack-4build3)
-ii  fonts-wine                           9.0~repack-4build3                      all          Windows API implementation - fonts
-ii  libwine:amd64                        9.0~repack-4build3                      amd64        Windows API implementation - library
-ii  libwine:i386                         9.0~repack-4build3                      i386         Windows API implementation - library
-ii  wine                                 9.0~repack-4build3                      all          Windows API implementation - standard suite
-ii  wine32:i386                          9.0~repack-4build3                      i386         Windows API implementation - 32-bit binary loader
-ii  wine64                               9.0~repack-4build3                      amd64        Windows API implementation - 64-bit binary loader
+--- 2. Display ---
+Display OK
 
---- 3. Add WineHQ repo ---
-Ubuntu: noble
-Repo added
+--- 3. Download MT5 ---
+-rw-r--r-- 1 root root 22765928 Feb 23 08:18 mt5setup.exe
+Downloaded: 22765928 bytes
 
---- 4. Install Wine ---
-W: Target Translations (main/i18n/Translation-en) is configured multiple times in /etc/apt/sources.list.d/winehq-noble.sources:1 and /etc/apt/sources.list.d/winehq.list:1
-W: Target DEP-11 (main/dep11/Components-amd64.yml) is configured multiple times in /etc/apt/sources.list.d/winehq-noble.sources:1 and /etc/apt/sources.list.d/winehq.list:1
-W: Target DEP-11 (main/dep11/Components-all.yml) is configured multiple times in /etc/apt/sources.list.d/winehq-noble.sources:1 and /etc/apt/sources.list.d/winehq.list:1
-W: Target CNF (main/cnf/Commands-amd64) is configured multiple times in /etc/apt/sources.list.d/winehq-noble.sources:1 and /etc/apt/sources.list.d/winehq.list:1
-W: Target CNF (main/cnf/Commands-all) is configured multiple times in /etc/apt/sources.list.d/winehq-noble.sources:1 and /etc/apt/sources.list.d/winehq.list:1
-Installing winehq-stable...
-Preparing to unpack .../winehq-stable_11.0.0.0~noble-1_amd64.deb ...
-Unpacking winehq-stable (11.0.0.0~noble-1) ...
-Setting up wine-stable-amd64 (11.0.0.0~noble-1) ...
-Setting up wine-stable-i386:i386 (11.0.0.0~noble-1) ...
-Setting up wine-stable (11.0.0.0~noble-1) ...
-Setting up winehq-stable (11.0.0.0~noble-1) ...
-Processing triggers for hicolor-icon-theme (0.17-2) ...
-Processing triggers for man-db (2.12.0-4build2) ...
+--- 4. Install MT5 ---
+reg: The operation completed successfully
+Installer PID: 82350
+Waiting for installer (up to 2 min)...
+  ...still installing (10s)
+  ...still installing (20s)
+  ...still installing (30s)
+  ...still installing (40s)
+  ...still installing (50s)
+  ...still installing (60s)
+  ...still installing (70s)
+  ...still installing (80s)
+  ...still installing (90s)
+  ...still installing (100s)
+  ...still installing (110s)
+Installer finished at iteration 12
 
-Running kernel seems to be up-to-date.
+--- 5. Find MT5 ---
+/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
 
-No services need to be restarted.
+MT5 directories:
+/root/.wine/drive_c/Program Files/MetaTrader 5
+/root/.wine/drive_c/users/root/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/MetaTrader 5
+Using existing MT5: /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
+MT5 dir: /root/.wine/drive_c/Program Files/MetaTrader 5
 
-No containers need to be restarted.
+--- 6. Copy EA files ---
+Same location, no copy needed
 
-User sessions running outdated binaries:
- root @ session #24: explorer.exe[19763,20036,20771,26061], services.exe[19755,20030,20765,26054]
- root @ session #8: explorer.exe[11869], plugplay.exe[13581], services.exe[11861], svchost.exe[13575]
+--- 7. Start MT5 fresh ---
+MT5 started from: /root/.wine/drive_c/Program Files/MetaTrader 5
 
-No VM guests are running outdated hypervisor (qemu) binaries on this host.
-
---- 5. Verify new Wine ---
-wine-11.0
-Wine binary: /usr/bin/wine
-Wine version: wine-11.0
-
---- 6. Restart MT5 with new Wine ---
-MT5 started
-
---- 7. Wait 30 seconds... ---
+--- 8. Wait 30 seconds ---
 MT5 running: YES
 
-Wine version running:
-wine-11.0
-
 Outbound connections:
-Recv-Q Send-Q Local Address:Port   Peer Address:Port Process
+Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
 
-Terminal log (last 15 lines):
-GH	2	07:39:11.266	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-CI	2	07:39:11.266	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+Terminal log:
 ID	0	07:39:13.126	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 NR	0	07:45:27.325	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
 RH	0	07:45:27.328	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
@@ -78,9 +61,21 @@ RQ	0	07:50:05.645	Terminal	C:\Program Files\MetaTrader 5
 NG	2	07:50:06.202	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
 RF	2	07:50:06.202	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
 PI	0	07:50:09.622	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+HD	2	07:55:19.682	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
+QL	0	07:55:19.690	Experts	expert PropFirmBot (EURUSD,M15) removed
 
 EA log:
-Not yet (waiting for symbol sync...)
+EXISTS!
+PS	0	22:38:21.873	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+RJ	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+GK	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+NQ	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+OI	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+OL	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+KG	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+QN	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+IF	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+MM	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
 
 === DONE ===
 EXIT_CODE=0
