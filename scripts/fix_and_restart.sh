@@ -1,92 +1,41 @@
 #!/bin/bash
-# PropFirmBot - Fix Connection & Restart MT5
-# Fixes: FundedNext login, time sync, DNS, restart MT5 with EA
+# PropFirmBot - Fix Connection & Restart MT5 (v2 - non-blocking)
 
-echo "=== FIX SCRIPT START ==="
-echo "Time: $(date '+%Y-%m-%d %H:%M:%S UTC')"
+echo "=== FIX START $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
-EA_DIR="$MT5/MQL5/Experts/PropFirmBot"
 
-# ============================================
 # STEP 1: Fix DNS
-# ============================================
-echo ""
-echo ">>> STEP 1: Fix DNS"
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 echo "nameserver 1.1.1.1" >> /etc/resolv.conf
-ping -c1 -W3 -4 google.com > /dev/null 2>&1 && echo "DNS: OK" || echo "DNS: FAILED"
+echo "1. DNS: FIXED"
 
-# ============================================
-# STEP 2: Fix system time via NTP
-# ============================================
-echo ""
-echo ">>> STEP 2: Fix system time"
-echo "Before: $(date)"
-apt-get install -y -qq ntpdate > /dev/null 2>&1
-ntpdate -u pool.ntp.org 2>&1 || ntpdate -u time.google.com 2>&1 || echo "NTP sync failed, trying timedatectl..."
-timedatectl set-ntp true 2>/dev/null
-echo "After: $(date)"
+# STEP 2: Fix time
+ntpdate -u pool.ntp.org > /dev/null 2>&1 || true
+echo "2. Time: $(date)"
 
-# ============================================
-# STEP 3: Stop current MT5
-# ============================================
-echo ""
-echo ">>> STEP 3: Stop MT5"
-# Gracefully kill MT5
-if pgrep -f terminal64 > /dev/null 2>&1; then
-    echo "Killing MT5 process..."
-    pkill -f terminal64
-    sleep 3
-    # Force kill if still running
-    if pgrep -f terminal64 > /dev/null 2>&1; then
-        pkill -9 -f terminal64
-        sleep 2
-    fi
-    echo "MT5 stopped"
-else
-    echo "MT5 was not running"
-fi
-
-# Also kill any stuck wineserver
+# STEP 3: Stop MT5
+pkill -f terminal64 2>/dev/null
+sleep 3
+pkill -9 -f terminal64 2>/dev/null
 wineserver -k 2>/dev/null
 sleep 2
+echo "3. MT5: STOPPED"
 
-# ============================================
-# STEP 4: Ensure Xvfb and VNC are running
-# ============================================
-echo ""
-echo ">>> STEP 4: Check display server"
+# STEP 4: Ensure display
 if ! pgrep -x Xvfb > /dev/null 2>&1; then
-    echo "Starting Xvfb..."
     Xvfb :99 -screen 0 1280x1024x24 &
     sleep 2
-else
-    echo "Xvfb already running"
 fi
 export DISPLAY=:99
-
 if ! pgrep -x x11vnc > /dev/null 2>&1; then
-    echo "Starting x11vnc..."
     x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw 2>/dev/null
-    sleep 1
-else
-    echo "x11vnc already running"
 fi
+echo "4. Display: OK"
 
-# ============================================
-# STEP 5: Configure MT5 for auto-login
-# ============================================
-echo ""
-echo ">>> STEP 5: Configure MT5 login"
-
-# Create/update the MT5 startup config
-# MT5 reads common.ini for startup settings
-CONFIG_DIR="$MT5/config"
-mkdir -p "$CONFIG_DIR" 2>/dev/null
-
-# Write the server connection config
-cat > "$CONFIG_DIR/common.ini" << 'INIEOF'
+# STEP 5: Configure MT5
+mkdir -p "$MT5/config" 2>/dev/null
+cat > "$MT5/config/common.ini" << 'EOF'
 [Common]
 Login=11797849
 ProxyEnable=0
@@ -103,112 +52,62 @@ AllowDllImport=0
 Enabled=1
 Account=11797849
 Profile=0
-INIEOF
+EOF
+echo "5. Config: WRITTEN"
 
-echo "common.ini updated"
-
-# Also ensure the server file exists for FundedNext
-SRV_DIR="$MT5/config/servers"
-mkdir -p "$SRV_DIR" 2>/dev/null
-
-# Write account credentials for auto-login
-# MT5 uses .srv files but the simplest is to use command line args
-
-# Add api.telegram.org to allowed URLs for WebRequest
-# This is stored in the terminal's options
-echo "Config files updated"
-
-# ============================================
-# STEP 6: Start MT5 with login parameters
-# ============================================
-echo ""
-echo ">>> STEP 6: Start MT5"
+# STEP 6: Start MT5 (fully detached)
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
-
-# Start MT5 with login credentials
 cd "$MT5"
-wine terminal64.exe /portable \
-    /login:11797849 \
-    /password:gazDE62## \
-    /server:FundedNext-Server \
-    &
+nohup wine terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server > /tmp/mt5_wine.log 2>&1 &
+disown
+echo "6. MT5: STARTING (backgrounded)"
 
-MT5_PID=$!
-echo "MT5 started with PID: $MT5_PID"
-
-# Wait for MT5 to initialize
-echo "Waiting 30 seconds for MT5 to connect..."
-sleep 30
-
-# Check if MT5 is running
+# STEP 7: Wait briefly and check
+sleep 15
 if pgrep -f terminal64 > /dev/null 2>&1; then
-    echo "MT5 is RUNNING"
+    echo "7. MT5: RUNNING"
     ps aux | grep terminal64 | grep -v grep
 else
-    echo "MT5 FAILED TO START!"
+    echo "7. MT5: NOT YET RUNNING (may still be loading)"
 fi
 
-# ============================================
-# STEP 7: Check logs for connection
-# ============================================
-echo ""
-echo ">>> STEP 7: Check connection status"
-
-# Wait a bit more and check new logs
-sleep 10
-
+# STEP 8: Check for new logs
 LATEST_LOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
 if [ -n "$LATEST_LOG" ]; then
-    echo "Latest log: $(basename "$LATEST_LOG")"
-    echo "Log size: $(stat -c%s "$LATEST_LOG") bytes"
-    echo "--- Last 40 lines ---"
-    cat "$LATEST_LOG" | tr -d '\0' | tail -40
+    echo "8. Log: $(basename "$LATEST_LOG" 2>/dev/null) ($(stat -c%s "$LATEST_LOG") bytes)"
+    cat "$LATEST_LOG" | tr -d '\0' | tail -20
 else
-    echo "No log files yet"
+    echo "8. Log: No logs yet"
 fi
 
-# ============================================
-# STEP 8: Send Telegram notification
-# ============================================
-echo ""
-echo ">>> STEP 8: Telegram notification"
-MT5_STATUS="UNKNOWN"
-pgrep -f terminal64 > /dev/null 2>&1 && MT5_STATUS="RUNNING" || MT5_STATUS="DOWN"
-
+# STEP 9: Telegram
 curl -s -4 --connect-timeout 5 "https://api.telegram.org/bot8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g/sendMessage" \
     -d "chat_id=7013213983" \
-    -d "text=🔧 MT5 Restart Complete
-Status: $MT5_STATUS
-Time: $(date '+%H:%M:%S UTC')
-Account: 11797849
-Server: FundedNext-Server
-Action: Auto-reconnect executed" 2>&1 | grep -o '"ok":[^,]*'
+    -d "text=🔧 MT5 Restarted on VPS $(date '+%H:%M UTC')
+$(pgrep -f terminal64 > /dev/null 2>&1 && echo '✅ MT5 Running' || echo '⏳ MT5 Loading...')" > /dev/null 2>&1
+echo "9. Telegram: SENT"
 
-# ============================================
-# STEP 9: Final status check
-# ============================================
-echo ""
-echo ">>> STEP 9: Final status"
-echo "MT5 Process:"
-ps aux | grep terminal64 | grep -v grep || echo "NOT RUNNING"
-echo ""
-echo "Wine processes:"
-ps aux | grep wine | grep -v grep
-echo ""
-echo "VNC:"
-pgrep -la x11vnc || echo "VNC DOWN"
-echo ""
-echo "System time: $(date)"
-echo ""
-
-# Check if new log has any balance/connection info
-sleep 5
+# STEP 10: Create a delayed check script (runs after 60 more seconds)
+cat > /tmp/delayed_check.sh << 'DELAYED'
+#!/bin/bash
+sleep 60
+MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 LATEST_LOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+BALANCE_LINE=""
 if [ -n "$LATEST_LOG" ]; then
-    echo "--- Updated log (last 20 lines) ---"
-    cat "$LATEST_LOG" | tr -d '\0' | tail -20
+    BALANCE_LINE=$(cat "$LATEST_LOG" | tr -d '\0' | grep -i "balance\|INIT\|Account\|WARNING\|ERROR" | tail -5)
 fi
+MT5_OK=$(pgrep -f terminal64 > /dev/null 2>&1 && echo "RUNNING" || echo "DOWN")
+curl -s -4 --connect-timeout 5 "https://api.telegram.org/bot8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g/sendMessage" \
+    -d "chat_id=7013213983" \
+    -d "text=📊 60s Post-Restart Check:
+MT5: $MT5_OK
+Log: $BALANCE_LINE" > /dev/null 2>&1
+DELAYED
+chmod +x /tmp/delayed_check.sh
+nohup bash /tmp/delayed_check.sh > /dev/null 2>&1 &
+disown
+echo "10. Delayed check: SCHEDULED (60s)"
 
-echo ""
-echo "=== FIX SCRIPT DONE ==="
+echo "=== FIX DONE ==="
