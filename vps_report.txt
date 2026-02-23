@@ -1,108 +1,40 @@
-=== NETWORK CHECK 2026-02-23 07:42:26 UTC ===
---- 1. Full Terminal Log Today ---
-Size: 5204 bytes
-ÿþLL	0	07:04:24.332	Terminal	updating C:\Program Files\MetaTrader 5\MQL5 folder
-RD	0	07:04:24.814	Terminal	no changes
-HI	0	07:04:25.623	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-NF	0	07:04:25.624	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-NI	0	07:04:25.624	Terminal	C:\Program Files\MetaTrader 5
-DQ	0	07:04:25.722	Compiler	full recompilation has been started
-NG	2	07:04:26.298	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-RF	2	07:04:26.298	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-KK	0	07:04:26.939	Compiler	full recompilation has been finished:  0 file(s) compiled
-MF	0	07:04:31.513	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-MO	2	07:09:41.847	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
-IQ	0	07:09:41.852	Experts	expert PropFirmBot (EURUSD,M15) removed
-KE	0	07:15:18.743	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-DR	0	07:15:18.743	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-LE	0	07:15:18.743	Terminal	C:\Program Files\MetaTrader 5
-RS	2	07:15:19.258	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-NR	2	07:15:19.258	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-OM	0	07:15:23.057	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-OH	2	07:20:33.102	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
-DH	0	07:20:33.107	Experts	expert PropFirmBot (EURUSD,M15) removed
-IL	0	07:39:10.769	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-JI	0	07:39:10.770	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-RL	0	07:39:10.770	Terminal	C:\Program Files\MetaTrader 5
-GH	2	07:39:11.266	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-CI	2	07:39:11.266	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+=== QUICK CHECK 2026-02-23 08:06:54 UTC ===
+Wine: wine-11.0
+Wine64: NOT_FOUND
+
+MT5 running: YES
+root       77742  3.0  2.7 704840 219800 ?       Sl   07:50   0:30 C:\Program Files\MetaTrader 5\terminal64.exe
+root       78314  0.0  0.1 2685808 13804 ?       S<   07:50   0:00 start.exe /exec terminal64.exe /login:11797849 /password:gazDE62##
+root       79378  0.0  2.0 298208 168352 ?       S<   07:55   0:00 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
+
+Outbound TCP (non-SSH/VNC):
+Recv-Q Send-Q Local Address:Port   Peer Address:Port Process
+
+Terminal log (last 15):
+Size: 8190 bytes
 ID	0	07:39:13.126	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+NR	0	07:45:27.325	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+RH	0	07:45:27.328	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
+FS	0	07:45:27.328	Terminal	C:\Program Files\MetaTrader 5
+PF	2	07:45:27.917	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
+LH	2	07:45:27.917	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+RJ	0	07:45:30.819	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+JQ	0	07:50:05.644	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+RN	0	07:50:05.645	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
+RQ	0	07:50:05.645	Terminal	C:\Program Files\MetaTrader 5
+NG	2	07:50:06.202	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
+RF	2	07:50:06.202	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+PI	0	07:50:09.622	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+HD	2	07:55:19.682	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
+QL	0	07:55:19.690	Experts	expert PropFirmBot (EURUSD,M15) removed
 
---- 2. EA Log Today ---
-No EA log (EA not initialized)
+EA log:
+No
 
---- 3. MT5 Process ---
-root       11857  0.3  0.1  12328  9384 ?        Ss   Feb22   4:02 /opt/wine-stable/lib/wine/../../bin/wineserver
-root       11876  0.1  0.2 360768 17056 ?        S<sl Feb22   1:17 C:\windows\system32\winedevice.exe
-root       19750  0.3  0.1  12064  9084 ?        Ss   Feb22   3:24 /opt/wine-stable/lib/wine/../../bin/wineserver
-root       19770  0.1  0.1 355596 16240 ?        S<sl Feb22   1:10 C:\windows\system32\winedevice.exe
-root       20026  0.3  0.1  12064  9184 ?        Ss   Feb22   3:24 /opt/wine-stable/lib/wine/../../bin/wineserver
-root       20045  0.1  0.1 355596 16188 ?        S<sl Feb22   1:10 C:\windows\system32\winedevice.exe
-root       20761  0.3  0.1  12064  9188 ?        Ss   Feb22   3:21 /opt/wine-stable/lib/wine/../../bin/wineserver
-root       20780  0.1  0.1 355596 16200 ?        S<sl Feb22   1:10 C:\windows\system32\winedevice.exe
-root       26050  0.3  0.1  12064  9188 ?        Ss   Feb22   2:51 /opt/wine-stable/lib/wine/../../bin/wineserver
-root       26069  0.1  0.1 355596 16180 ?        S<sl Feb22   1:02 C:\windows\system32\winedevice.exe
-root       75517  0.1  0.1 2669780 13816 ?       S    07:39   0:00 start.exe /exec terminal64.exe /login:11797849 /password:gazDE62##
-root       75520  2.6  0.1  15648 14268 ?        Ss   07:39   0:05 /usr/lib/wine/wineserver64 -p0
-root       75531  0.2  0.2 359472 23396 ?        Ssl  07:39   0:00 C:\windows\system32\winedevice.exe
-root       75543  4.0  0.3 574240 27424 ?        Ssl  07:39   0:07 C:\windows\system32\winedevice.exe
-root       75582  7.0  2.7 640580 220744 ?       Sl   07:39   0:13 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
-
---- 4. Network diagnostics ---
-Firewall rules:
-Chain INPUT (policy ACCEPT)
-target     prot opt source               destination         
-
-Chain FORWARD (policy ACCEPT)
-target     prot opt source               destination         
-
-Chain OUTPUT (policy ACCEPT)
-target     prot opt source               destination         
-
-Outbound connections (MT5):
-
-DNS working:
-Server:		8.8.8.8
-Address:	8.8.8.8#53
-
-Non-authoritative answer:
-Name:	google.com
-
---- 5. Extract server IPs from servers.dat ---
-
-
---- 6. Try to extract server IPs from Bases ---
-total 36
-drwxr-xr-x 9 root root 4096 Feb 22 18:47 .
-drwxr-xr-x 6 root root 4096 Feb 22 18:47 ..
-drwxr-xr-x 6 root root 4096 Feb 22 18:47 history
-drwxr-xr-x 2 root root 4096 Feb 22 22:38 mail
-drwxr-xr-x 2 root root 4096 Feb 22 18:47 news
-drwxr-xr-x 2 root root 4096 Feb 22 18:47 subscriptions
-drwxr-xr-x 2 root root 4096 Feb 22 18:47 symbols
-drwxr-xr-x 2 root root 4096 Feb 22 18:47 ticks
-drwxr-xr-x 3 root root 4096 Feb 22 18:47 trades
-
---- 7. Test common MT5 ports ---
-Port 443: OPEN
-Port 443: OPEN
-
---- 8. Check if MT5 has ANY network connection ---
-MT5 PID: 75517
-lrwx------ 1 root root 64 Feb 23 07:42 5 -> socket:[943428]
-  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode                                                     
-   0: 3600007F:0035 00000000:0000 0A 00000000:00000000 00:00000000 00000000   991        0 5070 1 ffff892202e4b780 100 0 0 10 5                      
-   1: 00000000:0016 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 8280 1 ffff892202e4ae40 100 0 0 10 0                      
-   2: 3500007F:0035 00000000:0000 0A 00000000:00000000 00:00000000 00000000   991        0 5068 1 ffff892202e49bc0 100 0 0 10 5                      
-   3: 00000000:170C 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 431591 1 ffff892203039bc0 100 0 0 10 0                    
-   4: 02EAED4D:0016 951C8ABC:9C78 01 00000000:00000000 02:000AF66E 00000000     0        0 948201 2 ffff89223c048000 21 4 31 10 -1                   
-   5: 02EAED4D:0016 87B140AA:96BA 01 00000000:00000000 02:000AFAE0 00000000     0        0 949776 2 ffff89223c049280 75 4 20 10 -1                   
-   6: 02EAED4D:0016 87B140AA:96C4 01 0000023C:00000000 01:0000004B 00000000     0        0 949816 3 ffff89223c04a500 98 4 27 10 -1                   
-   7: 02EAED4D:0016 3E47E140:CA3A 01 00000000:00000000 02:000AFB1E 00000000     0        0 949780 2 ffff89223c04ca00 21 4 20 10 -1                   
-   8: 02EAED4D:0016 80D980B2:C922 01 00000044:00000000 01:0000002E 00000000     0        0 949812 3 ffff89223c04b780 61 4 25 10 -1                   
-
---- 9. Telegram test (proves outbound HTTPS works) ---
-Telegram: SENT
-
+Wine packages:
+wine-stable 11.0.0.0~noble-1
+wine-stable-amd64 11.0.0.0~noble-1
+wine-stable-i386:i386 11.0.0.0~noble-1
+winehq-stable 11.0.0.0~noble-1
 === DONE ===
 EXIT_CODE=0
