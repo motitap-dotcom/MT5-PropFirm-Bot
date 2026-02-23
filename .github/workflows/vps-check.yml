@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/vps-check.yml'
       - 'trigger-check.txt'
+      - 'scripts/remote_check.sh'
 
 permissions:
   contents: write
@@ -18,109 +19,19 @@ jobs:
         with:
           ref: claude/build-cfd-trading-bot-fl0ld
 
-      - name: Check VPS and MT5 Status
+      - name: Run VPS diagnostics
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-
-          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 root@77.237.234.2 bash <<'REMOTE_SCRIPT' > vps_report.txt 2>&1
-          echo "╔══════════════════════════════════════════════════╗"
-          echo "║  PropFirmBot - VPS Status Report                 ║"
-          echo "║  $(date '+%Y-%m-%d %H:%M:%S UTC')                       ║"
-          echo "╚══════════════════════════════════════════════════╝"
-          echo ""
-
-          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
-
-          echo "=== 1. MT5 PROCESS ==="
-          ps aux | grep -i terminal64 | grep -v grep || echo "MT5 NOT RUNNING!"
-          echo ""
-
-          echo "=== 2. VNC ==="
-          pgrep -la x11vnc 2>/dev/null && echo "VNC OK" || echo "VNC NOT RUNNING"
-          pgrep -la Xvfb 2>/dev/null && echo "Xvfb OK" || echo "Xvfb NOT RUNNING"
-          echo ""
-
-          echo "=== 3. EA FILES ==="
-          ls -la "$MT5/MQL5/Experts/PropFirmBot/" 2>&1
-          echo ""
-
-          echo "=== 4. MT5 LOG (last 50 lines) ==="
-          LOGFILE=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-          if [ -n "$LOGFILE" ]; then
-            echo "File: $LOGFILE"
-            echo "Size: $(stat -c%s "$LOGFILE" 2>/dev/null) bytes"
-            echo "Modified: $(stat -c%y "$LOGFILE" 2>/dev/null)"
-            echo "---"
-            cat "$LOGFILE" | tr -d '\0' | tail -50
-          else
-            echo "No log files found!"
-          fi
-          echo ""
-
-          echo "=== 5. EA SPECIFIC LOGS ==="
-          if [ -n "$LOGFILE" ]; then
-            echo "PropFirmBot entries:"
-            cat "$LOGFILE" | tr -d '\0' | grep -i "TRADE\|SIGNAL\|GUARDIAN\|CLOSED\|EMERGENCY\|ERROR\|BUY\|SELL\|INIT\|NEWS\|PropFirmBot\|PFBot" | tail -30
-          fi
-          echo ""
-
-          echo "=== 6. ALL LOG FILES ==="
-          ls -la "$MT5/MQL5/Logs/" 2>&1
-          echo ""
-          for logf in $(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -3); do
-            echo "--- $(basename "$logf" 2>/dev/null || echo "$logf") ---"
-            cat "$logf" | tr -d '\0' | tail -20
-            echo ""
-          done
-
-          echo "=== 7. TRADE JOURNAL ==="
-          find "$MT5/MQL5/Files/" -name "*.csv" -type f 2>/dev/null
-          for f in $(find "$MT5/MQL5/Files/" -name "*.csv" -type f 2>/dev/null); do
-            echo "--- $f ---"
-            wc -l "$f" 2>/dev/null
-            tail -10 "$f" 2>/dev/null
-          done
-          echo ""
-
-          echo "=== 8. TELEGRAM TEST ==="
-          curl -s -4 --connect-timeout 5 "https://api.telegram.org/bot8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g/sendMessage" \
-            -d "chat_id=7013213983" \
-            -d "text=🤖 VPS Auto-Check (GitHub Actions) - $(date '+%H:%M:%S UTC')
-MT5: $(pgrep -x terminal64.exe > /dev/null 2>&1 && echo RUNNING || echo DOWN)
-Uptime: $(uptime -p)" 2>&1 | grep -o '"ok":[^,]*'
-          echo ""
-
-          echo "=== 9. DNS ==="
-          echo "nameserver 8.8.8.8" > /etc/resolv.conf
-          echo "nameserver 1.1.1.1" >> /etc/resolv.conf
-          ping -c1 -W3 -4 google.com 2>&1 | head -2
-          echo ""
-
-          echo "=== 10. SYSTEM ==="
-          echo "Uptime: $(uptime -p 2>/dev/null || uptime)"
-          echo "Load: $(cat /proc/loadavg | awk '{print $1, $2, $3}')"
-          free -m | awk '/Mem:/{printf "Memory: %dMB / %dMB (%d%%)\n", $3, $2, $3*100/$2}'
-          df -h / | awk 'NR==2{printf "Disk: %s used (%s free)\n", $5, $4}'
-          echo ""
-
-          echo "=== 11. MT5 CONFIG ==="
-          cat "$MT5/config/common.ini" 2>/dev/null | head -20 || echo "No config found"
-          echo ""
-
-          echo "=== 12. WINE PROCESSES ==="
-          ps aux | grep wine | grep -v grep
-          echo ""
-
-          echo "=== REPORT DONE ==="
-          REMOTE_SCRIPT
-
-          echo "--- SSH Exit Code: $? ---" >> vps_report.txt
+          chmod +x scripts/remote_check.sh
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/remote_check.sh root@77.237.234.2:/tmp/check.sh
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 root@77.237.234.2 "bash /tmp/check.sh" > vps_report.txt 2>&1
+          echo "EXIT_CODE=$?" >> vps_report.txt
           cat vps_report.txt
 
-      - name: Commit report to repo
+      - name: Commit report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add vps_report.txt
-          git commit -m "VPS status report - $(date -u '+%Y-%m-%d %H:%M UTC')" || echo "No changes"
-          git push origin claude/build-cfd-trading-bot-fl0ld
+          git add -f vps_report.txt
+          git commit -m "VPS status report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push origin claude/build-cfd-trading-bot-fl0ld || true
