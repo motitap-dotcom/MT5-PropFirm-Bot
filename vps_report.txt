@@ -1,0 +1,139 @@
+REPORT_START
+Time: 2026-02-23 06:58:05 UTC
+
+=== 1. MT5 PROCESS ===
+root       41279  6.0  3.5 1300316 289424 ?      Sl   Feb22  30:15 C:\Program Files\MetaTrader 5\terminal64.exe
+
+=== 2. VNC ===
+41210 x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw
+41205 Xvfb :99 -screen 0 1280x1024x24
+
+=== 3. EA FILES ===
+total 380
+drwxr-xr-x 2 root root   4096 Feb 22 21:35 .
+drwxr-xr-x 6 root root   4096 Feb 22 18:29 ..
+-rw-r--r-- 1 root root  15380 Feb 22 21:53 AccountStateManager.mqh
+-rw-r--r-- 1 root root  11187 Feb 22 21:53 Dashboard.mqh
+-rw-r--r-- 1 root root  21779 Feb 22 21:53 Guardian.mqh
+-rw-r--r-- 1 root root  10622 Feb 22 21:53 NewsFilter.mqh
+-rw-r--r-- 1 root root  11971 Feb 22 21:53 Notifications.mqh
+-rw-r--r-- 1 root root 152614 Feb 22 22:07 PropFirmBot.ex5
+-rw-r--r-- 1 root root   7382 Feb 22 21:53 PropFirmBot.log
+-rw-r--r-- 1 root root  32187 Feb 22 21:53 PropFirmBot.mq5
+-rw-r--r-- 1 root root  25237 Feb 22 21:53 RiskManager.mqh
+-rw-r--r-- 1 root root  23087 Feb 22 21:53 SignalEngine.mqh
+-rw-r--r-- 1 root root  22240 Feb 22 21:53 TradeAnalyzer.mqh
+-rw-r--r-- 1 root root   9141 Feb 22 21:53 TradeJournal.mqh
+-rw-r--r-- 1 root root  14433 Feb 22 21:53 TradeManager.mqh
+
+=== 4. LOG FILES LIST ===
+total 104
+drwxr-xr-x  2 root root  4096 Feb 22 19:37 .
+drwxr-xr-x 13 root root  4096 Feb 22 22:04 ..
+-rw-r--r--  1 root root 92702 Feb 22 22:39 20260222.log
+
+=== 5. MT5 LOG CONTENT ===
+File: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260222.log
+Size: 92702 bytes
+Modified: 2026-02-22 22:39:09.056162903 +0000
+MJ	0	22:07:17.626	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+PE	0	22:07:17.926	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+IR	0	22:07:17.926	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+LH	0	22:07:17.926	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+QP	0	22:07:17.926	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+QE	0	22:07:17.926	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+MN	0	22:07:17.926	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+OG	0	22:07:17.926	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+GM	0	22:07:17.926	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+KF	0	22:07:17.926	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+JE	0	22:38:11.300	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
+OI	0	22:38:11.301	PropFirmBot (EURUSD,M15)	==============================================
+DQ	0	22:38:11.301	PropFirmBot (EURUSD,M15)	  PropFirmBot v3.0 - FULL TRADING SYSTEM
+KG	0	22:38:11.301	PropFirmBot (EURUSD,M15)	  ALL MODULES ACTIVE
+MO	0	22:38:11.301	PropFirmBot (EURUSD,M15)	==============================================
+QS	0	22:38:21.319	PropFirmBot (EURUSD,M15)	[WARNING] Account balance still 0 after 20 attempts. Using configured size: $2000
+HM	0	22:38:21.319	PropFirmBot (EURUSD,M15)	[INIT] Symbols (3): EURUSD, GBPUSD, USDJPY
+LJ	0	22:38:21.319	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
+CF	0	22:38:21.319	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
+JE	0	22:38:21.320	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+NN	0	22:38:21.320	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+KM	0	22:38:21.320	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+RJ	0	22:38:21.320	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
+PR	0	22:38:21.320	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+NE	0	22:38:21.320	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
+PK	0	22:38:21.320	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
+HP	0	22:38:21.320	PropFirmBot (EURUSD,M15)	Target: NO TARGET
+DE	0	22:38:21.320	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
+DS	0	22:38:21.328	PropFirmBot (EURUSD,M15)	[GUARDIAN 2024.08.23 23:58:59] INIT | Bal=$2000.00 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+IN	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20240823.csv | Initial balance: $2000.00
+LL	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+KQ	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
+GO	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+KM	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+PL	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+QG	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
+OH	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY
+MO	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+LO	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+FM	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+PS	0	22:38:21.873	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+RJ	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+GK	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+NQ	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+OI	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+OL	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+KG	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+QN	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+IF	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+MM	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+
+=== 6. EA MESSAGES ===
+NN	0	22:38:21.320	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+KM	0	22:38:21.320	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+RJ	0	22:38:21.320	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
+PR	0	22:38:21.320	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+NE	0	22:38:21.320	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
+PK	0	22:38:21.320	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
+HP	0	22:38:21.320	PropFirmBot (EURUSD,M15)	Target: NO TARGET
+DE	0	22:38:21.320	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
+DS	0	22:38:21.328	PropFirmBot (EURUSD,M15)	[GUARDIAN 2024.08.23 23:58:59] INIT | Bal=$2000.00 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+IN	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20240823.csv | Initial balance: $2000.00
+LL	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+KQ	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
+GO	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+KM	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+PL	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+QG	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
+OH	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY
+MO	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+LO	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+FM	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+PS	0	22:38:21.873	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+RJ	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+GK	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+NQ	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+OI	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+OL	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+KG	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+QN	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+IF	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+MM	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+
+=== 7. TRADE JOURNAL ===
+JOURNAL_DONE
+
+=== 8. TELEGRAM ===
+"ok":true
+
+=== 9. SYSTEM ===
+Uptime: up 18 hours, 47 minutes
+Load: 0.38 0.26 0.20
+Memory: 1033MB / 7941MB (13%)
+Disk: 6% used (137G free)
+
+=== 10. DNS ===
+PING google.com (142.251.141.110) 56(84) bytes of data.
+64 bytes from tzfraa-ai-in-f14.1e100.net (142.251.141.110): icmp_seq=1 ttl=116 time=13.0 ms
+
+REPORT_END
+EXIT_CODE=0
