@@ -128,9 +128,9 @@ CRiskManager::CRiskManager()
    m_max_spread_major   = 3.0;
    m_max_spread_xau     = 5.0;
    m_london_start_hour  = 7;
-   m_london_end_hour    = 11;
+   m_london_end_hour    = 16;
    m_ny_start_hour      = 12;
-   m_ny_end_hour        = 16;
+   m_ny_end_hour        = 21;
    m_weekend_close_day  = 5;
    m_weekend_close_hour = 20;
    m_trailing_activation= 30;

@@ -84,7 +84,7 @@ input bool     InpNewsMedImpact   = false;       // News: Filter Medium Impact
 input int      InpLondonStart     = 7;          // London Start
 input int      InpLondonEnd       = 16;         // London End (covers overlap with NY)
 input int      InpNYStart         = 12;         // NY Start
-input int      InpNYEnd           = 20;         // NY End (extended)
+input int      InpNYEnd           = 21;         // NY End (extended to 23:00 Israel)
 
 // --- Trade Management ---
 input double   InpTrailingActivation = 30.0;    // Trailing Activation (pips)
