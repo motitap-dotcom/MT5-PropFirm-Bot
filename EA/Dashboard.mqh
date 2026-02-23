@@ -31,6 +31,9 @@ private:
    int      m_line_height;
    string   m_font;
    int      m_font_size;
+   double   m_hard_daily_dd;   // 0 = disabled (Stellar Instant)
+   double   m_hard_total_dd;   // 6% for Stellar Instant
+   double   m_profit_target;   // 0 = no target
 
    void     CreateLabel(string name, int x, int y, string text,
                          color clr, int size = 0, string font = "");
@@ -43,7 +46,7 @@ public:
             CDashboard();
            ~CDashboard();
 
-   void     Init(int x = 10, int y = 30);
+   void     Init(int x = 10, int y = 30, double hard_daily_dd = 0, double hard_total_dd = 6.0, double profit_target = 0);
    void     Update(CGuardian &guardian, int open_positions, double floating_pnl);
    void     Destroy();
 };
@@ -58,6 +61,9 @@ CDashboard::CDashboard()
    m_line_height = 18;
    m_font = "Consolas";
    m_font_size = 9;
+   m_hard_daily_dd = 0;
+   m_hard_total_dd = 6.0;
+   m_profit_target = 0;
 }
 
 //+------------------------------------------------------------------+
@@ -67,10 +73,13 @@ CDashboard::~CDashboard()
 }
 
 //+------------------------------------------------------------------+
-void CDashboard::Init(int x, int y)
+void CDashboard::Init(int x, int y, double hard_daily_dd, double hard_total_dd, double profit_target)
 {
    m_x = x;
    m_y = y;
+   m_hard_daily_dd = hard_daily_dd;
+   m_hard_total_dd = hard_total_dd;
+   m_profit_target = profit_target;
 
    // Background rectangle
    string bg_name = m_prefix + "BG";
@@ -199,21 +208,37 @@ void CDashboard::Update(CGuardian &guardian, int open_positions, double floating
 
    // Profit
    double total_pnl = equity - guardian.InitialBalance();
-   UpdateLabel("PNL_V", StringFormat("%+.2f%% ($%+.2f) / %.1f%%",
-               profit_pct, total_pnl, 10.0),
-               profit_pct >= 0 ? CLR_PROFIT : CLR_LOSS);
+   if(m_profit_target > 0)
+      UpdateLabel("PNL_V", StringFormat("%+.2f%% ($%+.2f) / %.1f%%",
+                  profit_pct, total_pnl, m_profit_target),
+                  profit_pct >= 0 ? CLR_PROFIT : CLR_LOSS);
+   else
+      UpdateLabel("PNL_V", StringFormat("%+.2f%% ($%+.2f) NO TARGET",
+                  profit_pct, total_pnl),
+                  profit_pct >= 0 ? CLR_PROFIT : CLR_LOSS);
 
    // Daily DD
-   UpdateLabel("DDD_V", StringFormat("%.2f%% ($%.2f) / 5.0%%",
-               daily_dd, guardian.DailyOpenBalance() - equity),
-               DDColor(daily_dd, 3.0, 4.0));
-   UpdateLabel("DDD_BAR", BarGraph(daily_dd, 5.0), DDColor(daily_dd, 3.0, 4.0));
+   if(m_hard_daily_dd > 0)
+   {
+      UpdateLabel("DDD_V", StringFormat("%.2f%% ($%.2f) / %.1f%%",
+                  daily_dd, guardian.DailyOpenBalance() - equity, m_hard_daily_dd),
+                  DDColor(daily_dd, m_hard_daily_dd * 0.6, m_hard_daily_dd * 0.8));
+      UpdateLabel("DDD_BAR", BarGraph(daily_dd, m_hard_daily_dd),
+                  DDColor(daily_dd, m_hard_daily_dd * 0.6, m_hard_daily_dd * 0.8));
+   }
+   else
+   {
+      UpdateLabel("DDD_V", "N/A (no daily limit)", CLR_GOOD);
+      UpdateLabel("DDD_BAR", "", CLR_GOOD);
+   }
 
-   // Total DD
-   UpdateLabel("TDD_V", StringFormat("%.2f%% ($%.2f) / 10.0%%",
-               total_dd, guardian.InitialBalance() - equity),
-               DDColor(total_dd, 7.0, 9.0));
-   UpdateLabel("TDD_BAR", BarGraph(total_dd, 10.0), DDColor(total_dd, 7.0, 9.0));
+   // Total DD (trailing for Stellar Instant)
+   double dd_display = MathMax(0, guardian.InitialBalance() - equity);
+   UpdateLabel("TDD_V", StringFormat("%.2f%% ($%.2f) / %.1f%% TRAILING",
+               total_dd, dd_display, m_hard_total_dd),
+               DDColor(total_dd, m_hard_total_dd * 0.58, m_hard_total_dd * 0.83));
+   UpdateLabel("TDD_BAR", BarGraph(total_dd, m_hard_total_dd),
+               DDColor(total_dd, m_hard_total_dd * 0.58, m_hard_total_dd * 0.83));
 
    // Positions
    UpdateLabel("POS_V", StringFormat("%d open | %d trades today",

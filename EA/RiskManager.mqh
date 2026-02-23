@@ -372,6 +372,10 @@ bool CRiskManager::IsSpreadAcceptable(string symbol)
 //+------------------------------------------------------------------+
 bool CRiskManager::IsDailyDrawdownOK()
 {
+   // If daily DD guard is disabled (0 or negative), always allow
+   // This is the case for FundedNext Stellar Instant (no daily DD limit)
+   if(m_daily_dd_guard_pct <= 0) return true;
+
    double equity = AccountInfoDouble(ACCOUNT_EQUITY);
    double daily_pnl = equity - m_daily_start_balance;
    double daily_dd_pct = 0;

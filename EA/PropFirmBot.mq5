@@ -275,7 +275,10 @@ int OnInit()
 
    // === DASHBOARD ===
    if(InpShowDashboard)
-      g_dashboard.Init(InpDashboardX, InpDashboardY);
+      g_dashboard.Init(InpDashboardX, InpDashboardY,
+                        g_account.GetDailyDDLimit(),
+                        g_account.GetTotalDDLimit(),
+                        g_account.GetProfitTarget());
 
    // Take initial position snapshot
    TakePositionSnapshot();
