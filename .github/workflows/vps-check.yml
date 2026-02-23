@@ -10,6 +10,7 @@ on:
       - 'scripts/connection_check.sh'
       - 'scripts/network_check.sh'
       - 'scripts/quick_check.sh'
+      - 'scripts/verify_ea.sh'
 
 permissions:
   contents: write
@@ -27,7 +28,7 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
           chmod +x scripts/remote_check.sh scripts/deep_check.sh
-          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/quick_check.sh root@77.237.234.2:/tmp/check.sh
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/verify_ea.sh root@77.237.234.2:/tmp/check.sh
           sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 root@77.237.234.2 "bash /tmp/check.sh" > vps_report.txt 2>&1
           echo "EXIT_CODE=$?" >> vps_report.txt
           cat vps_report.txt
