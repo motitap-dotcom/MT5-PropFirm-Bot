@@ -1,0 +1,35 @@
+=== FIX START 2026-02-23 07:15:11 UTC ===
+1. DNS: FIXED
+2. Time: Mon Feb 23 07:15:11 UTC 2026
+3. MT5: STOPPED
+4. Display: OK
+5. Config: WRITTEN
+6. MT5: STARTING (backgrounded)
+7. MT5: RUNNING
+root       73144  1.3  0.1 2669788 13820 ?       S    07:15   0:00 start.exe /exec terminal64.exe /portable /login:11797849 /password:gazDE62##
+root       73208 39.1  2.7 639308 220168 ?       Sl   07:15   0:05 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server
+8. Log: 20260222.log (92702 bytes)
+LL	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+KQ	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
+GO	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+KM	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+PL	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+QG	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
+OH	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY
+MO	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+LO	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+FM	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+PS	0	22:38:21.873	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+RJ	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+GK	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+NQ	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+OI	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+OL	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+KG	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+QN	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+IF	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+MM	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+9. Telegram: SENT
+10. Delayed check: SCHEDULED (60s)
+=== FIX DONE ===
+EXIT_CODE=0
