@@ -1,8 +1,9 @@
 REPORT_START
-Time: 2026-02-23 06:58:05 UTC
+Time: 2026-02-23 07:17:16 UTC
 
 === 1. MT5 PROCESS ===
-root       41279  6.0  3.5 1300316 289424 ?      Sl   Feb22  30:15 C:\Program Files\MetaTrader 5\terminal64.exe
+root       73144  0.1  0.1 2669788 13820 ?       S    07:15   0:00 start.exe /exec terminal64.exe /portable /login:11797849 /password:gazDE62##
+root       73208  9.6  2.7 639564 220960 ?       Sl   07:15   0:11 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server
 
 === 2. VNC ===
 41210 x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw
@@ -126,14 +127,14 @@ JOURNAL_DONE
 "ok":true
 
 === 9. SYSTEM ===
-Uptime: up 18 hours, 47 minutes
-Load: 0.38 0.26 0.20
-Memory: 1033MB / 7941MB (13%)
+Uptime: up 19 hours, 6 minutes
+Load: 1.13 0.46 0.28
+Memory: 950MB / 7941MB (11%)
 Disk: 6% used (137G free)
 
 === 10. DNS ===
 PING google.com (142.251.141.110) 56(84) bytes of data.
-64 bytes from tzfraa-ai-in-f14.1e100.net (142.251.141.110): icmp_seq=1 ttl=116 time=13.0 ms
+64 bytes from tzfraa-ai-in-f14.1e100.net (142.251.141.110): icmp_seq=1 ttl=116 time=3.96 ms
 
 REPORT_END
 EXIT_CODE=0
