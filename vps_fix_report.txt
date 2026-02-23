@@ -1,35 +1,109 @@
-=== FIX START 2026-02-23 07:15:11 UTC ===
-1. DNS: FIXED
-2. Time: Mon Feb 23 07:15:11 UTC 2026
-3. MT5: STOPPED
-4. Display: OK
-5. Config: WRITTEN
-6. MT5: STARTING (backgrounded)
-7. MT5: RUNNING
-root       73144  1.3  0.1 2669788 13820 ?       S    07:15   0:00 start.exe /exec terminal64.exe /portable /login:11797849 /password:gazDE62##
-root       73208 39.1  2.7 639308 220168 ?       Sl   07:15   0:05 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server
-8. Log: 20260222.log (92702 bytes)
-LL	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
-KQ	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
-GO	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-KM	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-PL	0	22:38:21.329	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
-QG	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-OH	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY
-MO	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-LO	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-FM	0	22:38:21.872	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-PS	0	22:38:21.873	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-RJ	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-GK	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-NQ	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-OI	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-OL	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-KG	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-QN	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-IF	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-MM	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-9. Telegram: SENT
-10. Delayed check: SCHEDULED (60s)
-=== FIX DONE ===
+=== CLEAN RESTART 2026-02-23 07:45:16 UTC ===
+--- 1. Kill ALL Wine processes ---
+Before:
+15
+root       11857  0.3  0.1  12328  9384 ?        Ss   Feb22   4:03 /opt/wine-stable/lib/wine/../../bin/wineserver
+root       11876  0.1  0.2 360768 17056 ?        S<sl Feb22   1:17 C:\windows\system32\winedevice.exe
+root       19750  0.3  0.1  12064  9084 ?        Ss   Feb22   3:25 /opt/wine-stable/lib/wine/../../bin/wineserver
+root       19770  0.1  0.1 355596 16240 ?        S<sl Feb22   1:11 C:\windows\system32\winedevice.exe
+root       20026  0.3  0.1  12064  9184 ?        Ss   Feb22   3:24 /opt/wine-stable/lib/wine/../../bin/wineserver
+root       20045  0.1  0.1 355596 16188 ?        S<sl Feb22   1:10 C:\windows\system32\winedevice.exe
+root       20761  0.3  0.1  12064  9188 ?        Ss   Feb22   3:21 /opt/wine-stable/lib/wine/../../bin/wineserver
+root       20780  0.1  0.1 355596 16200 ?        S<sl Feb22   1:10 C:\windows\system32\winedevice.exe
+root       26050  0.3  0.1  12064  9188 ?        Ss   Feb22   2:52 /opt/wine-stable/lib/wine/../../bin/wineserver
+root       26069  0.1  0.1 355596 16180 ?        S<sl Feb22   1:02 C:\windows\system32\winedevice.exe
+root       75517  0.0  0.1 2669780 13816 ?       S    07:39   0:00 start.exe /exec terminal64.exe /login:11797849 /password:gazDE62##
+root       75520  1.9  0.1  15648 14268 ?        Ss   07:39   0:07 /usr/lib/wine/wineserver64 -p0
+root       75531  0.2  0.2 359472 23404 ?        Ssl  07:39   0:00 C:\windows\system32\winedevice.exe
+root       75543  3.8  0.3 574240 27424 ?        Ssl  07:39   0:14 C:\windows\system32\winedevice.exe
+root       75582  5.4  2.7 640324 219696 ?       Sl   07:39   0:19 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
+
+Killing all Wine processes...
+
+After cleanup:
+0
+ALL CLEAN!
+
+--- 2. Clean Wine sockets ---
+Wine temp files cleaned
+
+--- 3. Display ---
+Display: OK
+
+--- 4. Start MT5 (clean) ---
+MT5 started (clean, PID: 76778)
+
+--- 5. Waiting 30 seconds for connection ---
+MT5 running: YES
+
+Wine processes:
+root       76778  0.5  0.1 2669716 13796 ?       S    07:45   0:00 start.exe /exec terminal64.exe /login:11797849 /password:gazDE62##
+root       76781  9.3  0.1  15656 14228 ?        Rs   07:45   0:02 /usr/lib/wine/wineserver64 -p0
+root       76791  0.4  0.2 359472 23400 ?        Ssl  07:45   0:00 C:\windows\system32\winedevice.exe
+root       76801  4.0  0.3 574240 27428 ?        Ssl  07:45   0:01 C:\windows\system32\winedevice.exe
+root       76840 17.2  2.7 639560 220644 ?       Sl   07:45   0:05 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
+
+Network connections from Wine/MT5:
+No wine connections in ss
+
+All outbound TCP connections (not SSH/VNC/DNS):
+Recv-Q Send-Q Local Address:Port   Peer Address:Port Process
+
+--- 6. Terminal log ---
+Size: 6510 bytes
+KE	0	07:15:18.743	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+DR	0	07:15:18.743	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
+LE	0	07:15:18.743	Terminal	C:\Program Files\MetaTrader 5
+RS	2	07:15:19.258	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
+NR	2	07:15:19.258	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+OM	0	07:15:23.057	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+OH	2	07:20:33.102	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
+DH	0	07:20:33.107	Experts	expert PropFirmBot (EURUSD,M15) removed
+IL	0	07:39:10.769	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+JI	0	07:39:10.770	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
+RL	0	07:39:10.770	Terminal	C:\Program Files\MetaTrader 5
+GH	2	07:39:11.266	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
+CI	2	07:39:11.266	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+ID	0	07:39:13.126	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+NR	0	07:45:27.325	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+RH	0	07:45:27.328	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
+FS	0	07:45:27.328	Terminal	C:\Program Files\MetaTrader 5
+PF	2	07:45:27.917	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
+LH	2	07:45:27.917	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+RJ	0	07:45:30.819	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+
+--- 7. Wait 30 more seconds... ---
+Terminal log after 60s:
+Size: 6510 bytes
+KE	0	07:15:18.743	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+DR	0	07:15:18.743	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
+LE	0	07:15:18.743	Terminal	C:\Program Files\MetaTrader 5
+RS	2	07:15:19.258	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
+NR	2	07:15:19.258	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+OM	0	07:15:23.057	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+OH	2	07:20:33.102	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
+DH	0	07:20:33.107	Experts	expert PropFirmBot (EURUSD,M15) removed
+IL	0	07:39:10.769	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+JI	0	07:39:10.770	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
+RL	0	07:39:10.770	Terminal	C:\Program Files\MetaTrader 5
+GH	2	07:39:11.266	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
+CI	2	07:39:11.266	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+ID	0	07:39:13.126	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+NR	0	07:45:27.325	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+RH	0	07:45:27.328	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
+FS	0	07:45:27.328	Terminal	C:\Program Files\MetaTrader 5
+PF	2	07:45:27.917	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
+LH	2	07:45:27.917	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+RJ	0	07:45:30.819	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+
+EA log:
+No EA log yet
+
+Outbound connections:
+Recv-Q Send-Q Local Address:Port   Peer Address:Port Process
+
+--- 8. Telegram ---
+Sent
+
+=== DONE ===
 EXIT_CODE=0
