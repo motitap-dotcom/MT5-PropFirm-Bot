@@ -1,113 +1,93 @@
-=== DEEP CHECK 2026-02-23 07:23:59 UTC ===
---- 1. MT5 Process ---
-root       73144  0.0  0.1 2669788 13820 ?       S    07:15   0:00 start.exe /exec terminal64.exe /portable /login:11797849 /password:gazDE62##
-root       73208  4.7  2.7 639308 219916 ?       Sl   07:15   0:24 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server
+=== SERVER DIAGNOSIS 2026-02-23 07:36:14 UTC ===
+--- 1. Server config files (.dat/.srv) ---
+/root/.wine/drive_c/Program Files/MetaTrader 5/config/servers.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/config/dnsperf.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Config/servers.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Config/agents.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Config/dnsperf.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Config/accounts.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/signals/signals.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/symbols/selected-11797849.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/symbols/symbols-11797849.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/indicators.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/alerts.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/objects.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/strategy.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Default/news/news.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Default/Mail/mail-0.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Default/Symbols/symbols-0.dat
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Default/Symbols/selected-0.dat
 
---- 2. EA Log (MQL5/Logs) ---
-total 104
-drwxr-xr-x  2 root root  4096 Feb 22 19:37 .
-drwxr-xr-x 13 root root  4096 Feb 22 22:04 ..
--rw-r--r--  1 root root 92702 Feb 22 22:39 20260222.log
-No EA log for today (EA may not be attached to chart)
+Config directory:
+/root/.wine/drive_c/Program Files/MetaTrader 5/config/:
+total 428
+drwxr-xr-x  4 root root   4096 Feb 23 07:04 .
+drwxr-xr-x 10 root root   4096 Feb 23 07:04 ..
+drwxr-xr-x  2 root root   4096 Feb 23 07:04 certificates
+-rw-r--r--  1 root root    358 Feb 23 07:15 common.ini
+-rw-r--r--  1 root root 372728 Feb 23 07:04 dnsperf.dat
+drwxr-xr-x  2 root root   4096 Feb 23 07:04 servers
+-rw-r--r--  1 root root  24876 Feb 23 07:04 servers.dat
+-rw-r--r--  1 root root  15198 Feb 23 07:15 terminal.ini
 
---- 3. Terminal Log TODAY (logs/) ---
-total 92
-drwxr-xr-x  2 root root  4096 Feb 23 07:04 .
-drwxr-xr-x 10 root root  4096 Feb 23 07:04 ..
--rw-r--r--  1 root root 11808 Feb 22 22:39 20260222.log
--rw-r--r--  1 root root  3898 Feb 23 07:21 20260223.log
--rw-r--r--  1 root root 69212 Feb 22 22:07 metaeditor.log
+/root/.wine/drive_c/Program Files/MetaTrader 5/config/certificates:
+total 8
+drwxr-xr-x 2 root root 4096 Feb 23 07:04 .
+drwxr-xr-x 4 root root 4096 Feb 23 07:04 ..
 
-Size: 3898 bytes
-ÿþLL	0	07:04:24.332	Terminal	updating C:\Program Files\MetaTrader 5\MQL5 folder
-RD	0	07:04:24.814	Terminal	no changes
-HI	0	07:04:25.623	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-NF	0	07:04:25.624	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-NI	0	07:04:25.624	Terminal	C:\Program Files\MetaTrader 5
-DQ	0	07:04:25.722	Compiler	full recompilation has been started
-NG	2	07:04:26.298	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-RF	2	07:04:26.298	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-KK	0	07:04:26.939	Compiler	full recompilation has been finished:  0 file(s) compiled
-MF	0	07:04:31.513	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-MO	2	07:09:41.847	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
-IQ	0	07:09:41.852	Experts	expert PropFirmBot (EURUSD,M15) removed
-KE	0	07:15:18.743	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-DR	0	07:15:18.743	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-LE	0	07:15:18.743	Terminal	C:\Program Files\MetaTrader 5
-RS	2	07:15:19.258	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-NR	2	07:15:19.258	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-OM	0	07:15:23.057	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-OH	2	07:20:33.102	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
-DH	0	07:20:33.107	Experts	expert PropFirmBot (EURUSD,M15) removed
+/root/.wine/drive_c/Program Files/MetaTrader 5/config/servers:
+total 8
+drwxr-xr-x 2 root root 4096 Feb 23 07:04 .
+drwxr-xr-x 4 root root 4096 Feb 23 07:04 ..
 
---- 4. Terminal Log YESTERDAY ---
-Size: 11808 bytes
-KH	0	22:02:36.298	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-CF	0	22:02:36.299	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-OI	0	22:02:36.299	Terminal	C:\Program Files\MetaTrader 5
-JL	2	22:02:36.991	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-FN	2	22:02:36.991	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-EP	0	22:02:39.246	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-GR	2	22:02:43.278	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-KF	0	22:06:37.282	Experts	expert PropFirmBot (EURUSD,M15) removed
-NR	0	22:06:37.292	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-GD	0	22:06:44.804	Experts	expert PropFirmBot (EURUSD,M15) removed
-QP	0	22:06:44.815	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-IR	0	22:07:02.449	Experts	expert PropFirmBot (EURUSD,M15) removed
-JE	0	22:07:02.468	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-MS	0	22:38:02.391	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-CI	0	22:38:02.392	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-OL	0	22:38:02.392	Terminal	C:\Program Files\MetaTrader 5
-DH	2	22:38:03.217	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-HI	2	22:38:03.217	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-LD	0	22:38:06.165	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-JO	2	22:38:11.958	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
+--- 2. Servers directory ---
+total 8
+drwxr-xr-x 2 root root 4096 Feb 23 07:04 .
+drwxr-xr-x 4 root root 4096 Feb 23 07:04 ..
 
---- 5. Config files ---
-PropFirmBot files:
-total 32
-drwxr-xr-x 2 root root 4096 Feb 22 21:00 .
-drwxr-xr-x 3 root root 4096 Feb 22 21:00 ..
--rw-r--r-- 1 root root 1620 Feb 22 21:00 account_state.json
--rw-r--r-- 1 root root 1469 Feb 22 21:00 challenge_rules.json
--rw-r--r-- 1 root root 1336 Feb 22 21:00 funded_rules.json
--rw-r--r-- 1 root root 1159 Feb 22 21:00 notifications.json
--rw-r--r-- 1 root root 1805 Feb 22 21:00 risk_params.json
--rw-r--r-- 1 root root 1244 Feb 22 21:00 symbols.json
+--- 3. Origin directory ---
 
-CSV files:
+--- 4. Looking for FundedNext in all files ---
 
-Chart profiles:
-British Pound
-Default
-Euro
-Market Overview
+--- 5. Bases directory ---
+ls: cannot access '/root/.wine/drive_c/Program Files/MetaTrader 5/bases/': No such file or directory
 
---- 6. Wine log (key lines) ---
-Size: 65550 bytes
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb700
-010c:err:toolbar:ToolbarWindowProc unknown msg 0466, wp 0, lp 7ffffe2fb700
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
-010c:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 7ffffe2fb140
 
---- 7. Telegram ---
-Sent
+--- 6. Main terminal config ---
+
+--- AppData config ---
+
+--- 7. All server references ---
+/root/.wine/drive_c/Program Files/MetaTrader 5/config/servers
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/signals
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Custom
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Custom/ticks
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Custom/history
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/news
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/ticks
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/history
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/subscriptions
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/symbols
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/trades
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/mail
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Default
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Default/news
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Default/Mail
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Default/ticks
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Default/History
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Default/subscriptions
+
+--- 8. Network test ---
+Server:		8.8.8.8
+Address:	8.8.8.8#53
+
+** server can't find mt5.fundednext.com: NXDOMAIN
+
+DNS lookup failed
+ping: mt5.fundednext.com: Name or service not known
+Ping failed
 
 === DONE ===
 EXIT_CODE=0
