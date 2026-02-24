@@ -498,25 +498,37 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
    double sl_price = 0, tp_price = 0;
    ENUM_SIGNAL_TYPE signal = SIGNAL_NONE;
 
-   // Primary strategy
-   signal = g_signals[signal_index].GetSignal(InpStrategy, sl_price, tp_price);
-
-   // Check if strategy is working (self-learning)
-   if(signal != SIGNAL_NONE && InpSelfLearning)
+   // בחירת אסטרטגיה דינמית - Self-Learning בוחר את הטובה ביותר
+   ENUM_STRATEGY_TYPE active_strategy = InpStrategy;
+   if(InpSelfLearning)
    {
-      string strat_name = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
-      if(!g_analyzer.IsStrategyWorking(strat_name))
-      {
-         PrintFormat("[ANALYZER] %s strategy underperforming - checking fallback", strat_name);
-         signal = SIGNAL_NONE; // Force fallback
-      }
+      string rec = g_analyzer.GetStrategyRecommendation();
+      active_strategy = (rec == "EMA") ? STRATEGY_EMA_CROSS : STRATEGY_SMC;
    }
 
-   // Fallback
-   if(signal == SIGNAL_NONE && InpUseFallback && InpStrategy == STRATEGY_SMC)
+   // Primary signal
+   signal = g_signals[signal_index].GetSignal(active_strategy, sl_price, tp_price);
+
+   // Fallback: נסה EMA אם SMC לא הצליח
+   if(signal == SIGNAL_NONE && InpUseFallback && active_strategy == STRATEGY_SMC)
       signal = g_signals[signal_index].GetSignal(STRATEGY_EMA_CROSS, sl_price, tp_price);
 
    if(signal == SIGNAL_NONE) return;
+
+   // SELF-LEARNING: הארך TP כשעל שרשרת נצחונות
+   if(InpSelfLearning)
+   {
+      double tp_mult = g_analyzer.GetTPMultiplier();
+      if(tp_mult > 1.001 && tp_price != 0)
+      {
+         double ep = (signal == SIGNAL_BUY)
+                     ? SymbolInfoDouble(symbol, SYMBOL_ASK)
+                     : SymbolInfoDouble(symbol, SYMBOL_BID);
+         tp_price = ep + (tp_price - ep) * tp_mult;
+         PrintFormat("[ANALYZER] TP extended x%.1f → %.5f (streak W%d)",
+                     tp_mult, tp_price, g_analyzer.GetConsecWins());
+      }
+   }
 
    // Validate RR
    double entry_price = (signal == SIGNAL_BUY)
@@ -572,7 +584,7 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
    }
 
    // Execute
-   string strategy_name = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
+   string strategy_name = (active_strategy == STRATEGY_SMC) ? "SMC" : "EMA";
    ulong ticket = 0;
 
    if(signal == SIGNAL_BUY)
@@ -736,12 +748,19 @@ void DetectClosedTrades()
          // SELF-LEARNING: Record trade in analyzer
          if(InpSelfLearning)
          {
-            string strategy_name = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
+            string strategy_name_rec = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
             int duration = (int)(TimeCurrent() - g_prev_positions[p].open_time);
-            g_analyzer.RecordTrade(symbol, direction, strategy_name,
+            g_analyzer.RecordTrade(symbol, direction, strategy_name_rec,
                pnl, pnl_pips, lot,
                MathAbs(open_price - sl), MathAbs(tp - open_price),
                duration);
+
+            // שלח התראה כשהמערכת משנה ריסק/אסטרטגיה
+            if(InpNotifyTrades && g_analyzer.HasAdaptationChanged())
+            {
+               g_notify.Send(g_analyzer.GetAdaptationMessage(), NOTIFY_INFO);
+               g_analyzer.ClearAdaptationFlag();
+            }
          }
 
          // Send notification

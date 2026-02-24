@@ -93,6 +93,14 @@ private:
    string       m_blocked_symbols[];
    int          m_blocked_count;
 
+   // Adaptive state
+   int          m_consec_wins;        // Current consecutive wins
+   int          m_consec_losses;      // Current consecutive losses
+   double       m_tp_multiplier;      // TP extension multiplier (1.0-1.5)
+   double       m_prev_risk_adj;      // Previous risk for change detection
+   bool         m_adaptation_changed; // True when adaptation level changed
+   string       m_adaptation_msg;     // Description of last change
+
    // Analysis results
    string       m_analysis_log;       // Last analysis summary
    datetime     m_last_analysis_time;
@@ -124,6 +132,13 @@ public:
 
    // Adaptive adjustments (EA reads these)
    double      GetRiskAdjustment()    { return m_risk_adjustment; }
+   double      GetTPMultiplier()      { return m_tp_multiplier; }
+   int         GetConsecWins()        { return m_consec_wins; }
+   int         GetConsecLosses()      { return m_consec_losses; }
+   bool        HasAdaptationChanged() { return m_adaptation_changed; }
+   string      GetAdaptationMessage() { return m_adaptation_msg; }
+   void        ClearAdaptationFlag()  { m_adaptation_changed = false; }
+   string      GetStrategyRecommendation();
    bool        IsSymbolBlocked(string symbol);
    bool        ShouldReduceRisk();
    double      GetSymbolRiskMultiplier(string symbol);
@@ -147,8 +162,14 @@ CTradeAnalyzer::CTradeAnalyzer()
    m_max_history       = 500;
    m_symbol_stat_count = 0;
    m_blocked_count     = 0;
-   m_risk_adjustment   = 1.0;
-   m_analysis_log      = "";
+   m_risk_adjustment    = 1.0;
+   m_consec_wins        = 0;
+   m_consec_losses      = 0;
+   m_tp_multiplier      = 1.0;
+   m_prev_risk_adj      = 1.0;
+   m_adaptation_changed = false;
+   m_adaptation_msg     = "";
+   m_analysis_log       = "";
    m_last_analysis_time = 0;
    m_analysis_interval  = 3600;  // Analyze every hour
 
@@ -251,8 +272,24 @@ void CTradeAnalyzer::Analyze()
    UpdateSessionStats();
    UpdateStrategyStats();
 
+   // === COUNT CONSECUTIVE WINS/LOSSES ===
+   m_consec_wins = 0;
+   m_consec_losses = 0;
+   for(int i = m_history_count - 1; i >= 0; i--)
+   {
+      if(m_history[i].pnl > 0)
+      {
+         if(m_consec_losses > 0) break;
+         m_consec_wins++;
+      }
+      else
+      {
+         if(m_consec_wins > 0) break;
+         m_consec_losses++;
+      }
+   }
+
    // === ADAPTIVE RISK ADJUSTMENT ===
-   // Based on recent short-term performance
    int recent_count = MathMin(m_history_count, PERF_WINDOW_SHORT);
    int recent_wins = 0;
    double recent_pnl = 0;
@@ -264,18 +301,51 @@ void CTradeAnalyzer::Analyze()
    }
 
    double recent_wr = CalcWinRate(recent_wins, recent_count);
+   m_prev_risk_adj = m_risk_adjustment;
 
-   // Adjust risk based on recent performance
    if(recent_count >= 5)
    {
-      if(recent_wr < 30)
-         m_risk_adjustment = 0.5;      // Bad streak: halve risk
+      if(recent_wr < 30 || m_consec_losses >= 4)
+         m_risk_adjustment = 0.50;     // שרשרת הפסדים חמורה - חצי ריסק
       else if(recent_wr < 40)
-         m_risk_adjustment = 0.75;     // Below average: reduce risk
-      else if(recent_wr > 60 && recent_pnl > 0)
-         m_risk_adjustment = 1.0;      // Good streak: normal risk
+         m_risk_adjustment = 0.70;     // מתחת לממוצע - הפחת ריסק
+      else if(recent_wr < 50)
+         m_risk_adjustment = 0.85;     // קצת מתחת לממוצע
+      else if(recent_wr < 60)
+         m_risk_adjustment = 1.0;      // ממוצע - ריסק רגיל
+      else if(recent_wr >= 60 && recent_pnl > 0 && m_consec_wins >= 3)
+         m_risk_adjustment = 1.15;     // שרשרת נצחונות - הגדל ריסק
+      else if(recent_wr >= 60 && recent_pnl > 0)
+         m_risk_adjustment = 1.0;      // טוב אבל לא רצוף
       else
-         m_risk_adjustment = 0.85;     // Default: slightly conservative
+         m_risk_adjustment = 0.85;
+
+      // בונוס חם: 5+ ניצחונות ברצף
+      if(m_consec_wins >= 5 && recent_wr >= 60)
+         m_risk_adjustment = MathMin(1.30, m_risk_adjustment + 0.10);
+   }
+
+   // === TP MULTIPLIER (הארך TP כשחם) ===
+   if(m_consec_wins >= 4 && recent_wr >= 55)
+      m_tp_multiplier = MathMin(1.50, 1.0 + m_consec_wins * 0.08);
+   else if(m_consec_wins >= 2)
+      m_tp_multiplier = 1.10;
+   else
+      m_tp_multiplier = 1.0;
+
+   // === זיהוי שינוי משמעותי - לשליחת התראה ===
+   if(MathAbs(m_risk_adjustment - m_prev_risk_adj) >= 0.10)
+   {
+      m_adaptation_changed = true;
+      string direction = m_risk_adjustment > m_prev_risk_adj ? "⬆ BOOST" : "⬇ REDUCE";
+      m_adaptation_msg = StringFormat(
+         "🧠 AdaptRisk %s: %.0f%%→%.0f%% | WR=%.0f%% | Streak=%s%d | TP=%.1fx",
+         direction,
+         m_prev_risk_adj * 100, m_risk_adjustment * 100, recent_wr,
+         m_consec_wins > 0 ? "W" : "L",
+         m_consec_wins > 0 ? m_consec_wins : m_consec_losses,
+         m_tp_multiplier);
+      PrintFormat("[Analyzer] %s", m_adaptation_msg);
    }
 
    // === SYMBOL BLOCKING ===
@@ -520,16 +590,39 @@ int CTradeAnalyzer::GetSymbolTradeCount(string symbol)
 }
 
 //+------------------------------------------------------------------+
+string CTradeAnalyzer::GetStrategyRecommendation()
+{
+   bool smc_ok = IsStrategyWorking("SMC");
+   bool ema_ok = IsStrategyWorking("EMA");
+
+   // Not enough data yet - use SMC default
+   if(m_strategy_stats[0].trades < 5 && m_strategy_stats[1].trades < 5)
+      return "SMC";
+
+   if(!smc_ok && ema_ok)  return "EMA";
+   if(!ema_ok && smc_ok)  return "SMC";
+   if(!smc_ok && !ema_ok) return "SMC"; // שתיהן גרועות - נסה SMC בכל זאת
+
+   // שתיהן עובדות - בחר את הטובה יותר לפי profit factor
+   if(m_strategy_stats[0].trades >= 5 && m_strategy_stats[1].trades >= 5)
+      return (m_strategy_stats[0].profit_factor >= m_strategy_stats[1].profit_factor) ? "SMC" : "EMA";
+
+   return "SMC"; // ברירת מחדל
+}
+
+//+------------------------------------------------------------------+
 string CTradeAnalyzer::GetShortReport()
 {
    return StringFormat(
-      "Trades: %d | Risk Adj: %.0f%%\n"
-      "Blocked: %d symbols\n"
+      "Trades: %d | Risk: %.0f%% | TP: %.1fx\n"
+      "Streak: %s%d | Blocked: %d | Strat: %s\n"
       "SMC: %d trades WR=%.0f%% PF=%.2f\n"
       "EMA: %d trades WR=%.0f%% PF=%.2f\n"
       "London: WR=%.0f%% | NY: WR=%.0f%%",
-      m_history_count, m_risk_adjustment * 100,
-      m_blocked_count,
+      m_history_count, m_risk_adjustment * 100, m_tp_multiplier,
+      m_consec_wins > 0 ? "W" : "L",
+      m_consec_wins > 0 ? m_consec_wins : m_consec_losses,
+      m_blocked_count, GetStrategyRecommendation(),
       m_strategy_stats[0].trades, m_strategy_stats[0].win_rate, m_strategy_stats[0].profit_factor,
       m_strategy_stats[1].trades, m_strategy_stats[1].win_rate, m_strategy_stats[1].profit_factor,
       m_session_stats[0].win_rate, m_session_stats[1].win_rate);
