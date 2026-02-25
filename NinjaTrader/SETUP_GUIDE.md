@@ -1,4 +1,10 @@
-# מדריך התקנה - MarchMadnessBot לתחרות NinjaTrader Arena
+# מדריך התקנה - NinjaTrader על Windows VPS
+
+## פרטי שרת
+- **IP:** 217.77.2.74
+- **OS:** Windows Server
+- **Provider:** Contabo
+- **חיבור:** RDP (Remote Desktop)
 
 ## פרטי התחרות
 - **שם:** $20K March Market Madness
@@ -10,146 +16,181 @@
 
 ---
 
-## מה יש לנו - 2 בוטים
+## שלב 1: התחברות לשרת
 
-### 1. MarchMadnessBot (אסטרטגיית מומנטום - ראשית)
-- סוחר ב-ES, NQ, CL **בו-זמנית** מצ'ארט אחד
-- משתמש ב-EMA, RSI, MACD, ATR
-- מזהה מגמות חזקות ופריצות (breakouts)
-- ניהול סיכון דינמי עם trailing stop
-- טיימפריים: 5 דקות + אישור על 15 דקות
+### מ-Windows:
+1. לחצי **Win + R**
+2. הקלידי: `mstsc`
+3. בשדה Computer הכניסי: **217.77.2.74**
+4. הכניסי שם משתמש וסיסמה (מ-Contabo)
+5. לחצי **Connect**
 
-### 2. MadnessScalper (סקאלפינג אגרסיבי)
-- סוחר מכשיר אחד בכל פעם
-- כניסות ויציאות מהירות
-- טיימפריים: 2 דקות + אישור על 5 דקות
-- סטופ הדוק ויעד מהיר
+### אם יש בעיית אבטחה:
+- לחצי **Yes** / **Connect Anyway** בחלון האזהרה
 
 ---
 
-## שלב 1: הורדת הקבצים
+## שלב 2: הרצת סקריפט ההתקנה
 
-### אופציה א - דרך GitHub:
-1. פתחי PowerShell
-2. הריצי:
+### ברגע שנכנסת לשרת:
+1. לחצי ימני על **Start** (כפתור Windows)
+2. בחרי **Windows PowerShell (Admin)** או **Terminal (Admin)**
+3. העתיקי והדביקי את הפקודה הבאה:
+
 ```powershell
-cd $HOME\Documents
-git clone https://github.com/motitap-dotcom/MT5-PropFirm-Bot.git
-cd MT5-PropFirm-Bot
-git checkout claude/ninjatrader-trading-bot-PxnQr
-```
-3. הקבצים נמצאים ב: `NinjaTrader\Strategies\`
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
 
-### אופציה ב - העתקה ידנית:
-1. פתחי את הקבצים ב-GitHub
-2. העתיקי את התוכן של `MarchMadnessBot.cs` ו-`MadnessScalper.cs`
-
-### לאיפה להעתיק?
-```
-C:\Users\[שם_משתמש]\Documents\NinjaTrader 8\bin\Custom\Strategies\
+# Download and run setup script
+$url = "https://raw.githubusercontent.com/motitap-dotcom/MT5-PropFirm-Bot/claude/ninjatrader-trading-bot-PxnQr/NinjaTrader/scripts/setup-windows-vps.ps1"
+$script = "$env:TEMP\setup-nt.ps1"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Invoke-WebRequest -Uri $url -OutFile $script -UseBasicParsing
+& $script
 ```
 
-**איך למצוא את התיקייה:**
-1. פתחי את NinjaTrader 8
-2. לחצי על **New** ואז **NinjaScript Editor**
-3. בצד שמאל תראי תיקיית **Strategies**
-4. לחצי ימני על **Strategies** ואז **Open Folder**
-5. העתיקי לשם את 2 הקבצים
+4. הסקריפט יעשה הכל אוטומטית:
+   - יתקין Git
+   - יוריד את הקוד מ-GitHub
+   - יוריד NinjaTrader 8
+   - יעתיק את האסטרטגיות
 
 ---
 
-## שלב 2: קומפילציה
+## שלב 3: התקנת NinjaTrader 8
 
-1. ב-NinjaScript Editor, לחצי על **Compile** (או F5) למעלה
-2. אם יש שגיאות - תודיעי לי ואני אתקן
-3. אם הצליח - תראי הודעה ירוקה למטה
+אם הסקריפט פותח את ה-installer:
+1. לחצי **Next**
+2. קבלי את תנאי הרישיון
+3. השאירי את נתיב ההתקנה ברירת מחדל
+4. לחצי **Install**
+5. חכי שיסיים
+6. לחצי **Finish**
+
+אם ה-installer לא נפתח אוטומטית:
+1. פתחי דפדפן בשרת
+2. גלשי ל: https://ninjatrader.com/GetNinjaTrader
+3. הורידי והתקיני ידנית
 
 ---
 
-## שלב 3: הפעלת MarchMadnessBot
+## שלב 4: הגדרת NinjaTrader
+
+### פתיחה ראשונה:
+1. פתחי **NinjaTrader 8** (אייקון על שולחן העבודה)
+2. בחרי **Free** או **Sim** license (לתחרות)
+3. התחברי עם חשבון NinjaTrader שלך
+
+### חיבור לתחרות:
+1. **Connections** > **Configure...**
+2. מצאי את חיבור התחרות (NinjaTrader Continuum / CQG)
+3. הכניסי פרטי חשבון התחרות
+4. לחצי **Connect**
+
+---
+
+## שלב 5: קומפילציית האסטרטגיות
+
+1. ב-NinjaTrader: **New** > **NinjaScript Editor**
+2. בצד שמאל תראי את **MarchMadnessBot** ו-**MadnessScalper**
+3. לחצי **F5** (Compile)
+4. ודאי הודעה ירוקה: **"Compile successful"**
+
+אם יש שגיאות - שלחי צילום מסך!
+
+---
+
+## שלב 6: הפעלת MarchMadnessBot
 
 ### הכנת הצ'ארט:
-1. פתחי צ'ארט חדש: **New** ואז **Chart**
-2. בחרי מכשיר: **ES 03-26** (E-Mini S&P 500)
-3. בחרי טיימפריים: **5 minute**
+1. **New** > **Chart**
+2. Instrument: **ES 03-26** (E-Mini S&P 500)
+3. Period: **5 Minute**
 4. לחצי **OK**
 
 ### הוספת האסטרטגיה:
-1. לחצי ימני על הצ'ארט ואז **Strategies**
-2. ברשימה מצד שמאל, מצאי **MarchMadnessBot**
-3. לחצי **Add**
-4. **חשוב!** בהגדרות:
-   - Account: **בחרי את חשבון התחרות** (CHMMMKV5060)
+1. לחצי ימני על הצ'ארט > **Strategies**
+2. מצאי **MarchMadnessBot** > לחצי **Add**
+3. **חשוב!** בהגדרות:
+   - Account: **CHMMMKV5060** (חשבון התחרות)
    - Max Contracts Per Instrument: **2**
-   - שאר ההגדרות - ברירת מחדל טובות
-5. לחצי **OK**
-6. **הפעילי:** לחצי על הכפתור הירוק למעלה (Enable Strategy)
+   - שאר ההגדרות - ברירת מחדל
+4. לחצי **OK**
+5. **הפעילי:** כפתור ירוק למעלה (Enable)
 
-### שמות מכשירים - חשוב!
-הבוט מוסיף אוטומטית NQ ו-CL. ייתכן שתצטרכי לשנות שמות:
+### שמות מכשירים:
 - ES: `ES 03-26`
 - NQ: `NQ 03-26`
 - CL: `CL 04-26`
 
-אם יש שגיאה על שם מכשיר - תגידי לי ואני אעדכן.
-
 ---
 
-## שלב 4 (אופציונלי): הוספת MadnessScalper
+## שלב 7 (אופציונלי): MadnessScalper
 
-1. פתחי צ'ארט **נוסף** ל-NQ (2 דקות)
-2. הוסיפי **MadnessScalper** לצ'ארט
-3. Account: חשבון התחרות
+1. פתחי צ'ארט **נוסף**: NQ 03-26, 2 Minutes
+2. הוסיפי **MadnessScalper**
+3. Account: CHMMMKV5060
 4. Contracts: **2**
 
-**שימי לב:** מקסימום 2 חוזים לכל מכשיר!
+---
+
+## עדכון אסטרטגיות (כשיש שינויים)
+
+פתחי PowerShell בשרת והריצי:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+& "C:\NinjaTrader-Bot\MT5-PropFirm-Bot\NinjaTrader\scripts\deploy-strategies.ps1"
+```
+
+אחרי זה קמפלי מחדש ב-NinjaScript Editor (F5).
 
 ---
 
-## שלב 5: לפני התחרות
+## 2 הבוטים שלנו
 
-### בדיקה בסימולציה:
-1. **לפני** התחרות, הפעילי את הבוט על חשבון **SIM**
-2. תני לו לרוץ כמה שעות ותראי שהוא עובד
-3. בדקי ב-**Log** (New ואז Log) שאין שגיאות
+### MarchMadnessBot (ראשי - מומנטום)
+- סוחר **ES, NQ, CL** בו-זמנית מצ'ארט אחד
+- EMA + RSI + MACD + ATR
+- מזהה מגמות חזקות ופריצות (breakouts)
+- Trailing stop דינמי
+- 5 דקות + אישור 15 דקות
 
-### ביום התחרות:
-1. החליפי לחשבון **התחרות** (CHMMMKV5060)
-2. וודאי שהבוט מופעל
-3. **אל תיגעי!** תני לבוט לעבוד
+### MadnessScalper (סקאלפינג)
+- סוחר מכשיר **אחד** בכל פעם
+- כניסות/יציאות מהירות
+- 2 דקות + אישור 5 דקות
+- סטופ הדוק ויעד מהיר
 
 ---
 
-## פרמטרים מומלצים
+## פרמטרים
 
 ### רגיל (ברירת מחדל):
 - Max Contracts: 2
-- ATR Stop Multiplier: 1.8
-- ATR Target Multiplier: 3.5
+- ATR Stop: 1.8
+- ATR Target: 3.5
 - Min Momentum Score: 3
-- Session Drawdown Limit: 2500
+- Session Drawdown: $2,500
 
-### אולטרא-אגרסיבי (ליום האחרון):
+### אגרסיבי (ליום האחרון):
 - Min Momentum Score: 2
-- ATR Target Multiplier: 5.0
-- Session Drawdown Limit: 5000
-- Cooldown Minutes: 5
+- ATR Target: 5.0
+- Session Drawdown: $5,000
+- Cooldown: 5 דקות
 
 ---
 
 ## טיפים
-
-1. **סמכי על הבוט** - אל תכבי אותו באמצע
-2. **אל תפחדי מהפסדים קטנים** - זה כסף סימולציה!
+1. **סמכי על הבוט** - אל תכבי באמצע
+2. **כסף סימולציה** - אל תפחדי מהפסדים
 3. **שעות פיק:** 8:30-11:30 + 13:00-15:30 (CT)
-4. **ביום האחרון** אפשר לעבור למצב אולטרא-אגרסיבי
-5. **בדקי לידרבורד** באתר התחרות
+4. **ביום האחרון** - אפשר מצב אגרסיבי
+5. **השאירי את השרת דלוק** - הבוט רץ 24/7!
 
 ---
 
 ## אם יש בעיה
-
-1. בדקי ב-Log שגיאות
-2. וודאי חשבון נכון
-3. וודאי שמות מכשירים
-4. שלחי צילום מסך ואני אעזור
+1. בדקי **Log** ב-NinjaTrader (New > Log)
+2. בדקי חשבון נכון נבחר
+3. בדקי שמות מכשירים
+4. שלחי צילום מסך ואני אעזור!

@@ -32,13 +32,25 @@
 - Bot is configured and working
 
 ## VPS Details
+
+### VPS 1 - Linux (MT5 PropFirmBot)
 - Provider: Contabo
 - IP: 77.237.234.2
-- OS: LINUX (Ubuntu) - NOT Windows!
+- OS: LINUX (Ubuntu)
 - SSH root password: Moti0417!
 - Contabo panel password: qA4P9f3ra5bw
 - Connection method: SSH (not RDP!)
 - Connect: ssh root@77.237.234.2
+- Purpose: MT5 PropFirmBot for FundedNext
+
+### VPS 2 - Windows (NinjaTrader Competition)
+- Provider: Contabo
+- IP: 217.77.2.74
+- OS: Windows Server
+- Connection method: RDP (Remote Desktop)
+- Connect: mstsc → 217.77.2.74
+- Purpose: NinjaTrader 8 for March Market Madness competition
+- Competition account: CHMMMKV5060
 
 ## What's Been Done
 - [x] All EA files created (PropFirmBot.mq5 + 10 .mqh modules)
@@ -99,8 +111,22 @@
 - Terminal: PowerShell (Windows) → SSH to VPS
 - SSH: ssh root@77.237.234.2 (password: Moti0417!)
 
+## NinjaTrader Competition Details
+- Competition: $20K March Market Madness
+- Dates: Mon 02/03/2026 - Sat 07/03/2026
+- Starting balance: $50,000 (simulation)
+- Max position: 2 contracts per instrument
+- Competition account: CHMMMKV5060
+- Instruments: ES 03-26, NQ 03-26, CL 04-26
+- Bots: MarchMadnessBot (momentum) + MadnessScalper (scalping)
+- Branch: claude/ninjatrader-trading-bot-PxnQr
+- Files: NinjaTrader/Strategies/ (MarchMadnessBot.cs, MadnessScalper.cs)
+- Setup scripts: NinjaTrader/scripts/ (setup-windows-vps.ps1, deploy-strategies.ps1)
+
 ## How to Resume Work
-- MT5 is running on VPS at 77.237.234.2
+
+### MT5 (Linux VPS - 77.237.234.2):
+- MT5 is running on VPS with PropFirmBot EA ACTIVE
 - VNC for MT5 GUI: connect to 77.237.234.2:5900 (no password, via RealVNC)
 - Repo on VPS: /root/MT5-PropFirm-Bot (branch: claude/build-cfd-trading-bot-fl0ld)
 - MT5 installed at: /root/.wine/drive_c/Program Files/MetaTrader 5/
@@ -108,3 +134,10 @@
 - Config files at: .../MQL5/Files/PropFirmBot/ (6 JSON files)
 - VNC server: x11vnc on display :99, port 5900
 - Start VNC: Xvfb :99 -screen 0 1280x1024x24 & x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw
+
+### NinjaTrader (Windows VPS - 217.77.2.74):
+- Connect via RDP: mstsc → 217.77.2.74
+- Repo: C:\NinjaTrader-Bot\MT5-PropFirm-Bot
+- Strategies folder: Documents\NinjaTrader 8\bin\Custom\Strategies\
+- Setup script: NinjaTrader\scripts\setup-windows-vps.ps1
+- Deploy script: NinjaTrader\scripts\deploy-strategies.ps1
