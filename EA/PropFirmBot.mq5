@@ -59,7 +59,7 @@ input int      InpEMASlow         = 21;         // EMA Slow Period
 input int      InpRSIPeriod       = 14;         // RSI Period
 input int      InpATRPeriod       = 14;         // ATR Period
 input int      InpOBLookback      = 20;         // Order Block Lookback
-input double   InpFVGMinPoints    = 50.0;       // Min FVG Size (points)
+input double   InpFVGMinPoints    = 20.0;       // Min FVG Size (points)
 
 // --- Risk Management ---
 input double   InpRiskPercent     = 0.5;        // Risk Per Trade (%)
