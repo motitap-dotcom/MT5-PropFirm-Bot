@@ -479,8 +479,8 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
       bool has_bullish_ob = DetectBullishOrderBlock(0, ob_high, ob_low);
       bool has_bullish_fvg = DetectBullishFVG(0, fvg_high, fvg_low);
 
-      // Need liquidity sweep + (order block OR fair value gap)
-      if(has_liquidity_sweep && (has_bullish_ob || has_bullish_fvg))
+      // Need order block OR fair value gap (liquidity sweep is bonus confirmation)
+      if(has_bullish_ob || has_bullish_fvg)
       {
          double entry = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
 
@@ -513,7 +513,8 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
       bool has_bearish_ob = DetectBearishOrderBlock(0, ob_high, ob_low);
       bool has_bearish_fvg = DetectBearishFVG(0, fvg_high, fvg_low);
 
-      if(has_liquidity_sweep && (has_bearish_ob || has_bearish_fvg))
+      // Need order block OR fair value gap (liquidity sweep is bonus confirmation)
+      if(has_bearish_ob || has_bearish_fvg)
       {
          double entry = SymbolInfoDouble(m_symbol, SYMBOL_BID);
 
