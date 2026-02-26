@@ -1,0 +1,373 @@
+name: Compile EA and Deploy to VPS
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'EA/**'
+      - 'configs/**'
+      - '.github/workflows/compile-and-deploy.yml'
+      - 'trigger-deploy.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  compile:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MetaTrader 5
+        shell: powershell
+        run: |
+          # Disable Defender to avoid blocking
+          Set-MpPreference -DisableRealtimeMonitoring $true -ErrorAction SilentlyContinue
+          Add-MpPreference -ExclusionPath "C:\" -ErrorAction SilentlyContinue
+
+          Write-Host "=== Downloading MT5 setup ==="
+          $urls = @(
+            "https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe",
+            "https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe?utm_source=www.metatrader5.com"
+          )
+
+          $downloaded = $false
+          foreach ($url in $urls) {
+            Write-Host "Trying: $url"
+            try {
+              $wc = New-Object System.Net.WebClient
+              $wc.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+              $wc.DownloadFile($url, "$PWD\mt5setup.exe")
+              $size = (Get-Item "mt5setup.exe").Length
+              Write-Host "Downloaded: $size bytes"
+              if ($size -gt 1000000) {
+                $downloaded = $true
+                break
+              }
+            } catch {
+              Write-Host "Failed: $_"
+            }
+          }
+
+          # Fallback: try curl with browser UA
+          if (-not $downloaded) {
+            Write-Host "=== Trying curl ==="
+            curl.exe -L -o mt5setup.exe -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" "https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe" 2>&1
+            $size = (Get-Item "mt5setup.exe" -ErrorAction SilentlyContinue).Length
+            Write-Host "Curl download: $size bytes"
+            if ($size -gt 1000000) { $downloaded = $true }
+          }
+
+          if (-not $downloaded) {
+            Write-Host "FATAL: Could not download MT5 installer"
+            exit 1
+          }
+
+          Write-Host "=== Installing MT5 ==="
+          $proc = Start-Process -FilePath ".\mt5setup.exe" -ArgumentList "/auto" -Wait -PassThru
+          Write-Host "Installer exit: $($proc.ExitCode)"
+
+          Write-Host "=== Waiting for installation ==="
+          Start-Sleep -Seconds 60
+
+          Write-Host "=== Searching for MetaEditor ==="
+          $searchPaths = @(
+            "C:\Program Files\MetaTrader 5",
+            "C:\Program Files",
+            "$env:APPDATA\MetaQuotes",
+            "$env:APPDATA",
+            "$env:LOCALAPPDATA",
+            "C:\Users",
+            "C:\"
+          )
+
+          $metaeditor = $null
+          foreach ($sp in $searchPaths) {
+            if (-not (Test-Path $sp)) { continue }
+            Write-Host "  Searching: $sp"
+            $found = Get-ChildItem -Path $sp -Filter "metaeditor64.exe" -Recurse -ErrorAction SilentlyContinue -Depth 6 | Select-Object -First 1
+            if ($found) {
+              $metaeditor = $found
+              Write-Host "  FOUND: $($found.FullName)"
+              break
+            }
+          }
+
+          if (-not $metaeditor) {
+            Write-Host "ERROR: MetaEditor not found!"
+            Write-Host "=== All .exe in Program Files ==="
+            Get-ChildItem "C:\Program Files" -Filter "*.exe" -Recurse -Depth 4 -ErrorAction SilentlyContinue | Select-Object -First 20 | ForEach-Object { Write-Host $_.FullName }
+            Write-Host "=== AppData contents ==="
+            Get-ChildItem "$env:APPDATA" -Directory -ErrorAction SilentlyContinue | ForEach-Object { Write-Host $_.FullName }
+            Write-Host "=== Running processes ==="
+            Get-Process | Where-Object { $_.ProcessName -match "meta|mt5|terminal" } | Format-Table Name, Path
+            exit 1
+          }
+
+          $mt5dir = $metaeditor.DirectoryName
+          Write-Host "MT5 DIR: $mt5dir"
+          Write-Host "METAEDITOR: $($metaeditor.FullName)"
+          echo "MT5_DIR=$mt5dir" >> $env:GITHUB_ENV
+          echo "METAEDITOR=$($metaeditor.FullName)" >> $env:GITHUB_ENV
+
+      - name: Initialize platform (download standard library)
+        shell: powershell
+        run: |
+          $mt5dir = $env:MT5_DIR
+          $terminal = Join-Path $mt5dir "terminal64.exe"
+
+          if (Test-Path $terminal) {
+            Write-Host "=== Running terminal to download standard library ==="
+            $proc = Start-Process -FilePath $terminal -ArgumentList "/portable" -PassThru
+            Start-Sleep -Seconds 30
+            try { $proc.Kill() } catch {}
+            Start-Sleep -Seconds 5
+          }
+
+          # Check standard library
+          $tradeMqh = Join-Path $mt5dir "MQL5\Include\Trade\Trade.mqh"
+          if (Test-Path $tradeMqh) {
+            Write-Host "Standard library OK: $tradeMqh"
+          } else {
+            Write-Host "WARNING: Trade.mqh not found at $tradeMqh"
+            Write-Host "=== Include dir contents ==="
+            $incDir = Join-Path $mt5dir "MQL5\Include"
+            if (Test-Path $incDir) {
+              Get-ChildItem $incDir -Directory | ForEach-Object { Write-Host "  $($_.Name)" }
+            } else {
+              Write-Host "Include directory does not exist!"
+            }
+          }
+
+      - name: Copy EA files and compile
+        shell: powershell
+        run: |
+          $mt5dir = $env:MT5_DIR
+          $metaeditor = $env:METAEDITOR
+
+          # Create EA directory
+          $eaDir = Join-Path $mt5dir "MQL5\Experts\PropFirmBot"
+          New-Item -ItemType Directory -Force -Path $eaDir | Out-Null
+
+          # Copy EA files
+          Write-Host "=== Copying EA files ==="
+          Copy-Item "EA\*" -Destination $eaDir -Force -Verbose
+
+          # Copy configs
+          $filesDir = Join-Path $mt5dir "MQL5\Files\PropFirmBot"
+          New-Item -ItemType Directory -Force -Path $filesDir | Out-Null
+          Copy-Item "configs\*" -Destination $filesDir -Force -Verbose
+
+          Write-Host "=== EA dir contents ==="
+          Get-ChildItem $eaDir | Format-Table Name, Length
+
+          # Verify standard library exists
+          $mql5Dir = Join-Path $mt5dir "MQL5"
+          $tradeMqh = Join-Path $mql5Dir "Include\Trade\Trade.mqh"
+          Write-Host "=== Checking standard library ==="
+          Write-Host "MQL5 dir: $mql5Dir"
+          if (Test-Path $tradeMqh) {
+            Write-Host "Trade.mqh found: $tradeMqh"
+          } else {
+            Write-Host "WARNING: Trade.mqh NOT found at $tradeMqh"
+            Write-Host "=== Include directory contents ==="
+            $incDir = Join-Path $mql5Dir "Include"
+            if (Test-Path $incDir) {
+              Get-ChildItem $incDir -Directory | ForEach-Object { Write-Host "  $($_.Name)" }
+            } else {
+              Write-Host "Include directory does NOT exist!"
+            }
+          }
+
+          # Compile - use MQL5 dir as include root (NOT EA dir)
+          $mq5 = Join-Path $eaDir "PropFirmBot.mq5"
+          Write-Host "=== Compiling: $mq5 ==="
+          Write-Host "Include path: $mql5Dir"
+
+          $proc = Start-Process -FilePath $metaeditor -ArgumentList "/compile:`"$mq5`" /log /include:`"$mql5Dir`"" -Wait -PassThru -NoNewWindow
+          Write-Host "MetaEditor exit: $($proc.ExitCode)"
+          Start-Sleep -Seconds 15
+
+          # Show compilation log
+          Write-Host "=== Compilation log ==="
+          $logPaths = @($eaDir, $mql5Dir, $mt5dir)
+          foreach ($lp in $logPaths) {
+            $logs = Get-ChildItem -Path $lp -Filter "*.log" -ErrorAction SilentlyContinue
+            foreach ($log in $logs) {
+              Write-Host "--- $($log.FullName) ---"
+              Get-Content $log.FullName -ErrorAction SilentlyContinue
+            }
+          }
+
+          # Check for .ex5
+          Write-Host "=== Checking for .ex5 ==="
+          $ex5 = Get-ChildItem -Path $mt5dir -Filter "PropFirmBot.ex5" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($ex5) {
+            Write-Host "SUCCESS: $($ex5.FullName) ($($ex5.Length) bytes)"
+            Copy-Item $ex5.FullName -Destination "PropFirmBot.ex5" -Force
+            echo "COMPILE_SUCCESS=true" >> $env:GITHUB_ENV
+          } else {
+            Write-Host "ERROR: .ex5 not found!"
+            # Search broader
+            Get-ChildItem -Path $mt5dir -Filter "*.ex5" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 10 | ForEach-Object { Write-Host "$($_.FullName) $($_.Length)b" }
+            echo "COMPILE_SUCCESS=false" >> $env:GITHUB_ENV
+            exit 1
+          }
+
+      - name: Upload compiled EA
+        if: env.COMPILE_SUCCESS == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PropFirmBot-EA
+          path: PropFirmBot.ex5
+          retention-days: 30
+
+  deploy-to-vps:
+    needs: compile
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download compiled EA
+        uses: actions/download-artifact@v4
+        with:
+          name: PropFirmBot-EA
+
+      - name: Deploy to VPS
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          echo "=== Compiled EA ==="
+          ls -la PropFirmBot.ex5
+
+          echo "=== Uploading to VPS ==="
+          EA_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"
+
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no PropFirmBot.ex5 "root@77.237.234.2:${EA_DIR}/PropFirmBot.ex5"
+
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no PropFirmBot.ex5 "root@77.237.234.2:/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot.ex5"
+
+          echo "=== Deploy configs ==="
+          FILES_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot"
+          for f in configs/*; do
+            sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no "$f" "root@77.237.234.2:${FILES_DIR}/$(basename $f)"
+          done
+
+          echo "=== Deploy EA source files ==="
+          for f in EA/*; do
+            sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no "$f" "root@77.237.234.2:${EA_DIR}/$(basename $f)"
+          done
+
+          echo "=== Restart MT5 + Install Watchdog ==="
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 "bash -s" <<'REMOTE'
+          export DISPLAY=:99
+          export WINEPREFIX=/root/.wine
+          export WINEDEBUG=-all
+
+          # Verify .ex5
+          echo "=== Verifying .ex5 ==="
+          ls -la "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5"
+
+          # Restart MT5
+          echo "=== Restarting MT5 ==="
+          pkill -f terminal64.exe 2>/dev/null; sleep 3
+          pkill -9 -f terminal64.exe 2>/dev/null; sleep 1
+          wineserver -k 2>/dev/null; sleep 2
+
+          # Make sure display is running
+          pgrep -x Xvfb > /dev/null 2>&1 || (Xvfb :99 -screen 0 1280x1024x24 &>/dev/null & sleep 1)
+          pgrep -x x11vnc > /dev/null 2>&1 || (x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -bg 2>/dev/null)
+
+          nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" </dev/null >/dev/null 2>&1 &
+          disown -a
+          sleep 15
+
+          echo "=== MT5 status ==="
+          ps aux | grep terminal64 | grep -v grep
+
+          # Install watchdog
+          echo "=== Installing watchdog ==="
+          SCRIPTS_DIR="/root/PropFirmBot/scripts"
+          mkdir -p "$SCRIPTS_DIR" /root/PropFirmBot/logs /root/PropFirmBot/state
+
+          cat > "$SCRIPTS_DIR/watchdog.sh" << 'WEOF'
+          #!/bin/bash
+          TG="8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g"
+          CHAT="7013213983"
+          LOG="/root/PropFirmBot/logs/watchdog.log"
+          STATE="/root/PropFirmBot/state/mt5_status"
+          TS=$(date '+%Y-%m-%d %H:%M:%S')
+          mkdir -p /root/PropFirmBot/logs /root/PropFirmBot/state
+          PREV="unknown"; [ -f "$STATE" ] && PREV=$(cat "$STATE")
+          PID=$(pgrep -f terminal64.exe 2>/dev/null || true)
+          pgrep -x x11vnc > /dev/null 2>&1 || (DISPLAY=:99 x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -bg 2>/dev/null || true)
+          if [ -n "$PID" ]; then
+              [ "$PREV" = "down" ] && curl -s -X POST "https://api.telegram.org/bot${TG}/sendMessage" -d "chat_id=${CHAT}" -d "text=PropFirmBot MT5 RECOVERED PID:${PID}" > /dev/null 2>&1
+              echo "up" > "$STATE"
+              M=$(date '+%M'); [ "$((M % 14))" -lt 2 ] && echo "$TS [OK] PID:$PID" >> "$LOG"
+          else
+              echo "$TS [ALERT] MT5 down!" >> "$LOG"
+              export DISPLAY=:99 WINEPREFIX=/root/.wine
+              nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" </dev/null >/dev/null 2>&1 &
+              disown -a; sleep 20
+              NEW=$(pgrep -f terminal64.exe 2>/dev/null || true)
+              if [ -n "$NEW" ]; then
+                  echo "up" > "$STATE"
+                  curl -s -X POST "https://api.telegram.org/bot${TG}/sendMessage" -d "chat_id=${CHAT}" -d "text=PropFirmBot MT5 RESTARTED PID:${NEW}" > /dev/null 2>&1
+              else
+                  echo "down" > "$STATE"
+                  curl -s -X POST "https://api.telegram.org/bot${TG}/sendMessage" -d "chat_id=${CHAT}" -d "text=PROPFIRMBOT MT5 DOWN! Check VPS!" > /dev/null 2>&1
+              fi
+          fi
+          [ -f "$LOG" ] && tail -2000 "$LOG" > "${LOG}.tmp" && mv "${LOG}.tmp" "$LOG"
+          WEOF
+
+          chmod +x "$SCRIPTS_DIR/watchdog.sh"
+          CRON_TMP=$(mktemp)
+          crontab -l 2>/dev/null > "$CRON_TMP" || true
+          sed -i '/PropFirmBot/d' "$CRON_TMP"
+          echo "*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog" >> "$CRON_TMP"
+          crontab "$CRON_TMP" && rm "$CRON_TMP"
+          echo "Watchdog installed:"
+          crontab -l | grep PropFirmBot
+
+          # Send Telegram notification
+          curl -s "https://api.telegram.org/bot8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g/sendMessage" \
+              -d "chat_id=7013213983" \
+              -d "text=PropFirmBot DEPLOYED! EA compiled + MT5 restarted + Watchdog active. $(date '+%d/%m %H:%M UTC')" > /dev/null 2>&1
+
+          echo "=== DONE ==="
+          REMOTE
+
+          echo "=== Deploy complete ==="
+
+      - name: Verify deployment
+        run: |
+          echo "=== Waiting 15s for MT5 to connect ==="
+          sleep 15
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@77.237.234.2 "bash -s" <<'VERIFY' | tee deploy_report.txt
+          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+          echo "=== DEPLOY VERIFICATION $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+          echo "MT5: $(pgrep -f terminal64.exe > /dev/null 2>&1 && echo RUNNING || echo NOT_RUNNING)"
+          ps aux | grep terminal64 | grep -v grep | awk '{printf "  PID:%s CPU:%s%% MEM:%s%%\n", $2, $3, $4}'
+          echo "EA: $([ -f "$MT5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5" ] && echo "COMPILED ($(stat -c%s "$MT5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5") bytes)" || echo "NOT FOUND")"
+          echo "VNC: $(pgrep -x x11vnc > /dev/null 2>&1 && echo RUNNING || echo NOT_RUNNING)"
+          echo "Watchdog: $(crontab -l 2>/dev/null | grep -q PropFirmBot && echo ACTIVE || echo NOT_SET)"
+          echo "Connections:"
+          ss -tn state established 2>/dev/null | grep -v ":22 \|:5900 \|:53 " | head -5
+          echo "Terminal log (last 10):"
+          TLOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
+          [ -n "$TLOG" ] && cat "$TLOG" | tr -d '\0' | tail -10
+          VERIFY
+
+      - name: Commit deploy report
+        if: always()
+        run: |
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f deploy_report.txt
+          git commit -m "Deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push origin HEAD:$BRANCH || true
