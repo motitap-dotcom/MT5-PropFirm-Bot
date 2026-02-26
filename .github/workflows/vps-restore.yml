@@ -1,0 +1,51 @@
+name: VPS Full Restore - Deploy + Compile + Watchdog
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vps-restore.yml'
+      - 'scripts/full_restore.sh'
+
+permissions:
+  contents: write
+
+jobs:
+  restore-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Full Restore - Deploy, Compile, Restart, Watchdog
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+          chmod +x scripts/full_restore.sh
+
+          echo "=== Copying restore script to VPS ==="
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/full_restore.sh root@77.237.234.2:/tmp/full_restore.sh
+
+          echo "=== Running full restore on VPS ==="
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=30 root@77.237.234.2 "bash /tmp/full_restore.sh" > restore_report.txt 2>&1 || true
+
+          echo "EXIT_CODE=$?" >> restore_report.txt
+          cat restore_report.txt
+
+      - name: Wait and verify
+        run: |
+          echo "=== Waiting 30s for MT5 to fully initialize ==="
+          sleep 30
+
+          echo "=== Running verification check ==="
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/verify_ea.sh root@77.237.234.2:/tmp/verify.sh
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 root@77.237.234.2 "bash /tmp/verify.sh" >> restore_report.txt 2>&1 || true
+          cat restore_report.txt
+
+      - name: Commit report
+        run: |
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f restore_report.txt
+          git commit -m "VPS restore report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push origin HEAD:$BRANCH || true
