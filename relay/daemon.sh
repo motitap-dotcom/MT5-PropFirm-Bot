@@ -76,8 +76,13 @@ push_result() {
 
 LAST_CMD_ID=""
 
+# Remember the starting branch so we can recover if another process switches it
+cd "$REPO_DIR"
+RELAY_BRANCH=$(git branch --show-current 2>/dev/null)
+
 log "=== Relay Daemon Started ==="
 log "Repo: $REPO_DIR"
+log "Branch: $RELAY_BRANCH"
 log "Poll interval: ${POLL_INTERVAL}s"
 
 # Write initial "ready" result
@@ -90,9 +95,15 @@ git push origin HEAD 2>/dev/null
 while true; do
     cd "$REPO_DIR"
 
-    # Pull latest changes
+    # Pull latest changes - ensure correct branch
+    CURRENT_BRANCH=$(git branch --show-current 2>/dev/null)
     git fetch origin 2>/dev/null
-    git reset --hard origin/$(git branch --show-current) 2>/dev/null
+    # If branch was switched by another process, switch back
+    if [ -n "$RELAY_BRANCH" ] && [ "$CURRENT_BRANCH" != "$RELAY_BRANCH" ]; then
+        log "Branch switched to $CURRENT_BRANCH, reverting to $RELAY_BRANCH"
+        git checkout "$RELAY_BRANCH" 2>/dev/null
+    fi
+    git reset --hard "origin/$(git branch --show-current)" 2>/dev/null
 
     # Check if command file exists and has content
     if [ -f "$COMMAND_FILE" ]; then

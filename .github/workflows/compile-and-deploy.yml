@@ -255,30 +255,51 @@ jobs:
             sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no "$f" "root@77.237.234.2:${FILES_DIR}/$(basename $f)"
           done
 
-          echo "=== Restart MT5 ==="
+          echo "=== Deploy EA source files ==="
+          for f in EA/*; do
+            sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no "$f" "root@77.237.234.2:${EA_DIR}/$(basename $f)"
+          done
+
+          echo "=== Fix VPS git + relay + restart MT5 ==="
           sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 << 'REMOTE'
           export DISPLAY=:99
           export WINEPREFIX=/root/.wine
           export WINEDEBUG=-all
-          export STAGING_WRITECOPY=1
 
-          echo "Stopping MT5..."
+          # Fix git repo branch to our branch
+          echo "=== Fixing git branch ==="
+          cd /root/MT5-PropFirm-Bot
+          BRANCH="claude/claude-md-mm3qa8i9848jcovk-X3DTU"
+          git fetch origin "$BRANCH" 2>&1
+          git checkout "$BRANCH" 2>&1
+          git reset --hard "origin/$BRANCH" 2>&1
+          echo "Current branch: $(git branch --show-current)"
+
+          # Restart relay daemon
+          echo "=== Restarting relay daemon ==="
+          systemctl restart relay-daemon.service 2>/dev/null
+          sleep 3
+          systemctl status relay-daemon.service --no-pager 2>/dev/null | head -5
+
+          # Verify .ex5 in both locations
+          echo "=== Verifying .ex5 ==="
+          ls -la "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5"
+          ls -la "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot.ex5"
+
+          # Restart MT5
+          echo "=== Restarting MT5 ==="
           killall -9 terminal64.exe 2>/dev/null
           wineserver -k 2>/dev/null
           sleep 5
 
-          echo "Checking .ex5..."
-          ls -la "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5"
-
-          echo "Starting MT5..."
           cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
           wine terminal64.exe &
           sleep 15
 
-          echo "MT5 status:"
+          echo "=== MT5 status ==="
           ps aux | grep terminal64 | grep -v grep
 
-          echo "Checking EA loaded..."
+          echo "=== Checking EA loaded ==="
           EALOG=$(ls -t "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/"*.log 2>/dev/null | head -1)
           if [ -n "$EALOG" ]; then
             tail -10 "$EALOG" | tr -d '\0'
