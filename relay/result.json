@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772141000",
-  "status": "success",
-  "timestamp": "2026-02-26T21:53:03Z",
+  "id": "cmd-1772141200",
+  "status": "error",
+  "timestamp": "2026-02-26T21:55:24Z",
   "hostname": "vmi3096165",
-  "output": "From https://github.com/motitap-dotcom/MT5-PropFirm-Bot\n * branch            claude/claude-md-mm3qa8i9848jcovk-X3DTU -> FETCH_HEAD\nAlready on 'claude/claude-md-mm3qa8i9848jcovk-X3DTU'\nM\trelay/result.json\nYour branch is up to date with 'origin/claude/claude-md-mm3qa8i9848jcovk-X3DTU'.\nHEAD is now at 9d15c17 relay: trigger workflow with fixed include path\n[claude/claude-md-mm3qa8i9848jcovk-X3DTU 8cf6b8f] trigger: compile with fixed include path\n 1 file changed, 1 insertion(+), 1 deletion(-)\nTo https://github.com/motitap-dotcom/MT5-PropFirm-Bot.git\n   9d15c17..8cf6b8f  claude/claude-md-mm3qa8i9848jcovk-X3DTU -> claude/claude-md-mm3qa8i9848jcovk-X3DTU\nPushed - workflow should trigger\n"
+  "output": "Exit code: 1\\nTraceback (most recent call last):\n  File \"<stdin>\", line 2, in <module>\n  File \"/usr/lib/python3.12/json/__init__.py\", line 293, in load\n    return loads(fp.read(),\n           ^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n"
 }
