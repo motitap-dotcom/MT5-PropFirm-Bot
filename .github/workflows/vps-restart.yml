@@ -1,0 +1,162 @@
+name: VPS Start MT5 + Watchdog
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/vps-restart.yml'
+      - 'trigger-restart.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  restart-mt5:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start MT5 and install watchdog
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          echo "=== Starting MT5 + Watchdog ===" | tee restart_report.txt
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@77.237.234.2 "bash -s" <<'REMOTE' 2>&1 | tee -a restart_report.txt
+          export DISPLAY=:99
+          export WINEPREFIX=/root/.wine
+
+          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+
+          echo "=== Pre-flight check ==="
+          echo "EA compiled: $([ -f "$MT5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5" ] && echo "YES ($(stat -c%s "$MT5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5") bytes)" || echo "NO!")"
+
+          # Make sure Xvfb and VNC are up
+          pgrep -x Xvfb > /dev/null 2>&1 || (Xvfb :99 -screen 0 1280x1024x24 &>/dev/null & sleep 2)
+          pgrep -x x11vnc > /dev/null 2>&1 || (x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -bg 2>/dev/null)
+
+          # Kill existing MT5 if any
+          pkill -f terminal64.exe 2>/dev/null; sleep 2
+          wineserver -k 2>/dev/null; sleep 2
+
+          # Start MT5
+          echo "Starting MT5..."
+          nohup wine "$MT5/terminal64.exe" </dev/null >/dev/null 2>&1 &
+          disown -a
+          echo "Waiting 20s for MT5 to start..."
+          sleep 20
+
+          MT5_PID=$(pgrep -f terminal64.exe 2>/dev/null || true)
+          if [ -n "$MT5_PID" ]; then
+              echo "MT5 RUNNING! PID: $MT5_PID"
+          else
+              echo "MT5 not detected, waiting 15 more seconds..."
+              sleep 15
+              MT5_PID=$(pgrep -f terminal64.exe 2>/dev/null || true)
+              [ -n "$MT5_PID" ] && echo "MT5 RUNNING! PID: $MT5_PID" || echo "MT5 FAILED TO START"
+          fi
+
+          # Install watchdog
+          echo ""
+          echo "=== Installing Watchdog ==="
+          SCRIPTS_DIR="/root/PropFirmBot/scripts"
+          mkdir -p "$SCRIPTS_DIR" /root/PropFirmBot/logs /root/PropFirmBot/state
+
+          cat > "$SCRIPTS_DIR/watchdog.sh" << 'WEOF'
+#!/bin/bash
+TG="8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g"
+CHAT="7013213983"
+LOG="/root/PropFirmBot/logs/watchdog.log"
+STATE="/root/PropFirmBot/state/mt5_status"
+TS=$(date '+%Y-%m-%d %H:%M:%S')
+mkdir -p /root/PropFirmBot/logs /root/PropFirmBot/state
+PREV="unknown"; [ -f "$STATE" ] && PREV=$(cat "$STATE")
+PID=$(pgrep -f terminal64.exe 2>/dev/null || true)
+pgrep -x x11vnc > /dev/null 2>&1 || (DISPLAY=:99 x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -bg 2>/dev/null || true)
+if [ -n "$PID" ]; then
+    [ "$PREV" = "down" ] && curl -s -X POST "https://api.telegram.org/bot${TG}/sendMessage" -d "chat_id=${CHAT}" -d "text=PropFirmBot MT5 RECOVERED PID:${PID} $(date '+%d/%m %H:%M')" > /dev/null 2>&1
+    echo "up" > "$STATE"
+    M=$(date '+%M'); [ "$((M % 14))" -lt 2 ] && echo "$TS [OK] PID:$PID" >> "$LOG"
+else
+    echo "$TS [ALERT] MT5 down! Restarting..." >> "$LOG"
+    export DISPLAY=:99 WINEPREFIX=/root/.wine
+    nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" </dev/null >/dev/null 2>&1 &
+    disown -a; sleep 20
+    NEW=$(pgrep -f terminal64.exe 2>/dev/null || true)
+    if [ -n "$NEW" ]; then
+        echo "up" > "$STATE"
+        curl -s -X POST "https://api.telegram.org/bot${TG}/sendMessage" -d "chat_id=${CHAT}" -d "text=PropFirmBot MT5 RESTARTED PID:${NEW} $(date '+%d/%m %H:%M')" > /dev/null 2>&1
+        echo "$TS [RESTARTED] PID:$NEW" >> "$LOG"
+    else
+        echo "down" > "$STATE"
+        curl -s -X POST "https://api.telegram.org/bot${TG}/sendMessage" -d "chat_id=${CHAT}" -d "text=PROPFIRMBOT MT5 DOWN! Restart FAILED! Check VPS: ssh root@77.237.234.2" > /dev/null 2>&1
+        echo "$TS [ERROR] Restart failed!" >> "$LOG"
+    fi
+fi
+[ -f "$LOG" ] && tail -2000 "$LOG" > "${LOG}.tmp" && mv "${LOG}.tmp" "$LOG"
+WEOF
+
+          chmod +x "$SCRIPTS_DIR/watchdog.sh"
+
+          # Set cron
+          CRON_TMP=$(mktemp)
+          crontab -l 2>/dev/null > "$CRON_TMP" || true
+          sed -i '/PropFirmBot/d' "$CRON_TMP"
+          echo "*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog" >> "$CRON_TMP"
+          crontab "$CRON_TMP" && rm "$CRON_TMP"
+
+          echo "Watchdog cron:"
+          crontab -l 2>/dev/null | grep PropFirmBot
+
+          # Initialize state
+          MT5_PID=$(pgrep -f terminal64.exe 2>/dev/null || true)
+          [ -n "$MT5_PID" ] && echo "up" > /root/PropFirmBot/state/mt5_status || echo "unknown" > /root/PropFirmBot/state/mt5_status
+          echo "0" > /root/PropFirmBot/state/restart_count
+
+          # Send Telegram
+          curl -s "https://api.telegram.org/bot8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g/sendMessage" \
+              -d "chat_id=7013213983" \
+              -d "text=PropFirmBot: MT5 started + Watchdog active! $(date '+%d/%m/%Y %H:%M UTC')" > /dev/null 2>&1
+
+          echo ""
+          echo "=== DONE ==="
+          REMOTE
+
+      - name: Verify (20s later)
+        run: |
+          sleep 20
+          echo "=== VERIFICATION ===" | tee -a restart_report.txt
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@77.237.234.2 "bash -s" <<'VERIFY' 2>&1 | tee -a restart_report.txt
+          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+          echo "MT5: $(pgrep -f terminal64.exe > /dev/null 2>&1 && echo RUNNING || echo NOT_RUNNING)"
+          ps aux | grep terminal64 | grep -v grep | awk '{printf "  PID:%s CPU:%s%% MEM:%s%%\n", $2, $3, $4}'
+          echo "EA: $([ -f "$MT5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5" ] && echo "COMPILED ($(stat -c%s "$MT5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5") bytes)" || echo "NOT FOUND")"
+          echo "VNC: $(pgrep -x x11vnc > /dev/null 2>&1 && echo RUNNING || echo NOT_RUNNING)"
+          echo "Watchdog: $(crontab -l 2>/dev/null | grep -q PropFirmBot && echo ACTIVE || echo NOT_SET)"
+          echo "Connections:"
+          ss -tn state established 2>/dev/null | grep -v ":22 \|:5900 \|:53 " | head -5
+          echo ""
+          echo "Terminal log (last 15):"
+          TLOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
+          [ -n "$TLOG" ] && cat "$TLOG" | tr -d '\0' | tail -15
+          echo ""
+          echo "EA log today:"
+          TODAY=$(date '+%Y%m%d')
+          EALOG="$MT5/MQL5/Logs/${TODAY}.log"
+          if [ -f "$EALOG" ]; then
+              echo "EA LOG EXISTS! Size: $(stat -c%s "$EALOG") bytes"
+              cat "$EALOG" | tr -d '\0' | tail -15
+          else
+              echo "No EA log for today"
+          fi
+          VERIFY
+
+      - name: Commit report
+        if: always()
+        run: |
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f restart_report.txt
+          git commit -m "VPS restart report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push origin HEAD:$BRANCH || true
