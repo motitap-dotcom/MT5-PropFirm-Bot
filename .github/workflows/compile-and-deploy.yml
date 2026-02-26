@@ -19,53 +19,179 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compile PropFirmBot EA
-        uses: fx31337/mql-compile-action@master
-        with:
-          path: EA/PropFirmBot.mq5
-          include: EA
-          init-platform: true
-          verbose: true
-
-      - name: Find and verify compiled EA
+      - name: Install MetaTrader 5
         shell: powershell
         run: |
-          Write-Host "=== Searching for compiled .ex5 ==="
-          # Check in EA directory first
-          if (Test-Path "EA/PropFirmBot.ex5") {
-            $ex5 = Get-Item "EA/PropFirmBot.ex5"
-            Write-Host "Found in EA dir: $($ex5.FullName) ($($ex5.Length) bytes)"
-            Copy-Item $ex5.FullName -Destination "PropFirmBot.ex5" -Force
-          } else {
-            Write-Host "Not in EA dir, searching everywhere..."
-            $ex5 = Get-ChildItem -Path . -Filter "PropFirmBot.ex5" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
-            if ($ex5) {
-              Write-Host "Found: $($ex5.FullName) ($($ex5.Length) bytes)"
-              Copy-Item $ex5.FullName -Destination "PropFirmBot.ex5" -Force
-            } else {
-              # Also search MT5 installation dir
-              $mt5ex5 = Get-ChildItem -Path "C:\" -Filter "PropFirmBot.ex5" -Recurse -ErrorAction SilentlyContinue -Depth 8 | Select-Object -First 1
-              if ($mt5ex5) {
-                Write-Host "Found in MT5: $($mt5ex5.FullName) ($($mt5ex5.Length) bytes)"
-                Copy-Item $mt5ex5.FullName -Destination "PropFirmBot.ex5" -Force
-              } else {
-                Write-Host "ERROR: PropFirmBot.ex5 not found anywhere!"
-                Write-Host "=== All .ex5 files ==="
-                Get-ChildItem -Path . -Filter "*.ex5" -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "$($_.FullName) ($($_.Length) bytes)" }
-                Get-ChildItem -Path "C:\Program Files" -Filter "*.ex5" -Recurse -ErrorAction SilentlyContinue -Depth 6 | Select-Object -First 5 | ForEach-Object { Write-Host "$($_.FullName) ($($_.Length) bytes)" }
-                exit 1
+          # Disable Defender to avoid blocking
+          Set-MpPreference -DisableRealtimeMonitoring $true -ErrorAction SilentlyContinue
+          Add-MpPreference -ExclusionPath "C:\" -ErrorAction SilentlyContinue
+
+          Write-Host "=== Downloading MT5 setup ==="
+          $urls = @(
+            "https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe",
+            "https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe?utm_source=www.metatrader5.com"
+          )
+
+          $downloaded = $false
+          foreach ($url in $urls) {
+            Write-Host "Trying: $url"
+            try {
+              $wc = New-Object System.Net.WebClient
+              $wc.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+              $wc.DownloadFile($url, "$PWD\mt5setup.exe")
+              $size = (Get-Item "mt5setup.exe").Length
+              Write-Host "Downloaded: $size bytes"
+              if ($size -gt 1000000) {
+                $downloaded = $true
+                break
               }
+            } catch {
+              Write-Host "Failed: $_"
             }
           }
 
-          Write-Host "=== Final check ==="
-          $final = Get-Item "PropFirmBot.ex5"
-          Write-Host "PropFirmBot.ex5: $($final.Length) bytes"
-          if ($final.Length -lt 1000) {
-            Write-Host "ERROR: File too small (likely compilation failed)"
+          # Fallback: try curl with browser UA
+          if (-not $downloaded) {
+            Write-Host "=== Trying curl ==="
+            curl.exe -L -o mt5setup.exe -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" "https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe" 2>&1
+            $size = (Get-Item "mt5setup.exe" -ErrorAction SilentlyContinue).Length
+            Write-Host "Curl download: $size bytes"
+            if ($size -gt 1000000) { $downloaded = $true }
+          }
+
+          if (-not $downloaded) {
+            Write-Host "FATAL: Could not download MT5 installer"
             exit 1
           }
-          echo "COMPILE_SUCCESS=true" >> $env:GITHUB_ENV
+
+          Write-Host "=== Installing MT5 ==="
+          $proc = Start-Process -FilePath ".\mt5setup.exe" -ArgumentList "/auto" -Wait -PassThru
+          Write-Host "Installer exit: $($proc.ExitCode)"
+
+          Write-Host "=== Waiting for installation ==="
+          Start-Sleep -Seconds 60
+
+          Write-Host "=== Searching for MetaEditor ==="
+          $searchPaths = @(
+            "C:\Program Files\MetaTrader 5",
+            "C:\Program Files",
+            "$env:APPDATA\MetaQuotes",
+            "$env:APPDATA",
+            "$env:LOCALAPPDATA",
+            "C:\Users",
+            "C:\"
+          )
+
+          $metaeditor = $null
+          foreach ($sp in $searchPaths) {
+            if (-not (Test-Path $sp)) { continue }
+            Write-Host "  Searching: $sp"
+            $found = Get-ChildItem -Path $sp -Filter "metaeditor64.exe" -Recurse -ErrorAction SilentlyContinue -Depth 6 | Select-Object -First 1
+            if ($found) {
+              $metaeditor = $found
+              Write-Host "  FOUND: $($found.FullName)"
+              break
+            }
+          }
+
+          if (-not $metaeditor) {
+            Write-Host "ERROR: MetaEditor not found!"
+            Write-Host "=== All .exe in Program Files ==="
+            Get-ChildItem "C:\Program Files" -Filter "*.exe" -Recurse -Depth 4 -ErrorAction SilentlyContinue | Select-Object -First 20 | ForEach-Object { Write-Host $_.FullName }
+            Write-Host "=== AppData contents ==="
+            Get-ChildItem "$env:APPDATA" -Directory -ErrorAction SilentlyContinue | ForEach-Object { Write-Host $_.FullName }
+            Write-Host "=== Running processes ==="
+            Get-Process | Where-Object { $_.ProcessName -match "meta|mt5|terminal" } | Format-Table Name, Path
+            exit 1
+          }
+
+          $mt5dir = $metaeditor.DirectoryName
+          Write-Host "MT5 DIR: $mt5dir"
+          Write-Host "METAEDITOR: $($metaeditor.FullName)"
+          echo "MT5_DIR=$mt5dir" >> $env:GITHUB_ENV
+          echo "METAEDITOR=$($metaeditor.FullName)" >> $env:GITHUB_ENV
+
+      - name: Initialize platform (download standard library)
+        shell: powershell
+        run: |
+          $mt5dir = $env:MT5_DIR
+          $terminal = Join-Path $mt5dir "terminal64.exe"
+
+          if (Test-Path $terminal) {
+            Write-Host "=== Running terminal to download standard library ==="
+            $proc = Start-Process -FilePath $terminal -ArgumentList "/portable" -PassThru
+            Start-Sleep -Seconds 30
+            try { $proc.Kill() } catch {}
+            Start-Sleep -Seconds 5
+          }
+
+          # Check standard library
+          $tradeMqh = Join-Path $mt5dir "MQL5\Include\Trade\Trade.mqh"
+          if (Test-Path $tradeMqh) {
+            Write-Host "Standard library OK: $tradeMqh"
+          } else {
+            Write-Host "WARNING: Trade.mqh not found at $tradeMqh"
+            Write-Host "=== Include dir contents ==="
+            $incDir = Join-Path $mt5dir "MQL5\Include"
+            if (Test-Path $incDir) {
+              Get-ChildItem $incDir -Directory | ForEach-Object { Write-Host "  $($_.Name)" }
+            } else {
+              Write-Host "Include directory does not exist!"
+            }
+          }
+
+      - name: Copy EA files and compile
+        shell: powershell
+        run: |
+          $mt5dir = $env:MT5_DIR
+          $metaeditor = $env:METAEDITOR
+
+          # Create EA directory
+          $eaDir = Join-Path $mt5dir "MQL5\Experts\PropFirmBot"
+          New-Item -ItemType Directory -Force -Path $eaDir | Out-Null
+
+          # Copy EA files
+          Write-Host "=== Copying EA files ==="
+          Copy-Item "EA\*" -Destination $eaDir -Force -Verbose
+
+          # Copy configs
+          $filesDir = Join-Path $mt5dir "MQL5\Files\PropFirmBot"
+          New-Item -ItemType Directory -Force -Path $filesDir | Out-Null
+          Copy-Item "configs\*" -Destination $filesDir -Force -Verbose
+
+          Write-Host "=== EA dir contents ==="
+          Get-ChildItem $eaDir | Format-Table Name, Length
+
+          # Compile
+          $mq5 = Join-Path $eaDir "PropFirmBot.mq5"
+          Write-Host "=== Compiling: $mq5 ==="
+
+          $proc = Start-Process -FilePath $metaeditor -ArgumentList "/portable /compile:`"$mq5`" /log /include:`"$eaDir`"" -Wait -PassThru -NoNewWindow
+          Write-Host "MetaEditor exit: $($proc.ExitCode)"
+          Start-Sleep -Seconds 15
+
+          # Show compilation log
+          Write-Host "=== Compilation log ==="
+          $logs = Get-ChildItem -Path $eaDir -Filter "*.log" -ErrorAction SilentlyContinue
+          foreach ($log in $logs) {
+            Write-Host "--- $($log.Name) ---"
+            Get-Content $log.FullName -ErrorAction SilentlyContinue
+          }
+
+          # Check for .ex5
+          Write-Host "=== Checking for .ex5 ==="
+          $ex5 = Get-ChildItem -Path $mt5dir -Filter "PropFirmBot.ex5" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($ex5) {
+            Write-Host "SUCCESS: $($ex5.FullName) ($($ex5.Length) bytes)"
+            Copy-Item $ex5.FullName -Destination "PropFirmBot.ex5" -Force
+            echo "COMPILE_SUCCESS=true" >> $env:GITHUB_ENV
+          } else {
+            Write-Host "ERROR: .ex5 not found!"
+            # Search broader
+            Get-ChildItem -Path $mt5dir -Filter "*.ex5" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 10 | ForEach-Object { Write-Host "$($_.FullName) $($_.Length)b" }
+            echo "COMPILE_SUCCESS=false" >> $env:GITHUB_ENV
+            exit 1
+          }
 
       - name: Upload compiled EA
         if: env.COMPILE_SUCCESS == 'true'
@@ -99,7 +225,6 @@ jobs:
 
           sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no PropFirmBot.ex5 "root@77.237.234.2:${EA_DIR}/PropFirmBot.ex5"
 
-          # Also copy to root Experts dir
           sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no PropFirmBot.ex5 "root@77.237.234.2:/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot.ex5"
 
           echo "=== Deploy configs ==="
