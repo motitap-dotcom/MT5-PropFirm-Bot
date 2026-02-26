@@ -162,20 +162,42 @@ jobs:
           Write-Host "=== EA dir contents ==="
           Get-ChildItem $eaDir | Format-Table Name, Length
 
-          # Compile
+          # Verify standard library exists
+          $mql5Dir = Join-Path $mt5dir "MQL5"
+          $tradeMqh = Join-Path $mql5Dir "Include\Trade\Trade.mqh"
+          Write-Host "=== Checking standard library ==="
+          Write-Host "MQL5 dir: $mql5Dir"
+          if (Test-Path $tradeMqh) {
+            Write-Host "Trade.mqh found: $tradeMqh"
+          } else {
+            Write-Host "WARNING: Trade.mqh NOT found at $tradeMqh"
+            Write-Host "=== Include directory contents ==="
+            $incDir = Join-Path $mql5Dir "Include"
+            if (Test-Path $incDir) {
+              Get-ChildItem $incDir -Directory | ForEach-Object { Write-Host "  $($_.Name)" }
+            } else {
+              Write-Host "Include directory does NOT exist!"
+            }
+          }
+
+          # Compile - use MQL5 dir as include root (NOT EA dir)
           $mq5 = Join-Path $eaDir "PropFirmBot.mq5"
           Write-Host "=== Compiling: $mq5 ==="
+          Write-Host "Include path: $mql5Dir"
 
-          $proc = Start-Process -FilePath $metaeditor -ArgumentList "/portable /compile:`"$mq5`" /log /include:`"$eaDir`"" -Wait -PassThru -NoNewWindow
+          $proc = Start-Process -FilePath $metaeditor -ArgumentList "/compile:`"$mq5`" /log /include:`"$mql5Dir`"" -Wait -PassThru -NoNewWindow
           Write-Host "MetaEditor exit: $($proc.ExitCode)"
           Start-Sleep -Seconds 15
 
           # Show compilation log
           Write-Host "=== Compilation log ==="
-          $logs = Get-ChildItem -Path $eaDir -Filter "*.log" -ErrorAction SilentlyContinue
-          foreach ($log in $logs) {
-            Write-Host "--- $($log.Name) ---"
-            Get-Content $log.FullName -ErrorAction SilentlyContinue
+          $logPaths = @($eaDir, $mql5Dir, $mt5dir)
+          foreach ($lp in $logPaths) {
+            $logs = Get-ChildItem -Path $lp -Filter "*.log" -ErrorAction SilentlyContinue
+            foreach ($log in $logs) {
+              Write-Host "--- $($log.FullName) ---"
+              Get-Content $log.FullName -ErrorAction SilentlyContinue
+            }
           }
 
           # Check for .ex5
