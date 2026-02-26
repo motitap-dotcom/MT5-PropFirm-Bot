@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772137100",
+  "id": "cmd-1772137200",
   "type": "shell",
-  "command": "echo '=== Find MetaEditor ===' && find '/root/.wine/drive_c' -iname '*metaeditor*' 2>/dev/null && echo '=== Find .exe in MT5 dir ===' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/'*.exe 2>/dev/null && echo '=== All files in MT5 root ===' && ls '/root/.wine/drive_c/Program Files/MetaTrader 5/' 2>/dev/null",
-  "timestamp": "2026-02-26T20:31:00Z",
+  "command": "export DISPLAY=:99 && export WINEPREFIX=/root/.wine && export WINEDEBUG=-all && export STAGING_WRITECOPY=1 && echo '=== Compiling EA ===' && cd '/root/.wine/drive_c/Program Files/MetaTrader 5' && wine MetaEditor64.exe /compile:'MQL5/Experts/PropFirmBot/PropFirmBot.mq5' /log /include:'MQL5/Experts/PropFirmBot' 2>&1 && sleep 15 && echo '=== Check .ex5 after compile ===' && find 'MQL5/Experts' -name 'PropFirmBot.ex5' -ls 2>/dev/null && echo '=== Compile log ===' && cat 'MQL5/Experts/PropFirmBot/PropFirmBot.log' 2>/dev/null | tail -30",
+  "timestamp": "2026-02-26T20:32:00Z",
   "from": "claude"
 }
