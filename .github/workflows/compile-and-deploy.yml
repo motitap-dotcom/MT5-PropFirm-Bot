@@ -19,6 +19,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Disable Windows Defender (prevents blocking MT5 installer)
+        shell: powershell
+        run: |
+          Write-Host "=== Disabling Windows Defender real-time protection ==="
+          Set-MpPreference -DisableRealtimeMonitoring $true -ErrorAction SilentlyContinue
+          Add-MpPreference -ExclusionPath "C:\" -ErrorAction SilentlyContinue
+          Write-Host "Defender disabled for CI"
+
       - name: Download MetaTrader 5
         shell: powershell
         run: |

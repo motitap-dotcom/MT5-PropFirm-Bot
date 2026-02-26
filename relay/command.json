@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772139000",
+  "id": "cmd-1772139100",
   "type": "shell",
-  "command": "echo '=== Strace MetaEditor to find .ex5 write failure ===' && export DISPLAY=:99 WINEPREFIX=/root/.wine WINEDEBUG=-all && rm -f '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5' 2>/dev/null && rm -f /tmp/me_trace.txt && timeout 90 strace -f -e trace=openat,rename,renameat2,unlink,write -o /tmp/me_trace.txt wine '/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe' /compile:'/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5' /log 2>/dev/null; echo \"Exit: $?\" && echo '=== Lines mentioning ex5 ===' && grep -i 'ex5' /tmp/me_trace.txt 2>/dev/null | head -20 && echo '=== Lines with EACCES/EPERM/error ===' && grep -i 'EACCES\\|EPERM\\|ENOENT.*ex5\\|PropFirmBot' /tmp/me_trace.txt 2>/dev/null | head -20 && echo '=== Check any new ex5 files ===' && find /root/.wine -name '*.ex5' -mmin -5 -ls 2>/dev/null && find /tmp -name '*.ex5' -mmin -5 -ls 2>/dev/null && echo '=== Strace file size ===' && wc -l /tmp/me_trace.txt 2>/dev/null",
-  "timestamp": "2026-02-26T21:30:00Z",
+  "command": "echo '=== Check strace for PropFirmBot file ops ===' && grep -i 'PropFirmBot\\|Experts' /tmp/me_trace.txt 2>/dev/null | head -20 && echo '=== Check strace for openat near end of file ===' && tail -100 /tmp/me_trace.txt 2>/dev/null | head -30 && echo '=== Check for any .ex5 file ops ===' && grep 'ex5\\|\\.ex' /tmp/me_trace.txt 2>/dev/null | head -10 && echo '=== Check if MetaEditor is running OK now ===' && ps aux | grep -i meta | grep -v grep && echo '=== MT5 status ===' && ps aux | grep -i terminal64 | grep -v grep && echo '=== Check GitHub Actions workflow runs ===' && cd /root/MT5-PropFirm-Bot && git log --oneline -3 && echo '=== Recent EA log ===' && ls -lt '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/' 2>/dev/null | head -5 && EALOG=$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/'*.log 2>/dev/null | head -1) && tail -20 \"$EALOG\" 2>/dev/null | tr -d '\\0' || echo 'No EA log'",
+  "timestamp": "2026-02-26T21:35:00Z",
   "from": "claude"
 }
