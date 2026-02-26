@@ -1,7 +1,7 @@
 {
-  "id": "init-1772144729",
-  "status": "ready",
-  "timestamp": "2026-02-26T22:25:29Z",
+  "id": "cmd-1772142500",
+  "status": "success",
+  "timestamp": "2026-02-26T22:25:31Z",
   "hostname": "vmi3096165",
-  "output": "Relay daemon is running and waiting for commands\n"
+  "output": "RELAY ALIVE\nBranch: claude/claude-md-mm3qa8i9848jcovk-X3DTU\n-rw-r--r-- 1 root root 164386 Feb 26 22:24 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5\nroot      332475  9.5  2.4 854564 203096 ?       S<l  22:22   0:19 C:\\Program Files\\MetaTrader 5\\terminal64.exe\n"
 }
