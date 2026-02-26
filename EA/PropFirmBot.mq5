@@ -58,15 +58,15 @@ input int      InpEMAFast         = 9;          // EMA Fast Period
 input int      InpEMASlow         = 21;         // EMA Slow Period
 input int      InpRSIPeriod       = 14;         // RSI Period
 input int      InpATRPeriod       = 14;         // ATR Period
-input int      InpOBLookback      = 20;         // Order Block Lookback
-input double   InpFVGMinPoints    = 50.0;       // Min FVG Size (points)
+input int      InpOBLookback      = 30;         // Order Block Lookback
+input double   InpFVGMinPoints    = 15.0;       // Min FVG Size (points)
 
 // --- Risk Management ---
 input double   InpRiskPercent     = 0.5;        // Risk Per Trade (%)
 input double   InpMaxRiskPercent  = 0.75;       // Max Risk Per Trade (%)
-input int      InpMaxPositions    = 2;          // Max Open Positions
-input double   InpMinRR           = 2.0;        // Min Risk:Reward
-input int      InpMaxDailyTrades  = 8;          // Max Trades Per Day
+input int      InpMaxPositions    = 3;          // Max Open Positions
+input double   InpMinRR           = 1.2;        // Min Risk:Reward
+input int      InpMaxDailyTrades  = 15;         // Max Trades Per Day
 input int      InpMaxConsecLosses = 5;          // Max Consecutive Losses
 
 // --- Spread Filter ---
@@ -81,10 +81,10 @@ input bool     InpNewsHighImpact  = true;        // News: Filter High Impact
 input bool     InpNewsMedImpact   = false;       // News: Filter Medium Impact
 
 // --- Session Filter (UTC) ---
-input int      InpLondonStart     = 7;          // London Start
+input int      InpLondonStart     = 6;          // London Start (aggressive: earlier)
 input int      InpLondonEnd       = 16;         // London End (covers overlap with NY)
 input int      InpNYStart         = 12;         // NY Start
-input int      InpNYEnd           = 21;         // NY End (extended to 23:00 Israel)
+input int      InpNYEnd           = 22;         // NY End (aggressive: extended)
 
 // --- Trade Management ---
 input double   InpTrailingActivation = 30.0;    // Trailing Activation (pips)
