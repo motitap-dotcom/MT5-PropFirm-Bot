@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772138900",
+  "id": "cmd-1772139000",
   "status": "success",
-  "timestamp": "2026-02-26T20:57:26Z",
+  "timestamp": "2026-02-26T20:59:18Z",
   "hostname": "vmi3096165",
-  "output": "=== Wine debug: trace file operations for .ex5 ===\n01c0:err:module:loader_init Importing dlls for L\"C:\\\\Program Files\\\\MetaTrader 5\\\\MetaEditor64.exe\" failed, status c0000135\n=== Check Wine version ===\nwine-11.3 (Staging)\n=== Try with regular wine (not staging features) ===\nExit2: 0\nNo .ex5 created\n"
+  "output": "=== Strace MetaEditor to find .ex5 write failure ===\nExit: 53\n=== Lines mentioning ex5 ===\n=== Lines with EACCES/EPERM/error ===\n=== Check any new ex5 files ===\n=== Strace file size ===\n2136 /tmp/me_trace.txt\n"
 }
