@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772139500",
+  "id": "cmd-1772140200",
   "type": "shell",
-  "command": "cd /root/MT5-PropFirm-Bot && git pull origin claude/claude-md-mm3qa8i9848jcovk-X3DTU 2>&1 && echo \"Trigger $(date -u '+%Y-%m-%d %H:%M:%S UTC')\" > trigger-deploy.txt && git add trigger-deploy.txt && git commit -m 'trigger: compile with manual MT5 install + browser UA' 2>&1 && git push origin claude/claude-md-mm3qa8i9848jcovk-X3DTU 2>&1 && echo 'Pushed - workflow should trigger'",
-  "timestamp": "2026-02-26T22:15:00Z",
+  "command": "echo '=== Check .ex5 file ===' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5' 2>&1 && echo '=== File date ===' && stat '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5' 2>&1 && echo '=== Check workflow runs ===' && curl -s 'https://api.github.com/repos/motitap-dotcom/MT5-PropFirm-Bot/actions/runs?per_page=5&branch=claude/claude-md-mm3qa8i9848jcovk-X3DTU' | python3 -c \"import sys,json; d=json.load(sys.stdin); [print(f'Run #{r[\\\"run_number\\\"]}: {r[\\\"status\\\"]}/{r.get(\\\"conclusion\\\",\\\"?\\\")} - {r[\\\"name\\\"]} at {r[\\\"created_at\\\"]}') for r in d.get('workflow_runs',[])]\" 2>&1 && echo '=== MT5 EA logs (last 20 lines) ===' && EALOG=$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/'*.log 2>/dev/null | head -1) && [ -n \"$EALOG\" ] && tail -20 \"$EALOG\" | tr -d '\\0' || echo 'No EA log found'",
+  "timestamp": "2026-02-26T23:10:00Z",
   "from": "claude"
 }
