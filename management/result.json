@@ -1,10 +1,16 @@
 Warning: Permanently added '77.237.234.2' (ED25519) to the list of known hosts.
-=== TRY COMPILE WITH DISPLAY ===
-0140:fixme:ntdll:NtRaiseHardError 0x50000018 4 0x3 0x7ffffe4fe1e8 0 0x7ffffe4fec78: stub
-=== CHECK .ex5 ===
-STILL NO .ex5 - checking logs...
-=== METAEDITOR LOG ===
-no metaeditor log
+=== Installing xdotool ===
+Use 'apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 9 not upgraded.
+=== Checking MT5 window ===
+=== Sending F4 to open MetaEditor ===
+=== Check MetaEditor ===
+23068673
+=== Sending F7 to compile ===
+XGetInputFocus returned the focused window of 1. This is likely a bug in the X server.
+XGetInputFocus returned the focused window of 1. This is likely a bug in the X server.
+=== Check .ex5 ===
+NO .ex5 yet
 
 ---META---
-{"exit_code":0,"action":"ssh","timestamp":"2026-02-26 18:01:56 UTC"}
+{"exit_code":0,"action":"ssh","timestamp":"2026-02-26 18:04:30 UTC"}
