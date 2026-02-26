@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772136600",
-  "type": "shell",
-  "command": "echo '=== Looking for .ex5 ===' && find '/root/.wine/drive_c/Program Files/MetaTrader 5/' -name '*.ex5' 2>/dev/null && echo '=== Last 200 lines of Feb 25 log ===' && tail -200 '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260225.log' 2>/dev/null && echo '=== Last 200 lines of Feb 24 log ===' && tail -200 '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260224.log' 2>/dev/null | grep -i 'signal\\|trade\\|order\\|session\\|news\\|spread\\|reject\\|skip\\|block\\|error\\|warn' | tail -50",
-  "timestamp": "2026-02-26T20:16:00Z",
+  "id": "cmd-1772136800",
+  "type": "deploy",
+  "command": "",
+  "timestamp": "2026-02-26T20:25:00Z",
   "from": "claude"
 }
