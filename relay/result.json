@@ -1,7 +1,7 @@
 {
-  "id": "init-1772144500",
-  "status": "ready",
-  "timestamp": "2026-02-26T22:21:40Z",
+  "id": "cmd-1772142200",
+  "status": "error",
+  "timestamp": "2026-02-26T22:21:42Z",
   "hostname": "vmi3096165",
-  "output": "Relay daemon is running and waiting for commands\n"
+  "output": "Exit code: 2\\nalive\nls: cannot access '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5': No such file or directory\n"
 }
