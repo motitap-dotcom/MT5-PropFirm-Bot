@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772140700",
+  "id": "cmd-1772140800",
   "type": "shell",
-  "command": "TOKEN=$(cat /root/.git-credentials 2>/dev/null | grep -o '//[^:]*:[^@]*@' | sed 's|//||;s|@||;s|.*:||' | head -1) && echo '=== Run #10 Jobs ===' && curl -s -H \"Authorization: token $TOKEN\" 'https://api.github.com/repos/motitap-dotcom/MT5-PropFirm-Bot/actions/runs/22461913767/jobs' | python3 << 'PYEOF'\nimport sys, json\nd = json.load(sys.stdin)\nfor j in d.get('jobs', []):\n    print(f\"Job: {j['name']} - {j['status']}/{j.get('conclusion','?')}\")\n    for s in j.get('steps', []):\n        print(f\"  [{s.get('conclusion', s['status'])}] {s['name']}\")\nPYEOF\necho '=== Download run #10 logs ===' && curl -s -L -H \"Authorization: token $TOKEN\" -H \"Accept: application/vnd.github.v3+json\" 'https://api.github.com/repos/motitap-dotcom/MT5-PropFirm-Bot/actions/runs/22461913767/logs' -o /tmp/run10.zip 2>&1 && ls -la /tmp/run10.zip && cd /tmp && unzip -o run10.zip -d run10_logs 2>&1 | tail -5 && echo '=== Log files ===' && ls -la /tmp/run10_logs/ 2>&1 && echo '=== Compile job log (last 100 lines) ===' && cat /tmp/run10_logs/*.txt 2>/dev/null | tail -100",
-  "timestamp": "2026-02-26T23:35:00Z",
+  "command": "TOKEN=$(cat /root/.git-credentials 2>/dev/null | grep -o '//[^:]*:[^@]*@' | sed 's|//||;s|@||;s|.*:||' | head -1) && curl -s -L -H \"Authorization: token $TOKEN\" -H \"Accept: application/vnd.github.v3+json\" 'https://api.github.com/repos/motitap-dotcom/MT5-PropFirm-Bot/actions/runs/22461913767/logs' -o /tmp/run10.zip 2>&1 && cd /tmp && unzip -o run10.zip -d run10_logs 2>&1 | tail -3 && echo '=== Step 3: Install MT5 (last 30 lines) ===' && tail -30 '/tmp/run10_logs/compile/3_Install MetaTrader 5.txt' 2>&1 && echo '=== Step 4: Init Platform (full) ===' && cat '/tmp/run10_logs/compile/4_Initialize platform (download standard library).txt' 2>&1 && echo '=== Step 5: Compile (first 50 lines) ===' && head -50 '/tmp/run10_logs/compile/5_Copy EA files and compile.txt' 2>&1",
+  "timestamp": "2026-02-26T23:40:00Z",
   "from": "claude"
 }
