@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772141600",
+  "id": "cmd-1772141800",
   "type": "shell",
-  "command": "echo '=== EA Logs (latest) ===' && EALOG=$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/'*.log 2>/dev/null | head -1) && if [ -n \"$EALOG\" ]; then echo \"Log: $EALOG\" && wc -l \"$EALOG\" && tail -60 \"$EALOG\" | tr -d '\\0'; else echo 'No EA log found'; fi && echo '=== Terminal Logs (latest) ===' && TLOG=$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/logs/'*.log 2>/dev/null | head -1) && if [ -n \"$TLOG\" ]; then echo \"Log: $TLOG\" && tail -30 \"$TLOG\" | tr -d '\\0'; else echo 'No terminal log found'; fi && echo '=== .ex5 details ===' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/' 2>&1 && echo '=== Process check ===' && ps aux | grep -i 'terminal64\\|wine' | grep -v grep",
-  "timestamp": "2026-02-27T00:10:00Z",
+  "command": "echo '=== Current .ex5 check ===' && find '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/' -name '*.ex5' -ls 2>&1 && echo '=== PropFirmBot dir ===' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/' 2>&1 && echo '=== Today EA log ===' && cat '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260226.log' 2>&1 | tr -d '\\0' | tail -30 && echo '=== Check deploy report ===' && cat /root/MT5-PropFirm-Bot/deploy_report.txt 2>/dev/null && echo '=== Check run #12 ===' && TOKEN=$(cat /root/.git-credentials 2>/dev/null | grep -o '//[^:]*:[^@]*@' | sed 's|//||;s|@||;s|.*:||' | head -1) && curl -s -H \"Authorization: token $TOKEN\" 'https://api.github.com/repos/motitap-dotcom/MT5-PropFirm-Bot/actions/runs?per_page=3&branch=claude/claude-md-mm3qa8i9848jcovk-X3DTU' > /tmp/runs.json && python3 -c 'import json; d=json.load(open(\"/tmp/runs.json\")); [print(f\"#{r[\"run_number\"]} {r[\"status\"]}/{r.get(\"conclusion\",\"?\")} {r[\"created_at\"]}\") for r in d.get(\"workflow_runs\",[])]' 2>&1",
+  "timestamp": "2026-02-27T00:15:00Z",
   "from": "claude"
 }
