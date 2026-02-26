@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772137200",
+  "id": "cmd-1772137400",
   "type": "shell",
-  "command": "export DISPLAY=:99 && export WINEPREFIX=/root/.wine && export WINEDEBUG=-all && export STAGING_WRITECOPY=1 && echo '=== Compiling EA ===' && cd '/root/.wine/drive_c/Program Files/MetaTrader 5' && wine MetaEditor64.exe /compile:'MQL5/Experts/PropFirmBot/PropFirmBot.mq5' /log /include:'MQL5/Experts/PropFirmBot' 2>&1 && sleep 15 && echo '=== Check .ex5 after compile ===' && find 'MQL5/Experts' -name 'PropFirmBot.ex5' -ls 2>/dev/null && echo '=== Compile log ===' && cat 'MQL5/Experts/PropFirmBot/PropFirmBot.log' 2>/dev/null | tail -30",
-  "timestamp": "2026-02-26T20:32:00Z",
+  "command": "echo '=== Check for .ex5 ===' && find '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts' -name 'PropFirmBot.ex5' -ls 2>/dev/null && echo '---' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot.ex5' 2>/dev/null || echo 'No .ex5 found yet' && echo '=== Today log ===' && cat '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260226.log' 2>/dev/null | tail -30 || echo 'No log for today'",
+  "timestamp": "2026-02-26T20:38:00Z",
   "from": "claude"
 }
