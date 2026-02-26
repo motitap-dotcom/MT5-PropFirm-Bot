@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772145300",
-  "status": "success",
-  "timestamp": "2026-02-26T22:50:11Z",
+  "id": "cmd-1772145500",
+  "status": "error",
+  "timestamp": "2026-02-26T22:52:02Z",
   "hostname": "vmi3096165",
-  "output": "Written /etc/systemd/system/xvfb.service\nWritten /etc/systemd/system/mt5.service\nWritten /etc/systemd/system/x11vnc.service\nAll service files written\n"
+  "output": "Exit code: 1\\nxvfb: active\nx11vnc: active\nmt5: deactivating\n=== MT5 process ===\n"
 }
