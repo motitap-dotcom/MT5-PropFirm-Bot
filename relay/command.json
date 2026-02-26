@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772140800",
+  "id": "cmd-1772141000",
   "type": "shell",
-  "command": "TOKEN=$(cat /root/.git-credentials 2>/dev/null | grep -o '//[^:]*:[^@]*@' | sed 's|//||;s|@||;s|.*:||' | head -1) && curl -s -L -H \"Authorization: token $TOKEN\" -H \"Accept: application/vnd.github.v3+json\" 'https://api.github.com/repos/motitap-dotcom/MT5-PropFirm-Bot/actions/runs/22461913767/logs' -o /tmp/run10.zip 2>&1 && cd /tmp && unzip -o run10.zip -d run10_logs 2>&1 | tail -3 && echo '=== Step 3: Install MT5 (last 30 lines) ===' && tail -30 '/tmp/run10_logs/compile/3_Install MetaTrader 5.txt' 2>&1 && echo '=== Step 4: Init Platform (full) ===' && cat '/tmp/run10_logs/compile/4_Initialize platform (download standard library).txt' 2>&1 && echo '=== Step 5: Compile (first 50 lines) ===' && head -50 '/tmp/run10_logs/compile/5_Copy EA files and compile.txt' 2>&1",
-  "timestamp": "2026-02-26T23:40:00Z",
+  "command": "cd /root/MT5-PropFirm-Bot && git fetch origin claude/claude-md-mm3qa8i9848jcovk-X3DTU && git checkout claude/claude-md-mm3qa8i9848jcovk-X3DTU && git reset --hard origin/claude/claude-md-mm3qa8i9848jcovk-X3DTU && echo 'trigger-$(date +%s)' > trigger-deploy.txt && git add trigger-deploy.txt && git commit -m 'trigger: compile with fixed include path' && git push origin claude/claude-md-mm3qa8i9848jcovk-X3DTU && echo 'Pushed - workflow should trigger'",
+  "timestamp": "2026-02-26T23:50:00Z",
   "from": "claude"
 }
