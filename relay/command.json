@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772142900",
+  "id": "cmd-1772143100",
   "type": "shell",
-  "command": "echo '=== All terminal log entries after 22:20 ===' && TLOG=$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/logs/'*.log 2>/dev/null | head -1) && grep -E '22:2[0-9]|22:3[0-9]' \"$TLOG\" 2>/dev/null | tr -d '\\0' | grep -i 'expert\\|loaded\\|autotrading\\|account\\|connecting\\|connected\\|error\\|PropFirm' | head -30 && echo '=== Full terminal log last 40 lines ===' && tail -40 \"$TLOG\" 2>&1 | tr -d '\\0' && echo '=== EA logs today ===' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260226.log' 2>&1 && echo '=== Check if EA is in Experts panel ===' && find '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/' -name '*.ex5' -ls 2>&1 | grep -i prop && echo '=== MT5 profile charts ===' && find '/root/.wine/drive_c/Program Files/MetaTrader 5/config/charts/' -name '*.chr' -ls 2>/dev/null | head -5",
-  "timestamp": "2026-02-27T00:58:00Z",
+  "command": "MT5='/root/.wine/drive_c/Program Files/MetaTrader 5' && echo '=== Profile dirs ===' && find \"$MT5/config\" -type d 2>/dev/null | head -20 && echo '=== Chart files ===' && find \"$MT5/config\" -name '*.chr' 2>/dev/null | head -10 && echo '=== Check for EA in chart config ===' && find \"$MT5/config\" -name '*.chr' -exec grep -l -i 'PropFirm\\|expert' {} \\; 2>/dev/null && echo '=== Profiles ===' && find \"$MT5\" -path '*/profiles/*' -type f 2>/dev/null | head -20 && echo '=== Check autotrading ===' && find \"$MT5\" -name 'common.ini' -o -name 'terminal.ini' 2>/dev/null | while read f; do echo \"--- $f ---\"; grep -i 'auto\\|expert\\|allowed' \"$f\" 2>/dev/null; done && echo '=== Any .chr files anywhere ===' && find \"$MT5\" -name '*.chr' 2>/dev/null | head -10",
+  "timestamp": "2026-02-27T01:02:00Z",
   "from": "claude"
 }
