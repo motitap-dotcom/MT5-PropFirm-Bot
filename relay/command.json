@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772143300",
+  "id": "cmd-1772143500",
   "type": "shell",
-  "command": "MT5='/root/.wine/drive_c/Program Files/MetaTrader 5' && echo '=== terminal.ini ===' && cat \"$MT5/config/terminal.ini\" 2>/dev/null && echo '=== common.ini ===' && cat \"$MT5/config/common.ini\" 2>/dev/null && echo '=== Config/terminal.ini ===' && cat \"$MT5/Config/terminal.ini\" 2>/dev/null && echo '=== Config/common.ini ===' && cat \"$MT5/Config/common.ini\" 2>/dev/null && echo '=== MQL5/Profiles dirs ===' && find \"$MT5/MQL5/Profiles\" -type d 2>/dev/null && echo '=== MQL5/Profiles files ===' && find \"$MT5/MQL5/Profiles\" -type f 2>/dev/null | head -30 && echo '=== Experts dir ===' && ls -la \"$MT5/MQL5/Experts/\" 2>/dev/null && ls -la \"$MT5/MQL5/Experts/PropFirmBot/\" 2>/dev/null && echo '=== .ex5 files ===' && find \"$MT5\" -name '*.ex5' 2>/dev/null",
-  "timestamp": "2026-02-27T01:10:00Z",
+  "command": "MT5='/root/.wine/drive_c/Program Files/MetaTrader 5' && echo '=== Default chart01.chr ===' && cat \"$MT5/MQL5/Profiles/Charts/Default/chart01.chr\" 2>/dev/null | tr -d '\\0' && echo '=== Default order.wnd ===' && cat \"$MT5/MQL5/Profiles/Charts/Default/order.wnd\" 2>/dev/null | tr -d '\\0' && echo '=== Any chart with EA reference ===' && grep -rl -i 'PropFirm\\|expert_name' \"$MT5/MQL5/Profiles/\" 2>/dev/null && echo '=== MT5 terminal log last 30 ===' && TLOG=$(ls -t \"$MT5/logs/\"*.log 2>/dev/null | head -1) && if [ -n \"$TLOG\" ]; then tail -30 \"$TLOG\" | tr -d '\\0'; fi && echo '=== EA log today ===' && cat \"$MT5/MQL5/Logs/20260226.log\" 2>/dev/null | tr -d '\\0' | tail -20 && echo '=== EA log latest ===' && EALOG=$(ls -t \"$MT5/MQL5/Logs/\"*.log 2>/dev/null | head -1) && if [ -n \"$EALOG\" ]; then echo \"File: $EALOG\"; tail -20 \"$EALOG\" | tr -d '\\0'; fi",
+  "timestamp": "2026-02-27T01:15:00Z",
   "from": "claude"
 }
