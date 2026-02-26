@@ -98,7 +98,7 @@ input int      InpSlippage          = 20;        // Max Slippage (points)
 input bool     InpTradeEURUSD     = true;       // Trade EURUSD
 input bool     InpTradeGBPUSD     = true;       // Trade GBPUSD
 input bool     InpTradeUSDJPY     = true;       // Trade USDJPY
-input bool     InpTradeXAUUSD     = false;      // Trade XAUUSD
+input bool     InpTradeXAUUSD     = true;       // Trade XAUUSD
 
 // --- Notifications ---
 input string   InpTelegramToken   = "8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g";  // Telegram Bot Token
@@ -514,9 +514,15 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
 
    // Fallback
    if(signal == SIGNAL_NONE && InpUseFallback && InpStrategy == STRATEGY_SMC)
+   {
+      PrintFormat("[SIGNAL] %s SMC=NONE, trying EMA fallback...", symbol);
       signal = g_signals[signal_index].GetSignal(STRATEGY_EMA_CROSS, sl_price, tp_price);
+   }
 
    if(signal == SIGNAL_NONE) return;
+
+   PrintFormat("[SIGNAL] %s >>> %s signal found! SL=%.5f TP=%.5f",
+               symbol, signal == SIGNAL_BUY ? "BUY" : "SELL", sl_price, tp_price);
 
    // Validate RR
    double entry_price = (signal == SIGNAL_BUY)

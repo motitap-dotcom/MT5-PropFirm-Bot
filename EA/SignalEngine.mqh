@@ -479,8 +479,9 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
       bool has_bullish_ob = DetectBullishOrderBlock(0, ob_high, ob_low);
       bool has_bullish_fvg = DetectBullishFVG(0, fvg_high, fvg_low);
 
-      // Need liquidity sweep + (order block OR fair value gap)
-      if(has_liquidity_sweep && (has_bullish_ob || has_bullish_fvg))
+      // Need (order block OR fair value gap); liquidity sweep is a bonus
+      // With liq sweep: full confidence. Without: still valid entry on OB/FVG alone.
+      if(has_bullish_ob || has_bullish_fvg)
       {
          double entry = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
 
@@ -493,8 +494,9 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
          double sl_distance = entry - sl_price;
          if(sl_distance <= 0) return SIGNAL_NONE;
 
-         // TP at 2:1 minimum RR
-         tp_price = entry + (sl_distance * 2.0);
+         // TP: 2.5:1 RR with liquidity sweep, 2:1 without
+         double rr_mult = has_liquidity_sweep ? 2.5 : 2.0;
+         tp_price = entry + (sl_distance * rr_mult);
 
          PrintFormat("[SMC] BUY signal: Entry=%.5f SL=%.5f TP=%.5f | LiqSweep=%s OB=%s FVG=%s",
                      entry, sl_price, tp_price,
@@ -503,6 +505,14 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
                      has_bullish_fvg ? "Y" : "N");
 
          return SIGNAL_BUY;
+      }
+      else
+      {
+         PrintFormat("[SMC] %s BUY rejected: HTF=Bullish LiqSweep=%s OB=%s FVG=%s",
+                     m_symbol,
+                     has_liquidity_sweep ? "Y" : "N",
+                     has_bullish_ob ? "Y" : "N",
+                     has_bullish_fvg ? "Y" : "N");
       }
    }
 
@@ -513,7 +523,7 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
       bool has_bearish_ob = DetectBearishOrderBlock(0, ob_high, ob_low);
       bool has_bearish_fvg = DetectBearishFVG(0, fvg_high, fvg_low);
 
-      if(has_liquidity_sweep && (has_bearish_ob || has_bearish_fvg))
+      if(has_bearish_ob || has_bearish_fvg)
       {
          double entry = SymbolInfoDouble(m_symbol, SYMBOL_BID);
 
@@ -525,7 +535,8 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
          double sl_distance = sl_price - entry;
          if(sl_distance <= 0) return SIGNAL_NONE;
 
-         tp_price = entry - (sl_distance * 2.0);
+         double rr_mult = has_liquidity_sweep ? 2.5 : 2.0;
+         tp_price = entry - (sl_distance * rr_mult);
 
          PrintFormat("[SMC] SELL signal: Entry=%.5f SL=%.5f TP=%.5f | LiqSweep=%s OB=%s FVG=%s",
                      entry, sl_price, tp_price,
@@ -535,6 +546,20 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
 
          return SIGNAL_SELL;
       }
+      else
+      {
+         PrintFormat("[SMC] %s SELL rejected: HTF=Bearish LiqSweep=%s OB=%s FVG=%s",
+                     m_symbol,
+                     has_liquidity_sweep ? "Y" : "N",
+                     has_bearish_ob ? "Y" : "N",
+                     has_bearish_fvg ? "Y" : "N");
+      }
+   }
+
+   // Log when HTF has no clear bias
+   if(htf_bias == 0)
+   {
+      PrintFormat("[SMC] %s no signal: HTF bias=NEUTRAL (no clear trend on H4)", m_symbol);
    }
 
    return SIGNAL_NONE;
@@ -548,9 +573,9 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
    sl_price = 0;
    tp_price = 0;
 
-   // Copy indicator data
-   if(CopyBuffer(m_handle_ema_fast, 0, 0, 3, m_ema_fast) < 3) return SIGNAL_NONE;
-   if(CopyBuffer(m_handle_ema_slow, 0, 0, 3, m_ema_slow) < 3) return SIGNAL_NONE;
+   // Copy indicator data (need 5 bars for 3-bar crossover window)
+   if(CopyBuffer(m_handle_ema_fast, 0, 0, 5, m_ema_fast) < 5) return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_ema_slow, 0, 0, 5, m_ema_slow) < 5) return SIGNAL_NONE;
    if(CopyBuffer(m_handle_rsi, 0, 0, 3, m_rsi) < 3)           return SIGNAL_NONE;
    if(CopyBuffer(m_handle_atr, 0, 0, 3, m_atr) < 3)           return SIGNAL_NONE;
 
@@ -560,10 +585,34 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
    // Get H4 bias for confirmation
    int htf_bias = GetHTFBias();
 
-   // EMA 9 crossed above EMA 21
-   bool cross_up = (m_ema_fast[1] <= m_ema_slow[1]) && (m_ema_fast[0] > m_ema_slow[0]);
-   // EMA 9 crossed below EMA 21
-   bool cross_down = (m_ema_fast[1] >= m_ema_slow[1]) && (m_ema_fast[0] < m_ema_slow[0]);
+   // EMA crossover detection with 3-bar window:
+   // Check if cross happened on bar[0], bar[1], or bar[2]
+   bool cross_up = false;
+   bool cross_down = false;
+
+   for(int i = 0; i < 3; i++)
+   {
+      if(m_ema_fast[i+1] <= m_ema_slow[i+1] && m_ema_fast[i] > m_ema_slow[i])
+      { cross_up = true; break; }
+   }
+   for(int i = 0; i < 3; i++)
+   {
+      if(m_ema_fast[i+1] >= m_ema_slow[i+1] && m_ema_fast[i] < m_ema_slow[i])
+      { cross_down = true; break; }
+   }
+
+   // Also accept: EMA fast is above slow AND was recently close (momentum building)
+   // This catches cases where the cross just happened and price is pulling away
+   if(!cross_up && m_ema_fast[0] > m_ema_slow[0])
+   {
+      double gap_pct = (m_ema_fast[0] - m_ema_slow[0]) / m_ema_slow[0] * 100.0;
+      if(gap_pct < 0.05) cross_up = true;  // EMAs very close, momentum building
+   }
+   if(!cross_down && m_ema_fast[0] < m_ema_slow[0])
+   {
+      double gap_pct = (m_ema_slow[0] - m_ema_fast[0]) / m_ema_slow[0] * 100.0;
+      if(gap_pct < 0.05) cross_down = true;
+   }
 
    // BUY: EMA cross up + RSI not overbought + bullish or neutral HTF
    if(cross_up && m_rsi[0] < m_rsi_overbought && m_rsi[0] > m_rsi_oversold && htf_bias >= 0)
@@ -573,8 +622,8 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
       double sl_distance = entry - sl_price;
       tp_price = entry + (sl_distance * 2.0);
 
-      PrintFormat("[EMA] BUY signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
-                  entry, sl_price, tp_price, m_rsi[0]);
+      PrintFormat("[EMA] BUY signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f HTF=%d",
+                  entry, sl_price, tp_price, m_rsi[0], htf_bias);
       return SIGNAL_BUY;
    }
 
@@ -586,10 +635,19 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
       double sl_distance = sl_price - entry;
       tp_price = entry - (sl_distance * 2.0);
 
-      PrintFormat("[EMA] SELL signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
-                  entry, sl_price, tp_price, m_rsi[0]);
+      PrintFormat("[EMA] SELL signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f HTF=%d",
+                  entry, sl_price, tp_price, m_rsi[0], htf_bias);
       return SIGNAL_SELL;
    }
+
+   // Debug log: why no EMA signal
+   if(!cross_up && !cross_down)
+      PrintFormat("[EMA] %s no cross in 3-bar window | Fast=%.5f Slow=%.5f",
+                  m_symbol, m_ema_fast[0], m_ema_slow[0]);
+   else
+      PrintFormat("[EMA] %s cross found but filtered | RSI=%.1f HTF=%d | CrossUp=%s CrossDn=%s",
+                  m_symbol, m_rsi[0], htf_bias,
+                  cross_up ? "Y" : "N", cross_down ? "Y" : "N");
 
    return SIGNAL_NONE;
 }
