@@ -1,16 +1,8 @@
 Warning: Permanently added '77.237.234.2' (ED25519) to the list of known hosts.
-{"fallback":true}
----PROCESSES---
-root      162931  0.0  0.2  31820 22340 ?        S    Feb24   0:56 python3 server.py 8081
-root      238192  0.6  0.9 215800 76804 ?        S    Feb25  10:32 Xvfb :99 -screen 0 1280x1024x24
-root      249458  0.1  0.2  41624 18124 ?        Ss   10:33   0:42 x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw
-root      263635  0.0  0.3  40960 31084 pts/3    S    17:29   0:00 python3 server_agent.py
-root      263705  0.0  0.3  40956 30872 ?        Ss   17:29   0:00 /usr/bin/python3 /root/Tradovate-Bot/server_agent.py --interval 30
----CONNECTIONS---
-Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
-0      0       77.237.234.2:48502 87.248.119.252:443         
----UPTIME---
- 17:40:24 up 4 days,  5:29,  8 users,  load average: 0.10, 0.05, 0.01
+From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
+ * branch            claude/claude-md-mm3qa8i9848jcovk-X3DTU -> FETCH_HEAD
+   78b0de4..c9a01a7  claude/claude-md-mm3qa8i9848jcovk-X3DTU -> origin/claude/claude-md-mm3qa8i9848jcovk-X3DTU
+fatal: invalid reference: claude/claude-md-mm3qa8i9848jcovk-X3DTU
 
 ---META---
-{"exit_code":0,"action":"status","timestamp":"2026-02-26 17:40:23 UTC"}
+{"exit_code":0,"action":"install-mgmt","timestamp":"2026-02-26 17:42:38 UTC"}
