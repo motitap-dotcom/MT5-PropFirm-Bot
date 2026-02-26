@@ -13,11 +13,12 @@ permissions:
 jobs:
   restore-bot:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
 
       - name: Full Restore - Deploy, Compile, Restart, Watchdog
+        timeout-minutes: 6
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
           chmod +x scripts/full_restore.sh
@@ -26,19 +27,22 @@ jobs:
           sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/full_restore.sh root@77.237.234.2:/tmp/full_restore.sh
 
           echo "=== Running full restore on VPS ==="
-          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=30 root@77.237.234.2 "bash /tmp/full_restore.sh" > restore_report.txt 2>&1 || true
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=15 root@77.237.234.2 "bash /tmp/full_restore.sh </dev/null" > restore_report.txt 2>&1 || true
 
           echo "EXIT_CODE=$?" >> restore_report.txt
+          echo "=== Restore output ==="
           cat restore_report.txt
 
-      - name: Wait and verify
+      - name: Verify status
         run: |
-          echo "=== Waiting 30s for MT5 to fully initialize ==="
-          sleep 30
+          echo "=== Waiting 20s for MT5 to settle ==="
+          sleep 20
 
-          echo "=== Running verification check ==="
+          echo "=== Running verification ==="
           sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/verify_ea.sh root@77.237.234.2:/tmp/verify.sh
-          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 root@77.237.234.2 "bash /tmp/verify.sh" >> restore_report.txt 2>&1 || true
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 root@77.237.234.2 "bash /tmp/verify.sh </dev/null" >> restore_report.txt 2>&1 || true
+
+          echo "=== Full report ==="
           cat restore_report.txt
 
       - name: Commit report

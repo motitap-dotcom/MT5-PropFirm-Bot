@@ -132,8 +132,9 @@ if [ -n "$METAEDITOR" ]; then
 
     # Method 1: Command-line compile
     echo "Attempting command-line compile..."
-    timeout 60 wine "$METAEDITOR" /compile:"$EA_DEST/PropFirmBot.mq5" /log 2>&1 || true
-    sleep 5
+    timeout 60 wine "$METAEDITOR" /compile:"$EA_DEST/PropFirmBot.mq5" /log > /dev/null 2>&1 || true
+    wineserver -w 2>/dev/null || true
+    sleep 3
 
     if [ -f "$EA_DEST/PropFirmBot.ex5" ]; then
         EX5_SIZE=$(stat -c%s "$EA_DEST/PropFirmBot.ex5" 2>/dev/null)
@@ -144,8 +145,9 @@ if [ -n "$METAEDITOR" ]; then
 
         # Method 2: Try with /include path
         echo "Trying with include path..."
-        timeout 60 wine "$METAEDITOR" /compile:"$EA_DEST/PropFirmBot.mq5" /include:"$MQL5_PATH" /log 2>&1 || true
-        sleep 5
+        timeout 60 wine "$METAEDITOR" /compile:"$EA_DEST/PropFirmBot.mq5" /include:"$MQL5_PATH" /log > /dev/null 2>&1 || true
+        wineserver -w 2>/dev/null || true
+        sleep 3
 
         if [ -f "$EA_DEST/PropFirmBot.ex5" ]; then
             EX5_SIZE=$(stat -c%s "$EA_DEST/PropFirmBot.ex5" 2>/dev/null)
@@ -193,22 +195,22 @@ if ! pgrep -x "x11vnc" > /dev/null 2>&1; then
     sleep 1
 fi
 
-# Start MT5
+# Start MT5 (fully detached so SSH doesn't hang)
 echo "Starting MT5..."
-wine "$MT5_PATH/terminal64.exe" &
-MT5_WINE_PID=$!
-echo "Wine PID: $MT5_WINE_PID"
+nohup wine "$MT5_PATH/terminal64.exe" > /dev/null 2>&1 &
+disown
+echo "MT5 launch command sent"
 
 # Wait for MT5 to start
-echo "Waiting for MT5 to initialize..."
-sleep 30
+echo "Waiting for MT5 to initialize (20s)..."
+sleep 20
 
 MT5_PID=$(pgrep -f "terminal64.exe" 2>/dev/null || true)
 if [ -n "$MT5_PID" ]; then
     echo "✅ MT5 is RUNNING (PID: $MT5_PID)"
 else
-    echo "⚠️ MT5 process not detected yet, waiting more..."
-    sleep 20
+    echo "⚠️ MT5 process not detected yet, waiting more (15s)..."
+    sleep 15
     MT5_PID=$(pgrep -f "terminal64.exe" 2>/dev/null || true)
     [ -n "$MT5_PID" ] && echo "✅ MT5 is RUNNING (PID: $MT5_PID)" || echo "❌ MT5 failed to start"
 fi
@@ -476,8 +478,7 @@ Config files: ${CFG_COUNT}
 $(date '+%d/%m/%Y %H:%M:%S UTC')"
 
 echo ""
-echo "━━━ Broker connection check (waiting 10s) ━━━"
-sleep 10
+echo "━━━ Broker connection check ━━━"
 CONNS2=$(ss -tn state established 2>/dev/null | grep -v ":22 \|:5900 \|:53 ")
 if [ -n "$CONNS2" ]; then
     echo "✅ Outbound connections active:"
