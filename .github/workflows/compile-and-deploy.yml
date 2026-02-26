@@ -1,0 +1,186 @@
+name: Compile EA and Deploy to VPS
+
+on:
+  push:
+    paths:
+      - 'EA/**'
+      - 'configs/**'
+      - '.github/workflows/compile-and-deploy.yml'
+      - 'trigger-deploy.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  compile-and-deploy:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download and install MetaTrader 5
+        shell: powershell
+        run: |
+          Write-Host "=== Downloading MT5 ==="
+          $url = "https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe"
+          Invoke-WebRequest -Uri $url -OutFile "mt5setup.exe" -UseBasicParsing
+          Write-Host "Downloaded: $((Get-Item mt5setup.exe).Length) bytes"
+
+          Write-Host "=== Installing MT5 silently ==="
+          Start-Process -FilePath "mt5setup.exe" -ArgumentList "/auto" -Wait -NoNewWindow
+          Start-Sleep -Seconds 30
+
+          # Find MetaEditor
+          $metaeditor = Get-ChildItem -Path "C:\Program Files" -Filter "metaeditor64.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $metaeditor) {
+            $metaeditor = Get-ChildItem -Path "$env:APPDATA" -Filter "metaeditor64.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          }
+          if (-not $metaeditor) {
+            $metaeditor = Get-ChildItem -Path "C:\" -Filter "metaeditor64.exe" -Recurse -ErrorAction SilentlyContinue -Depth 5 | Select-Object -First 1
+          }
+
+          if ($metaeditor) {
+            Write-Host "Found MetaEditor: $($metaeditor.FullName)"
+            $mt5dir = $metaeditor.DirectoryName
+            echo "MT5_DIR=$mt5dir" >> $env:GITHUB_ENV
+            echo "METAEDITOR=$($metaeditor.FullName)" >> $env:GITHUB_ENV
+          } else {
+            Write-Host "ERROR: MetaEditor not found!"
+            Get-ChildItem -Path "C:\Program Files" -Directory | ForEach-Object { Write-Host $_.FullName }
+            exit 1
+          }
+
+      - name: Copy EA files and compile
+        shell: powershell
+        run: |
+          $mt5dir = $env:MT5_DIR
+          $metaeditor = $env:METAEDITOR
+
+          Write-Host "=== MT5 dir: $mt5dir ==="
+          Write-Host "=== MetaEditor: $metaeditor ==="
+
+          # Create PropFirmBot directory
+          $eaDir = Join-Path $mt5dir "MQL5\Experts\PropFirmBot"
+          New-Item -ItemType Directory -Force -Path $eaDir | Out-Null
+
+          # Copy EA files
+          Write-Host "=== Copying EA files ==="
+          Copy-Item "EA\*" -Destination $eaDir -Force -Verbose
+
+          # Copy configs
+          $filesDir = Join-Path $mt5dir "MQL5\Files\PropFirmBot"
+          New-Item -ItemType Directory -Force -Path $filesDir | Out-Null
+          Copy-Item "configs\*" -Destination $filesDir -Force -Verbose
+
+          Write-Host "=== Files in EA dir ==="
+          Get-ChildItem $eaDir
+
+          # Compile
+          $mq5file = Join-Path $eaDir "PropFirmBot.mq5"
+          Write-Host "=== Compiling: $mq5file ==="
+
+          & $metaeditor /compile:"$mq5file" /log /include:"$eaDir"
+          Start-Sleep -Seconds 30
+
+          # Check result
+          Write-Host "=== Checking compilation result ==="
+          $ex5 = Get-ChildItem -Path $mt5dir -Filter "PropFirmBot.ex5" -Recurse -ErrorAction SilentlyContinue
+          if ($ex5) {
+            Write-Host "SUCCESS! Found: $($ex5.FullName) ($($ex5.Length) bytes)"
+            # Copy to workspace for upload
+            Copy-Item $ex5.FullName -Destination "PropFirmBot.ex5" -Force
+            echo "EX5_PATH=$($ex5.FullName)" >> $env:GITHUB_ENV
+            echo "COMPILE_SUCCESS=true" >> $env:GITHUB_ENV
+          } else {
+            Write-Host "ERROR: .ex5 not found!"
+            # Check logs
+            Get-ChildItem -Path $eaDir -Filter "*.log" | ForEach-Object {
+              Write-Host "--- $($_.Name) ---"
+              Get-Content $_.FullName
+            }
+            echo "COMPILE_SUCCESS=false" >> $env:GITHUB_ENV
+            exit 1
+          }
+
+      - name: Upload compiled EA
+        if: env.COMPILE_SUCCESS == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PropFirmBot-EA
+          path: PropFirmBot.ex5
+          retention-days: 30
+
+  deploy-to-vps:
+    needs: compile-and-deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download compiled EA
+        uses: actions/download-artifact@v4
+        with:
+          name: PropFirmBot-EA
+
+      - name: Deploy to VPS
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          echo "=== Compiled EA ==="
+          ls -la PropFirmBot.ex5
+
+          echo "=== Uploading to VPS ==="
+          EA_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"
+
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no PropFirmBot.ex5 "root@77.237.234.2:${EA_DIR}/PropFirmBot.ex5"
+
+          # Also copy to root Experts dir
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no PropFirmBot.ex5 "root@77.237.234.2:/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot.ex5"
+
+          echo "=== Deploy configs ==="
+          FILES_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot"
+          for f in configs/*; do
+            sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no "$f" "root@77.237.234.2:${FILES_DIR}/$(basename $f)"
+          done
+
+          echo "=== Restart MT5 ==="
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 << 'REMOTE'
+          export DISPLAY=:99
+          export WINEPREFIX=/root/.wine
+          export WINEDEBUG=-all
+          export STAGING_WRITECOPY=1
+
+          echo "Stopping MT5..."
+          killall -9 terminal64.exe 2>/dev/null
+          wineserver -k 2>/dev/null
+          sleep 5
+
+          echo "Checking .ex5..."
+          ls -la "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5"
+
+          echo "Starting MT5..."
+          cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
+          wine terminal64.exe &
+          sleep 15
+
+          echo "MT5 status:"
+          ps aux | grep terminal64 | grep -v grep
+
+          echo "Checking EA loaded..."
+          EALOG=$(ls -t "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+          if [ -n "$EALOG" ]; then
+            tail -10 "$EALOG" | tr -d '\0'
+          fi
+          REMOTE
+
+          echo "=== Deploy complete ==="
+
+      - name: Commit deploy report
+        run: |
+          echo "Deploy completed at $(date -u '+%Y-%m-%d %H:%M UTC')" > deploy_report.txt
+          echo "EA file: PropFirmBot.ex5 ($(stat -c%s PropFirmBot.ex5 2>/dev/null || echo 'N/A') bytes)" >> deploy_report.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f deploy_report.txt
+          git commit -m "Deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push origin ${{ github.ref_name }} || true
