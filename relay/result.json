@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772140400",
-  "status": "error",
-  "timestamp": "2026-02-26T21:42:20Z",
+  "id": "cmd-1772140600",
+  "status": "success",
+  "timestamp": "2026-02-26T21:48:18Z",
   "hostname": "vmi3096165",
-  "output": "Exit code: 1\\n=== Run #10 jobs ===\nTraceback (most recent call last):\n  File \"<stdin>\", line 2, in <module>\n  File \"/usr/lib/python3.12/json/__init__.py\", line 293, in load\n    return loads(fp.read(),\n           ^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n=== Run #10 logs (compile job) ===\n"
+  "output": "=== Git credentials ===\nstore\nhttps:***@github.com\n=== Try API with auth ===\nToken found: yes\n#10 id=22461913767 completed/failure Compile EA and Deploy to VPS\n#9 id=22461895895 completed/failure Compile EA and Deploy to VPS\n#8 id=22461381300 completed/failure Compile EA and Deploy to VPS\n"
 }
