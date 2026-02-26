@@ -1,2 +1,1 @@
-Trigger compile and deploy - 2026-02-26 19:45 UTC
-Fix: Wine Staging cannot compile .ex5, using Windows runner instead
+Trigger compile 2026-02-26 20:32 UTC
