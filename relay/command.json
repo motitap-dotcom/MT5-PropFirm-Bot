@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772136900",
+  "id": "cmd-1772137000",
   "type": "shell",
-  "command": "echo '=== Check .ex5 ===' && find '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts' -name 'PropFirmBot*' -ls 2>/dev/null && echo '=== MT5 running ===' && ps aux | grep terminal64 | grep -v grep && echo '=== Latest EA log ===' && EALOG=$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/'*.log 2>/dev/null | head -1) && echo \"Log: $EALOG\" && tail -20 \"$EALOG\" 2>/dev/null | tr -d '\\0'",
-  "timestamp": "2026-02-26T20:28:00Z",
+  "command": "export DISPLAY=:99 && export WINEPREFIX=/root/.wine && export WINEDEBUG=-all && export STAGING_WRITECOPY=1 && echo '=== Trying MetaEditor compile ===' && METAEDITOR='/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe' && EA_SRC='/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5' && if [ -f \"$METAEDITOR\" ]; then echo 'MetaEditor found, compiling...' && wine \"$METAEDITOR\" /compile:\"$EA_SRC\" /log 2>&1 && sleep 10 && echo '=== Check .ex5 after compile ===' && find '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts' -name '*.ex5' -ls 2>/dev/null; else echo 'MetaEditor not found'; fi",
+  "timestamp": "2026-02-26T20:30:00Z",
   "from": "claude"
 }
