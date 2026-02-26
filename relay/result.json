@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772138800",
+  "id": "cmd-1772138900",
   "status": "success",
-  "timestamp": "2026-02-26T20:55:35Z",
+  "timestamp": "2026-02-26T20:57:26Z",
   "hostname": "vmi3096165",
-  "output": "=== Pre-create ex5 file ===\n-rw-rw-rw- 1 root root 0 Feb 26 20:55 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5\n=== Compile with pre-created target ===\nExit: 53\n=== Check ex5 after ===\n-rw-rw-rw- 1 root root 0 Feb 26 20:55 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5\n  File: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5\n  Size: 0         \tBlocks: 0          IO Block: 4096   regular empty file\nDevice: 8,1\tInode: 1576340     Links: 1\nAccess: (0666/-rw-rw-rw-)  Uid: (    0/    root)   Gid: (    0/    root)\nAccess: 2026-02-26 20:55:35.026641396 +0000\nModify: 2026-02-26 20:55:35.026641396 +0000\nChange: 2026-02-26 20:55:35.028641390 +0000\n Birth: 2026-02-26 20:55:35.026641396 +0000\n=== File size check ===\n0\n"
+  "output": "=== Wine debug: trace file operations for .ex5 ===\n01c0:err:module:loader_init Importing dlls for L\"C:\\\\Program Files\\\\MetaTrader 5\\\\MetaEditor64.exe\" failed, status c0000135\n=== Check Wine version ===\nwine-11.3 (Staging)\n=== Try with regular wine (not staging features) ===\nExit2: 0\nNo .ex5 created\n"
 }
