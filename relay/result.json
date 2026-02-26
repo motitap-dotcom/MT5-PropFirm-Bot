@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772139200",
+  "id": "cmd-1772139300",
   "status": "success",
-  "timestamp": "2026-02-26T21:11:25Z",
+  "timestamp": "2026-02-26T21:21:01Z",
   "hostname": "vmi3096165",
-  "output": "From https://github.com/motitap-dotcom/MT5-PropFirm-Bot\n * branch            claude/claude-md-mm3qa8i9848jcovk-X3DTU -> FETCH_HEAD\nAlready up to date.\n[claude/claude-md-mm3qa8i9848jcovk-X3DTU a3783f1] trigger: compile and deploy EA via fx31337 action\n 1 file changed, 1 insertion(+), 1 deletion(-)\nTo https://github.com/motitap-dotcom/MT5-PropFirm-Bot.git\n   ac40c6a..a3783f1  claude/claude-md-mm3qa8i9848jcovk-X3DTU -> claude/claude-md-mm3qa8i9848jcovk-X3DTU\nPush done - workflow should trigger now\n"
+  "output": "=== Check GitHub Actions status ===\nf81da0b relay: check GitHub Actions workflow status\n578fe34 relay: result 2026-02-26 21:11 UTC\na3783f1 trigger: compile and deploy EA via fx31337 action\nac40c6a relay: trigger workflow from VPS (direct GitHub access)\n8b9de79 ci: rewrite workflow using fx31337/mql-compile-action\n=== Check if workflow created any artifacts ===\nRun #8: completed / failure - Compile EA and Deploy to VPS (2026-02-26T21:11:27Z)\nRun #7: completed / failure - Compile EA and Deploy to VPS (2026-02-26T21:07:46Z)\nRun #6: completed / failure - Compile EA and Deploy to VPS (2026-02-26T21:01:52Z)\nRun #5: completed / failure - Compile EA and Deploy to VPS (2026-02-26T20:51:14Z)\nRun #4: completed / failure - Compile EA and Deploy to VPS (2026-02-26T20:38:41Z)\n=== Check .ex5 on VPS ===\nNo .ex5 yet\n"
 }
