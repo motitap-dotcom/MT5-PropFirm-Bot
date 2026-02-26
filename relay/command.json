@@ -1,7 +1,6 @@
 {
-  "id": "cmd-1772142600",
-  "type": "shell",
-  "command": "echo '=== Today EA log ===' && cat '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260226.log' 2>&1 | tr -d '\\0' | tail -40 && echo '=== Terminal log (today) ===' && TLOG=$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/logs/'*.log 2>/dev/null | head -1) && echo \"File: $TLOG\" && tail -20 \"$TLOG\" 2>&1 | tr -d '\\0' && echo '=== Account info ===' && cat '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/status.json' 2>&1 | head -20",
-  "timestamp": "2026-02-27T00:50:00Z",
+  "id": "cmd-1772142700",
+  "type": "restart-mt5",
+  "timestamp": "2026-02-27T00:52:00Z",
   "from": "claude"
 }
