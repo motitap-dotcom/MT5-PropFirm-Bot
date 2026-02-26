@@ -15,16 +15,13 @@ Warning: Permanently added '77.237.234.2' (ED25519) to the list of known hosts.
 ++ git rev-parse --abbrev-ref HEAD
 + BRANCH=claude/claude-md-mm3qa8i9848jcovk-X3DTU
 + git pull origin claude/claude-md-mm3qa8i9848jcovk-X3DTU
-Updating 7d7bd75..acaab7e
-Fast-forward
- relay/command.json | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Already up to date.
 + MT5='/root/.wine/drive_c/Program Files/MetaTrader 5'
 + EA_DEST='/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot'
 + CFG_DEST='/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot'
 + mkdir -p '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot' '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot'
-+ echo '--- Copying EA files ---'
 --- Copying EA files ---
++ echo '--- Copying EA files ---'
 + cp -fv /root/MT5-PropFirm-Bot/EA/PropFirmBot.mq5 /root/MT5-PropFirm-Bot/EA/AccountStateManager.mqh /root/MT5-PropFirm-Bot/EA/Dashboard.mqh /root/MT5-PropFirm-Bot/EA/Guardian.mqh /root/MT5-PropFirm-Bot/EA/NewsFilter.mqh /root/MT5-PropFirm-Bot/EA/Notifications.mqh /root/MT5-PropFirm-Bot/EA/RiskManager.mqh /root/MT5-PropFirm-Bot/EA/SignalEngine.mqh /root/MT5-PropFirm-Bot/EA/StatusWriter.mqh /root/MT5-PropFirm-Bot/EA/TradeAnalyzer.mqh /root/MT5-PropFirm-Bot/EA/TradeJournal.mqh /root/MT5-PropFirm-Bot/EA/TradeManager.mqh '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/'
 '/root/MT5-PropFirm-Bot/EA/PropFirmBot.mq5' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5'
 '/root/MT5-PropFirm-Bot/EA/AccountStateManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh'
@@ -39,6 +36,8 @@ Fast-forward
 '/root/MT5-PropFirm-Bot/EA/TradeJournal.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeJournal.mqh'
 '/root/MT5-PropFirm-Bot/EA/TradeManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeManager.mqh'
 --- Copying config files ---
++ echo '--- Copying config files ---'
++ cp -fv /root/MT5-PropFirm-Bot/configs/account_state.json /root/MT5-PropFirm-Bot/configs/challenge_rules.json /root/MT5-PropFirm-Bot/configs/funded_rules.json /root/MT5-PropFirm-Bot/configs/notifications.json /root/MT5-PropFirm-Bot/configs/risk_params.json /root/MT5-PropFirm-Bot/configs/symbols.json '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/'
 '/root/MT5-PropFirm-Bot/configs/account_state.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/account_state.json'
 '/root/MT5-PropFirm-Bot/configs/challenge_rules.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/challenge_rules.json'
 '/root/MT5-PropFirm-Bot/configs/funded_rules.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/funded_rules.json'
@@ -49,99 +48,186 @@ Fast-forward
 total 252
 drwxr-xr-x 2 root root  4096 Feb 26 22:11 .
 drwxr-xr-x 6 root root  4096 Feb 26 21:55 ..
--rw-r--r-- 1 root root 15380 Feb 26 22:15 AccountStateManager.mqh
--rw-r--r-- 1 root root 12411 Feb 26 22:15 Dashboard.mqh
--rw-r--r-- 1 root root 22396 Feb 26 22:15 Guardian.mqh
--rw-r--r-- 1 root root 10622 Feb 26 22:15 NewsFilter.mqh
--rw-r--r-- 1 root root 11971 Feb 26 22:15 Notifications.mqh
+-rw-r--r-- 1 root root 15380 Feb 26 22:19 AccountStateManager.mqh
+-rw-r--r-- 1 root root 12411 Feb 26 22:19 Dashboard.mqh
+-rw-r--r-- 1 root root 22396 Feb 26 22:19 Guardian.mqh
+-rw-r--r-- 1 root root 10622 Feb 26 22:19 NewsFilter.mqh
+-rw-r--r-- 1 root root 11971 Feb 26 22:19 Notifications.mqh
 -rw-r--r-- 1 root root  7334 Feb 23 15:23 PropFirmBot.log
--rw-r--r-- 1 root root 34704 Feb 26 22:15 PropFirmBot.mq5
--rw-r--r-- 1 root root 25420 Feb 26 22:15 RiskManager.mqh
--rw-r--r-- 1 root root 25335 Feb 26 22:15 SignalEngine.mqh
--rw-r--r-- 1 root root  8535 Feb 26 22:15 StatusWriter.mqh
--rw-r--r-- 1 root root 22240 Feb 26 22:15 TradeAnalyzer.mqh
--rw-r--r-- 1 root root  9141 Feb 26 22:15 TradeJournal.mqh
--rw-r--r-- 1 root root 14433 Feb 26 22:15 TradeManager.mqh
-+ echo '--- Copying config files ---'
-+ cp -fv /root/MT5-PropFirm-Bot/configs/account_state.json /root/MT5-PropFirm-Bot/configs/challenge_rules.json /root/MT5-PropFirm-Bot/configs/funded_rules.json /root/MT5-PropFirm-Bot/configs/notifications.json /root/MT5-PropFirm-Bot/configs/risk_params.json /root/MT5-PropFirm-Bot/configs/symbols.json '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/'
+-rw-r--r-- 1 root root 34704 Feb 26 22:19 PropFirmBot.mq5
+-rw-r--r-- 1 root root 25420 Feb 26 22:19 RiskManager.mqh
+-rw-r--r-- 1 root root 25335 Feb 26 22:19 SignalEngine.mqh
+-rw-r--r-- 1 root root  8535 Feb 26 22:19 StatusWriter.mqh
+-rw-r--r-- 1 root root 22240 Feb 26 22:19 TradeAnalyzer.mqh
+-rw-r--r-- 1 root root  9141 Feb 26 22:19 TradeJournal.mqh
+-rw-r--r-- 1 root root 14433 Feb 26 22:19 TradeManager.mqh
+--- DEPLOY DONE ---
 + echo '--- EA files in dest ---'
 + ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/'
---- DEPLOY DONE ---
 + echo '--- DEPLOY DONE ---'
 === Compiling EA ===
 Found: /root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe
-Compiling (method 1)...
-Waiting for wineserver to finish writing...
+Windows path: C:\Program Files\MetaTrader 5\MQL5\Experts\PropFirmBot\PropFirmBot.mq5
+Windows include: C:\Program Files\MetaTrader 5\MQL5
+Compiling (method 1 - Windows path)...
+011c:err:module:import_dll Library dbghelp.dll (which is needed by L"C:\\Program Files\\MetaTrader 5\\MetaEditor64.exe") not found
+011c:err:module:loader_init Importing dlls for L"C:\\Program Files\\MetaTrader 5\\MetaEditor64.exe" failed, status c0000135
+Checking for .ex5...
 No .ex5 after method 1
-Method 1 didn't create .ex5, trying method 2...
+Method 1 failed. Trying method 2 with /include...
+002c:fixme:winediag:loader_init wine-staging 11.3 is a testing version containing experimental patches.
+002c:fixme:winediag:loader_init Please mention your exact version when filing bug reports on winehq.org.
+00b8:fixme:wineusb:query_id Unhandled ID query type 0x5.
+0024:fixme:winediag:loader_init wine-staging 11.3 is a testing version containing experimental patches.
+0024:fixme:winediag:loader_init Please mention your exact version when filing bug reports on winehq.org.
+00f8:err:module:import_dll Library dbghelp.dll (which is needed by L"C:\\Program Files\\MetaTrader 5\\MetaEditor64.exe") not found
+00f8:err:module:loader_init Importing dlls for L"C:\\Program Files\\MetaTrader 5\\MetaEditor64.exe" failed, status c0000135
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
+0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
+0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
+0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
 No .ex5 after method 2
-COMPILE FAILED
---- Compile log ---
- : information: generating code 48%
- : information: generating code 51%
- : information: generating code 54%
- : information: generating code 57%
- : information: generating code 60%
- : information: generating code 63%
- : information: generating code 66%
- : information: generating code 69%
- : information: generating code 72%
- : information: generating code 75%
- : information: generating code 78%
- : information: generating code 81%
- : information: generating code 84%
- : information: generating code 87%
- : information: generating code 90%
- : information: generating code 93%
- : information: generating code 95%
- : information: generating code 100%
- : information: code generated
-Result: 0 errors, 0 warnings, 3458 msec elapsed, cpu='X64 Regular'
---- Searching for .ex5 anywhere ---
+Method 2 failed. Trying method 3 (Unix path)...
+0050:fixme:winediag:loader_init wine-staging 11.3 is a testing version containing experimental patches.
+0050:fixme:winediag:loader_init Please mention your exact version when filing bug reports on winehq.org.
+ALL COMPILE METHODS FAILED
+--- Searching for .ex5 files ---
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot.ex5
+--- PropFirmBot.log ---
 --- COMPILE STEP DONE ---
-=== Starting MT5 + Watchdog ===
-PORT=5900
-Starting MT5...
-MT5 launch sent, checking in 15s...
-MT5 RUNNING (PID: 329876)
---- Installing watchdog ---
-Watchdog cron installed:
-*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
---- MT5+WATCHDOG DONE ---
-=== Waiting 20s then verifying ===
-=== FINAL VERIFICATION 2026-02-26 22:16:31 UTC ===
-
-MT5: RUNNING
-  PID:329876 CPU:40.0% MEM:2.4%
-
-VNC: RUNNING
-Xvfb: RUNNING
-
-EA: NOT COMPILED
-EA sources: 12 files
-
-Connections:
-Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
-
-Watchdog: ACTIVE
-
-Telegram: ONLINE
-
-Latest terminal log (last 15 lines):
-RF	0	22:00:17.810	Terminal	exit with code 0
-CL	0	22:00:17.811	Terminal	stopped with 0
-PP	2	22:00:22.923	Terminal	terminal process already started
-EE	0	22:00:22.923	Terminal	exit with code 0
-CS	0	22:00:22.923	Terminal	stopped with 0
-DJ	0	22:00:23.069	Terminal	shutdown with 0
-IR	0	22:00:11.873	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-OE	0	22:00:11.877	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-RS	0	22:00:11.877	Terminal	C:\Program Files\MetaTrader 5
-GQ	0	22:12:16.594	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-NR	0	22:12:16.595	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-GS	0	22:12:16.595	Terminal	C:\Program Files\MetaTrader 5
-IK	0	22:15:56.920	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-NL	0	22:15:56.923	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-KD	0	22:15:56.923	Terminal	C:\Program Files\MetaTrader 5
-
-=== VERIFICATION COMPLETE ===
