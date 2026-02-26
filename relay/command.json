@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772141200",
+  "id": "cmd-1772141300",
   "type": "shell",
-  "command": "TOKEN=$(cat /root/.git-credentials 2>/dev/null | grep -o '//[^:]*:[^@]*@' | sed 's|//||;s|@||;s|.*:||' | head -1) && curl -s -H \"Authorization: token $TOKEN\" 'https://api.github.com/repos/motitap-dotcom/MT5-PropFirm-Bot/actions/runs?per_page=3&branch=claude/claude-md-mm3qa8i9848jcovk-X3DTU' | python3 << 'PYEOF'\nimport sys, json\nd = json.load(sys.stdin)\nfor r in d.get('workflow_runs', []):\n    print(f\"#{r['run_number']} id={r['id']} {r['status']}/{r.get('conclusion','?')} {r['name']} at {r['created_at']}\")\nPYEOF",
-  "timestamp": "2026-02-26T23:55:00Z",
+  "command": "TOKEN=$(cat /root/.git-credentials 2>/dev/null | grep -o '//[^:]*:[^@]*@' | sed 's|//||;s|@||;s|.*:||' | head -1) && echo \"Token first 4: ${TOKEN:0:4}\" && curl -v -H \"Authorization: token $TOKEN\" 'https://api.github.com/repos/motitap-dotcom/MT5-PropFirm-Bot/actions/runs?per_page=1&branch=claude/claude-md-mm3qa8i9848jcovk-X3DTU' 2>&1 | head -40",
+  "timestamp": "2026-02-27T00:00:00Z",
   "from": "claude"
 }
