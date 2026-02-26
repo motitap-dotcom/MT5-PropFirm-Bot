@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772136800",
-  "type": "deploy",
-  "command": "",
-  "timestamp": "2026-02-26T20:25:00Z",
+  "id": "cmd-1772136900",
+  "type": "shell",
+  "command": "echo '=== Check .ex5 ===' && find '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts' -name 'PropFirmBot*' -ls 2>/dev/null && echo '=== MT5 running ===' && ps aux | grep terminal64 | grep -v grep && echo '=== Latest EA log ===' && EALOG=$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/'*.log 2>/dev/null | head -1) && echo \"Log: $EALOG\" && tail -20 \"$EALOG\" 2>/dev/null | tr -d '\\0'",
+  "timestamp": "2026-02-26T20:28:00Z",
   "from": "claude"
 }
