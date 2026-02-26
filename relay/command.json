@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772143100",
+  "id": "cmd-1772143300",
   "type": "shell",
-  "command": "MT5='/root/.wine/drive_c/Program Files/MetaTrader 5' && echo '=== Profile dirs ===' && find \"$MT5/config\" -type d 2>/dev/null | head -20 && echo '=== Chart files ===' && find \"$MT5/config\" -name '*.chr' 2>/dev/null | head -10 && echo '=== Check for EA in chart config ===' && find \"$MT5/config\" -name '*.chr' -exec grep -l -i 'PropFirm\\|expert' {} \\; 2>/dev/null && echo '=== Profiles ===' && find \"$MT5\" -path '*/profiles/*' -type f 2>/dev/null | head -20 && echo '=== Check autotrading ===' && find \"$MT5\" -name 'common.ini' -o -name 'terminal.ini' 2>/dev/null | while read f; do echo \"--- $f ---\"; grep -i 'auto\\|expert\\|allowed' \"$f\" 2>/dev/null; done && echo '=== Any .chr files anywhere ===' && find \"$MT5\" -name '*.chr' 2>/dev/null | head -10",
-  "timestamp": "2026-02-27T01:02:00Z",
+  "command": "MT5='/root/.wine/drive_c/Program Files/MetaTrader 5' && echo '=== terminal.ini ===' && cat \"$MT5/config/terminal.ini\" 2>/dev/null && echo '=== common.ini ===' && cat \"$MT5/config/common.ini\" 2>/dev/null && echo '=== Config/terminal.ini ===' && cat \"$MT5/Config/terminal.ini\" 2>/dev/null && echo '=== Config/common.ini ===' && cat \"$MT5/Config/common.ini\" 2>/dev/null && echo '=== MQL5/Profiles dirs ===' && find \"$MT5/MQL5/Profiles\" -type d 2>/dev/null && echo '=== MQL5/Profiles files ===' && find \"$MT5/MQL5/Profiles\" -type f 2>/dev/null | head -30 && echo '=== Experts dir ===' && ls -la \"$MT5/MQL5/Experts/\" 2>/dev/null && ls -la \"$MT5/MQL5/Experts/PropFirmBot/\" 2>/dev/null && echo '=== .ex5 files ===' && find \"$MT5\" -name '*.ex5' 2>/dev/null",
+  "timestamp": "2026-02-27T01:10:00Z",
   "from": "claude"
 }
