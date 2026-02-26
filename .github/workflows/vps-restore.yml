@@ -10,6 +10,11 @@ on:
 permissions:
   contents: write
 
+env:
+  VPS_PASS: 'Moti0417!'
+  VPS_HOST: 'root@77.237.234.2'
+  SSH_OPTS: '-o StrictHostKeyChecking=no -o ConnectTimeout=10'
+
 jobs:
   restore-bot:
     runs-on: ubuntu-latest
@@ -17,35 +22,224 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Full Restore - Deploy, Compile, Restart, Watchdog
-        timeout-minutes: 6
+      - name: Install sshpass
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+      - name: Step 1 - Kill MT5 and deploy files
+        timeout-minutes: 2
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          chmod +x scripts/full_restore.sh
+          echo "=== Stopping MT5 and deploying EA files ===" | tee restore_report.txt
+          sshpass -p "$VPS_PASS" ssh $SSH_OPTS $VPS_HOST "bash -s" <<'REMOTE_EOF' 2>&1 | tee -a restore_report.txt
+          set -x
+          echo "--- Stopping MT5 ---"
+          pkill -f terminal64.exe 2>/dev/null; sleep 3; pkill -9 -f terminal64.exe 2>/dev/null; sleep 1
+          wineserver -k 2>/dev/null; sleep 1
 
-          echo "=== Copying restore script to VPS ==="
-          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/full_restore.sh root@77.237.234.2:/tmp/full_restore.sh
+          echo "--- Pulling latest code ---"
+          cd /root/MT5-PropFirm-Bot && git fetch origin 2>/dev/null
+          BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+          git pull origin "$BRANCH" 2>/dev/null || git pull origin claude/build-cfd-trading-bot-fl0ld 2>/dev/null || true
 
-          echo "=== Running full restore on VPS ==="
-          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=15 root@77.237.234.2 "bash /tmp/full_restore.sh </dev/null" > restore_report.txt 2>&1 || true
+          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+          EA_DEST="$MT5/MQL5/Experts/PropFirmBot"
+          CFG_DEST="$MT5/MQL5/Files/PropFirmBot"
+          mkdir -p "$EA_DEST" "$CFG_DEST"
 
-          echo "EXIT_CODE=$?" >> restore_report.txt
-          echo "=== Restore output ==="
-          cat restore_report.txt
+          echo "--- Copying EA files ---"
+          cp -fv /root/MT5-PropFirm-Bot/EA/*.mq5 /root/MT5-PropFirm-Bot/EA/*.mqh "$EA_DEST/" 2>&1
+          echo "--- Copying config files ---"
+          cp -fv /root/MT5-PropFirm-Bot/configs/*.json "$CFG_DEST/" 2>&1
 
-      - name: Verify status
+          echo "--- EA files in dest ---"
+          ls -la "$EA_DEST/"
+          echo "--- DEPLOY DONE ---"
+          REMOTE_EOF
+
+      - name: Step 2 - Compile EA
+        timeout-minutes: 3
         run: |
-          echo "=== Waiting 20s for MT5 to settle ==="
+          echo "=== Compiling EA ===" | tee -a restore_report.txt
+          sshpass -p "$VPS_PASS" ssh $SSH_OPTS $VPS_HOST "bash -s" <<'REMOTE_EOF' 2>&1 | tee -a restore_report.txt
+          export DISPLAY=:99
+          export WINEPREFIX=/root/.wine
+          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+          EA_DEST="$MT5/MQL5/Experts/PropFirmBot"
+
+          # Kill any lingering wine processes first
+          wineserver -k 2>/dev/null; sleep 2
+
+          # Make sure Xvfb is running
+          pgrep -x Xvfb > /dev/null 2>&1 || (Xvfb :99 -screen 0 1280x1024x24 &>/dev/null & sleep 2)
+
+          # Find MetaEditor
+          METAEDITOR=""
+          for name in metaeditor64.exe MetaEditor64.exe; do
+              [ -f "$MT5/$name" ] && METAEDITOR="$MT5/$name" && break
+          done
+
+          if [ -z "$METAEDITOR" ]; then
+              echo "MetaEditor NOT FOUND!"
+              find "$MT5" -iname "metaeditor*" 2>/dev/null
+              echo "COMPILE_RESULT=no_metaeditor"
+              exit 0
+          fi
+
+          echo "Found: $METAEDITOR"
+          rm -f "$EA_DEST/PropFirmBot.ex5" 2>/dev/null
+
+          # Compile with timeout
+          echo "Compiling..."
+          timeout 90 wine "$METAEDITOR" /compile:"$EA_DEST/PropFirmBot.mq5" /log </dev/null >/dev/null 2>&1 || true
+
+          # Kill MetaEditor/wineserver after compile
+          pkill -f metaeditor 2>/dev/null; sleep 2
+          wineserver -k 2>/dev/null; sleep 2
+
+          # Check result
+          if [ -f "$EA_DEST/PropFirmBot.ex5" ]; then
+              SIZE=$(stat -c%s "$EA_DEST/PropFirmBot.ex5")
+              echo "COMPILE SUCCESS! PropFirmBot.ex5 = $SIZE bytes"
+          else
+              echo "Compile failed - trying method 2 with /include..."
+              timeout 90 wine "$METAEDITOR" /compile:"$EA_DEST/PropFirmBot.mq5" /include:"$MT5/MQL5" /log </dev/null >/dev/null 2>&1 || true
+              pkill -f metaeditor 2>/dev/null; sleep 2
+              wineserver -k 2>/dev/null; sleep 2
+
+              if [ -f "$EA_DEST/PropFirmBot.ex5" ]; then
+                  SIZE=$(stat -c%s "$EA_DEST/PropFirmBot.ex5")
+                  echo "COMPILE SUCCESS (method 2)! PropFirmBot.ex5 = $SIZE bytes"
+              else
+                  echo "COMPILE FAILED - .ex5 not created"
+                  # Check for compile log
+                  [ -f "$EA_DEST/PropFirmBot.log" ] && cat "$EA_DEST/PropFirmBot.log" | tr -d '\0' | tail -20
+              fi
+          fi
+          echo "--- COMPILE STEP DONE ---"
+          REMOTE_EOF
+
+      - name: Step 3 - Start MT5 and install watchdog
+        timeout-minutes: 2
+        run: |
+          echo "=== Starting MT5 + Watchdog ===" | tee -a restore_report.txt
+          sshpass -p "$VPS_PASS" ssh $SSH_OPTS $VPS_HOST "bash -s" <<'REMOTE_EOF' 2>&1 | tee -a restore_report.txt
+          export DISPLAY=:99
+          export WINEPREFIX=/root/.wine
+          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+
+          # Make sure display is running
+          pgrep -x Xvfb > /dev/null 2>&1 || (Xvfb :99 -screen 0 1280x1024x24 &>/dev/null & sleep 1)
+          pgrep -x x11vnc > /dev/null 2>&1 || (x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -bg 2>/dev/null)
+
+          # Start MT5 completely detached
+          echo "Starting MT5..."
+          nohup wine "$MT5/terminal64.exe" </dev/null >/dev/null 2>&1 &
+          disown -a
+          sleep 5
+          echo "MT5 launch sent, checking in 15s..."
+          sleep 15
+
+          MT5_PID=$(pgrep -f terminal64.exe 2>/dev/null || true)
+          [ -n "$MT5_PID" ] && echo "MT5 RUNNING (PID: $MT5_PID)" || echo "MT5 not detected yet (may still be starting)"
+
+          # Install watchdog
+          echo "--- Installing watchdog ---"
+          SCRIPTS_DIR="/root/PropFirmBot/scripts"
+          mkdir -p "$SCRIPTS_DIR" /root/PropFirmBot/logs /root/PropFirmBot/state
+
+          cat > "$SCRIPTS_DIR/watchdog.sh" << 'WEOF'
+          #!/bin/bash
+          TG_TOKEN="8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g"
+          TG_CHAT="7013213983"
+          LOG="/root/PropFirmBot/logs/watchdog.log"
+          STATE="/root/PropFirmBot/state/mt5_status"
+          TS=$(date '+%Y-%m-%d %H:%M:%S')
+          mkdir -p /root/PropFirmBot/logs /root/PropFirmBot/state
+          PREV="unknown"; [ -f "$STATE" ] && PREV=$(cat "$STATE")
+          MT5_PID=$(pgrep -f terminal64.exe 2>/dev/null || true)
+          pgrep -x x11vnc > /dev/null 2>&1 || (DISPLAY=:99 x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -bg 2>/dev/null || true)
+          if [ -n "$MT5_PID" ]; then
+              [ "$PREV" = "down" ] && curl -s -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" -d "chat_id=${TG_CHAT}" -d "text=PropFirmBot MT5 RECOVERED! PID:${MT5_PID} $(date '+%d/%m %H:%M')" > /dev/null 2>&1
+              echo "up" > "$STATE"
+              M=$(date '+%M'); [ "$((M % 14))" -lt 2 ] && echo "$TS [OK] PID:$MT5_PID" >> "$LOG"
+          else
+              echo "$TS [ALERT] MT5 down! Restarting..." >> "$LOG"
+              export DISPLAY=:99 WINEPREFIX=/root/.wine
+              nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" </dev/null >/dev/null 2>&1 &
+              disown -a; sleep 20
+              NEW=$(pgrep -f terminal64.exe 2>/dev/null || true)
+              if [ -n "$NEW" ]; then
+                  echo "up" > "$STATE"
+                  curl -s -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" -d "chat_id=${TG_CHAT}" -d "text=PropFirmBot MT5 RESTARTED PID:${NEW} $(date '+%d/%m %H:%M')" > /dev/null 2>&1
+                  echo "$TS [RESTARTED] PID:$NEW" >> "$LOG"
+              else
+                  echo "down" > "$STATE"
+                  curl -s -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" -d "chat_id=${TG_CHAT}" -d "text=PROPFIRMBOT MT5 DOWN! Restart failed! Check VPS now! $(date '+%d/%m %H:%M')" > /dev/null 2>&1
+                  echo "$TS [ERROR] Restart failed" >> "$LOG"
+              fi
+          fi
+          [ -f "$LOG" ] && tail -2000 "$LOG" > "${LOG}.tmp" && mv "${LOG}.tmp" "$LOG"
+          WEOF
+
+          chmod +x "$SCRIPTS_DIR/watchdog.sh"
+
+          # Set up cron
+          CRON_TMP=$(mktemp)
+          crontab -l 2>/dev/null > "$CRON_TMP" || true
+          sed -i '/PropFirmBot/d' "$CRON_TMP"
+          echo "*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog" >> "$CRON_TMP"
+          crontab "$CRON_TMP" && rm "$CRON_TMP"
+
+          echo "Watchdog cron installed:"
+          crontab -l 2>/dev/null | grep PropFirmBot
+
+          # Send Telegram notification
+          curl -s -X POST "https://api.telegram.org/bot8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g/sendMessage" \
+              -d "chat_id=7013213983" \
+              -d "text=PropFirmBot RESTORE COMPLETE!%0AMT5: $(pgrep -f terminal64.exe >/dev/null 2>&1 && echo RUNNING || echo Starting...)%0AWatchdog: Active (every 2 min)%0ATime: $(date '+%d/%m/%Y %H:%M UTC')" > /dev/null 2>&1
+
+          echo "--- MT5+WATCHDOG DONE ---"
+          REMOTE_EOF
+
+      - name: Step 4 - Final verification
+        run: |
+          echo "=== Waiting 20s then verifying ===" | tee -a restore_report.txt
           sleep 20
-
-          echo "=== Running verification ==="
-          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/verify_ea.sh root@77.237.234.2:/tmp/verify.sh
-          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 root@77.237.234.2 "bash /tmp/verify.sh </dev/null" >> restore_report.txt 2>&1 || true
-
-          echo "=== Full report ==="
-          cat restore_report.txt
+          sshpass -p "$VPS_PASS" ssh $SSH_OPTS $VPS_HOST "bash -s" <<'REMOTE_EOF' 2>&1 | tee -a restore_report.txt
+          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+          echo "=== FINAL VERIFICATION $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+          echo ""
+          echo "MT5: $(pgrep -f terminal64.exe > /dev/null 2>&1 && echo 'RUNNING' || echo 'NOT RUNNING')"
+          ps aux | grep terminal64 | grep -v grep | awk '{printf "  PID:%s CPU:%s%% MEM:%s%%\n", $2, $3, $4}'
+          echo ""
+          echo "VNC: $(pgrep -x x11vnc > /dev/null 2>&1 && echo 'RUNNING' || echo 'NOT RUNNING')"
+          echo "Xvfb: $(pgrep -x Xvfb > /dev/null 2>&1 && echo 'RUNNING' || echo 'NOT RUNNING')"
+          echo ""
+          EA_DEST="$MT5/MQL5/Experts/PropFirmBot"
+          if [ -f "$EA_DEST/PropFirmBot.ex5" ]; then
+              echo "EA: COMPILED ($(stat -c%s "$EA_DEST/PropFirmBot.ex5") bytes)"
+          else
+              echo "EA: NOT COMPILED"
+          fi
+          echo "EA sources: $(ls "$EA_DEST"/*.mq5 "$EA_DEST"/*.mqh 2>/dev/null | wc -l) files"
+          echo ""
+          echo "Connections:"
+          ss -tn state established 2>/dev/null | grep -v ":22 \|:5900 \|:53 " | head -5
+          echo ""
+          echo "Watchdog: $(crontab -l 2>/dev/null | grep -q PropFirmBot && echo 'ACTIVE' || echo 'NOT SET')"
+          echo ""
+          echo "Telegram: $(curl -s --connect-timeout 3 'https://api.telegram.org/bot8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g/getMe' | grep -q ok && echo 'ONLINE' || echo 'ERROR')"
+          echo ""
+          TERM_LOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
+          if [ -n "$TERM_LOG" ]; then
+              echo "Latest terminal log (last 15 lines):"
+              cat "$TERM_LOG" | tr -d '\0' | tail -15
+          fi
+          echo ""
+          echo "=== VERIFICATION COMPLETE ==="
+          REMOTE_EOF
 
       - name: Commit report
+        if: always()
         run: |
           BRANCH="${GITHUB_REF#refs/heads/}"
           git config user.name "github-actions[bot]"
