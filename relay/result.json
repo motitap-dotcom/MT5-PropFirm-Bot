@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772145100",
-  "status": "error",
-  "timestamp": "2026-02-26T22:49:09Z",
+  "id": "cmd-1772145300",
+  "status": "success",
+  "timestamp": "2026-02-26T22:50:11Z",
   "hostname": "vmi3096165",
-  "output": "Exit code: 143\\n=== Stop all MT5/Wine ===\n=== Clean X locks ===\n=== Fix xvfb.service ===\n=== Fix mt5.service ===\n=== Create vnc.service ===\n=== Reload and start ===\n"
+  "output": "Written /etc/systemd/system/xvfb.service\nWritten /etc/systemd/system/mt5.service\nWritten /etc/systemd/system/x11vnc.service\nAll service files written\n"
 }
