@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772136400",
+  "id": "cmd-1772136500",
   "type": "shell",
-  "command": "echo '=== Todays EA Log ===' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/' && echo '---' && cat '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260226.log' 2>/dev/null | tail -100 || echo 'No log for today' && echo '=== Terminal Log ===' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/Logs/' | tail -5 && echo '---' && cat '/root/.wine/drive_c/Program Files/MetaTrader 5/Logs/'$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/Logs/' | head -1) 2>/dev/null | tail -50 && echo '=== AutoTrading Status ===' && cat '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/status.json' 2>/dev/null",
-  "timestamp": "2026-02-26T20:06:00Z",
+  "command": "echo '=== MT5 Process ===' && ps aux | grep -i 'terminal64\\|metatrader\\|wine' | grep -v grep && echo '=== EA files ===' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/' && echo '=== AutoTrading check ===' && grep -i 'autotrading\\|expert\\|allow' '/root/.wine/drive_c/Program Files/MetaTrader 5/config/common.ini' 2>/dev/null || echo 'No common.ini' && echo '=== MT5 Config ===' && find '/root/.wine/drive_c/Program Files/MetaTrader 5/' -name '*.ini' -exec echo '--- {} ---' \\; -exec cat {} \\; 2>/dev/null | head -100 && echo '=== uptime ===' && uptime && echo '=== Wine time vs system ===' && date -u && DISPLAY=:99 WINEPREFIX=/root/.wine wine cmd /c 'echo %date% %time%' 2>/dev/null",
+  "timestamp": "2026-02-26T20:13:00Z",
   "from": "claude"
 }
