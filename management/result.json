@@ -1,5 +1,9 @@
 Warning: Permanently added '77.237.234.2' (ED25519) to the list of known hosts.
-=== Killing old processes ===
-
+{
+  "healthy": true,
+  "mt5_running": true,
+  "vnc_running": true,
+  "timestamp": "2026-02-26T18:14:34.009356+00:00"
+}
 ---META---
-{"exit_code":0,"action":"ssh","timestamp":"2026-02-26 18:12:51 UTC"}
+{"exit_code":0,"action":"health","timestamp":"2026-02-26 18:14:31 UTC"}
