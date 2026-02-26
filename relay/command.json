@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772142800",
+  "id": "cmd-1772142900",
   "type": "shell",
-  "command": "echo '=== Terminal log (last 20) ===' && TLOG=$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/logs/'*.log 2>/dev/null | head -1) && tail -20 \"$TLOG\" 2>&1 | tr -d '\\0' && echo '=== EA log ===' && EALOG=$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/'*.log 2>/dev/null | head -1) && echo \"File: $EALOG\" && tail -30 \"$EALOG\" 2>&1 | tr -d '\\0'",
-  "timestamp": "2026-02-27T00:55:00Z",
+  "command": "echo '=== All terminal log entries after 22:20 ===' && TLOG=$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/logs/'*.log 2>/dev/null | head -1) && grep -E '22:2[0-9]|22:3[0-9]' \"$TLOG\" 2>/dev/null | tr -d '\\0' | grep -i 'expert\\|loaded\\|autotrading\\|account\\|connecting\\|connected\\|error\\|PropFirm' | head -30 && echo '=== Full terminal log last 40 lines ===' && tail -40 \"$TLOG\" 2>&1 | tr -d '\\0' && echo '=== EA logs today ===' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260226.log' 2>&1 && echo '=== Check if EA is in Experts panel ===' && find '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/' -name '*.ex5' -ls 2>&1 | grep -i prop && echo '=== MT5 profile charts ===' && find '/root/.wine/drive_c/Program Files/MetaTrader 5/config/charts/' -name '*.chr' -ls 2>/dev/null | head -5",
+  "timestamp": "2026-02-27T00:58:00Z",
   "from": "claude"
 }
