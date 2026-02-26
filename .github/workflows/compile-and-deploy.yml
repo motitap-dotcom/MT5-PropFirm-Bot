@@ -1,6 +1,7 @@
 name: Compile EA and Deploy to VPS
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'EA/**'
