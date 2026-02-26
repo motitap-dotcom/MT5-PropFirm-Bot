@@ -1,13 +1,10 @@
 Warning: Permanently added '77.237.234.2' (ED25519) to the list of known hosts.
+=== TRY COMPILE WITH DISPLAY ===
+0140:fixme:ntdll:NtRaiseHardError 0x50000018 4 0x3 0x7ffffe4fe1e8 0 0x7ffffe4fec78: stub
 === CHECK .ex5 ===
-NO .ex5
+STILL NO .ex5 - checking logs...
 === METAEDITOR LOG ===
-No metaeditor log
-=== TRY COMPILE ===
-0130:fixme:ntdll:NtRaiseHardError 0x50000018 4 0x3 0x7ffffe4fe1e8 0 0x7ffffe4fec78: stub
-0130:err:winediag:nodrv_CreateWindow Application tried to create a window, but no driver could be loaded.
-0130:err:winediag:nodrv_CreateWindow L"The explorer process failed to start."
-STILL NO .ex5
+no metaeditor log
 
 ---META---
-{"exit_code":0,"action":"ssh","timestamp":"2026-02-26 18:00:01 UTC"}
+{"exit_code":0,"action":"ssh","timestamp":"2026-02-26 18:01:56 UTC"}
