@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772136300",
-  "type": "status",
-  "command": "",
-  "timestamp": "2026-02-26T20:05:00Z",
+  "id": "cmd-1772136400",
+  "type": "shell",
+  "command": "echo '=== Todays EA Log ===' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/' && echo '---' && cat '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260226.log' 2>/dev/null | tail -100 || echo 'No log for today' && echo '=== Terminal Log ===' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/Logs/' | tail -5 && echo '---' && cat '/root/.wine/drive_c/Program Files/MetaTrader 5/Logs/'$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/Logs/' | head -1) 2>/dev/null | tail -50 && echo '=== AutoTrading Status ===' && cat '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/status.json' 2>/dev/null",
+  "timestamp": "2026-02-26T20:06:00Z",
   "from": "claude"
 }
