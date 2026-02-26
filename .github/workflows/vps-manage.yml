@@ -1,0 +1,116 @@
+name: VPS Management Command
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        type: choice
+        options:
+          - status
+          - health
+          - restart-mt5
+          - restart-vnc
+          - deploy
+          - start-mt5
+          - stop-mt5
+          - logs-ea
+          - logs-terminal
+          - system-info
+          - positions
+          - account
+          - telegram-test
+      extra_args:
+        description: 'Extra arguments (optional)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  manage-vps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/build-cfd-trading-bot-fl0ld
+
+      - name: Execute VPS Management Action
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          ACTION="${{ github.event.inputs.action }}"
+          EXTRA="${{ github.event.inputs.extra_args }}"
+          TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
+
+          echo "=== PropFirmBot VPS Management ==="
+          echo "Action: $ACTION"
+          echo "Time: $TIMESTAMP"
+          echo "=================================="
+
+          # Build the SSH command based on action
+          case "$ACTION" in
+            status)
+              CMD="curl -s 'http://localhost:8888/api/status?token=pfbot_mgmt_7x9Kp2mW4vQr8sNj' 2>/dev/null || echo '{\"fallback\": true}' && echo '---PROCESS-CHECK---' && ps aux | grep -E '(terminal64|Xvfb|x11vnc|python3.*server)' | grep -v grep && echo '---CONNECTIONS---' && ss -tn state established | head -20"
+              ;;
+            health)
+              CMD="curl -s 'http://localhost:8888/api/health?token=pfbot_mgmt_7x9Kp2mW4vQr8sNj' 2>/dev/null || (echo '{\"mt5_running\":' && (pgrep -f terminal64 > /dev/null && echo 'true' || echo 'false') && echo ',\"vnc_running\":' && (pgrep -f Xvfb > /dev/null && echo 'true' || echo 'false') && echo '}')"
+              ;;
+            restart-mt5)
+              CMD="curl -s 'http://localhost:8888/api/restart-mt5?token=pfbot_mgmt_7x9Kp2mW4vQr8sNj&confirm=yes' 2>/dev/null || (pkill -f terminal64; sleep 3; wineserver -k 2>/dev/null; sleep 2; DISPLAY=:99 wine '/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe' & sleep 5; pgrep -f terminal64 > /dev/null && echo 'MT5 restarted' || echo 'MT5 restart FAILED')"
+              ;;
+            restart-vnc)
+              CMD="curl -s 'http://localhost:8888/api/restart-vnc?token=pfbot_mgmt_7x9Kp2mW4vQr8sNj&confirm=yes' 2>/dev/null || (pkill x11vnc; pkill Xvfb; sleep 2; Xvfb :99 -screen 0 1280x1024x24 & sleep 2; x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw; sleep 2; echo 'VNC restarted')"
+              ;;
+            deploy)
+              CMD="curl -s 'http://localhost:8888/api/deploy?token=pfbot_mgmt_7x9Kp2mW4vQr8sNj&confirm=yes' 2>/dev/null || (cd /root/MT5-PropFirm-Bot && git pull origin claude/build-cfd-trading-bot-fl0ld && cp EA/* '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/' && cp configs/* '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/' && echo 'Deploy done')"
+              ;;
+            start-mt5)
+              CMD="curl -s 'http://localhost:8888/api/start-mt5?token=pfbot_mgmt_7x9Kp2mW4vQr8sNj&confirm=yes' 2>/dev/null || (DISPLAY=:99 wine '/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe' & sleep 5; pgrep -f terminal64 > /dev/null && echo 'MT5 started' || echo 'MT5 start FAILED')"
+              ;;
+            stop-mt5)
+              CMD="curl -s 'http://localhost:8888/api/stop-mt5?token=pfbot_mgmt_7x9Kp2mW4vQr8sNj&confirm=yes' 2>/dev/null || (pkill -f terminal64; sleep 3; echo 'MT5 stopped')"
+              ;;
+            logs-ea)
+              CMD="curl -s 'http://localhost:8888/api/logs?token=pfbot_mgmt_7x9Kp2mW4vQr8sNj&source=ea&lines=100' 2>/dev/null || tail -100 '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/'$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/' 2>/dev/null | head -1) 2>/dev/null || echo 'No EA logs found'"
+              ;;
+            logs-terminal)
+              CMD="curl -s 'http://localhost:8888/api/logs?token=pfbot_mgmt_7x9Kp2mW4vQr8sNj&source=terminal&lines=100' 2>/dev/null || tail -100 '/root/.wine/drive_c/Program Files/MetaTrader 5/logs/'$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/logs/' 2>/dev/null | head -1) 2>/dev/null || echo 'No terminal logs found'"
+              ;;
+            system-info)
+              CMD="curl -s 'http://localhost:8888/api/system?token=pfbot_mgmt_7x9Kp2mW4vQr8sNj' 2>/dev/null || (echo '=== System Info ===' && uptime && free -m && df -h / && echo '=== Load ===' && cat /proc/loadavg)"
+              ;;
+            positions)
+              CMD="curl -s 'http://localhost:8888/api/positions?token=pfbot_mgmt_7x9Kp2mW4vQr8sNj' 2>/dev/null || cat '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/status.json' 2>/dev/null || echo 'No positions data'"
+              ;;
+            account)
+              CMD="curl -s 'http://localhost:8888/api/account?token=pfbot_mgmt_7x9Kp2mW4vQr8sNj' 2>/dev/null || cat '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/status.json' 2>/dev/null || echo 'No account data'"
+              ;;
+            telegram-test)
+              CMD="curl -s 'http://localhost:8888/api/telegram-test?token=pfbot_mgmt_7x9Kp2mW4vQr8sNj&confirm=yes' 2>/dev/null || curl -s -X POST 'https://api.telegram.org/bot8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g/sendMessage' -d 'chat_id=7013213983' -d 'text=Test from GitHub Actions'"
+              ;;
+            *)
+              echo "Unknown action: $ACTION"
+              exit 1
+              ;;
+          esac
+
+          echo "Running: $ACTION"
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 root@77.237.234.2 "$CMD" > vps_mgmt_result.txt 2>&1 || true
+          echo "EXIT_CODE=$?" >> vps_mgmt_result.txt
+
+          echo ""
+          echo "=== Result ==="
+          cat vps_mgmt_result.txt
+
+      - name: Commit result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          echo "{\"action\": \"${{ github.event.inputs.action }}\", \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\", \"run_id\": ${{ github.run_id }}}" > vps_mgmt_meta.json
+          git add -f vps_mgmt_result.txt vps_mgmt_meta.json
+          git commit -m "VPS mgmt: ${{ github.event.inputs.action }} @ $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push origin claude/build-cfd-trading-bot-fl0ld || true

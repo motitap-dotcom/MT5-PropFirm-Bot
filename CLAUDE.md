@@ -83,6 +83,10 @@ MT5-PropFirm-Bot/
 │       ├── install_watchdog.sh      # Watchdog systemd service installer
 │       └── quick_setup.sh           # Quick setup for re-deployments
 │
+├── management/                      # VPS remote management API
+│   ├── server.py                    # HTTP API server (port 8888, no deps)
+│   └── install.sh                   # One-command systemd service installer
+│
 ├── vps-scripts/                     # Standalone VPS health check
 │   └── full-setup.sh               # Full VPS check & setup (paste-and-run)
 │
@@ -232,6 +236,40 @@ JSON configs in `configs/` are deployed to MT5's `MQL5/Files/PropFirmBot/` direc
 - [x] Smart watchdog with Telegram alerts and auto-restart
 - [x] Critical equity=0 bug fixed (status.json + diagnostics)
 - [x] RiskManager bug fixed (blocked ALL trades on Stellar Instant)
+
+## VPS Management API (Remote Control)
+A Python HTTP API running on port 8888 allows remote management of the VPS without SSH.
+
+**Files:**
+- `management/server.py` - The API server (Python stdlib, no deps)
+- `management/install.sh` - One-command systemd installer
+- `.github/workflows/vps-manage.yml` - GitHub Actions backup trigger
+
+**Auth token:** `pfbot_mgmt_7x9Kp2mW4vQr8sNj`
+**URL:** `http://77.237.234.2:8888/api/`
+
+**GET endpoints** (read-only, append `?token=AUTH_TOKEN`):
+- `/api/status` - Full system status
+- `/api/health` - Quick health check
+- `/api/positions` - Open positions
+- `/api/account` - Balance, equity, drawdown
+- `/api/logs?source=ea&lines=50` - EA or terminal logs
+- `/api/system` - CPU, RAM, disk usage
+- `/api/ea-status` - EA status.json data
+- `/api/config` - Current config files
+- `/api/processes` - Running processes
+- `/api/exec?cmd=COMMAND` - Whitelisted command execution
+- `/api/ping` - No-auth health ping
+
+**POST endpoints** (actions, append `&confirm=yes` for GET):
+- `/api/restart-mt5` - Restart MetaTrader 5
+- `/api/restart-vnc` - Restart VNC server
+- `/api/deploy` - Git pull + deploy to MT5
+- `/api/start-mt5` - Start MT5
+- `/api/stop-mt5` - Stop MT5
+- `/api/telegram-test` - Send test Telegram message
+
+**Backup:** GitHub Actions `vps-manage.yml` workflow with `workflow_dispatch` for when direct HTTP is unavailable.
 
 ## Remaining Tasks
 - [ ] Verify Telegram notifications from live EA
