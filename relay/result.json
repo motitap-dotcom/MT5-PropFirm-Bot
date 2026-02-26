@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772137000",
+  "id": "cmd-1772137100",
   "status": "success",
-  "timestamp": "2026-02-26T20:29:27Z",
+  "timestamp": "2026-02-26T20:30:30Z",
   "hostname": "vmi3096165",
-  "output": "=== Trying MetaEditor compile ===\nMetaEditor not found\n"
+  "output": "=== Find MetaEditor ===\n/root/.wine/drive_c/Program Files/MetaTrader 5/config/metaeditor.ini\n/root/.wine/drive_c/Program Files/MetaTrader 5/logs/metaeditor.log\n/root/.wine/drive_c/Program Files/MetaTrader 5/Config/metaeditor.ini\n/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe\n/root/.wine/drive_c/users/Public/Desktop/MetaEditor 5.lnk\n/root/.wine/drive_c/users/root/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/MetaTrader 5/MetaEditor.lnk\n/root/.wine/drive_c/users/root/Desktop/MetaEditor 5.desktop\n=== Find .exe in MT5 dir ===\n-rwxr-xr-x 1 root root 107965624 Feb 22 18:22 /root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe\n-rwxr-xr-x 1 root root  52208696 Feb 22 18:22 /root/.wine/drive_c/Program Files/MetaTrader 5/metatester64.exe\n-rwxr-xr-x 1 root root 143962376 Feb 22 18:22 /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe\n-rwxr-xr-x 1 root root  23784600 Feb 22 18:20 /root/.wine/drive_c/Program Files/MetaTrader 5/uninstall.exe\n=== All files in MT5 root ===\nBases\nConfig\nMQL5\nMetaEditor64.exe\nProfiles\nSounds\nTerminal.ico\nTester\nconfig\nlogs\nmetatester64.exe\nterminal64.exe\nuninstall.exe\n"
 }
