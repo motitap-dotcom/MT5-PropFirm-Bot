@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772143700",
+  "id": "cmd-1772143900",
   "status": "error",
-  "timestamp": "2026-02-26T22:38:25Z",
+  "timestamp": "2026-02-26T22:39:43Z",
   "hostname": "vmi3096165",
-  "output": "Exit code: 1\\n=== Fix XAUUSD in chart01.chr ===\nFixed XAUUSD=true\n=== Current MT5 status ===\n"
+  "output": "Exit code: 1\\n=== Kill any leftover ===\n=== Check crontab ===\n*/2 * * * * /root/Tradovate-Bot/auto-deploy.sh\n*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog\n=== Checking interfering services ===\n=== MT5 running? ===\n"
 }
