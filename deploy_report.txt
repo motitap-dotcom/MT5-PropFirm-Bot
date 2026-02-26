@@ -1,0 +1,19 @@
+=== DEPLOY VERIFICATION 2026-02-26 22:34:50 UTC ===
+MT5: RUNNING
+  PID:339048 CPU:19.7% MEM:2.5%
+EA: COMPILED (163320 bytes)
+VNC: RUNNING
+Watchdog: ACTIVE
+Connections:
+Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
+Terminal log (last 10):
+OH	0	22:27:17.650	Terminal	stopped with 0
+FS	0	22:27:17.773	Terminal	shutdown with 0
+JF	2	22:27:22.801	Terminal	terminal process already started
+OR	0	22:27:22.801	Terminal	exit with code 0
+EP	0	22:27:22.801	Terminal	stopped with 0
+OK	0	22:27:22.914	Terminal	shutdown with 0
+MN	0	22:34:21.389	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+OI	0	22:34:21.390	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+NO	0	22:34:21.390	Terminal	C:\Program Files\MetaTrader 5
+PP	0	22:34:26.211	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
