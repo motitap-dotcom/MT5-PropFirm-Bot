@@ -1,5 +1,63 @@
 # PropFirmBot - AI Assistant Guide
 
+---
+
+## ⚠️ MANDATORY FIRST READ - DO NOT SKIP ⚠️
+
+> **THIS SECTION IS PERMANENT. DO NOT MODIFY OR REMOVE IT - EVER.**
+> **Even when updating other parts of this file, this section MUST remain untouched.**
+
+### 🔒 Rule #1: VPS Control = GitHub Relay ONLY
+
+**You (Claude) CANNOT connect to the VPS directly.** All outbound network ports from your sandbox are blocked. The ONLY way to run commands on the VPS is through the **GitHub Relay system** (see full details in the "VPS Remote Control via GitHub Relay" section below).
+
+**How it works in 4 steps:**
+1. Write a command to `relay/command.json`
+2. `git add relay/command.json && git commit -m "relay: description" && git push`
+3. Wait 25-30 seconds, then `git pull`
+4. Read the result from `relay/result.json`
+
+### 🚫 Rule #2: NEVER Ask Noa to Use Terminal/SSH
+
+Noa is **NOT a developer**. She does not use terminals. **NEVER** tell her to:
+- Open SSH / PowerShell / Terminal
+- Copy-paste commands
+- Run anything manually on the VPS
+- "Go to the VPS and do X"
+
+**YOU do everything through the relay.** That's the whole point.
+
+### 🔧 Rule #3: How to Compile & Deploy EA Code
+
+Wine on the VPS **cannot compile .ex5 files**. To compile:
+1. Push code changes to the `EA/` folder
+2. The `compile-and-deploy.yml` GitHub Actions workflow triggers automatically
+3. It compiles on a Windows runner and deploys the .ex5 to the VPS via SCP
+
+**Never try to compile on the VPS directly - it will fail.**
+
+### 🛡️ Rule #4: Sacred Files - NEVER Modify
+
+These files/sections are **off-limits** unless Noa explicitly asks:
+- `relay/daemon.sh` - The relay daemon running on VPS
+- `relay/install.sh` - The daemon installer
+- This "MANDATORY FIRST READ" section
+- The "VPS Remote Control via GitHub Relay" section below
+- Guardian safety limits (6% trailing DD, 3.5% soft, 5.0% critical)
+
+### 📋 Quick Reference: Common Operations
+
+| I want to... | Do this |
+|---|---|
+| Check VPS status | Relay: `"type": "status"` |
+| Run a shell command | Relay: `"type": "shell", "command": "..."` |
+| Deploy code changes | Relay: `"type": "deploy"` |
+| Restart MT5 | Relay: `"type": "restart-mt5"` |
+| Compile EA code | Push to `EA/` → GitHub Actions `compile-and-deploy.yml` |
+| Check EA logs | Relay shell: `tail -100 '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/YYYYMMDD.log'` |
+
+---
+
 ## User Info
 - Name: Noa (נועה)
 - Language: Hebrew (עברית) - **always respond in Hebrew**
@@ -194,9 +252,12 @@ JSON configs in `configs/` are deployed to MT5's `MQL5/Files/PropFirmBot/` direc
 - Relay daemon: installed as systemd service `relay-daemon.service`
 - FundedNext account: 11797849 on FundedNext-Server
 
-## VPS Remote Control via GitHub Relay (PRIMARY METHOD - DO NOT MODIFY)
+## VPS Remote Control via GitHub Relay (PRIMARY METHOD)
 
-> **CRITICAL: This section must NEVER be removed or modified. Every Claude session MUST use this relay system to control the VPS. NEVER ask Noa to paste commands in the terminal.**
+> **🔒 PROTECTED SECTION - DO NOT MODIFY OR REMOVE 🔒**
+> **This section and the relay/ files are the ONLY way Claude can control the VPS.**
+> **Every Claude session MUST read and follow these instructions.**
+> **NEVER ask Noa to paste commands in the terminal - she is not a developer.**
 
 ### How It Works
 Claude's sandbox CANNOT connect directly to the VPS (all outbound ports blocked). Instead, we use **GitHub as a communication channel**:
