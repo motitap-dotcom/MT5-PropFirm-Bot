@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772144900",
-  "status": "success",
-  "timestamp": "2026-02-26T22:47:08Z",
+  "id": "cmd-1772145100",
+  "status": "error",
+  "timestamp": "2026-02-26T22:49:09Z",
   "hostname": "vmi3096165",
-  "output": "=== mt5.service unit ===\n# /etc/systemd/system/mt5.service\n[Unit]\nDescription=MetaTrader 5 Trading Terminal\nAfter=network.target xvfb.service\nRequires=xvfb.service\n\n[Service]\nType=simple\nUser=root\nEnvironment=DISPLAY=:99\nEnvironment=WINEPREFIX=/root/.wine\nExecStart=/usr/bin/wine \"/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe\"\nRestart=always\nRestartSec=30\nStartLimitIntervalSec=600\nStartLimitBurst=10\n\n[Install]\nWantedBy=multi-user.target\n=== xvfb.service unit ===\n# /etc/systemd/system/xvfb.service\n[Unit]\nDescription=X Virtual Frame Buffer for MT5\nAfter=network.target\n\n[Service]\nType=simple\nExecStart=/usr/bin/Xvfb :99 -screen 0 1280x1024x24\nRestart=always\nRestartSec=5\n\n[Install]\nWantedBy=multi-user.target\n=== mt5.service status ===\n\u25cf mt5.service - MetaTrader 5 Trading Terminal\n     Loaded: loaded (/etc/systemd/system/mt5.service; enabled; preset: enabled)\n     Active: active (running) since Thu 2026-02-26 22:47:08 UTC; 20ms ago\n   Main PID: 344554 (wine)\n      Tasks: 1 (limit: 9483)\n     Memory: 5.3M (peak: 5.3M)\n        CPU: 14ms\n     CGroup: /system.slice/mt5.service\n             \u2514\u2500344554 /opt/wine-staging/lib/wine/i386-unix/wine \"/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe\"\n\nFeb 26 22:47:08 vmi3096165 systemd[1]: Started mt5.service - MetaTrader 5 Trading Terminal.\n=== Old watchdog ===\n#!/bin/bash\n# PropFirmBot Watchdog - runs every 2 min via cron\n# Checks MT5, auto-restarts if down, sends Telegram alerts\n\nTG=\"8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g\"\n=== Clear crontab completely ===\nCrontab cleared\n"
+  "output": "Exit code: 143\\n=== Stop all MT5/Wine ===\n=== Clean X locks ===\n=== Fix xvfb.service ===\n=== Fix mt5.service ===\n=== Create vnc.service ===\n=== Reload and start ===\n"
 }
