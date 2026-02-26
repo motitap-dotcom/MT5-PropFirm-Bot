@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772139400",
+  "id": "cmd-1772139500",
   "status": "success",
-  "timestamp": "2026-02-26T21:22:05Z",
+  "timestamp": "2026-02-26T21:26:30Z",
   "hostname": "vmi3096165",
-  "output": "=== Get latest workflow run logs ===\nRun ID: 22461381300\n=== Jobs ===\nJob: compile - completed/failure\nSteps:\n  [completed/success] Set up job\n  [completed/success] Run actions/checkout@v4\n  [completed/failure] Compile PropFirmBot EA\n  [completed/skipped] Find and verify compiled EA\n  [completed/skipped] Upload compiled EA\n  [completed/failure] Post Compile PropFirmBot EA\n  [completed/success] Post Run actions/checkout@v4\n  [completed/success] Complete job\nJob: deploy-to-vps - completed/skipped\nSteps:\n=== Get logs URL ===\n403\n=== Try direct log download ===\nArchive:  /tmp/workflow_logs.zip\n  End-of-central-directory signature not found.  Either this file is not\n  a zipfile, or it constitutes one disk of a multi-part archive.  In the\n  latter case the central directory and zipfile comment will be found on\n  the last disk(s) of this archive.\nunzip:  cannot find zipfile directory in one of /tmp/workflow_logs.zip or\n        /tmp/workflow_logs.zip.zip, and cannot find /tmp/workflow_logs.zip.ZIP, period.\n=== Failed step logs ===\n"
+  "output": "From https://github.com/motitap-dotcom/MT5-PropFirm-Bot\n * branch            claude/claude-md-mm3qa8i9848jcovk-X3DTU -> FETCH_HEAD\nAlready up to date.\n[claude/claude-md-mm3qa8i9848jcovk-X3DTU 7129809] trigger: compile with manual MT5 install + browser UA\n 1 file changed, 1 insertion(+), 1 deletion(-)\nTo https://github.com/motitap-dotcom/MT5-PropFirm-Bot.git\n   93e057c..7129809  claude/claude-md-mm3qa8i9848jcovk-X3DTU -> claude/claude-md-mm3qa8i9848jcovk-X3DTU\nPushed - workflow should trigger\n"
 }
