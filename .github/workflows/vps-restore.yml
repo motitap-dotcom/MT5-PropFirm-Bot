@@ -86,43 +86,64 @@ jobs:
 
           echo "Found: $METAEDITOR"
           rm -f "$EA_DEST/PropFirmBot.ex5" 2>/dev/null
+          rm -f "$EA_DEST/PropFirmBot.log" 2>/dev/null
 
-          # Compile with timeout - let it fully finish before checking
-          echo "Compiling (method 1)..."
-          timeout 90 wine "$METAEDITOR" /compile:"$EA_DEST/PropFirmBot.mq5" /log </dev/null >/dev/null 2>&1 || true
+          # Convert Unix path to Windows path for MetaEditor
+          WIN_MQ5=$(winepath -w "$EA_DEST/PropFirmBot.mq5" 2>/dev/null || echo 'C:\Program Files\MetaTrader 5\MQL5\Experts\PropFirmBot\PropFirmBot.mq5')
+          WIN_INC=$(winepath -w "$MT5/MQL5" 2>/dev/null || echo 'C:\Program Files\MetaTrader 5\MQL5')
+          echo "Windows path: $WIN_MQ5"
+          echo "Windows include: $WIN_INC"
 
-          # IMPORTANT: wait for wineserver to finish writing files (don't kill!)
-          echo "Waiting for wineserver to finish writing..."
+          # Method 1: Compile with Windows path
+          echo "Compiling (method 1 - Windows path)..."
+          timeout 90 wine "$METAEDITOR" /compile:"$WIN_MQ5" /log 2>&1 || true
           timeout 30 wineserver -w 2>/dev/null || true
           sleep 3
 
-          # Check result
+          echo "Checking for .ex5..."
           ls -la "$EA_DEST/PropFirmBot.ex5" 2>/dev/null || echo "No .ex5 after method 1"
+          # Also check PropFirmBot.log timestamp
+          ls -la "$EA_DEST/PropFirmBot.log" 2>/dev/null && echo "--- NEW compile log ---" && cat "$EA_DEST/PropFirmBot.log" | tr -d '\0' | tail -10
+
           if [ -f "$EA_DEST/PropFirmBot.ex5" ]; then
               SIZE=$(stat -c%s "$EA_DEST/PropFirmBot.ex5")
               echo "COMPILE SUCCESS! PropFirmBot.ex5 = $SIZE bytes"
           else
-              echo "Method 1 didn't create .ex5, trying method 2..."
-              # Kill leftover wine processes before retry
+              echo "Method 1 failed. Trying method 2 with /include..."
               wineserver -k 2>/dev/null; sleep 2
 
-              timeout 90 wine "$METAEDITOR" /compile:"$EA_DEST/PropFirmBot.mq5" /include:"$MT5/MQL5" /log </dev/null >/dev/null 2>&1 || true
+              timeout 90 wine "$METAEDITOR" /compile:"$WIN_MQ5" /include:"$WIN_INC" /log 2>&1 || true
               timeout 30 wineserver -w 2>/dev/null || true
               sleep 3
 
               ls -la "$EA_DEST/PropFirmBot.ex5" 2>/dev/null || echo "No .ex5 after method 2"
+              ls -la "$EA_DEST/PropFirmBot.log" 2>/dev/null && cat "$EA_DEST/PropFirmBot.log" | tr -d '\0' | tail -10
+
               if [ -f "$EA_DEST/PropFirmBot.ex5" ]; then
                   SIZE=$(stat -c%s "$EA_DEST/PropFirmBot.ex5")
                   echo "COMPILE SUCCESS (method 2)! PropFirmBot.ex5 = $SIZE bytes"
               else
-                  echo "COMPILE FAILED"
-                  echo "--- Compile log ---"
-                  [ -f "$EA_DEST/PropFirmBot.log" ] && cat "$EA_DEST/PropFirmBot.log" | tr -d '\0' | tail -20
-                  echo "--- Searching for .ex5 anywhere ---"
-                  find "$MT5/MQL5" -name "*.ex5" -newer "$EA_DEST/PropFirmBot.mq5" 2>/dev/null
+                  echo "Method 2 failed. Trying method 3 (Unix path)..."
+                  wineserver -k 2>/dev/null; sleep 2
+
+                  timeout 90 wine "$METAEDITOR" /compile:"$EA_DEST/PropFirmBot.mq5" /log 2>&1 || true
+                  timeout 30 wineserver -w 2>/dev/null || true
+                  sleep 3
+
+                  ls -la "$EA_DEST/PropFirmBot.ex5" 2>/dev/null
+                  if [ -f "$EA_DEST/PropFirmBot.ex5" ]; then
+                      SIZE=$(stat -c%s "$EA_DEST/PropFirmBot.ex5")
+                      echo "COMPILE SUCCESS (method 3)! PropFirmBot.ex5 = $SIZE bytes"
+                  else
+                      echo "ALL COMPILE METHODS FAILED"
+                      echo "--- Searching for .ex5 files ---"
+                      find /root/.wine -name "PropFirmBot.ex5" 2>/dev/null
+                      find /root/.wine -name "*.ex5" -newer "$EA_DEST/PropFirmBot.mq5" 2>/dev/null
+                      echo "--- PropFirmBot.log ---"
+                      [ -f "$EA_DEST/PropFirmBot.log" ] && cat "$EA_DEST/PropFirmBot.log" | tr -d '\0'
+                  fi
               fi
           fi
-          # Clean up wine processes
           wineserver -k 2>/dev/null || true; sleep 1
           echo "--- COMPILE STEP DONE ---"
           REMOTE_EOF
