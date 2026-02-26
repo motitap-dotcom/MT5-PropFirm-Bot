@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772145500",
+  "id": "cmd-1772145700",
   "type": "shell",
-  "command": "systemctl stop mt5.service x11vnc.service xvfb.service 2>/dev/null && killall -9 terminal64.exe 2>/dev/null; wineserver -k 2>/dev/null; killall -9 Xvfb x11vnc 2>/dev/null; sleep 2 && rm -f /tmp/.X99-lock /tmp/.X11-unix/X99 2>/dev/null && systemctl daemon-reload && systemctl enable xvfb.service x11vnc.service mt5.service 2>&1 && systemctl start xvfb.service && sleep 2 && echo 'xvfb:' $(systemctl is-active xvfb.service) && systemctl start x11vnc.service && sleep 2 && echo 'x11vnc:' $(systemctl is-active x11vnc.service) && systemctl start mt5.service && sleep 20 && echo 'mt5:' $(systemctl is-active mt5.service) && echo '=== MT5 process ===' && ps aux | grep terminal64 | grep -v grep && echo '=== Terminal log ===' && TLOG=$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/logs/'*.log 2>/dev/null | head -1) && if [ -n \"$TLOG\" ]; then tail -15 \"$TLOG\" | tr -d '\\0'; fi && echo '=== EA log ===' && for d in 20260227 20260226; do if [ -f \"/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/$d.log\" ]; then echo \"$d:\"; tail -20 \"/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/$d.log\" | tr -d '\\0'; break; fi; done",
-  "timestamp": "2026-02-27T01:52:00Z",
+  "command": "echo '=== mt5.service journal ===' && journalctl -u mt5.service --since '3 min ago' --no-pager 2>/dev/null | tail -20 && echo '=== mt5.service status ===' && systemctl status mt5.service --no-pager 2>/dev/null && echo '=== Try manual wine ===' && export DISPLAY=:99 WINEPREFIX=/root/.wine WINEDEBUG=-all STAGING_WRITECOPY=1 && /opt/wine-staging/bin/wine '/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe' 2>&1 & WPID=$! && sleep 15 && echo '=== Check ===' && ps aux | grep terminal64 | grep -v grep && echo '=== wine path ===' && which wine && ls -la /opt/wine-staging/bin/wine 2>/dev/null && ls -la /usr/bin/wine 2>/dev/null",
+  "timestamp": "2026-02-27T01:55:00Z",
   "from": "claude"
 }
