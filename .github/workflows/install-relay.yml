@@ -1,0 +1,42 @@
+name: Install Relay Daemon on VPS
+
+on:
+  push:
+    paths:
+      - '.github/workflows/install-relay.yml'
+      - 'relay/install.sh'
+      - 'relay/daemon.sh'
+
+permissions:
+  contents: write
+
+jobs:
+  install-relay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install relay daemon on VPS
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          echo "=== Deploying relay daemon ==="
+          # First ensure VPS repo is up to date
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 << 'REMOTE'
+          cd /root/MT5-PropFirm-Bot
+
+          # Stop existing daemon
+          systemctl stop relay-daemon 2>/dev/null
+
+          # Pull latest code
+          git fetch origin
+          git reset --hard origin/$(git branch --show-current)
+
+          # Install daemon
+          bash relay/install.sh
+
+          echo ""
+          echo "=== Verify ==="
+          systemctl is-active relay-daemon
+          REMOTE
