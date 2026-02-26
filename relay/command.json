@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772142200",
+  "id": "cmd-1772142500",
   "type": "shell",
-  "command": "echo 'alive' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5' 2>&1 && ps aux | grep terminal64 | grep -v grep | head -1 && tail -5 '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260226.log' 2>&1 | tr -d '\\0'",
-  "timestamp": "2026-02-27T00:30:00Z",
+  "command": "echo 'RELAY ALIVE' && echo \"Branch: $(git -C /root/MT5-PropFirm-Bot branch --show-current)\" && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5' 2>&1 && ps aux | grep terminal64 | grep -v grep | head -1",
+  "timestamp": "2026-02-27T00:45:00Z",
   "from": "claude"
 }
