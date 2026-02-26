@@ -6,7 +6,7 @@ on:
     paths:
       - '.github/workflows/vps-restore.yml'
       - 'scripts/full_restore.sh'
-      - 'trigger-check.txt'
+      - 'trigger-restore.txt'
 
 permissions:
   contents: write
