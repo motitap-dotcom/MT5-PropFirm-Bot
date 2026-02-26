@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772145700",
+  "id": "cmd-1772145900",
   "type": "shell",
-  "command": "echo '=== mt5.service journal ===' && journalctl -u mt5.service --since '3 min ago' --no-pager 2>/dev/null | tail -20 && echo '=== mt5.service status ===' && systemctl status mt5.service --no-pager 2>/dev/null && echo '=== Try manual wine ===' && export DISPLAY=:99 WINEPREFIX=/root/.wine WINEDEBUG=-all STAGING_WRITECOPY=1 && /opt/wine-staging/bin/wine '/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe' 2>&1 & WPID=$! && sleep 15 && echo '=== Check ===' && ps aux | grep terminal64 | grep -v grep && echo '=== wine path ===' && which wine && ls -la /opt/wine-staging/bin/wine 2>/dev/null && ls -la /usr/bin/wine 2>/dev/null",
-  "timestamp": "2026-02-27T01:55:00Z",
+  "command": "systemctl stop mt5.service 2>/dev/null && sleep 2 && python3 -c \"mt5 = '''[Unit]\nDescription=MetaTrader 5 Trading Terminal\nAfter=network.target xvfb.service\nRequires=xvfb.service\nStartLimitIntervalSec=600\nStartLimitBurst=10\n\n[Service]\nType=simple\nUser=root\nEnvironment=DISPLAY=:99\nEnvironment=WINEPREFIX=/root/.wine\nEnvironment=WINEDEBUG=-all\nEnvironment=STAGING_WRITECOPY=1\nExecStartPre=/bin/sleep 3\nExecStart=/opt/wine-staging/bin/wine \\'/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe\\'\nRestart=on-failure\nRestartSec=30\n\n[Install]\nWantedBy=multi-user.target\n'''\nwith open('/etc/systemd/system/mt5.service', 'w') as f:\n    f.write(mt5)\nprint('mt5.service updated with quoted path')\" && systemctl daemon-reload && systemctl start mt5.service && sleep 20 && echo 'mt5:' $(systemctl is-active mt5.service) && ps aux | grep terminal64 | grep -v grep && echo '=== Terminal log ===' && TLOG=$(ls -t '/root/.wine/drive_c/Program Files/MetaTrader 5/logs/'*.log 2>/dev/null | head -1) && tail -10 \"$TLOG\" 2>/dev/null | tr -d '\\0'",
+  "timestamp": "2026-02-27T01:58:00Z",
   "from": "claude"
 }
