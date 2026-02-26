@@ -85,11 +85,15 @@ jobs:
             exec)
               CMD="curl -s '${API}/exec?token=${TOKEN}&cmd=$(echo -n "$EXTRA" | python3 -c "import sys,urllib.parse;print(urllib.parse.quote(sys.stdin.read()))")' 2>/dev/null || echo '{\"error\":\"API not available for exec\"}'"
               ;;
+            ssh)
+              CMD="$EXTRA"
+              ;;
             mgmt-check)
               CMD="systemctl is-active propfirmbot-mgmt 2>/dev/null && echo 'Management API: RUNNING' || echo 'Management API: NOT RUNNING'; curl -s '${API}/ping' 2>/dev/null || echo 'API ping: FAILED'"
               ;;
             install-mgmt)
-              CMD="cd /root/MT5-PropFirm-Bot && git pull && bash management/install.sh"
+              BRANCH=$(git rev-parse --abbrev-ref HEAD)
+              CMD="cd /root/MT5-PropFirm-Bot && git fetch origin ${BRANCH} && git checkout ${BRANCH} -- management/ && bash management/install.sh && echo 'INSTALL COMPLETE'"
               ;;
             *)
               echo "Unknown action: $ACTION"
