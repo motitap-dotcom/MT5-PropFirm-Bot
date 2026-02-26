@@ -1,12 +1,11 @@
 ╔══════════════════════════════════════════════════╗
 ║     PropFirmBot - VPS Status Check               ║
-║     2026-02-26 21:33:13 UTC                       ║
+║     2026-02-26 22:23:01 UTC                       ║
 ╚══════════════════════════════════════════════════╝
 
 ━━━ 1. MT5 Process ━━━
 ✅ MT5 is RUNNING
-   PID: 280171 | CPU: 0.0% | MEM: 0.1% | Started: 19:15 0:00
-   PID: 294882 | CPU: 1.5% | MEM: 2.4% | Started: 20:27 1:03
+   PID: 332475 | CPU: 23.1% | MEM: 2.4% | Started: 22:22 0:13
 
 ━━━ 2. VNC / Display ━━━
 ✅ VNC (x11vnc) is RUNNING
@@ -19,38 +18,38 @@
 ━━━ 4. Outbound Connections (MT5 broker) ━━━
 ✅ Active connections:
    Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
-   0      0       77.237.234.2:41014   34.120.3.201:443         
+   0      0       77.237.234.2:35038   140.82.121.3:443         
 
 ━━━ 5. Terminal Log (latest) ━━━
 basename: extra operand ‘5/logs/20260226.log’
 Try 'basename --help' for more information.
-   File:  | Size: 13166 bytes
+   File:  | Size: 20366 bytes
    --- Last 25 lines ---
-   NF	0	11:05:41.059	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-   DE	0	11:05:41.059	Network	'11797849': trading has been enabled - hedging mode
-   LR	0	19:21:12.238	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-   LE	0	19:21:12.241	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-   IL	0	19:21:12.241	Terminal	C:\Program Files\MetaTrader 5
-   CF	0	19:21:23.332	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-   HF	0	19:21:23.332	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.26 13:05:38
-   IG	0	19:21:25.144	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-   GD	0	19:21:25.144	Network	'11797849': trading has been enabled - hedging mode
-   CQ	0	19:21:26.139	Network	'11797849': scanning network for access points
-   GG	0	19:21:31.447	Network	'11797849': scanning network finished
-   DP	2	19:28:27.358	Error	MetaEditor not found
-   DD	0	19:39:23.480	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-   LO	0	19:39:23.486	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-   ME	0	19:39:23.486	Terminal	C:\Program Files\MetaTrader 5
-   EL	0	19:39:32.355	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-   NL	0	19:39:32.355	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.26 21:38:37
-   LM	0	19:39:33.402	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-   JN	0	19:39:33.402	Network	'11797849': trading has been enabled - hedging mode
-   GE	0	19:45:59.245	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-   LO	0	19:45:59.246	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-   MF	0	19:45:59.246	Terminal	C:\Program Files\MetaTrader 5
-   OO	0	20:27:31.148	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-   FI	0	20:27:31.149	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-   GH	0	20:27:31.149	Terminal	C:\Program Files\MetaTrader 5
+   GQ	0	22:12:16.594	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+   NR	0	22:12:16.595	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+   GS	0	22:12:16.595	Terminal	C:\Program Files\MetaTrader 5
+   IK	0	22:15:56.920	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+   NL	0	22:15:56.923	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+   KD	0	22:15:56.923	Terminal	C:\Program Files\MetaTrader 5
+   JM	2	22:22:08.020	Terminal	terminal process already started
+   KK	0	22:22:08.020	Terminal	exit with code 0
+   MI	0	22:22:08.020	Terminal	stopped with 0
+   GL	0	22:22:08.209	Terminal	shutdown with 0
+   RE	2	22:22:13.626	Terminal	terminal process already started
+   OP	0	22:22:13.626	Terminal	exit with code 0
+   EQ	0	22:22:13.626	Terminal	stopped with 0
+   DE	0	22:22:13.758	Terminal	shutdown with 0
+   GM	2	22:22:19.184	Terminal	terminal process already started
+   NH	0	22:22:19.184	Terminal	exit with code 0
+   CI	0	22:22:19.185	Terminal	stopped with 0
+   HM	0	22:22:19.363	Terminal	shutdown with 0
+   NE	2	22:22:23.823	Terminal	terminal process already started
+   CP	0	22:22:23.823	Terminal	exit with code 0
+   LQ	0	22:22:23.824	Terminal	stopped with 0
+   CE	0	22:22:23.963	Terminal	shutdown with 0
+   JE	0	22:22:08.515	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+   RN	0	22:22:08.520	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+   OF	0	22:22:08.520	Terminal	C:\Program Files\MetaTrader 5
 
 ━━━ 6. EA Log (today: 20260226) ━━━
    ⚠️ No EA log for today (20260226)
@@ -61,38 +60,38 @@ Try 'basename --help' for more information.
    -rw-r--r-- 1 root root  92702 Feb 22 22:39 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260222.log
 
 ━━━ 7. Config Files ━━━
-   ✅ 
-   ✅ 
-   ✅ 
-   ✅ 
-   ✅ 
-   ✅ 
-   ✅ 
-
-━━━ 8. Trade Journal ━━━
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/account_state.json’
 Try 'basename --help' for more information.
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/challenge_rules.json’
 Try 'basename --help' for more information.
+   ✅ 
+   ✅ 
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/funded_rules.json’
 Try 'basename --help' for more information.
+   ✅ 
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/notifications.json’
 Try 'basename --help' for more information.
+   ✅ 
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/risk_params.json’
 Try 'basename --help' for more information.
+   ✅ 
+   ✅ 
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/status.json’
 Try 'basename --help' for more information.
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/symbols.json’
 Try 'basename --help' for more information.
+   ✅ 
+
+━━━ 8. Trade Journal ━━━
    ⚠️ No trade journal (bot may not have traded yet)
 
 ━━━ 9. Telegram Connectivity ━━━
    ✅ Telegram Bot is ONLINE
 
 ━━━ 10. System Health ━━━
-   Uptime: up 4 days, 9 hours, 22 minutes
-   CPU Load: 0.27 0.20 0.25
-   Memory: 1248MB / 7941MB (15%)
+   Uptime: up 4 days, 10 hours, 12 minutes
+   CPU Load: 1.59 1.33 1.09
+   Memory: 1193MB / 7941MB (15%)
    Disk: 10% used (130G free)
    Internet: ✅ OK
 
