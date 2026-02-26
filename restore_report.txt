@@ -1,0 +1,214 @@
+╔══════════════════════════════════════════════════╗
+║   PropFirmBot - FULL RESTORE                     ║
+║   2026-02-26 21:59:37 UTC                        ║
+╚══════════════════════════════════════════════════╝
+
+━━━ [1/7] Pulling latest code ━━━
+Already up to date.
+✅ Code updated (branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU)
+
+━━━ [2/7] Stopping MT5 for clean restart ━━━
+Stopping MT5...
+✅ MT5 stopped
+
+━━━ [3/7] Deploying EA files ━━━
+   ✅ PropFirmBot.mq5
+   ✅ AccountStateManager.mqh
+   ✅ Dashboard.mqh
+   ✅ Guardian.mqh
+   ✅ NewsFilter.mqh
+   ✅ Notifications.mqh
+   ✅ RiskManager.mqh
+   ✅ SignalEngine.mqh
+   ✅ StatusWriter.mqh
+   ✅ TradeAnalyzer.mqh
+   ✅ TradeJournal.mqh
+   ✅ TradeManager.mqh
+Copied 12 EA files
+
+━━━ [4/7] Deploying config files ━━━
+   ✅ account_state.json
+   ✅ challenge_rules.json
+   ✅ funded_rules.json
+   ✅ notifications.json
+   ✅ risk_params.json
+   ✅ symbols.json
+Copied 6 config files
+
+━━━ [5/7] Compiling EA ━━━
+Found MetaEditor: MetaEditor64.exe
+Attempting command-line compile...
+Command-line compile didn't create .ex5
+Trying with include path...
+⚠️ Auto-compile failed
+--- Compilation log ---
+ : information: generating code 18%
+ : information: generating code 21%
+ : information: generating code 24%
+ : information: generating code 27%
+ : information: generating code 30%
+ : information: generating code 33%
+ : information: generating code 36%
+ : information: generating code 39%
+ : information: generating code 42%
+ : information: generating code 45%
+ : information: generating code 48%
+ : information: generating code 51%
+ : information: generating code 54%
+ : information: generating code 57%
+ : information: generating code 60%
+ : information: generating code 63%
+ : information: generating code 66%
+ : information: generating code 69%
+ : information: generating code 72%
+ : information: generating code 75%
+ : information: generating code 78%
+ : information: generating code 81%
+ : information: generating code 84%
+ : information: generating code 87%
+ : information: generating code 90%
+ : information: generating code 93%
+ : information: generating code 95%
+ : information: generating code 100%
+ : information: code generated
+Result: 0 errors, 0 warnings, 3458 msec elapsed, cpu='X64 Regular'
+--- End log ---
+
+━━━ [6/7] Starting MT5 ━━━
+Starting MT5...
+MT5 launch command sent
+Waiting for MT5 to initialize (20s)...
+✅ MT5 is RUNNING (PID: 321026
+321271)
+
+━━━ [7/7] Installing Watchdog ━━━
+✅ Systemd services configured
+✅ Watchdog cron installed (every 2 min)
+
+╔══════════════════════════════════════════════════╗
+║   FINAL STATUS                                   ║
+╚══════════════════════════════════════════════════╝
+
+✅ MT5: RUNNING (PID: 321026
+321271)
+✅ VNC: RUNNING
+❌ EA: NOT COMPILED
+✅ BROKER: Connected
+✅ WATCHDOG: Active
+   EA source files: 12
+
+━━━ Broker connection check ━━━
+✅ Outbound connections active:
+Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
+0      0       77.237.234.2:56326 194.164.179.199:443         
+
+╔══════════════════════════════════════════════════╗
+║   RESTORE COMPLETE                               ║
+╚══════════════════════════════════════════════════╝
+EXIT_CODE=0
+╔══════════════════════════════════════════════════╗
+║     PropFirmBot - VPS Status Check               ║
+║     2026-02-26 22:00:47 UTC                       ║
+╚══════════════════════════════════════════════════╝
+
+━━━ 1. MT5 Process ━━━
+✅ MT5 is RUNNING
+   PID: 321026 | CPU: 26.1% | MEM: 2.4% | Started: 22:00 0:10
+   PID: 321819 | CPU: 73.6% | MEM: 1.9% | Started: 22:00 0:00
+
+━━━ 2. VNC / Display ━━━
+✅ VNC (x11vnc) is RUNNING
+✅ Xvfb display is RUNNING
+
+━━━ 3. EA Files ━━━
+   Source files (.mq5/.mqh): 12
+   ❌ PropFirmBot.ex5 NOT FOUND!
+
+━━━ 4. Outbound Connections (MT5 broker) ━━━
+✅ Active connections:
+   Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
+
+━━━ 5. Terminal Log (latest) ━━━
+basename: extra operand ‘5/logs/20260226.log’
+Try 'basename --help' for more information.
+   File:  | Size: 16992 bytes
+   --- Last 25 lines ---
+   GQ	0	21:41:56.564	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+   NS	0	21:41:56.565	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+   KR	0	21:41:56.565	Terminal	C:\Program Files\MetaTrader 5
+   NJ	0	21:56:00.726	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+   GM	0	21:56:00.727	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+   ND	0	21:56:00.727	Terminal	C:\Program Files\MetaTrader 5
+   NL	0	21:56:05.053	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+   GJ	0	21:56:39.565	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+   LM	0	21:56:39.566	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+   ID	0	21:56:39.566	Terminal	C:\Program Files\MetaTrader 5
+   PL	0	21:56:43.002	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+   PJ	2	22:00:11.602	Terminal	terminal process already started
+   EN	0	22:00:11.602	Terminal	exit with code 0
+   KD	0	22:00:11.602	Terminal	stopped with 0
+   EG	0	22:00:11.724	Terminal	shutdown with 0
+   GR	2	22:00:17.810	Terminal	terminal process already started
+   RF	0	22:00:17.810	Terminal	exit with code 0
+   CL	0	22:00:17.811	Terminal	stopped with 0
+   PP	2	22:00:22.923	Terminal	terminal process already started
+   EE	0	22:00:22.923	Terminal	exit with code 0
+   CS	0	22:00:22.923	Terminal	stopped with 0
+   DJ	0	22:00:23.069	Terminal	shutdown with 0
+   IR	0	22:00:11.873	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+   OE	0	22:00:11.877	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+   RS	0	22:00:11.877	Terminal	C:\Program Files\MetaTrader 5
+
+━━━ 6. EA Log (today: 20260226) ━━━
+   ⚠️ No EA log for today (20260226)
+   Latest EA logs:
+   -rw-r--r-- 1 root root  36174 Feb 25 16:30 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260225.log
+   -rw-r--r-- 1 root root 297152 Feb 24 22:15 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260224.log
+   -rw-r--r-- 1 root root 133168 Feb 23 23:47 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260223.log
+   -rw-r--r-- 1 root root  92702 Feb 22 22:39 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260222.log
+
+━━━ 7. Config Files ━━━
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/account_state.json’
+Try 'basename --help' for more information.
+   ✅ 
+   ✅ 
+   ✅ 
+   ✅ 
+   ✅ 
+   ✅ 
+   ✅ 
+
+━━━ 8. Trade Journal ━━━
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/challenge_rules.json’
+Try 'basename --help' for more information.
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/funded_rules.json’
+Try 'basename --help' for more information.
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/notifications.json’
+Try 'basename --help' for more information.
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/risk_params.json’
+Try 'basename --help' for more information.
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/status.json’
+Try 'basename --help' for more information.
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/symbols.json’
+Try 'basename --help' for more information.
+   ⚠️ No trade journal (bot may not have traded yet)
+
+━━━ 9. Telegram Connectivity ━━━
+   ✅ Telegram Bot is ONLINE
+
+━━━ 10. System Health ━━━
+   Uptime: up 4 days, 9 hours, 50 minutes
+   CPU Load: 0.97 0.51 0.32
+   Memory: 1334MB / 7941MB (16%)
+   Disk: 10% used (130G free)
+   Internet: ✅ OK
+
+━━━ 11. Wine Version ━━━
+wine-11.3 (Staging)
+
+━━━ 12. Watchdog/Cron Status ━━━
+   ⚠️ No watchdog cron found
+
+╔══════════════════════════════════════════════════╗
+║           End of Status Report                   ║
+╚══════════════════════════════════════════════════╝
