@@ -1,15 +1,11 @@
 name: VPS Status Check
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - '.github/workflows/vps-check.yml'
       - 'trigger-check.txt'
-      - 'scripts/remote_check.sh'
-      - 'scripts/deep_check.sh'
-      - 'scripts/connection_check.sh'
-      - 'scripts/network_check.sh'
-      - 'scripts/quick_check.sh'
       - 'scripts/verify_ea.sh'
 
 permissions:
@@ -21,13 +17,11 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: claude/build-cfd-trading-bot-fl0ld
 
       - name: Run VPS diagnostics
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          chmod +x scripts/remote_check.sh scripts/deep_check.sh
+          chmod +x scripts/verify_ea.sh
           sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/verify_ea.sh root@77.237.234.2:/tmp/check.sh
           sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 root@77.237.234.2 "bash /tmp/check.sh" > vps_report.txt 2>&1
           echo "EXIT_CODE=$?" >> vps_report.txt
@@ -35,8 +29,9 @@ jobs:
 
       - name: Commit report
         run: |
+          BRANCH="${GITHUB_REF#refs/heads/}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f vps_report.txt
           git commit -m "VPS status report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push origin claude/build-cfd-trading-bot-fl0ld || true
+          git push origin HEAD:$BRANCH || true
