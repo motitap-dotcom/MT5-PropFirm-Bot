@@ -1,6 +1,7 @@
 {
-  "id": "none",
-  "status": "waiting",
-  "timestamp": "2026-02-26T00:00:00Z",
-  "output": "Relay daemon not yet installed"
+  "id": "init-1772136198",
+  "status": "ready",
+  "timestamp": "2026-02-26T20:03:18Z",
+  "hostname": "vmi3096165",
+  "output": "Relay daemon is running and waiting for commands\n"
 }
