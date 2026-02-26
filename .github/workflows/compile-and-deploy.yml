@@ -15,39 +15,94 @@ permissions:
 jobs:
   compile-and-deploy:
     runs-on: windows-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download and install MetaTrader 5
+      - name: Download MetaTrader 5
         shell: powershell
         run: |
+          Write-Host "=== Runner Info ==="
+          Write-Host "OS: $([System.Environment]::OSVersion)"
+          Write-Host "User: $env:USERNAME"
+          Write-Host "Temp: $env:TEMP"
+
           Write-Host "=== Downloading MT5 ==="
           $url = "https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe"
-          Invoke-WebRequest -Uri $url -OutFile "mt5setup.exe" -UseBasicParsing
-          Write-Host "Downloaded: $((Get-Item mt5setup.exe).Length) bytes"
 
-          Write-Host "=== Installing MT5 silently ==="
-          Start-Process -FilePath "mt5setup.exe" -ArgumentList "/auto" -Wait -NoNewWindow
-          Start-Sleep -Seconds 30
-
-          # Find MetaEditor
-          $metaeditor = Get-ChildItem -Path "C:\Program Files" -Filter "metaeditor64.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
-          if (-not $metaeditor) {
-            $metaeditor = Get-ChildItem -Path "$env:APPDATA" -Filter "metaeditor64.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          $maxRetries = 3
+          for ($i = 1; $i -le $maxRetries; $i++) {
+            try {
+              Write-Host "Download attempt $i..."
+              Invoke-WebRequest -Uri $url -OutFile "mt5setup.exe" -UseBasicParsing -TimeoutSec 120
+              $fileSize = (Get-Item mt5setup.exe).Length
+              Write-Host "Downloaded: $fileSize bytes"
+              if ($fileSize -gt 1000000) {
+                Write-Host "Download OK"
+                break
+              }
+              Write-Host "File too small, retrying..."
+            } catch {
+              Write-Host "Download failed: $_"
+              if ($i -lt $maxRetries) { Start-Sleep -Seconds 5 }
+            }
           }
-          if (-not $metaeditor) {
-            $metaeditor = Get-ChildItem -Path "C:\" -Filter "metaeditor64.exe" -Recurse -ErrorAction SilentlyContinue -Depth 5 | Select-Object -First 1
+
+          if (-not (Test-Path "mt5setup.exe") -or (Get-Item "mt5setup.exe").Length -lt 1000000) {
+            Write-Host "FATAL: MT5 download failed after $maxRetries attempts"
+            exit 1
+          }
+
+      - name: Install MetaTrader 5
+        shell: powershell
+        run: |
+          Write-Host "=== Installing MT5 silently ==="
+          $proc = Start-Process -FilePath "mt5setup.exe" -ArgumentList "/auto" -Wait -PassThru
+          Write-Host "Installer exit code: $($proc.ExitCode)"
+
+          Write-Host "=== Waiting for installation to complete ==="
+          Start-Sleep -Seconds 60
+
+          Write-Host "=== Searching for MetaEditor ==="
+          # Search common locations
+          $searchPaths = @(
+            "C:\Program Files",
+            "$env:APPDATA\MetaQuotes",
+            "$env:APPDATA",
+            "$env:LOCALAPPDATA",
+            "C:\Users\$env:USERNAME",
+            "C:\"
+          )
+
+          $metaeditor = $null
+          foreach ($searchPath in $searchPaths) {
+            if (-not (Test-Path $searchPath)) { continue }
+            Write-Host "Searching: $searchPath"
+            $found = Get-ChildItem -Path $searchPath -Filter "metaeditor64.exe" -Recurse -ErrorAction SilentlyContinue -Depth 6 | Select-Object -First 1
+            if ($found) {
+              $metaeditor = $found
+              Write-Host "FOUND: $($found.FullName)"
+              break
+            }
           }
 
           if ($metaeditor) {
-            Write-Host "Found MetaEditor: $($metaeditor.FullName)"
             $mt5dir = $metaeditor.DirectoryName
+            Write-Host "MetaEditor: $($metaeditor.FullName)"
+            Write-Host "MT5 Dir: $mt5dir"
             echo "MT5_DIR=$mt5dir" >> $env:GITHUB_ENV
             echo "METAEDITOR=$($metaeditor.FullName)" >> $env:GITHUB_ENV
           } else {
-            Write-Host "ERROR: MetaEditor not found!"
-            Get-ChildItem -Path "C:\Program Files" -Directory | ForEach-Object { Write-Host $_.FullName }
+            Write-Host "ERROR: MetaEditor not found after installation!"
+            Write-Host ""
+            Write-Host "=== Diagnostic: Program Files ==="
+            Get-ChildItem -Path "C:\Program Files" -Directory -ErrorAction SilentlyContinue | ForEach-Object { Write-Host $_.FullName }
+            Write-Host "=== Diagnostic: AppData ==="
+            Get-ChildItem -Path "$env:APPDATA" -Directory -ErrorAction SilentlyContinue | ForEach-Object { Write-Host $_.FullName }
+            Write-Host "=== Diagnostic: Processes ==="
+            Get-Process | Where-Object { $_.ProcessName -like "*meta*" -or $_.ProcessName -like "*mt5*" } | Format-Table
+            Write-Host "=== Diagnostic: Recent exe files ==="
+            Get-ChildItem -Path "C:\Program Files" -Filter "*.exe" -Recurse -ErrorAction SilentlyContinue -Depth 4 | Select-Object -First 20 | ForEach-Object { Write-Host $_.FullName }
             exit 1
           }
 
@@ -59,6 +114,23 @@ jobs:
 
           Write-Host "=== MT5 dir: $mt5dir ==="
           Write-Host "=== MetaEditor: $metaeditor ==="
+
+          # Check MQL5 standard library exists
+          $includePath = Join-Path $mt5dir "MQL5\Include"
+          Write-Host "=== MQL5 Include dir ==="
+          if (Test-Path $includePath) {
+            Write-Host "Include dir exists"
+            $tradeFile = Join-Path $includePath "Trade\Trade.mqh"
+            if (Test-Path $tradeFile) {
+              Write-Host "Trade.mqh found: $tradeFile"
+            } else {
+              Write-Host "WARNING: Trade.mqh NOT found at $tradeFile"
+              Write-Host "Contents of Include:"
+              Get-ChildItem $includePath -Directory -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.Name)" }
+            }
+          } else {
+            Write-Host "WARNING: MQL5 Include directory not found!"
+          }
 
           # Create PropFirmBot directory
           $eaDir = Join-Path $mt5dir "MQL5\Experts\PropFirmBot"
@@ -74,30 +146,53 @@ jobs:
           Copy-Item "configs\*" -Destination $filesDir -Force -Verbose
 
           Write-Host "=== Files in EA dir ==="
-          Get-ChildItem $eaDir
+          Get-ChildItem $eaDir | Format-Table Name, Length
 
           # Compile
           $mq5file = Join-Path $eaDir "PropFirmBot.mq5"
           Write-Host "=== Compiling: $mq5file ==="
+          Write-Host "Command: $metaeditor /compile:$mq5file /log /include:$eaDir"
 
-          & $metaeditor /compile:"$mq5file" /log /include:"$eaDir"
-          Start-Sleep -Seconds 30
+          $compileProc = Start-Process -FilePath $metaeditor -ArgumentList "/compile:`"$mq5file`" /log /include:`"$eaDir`"" -Wait -PassThru -NoNewWindow
+          Write-Host "MetaEditor exit code: $($compileProc.ExitCode)"
+
+          # Wait for file to be written
+          Start-Sleep -Seconds 15
+
+          # Always check for logs
+          Write-Host "=== Compilation logs ==="
+          $logFiles = Get-ChildItem -Path $eaDir -Filter "*.log" -ErrorAction SilentlyContinue
+          if ($logFiles) {
+            foreach ($logFile in $logFiles) {
+              Write-Host "--- $($logFile.Name) ($($logFile.Length) bytes) ---"
+              Get-Content $logFile.FullName -ErrorAction SilentlyContinue
+            }
+          } else {
+            Write-Host "No log files in EA dir"
+            # Check parent directories for logs
+            $mql5LogDir = Join-Path $mt5dir "MQL5\Logs"
+            if (Test-Path $mql5LogDir) {
+              Write-Host "=== MQL5 Logs dir ==="
+              Get-ChildItem $mql5LogDir -ErrorAction SilentlyContinue | ForEach-Object {
+                Write-Host "--- $($_.Name) ---"
+                Get-Content $_.FullName -Tail 20 -ErrorAction SilentlyContinue
+              }
+            }
+          }
 
           # Check result
           Write-Host "=== Checking compilation result ==="
-          $ex5 = Get-ChildItem -Path $mt5dir -Filter "PropFirmBot.ex5" -Recurse -ErrorAction SilentlyContinue
+          $ex5 = Get-ChildItem -Path $mt5dir -Filter "PropFirmBot.ex5" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
           if ($ex5) {
             Write-Host "SUCCESS! Found: $($ex5.FullName) ($($ex5.Length) bytes)"
-            # Copy to workspace for upload
             Copy-Item $ex5.FullName -Destination "PropFirmBot.ex5" -Force
             echo "EX5_PATH=$($ex5.FullName)" >> $env:GITHUB_ENV
             echo "COMPILE_SUCCESS=true" >> $env:GITHUB_ENV
           } else {
-            Write-Host "ERROR: .ex5 not found!"
-            # Check logs
-            Get-ChildItem -Path $eaDir -Filter "*.log" | ForEach-Object {
-              Write-Host "--- $($_.Name) ---"
-              Get-Content $_.FullName
+            Write-Host "ERROR: .ex5 not found after compilation!"
+            Write-Host "=== All files in MT5 dir ==="
+            Get-ChildItem -Path $mt5dir -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Extension -in @('.ex5', '.log', '.mq5') } | ForEach-Object {
+              Write-Host "$($_.FullName) ($($_.Length) bytes)"
             }
             echo "COMPILE_SUCCESS=false" >> $env:GITHUB_ENV
             exit 1
