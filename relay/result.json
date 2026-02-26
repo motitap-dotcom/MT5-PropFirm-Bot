@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772139500",
+  "id": "cmd-1772140200",
   "status": "success",
-  "timestamp": "2026-02-26T21:26:30Z",
+  "timestamp": "2026-02-26T21:39:57Z",
   "hostname": "vmi3096165",
-  "output": "From https://github.com/motitap-dotcom/MT5-PropFirm-Bot\n * branch            claude/claude-md-mm3qa8i9848jcovk-X3DTU -> FETCH_HEAD\nAlready up to date.\n[claude/claude-md-mm3qa8i9848jcovk-X3DTU 7129809] trigger: compile with manual MT5 install + browser UA\n 1 file changed, 1 insertion(+), 1 deletion(-)\nTo https://github.com/motitap-dotcom/MT5-PropFirm-Bot.git\n   93e057c..7129809  claude/claude-md-mm3qa8i9848jcovk-X3DTU -> claude/claude-md-mm3qa8i9848jcovk-X3DTU\nPushed - workflow should trigger\n"
+  "output": "=== Check .ex5 file ===\nls: cannot access '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5': No such file or directory\nNo EA log found\n"
 }
