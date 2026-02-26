@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772144700",
+  "id": "cmd-1772144900",
   "type": "shell",
-  "command": "echo '=== Who killed MT5? ===' && dmesg 2>/dev/null | tail -20 && echo '=== systemctl units ===' && systemctl list-units --type=service --state=running --no-pager 2>/dev/null | grep -v 'ssh\\|cron\\|system\\|network\\|udev\\|dbus\\|log\\|login\\|rsyslog\\|snap\\|unatt' && echo '=== Recent auth/syslog ===' && tail -20 /var/log/syslog 2>/dev/null | grep -i 'kill\\|oom\\|term\\|mt5\\|wine' && echo '=== journalctl wine ===' && journalctl --since '5 min ago' --no-pager 2>/dev/null | grep -i 'wine\\|terminal\\|kill\\|oom' | tail -10 && echo '=== Any running github action SSH sessions ===' && who 2>/dev/null && echo '=== Check for active SSH sessions ===' && ss -tn state established 2>/dev/null | grep ':22 ' && echo '=== All running wine processes ===' && ps aux | grep -i wine | grep -v grep && echo '=== Recent process exits ===' && journalctl --since '10 min ago' --no-pager 2>/dev/null | grep -i 'Process\\|exit\\|terminal' | tail -15 && echo '=== crontab ===' && crontab -l 2>/dev/null && echo '=== /etc/cron.d/ ===' && ls /etc/cron.d/ 2>/dev/null && echo '=== Restart MT5 again ===' && export DISPLAY=:99 WINEPREFIX=/root/.wine WINEDEBUG=-all STAGING_WRITECOPY=1 && cd '/root/.wine/drive_c/Program Files/MetaTrader 5' && wine terminal64.exe & sleep 15 && ps aux | grep terminal64 | grep -v grep",
-  "timestamp": "2026-02-27T01:38:00Z",
+  "command": "echo '=== mt5.service unit ===' && systemctl cat mt5.service 2>/dev/null && echo '=== xvfb.service unit ===' && systemctl cat xvfb.service 2>/dev/null && echo '=== mt5.service status ===' && systemctl status mt5.service --no-pager 2>/dev/null | head -15 && echo '=== Old watchdog ===' && cat /root/PropFirmBot/scripts/watchdog.sh 2>/dev/null | head -5 && echo '=== Clear crontab completely ===' && echo '' | crontab - && echo 'Crontab cleared' && crontab -l 2>/dev/null",
+  "timestamp": "2026-02-27T01:42:00Z",
   "from": "claude"
 }
