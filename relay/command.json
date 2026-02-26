@@ -1,7 +1,7 @@
 {
-  "id": "cmd-1772139200",
+  "id": "cmd-1772139300",
   "type": "shell",
-  "command": "cd /root/MT5-PropFirm-Bot && git pull origin claude/claude-md-mm3qa8i9848jcovk-X3DTU 2>&1 && echo \"Trigger compile $(date -u '+%Y-%m-%d %H:%M UTC')\" > trigger-deploy.txt && git add trigger-deploy.txt && git commit -m 'trigger: compile and deploy EA via fx31337 action' 2>&1 && git push origin claude/claude-md-mm3qa8i9848jcovk-X3DTU 2>&1 && echo 'Push done - workflow should trigger now'",
-  "timestamp": "2026-02-26T21:45:00Z",
+  "command": "echo '=== Check GitHub Actions status ===' && cd /root/MT5-PropFirm-Bot && git log --oneline -5 && echo '=== Check if workflow created any artifacts ===' && curl -s -H 'Accept: application/vnd.github+json' 'https://api.github.com/repos/motitap-dotcom/MT5-PropFirm-Bot/actions/runs?per_page=5&branch=claude/claude-md-mm3qa8i9848jcovk-X3DTU' 2>&1 | python3 -c \"import sys,json; data=json.load(sys.stdin); runs=data.get('workflow_runs',[]); [print(f\\\"Run #{r['run_number']}: {r['status']} / {r.get('conclusion','pending')} - {r['name']} ({r['created_at']})\\\") for r in runs[:5]]\" 2>&1 || echo 'API check failed' && echo '=== Check .ex5 on VPS ===' && ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5' 2>/dev/null || echo 'No .ex5 yet'",
+  "timestamp": "2026-02-26T22:00:00Z",
   "from": "claude"
 }
