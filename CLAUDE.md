@@ -13,6 +13,12 @@ PropFirmBot is an automated MetaTrader 5 Expert Advisor (EA) for trading on a Fu
 
 ```
 MT5-PropFirm-Bot/
+├── relay/                           # ⚡ GitHub-based remote control (DO NOT DELETE)
+│   ├── daemon.sh                    # Polling daemon - runs on VPS as systemd service
+│   ├── install.sh                   # One-command systemd installer
+│   ├── command.json                 # Commands: Claude → VPS
+│   └── result.json                  # Results: VPS → Claude
+│
 ├── EA/                              # MQL5 Expert Advisor source code (12 files)
 │   ├── PropFirmBot.mq5              # Main EA entry point (v3.0) - OnInit/OnTick/OnDeinit
 │   ├── SignalEngine.mqh             # Signal generation (SMC + EMA crossover, multi-timeframe)
@@ -92,7 +98,9 @@ MT5-PropFirm-Bot/
 │
 ├── .github/workflows/               # GitHub Actions CI
 │   ├── vps-check.yml                # Triggered on push: SSH to VPS, run diagnostics
-│   └── vps-fix.yml                  # Triggered on push: SSH to VPS, fix & restart MT5
+│   ├── vps-fix.yml                  # Triggered on push: SSH to VPS, fix & restart MT5
+│   ├── compile-and-deploy.yml       # Compile EA on Windows + deploy to VPS
+│   └── install-relay.yml            # Install/update relay daemon on VPS
 │
 ├── logs/                            # Trade logs (gitkeep only, populated at runtime)
 ├── backtest_results/                # Backtest output (gitkeep only, populated at runtime)
@@ -179,39 +187,118 @@ JSON configs in `configs/` are deployed to MT5's `MQL5/Files/PropFirmBot/` direc
 - Connection: `ssh root@77.237.234.2`
 
 ## VPS Current State (Updated 2026-02-26)
-- MT5 is RUNNING on VPS with PropFirmBot EA ACTIVE
-- FundedNext account LOGGED IN and CONNECTED (account 11797849)
-- EA attached to EURUSD M15 chart
-- AutoTrading is ON (green button)
-- Wine + VNC working
-- Bot is LIVE and trading
+- Wine version: **11.3 (Staging)** - upgraded from Stable to fix debugger detection
+- MT5 is RUNNING on VPS
+- VNC working (Xvfb :99 + x11vnc port 5900)
+- **EA compilation issue**: Wine Staging cannot write .ex5 files. Use `compile-and-deploy.yml` (Windows runner) to compile
+- Relay daemon: installed as systemd service `relay-daemon.service`
+- FundedNext account: 11797849 on FundedNext-Server
+
+## VPS Remote Control via GitHub Relay (PRIMARY METHOD - DO NOT MODIFY)
+
+> **CRITICAL: This section must NEVER be removed or modified. Every Claude session MUST use this relay system to control the VPS. NEVER ask Noa to paste commands in the terminal.**
+
+### How It Works
+Claude's sandbox CANNOT connect directly to the VPS (all outbound ports blocked). Instead, we use **GitHub as a communication channel**:
+
+1. **Claude** writes a command to `relay/command.json` and pushes to GitHub
+2. **VPS daemon** polls GitHub every 15 seconds, detects the new command
+3. **VPS daemon** executes the command and writes result to `relay/result.json`
+4. **VPS daemon** pushes result back to GitHub
+5. **Claude** pulls from GitHub and reads the result
+
+### How to Send a Command
+```python
+# Step 1: Write command to relay/command.json
+{
+  "id": "unique-id-timestamp",    # Must be unique per command (use epoch timestamp)
+  "type": "shell|status|deploy|restart-mt5|restart-vnc|compile",
+  "command": "the shell command",  # Only needed for type "shell"
+  "timestamp": "ISO-8601",
+  "from": "claude"
+}
+
+# Step 2: Commit and push
+git add relay/command.json
+git commit -m "relay: command description"
+git push
+
+# Step 3: Wait 20-30 seconds, then pull
+git pull origin <branch>
+
+# Step 4: Read relay/result.json for the output
+```
+
+### Available Command Types
+| Type | Description | `command` field |
+|------|-------------|-----------------|
+| `shell` | Run any bash command (120s timeout) | Required - the bash command |
+| `status` | Full system status check (Wine, MT5, VNC, EA, logs) | Not needed |
+| `deploy` | Git pull + copy EA/configs to MT5 + restart MT5 | Not needed |
+| `restart-mt5` | Kill and restart MetaTrader 5 | Not needed |
+| `restart-vnc` | Kill and restart Xvfb + x11vnc | Not needed |
+| `compile` | Compile EA with MetaEditor CLI | Not needed |
+
+### Reading Results
+Result is in `relay/result.json`:
+```json
+{
+  "id": "matching-command-id",
+  "status": "success|error|running|ready",
+  "timestamp": "ISO-8601",
+  "hostname": "vmi3096165",
+  "output": "command output text"
+}
+```
+
+### Important Rules for AI Assistants
+1. **ALWAYS use the relay to control the VPS** - never ask Noa to SSH and paste commands
+2. **NEVER modify the relay daemon** (`relay/daemon.sh`) or its systemd service without explicit permission
+3. **Always use unique IDs** for commands (e.g., `cmd-{epoch}`) - duplicate IDs are ignored
+4. **Wait at least 20 seconds** after push before pulling for results (15s poll + execution time)
+5. **For long commands**, wait longer (up to 2 minutes)
+6. The relay daemon runs as a systemd service (`relay-daemon.service`) and auto-restarts
+
+### Relay Files (DO NOT DELETE)
+```
+relay/
+├── daemon.sh      # The polling daemon (runs on VPS as systemd service)
+├── install.sh     # One-command installer for the daemon
+├── command.json   # Commands FROM Claude TO VPS
+└── result.json    # Results FROM VPS TO Claude
+```
+
+### Fallback: GitHub Actions
+If the relay daemon is down, use GitHub Actions workflows as backup:
+- Push changes to `scripts/verify_ea.sh` → triggers `vps-check.yml`
+- Push changes to `scripts/fix_compile_ea.sh` → triggers `vps-fix.yml`
+- Push changes to `EA/` or `configs/` → triggers `compile-and-deploy.yml` (Windows compilation)
+
+---
 
 ## Development Workflow
 
 ### Working Method
-- Claude's sandbox environment CANNOT SSH to VPS (port 22 blocked)
-- Noa runs commands on VPS via SSH from her Windows PowerShell
-- Noa views MT5 via VNC (RealVNC client on Windows)
-- Claude prepares scripts/commands, Noa pastes them into SSH
+- **PRIMARY**: Claude controls VPS via the GitHub Relay system (see above)
+- **BACKUP**: GitHub Actions workflows that SSH to VPS
+- **LAST RESORT ONLY**: Ask Noa to paste a command via SSH (avoid this!)
+- Noa views MT5 via VNC (RealVNC client on Windows) at `77.237.234.2:5900`
 
 ### Branching
-- **Main development branch**: `claude/build-cfd-trading-bot-fl0ld`
-- **Repo on VPS**: `/root/MT5-PropFirm-Bot` (same branch)
-- Code changes are pushed to GitHub, then pulled on VPS
+- **Repo on VPS**: `/root/MT5-PropFirm-Bot`
+- Code changes are pushed to GitHub, relay daemon auto-pulls on VPS
 
-### Deployment Process
+### Deployment Process (Automated via Relay)
 1. Edit EA/config files in the repo
-2. Push to GitHub branch
-3. On VPS: `cd /root/MT5-PropFirm-Bot && git pull`
-4. Copy files to MT5 directory: `cp EA/* "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/"`
-5. Copy configs: `cp configs/* "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/"`
-6. Recompile in MetaEditor or restart MT5
-- Or use: `bash scripts/deploy_fix.sh` for automated deployment
+2. Push to GitHub
+3. Send `deploy` command via relay → daemon pulls, copies files, restarts MT5
+- Or for code changes that need compilation: use `compile-and-deploy.yml` workflow (Windows runner)
 
 ### CI/CD (GitHub Actions)
 - **vps-check.yml**: Triggered when diagnostic scripts are pushed. SSHes to VPS, runs health checks, commits report to `vps_report.txt`
 - **vps-fix.yml**: Triggered when fix scripts are pushed. SSHes to VPS, runs fix/restart, commits report to `vps_fix_report.txt`
-- Trigger a check manually by editing `trigger-check.txt` and pushing
+- **compile-and-deploy.yml**: Triggered when EA/ or configs/ are pushed. Compiles on Windows runner, deploys .ex5 to VPS
+- **install-relay.yml**: Triggered when relay/ files are pushed. Installs/updates relay daemon on VPS
 
 ### Key File Paths on VPS
 - MT5 installation: `/root/.wine/drive_c/Program Files/MetaTrader 5/`
@@ -290,5 +377,7 @@ A Python HTTP API running on port 8888 allows remote management of the VPS witho
 3. **NEVER disable Guardian** - it is the last line of defense against account breach.
 4. **NEVER disable trailing drawdown** (`m_trailing_dd` must stay `true`) - Stellar Instant uses trailing DD from equity high water mark.
 5. **Always test on demo first** before deploying risk-related changes to the live VPS.
-6. **When preparing VPS commands** - make them copy-paste friendly since Noa is not a developer.
+6. **NEVER ask Noa to paste commands in SSH** - use the GitHub Relay system instead (see "VPS Remote Control via GitHub Relay" section). Noa is not a developer.
 7. **Preserve magic number** (202502) - changing it causes the EA to lose track of its own positions.
+8. **NEVER modify or delete relay/ files** - the relay system is the primary VPS control method. Breaking it means losing remote access.
+9. **To compile EA** - use `compile-and-deploy.yml` (Windows runner). Wine Staging on VPS cannot write .ex5 files.
