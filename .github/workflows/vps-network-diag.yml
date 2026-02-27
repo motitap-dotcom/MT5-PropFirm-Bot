@@ -24,9 +24,9 @@ jobs:
       - name: Run network diagnostics on VPS
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          chmod +x scripts/reinstall_mt5.sh
-          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/reinstall_mt5.sh root@77.237.234.2:/tmp/reinstall_mt5.sh
-          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 -o ServerAliveInterval=30 -o ServerAliveCountMax=30 root@77.237.234.2 "bash /tmp/reinstall_mt5.sh" > network_report.txt 2>&1 || true
+          chmod +x scripts/fix_servers_dat.sh
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/fix_servers_dat.sh root@77.237.234.2:/tmp/fix_servers_dat.sh
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 -o ServerAliveInterval=30 -o ServerAliveCountMax=30 root@77.237.234.2 "bash /tmp/fix_servers_dat.sh" > network_report.txt 2>&1 || true
           echo "EXIT_CODE=$?" >> network_report.txt
           cat network_report.txt
 
