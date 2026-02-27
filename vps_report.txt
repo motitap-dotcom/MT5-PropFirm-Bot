@@ -1,10 +1,11 @@
 ╔══════════════════════════════════════════════════╗
 ║     PropFirmBot - VPS Status Check               ║
-║     2026-02-26 22:49:12 UTC                       ║
+║     2026-02-27 07:21:17 UTC                       ║
 ╚══════════════════════════════════════════════════╝
 
 ━━━ 1. MT5 Process ━━━
-❌ MT5 is NOT RUNNING!
+✅ MT5 is RUNNING
+   PID: 408181 | CPU: 4.6% | MEM: 2.5% | Started: 07:08 0:36
 
 ━━━ 2. VNC / Display ━━━
 ✅ VNC (x11vnc) is RUNNING
@@ -12,43 +13,26 @@
 
 ━━━ 3. EA Files ━━━
    Source files (.mq5/.mqh): 12
-   ✅ PropFirmBot.ex5: 163674 bytes (compiled: 2026-02-26 22:38:49)
+   ✅ PropFirmBot.ex5: 163174 bytes (compiled: 2026-02-26 22:56:11)
 
 ━━━ 4. Outbound Connections (MT5 broker) ━━━
 ✅ Active connections:
-   Recv-Q Send-Q Local Address:Port   Peer Address:Port Process
+   Recv-Q Send-Q Local Address:Port  Peer Address:Port Process
 
 ━━━ 5. Terminal Log (latest) ━━━
-   File:  | Size: 24824 bytes
+basename: extra operand ‘5/logs/20260227.log’
+Try 'basename --help' for more information.
+   File:  | Size: 1144 bytes
    --- Last 25 lines ---
-   OH	0	22:27:17.650	Terminal	stopped with 0
-   FS	0	22:27:17.773	Terminal	shutdown with 0
-   JF	2	22:27:22.801	Terminal	terminal process already started
-   OR	0	22:27:22.801	Terminal	exit with code 0
-   EP	0	22:27:22.801	Terminal	stopped with 0
-   OK	0	22:27:22.914	Terminal	shutdown with 0
-   MN	0	22:34:21.389	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-   OI	0	22:34:21.390	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-   NO	0	22:34:21.390	Terminal	C:\Program Files\MetaTrader 5
-   PP	0	22:34:26.211	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-   EN	0	22:38:28.924	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-   PI	0	22:38:28.925	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-   MO	0	22:38:28.925	Terminal	C:\Program Files\MetaTrader 5
-   GP	0	22:39:54.607	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-   HS	0	22:39:54.608	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-   IQ	0	22:39:54.608	Terminal	C:\Program Files\MetaTrader 5
-   DJ	0	22:39:57.902	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-   EP	2	22:44:37.911	Terminal	terminal process already started
-   DE	0	22:44:37.911	Terminal	exit with code 0
-   RR	0	22:44:37.911	Terminal	stopped with 0
-   HJ	0	22:44:38.016	Terminal	shutdown with 0
-   GP	0	22:44:36.807	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-   HS	0	22:44:36.808	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-   IQ	0	22:44:36.808	Terminal	C:\Program Files\MetaTrader 5
-   GJ	0	22:44:39.286	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+   ��QO	0	07:08:11.964	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+   EH	0	07:08:11.966	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+   DH	0	07:08:11.966	Terminal	C:\Program Files\MetaTrader 5
+   KQ	0	07:08:15.940	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+   IL	2	07:13:25.998	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
+   DD	0	07:13:26.004	Experts	expert PropFirmBot (EURUSD,M15) removed
 
-━━━ 6. EA Log (today: 20260226) ━━━
-   ⚠️ No EA log for today (20260226)
+━━━ 6. EA Log (today: 20260227) ━━━
+   ⚠️ No EA log for today (20260227)
    Latest EA logs:
    -rw-r--r-- 1 root root  36174 Feb 25 16:30 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260225.log
    -rw-r--r-- 1 root root 297152 Feb 24 22:15 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260224.log
@@ -56,23 +40,15 @@
    -rw-r--r-- 1 root root  92702 Feb 22 22:39 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260222.log
 
 ━━━ 7. Config Files ━━━
-   ✅ 
-   ✅ 
-   ✅ 
-   ✅ 
-   ✅ 
-basename: extra operand ‘5/logs/20260226.log’
-Try 'basename --help' for more information.
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/account_state.json’
 Try 'basename --help' for more information.
+   ✅ 
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/challenge_rules.json’
 Try 'basename --help' for more information.
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/funded_rules.json’
-Try 'basename --help' for more information.
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/notifications.json’
-Try 'basename --help' for more information.
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/risk_params.json’
-Try 'basename --help' for more information.
+   ✅ 
+   ✅ 
+   ✅ 
+   ✅ 
    ✅ 
    ✅ 
 
@@ -80,6 +56,12 @@ Try 'basename --help' for more information.
    ⚠️ No trade journal (bot may not have traded yet)
 
 ━━━ 9. Telegram Connectivity ━━━
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/funded_rules.json’
+Try 'basename --help' for more information.
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/notifications.json’
+Try 'basename --help' for more information.
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/risk_params.json’
+Try 'basename --help' for more information.
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/status.json’
 Try 'basename --help' for more information.
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/symbols.json’
@@ -87,9 +69,9 @@ Try 'basename --help' for more information.
    ✅ Telegram Bot is ONLINE
 
 ━━━ 10. System Health ━━━
-   Uptime: up 4 days, 10 hours, 38 minutes
-   CPU Load: 0.11 0.36 0.59
-   Memory: 936MB / 7941MB (11%)
+   Uptime: up 4 days, 19 hours, 10 minutes
+   CPU Load: 0.03 0.08 0.08
+   Memory: 1133MB / 7941MB (14%)
    Disk: 10% used (130G free)
    Internet: ✅ OK
 
