@@ -1,12 +1,12 @@
 ╔══════════════════════════════════════════════════╗
 ║     PropFirmBot - VPS Status Check               ║
-║     2026-02-27 07:37:24 UTC                       ║
+║     2026-02-27 08:43:54 UTC                       ║
 ╚══════════════════════════════════════════════════╝
 
 ━━━ 1. MT5 Process ━━━
 ✅ MT5 is RUNNING
-   PID: 411397 | CPU: 0.0% | MEM: 0.1% | Started: 07:29 0:00
-   PID: 411449 | CPU: 8.2% | MEM: 2.5% | Started: 07:29 0:39
+   PID: 426793 | CPU: 0.0% | MEM: 0.1% | Started: 08:33 0:00
+   PID: 426843 | CPU: 28.3% | MEM: 3.4% | Started: 08:33 2:51
 
 ━━━ 2. VNC / Display ━━━
 ✅ VNC (x11vnc) is RUNNING
@@ -14,45 +14,94 @@
 
 ━━━ 3. EA Files ━━━
    Source files (.mq5/.mqh): 12
-   ✅ PropFirmBot.ex5: 163174 bytes (compiled: 2026-02-26 22:56:11)
+   ✅ PropFirmBot.ex5: 163174 bytes (compiled: 2026-02-27 08:11:55)
 
 ━━━ 4. Outbound Connections (MT5 broker) ━━━
 ✅ Active connections:
-   Recv-Q Send-Q Local Address:Port  Peer Address:Port Process
+   Recv-Q Send-Q            Local Address:Port            Peer Address:Port Process
+   0      0                  77.237.234.2:45082        194.164.179.244:443         
+   0      0                  77.237.234.2:35341          18.168.91.222:443         
+   0      0      [2a02:c207:2309:6165::1]:55132 [2001:67c:4e8:f004::9]:443         
+   0      0      [2a02:c207:2309:6165::1]:55126 [2001:67c:4e8:f004::9]:443         
 
 ━━━ 5. Terminal Log (latest) ━━━
 basename: extra operand ‘5/logs/20260227.log’
 Try 'basename --help' for more information.
-   File:  | Size: 2286 bytes
+   File:  | Size: 12536 bytes
    --- Last 25 lines ---
-   ��QO	0	07:08:11.964	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-   EH	0	07:08:11.966	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-   DH	0	07:08:11.966	Terminal	C:\Program Files\MetaTrader 5
-   KQ	0	07:08:15.940	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-   IL	2	07:13:25.998	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
-   DD	0	07:13:26.004	Experts	expert PropFirmBot (EURUSD,M15) removed
-   KP	0	07:29:33.554	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-   GP	0	07:29:33.556	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-   NQ	0	07:29:33.556	Terminal	C:\Program Files\MetaTrader 5
-   RJ	0	07:29:38.778	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-   LS	2	07:34:48.829	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
-   PM	0	07:34:48.834	Experts	expert PropFirmBot (EURUSD,M15) removed
+   OK	0	08:33:51.411	Startup	successfully initialized from start config "C:\Program Files\MetaTrader 5\config\startup.ini"
+   JE	0	08:33:51.713	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+   RN	0	08:33:51.715	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+   OF	0	08:33:51.715	Terminal	C:\Program Files\MetaTrader 5
+   DL	0	08:33:51.715	Terminal	launched with C:\Program Files\MetaTrader 5\config\startup.ini
+   LD	0	08:34:01.939	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+   LQ	0	08:34:02.789	Network	'11797849': authorized on FundedNext-Server
+   NK	0	08:34:02.789	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.26 21:39:31
+   LK	0	08:34:04.267	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+   JH	0	08:34:04.267	Network	'11797849': trading has been enabled - hedging mode
+   QR	0	08:34:05.587	Network	'11797849': scanning network for access points
+   IN	0	08:34:10.246	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+   RI	0	08:34:10.553	Network	'11797849': scanning network finished
+   KQ	0	08:34:10.553	Network	'11797849': auto connecting to a better access point with 94 % quality (previous: 74 %)
+   QO	1	08:34:10.558	Network	'11797849': connection to FundedNext-Server lost
+   NF	0	08:34:11.554	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.53 ms, build 5640)
+   DG	0	08:34:11.554	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.27 10:34:02
+   KG	0	08:34:12.450	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+   ID	0	08:34:12.450	Network	'11797849': trading has been enabled - hedging mode
+   RR	0	08:34:27.867	Tester	MQL5 Cloud Server "MQL5 Cloud Asia 2: 10 gbit" found
+   FG	0	08:34:27.867	Tester	MQL5 Cloud Server "MQL5 Cloud USA 1: 10 gbit" found
+   FQ	0	08:34:27.867	Tester	MQL5 Cloud Server "MQL5 Cloud Europe 2: 10 gbit" found
+   QP	0	08:34:27.867	Tester	MQL5 Cloud Server "MQL5 Cloud USA 2: 10 gbit" found
+   NF	0	08:34:27.868	Tester	MQL5 Cloud Server "MQL5 Cloud Asia 1: 1 gbit" found
+   JS	0	08:34:27.868	Tester	MQL5 Cloud Server "MQL5 Cloud Europe 3: 10 gbit" found
 
 ━━━ 6. EA Log (today: 20260227) ━━━
-   ⚠️ No EA log for today (20260227)
-   Latest EA logs:
-   -rw-r--r-- 1 root root  36174 Feb 25 16:30 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260225.log
-   -rw-r--r-- 1 root root 297152 Feb 24 22:15 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260224.log
-   -rw-r--r-- 1 root root 133168 Feb 23 23:47 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260223.log
-   -rw-r--r-- 1 root root  92702 Feb 22 22:39 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260222.log
+   ✅ EA log exists! Size: 46736 bytes
+   --- Last 30 lines ---
+   DQ	0	08:40:29.867	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   LM	0	08:40:29.867	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   GJ	0	08:41:08.152	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   JL	0	08:41:08.152	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
+   GK	0	08:41:12.818	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   PS	0	08:41:12.819	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   CD	0	08:41:18.124	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   FF	0	08:41:18.124	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
+   MR	0	08:41:32.724	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   CJ	0	08:41:32.726	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   JN	0	08:41:39.168	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   QN	0	08:41:39.169	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   LK	0	08:41:59.078	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   IS	0	08:41:59.080	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   EG	0	08:42:07.242	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   CI	0	08:42:07.243	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
+   NE	0	08:42:33.152	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   GI	0	08:42:33.155	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   CQ	0	08:42:36.891	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   KM	0	08:42:36.891	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   QJ	0	08:42:53.243	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   FR	0	08:42:53.246	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   LF	0	08:42:56.852	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   CF	0	08:42:56.853	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   MS	0	08:43:00.574	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   CK	0	08:43:00.576	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   FO	0	08:43:12.499	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   MO	0	08:43:12.500	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   JH	0	08:43:18.222	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   QD	0	08:43:18.223	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
 
 ━━━ 7. Config Files ━━━
+   ✅ 
+   ✅ 
+   ✅ 
+   ✅ 
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/account_state.json’
 Try 'basename --help' for more information.
-   ✅ 
-   ✅ 
-   ✅ 
-   ✅ 
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/challenge_rules.json’
+Try 'basename --help' for more information.
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/funded_rules.json’
+Try 'basename --help' for more information.
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/notifications.json’
+Try 'basename --help' for more information.
    ✅ 
    ✅ 
    ✅ 
@@ -61,12 +110,6 @@ Try 'basename --help' for more information.
    ⚠️ No trade journal (bot may not have traded yet)
 
 ━━━ 9. Telegram Connectivity ━━━
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/challenge_rules.json’
-Try 'basename --help' for more information.
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/funded_rules.json’
-Try 'basename --help' for more information.
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/notifications.json’
-Try 'basename --help' for more information.
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/risk_params.json’
 Try 'basename --help' for more information.
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/status.json’
@@ -76,10 +119,10 @@ Try 'basename --help' for more information.
    ✅ Telegram Bot is ONLINE
 
 ━━━ 10. System Health ━━━
-   Uptime: up 4 days, 19 hours, 26 minutes
-   CPU Load: 0.24 0.25 0.18
-   Memory: 1161MB / 7941MB (14%)
-   Disk: 10% used (130G free)
+   Uptime: up 4 days, 20 hours, 33 minutes
+   CPU Load: 1.32 0.92 0.69
+   Memory: 1253MB / 7941MB (15%)
+   Disk: 11% used (130G free)
    Internet: ✅ OK
 
 ━━━ 11. Wine Version ━━━
