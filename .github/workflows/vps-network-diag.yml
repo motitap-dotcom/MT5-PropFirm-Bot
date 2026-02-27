@@ -8,6 +8,7 @@ on:
       - 'scripts/network_diag.sh'
       - 'scripts/find_server.sh'
       - 'scripts/fix_server.sh'
+      - 'scripts/fix_wine_network.sh'
       - 'trigger-diag.txt'
 
 permissions:
@@ -23,9 +24,9 @@ jobs:
       - name: Run network diagnostics on VPS
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          chmod +x scripts/fix_server.sh
-          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/fix_server.sh root@77.237.234.2:/tmp/fix_server.sh
-          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 "bash /tmp/fix_server.sh" > network_report.txt 2>&1 || true
+          chmod +x scripts/fix_wine_network.sh
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/fix_wine_network.sh root@77.237.234.2:/tmp/fix_wine_network.sh
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 "bash /tmp/fix_wine_network.sh" > network_report.txt 2>&1 || true
           echo "EXIT_CODE=$?" >> network_report.txt
           cat network_report.txt
 
