@@ -39,16 +39,23 @@ jobs:
           pgrep -x x11vnc > /dev/null 2>&1 || (x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -bg 2>/dev/null)
 
           pkill -f terminal64.exe 2>/dev/null; sleep 2
-          wineserver -k 2>/dev/null; sleep 2
+          wineserver -k 2>/dev/null; sleep 3
+          pkill -9 -f "wine" 2>/dev/null; sleep 2
+          rm -rf /tmp/.wine-* /tmp/wine-* 2>/dev/null
 
-          echo "Starting MT5..."
-          nohup wine "$MT5/terminal64.exe" </dev/null >/dev/null 2>&1 &
+          echo "Starting MT5 with broker login..."
+          cd "$MT5"
+          nohup wine terminal64.exe /login:11797849 /password:"gazDE62##" /server:FundedNext-Server </dev/null >/dev/null 2>&1 &
           disown -a
-          echo "Waiting 20s..."
-          sleep 20
+          echo "Waiting 45s for connection + symbol sync..."
+          sleep 45
 
           PID=$(pgrep -f terminal64.exe 2>/dev/null || true)
           [ -n "$PID" ] && echo "MT5 RUNNING! PID: $PID" || echo "MT5 not started yet"
+
+          # Check terminal log for connection
+          TLOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
+          [ -n "$TLOG" ] && echo "Terminal log:" && cat "$TLOG" | tr -d '\0' | tail -15
 
           echo ""
           echo "=== Installing Watchdog ==="
@@ -76,7 +83,7 @@ jobs:
 
       - name: Verify
         run: |
-          sleep 20
+          sleep 30
           echo "=== VERIFICATION ===" | tee -a restart_report.txt
           sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@77.237.234.2 "bash -s" <<'VERIFY' 2>&1 | tee -a restart_report.txt
           MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"

@@ -34,7 +34,9 @@ else
     # MT5 is DOWN - restart
     echo "$TS [ALERT] MT5 down! Restarting..." >> "$LOG"
     export DISPLAY=:99 WINEPREFIX=/root/.wine
-    nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" </dev/null >/dev/null 2>&1 &
+    MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
+    cd "$MT5_DIR"
+    nohup wine terminal64.exe /login:11797849 /password:"gazDE62##" /server:FundedNext-Server </dev/null >/dev/null 2>&1 &
     disown -a
     sleep 20
     NEW=$(pgrep -f terminal64.exe 2>/dev/null || true)
