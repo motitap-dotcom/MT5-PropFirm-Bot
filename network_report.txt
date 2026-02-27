@@ -1,41 +1,70 @@
-=== FIX SERVERS.DAT Fri Feb 27 08:17:33 UTC 2026 ===
+=== FIX LOGIN Fri Feb 27 08:33:42 UTC 2026 ===
 --- 1. Kill MT5 ---
 
---- 2. Backup and remove servers.dat files ---
-config/servers.dat: 46784 bytes
-Config/servers.dat: 63440 bytes
+--- 2. Ensure correct servers.dat ---
+servers.dat: 63448 bytes
 
-Approach A: Copy Config/servers.dat -> config/servers.dat (bigger version)
-config/servers.dat now: 63440 bytes
+--- 3. Try approach: config file with password ---
+Created startup.ini with password
 
---- 3. Also copy accounts.dat if different ---
-accounts.dat: 6091 bytes
+--- 4. Start MT5 with config file ---
+MT5 started with config file, waiting 90s...
 
---- 4. Start MT5 with approach A ---
-MT5 started, waiting 120s for connection...
+--- 5. Check connection ---
+Network messages:
+QO	1	08:34:10.558	Network	'11797849': connection to FundedNext-Server lost
+NF	0	08:34:11.554	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.53 ms, build 5640)
+DG	0	08:34:11.554	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.27 10:34:02
+KG	0	08:34:12.450	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+ID	0	08:34:12.450	Network	'11797849': trading has been enabled - hedging mode
+*** CONNECTED! ***
 
---- 5. Check approach A ---
-Connections: Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
-0      0       77.237.234.2:33264 149.154.166.110:443         
-0      0       77.237.234.2:53438 194.164.179.244:443         
-Auth messages: KD	2	08:18:02.733	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-Terminal log:
-PR	0	08:10:10.852	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-PI	0	08:12:02.406	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-HK	0	08:12:02.411	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-IJ	0	08:12:02.411	Terminal	C:\Program Files\MetaTrader 5
-IR	0	08:12:06.562	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-OI	0	08:17:48.181	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-IK	0	08:17:48.185	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-HJ	0	08:17:48.185	Terminal	C:\Program Files\MetaTrader 5
-NR	0	08:17:57.863	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-KD	2	08:18:02.733	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-
-*** APPROACH A WORKED! ***
-
---- 9. Final status ---
+--- 8. Final status ---
 MT5: RUNNING
-servers.dat: 63448
-config/servers/ files: 0
+
+Terminal log (last 15):
+QR	0	08:34:05.587	Network	'11797849': scanning network for access points
+IN	0	08:34:10.246	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+RI	0	08:34:10.553	Network	'11797849': scanning network finished
+KQ	0	08:34:10.553	Network	'11797849': auto connecting to a better access point with 94 % quality (previous: 74 %)
+QO	1	08:34:10.558	Network	'11797849': connection to FundedNext-Server lost
+NF	0	08:34:11.554	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.53 ms, build 5640)
+DG	0	08:34:11.554	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.27 10:34:02
+KG	0	08:34:12.450	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+ID	0	08:34:12.450	Network	'11797849': trading has been enabled - hedging mode
+RR	0	08:34:27.867	Tester	MQL5 Cloud Server "MQL5 Cloud Asia 2: 10 gbit" found
+FG	0	08:34:27.867	Tester	MQL5 Cloud Server "MQL5 Cloud USA 1: 10 gbit" found
+FQ	0	08:34:27.867	Tester	MQL5 Cloud Server "MQL5 Cloud Europe 2: 10 gbit" found
+QP	0	08:34:27.867	Tester	MQL5 Cloud Server "MQL5 Cloud USA 2: 10 gbit" found
+NF	0	08:34:27.868	Tester	MQL5 Cloud Server "MQL5 Cloud Asia 1: 1 gbit" found
+JS	0	08:34:27.868	Tester	MQL5 Cloud Server "MQL5 Cloud Europe 3: 10 gbit" found
+
+Connections:
+Recv-Q Send-Q            Local Address:Port            Peer Address:Port Process
+0      0                  77.237.234.2:45082        194.164.179.244:443         
+0      0                  77.237.234.2:35341          18.168.91.222:443         
+0      0      [2a02:c207:2309:6165::1]:55132 [2001:67c:4e8:f004::9]:443         
+0      0      [2a02:c207:2309:6165::1]:55126 [2001:67c:4e8:f004::9]:443         
+
+EA log:
+DG	0	08:34:10.843	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+LM	0	08:34:10.843	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+HF	0	08:34:10.843	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+LF	0	08:34:16.145	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+IF	0	08:34:16.152	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 10:30 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
+OF	0	08:34:20.262	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+GF	0	08:34:20.262	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+HR	0	08:34:23.172	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+ID	0	08:34:23.172	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
+PP	0	08:34:27.127	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+HL	0	08:34:27.127	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+KL	0	08:34:33.149	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+FN	0	08:34:33.150	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
+CJ	0	08:34:44.541	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+MR	0	08:34:44.543	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+
+--- 9. Update watchdog ---
+Watchdog: ACTIVE
+
 === DONE ===
 EXIT_CODE=0
