@@ -1,0 +1,119 @@
+name: Streaming Status Check
+
+on:
+  push:
+    paths:
+      - '.github/workflows/streaming-status.yml'
+      - 'stream-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  stream-status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/streaming-push-connection-53iBP
+
+      - name: Get VPS live status
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          cat > /tmp/status_check.sh << 'SCRIPT'
+          #!/bin/bash
+          echo "=========================================="
+          echo "  VPS STREAMING STATUS REPORT"
+          echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "=========================================="
+
+          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+
+          echo ""
+          echo "--- MT5 Process ---"
+          MT5_PID=$(pgrep -f terminal64)
+          if [ -n "$MT5_PID" ]; then
+            echo "MT5 RUNNING (PID: $MT5_PID)"
+            ps -p $MT5_PID -o %cpu,%mem,etime --no-headers 2>/dev/null
+          else
+            echo "MT5 NOT RUNNING!"
+          fi
+
+          echo ""
+          echo "--- Status.json (EA Real-Time Data) ---"
+          STATUS_FILE="$MT5/MQL5/Files/PropFirmBot/status.json"
+          if [ -f "$STATUS_FILE" ]; then
+            MODIFIED=$(stat -c%Y "$STATUS_FILE" 2>/dev/null)
+            NOW=$(date +%s)
+            AGE=$(( NOW - MODIFIED ))
+            echo "File age: ${AGE} seconds"
+            cat "$STATUS_FILE" 2>/dev/null | tr -d '\0'
+          else
+            echo "status.json NOT FOUND"
+          fi
+
+          echo ""
+          echo "--- Active Connections ---"
+          ss -tn state established 2>/dev/null | grep -v ":22 \|:5900 \|:53 " | head -10
+
+          echo ""
+          echo "--- Latest Terminal Log ---"
+          LATEST_TERM=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
+          if [ -n "$LATEST_TERM" ]; then
+            echo "Log: $(basename $LATEST_TERM) ($(stat -c%s "$LATEST_TERM") bytes)"
+            cat "$LATEST_TERM" | tr -d '\0' | tail -20
+          else
+            echo "No terminal logs found"
+          fi
+
+          echo ""
+          echo "--- Latest EA Log ---"
+          LATEST_EA=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+          if [ -n "$LATEST_EA" ]; then
+            echo "Log: $(basename $LATEST_EA) ($(stat -c%s "$LATEST_EA") bytes)"
+            cat "$LATEST_EA" | tr -d '\0' | tail -30
+          else
+            echo "No EA logs found"
+          fi
+
+          echo ""
+          echo "--- System Health ---"
+          echo "CPU: $(top -bn1 | grep 'Cpu(s)' | awk '{print $2}')%"
+          echo "RAM: $(free -h | awk '/Mem:/{print $3"/"$2}')"
+          echo "Disk: $(df -h / | awk 'NR==2{print $3"/"$2" ("$5")"}')"
+          echo "Uptime: $(uptime -p)"
+
+          echo ""
+          echo "--- Watchdog Status ---"
+          if [ -f /root/PropFirmBot/state/mt5_status ]; then
+            echo "MT5 state: $(cat /root/PropFirmBot/state/mt5_status)"
+          fi
+          if [ -f /root/PropFirmBot/state/restart_count ]; then
+            echo "Restart count today: $(cat /root/PropFirmBot/state/restart_count)"
+          fi
+          tail -10 /root/PropFirmBot/logs/watchdog.log 2>/dev/null || echo "No watchdog log"
+
+          echo ""
+          echo "--- VNC Status ---"
+          pgrep -f x11vnc > /dev/null && echo "VNC: RUNNING" || echo "VNC: NOT RUNNING"
+          pgrep -f Xvfb > /dev/null && echo "Xvfb: RUNNING" || echo "Xvfb: NOT RUNNING"
+
+          echo ""
+          echo "=========================================="
+          echo "  END OF REPORT"
+          echo "=========================================="
+          SCRIPT
+
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 "bash -s" < /tmp/status_check.sh > stream_report.txt 2>&1 || true
+          echo "SSH_EXIT=$?" >> stream_report.txt
+          cat stream_report.txt
+
+      - name: Commit report back
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f stream_report.txt
+          git commit -m "Stream status $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push origin claude/streaming-push-connection-53iBP || true
