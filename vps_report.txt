@@ -1,25 +1,25 @@
 ==========================================
-  BOT STATUS CHECK - 2026-02-27 13:43:00 UTC
+  BOT STATUS CHECK - 2026-02-27 13:44:36 UTC
 ==========================================
 
 --- MT5 Process ---
 root      426793  0.0  0.1 2687116 14284 ?       S<   08:33   0:00 start.exe /exec terminal64.exe
-root      426843 24.0  3.5 2561276 285664 ?      R<l  08:33  74:14 C:\Program Files\MetaTrader 5\terminal64.exe /config:C:\Program Files\MetaTrader 5\config\startup.ini
+root      426843 24.1  3.5 2561276 285684 ?      R<l  08:33  75:08 C:\Program Files\MetaTrader 5\terminal64.exe /config:C:\Program Files\MetaTrader 5\config\startup.ini
 STATUS: MT5 is RUNNING
 
 --- Wine Version ---
 wine-11.3 (Staging)
 
 --- VNC Status ---
-root      346808  0.2  0.3  43572 26548 ?        Ss   Feb26   1:57 /usr/bin/x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -xkb
+root      346808  0.2  0.3  43572 26548 ?        Ss   Feb26   1:58 /usr/bin/x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -xkb
 VNC: RUNNING
-root      346800  0.8  1.0 220436 82460 ?        Ss   Feb26   7:10 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
+root      346800  0.8  1.0 220436 82460 ?        Ss   Feb26   7:16 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
 Xvfb: RUNNING
 
 --- Network Connections (MT5) ---
-Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
-0      0       77.237.234.2:45082 194.164.179.244:443         
-0      0       77.237.234.2:35341   18.168.91.222:443         
+Recv-Q Send-Q Local Address:Port     Peer Address:PortProcess
+0      0       77.237.234.2:45082 194.164.179.244:443        
+0      0       77.237.234.2:35341   18.168.91.222:443        
 
 --- EA Files ---
 total 400
@@ -48,7 +48,7 @@ drwxr-xr-x 3 root root 4096 Feb 22 21:00 ..
 -rw-r--r-- 1 root root 1336 Feb 26 22:56 funded_rules.json
 -rw-r--r-- 1 root root 1159 Feb 26 22:56 notifications.json
 -rw-r--r-- 1 root root 1805 Feb 26 22:56 risk_params.json
--rw-r--r-- 1 root root  904 Feb 27 13:42 status.json
+-rw-r--r-- 1 root root  904 Feb 27 13:44 status.json
 -rw-r--r-- 1 root root 1244 Feb 26 22:56 symbols.json
 
 --- Terminal Log (latest entries) ---
@@ -95,25 +95,7 @@ JS	0	08:34:27.868	Tester	MQL5 Cloud Server "MQL5 Cloud Europe 3: 10 gbit" found
 CF	2	11:49:04.113	WebView	couldn't find WebView2 Runtime
 
 --- EA Log (latest entries) ---
-File: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260227.log (939486 bytes)
-GJ	0	13:39:00.085	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-CL	0	13:39:00.086	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-HH	0	13:39:12.586	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-CS	0	13:39:12.587	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-QD	0	13:39:18.301	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-LH	0	13:39:18.302	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-QQ	0	13:39:22.056	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-GL	0	13:39:22.058	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-EM	0	13:39:28.580	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-JQ	0	13:39:28.581	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-LF	0	13:39:32.151	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-QE	0	13:39:32.152	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-IR	0	13:39:53.126	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-EJ	0	13:39:53.126	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-OO	0	13:40:08.124	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-LN	0	13:40:08.125	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-KK	0	13:40:32.057	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-ES	0	13:40:32.059	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+File: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260227.log (943446 bytes)
 ED	0	13:40:39.083	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
 DG	0	13:40:39.084	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
 RP	0	13:40:43.289	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
@@ -136,16 +118,34 @@ IS	0	13:41:51.257	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write Pr
 OJ	0	13:41:51.259	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
 DO	0	13:42:13.831	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
 HO	0	13:42:13.831	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+IH	0	13:42:27.147	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+ES	0	13:42:27.147	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+PD	0	13:42:50.144	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+NH	0	13:42:50.146	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+QQ	0	13:42:54.169	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+EL	0	13:42:54.170	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+MM	0	13:43:12.122	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+RQ	0	13:43:12.123	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+JF	0	13:43:32.789	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+NE	0	13:43:32.790	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+GR	0	13:43:47.078	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+DJ	0	13:43:47.079	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+IO	0	13:43:53.154	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+DN	0	13:43:53.157	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+OK	0	13:44:04.106	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+LS	0	13:44:04.107	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+RD	0	13:44:13.082	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+PG	0	13:44:13.084	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
 
 --- Disk Space ---
 /dev/sda1       145G   15G  130G  11% /
 
 --- Memory ---
                total        used        free      shared  buff/cache   available
-Mem:           7.8Gi       1.2Gi       6.0Gi        31Mi       880Mi       6.5Gi
+Mem:           7.8Gi       1.2Gi       6.0Gi        31Mi       881Mi       6.5Gi
 
 --- Uptime ---
- 13:43:01 up 5 days,  1:32,  8 users,  load average: 1.02, 0.79, 0.66
+ 13:44:36 up 5 days,  1:34,  8 users,  load average: 1.05, 0.83, 0.69
 
 ==========================================
   CHECK COMPLETE
