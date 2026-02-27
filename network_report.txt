@@ -1,0 +1,129 @@
+=== NETWORK DIAGNOSTICS Fri Feb 27 07:39:20 UTC 2026 ===
+
+--- 1. DNS Resolution ---
+  mt5.fundednext.com -> FAILED
+  mt5-real.fundednext.com -> FAILED
+  server.fundednext.com -> FAILED
+  fundednext.com -> 104.18.23.206
+
+--- 2. MT5 Server Config ---
+  Server config dir: 
+
+--- 3. MT5 Common Config ---
+  common.ini exists
+[Common]
+Login=11797849
+ProxyEnable=0
+CertInstall=0
+NewsEnable=0
+Environment=F008C7293503CED0045B07842FC57A638AA2FD5F10DEE8EA7AD19815A339B9A21E36157778467577E33A229F2FC5240D
+Server=FundedNext-Server
+ProxyType=0
+ProxyAddress=
+EnableOpenCL=7
+ProxyAuth=
+Services=4294967295
+NewsLanguages=
+Source=download.mql5.com
+[StartUp]
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+Symbol=EURUSD
+Period=M15
+[Experts]
+AllowLiveTrading=1
+AllowDllImport=0
+Enabled=1
+Account=1
+Profile=0
+Chart=0
+Api=0
+DisableOpenCL=
+WebRequest=1
+WebRequestUrl=7FD432023C960D48DEB1226C4CA79933EC41824AD52F6AA5784B4E98197419B32D82FBC346A0F934FDD00C563590039D55AAE1A9
+[Charts]
+ProfileLast=Default
+MaxBars=100000
+PrintColor=0
+SaveDeleted=0
+TradeHistory=1
+TradeLevels=1
+TradeLevelsDrag=0
+ObsoleteLasttime=1771835524
+PreloadCharts=1
+
+--- 4. MT5 Last Known Server (origin.ini) ---
+
+--- 5. All current TCP connections ---
+Recv-Q Send-Q Local Address:Port   Peer Address:Port Process
+0      0       77.237.234.2:22      182.61.31.3:35810       
+0      1208    77.237.234.2:22   135.232.201.90:39937       
+0      0       77.237.234.2:22   170.64.151.219:51398       
+
+--- 6. Port connectivity test ---
+  185.68.16.106:443 OPEN
+  185.68.16.107:443 OPEN
+
+--- 7. Traceroute to common broker ports ---
+  Cannot resolve FundedNext DNS
+
+--- 8. Wine network test ---
+Pinging 8.8.8.8 [8.8.8.8] with 32 bytes of data:
+Reply from 8.8.8.8: bytes=32 time=3ms TTL=116
+
+Ping statistics for 8.8.8.8
+	Packets: Sent = 1, Received = 1, Lost = 0 (0% loss)
+
+--- 9. MT5 Terminal Log (full for today) ---
+  Full terminal log:
+ÿþQO	0	07:08:11.964	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+EH	0	07:08:11.966	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+DH	0	07:08:11.966	Terminal	C:\Program Files\MetaTrader 5
+KQ	0	07:08:15.940	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+IL	2	07:13:25.998	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
+DD	0	07:13:26.004	Experts	expert PropFirmBot (EURUSD,M15) removed
+KP	0	07:29:33.554	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+GP	0	07:29:33.556	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+NQ	0	07:29:33.556	Terminal	C:\Program Files\MetaTrader 5
+RJ	0	07:29:38.778	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+LS	2	07:34:48.829	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
+PM	0	07:34:48.834	Experts	expert PropFirmBot (EURUSD,M15) removed
+
+--- 10. MT5 EA log ---
+  No EA log for today
+
+--- 11. Firewall rules ---
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+ACCEPT     6    --  0.0.0.0/0            0.0.0.0/0            tcp dpt:8080
+ACCEPT     6    --  0.0.0.0/0            0.0.0.0/0            tcp dpt:8080
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+Status: inactive
+
+--- 12. MT5 process & network ---
+  MT5 PID: 411397
+  Open files/sockets:
+lrwx------ 1 root root 64 Feb 27 07:40 6 -> socket:[4015551]
+  Network (from /proc):
+  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode                                                     
+   0: 00000000:22B8 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 3361459 1 ffff89223b91ef00 100 0 0 10 0                   
+   1: 3600007F:0035 00000000:0000 0A 00000000:00000000 00:00000000 00000000   991        0 5070 1 ffff892202e4b780 100 0 0 10 5                      
+   2: 00000000:0016 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 8280 1 ffff892202e4ae40 100 0 0 10 0                      
+   3: 00000000:0019 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 2259300 1 ffff89223c048000 100 0 0 10 0                   
+   4: 3500007F:0035 00000000:0000 0A 00000000:00000000 00:00000000 00000000   991        0 5068 1 ffff892202e49bc0 100 0 0 10 5                      
+   5: 00000000:170C 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 3749183 1 ffff8922e3591bc0 100 0 0 10 0                   
+   6: 00000000:1F91 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 2232078 1 ffff892202e4dc80 100 0 0 10 0                   
+   7: 00000000:1F90 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 2269638 1 ffff8922cb3a8000 100 0 0 10 0                   
+   8: 02EAED4D:0016 031F3DB6:C9DC 01 00000034:00000000 01:00000027 00000000     0        0 4027489 3 ffff8922e35940c0 59 4 30 10 -1                  
+
+--- 13. General internet check ---
+HTTP: 200
+Telegram API: 302
+
+=== END DIAGNOSTICS ===
+EXIT_CODE=0
