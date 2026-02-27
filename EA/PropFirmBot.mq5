@@ -812,7 +812,9 @@ void CheckDailyReport()
             g_guardian.TodayWins(),
             g_guardian.TodayLosses(),
             g_guardian.DailyDD(),
-            g_guardian.TotalDD());
+            g_guardian.TotalDD(),
+            g_account.GetDailyDDLimit(),
+            g_account.GetTotalDDLimit());
 
          // Log analysis summary
          if(InpSelfLearning)

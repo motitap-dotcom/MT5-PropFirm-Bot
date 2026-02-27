@@ -47,7 +47,8 @@ private:
    string   FormatTradeClose(string symbol, string direction, double pnl,
                               double pnl_pips, string reason);
    string   FormatDailyReport(double balance, double equity, double daily_pnl,
-                               int wins, int losses, double daily_dd, double total_dd);
+                               int wins, int losses, double daily_dd, double total_dd,
+                               double daily_dd_limit, double total_dd_limit);
 
    bool     SendTelegram(string message);
    void     SendPush(string message);
@@ -73,7 +74,8 @@ public:
                               double pnl_pips, string reason);
    void     NotifyStateChange(string old_state, string new_state, string reason);
    void     NotifyDailyReport(double balance, double equity, double daily_pnl,
-                               int wins, int losses, double daily_dd, double total_dd);
+                               int wins, int losses, double daily_dd, double total_dd,
+                               double daily_dd_limit, double total_dd_limit);
    void     NotifyEmergency(string message);
    void     NotifyTargetReached(double profit_pct, double profit_amount);
    void     NotifyPhaseChange(string phase, string details);
@@ -245,10 +247,17 @@ string CNotifications::FormatTradeClose(string symbol, string direction, double 
 
 //+------------------------------------------------------------------+
 string CNotifications::FormatDailyReport(double balance, double equity, double daily_pnl,
-                                          int wins, int losses, double daily_dd, double total_dd)
+                                          int wins, int losses, double daily_dd, double total_dd,
+                                          double daily_dd_limit, double total_dd_limit)
 {
    string pnl_emoji = daily_pnl >= 0 ? "📈" : "📉";
    double wr = (wins + losses) > 0 ? (double)wins / (wins + losses) * 100 : 0;
+
+   string daily_dd_str = daily_dd_limit > 0
+      ? StringFormat("Daily DD: %.2f%% / %.1f%%", daily_dd, daily_dd_limit)
+      : StringFormat("Daily DD: %.2f%% (no limit)", daily_dd);
+
+   string total_dd_str = StringFormat("Total DD: %.2f%% / %.1f%%", total_dd, total_dd_limit);
 
    return StringFormat(
       "%s <b>Daily Report</b>\n"
@@ -257,11 +266,11 @@ string CNotifications::FormatDailyReport(double balance, double equity, double d
       "Equity: $%.2f\n"
       "Daily PnL: $%+.2f\n"
       "Trades: W%d L%d (%.0f%%)\n"
-      "Daily DD: %.2f%% / 5%%\n"
-      "Total DD: %.2f%% / 10%%",
+      "%s\n"
+      "%s",
       pnl_emoji, balance, equity, daily_pnl,
       wins, losses, wr,
-      daily_dd, total_dd);
+      daily_dd_str, total_dd_str);
 }
 
 //+------------------------------------------------------------------+
@@ -299,9 +308,11 @@ void CNotifications::NotifyStateChange(string old_state, string new_state, strin
 
 //+------------------------------------------------------------------+
 void CNotifications::NotifyDailyReport(double balance, double equity, double daily_pnl,
-                                        int wins, int losses, double daily_dd, double total_dd)
+                                        int wins, int losses, double daily_dd, double total_dd,
+                                        double daily_dd_limit, double total_dd_limit)
 {
-   string msg = FormatDailyReport(balance, equity, daily_pnl, wins, losses, daily_dd, total_dd);
+   string msg = FormatDailyReport(balance, equity, daily_pnl, wins, losses, daily_dd, total_dd,
+                                   daily_dd_limit, total_dd_limit);
    Send(msg, NOTIFY_INFO);
 }
 
