@@ -1,31 +1,25 @@
 === Starting MT5 + Watchdog ===
 === Pre-flight ===
-EA: MISSING
+EA: YES (163174 bytes)
 Starting MT5...
 Waiting 20s...
-MT5 RUNNING! PID: 346452
+MT5 RUNNING! PID: 408181
 
 === Installing Watchdog ===
 Watchdog cron:
 */2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
 === DONE ===
 === VERIFICATION ===
-=== STATUS 2026-02-26 22:51:19 UTC ===
+=== STATUS 2026-02-27 07:08:41 UTC ===
 MT5: RUNNING
-  PID:346452 CPU:8.6% MEM:2.4%
-EA: NOT FOUND
+  PID:408181 CPU:26.2% MEM:2.6%
+EA: COMPILED (163174 bytes)
 VNC: RUNNING
 Watchdog: ACTIVE
 Connections:
-Recv-Q Send-Q Local Address:Port   Peer Address:Port Process
+Recv-Q Send-Q Local Address:Port  Peer Address:Port Process
 Terminal (last 10):
-GP	0	22:44:36.807	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-HS	0	22:44:36.808	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-IQ	0	22:44:36.808	Terminal	C:\Program Files\MetaTrader 5
-GJ	0	22:44:39.286	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-NH	0	22:49:48.497	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-HH	0	22:49:48.497	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-MI	0	22:49:48.497	Terminal	C:\Program Files\MetaTrader 5
-LR	0	22:50:39.765	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-JR	0	22:50:39.765	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-GS	0	22:50:39.765	Terminal	C:\Program Files\MetaTrader 5
+ÿþQO	0	07:08:11.964	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+EH	0	07:08:11.966	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+DH	0	07:08:11.966	Terminal	C:\Program Files\MetaTrader 5
+KQ	0	07:08:15.940	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
