@@ -1,18 +1,31 @@
 === Starting MT5 + Watchdog ===
 === Pre-flight ===
 EA: YES (163174 bytes)
-Starting MT5...
-Waiting 20s...
-MT5 RUNNING! PID: 408181
+Starting MT5 with broker login...
+Waiting 45s for connection + symbol sync...
+MT5 RUNNING! PID: 411397
+411449
+Terminal log:
+ÿþQO	0	07:08:11.964	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+EH	0	07:08:11.966	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+DH	0	07:08:11.966	Terminal	C:\Program Files\MetaTrader 5
+KQ	0	07:08:15.940	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+IL	2	07:13:25.998	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
+DD	0	07:13:26.004	Experts	expert PropFirmBot (EURUSD,M15) removed
+KP	0	07:29:33.554	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+GP	0	07:29:33.556	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+NQ	0	07:29:33.556	Terminal	C:\Program Files\MetaTrader 5
+RJ	0	07:29:38.778	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 
 === Installing Watchdog ===
 Watchdog cron:
 */2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
 === DONE ===
 === VERIFICATION ===
-=== STATUS 2026-02-27 07:08:41 UTC ===
+=== STATUS 2026-02-27 07:30:48 UTC ===
 MT5: RUNNING
-  PID:408181 CPU:26.2% MEM:2.6%
+  PID:411397 CPU:0.3% MEM:0.1%
+  PID:411449 CPU:15.8% MEM:2.5%
 EA: COMPILED (163174 bytes)
 VNC: RUNNING
 Watchdog: ACTIVE
@@ -23,3 +36,9 @@ Terminal (last 10):
 EH	0	07:08:11.966	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
 DH	0	07:08:11.966	Terminal	C:\Program Files\MetaTrader 5
 KQ	0	07:08:15.940	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+IL	2	07:13:25.998	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
+DD	0	07:13:26.004	Experts	expert PropFirmBot (EURUSD,M15) removed
+KP	0	07:29:33.554	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+GP	0	07:29:33.556	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+NQ	0	07:29:33.556	Terminal	C:\Program Files\MetaTrader 5
+RJ	0	07:29:38.778	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
