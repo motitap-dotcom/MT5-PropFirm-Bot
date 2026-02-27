@@ -1,0 +1,113 @@
+name: Check Trades
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/check-trades.yml'
+      - 'trigger-trades-check.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  check-trades:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/good-morning-h8H7R
+
+      - name: Check trades on VPS
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 root@77.237.234.2 bash -s << 'REMOTE_SCRIPT' > trades_report.txt 2>&1
+
+          echo "========================================="
+          echo "  PropFirmBot - Trade Check Report"
+          echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "========================================="
+          echo ""
+
+          MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
+          EA_FILES="$MT5_DIR/MQL5/Files/PropFirmBot"
+          MT5_LOGS="$MT5_DIR/MQL5/Logs"
+
+          # 1. Check if MT5 is running
+          echo "--- MT5 Status ---"
+          if pgrep -f "terminal64.exe" > /dev/null 2>&1; then
+            echo "MT5: RUNNING"
+          else
+            echo "MT5: NOT RUNNING!"
+          fi
+          echo ""
+
+          # 2. Check trade journal
+          echo "--- Trade Journal ---"
+          JOURNAL="$EA_FILES/trade_journal.csv"
+          if [ -f "$JOURNAL" ]; then
+            LINES=$(wc -l < "$JOURNAL")
+            echo "Found trade journal: $LINES lines"
+            echo ""
+            cat "$JOURNAL"
+          else
+            echo "No trade journal file found"
+          fi
+          echo ""
+
+          # 3. Check EA status file
+          echo "--- EA Status ---"
+          STATUS="$EA_FILES/ea_status.json"
+          if [ -f "$STATUS" ]; then
+            cat "$STATUS"
+          else
+            echo "No EA status file found"
+          fi
+          echo ""
+
+          # 4. Check account state
+          echo "--- Account State ---"
+          ACCT="$EA_FILES/account_state.json"
+          if [ -f "$ACCT" ]; then
+            cat "$ACCT"
+          else
+            echo "No account state file found"
+          fi
+          echo ""
+
+          # 5. Search logs for trade activity
+          echo "--- Recent Trade Activity in Logs ---"
+          if ls "$MT5_LOGS"/*.log 1>/dev/null 2>&1; then
+            grep -ih "order\|deal\|buy\|sell\|position\|trade\|profit\|loss" "$MT5_LOGS"/*.log 2>/dev/null | tail -30 || echo "No trade-related entries in logs"
+          else
+            echo "No log files found"
+          fi
+          echo ""
+
+          # 6. List all files in PropFirmBot directory
+          echo "--- EA Files ---"
+          if [ -d "$EA_FILES" ]; then
+            ls -la "$EA_FILES/" 2>/dev/null
+          else
+            echo "PropFirmBot files directory not found"
+          fi
+          echo ""
+
+          echo "========================================="
+          echo "  Report complete"
+          echo "========================================="
+
+          REMOTE_SCRIPT
+
+          echo "EXIT_CODE=$?" >> trades_report.txt
+          cat trades_report.txt
+
+      - name: Commit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f trades_report.txt
+          git commit -m "Trade check report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push origin claude/good-morning-h8H7R || true
