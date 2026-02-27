@@ -1,12 +1,12 @@
 ╔══════════════════════════════════════════════════╗
 ║     PropFirmBot - VPS Status Check               ║
-║     2026-02-27 08:43:54 UTC                       ║
+║     2026-02-27 08:53:03 UTC                       ║
 ╚══════════════════════════════════════════════════╝
 
 ━━━ 1. MT5 Process ━━━
 ✅ MT5 is RUNNING
    PID: 426793 | CPU: 0.0% | MEM: 0.1% | Started: 08:33 0:00
-   PID: 426843 | CPU: 28.3% | MEM: 3.4% | Started: 08:33 2:51
+   PID: 426843 | CPU: 37.3% | MEM: 3.4% | Started: 08:33 7:10
 
 ━━━ 2. VNC / Display ━━━
 ✅ VNC (x11vnc) is RUNNING
@@ -18,11 +18,9 @@
 
 ━━━ 4. Outbound Connections (MT5 broker) ━━━
 ✅ Active connections:
-   Recv-Q Send-Q            Local Address:Port            Peer Address:Port Process
-   0      0                  77.237.234.2:45082        194.164.179.244:443         
-   0      0                  77.237.234.2:35341          18.168.91.222:443         
-   0      0      [2a02:c207:2309:6165::1]:55132 [2001:67c:4e8:f004::9]:443         
-   0      0      [2a02:c207:2309:6165::1]:55126 [2001:67c:4e8:f004::9]:443         
+   Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
+   0      0       77.237.234.2:45082 194.164.179.244:443         
+   0      0       77.237.234.2:35341   18.168.91.222:443         
 
 ━━━ 5. Terminal Log (latest) ━━━
 basename: extra operand ‘5/logs/20260227.log’
@@ -56,42 +54,40 @@ Try 'basename --help' for more information.
    JS	0	08:34:27.868	Tester	MQL5 Cloud Server "MQL5 Cloud Europe 3: 10 gbit" found
 
 ━━━ 6. EA Log (today: 20260227) ━━━
-   ✅ EA log exists! Size: 46736 bytes
+   ✅ EA log exists! Size: 59110 bytes
    --- Last 30 lines ---
-   DQ	0	08:40:29.867	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   LM	0	08:40:29.867	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-   GJ	0	08:41:08.152	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   JL	0	08:41:08.152	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-   GK	0	08:41:12.818	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   PS	0	08:41:12.819	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-   CD	0	08:41:18.124	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   FF	0	08:41:18.124	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-   MR	0	08:41:32.724	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   CJ	0	08:41:32.726	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-   JN	0	08:41:39.168	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   QN	0	08:41:39.169	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-   LK	0	08:41:59.078	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   IS	0	08:41:59.080	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-   EG	0	08:42:07.242	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   CI	0	08:42:07.243	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-   NE	0	08:42:33.152	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   GI	0	08:42:33.155	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-   CQ	0	08:42:36.891	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   KM	0	08:42:36.891	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-   QJ	0	08:42:53.243	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   FR	0	08:42:53.246	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-   LF	0	08:42:56.852	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   CF	0	08:42:56.853	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-   MS	0	08:43:00.574	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   CK	0	08:43:00.576	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-   FO	0	08:43:12.499	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   MO	0	08:43:12.500	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-   JH	0	08:43:18.222	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   QD	0	08:43:18.223	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   HN	0	08:46:58.131	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   EP	0	08:46:58.131	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
+   HL	0	08:47:45.468	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   CO	0	08:47:45.469	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   OH	0	08:48:13.205	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   KD	0	08:48:13.205	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   KE	0	08:48:27.963	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   JF	0	08:48:27.963	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
+   HR	0	08:48:33.923	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   RJ	0	08:48:33.925	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   PO	0	08:49:02.931	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   HO	0	08:49:02.935	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   HI	0	08:49:06.085	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1204 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+   LO	0	08:49:18.128	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1216 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+   NO	0	08:49:25.163	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   LO	0	08:49:25.165	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   IH	0	08:49:38.148	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   FS	0	08:49:38.149	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   JD	0	08:49:53.768	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   FH	0	08:49:53.768	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   IQ	0	08:49:57.567	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   OL	0	08:49:57.569	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   EM	0	08:50:12.625	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   MQ	0	08:50:12.629	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   OF	0	08:50:38.069	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   DE	0	08:50:38.071	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   JR	0	08:50:54.565	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   QJ	0	08:50:54.568	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+   EO	0	08:51:15.384	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+   JN	0	08:51:15.385	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
 
 ━━━ 7. Config Files ━━━
-   ✅ 
-   ✅ 
    ✅ 
    ✅ 
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/account_state.json’
@@ -100,28 +96,30 @@ basename: extra operand ‘5/MQL5/Files/PropFirmBot/challenge_rules.json’
 Try 'basename --help' for more information.
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/funded_rules.json’
 Try 'basename --help' for more information.
+   ✅ 
 basename: extra operand ‘5/MQL5/Files/PropFirmBot/notifications.json’
 Try 'basename --help' for more information.
    ✅ 
    ✅ 
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/risk_params.json’
+Try 'basename --help' for more information.
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/status.json’
+Try 'basename --help' for more information.
+   ✅ 
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/symbols.json’
+Try 'basename --help' for more information.
    ✅ 
 
 ━━━ 8. Trade Journal ━━━
    ⚠️ No trade journal (bot may not have traded yet)
 
 ━━━ 9. Telegram Connectivity ━━━
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/risk_params.json’
-Try 'basename --help' for more information.
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/status.json’
-Try 'basename --help' for more information.
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/symbols.json’
-Try 'basename --help' for more information.
    ✅ Telegram Bot is ONLINE
 
 ━━━ 10. System Health ━━━
-   Uptime: up 4 days, 20 hours, 33 minutes
-   CPU Load: 1.32 0.92 0.69
-   Memory: 1253MB / 7941MB (15%)
+   Uptime: up 4 days, 20 hours, 42 minutes
+   CPU Load: 2.05 1.46 1.07
+   Memory: 1259MB / 7941MB (15%)
    Disk: 11% used (130G free)
    Internet: ✅ OK
 
