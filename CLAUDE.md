@@ -99,6 +99,12 @@
 - Terminal: PowerShell (Windows) → SSH to VPS
 - SSH: ssh root@77.237.234.2 (password: Moti0417!)
 
+## Session Start - MANDATORY First Action
+**At the start of EVERY session, BEFORE doing anything else:**
+1. Read the file `server_connection.md` in the repo root
+2. Use the connection details from that file - NEVER ask Noa for connection details again
+3. If you say "I can't connect" - your FIRST action must be to re-read `server_connection.md`
+
 ## How to Resume Work
 - MT5 is running on VPS at 77.237.234.2
 - VNC for MT5 GUI: connect to 77.237.234.2:5900 (no password, via RealVNC)
