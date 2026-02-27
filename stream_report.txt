@@ -1,0 +1,146 @@
+Warning: Permanently added '77.237.234.2' (ED25519) to the list of known hosts.
+==========================================
+  VPS STREAMING STATUS REPORT
+  2026-02-27 13:51:56 UTC
+==========================================
+
+--- MT5 Process ---
+MT5 RUNNING (PID: 426793
+426843)
+
+--- Status.json (EA Real-Time Data) ---
+File age: 2 seconds
+{
+  "timestamp": "2026.02.27 15:51:54",
+  "server_time": "2026.02.27 15:51:54",
+  "gmt_time": "2026.02.27 13:51:54",
+  "account": {
+    "number": 11797849,
+    "name": "FundedNext-Stellar Instant Account- moti tapiro",
+    "server": "FundedNext-Server",
+    "currency": "USD",
+    "leverage": 30,
+    "balance": 1998.90,
+    "equity": 1998.90,
+    "margin": 0.00,
+    "free_margin": 1998.90,
+    "floating_pnl": 0.00,
+    "initial_balance": 1998.90,
+    "total_pnl": 0.00,
+    "profit_percent": 0.00
+  },
+  "guardian": {
+    "state": "ACTIVE",
+    "daily_dd": 0.00,
+    "total_dd": 0.00,
+    "halt_message": "",
+    "connection_ok": true,
+    "can_trade": true
+  },
+  "today": {
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "profit": 0.00,
+    "loss": 0.00,
+    "net": 0.00,
+    "consec_losses": 0
+  },
+  "positions": {
+    "count": 0,
+    "open": []
+  }
+}
+--- Active Connections ---
+Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
+0      0       77.237.234.2:45082 194.164.179.244:443         
+0      0       77.237.234.2:35341   18.168.91.222:443         
+
+--- Latest Terminal Log ---
+basename: extra operand ‘5/logs/20260227.log’
+Try 'basename --help' for more information.
+Log:  (12652 bytes)
+LQ	0	08:34:02.789	Network	'11797849': authorized on FundedNext-Server
+NK	0	08:34:02.789	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.26 21:39:31
+LK	0	08:34:04.267	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+JH	0	08:34:04.267	Network	'11797849': trading has been enabled - hedging mode
+QR	0	08:34:05.587	Network	'11797849': scanning network for access points
+IN	0	08:34:10.246	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+RI	0	08:34:10.553	Network	'11797849': scanning network finished
+KQ	0	08:34:10.553	Network	'11797849': auto connecting to a better access point with 94 % quality (previous: 74 %)
+QO	1	08:34:10.558	Network	'11797849': connection to FundedNext-Server lost
+NF	0	08:34:11.554	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.53 ms, build 5640)
+DG	0	08:34:11.554	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.27 10:34:02
+KG	0	08:34:12.450	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+ID	0	08:34:12.450	Network	'11797849': trading has been enabled - hedging mode
+RR	0	08:34:27.867	Tester	MQL5 Cloud Server "MQL5 Cloud Asia 2: 10 gbit" found
+FG	0	08:34:27.867	Tester	MQL5 Cloud Server "MQL5 Cloud USA 1: 10 gbit" found
+FQ	0	08:34:27.867	Tester	MQL5 Cloud Server "MQL5 Cloud Europe 2: 10 gbit" found
+QP	0	08:34:27.867	Tester	MQL5 Cloud Server "MQL5 Cloud USA 2: 10 gbit" found
+NF	0	08:34:27.868	Tester	MQL5 Cloud Server "MQL5 Cloud Asia 1: 1 gbit" found
+JS	0	08:34:27.868	Tester	MQL5 Cloud Server "MQL5 Cloud Europe 3: 10 gbit" found
+CF	2	11:49:04.113	WebView	couldn't find WebView2 Runtime
+
+--- Latest EA Log ---
+Log:  (959142 bytes)
+JJ	0	13:48:12.117	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+FR	0	13:48:12.117	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+MG	0	13:48:15.115	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+PF	0	13:48:15.116	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+GS	0	13:48:18.394	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+DK	0	13:48:18.395	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+LL	0	13:48:32.131	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+IQ	0	13:48:32.131	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
+KM	0	13:48:47.286	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+NQ	0	13:48:47.289	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+OF	0	13:48:53.151	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+FF	0	13:48:53.152	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+DR	0	13:49:07.145	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+LJ	0	13:49:07.150	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+PN	0	13:49:18.500	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=27971 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+PQ	0	13:49:28.379	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+QL	0	13:49:28.381	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+QM	0	13:49:32.683	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+DO	0	13:49:32.683	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
+PJ	0	13:49:44.017	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=28039 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+GM	0	13:49:58.074	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+DP	0	13:49:58.075	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+NI	0	13:50:33.155	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+OE	0	13:50:33.156	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+ER	0	13:50:38.281	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+GI	0	13:50:38.283	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+KN	0	13:50:43.234	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+PN	0	13:50:43.235	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+OK	0	13:50:58.289	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+ER	0	13:50:58.292	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+
+--- System Health ---
+basename: extra operand ‘5/MQL5/Logs/20260227.log’
+Try 'basename --help' for more information.
+CPU: 6.7%
+RAM: 1.3Gi/7.8Gi
+Disk: 15G/145G (11%)
+Uptime: up 5 days, 1 hour, 41 minutes
+
+--- Watchdog Status ---
+MT5 state: up
+Restart count today: 0
+2026-02-27 12:56:01 [OK] PID:426793
+426843
+2026-02-27 13:00:01 [OK] PID:426793
+426843
+2026-02-27 13:14:01 [OK] PID:426793
+426843
+2026-02-27 13:28:01 [OK] PID:426793
+426843
+2026-02-27 13:42:01 [OK] PID:426793
+426843
+
+--- VNC Status ---
+VNC: RUNNING
+Xvfb: RUNNING
+
+==========================================
+  END OF REPORT
+==========================================
+SSH_EXIT=0
