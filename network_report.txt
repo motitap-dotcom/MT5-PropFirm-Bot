@@ -1,114 +1,41 @@
-=== REINSTALL MT5 Fri Feb 27 08:08:02 UTC 2026 ===
---- 1. Backup EA files ---
-Backed up EA files: 13 files
+=== FIX SERVERS.DAT Fri Feb 27 08:17:33 UTC 2026 ===
+--- 1. Kill MT5 ---
 
---- 2. Kill MT5 ---
+--- 2. Backup and remove servers.dat files ---
+config/servers.dat: 46784 bytes
+Config/servers.dat: 63440 bytes
 
---- 3. Download FundedNext MT5 installer ---
-Installer: 4536104 bytes
+Approach A: Copy Config/servers.dat -> config/servers.dat (bigger version)
+config/servers.dat now: 63440 bytes
 
---- 4. Extract installer with 7z ---
-Selecting previously unselected package 7zip.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 147073 files and directories currently installed.)
-Preparing to unpack .../7zip_23.01+dfsg-11_amd64.deb ...
-Unpacking 7zip (23.01+dfsg-11) ...
-Selecting previously unselected package p7zip-full.
-Preparing to unpack .../p7zip-full_16.02+transitional.1_all.deb ...
-Unpacking p7zip-full (16.02+transitional.1) ...
-Setting up 7zip (23.01+dfsg-11) ...
-Setting up p7zip-full (16.02+transitional.1) ...
-Processing triggers for man-db (2.12.0-4build2) ...
-Extracted files:
-/tmp/fn_extract/.cod2
-/tmp/fn_extract/.reloc
-/tmp/fn_extract/.fptable
-/tmp/fn_extract/.rsrc/1033/MANIFEST/1
-/tmp/fn_extract/.rsrc/0/BITMAP/1
-/tmp/fn_extract/.rsrc/0/BITMAP/47
-/tmp/fn_extract/.rsrc/0/BITMAP/2
-/tmp/fn_extract/.rsrc/0/STRING/4
-/tmp/fn_extract/.rsrc/0/STRING/1
-/tmp/fn_extract/.rsrc/0/STRING/3
-/tmp/fn_extract/.rsrc/0/STRING/2
-/tmp/fn_extract/.rsrc/0/STRING/26
-/tmp/fn_extract/.rsrc/0/LNG/112
-/tmp/fn_extract/.rsrc/0/LNG/113
-/tmp/fn_extract/.rsrc/0/LNG/111
-/tmp/fn_extract/.rsrc/0/LNG/114
-/tmp/fn_extract/.rsrc/0/LNG/102
-/tmp/fn_extract/.rsrc/0/LNG/104
-/tmp/fn_extract/.rsrc/0/LNG/106
-/tmp/fn_extract/.rsrc/0/ACCELERATOR/24
-/tmp/fn_extract/.rsrc/0/version.txt
-/tmp/fn_extract/.rsrc/0/DIALOG/4
-/tmp/fn_extract/.rsrc/0/DIALOG/5
-/tmp/fn_extract/.rsrc/0/DIALOG/7
-/tmp/fn_extract/.rsrc/0/DIALOG/6
-/tmp/fn_extract/.rsrc/0/DIALOG/3
-/tmp/fn_extract/.rsrc/0/DIALOG/48
-/tmp/fn_extract/.rsrc/0/RCDATA/79
-/tmp/fn_extract/.rsrc/0/RCDATA/71
-/tmp/fn_extract/.rsrc/0/RCDATA/80
+--- 3. Also copy accounts.dat if different ---
+accounts.dat: 6091 bytes
 
---- 5. Look for server config files ---
-Looking for server-related files...
+--- 4. Start MT5 with approach A ---
+MT5 started, waiting 120s for connection...
 
-Looking for FundedNext strings...
-
-Looking for IP addresses in extracted files...
-5.0.0.0
-6.0.0.0
-
---- 6. Try running installer with Wine (120s timeout) ---
-Installer PID: 420778
-  After 30s: servers/ has 0 files
-  After 60s: servers/ has 0 files
-  After 90s: servers/ has 0 files
-  After 120s: servers/ has 0 files
-
---- 7. Check server config after install ---
-config/servers/ contents:
-Config/servers/ contents:
-
-servers.dat sizes:
-/root/.wine/drive_c/Program Files/MetaTrader 5/config/servers.dat: 46784 bytes
-/root/.wine/drive_c/Program Files/MetaTrader 5/Config/servers.dat: 63440 bytes
-
---- 8. Restore EA files ---
-EA files restored: 13 files
-
---- 9. Start MT5 ---
-MT5 started, waiting 90s...
-
---- 10. Final check ---
-MT5: RUNNING
-
-Terminal log (last 20):
-JI	0	07:56:08.940	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-KK	0	07:56:08.941	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-NJ	0	07:56:08.941	Terminal	C:\Program Files\MetaTrader 5
-MR	0	07:56:12.513	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-JI	0	08:02:28.742	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-KK	0	08:02:28.743	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-NJ	0	08:02:28.743	Terminal	C:\Program Files\MetaTrader 5
-LR	0	08:02:36.862	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-LI	0	08:04:04.986	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-LK	0	08:04:04.988	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-MJ	0	08:04:04.988	Terminal	C:\Program Files\MetaTrader 5
-DR	0	08:04:08.492	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-QI	0	08:10:04.410	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-FK	0	08:10:04.413	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
-CJ	0	08:10:04.413	Terminal	C:\Program Files\MetaTrader 5
+--- 5. Check approach A ---
+Connections: Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
+0      0       77.237.234.2:33264 149.154.166.110:443         
+0      0       77.237.234.2:53438 194.164.179.244:443         
+Auth messages: KD	2	08:18:02.733	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
+Terminal log:
 PR	0	08:10:10.852	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 PI	0	08:12:02.406	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
 HK	0	08:12:02.411	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
 IJ	0	08:12:02.411	Terminal	C:\Program Files\MetaTrader 5
 IR	0	08:12:06.562	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+OI	0	08:17:48.181	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+IK	0	08:17:48.185	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+HJ	0	08:17:48.185	Terminal	C:\Program Files\MetaTrader 5
+NR	0	08:17:57.863	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+KD	2	08:18:02.733	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
 
-Connections:
-Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
+*** APPROACH A WORKED! ***
 
-EA log:
-No EA log
+--- 9. Final status ---
+MT5: RUNNING
+servers.dat: 63448
+config/servers/ files: 0
 === DONE ===
 EXIT_CODE=0
