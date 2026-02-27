@@ -1,0 +1,87 @@
+Warning: Permanently added '77.237.234.2' (ED25519) to the list of known hosts.
+=========================================
+  PropFirmBot - Trade Check Report
+  2026-02-27 05:41:13 UTC
+=========================================
+
+--- MT5 Status ---
+MT5: RUNNING
+
+--- Trade Journal ---
+No trade journal file found
+
+--- EA Status ---
+No EA status file found
+
+--- Account State ---
+{
+  "_description": "Current account state - FundedNext Stellar Instant",
+  "_important": "Always verify these values match your FundedNext dashboard",
+
+  "current_phase": "FUNDED_INSTANT",
+  "last_updated": "2026-02-21",
+
+  "funded_instant": {
+    "name": "FundedNext Stellar Instant $2000",
+    "account_number": "11797849",
+    "server": "FundedNext-Server",
+    "account_size": 2000,
+    "trailing_max_drawdown_percent": 6,
+    "min_equity": 1880,
+    "_min_equity_note": "Initial: $2000 - 6% = $1880. Trails up with highest balance.",
+    "start_date": "2026-02-21",
+    "profit_split_percent": 70
+  },
+
+  "funded": {
+    "_note": "Same as funded_instant for Stellar Instant accounts",
+    "account_number": "11797849",
+    "server": "FundedNext-Server",
+    "account_size": 2000,
+    "max_daily_drawdown_percent": 0,
+    "max_total_drawdown_percent": 6,
+    "trailing_drawdown": true,
+    "profit_split_percent": 70,
+    "start_date": "2026-02-21"
+  },
+
+  "phase_history": [
+    {
+      "phase": "FUNDED_INSTANT",
+      "start_date": "2026-02-21",
+      "end_date": null,
+      "result": null,
+      "notes": "FundedNext Stellar Instant - direct funded account"
+    }
+  ],
+
+  "checklist_before_going_live": [
+    "[x] Verify account credentials are correct",
+    "[x] Confirm all drawdown limits match prop firm rules (6% trailing)",
+    "[x] Set up Telegram notifications",
+    "[ ] Verify VPS is stable (24/7 uptime)",
+    "[ ] Check broker spreads during London/NY sessions",
+    "[x] Confirm EA is allowed by prop firm",
+    "[ ] Set up monitoring scripts",
+    "[ ] Take screenshot of starting balance"
+  ]
+}
+
+--- Recent Trade Activity in Logs ---
+
+--- EA Files ---
+total 36
+drwxr-xr-x 2 root root 4096 Feb 23 15:15 .
+drwxr-xr-x 3 root root 4096 Feb 22 21:00 ..
+-rw-r--r-- 1 root root 1620 Feb 26 22:56 account_state.json
+-rw-r--r-- 1 root root 1469 Feb 26 22:56 challenge_rules.json
+-rw-r--r-- 1 root root 1336 Feb 26 22:56 funded_rules.json
+-rw-r--r-- 1 root root 1159 Feb 26 22:56 notifications.json
+-rw-r--r-- 1 root root 1805 Feb 26 22:56 risk_params.json
+-rw-r--r-- 1 root root  904 Feb 25 16:41 status.json
+-rw-r--r-- 1 root root 1244 Feb 26 22:56 symbols.json
+
+=========================================
+  Report complete
+=========================================
+EXIT_CODE=0
