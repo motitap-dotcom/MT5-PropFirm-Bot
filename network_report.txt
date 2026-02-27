@@ -1,221 +1,93 @@
-=== FIND FUNDEDNEXT SERVER Fri Feb 27 07:45:12 UTC 2026 ===
+=== FIX SERVER CONNECTION Fri Feb 27 07:48:25 UTC 2026 ===
 
---- 1. Search old terminal logs for server IP ---
-  Checking: 20260222.log
-DR	2	18:47:10.833	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-PM	0	19:42:06.841	Tester	MQL5 Cloud Server "MQL5 Cloud Asia 2: 10 gbit" found
-DD	0	19:42:06.841	Tester	MQL5 Cloud Server "MQL5 Cloud USA 1: 10 gbit" found
-LQ	0	19:42:06.841	Tester	MQL5 Cloud Server "MQL5 Cloud Europe 2: 10 gbit" found
-GP	0	19:42:06.841	Tester	MQL5 Cloud Server "MQL5 Cloud USA 2: 10 gbit" found
-IG	0	19:42:06.841	Tester	MQL5 Cloud Server "MQL5 Cloud Asia 1: 1 gbit" found
-ER	0	19:42:06.841	Tester	MQL5 Cloud Server "MQL5 Cloud Europe 3: 10 gbit" found
-KM	3	21:11:41.996	Experts	automated trading is disabled because the account has been changed
-CR	2	21:11:44.463	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-DI	2	21:24:33.381	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-  Checking: 20260223.log
-CR	3	08:32:07.916	Experts	automated trading is disabled because the account has been changed
-CE	2	08:32:08.029	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-CS	2	15:15:24.183	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-LE	2	15:23:55.451	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-EG	2	15:38:45.101	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-DF	2	15:46:10.927	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-HK	2	17:56:57.260	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-CQ	0	21:38:52.803	Network	'11797849': authorized on FundedNext-Server
-  Checking: 20260224.log
-ES	1	17:34:49.703	Network	'11797849': connection to FundedNext-Server lost
-KJ	0	17:35:00.752	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-LJ	0	17:35:00.752	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.23 23:38:52
-FJ	0	18:10:23.453	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-NJ	0	18:10:23.453	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.24 19:34:59
-QF	1	20:03:28.405	Network	'11797849': connection to FundedNext-Server lost
-OL	0	20:03:29.202	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-DL	0	20:03:29.202	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.24 20:10:23
-IK	0	21:33:30.912	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-NK	0	21:33:30.912	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.24 23:33:25
-  Checking: 20260225.log
-CL	0	15:54:23.673	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-PL	0	15:54:23.673	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.25 00:13:10
-FM	0	16:29:26.797	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-FM	0	16:29:26.797	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.25 17:54:23
-LL	0	16:41:36.406	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-GL	0	16:41:36.407	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.25 18:29:26
-KD	1	18:20:30.228	Network	'11797849': connection to FundedNext-Server lost
-NQ	0	18:20:31.888	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-GN	0	18:20:31.888	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.25 18:41:36
-  Checking: 20260226.log
-DR	0	10:33:21.337	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-LR	0	10:33:21.337	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.25 20:20:31
-KG	0	10:55:18.778	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-DG	0	10:55:18.778	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.26 12:33:21
-RF	0	10:58:08.450	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-DG	0	10:58:08.451	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.26 12:55:18
-QF	0	11:05:39.317	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-QF	0	11:05:39.317	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.26 12:58:07
-CF	0	19:21:23.332	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.49 ms, build 5640)
-HF	0	19:21:23.332	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.26 13:05:38
-  Checking: 20260227.log
-  Checking: metaeditor.log
-0	2026.02.22 18:30:29.097	Compile	C:\Program Files\MetaTrader 5\MQL5\Scripts\Examples\AccountInfo\AccountInfoSample.mq5 - 0 errors, 0 warnings, 362 msec elapsed without optimizations, cpu='X64 Regular'
-0	2026.02.22 18:30:29.100	Compiler	compiled AccountInfoSample.mq5
+--- 1. Extract IPs from servers.dat ---
+servers.dat found (46784 bytes)
+Strings containing IPs:
+Strings containing FundedNext:
+Strings containing access/port:
 
---- 2. Search old EA logs for server info ---
-  Checking: 20260222.log
-JD	0	21:05:28.973	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-QH	0	21:05:28.973	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-OG	0	21:05:28.974	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-KL	0	21:05:28.974	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-NS	0	21:05:28.974	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-GD	0	21:05:28.974	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-QS	0	21:05:28.974	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-LO	0	21:05:28.993	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20240823.csv | Initial balance: $0.00
-OL	0	21:05:28.993	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$0.00 Magic=202502
-HL	0	21:05:28.993	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
-  Checking: 20260223.log
-EN	0	08:32:07.115	PropFirmBot (EURUSD,M15)	[WARNING] Account balance still 0 after 20 attempts. Using configured size: $2000
-NM	0	08:32:07.120	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-EQ	0	08:32:07.120	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-GH	0	08:32:07.123	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-CE	0	08:32:07.123	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-FH	0	08:32:07.123	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-OM	0	08:32:07.123	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-ID	0	08:32:07.123	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-HE	0	08:32:07.212	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20240823.csv | Initial balance: $2000.00
-MG	0	08:32:07.212	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
-  Checking: 20260224.log
-grep: (standard input): binary file matches
-IM	0	06:53:51.803	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
-KJ	0	06:53:51.804	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $2000.00 (after 0 waits)
-ON	0	06:53:51.804	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-HR	0	06:53:51.804	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-CI	0	06:53:51.804	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-CJ	0	06:53:51.804	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-FI	0	06:53:51.804	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-KN	0	06:53:51.804	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-IE	0	06:53:51.804	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-MJ	0	06:53:51.805	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260224.csv | Initial balance: $2000.00
-  Checking: 20260225.log
-MO	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
-KH	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-DD	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-OK	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-CH	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-FO	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-GH	0	15:54:24.562	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-IP	0	15:54:24.562	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-FH	0	15:54:24.596	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260225.csv | Initial balance: $1998.90
-EJ	0	15:54:24.596	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+--- 2. Extract IPs from downloaded FN installer ---
+Installer found (4536104 bytes)
+IPs in installer:
+5.0.0.0
+6.0.0.0
+Server strings:
+        <requestedExecutionLevel level="asInvoker" uiAccess="false"/>
 
---- 3. All files in config/servers ---
-  /root/.wine/drive_c/Program Files/MetaTrader 5/config/jupyter.ini (84 bytes)
-  /root/.wine/drive_c/Program Files/MetaTrader 5/config/terminal.ini (15990 bytes)
-  /root/.wine/drive_c/Program Files/MetaTrader 5/config/metaeditor.ini (5816 bytes)
-  /root/.wine/drive_c/Program Files/MetaTrader 5/config/servers.dat (46784 bytes)
-  /root/.wine/drive_c/Program Files/MetaTrader 5/config/settings.ini (5908 bytes)
-  /root/.wine/drive_c/Program Files/MetaTrader 5/config/common.ini (834 bytes)
-  /root/.wine/drive_c/Program Files/MetaTrader 5/config/dnsperf.dat (380488 bytes)
-  /root/.wine/drive_c/Program Files/MetaTrader 5/config/cookies.dat (2496 bytes)
-  DIR: /root/.wine/drive_c/Program Files/MetaTrader 5/config
-  DIR: /root/.wine/drive_c/Program Files/MetaTrader 5/config/certificates
-  DIR: /root/.wine/drive_c/Program Files/MetaTrader 5/config/servers
+--- 3. Check Config/servers.dat (uppercase C) ---
+Config/servers.dat found (63440 bytes)
+IPs:
 
---- 4. Search for .srv files anywhere in MT5 ---
-/root/.wine/drive_c/Program Files/MetaTrader 5/config/servers.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/config/dnsperf.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/config/servers
-/root/.wine/drive_c/Program Files/MetaTrader 5/config/cookies.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Config/servers.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Config/agents.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Config/dnsperf.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Config/accounts.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/signals/signals.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/symbols/selected-11797849.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/symbols/symbols-11797849.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/trades/11797849/history_2026.02.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/trades/11797849/deals_2026.02.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/mail/mail-11797849.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/indicators.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/alerts.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/objects.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/strategy.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Default/news/news.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Default/Mail/mail-0.dat
+--- 4. Check accounts.dat ---
+accounts.dat found (6091 bytes)
+Content:
+:;g>
+3H"=
+~ 1Pf
+$"8{
+@><i
+"R,N
+:"Whu
+;p^R 
+R4	6)w
+@N2d
+s7qlV5
+fs%&`
+c-#q
+:;g>
+3H"=
+~ 1Pf
+(z|z?
+Z8a7u
+TXx5rT)VI
+3`nR
 
---- 5. Search for FundedNext in ALL files ---
-/root/.wine/drive_c/Program Files/MetaTrader 5/config/common.ini
-/root/.wine/drive_c/Program Files/MetaTrader 5/config/common.ini
+--- 5. Test connectivity to all found IPs ---
+Testing all unique IPs for MT5 broker ports (443, 443):
 
---- 6. Check if server info exists in profile ---
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/order.wnd
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/order.wnd
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/order.wnd
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/order.wnd
+--- 6. Full terminal.ini check ---
+terminal.ini (15990 bytes)
 
---- 7. Full hexdump of common.ini for hidden data ---
-000000b0: 3044 0d0a 5365 7276 6572 3d46 756e 6465  0D..Server=Funde
-000000c0: 644e 6578 742d 5365 7276 6572 0d0a 5072  dNext-Server..Pr
-00000100: 7574 683d 0d0a 5365 7276 6963 6573 3d34  uth=..Services=4
+--- 7. Kill MT5, install from FundedNext setup, restart ---
+Killing MT5...
+Running FundedNext MT5 installer (silent)...
+Installer PID: 415516
+Checking if server config was updated...
+config/servers/ contents:
+total 8
+drwxr-xr-x 2 root root 4096 Feb 23 07:04 .
+drwxr-xr-x 4 root root 4096 Feb 27 07:08 ..
+servers.dat size: 46784
+New files:
 
---- 8. Check Wine registry for server info ---
-"Hosting.Server"="VPS New York NY3 06"
-"Trade.Server"="FundedNext-Server"
-"FullName"="FundedNext-Stellar Instant Account- moti tapiro"
-"LOGONSERVER"="\\\\VMI3096165"
+--- 8. Start MT5 with login params ---
+Starting MT5...
+MT5 started, waiting 60s for connection...
 
---- 9. Download FundedNext MT5 setup to extract server config ---
-Trying known download URL patterns...
-  https://download.mql5.com/cdn/web/fundednext.ltd/mt5/fundednext5setup.exe -> HTTP 200
-  FOUND! Downloading...
-  Downloaded: 4536104 bytes
+--- 9. Check if MT5 connected ---
+MT5 PID: 415860
+Terminal log (last 15 lines):
+EH	0	07:08:11.966	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+DH	0	07:08:11.966	Terminal	C:\Program Files\MetaTrader 5
+KQ	0	07:08:15.940	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+IL	2	07:13:25.998	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
+DD	0	07:13:26.004	Experts	expert PropFirmBot (EURUSD,M15) removed
+KP	0	07:29:33.554	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+GP	0	07:29:33.556	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+NQ	0	07:29:33.556	Terminal	C:\Program Files\MetaTrader 5
+RJ	0	07:29:38.778	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+LS	2	07:34:48.829	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
+PM	0	07:34:48.834	Experts	expert PropFirmBot (EURUSD,M15) removed
+II	0	07:49:44.974	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+NK	0	07:49:44.977	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+KJ	0	07:49:44.977	Terminal	C:\Program Files\MetaTrader 5
+ER	0	07:49:52.647	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 
---- 10. Try to resolve FundedNext via MQL5 trade API ---
-<html>
-<head><title>301 Moved Permanently</title></head>
-<body>
-<center><h1>301 Moved Permanently</h1></center>
-<hr><center>Angie</center>
-</body>
-</html>
+EA log:
+No EA log
 
---- 11. Check /root for any old MT5 backups ---
-/root/.wine/drive_c/Program Files/MetaTrader 5/config/servers.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Config/servers.dat
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/history/USDCHF/2026.hcc
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/history/USDCHF/2024.hcc
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/history/USDCHF/2025.hcc
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/history/EURUSD/2026.hcc
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/history/EURUSD/2024.hcc
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/history/EURUSD/2025.hcc
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/history/EURUSD/cache/H4.hc
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/history/USDJPY/2026.hcc
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/history/USDJPY/2024.hcc
-/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/FundedNext-Server/history/USDJPY/2025.hcc
+Outbound connections:
+Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
 
---- 12. Full search for IP-like patterns in config files ---
-
---- 13. Check if maybe it needs to download server list ---
-<html>
-<head><title>301 Moved Permanently</title></head>
-<body>
-<center><h1>301 Moved Permanently</h1></center>
-<hr><center>Angie</center>
-</body>
-</html>
-
-=== END SEARCH ===
+=== DONE ===
 EXIT_CODE=0
