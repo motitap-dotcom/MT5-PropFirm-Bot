@@ -40,15 +40,52 @@ jobs:
 
           pkill -f terminal64.exe 2>/dev/null; sleep 2
           wineserver -k 2>/dev/null; sleep 3
-          pkill -9 -f "wine" 2>/dev/null; sleep 2
-          rm -rf /tmp/.wine-* /tmp/wine-* 2>/dev/null
 
-          echo "Starting MT5 with broker login..."
+          # Ensure correct servers.dat (use bigger backup if needed)
+          if [ $(stat -c%s "$MT5/config/servers.dat" 2>/dev/null || echo 0) -lt 60000 ]; then
+              cp "$MT5/Config/servers.dat" "$MT5/config/servers.dat" 2>/dev/null
+              echo "Restored servers.dat from backup"
+          fi
+
+          # Create startup config with password (most reliable login method)
+          cat > "$MT5/config/startup.ini" << 'SEOF'
+[Common]
+Login=11797849
+Password=gazDE62##
+Server=FundedNext-Server
+ProxyEnable=0
+CertInstall=0
+NewsEnable=0
+EnableOpenCL=7
+Services=4294967295
+Source=download.mql5.com
+[StartUp]
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+Symbol=EURUSD
+Period=M15
+[Experts]
+AllowLiveTrading=1
+AllowDllImport=0
+Enabled=1
+Account=1
+Profile=0
+Chart=0
+WebRequest=1
+[Charts]
+ProfileLast=Default
+MaxBars=100000
+TradeHistory=1
+TradeLevels=1
+PreloadCharts=1
+SEOF
+
+          echo "Starting MT5 with config file..."
           cd "$MT5"
-          nohup wine terminal64.exe /login:11797849 /password:"gazDE62##" /server:FundedNext-Server </dev/null >/dev/null 2>&1 &
+          nohup wine terminal64.exe "/config:C:\Program Files\MetaTrader 5\config\startup.ini" </dev/null >/dev/null 2>&1 &
           disown -a
-          echo "Waiting 45s for connection + symbol sync..."
-          sleep 45
+          echo "Waiting 60s for connection + symbol sync..."
+          sleep 60
 
           PID=$(pgrep -f terminal64.exe 2>/dev/null || true)
           [ -n "$PID" ] && echo "MT5 RUNNING! PID: $PID" || echo "MT5 not started yet"

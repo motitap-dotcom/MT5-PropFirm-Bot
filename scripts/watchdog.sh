@@ -35,8 +35,12 @@ else
     echo "$TS [ALERT] MT5 down! Restarting..." >> "$LOG"
     export DISPLAY=:99 WINEPREFIX=/root/.wine
     MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
+    # Ensure correct servers.dat
+    if [ $(stat -c%s "$MT5_DIR/config/servers.dat" 2>/dev/null || echo 0) -lt 60000 ]; then
+        cp "$MT5_DIR/Config/servers.dat" "$MT5_DIR/config/servers.dat" 2>/dev/null
+    fi
     cd "$MT5_DIR"
-    nohup wine terminal64.exe /login:11797849 /password:"gazDE62##" /server:FundedNext-Server </dev/null >/dev/null 2>&1 &
+    nohup wine terminal64.exe "/config:C:\Program Files\MetaTrader 5\config\startup.ini" </dev/null >/dev/null 2>&1 &
     disown -a
     sleep 20
     NEW=$(pgrep -f terminal64.exe 2>/dev/null || true)
