@@ -88,6 +88,27 @@
 10. TradeAnalyzer.mqh - Performance analytics
 11. AccountStateManager.mqh - Phase management (Challenge/Funded/Scaling)
 
+## Continuous Sync Workflow (MANDATORY)
+### Directory Context
+- All operations MUST be performed within: `/home/user/MT5-PropFirm-Bot`
+- On VPS: `/root/MT5-PropFirm-Bot`
+- NEVER work outside these paths
+
+### Pull Before Work (ALWAYS)
+- Before starting ANY task, ALWAYS pull the latest state first
+- Run: `git pull origin <current-branch>` or `git fetch origin <branch>`
+- Purpose: ensure work is based on the latest version, prevent conflicts and data overwriting
+
+### Push After Changes (ALWAYS)
+- Immediately after completing ANY change or writing new code, ALWAYS push
+- Run: `git add . && git commit -m "description" && git push -u origin <branch>`
+- Purpose: keep the remote repository continuously up-to-date at all times
+- Do NOT wait for manual instruction to push - push automatically after every change
+
+### Sync Flow Summary
+1. `git pull` → Start work → Make changes → `git add . && git commit && git push`
+2. This cycle repeats for EVERY task, no exceptions
+
 ## Working Method
 - Claude's environment CANNOT SSH to VPS (port 22 blocked from sandbox)
 - Noa runs commands on VPS via SSH from her Windows PowerShell
