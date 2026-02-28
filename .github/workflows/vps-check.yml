@@ -24,8 +24,8 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
           chmod +x scripts/check_status.sh scripts/check_trades.sh
-          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/check_trades.sh root@77.237.234.2:/tmp/check_trades.sh
-          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 "bash /tmp/check_trades.sh" > vps_report.txt 2>&1 || true
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/check_status.sh root@77.237.234.2:/tmp/check_status.sh
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 "bash /tmp/check_status.sh" > vps_report.txt 2>&1 || true
           echo "" >> vps_report.txt
           echo "WORKFLOW_EXIT_CODE=$?" >> vps_report.txt
           cat vps_report.txt
