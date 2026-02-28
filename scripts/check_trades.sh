@@ -1,116 +1,188 @@
 #!/bin/bash
-# PropFirmBot - Account & Trade History Check
-# Runs on VPS via GitHub Actions
+# PropFirmBot - Deep Signal & Trade Diagnostics
+# WHY is the bot not trading?
 
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+EA_LOGS="$MT5/MQL5/Logs"
+TERM_LOGS="$MT5/logs"
 NOW=$(date '+%Y-%m-%d %H:%M:%S UTC')
 
 echo "============================================"
-echo "  PropFirmBot - Account & Trade Report"
-echo "  $NOW"
+echo "  WHY IS THE BOT NOT TRADING?"
+echo "  Deep Diagnostic - $NOW"
 echo "============================================"
 
-# 1. Status JSON (current account state from EA)
+# 1. List ALL EA log files
 echo ""
-echo ">>> ACCOUNT STATUS (status.json) <<<"
-STATUS_FILE="$MT5/MQL5/Files/PropFirmBot/status.json"
-if [ -f "$STATUS_FILE" ]; then
-    cat "$STATUS_FILE"
-else
-    echo "status.json not found"
-fi
+echo ">>> ALL EA LOG FILES <<<"
+ls -lh "$EA_LOGS/"*.log 2>/dev/null || echo "No EA logs found!"
 
-# 2. Account State JSON
+# 2. List ALL terminal log files
 echo ""
-echo ">>> ACCOUNT STATE (account_state.json) <<<"
-ACCT_FILE="$MT5/MQL5/Files/PropFirmBot/account_state.json"
-if [ -f "$ACCT_FILE" ]; then
-    cat "$ACCT_FILE"
-else
-    echo "account_state.json not found"
-fi
+echo ">>> ALL TERMINAL LOG FILES <<<"
+ls -lh "$TERM_LOGS/"*.log 2>/dev/null || echo "No terminal logs found!"
 
-# 3. Risk params
-echo ""
-echo ">>> RISK PARAMS (risk_params.json) <<<"
-RISK_FILE="$MT5/MQL5/Files/PropFirmBot/risk_params.json"
-if [ -f "$RISK_FILE" ]; then
-    cat "$RISK_FILE"
-else
-    echo "risk_params.json not found"
-fi
-
-# 4. Search ALL EA logs for trade activity
+# 3. Read the BIGGEST/most recent EA log fully for signal info
 echo ""
 echo "============================================"
-echo ">>> TRADE HISTORY FROM EA LOGS <<<"
+echo ">>> FULL EA LOG ANALYSIS <<<"
 echo "============================================"
 
-for logfile in $(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -7); do
-    LOGDATE=$(basename "$logfile" .log)
-    echo ""
-    echo "--- Log: $LOGDATE ---"
-
-    # Orders, positions, trades
-    echo "[Orders/Trades]"
-    cat "$logfile" | tr -d '\0' | grep -i "order\|trade\|position\|buy\|sell\|open\|close\|deal\|profit\|loss" | grep -v "StatusWriter\|FolderCreate\|scanning\|OnTimer\|OnTick" | tail -30
-
-    # Balance/Equity info
-    echo "[Balance/Equity]"
-    cat "$logfile" | tr -d '\0' | grep -i "balance\|equity\|drawdown\|margin\|account\|fund" | grep -v "StatusWriter\|FolderCreate" | tail -15
-
-    # Signals generated
-    echo "[Signals]"
-    cat "$logfile" | tr -d '\0' | grep -i "signal\|entry\|exit\|trigger\|pattern\|setup" | grep -v "StatusWriter" | tail -15
-
-    # Guardian/Safety
-    echo "[Guardian/Safety]"
-    cat "$logfile" | tr -d '\0' | grep -i "guardian\|safety\|emergency\|shutdown\|halt\|warning\|critical\|suspend" | tail -10
+LATEST_EA=$(ls -t "$EA_LOGS/"*.log 2>/dev/null | head -1)
+if [ -n "$LATEST_EA" ]; then
+    echo "Analyzing: $LATEST_EA"
+    echo "Size: $(stat -c%s "$LATEST_EA") bytes"
+    CONTENT=$(cat "$LATEST_EA" | tr -d '\0')
 
     echo ""
-done
+    echo "--- [1] SIGNAL ENGINE lines ---"
+    echo "$CONTENT" | grep -i "signal" | head -50
 
-# 5. Check for trade journal files
-echo ""
-echo ">>> TRADE JOURNAL FILES <<<"
-JOURNAL_DIR="$MT5/MQL5/Files/PropFirmBot"
-ls -la "$JOURNAL_DIR/"*journal* "$JOURNAL_DIR/"*trade* "$JOURNAL_DIR/"*history* 2>/dev/null || echo "No trade journal files found"
+    echo ""
+    echo "--- [2] TRADE / ORDER / POSITION lines ---"
+    echo "$CONTENT" | grep -i "trade\|order\|position\|buy\|sell\|open pos\|close pos\|deal" | head -50
 
-# 6. MT5 terminal trade log
-echo ""
-echo ">>> MT5 TERMINAL JOURNAL (last 7 days) <<<"
-JOURNAL_DIR2="$MT5/logs"
-for jfile in $(ls -t "$JOURNAL_DIR2/"*.log 2>/dev/null | head -7); do
-    JDATE=$(basename "$jfile" .log)
-    TRADE_LINES=$(cat "$jfile" | tr -d '\0' | grep -i "order\|deal\|trade\|buy\|sell\|position" | grep -v "scanning" | wc -l)
-    if [ "$TRADE_LINES" -gt 0 ]; then
-        echo ""
-        echo "--- Terminal $JDATE ($TRADE_LINES trade lines) ---"
-        cat "$jfile" | tr -d '\0' | grep -i "order\|deal\|trade\|buy\|sell\|position" | grep -v "scanning" | tail -20
-    fi
-done
+    echo ""
+    echo "--- [3] SESSION FILTER lines ---"
+    echo "$CONTENT" | grep -i "session\|london\|newyork\|new york\|outside.*session\|trading.*hours\|market.*closed\|market.*open" | head -30
 
-# 7. Check account connected
+    echo ""
+    echo "--- [4] SPREAD FILTER lines ---"
+    echo "$CONTENT" | grep -i "spread\|slippage\|too wide\|high spread" | head -30
+
+    echo ""
+    echo "--- [5] GUARDIAN / RISK lines ---"
+    echo "$CONTENT" | grep -i "guardian\|risk\|drawdown\|halt\|shutdown\|emergency\|suspend\|weekend\|can_trade\|cannot trade\|blocked" | head -50
+
+    echo ""
+    echo "--- [6] BALANCE / EQUITY / ACCOUNT lines ---"
+    echo "$CONTENT" | grep -i "balance\|equity\|margin\|account\|fund\|initial" | head -30
+
+    echo ""
+    echo "--- [7] ERROR / WARNING lines ---"
+    echo "$CONTENT" | grep -i "error\|warning\|fail\|invalid\|cannot\|denied\|reject" | head -50
+
+    echo ""
+    echo "--- [8] INIT / DEINIT / STARTUP lines ---"
+    echo "$CONTENT" | grep -i "init\|start\|loaded\|attach\|deinit\|remove\|version\|config\|param" | head -30
+
+    echo ""
+    echo "--- [9] TICK / TIMER lines (sample) ---"
+    echo "$CONTENT" | grep -i "tick\|timer\|ontick\|ontimer" | head -10
+    echo "... total tick/timer lines: $(echo "$CONTENT" | grep -ic "tick\|timer\|ontick\|ontimer")"
+
+    echo ""
+    echo "--- [10] TELEGRAM lines ---"
+    echo "$CONTENT" | grep -i "telegram\|notification\|alert\|message.*sent" | head -20
+
+    echo ""
+    echo "--- [11] NEWS FILTER lines ---"
+    echo "$CONTENT" | grep -i "news\|calendar\|event\|nfp\|fomc\|cpi" | head -20
+
+    echo ""
+    echo "--- [12] COMPLETE FIRST 100 LINES (to see startup) ---"
+    echo "$CONTENT" | head -100
+
+    echo ""
+    echo "--- [13] COMPLETE LAST 100 LINES (latest activity) ---"
+    echo "$CONTENT" | tail -100
+
+    echo ""
+    echo "--- [14] UNIQUE MESSAGE TYPES (counts) ---"
+    echo "$CONTENT" | sed 's/^[A-Z]*[[:space:]]*[0-9]*[[:space:]]*//' | sed 's/[0-9][0-9]:[0-9][0-9]:[0-9][0-9]\.[0-9]*/TIME/' | sort | uniq -c | sort -rn | head -40
+
+else
+    echo "NO EA LOGS FOUND!"
+fi
+
+# 4. Check the second most recent EA log too
 echo ""
-echo ">>> CONNECTION STATUS <<<"
-LATEST_TERM=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
+echo "============================================"
+SECOND_EA=$(ls -t "$EA_LOGS/"*.log 2>/dev/null | sed -n '2p')
+if [ -n "$SECOND_EA" ]; then
+    echo ">>> SECOND EA LOG: $SECOND_EA <<<"
+    echo "Size: $(stat -c%s "$SECOND_EA") bytes"
+    CONTENT2=$(cat "$SECOND_EA" | tr -d '\0')
+
+    echo ""
+    echo "--- Signal lines ---"
+    echo "$CONTENT2" | grep -i "signal" | head -30
+
+    echo ""
+    echo "--- Trade/Order lines ---"
+    echo "$CONTENT2" | grep -i "trade\|order\|position\|buy\|sell" | head -30
+
+    echo ""
+    echo "--- Error lines ---"
+    echo "$CONTENT2" | grep -i "error\|warning\|fail" | head -30
+
+    echo ""
+    echo "--- First 50 lines ---"
+    echo "$CONTENT2" | head -50
+
+    echo ""
+    echo "--- Last 50 lines ---"
+    echo "$CONTENT2" | tail -50
+fi
+
+# 5. Terminal log analysis
+echo ""
+echo "============================================"
+echo ">>> TERMINAL LOG ANALYSIS <<<"
+echo "============================================"
+
+LATEST_TERM=$(ls -t "$TERM_LOGS/"*.log 2>/dev/null | grep -v metaeditor | head -1)
 if [ -n "$LATEST_TERM" ]; then
-    echo "Last terminal log: $(basename $LATEST_TERM)"
-    cat "$LATEST_TERM" | tr -d '\0' | grep -i "authorized\|login\|connect\|disconnect\|account" | tail -10
+    echo "Analyzing: $LATEST_TERM"
+    TCONTENT=$(cat "$LATEST_TERM" | tr -d '\0')
+
+    echo ""
+    echo "--- Expert/EA related ---"
+    echo "$TCONTENT" | grep -i "expert\|ea \|propfirm\|autotrading\|algo\|allow" | head -20
+
+    echo ""
+    echo "--- Connection/Login ---"
+    echo "$TCONTENT" | grep -i "authorized\|login\|connect\|disconnect\|account\|server" | head -20
+
+    echo ""
+    echo "--- Errors ---"
+    echo "$TCONTENT" | grep -i "error\|fail\|denied\|reject\|cannot" | head -20
+
+    echo ""
+    echo "--- Full log ---"
+    echo "$TCONTENT" | tail -50
 fi
 
-# 8. All config files summary
+# 6. Check if AutoTrading is actually enabled
 echo ""
-echo ">>> ALL CONFIG FILES <<<"
-for f in "$MT5/MQL5/Files/PropFirmBot/"*.json; do
-    if [ -f "$f" ]; then
+echo ">>> AUTOTRADING CHECK <<<"
+CONFIG_DIR="$MT5/config"
+if [ -d "$CONFIG_DIR" ]; then
+    echo "Config files:"
+    ls -la "$CONFIG_DIR/" 2>/dev/null
+    for cf in "$CONFIG_DIR/"*; do
+        if [ -f "$cf" ]; then
+            echo ""
+            echo "=== $(basename "$cf") ==="
+            cat "$cf" 2>/dev/null | head -30
+        fi
+    done
+fi
+
+# 7. Check EA parameters in chart
+echo ""
+echo ">>> CHART PROFILES <<<"
+PROFILES="$MT5/MQL5/Profiles"
+if [ -d "$PROFILES" ]; then
+    find "$PROFILES" -name "*.chr" -o -name "*.ini" 2>/dev/null | head -10
+    for chr in $(find "$PROFILES" -name "*.chr" 2>/dev/null | head -3); do
         echo ""
-        echo "=== $(basename $f) ==="
-        cat "$f"
-    fi
-done
+        echo "=== $chr ==="
+        cat "$chr" 2>/dev/null | head -50
+    done
+fi
 
 echo ""
 echo "============================================"
-echo "  Report Complete - $NOW"
+echo "  Diagnostic Complete - $NOW"
 echo "============================================"
