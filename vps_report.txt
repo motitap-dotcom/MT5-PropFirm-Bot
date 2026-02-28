@@ -1,117 +1,776 @@
 ============================================
-  PropFirmBot Status Report
-  2026-02-28 17:10:53 UTC
+  PropFirmBot - Account & Trade Report
+  2026-02-28 17:23:12 UTC
 ============================================
 
->>> MT5 PROCESS <<<
-STATUS: RUNNING
-root      426793  0.0  0.1 2687116 14284 ?       S<   Feb27   0:00 start.exe /exec terminal64.exe
-root      426843 17.9  3.6 2561972 298748 ?      S<l  Feb27 351:50 C:\Program Files\MetaTrader 5\terminal64.exe /config:C:\Program Files\MetaTrader 5\config\startup.ini
-PID: 426793
-426843
-Uptime: 1-08:37:04 1-08:37:02
-Memory: 14 MB292 MB
-CPU:  0.0
-17.9%
+>>> ACCOUNT STATUS (status.json) <<<
+{
+  "timestamp": "2026.02.27 23:59:58",
+  "server_time": "2026.02.27 23:59:58",
+  "gmt_time": "2026.02.27 21:59:58",
+  "account": {
+    "number": 11797849,
+    "name": "FundedNext-Stellar Instant Account- moti tapiro",
+    "server": "FundedNext-Server",
+    "currency": "USD",
+    "leverage": 30,
+    "balance": 1998.90,
+    "equity": 1998.90,
+    "margin": 0.00,
+    "free_margin": 1998.90,
+    "floating_pnl": 0.00,
+    "initial_balance": 1998.90,
+    "total_pnl": 0.00,
+    "profit_percent": 0.00
+  },
+  "guardian": {
+    "state": "HALTED",
+    "daily_dd": 0.00,
+    "total_dd": 0.00,
+    "halt_message": "Weekend guard",
+    "connection_ok": true,
+    "can_trade": false
+  },
+  "today": {
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "profit": 0.00,
+    "loss": 0.00,
+    "net": 0.00,
+    "consec_losses": 0
+  },
+  "positions": {
+    "count": 0,
+    "open": []
+  }
+}
+>>> ACCOUNT STATE (account_state.json) <<<
+{
+  "_description": "Current account state - FundedNext Stellar Instant",
+  "_important": "Always verify these values match your FundedNext dashboard",
 
->>> VNC STATUS <<<
-Xvfb: RUNNING
-x11vnc: RUNNING
+  "current_phase": "FUNDED_INSTANT",
+  "last_updated": "2026-02-21",
 
->>> EA FILES <<<
-EA directory exists
--rw-r--r-- 1 root root 163174 Feb 27 08:11 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
-Compiled EA: OK
-Total files: 13
+  "funded_instant": {
+    "name": "FundedNext Stellar Instant $2000",
+    "account_number": "11797849",
+    "server": "FundedNext-Server",
+    "account_size": 2000,
+    "trailing_max_drawdown_percent": 6,
+    "min_equity": 1880,
+    "_min_equity_note": "Initial: $2000 - 6% = $1880. Trails up with highest balance.",
+    "start_date": "2026-02-21",
+    "profit_split_percent": 70
+  },
 
->>> CONFIG FILES <<<
--rw-r--r-- 1 root root 1620 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/account_state.json
--rw-r--r-- 1 root root 1469 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/challenge_rules.json
--rw-r--r-- 1 root root 1336 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/funded_rules.json
--rw-r--r-- 1 root root 1159 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/notifications.json
--rw-r--r-- 1 root root 1805 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/risk_params.json
--rw-r--r-- 1 root root  918 Feb 27 21:59 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/status.json
--rw-r--r-- 1 root root 1244 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/symbols.json
+  "funded": {
+    "_note": "Same as funded_instant for Stellar Instant accounts",
+    "account_number": "11797849",
+    "server": "FundedNext-Server",
+    "account_size": 2000,
+    "max_daily_drawdown_percent": 0,
+    "max_total_drawdown_percent": 6,
+    "trailing_drawdown": true,
+    "profit_split_percent": 70,
+    "start_date": "2026-02-21"
+  },
 
->>> MT5 TERMINAL LOG (today) <<<
-Log size: 836 bytes
---- Last 30 lines ---
-��CM	0	04:31:20.446	Network	'11797849': scanning network for access points
-HK	0	04:31:57.656	Network	'11797849': scanning network finished
-CL	0	10:31:21.008	Network	'11797849': scanning network for access points
-HH	0	10:31:58.243	Network	'11797849': scanning network finished
-DO	0	16:31:22.930	Network	'11797849': scanning network for access points
-DF	0	16:32:00.214	Network	'11797849': scanning network finished
+  "phase_history": [
+    {
+      "phase": "FUNDED_INSTANT",
+      "start_date": "2026-02-21",
+      "end_date": null,
+      "result": null,
+      "notes": "FundedNext Stellar Instant - direct funded account"
+    }
+  ],
 
->>> EA LOG (today) <<<
-No EA log for today (20260228)
-Latest EA logs:
--rw-r--r-- 1 root root 2127586 Feb 27 21:59 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260227.log
--rw-r--r-- 1 root root   36174 Feb 25 16:30 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260225.log
--rw-r--r-- 1 root root  297152 Feb 24 22:15 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260224.log
--rw-r--r-- 1 root root  133168 Feb 23 23:47 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260223.log
--rw-r--r-- 1 root root   92702 Feb 22 22:39 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260222.log
+  "checklist_before_going_live": [
+    "[x] Verify account credentials are correct",
+    "[x] Confirm all drawdown limits match prop firm rules (6% trailing)",
+    "[x] Set up Telegram notifications",
+    "[ ] Verify VPS is stable (24/7 uptime)",
+    "[ ] Check broker spreads during London/NY sessions",
+    "[x] Confirm EA is allowed by prop firm",
+    "[ ] Set up monitoring scripts",
+    "[ ] Take screenshot of starting balance"
+  ]
+}
 
---- Last EA log:  ---
-basename: extra operand ‘5/MQL5/Logs/20260227.log’
+>>> RISK PARAMS (risk_params.json) <<<
+{
+  "_mode": "FUNDED_INSTANT",
+  "_warning": "TIGHTENED for 6% trailing drawdown - Stellar Instant. BE VERY CONSERVATIVE.",
+
+  "risk_per_trade_percent": 0.5,
+  "max_risk_per_trade_percent": 0.75,
+  "min_risk_per_trade_percent": 0.25,
+  "max_open_positions": 2,
+  "max_daily_trades": 6,
+  "max_consecutive_losses": 4,
+  "min_risk_reward_ratio": 2.0,
+
+  "drawdown_guards": {
+    "hard_total_dd_percent": 6.0,
+    "soft_total_dd_percent": 3.5,
+    "critical_total_dd_percent": 5.0,
+    "trailing_drawdown": true,
+    "_note": "6% TRAILING DD. Soft=reduce lot size | Critical=close all & halt | Hard=account blown (never reach)"
+  },
+
+  "spread_filter": {
+    "major_pairs_max_pips": 2.5,
+    "xauusd_max_pips": 4.0,
+    "spread_anomaly_multiplier": 3.0
+  },
+
+  "news_filter": {
+    "minutes_before": 30,
+    "minutes_after": 30,
+    "filter_high_impact": true,
+    "filter_medium_impact": false,
+    "_note": "FundedNext caps profit at 40% for trades within 5 min of news"
+  },
+
+  "trailing_stop": {
+    "activation_pips": 30,
+    "trail_distance_pips": 20
+  },
+
+  "breakeven": {
+    "activation_pips": 20,
+    "offset_pips": 2
+  },
+
+  "session_filter": {
+    "london_start_utc": "07:00",
+    "london_end_utc": "11:00",
+    "newyork_start_utc": "12:00",
+    "newyork_end_utc": "16:00"
+  },
+
+  "weekend_guard": {
+    "close_all_day": 5,
+    "close_all_hour_utc": 20
+  },
+
+  "flash_crash_guard": {
+    "max_equity_drop_pct_per_tick": 1.5,
+    "connection_timeout_seconds": 120
+  },
+
+  "caution_mode": {
+    "_note": "When approaching DD limits, lot size is halved automatically",
+    "trigger_at_percent_of_soft_limit": 60
+  },
+
+  "consistency_rule": {
+    "enabled": true,
+    "max_single_day_profit_percent": 40,
+    "_note": "No single day can be more than 40% of total profit for payout eligibility"
+  }
+}
+
+============================================
+>>> TRADE HISTORY FROM EA LOGS <<<
+============================================
+
+--- Log: Program ---
+[Orders/Trades]
+[Balance/Equity]
+[Signals]
+[Guardian/Safety]
+
+
+--- Log: MetaTrader ---
+[Orders/Trades]
+cat: /root/.wine/drive_c/Program: No such file or directory
+cat: /root/.wine/drive_c/Program: No such file or directory
+cat: /root/.wine/drive_c/Program: No such file or directory
+cat: /root/.wine/drive_c/Program: No such file or directory
+cat: Files/MetaTrader: No such file or directory
+[Balance/Equity]
+cat: Files/MetaTrader: No such file or directory
+[Signals]
+[Guardian/Safety]
+cat: Files/MetaTrader: No such file or directory
+cat: Files/MetaTrader: No such file or directory
+
+
+--- Log: 20260227 ---
+[Orders/Trades]
+cat: 5/MQL5/Logs/20260227.log: No such file or directory
+[Balance/Equity]
+cat: 5/MQL5/Logs/20260227.log: No such file or directory
+[Signals]
+cat: 5/MQL5/Logs/20260227.log: No such file or directory
+[Guardian/Safety]
+cat: 5/MQL5/Logs/20260227.log: No such file or directory
+
+
+--- Log: Program ---
+[Orders/Trades]
+cat: /root/.wine/drive_c/Program: No such file or directory
+[Balance/Equity]
+cat: /root/.wine/drive_c/Program: No such file or directory
+[Signals]
+[Guardian/Safety]
+
+
+--- Log: MetaTrader ---
+[Orders/Trades]
+[Balance/Equity]
+cat: /root/.wine/drive_c/Program: No such file or directory
+cat: /root/.wine/drive_c/Program: No such file or directory
+cat: Files/MetaTrader: No such file or directory
+cat: Files/MetaTrader: No such file or directory
+[Signals]
+cat: Files/MetaTrader: No such file or directory
+[Guardian/Safety]
+cat: Files/MetaTrader: No such file or directory
+
+
+--- Log: 20260225 ---
+[Orders/Trades]
+cat: 5/MQL5/Logs/20260225.log: No such file or directory
+[Balance/Equity]
+cat: 5/MQL5/Logs/20260225.log: No such file or directory
+[Signals]
+cat: 5/MQL5/Logs/20260225.log: No such file or directory
+[Guardian/Safety]
+cat: 5/MQL5/Logs/20260225.log: No such file or directory
+
+
+--- Log: Program ---
+[Orders/Trades]
+cat: /root/.wine/drive_c/Program: No such file or directory
+[Balance/Equity]
+cat: /root/.wine/drive_c/Program: No such file or directory
+[Signals]
+cat: /root/.wine/drive_c/Program: No such file or directory
+[Guardian/Safety]
+cat: /root/.wine/drive_c/Program: No such file or directory
+
+
+--- Log: MetaTrader ---
+[Orders/Trades]
+cat: Files/MetaTrader: No such file or directory
+[Balance/Equity]
+cat: Files/MetaTrader: No such file or directory
+[Signals]
+cat: Files/MetaTrader: No such file or directory
+[Guardian/Safety]
+cat: Files/MetaTrader: No such file or directory
+
+
+--- Log: 20260224 ---
+[Orders/Trades]
+cat: 5/MQL5/Logs/20260224.log: No such file or directory
+[Balance/Equity]
+cat: 5/MQL5/Logs/20260224.log: No such file or directory
+[Signals]
+cat: 5/MQL5/Logs/20260224.log: No such file or directory
+[Guardian/Safety]
+cat: 5/MQL5/Logs/20260224.log: No such file or directory
+
+
+--- Log: Program ---
+[Orders/Trades]
+cat: /root/.wine/drive_c/Program: No such file or directory
+[Balance/Equity]
+cat: /root/.wine/drive_c/Program: No such file or directory
+[Signals]
+cat: /root/.wine/drive_c/Program: No such file or directory
+[Guardian/Safety]
+cat: /root/.wine/drive_c/Program: No such file or directory
+
+
+--- Log: MetaTrader ---
+[Orders/Trades]
+cat: Files/MetaTrader: No such file or directory
+[Balance/Equity]
+cat: Files/MetaTrader: No such file or directory
+[Signals]
+cat: Files/MetaTrader: No such file or directory
+[Guardian/Safety]
+cat: Files/MetaTrader: No such file or directory
+
+
+--- Log: 20260223 ---
+[Orders/Trades]
+cat: 5/MQL5/Logs/20260223.log: No such file or directory
+[Balance/Equity]
+cat: 5/MQL5/Logs/20260223.log: No such file or directory
+[Signals]
+cat: 5/MQL5/Logs/20260223.log: No such file or directory
+[Guardian/Safety]
+cat: 5/MQL5/Logs/20260223.log: No such file or directory
+
+
+--- Log: Program ---
+[Orders/Trades]
+cat: /root/.wine/drive_c/Program: No such file or directory
+[Balance/Equity]
+cat: /root/.wine/drive_c/Program: No such file or directory
+[Signals]
+cat: /root/.wine/drive_c/Program: No such file or directory
+[Guardian/Safety]
+cat: /root/.wine/drive_c/Program: No such file or directory
+
+
+--- Log: MetaTrader ---
+[Orders/Trades]
+cat: Files/MetaTrader: No such file or directory
+[Balance/Equity]
+cat: Files/MetaTrader: No such file or directory
+[Signals]
+cat: Files/MetaTrader: No such file or directory
+[Guardian/Safety]
+cat: Files/MetaTrader: No such file or directory
+
+
+--- Log: 20260222 ---
+[Orders/Trades]
+cat: 5/MQL5/Logs/20260222.log: No such file or directory
+[Balance/Equity]
+cat: 5/MQL5/Logs/20260222.log: No such file or directory
+[Signals]
+cat: 5/MQL5/Logs/20260222.log: No such file or directory
+[Guardian/Safety]
+cat: 5/MQL5/Logs/20260222.log: No such file or directory
+
+
+>>> TRADE JOURNAL FILES <<<
+No trade journal files found
+
+>>> MT5 TERMINAL JOURNAL (last 7 days) <<<
+cat: /root/.wine/drive_c/Program: No such file or directory
+cat: Files/MetaTrader: No such file or directory
+cat: 5/logs/20260228.log: No such file or directory
+cat: /root/.wine/drive_c/Program: No such file or directory
+cat: Files/MetaTrader: No such file or directory
+cat: 5/logs/20260227.log: No such file or directory
+cat: /root/.wine/drive_c/Program: No such file or directory
+cat: Files/MetaTrader: No such file or directory
+cat: 5/logs/20260226.log: No such file or directory
+cat: /root/.wine/drive_c/Program: No such file or directory
+cat: Files/MetaTrader: No such file or directory
+cat: 5/logs/20260225.log: No such file or directory
+cat: /root/.wine/drive_c/Program: No such file or directory
+cat: Files/MetaTrader: No such file or directory
+cat: 5/logs/metaeditor.log: No such file or directory
+cat: /root/.wine/drive_c/Program: No such file or directory
+cat: Files/MetaTrader: No such file or directory
+cat: 5/logs/20260224.log: No such file or directory
+cat: /root/.wine/drive_c/Program: No such file or directory
+cat: Files/MetaTrader: No such file or directory
+cat: 5/logs/20260223.log: No such file or directory
+
+>>> CONNECTION STATUS <<<
+basename: extra operand ‘5/logs/20260228.log’
 Try 'basename --help' for more information.
-EE	0	21:57:41.193	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-DI	0	21:57:41.194	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-LN	0	21:57:51.283	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-MM	0	21:57:51.284	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-LJ	0	21:57:55.137	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-PR	0	21:57:55.137	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-EG	0	21:58:05.509	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-IF	0	21:58:05.509	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-CS	0	21:58:21.132	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-GK	0	21:58:21.132	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-OL	0	21:58:25.154	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-KO	0	21:58:25.154	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-IH	0	21:58:39.438	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-FD	0	21:58:39.439	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-LE	0	21:58:47.265	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-QH	0	21:58:47.266	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-HQ	0	21:58:51.075	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-MS	0	21:58:51.075	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-CO	0	21:58:55.087	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-FO	0	21:58:55.088	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+Last terminal log: 
 
->>> NETWORK CONNECTIONS <<<
-Outbound connections (non-SSH/VNC):
-Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
-0      0       77.237.234.2:45082 194.164.179.244:443         
-0      0       77.237.234.2:40573      65.2.67.50:443         
+>>> ALL CONFIG FILES <<<
 
-DNS resolution:
-Name:	google.com
-Address: 2a00:1450:4001:81c::200e
+===  ===
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/account_state.json’
+Try 'basename --help' for more information.
+{
+  "_description": "Current account state - FundedNext Stellar Instant",
+  "_important": "Always verify these values match your FundedNext dashboard",
 
+  "current_phase": "FUNDED_INSTANT",
+  "last_updated": "2026-02-21",
 
->>> TRADE ACTIVITY <<<
-No EA log to check
+  "funded_instant": {
+    "name": "FundedNext Stellar Instant $2000",
+    "account_number": "11797849",
+    "server": "FundedNext-Server",
+    "account_size": 2000,
+    "trailing_max_drawdown_percent": 6,
+    "min_equity": 1880,
+    "_min_equity_note": "Initial: $2000 - 6% = $1880. Trails up with highest balance.",
+    "start_date": "2026-02-21",
+    "profit_split_percent": 70
+  },
 
->>> WATCHDOG <<<
-Watchdog cron: INSTALLED
-*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
-MT5 service: NOT configured as systemd service
+  "funded": {
+    "_note": "Same as funded_instant for Stellar Instant accounts",
+    "account_number": "11797849",
+    "server": "FundedNext-Server",
+    "account_size": 2000,
+    "max_daily_drawdown_percent": 0,
+    "max_total_drawdown_percent": 6,
+    "trailing_drawdown": true,
+    "profit_split_percent": 70,
+    "start_date": "2026-02-21"
+  },
 
->>> SYSTEM HEALTH <<<
-Uptime:  17:10:53 up 6 days,  5:00,  8 users,  load average: 0.15, 0.23, 0.20
+  "phase_history": [
+    {
+      "phase": "FUNDED_INSTANT",
+      "start_date": "2026-02-21",
+      "end_date": null,
+      "result": null,
+      "notes": "FundedNext Stellar Instant - direct funded account"
+    }
+  ],
 
-Memory:
-               total        used        free      shared  buff/cache   available
-Mem:           7.8Gi       1.3Gi       6.0Gi        31Mi       877Mi       6.5Gi
+  "checklist_before_going_live": [
+    "[x] Verify account credentials are correct",
+    "[x] Confirm all drawdown limits match prop firm rules (6% trailing)",
+    "[x] Set up Telegram notifications",
+    "[ ] Verify VPS is stable (24/7 uptime)",
+    "[ ] Check broker spreads during London/NY sessions",
+    "[x] Confirm EA is allowed by prop firm",
+    "[ ] Set up monitoring scripts",
+    "[ ] Take screenshot of starting balance"
+  ]
+}
 
-Disk:
-/dev/sda1       145G   16G  130G  11% /
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/challenge_rules.json’
+Try 'basename --help' for more information.
+===  ===
+{
+  "challenge_name": "FundedNext Stellar Instant $2000",
+  "account_type": "INSTANT_FUNDED",
+  "account_size": 2000,
+  "currency": "USD",
 
-Load avg: 0.15 0.23 0.20 1/374 800120
+  "profit_target_percent": 0,
+  "profit_target_amount": 0,
+  "_profit_note": "No profit target - instant funded account",
 
->>> WINE <<<
-wine-11.3 (Staging)
+  "max_daily_drawdown_percent": 0,
+  "max_daily_drawdown_amount": 0,
+  "_daily_dd_note": "Stellar Instant has NO daily drawdown limit",
+
+  "max_total_drawdown_percent": 6,
+  "max_total_drawdown_amount": 120,
+  "trailing_drawdown": true,
+  "_trailing_dd_note": "6% TRAILING drawdown from highest equity. Minimum equity = highest balance - 6%",
+
+  "min_trading_days": 0,
+  "_min_days_note": "No minimum trading days for Stellar Instant",
+
+  "leverage": 100,
+  "ea_allowed": true,
+  "news_trading_allowed": true,
+  "news_profit_cap_percent": 40,
+  "_news_note": "Profit from trades within 5 min of high-impact news capped at 40%",
+
+  "weekend_holding_allowed": true,
+  "min_trade_duration_seconds": 0,
+  "max_open_lots": 5.0,
+
+  "payout_rules": {
+    "on_demand_above_5_percent": true,
+    "minimum_14_days_below_5_percent": true,
+    "min_profit_to_withdraw": 500,
+    "min_withdrawal_amount": 250,
+    "profit_split_percent": 70,
+    "max_profit_split_percent": 80,
+    "consistency_rule_max_day_percent": 40,
+    "_note": "No single day can be more than 40% of total profit"
+  },
+
+  "scaling": {
+    "enabled": true,
+    "increase_percent": 40,
+    "every_months": 4,
+    "max_account_size": 4000000
+  }
+}
+
+===  ===
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/funded_rules.json’
+Try 'basename --help' for more information.
+{
+  "_description": "Rules for FundedNext Stellar Instant account",
+
+  "account_size": 2000,
+  "currency": "USD",
+  "leverage": 100,
+
+  "max_daily_drawdown_percent": 0,
+  "max_total_drawdown_percent": 6,
+  "trailing_drawdown": true,
+  "_dd_note": "6% trailing drawdown. No daily DD limit.",
+
+  "profit_split_percent": 70,
+  "max_profit_split_percent": 80,
+  "min_withdrawal_amount": 250,
+  "min_profit_to_withdraw": 500,
+  "has_profit_target": false,
+  "profit_target_percent": 0,
+
+  "ea_allowed": true,
+  "news_trading_allowed": true,
+  "news_profit_cap_percent": 40,
+  "weekend_holding_allowed": true,
+
+  "risk_adjustments": {
+    "_note": "Conservative for 6% trailing DD - protect capital",
+    "risk_multiplier": 0.7,
+    "risk_per_trade_percent": 0.5,
+    "max_risk_per_trade_percent": 0.75,
+    "max_open_positions": 2,
+    "max_daily_trades": 6,
+    "min_risk_reward_ratio": 2.0
+  },
+
+  "drawdown_guards": {
+    "soft_total_dd_percent": 3.5,
+    "critical_total_dd_percent": 5.0,
+    "hard_total_dd_percent": 6.0,
+    "trailing_drawdown": true
+  },
+
+  "consistency_rule": {
+    "enabled": true,
+    "max_single_day_profit_percent": 40,
+    "_note": "Required for payout eligibility"
+  },
+
+  "scaling_rules": {
+    "enabled": true,
+    "every_months": 4,
+    "scaling_increase_percent": 40,
+    "max_account_size": 4000000
+  }
+}
+
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/notifications.json’
+Try 'basename --help' for more information.
+===  ===
+{
+  "_description": "Notification settings for PropFirmBot",
+
+  "telegram": {
+    "enabled": true,
+    "token": "8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g",
+    "chat_id": "7013213983",
+    "_setup_instructions": [
+      "1. Open Telegram and search for @BotFather",
+      "2. Send /newbot and follow instructions to create a bot",
+      "3. Copy the bot token and paste it here",
+      "4. Start a chat with your bot, then visit:",
+      "   https://api.telegram.org/bot<TOKEN>/getUpdates",
+      "5. Send a message to your bot, refresh the page,",
+      "   and copy your chat_id from the response",
+      "6. Set enabled to true"
+    ]
+  },
+
+  "push_notifications": {
+    "enabled": true,
+    "_note": "Uses MT5 built-in push notifications to mobile app"
+  },
+
+  "email": {
+    "enabled": false,
+    "_note": "Configure email in MT5 Terminal -> Tools -> Options -> Email"
+  },
+
+  "notify_on": {
+    "trade_open": true,
+    "trade_close": true,
+    "state_change": true,
+    "daily_report": true,
+    "emergency": true,
+    "target_reached": true,
+    "analysis_report": true
+  },
+
+  "daily_report_time_utc": "17:00",
+  "weekly_report_day": "Friday"
+}
+
+===  ===
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/risk_params.json’
+Try 'basename --help' for more information.
+{
+  "_mode": "FUNDED_INSTANT",
+  "_warning": "TIGHTENED for 6% trailing drawdown - Stellar Instant. BE VERY CONSERVATIVE.",
+
+  "risk_per_trade_percent": 0.5,
+  "max_risk_per_trade_percent": 0.75,
+  "min_risk_per_trade_percent": 0.25,
+  "max_open_positions": 2,
+  "max_daily_trades": 6,
+  "max_consecutive_losses": 4,
+  "min_risk_reward_ratio": 2.0,
+
+  "drawdown_guards": {
+    "hard_total_dd_percent": 6.0,
+    "soft_total_dd_percent": 3.5,
+    "critical_total_dd_percent": 5.0,
+    "trailing_drawdown": true,
+    "_note": "6% TRAILING DD. Soft=reduce lot size | Critical=close all & halt | Hard=account blown (never reach)"
+  },
+
+  "spread_filter": {
+    "major_pairs_max_pips": 2.5,
+    "xauusd_max_pips": 4.0,
+    "spread_anomaly_multiplier": 3.0
+  },
+
+  "news_filter": {
+    "minutes_before": 30,
+    "minutes_after": 30,
+    "filter_high_impact": true,
+    "filter_medium_impact": false,
+    "_note": "FundedNext caps profit at 40% for trades within 5 min of news"
+  },
+
+  "trailing_stop": {
+    "activation_pips": 30,
+    "trail_distance_pips": 20
+  },
+
+  "breakeven": {
+    "activation_pips": 20,
+    "offset_pips": 2
+  },
+
+  "session_filter": {
+    "london_start_utc": "07:00",
+    "london_end_utc": "11:00",
+    "newyork_start_utc": "12:00",
+    "newyork_end_utc": "16:00"
+  },
+
+  "weekend_guard": {
+    "close_all_day": 5,
+    "close_all_hour_utc": 20
+  },
+
+  "flash_crash_guard": {
+    "max_equity_drop_pct_per_tick": 1.5,
+    "connection_timeout_seconds": 120
+  },
+
+  "caution_mode": {
+    "_note": "When approaching DD limits, lot size is halved automatically",
+    "trigger_at_percent_of_soft_limit": 60
+  },
+
+  "consistency_rule": {
+    "enabled": true,
+    "max_single_day_profit_percent": 40,
+    "_note": "No single day can be more than 40% of total profit for payout eligibility"
+  }
+}
+
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/status.json’
+Try 'basename --help' for more information.
+===  ===
+{
+  "timestamp": "2026.02.27 23:59:58",
+  "server_time": "2026.02.27 23:59:58",
+  "gmt_time": "2026.02.27 21:59:58",
+  "account": {
+    "number": 11797849,
+    "name": "FundedNext-Stellar Instant Account- moti tapiro",
+    "server": "FundedNext-Server",
+    "currency": "USD",
+    "leverage": 30,
+    "balance": 1998.90,
+    "equity": 1998.90,
+    "margin": 0.00,
+    "free_margin": 1998.90,
+    "floating_pnl": 0.00,
+    "initial_balance": 1998.90,
+    "total_pnl": 0.00,
+    "profit_percent": 0.00
+  },
+  "guardian": {
+    "state": "HALTED",
+    "daily_dd": 0.00,
+    "total_dd": 0.00,
+    "halt_message": "Weekend guard",
+    "connection_ok": true,
+    "can_trade": false
+  },
+  "today": {
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "profit": 0.00,
+    "loss": 0.00,
+    "net": 0.00,
+    "consec_losses": 0
+  },
+  "positions": {
+    "count": 0,
+    "open": []
+  }
+}
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/symbols.json’
+Try 'basename --help' for more information.
+===  ===
+{
+  "symbols": [
+    {
+      "name": "EURUSD",
+      "pip_size": 0.0001,
+      "pip_value_per_lot": 10.0,
+      "max_spread_pips": 3.0,
+      "point_digits": 5,
+      "min_lot": 0.01,
+      "max_lot": 5.0,
+      "lot_step": 0.01,
+      "enabled": true,
+      "preferred_timeframe": "M15",
+      "htf_timeframe": "H4"
+    },
+    {
+      "name": "GBPUSD",
+      "pip_size": 0.0001,
+      "pip_value_per_lot": 10.0,
+      "max_spread_pips": 3.0,
+      "point_digits": 5,
+      "min_lot": 0.01,
+      "max_lot": 5.0,
+      "lot_step": 0.01,
+      "enabled": true,
+      "preferred_timeframe": "M15",
+      "htf_timeframe": "H4"
+    },
+    {
+      "name": "USDJPY",
+      "pip_size": 0.01,
+      "pip_value_per_lot": 6.7,
+      "max_spread_pips": 3.0,
+      "point_digits": 3,
+      "min_lot": 0.01,
+      "max_lot": 5.0,
+      "lot_step": 0.01,
+      "enabled": true,
+      "preferred_timeframe": "M15",
+      "htf_timeframe": "H4"
+    },
+    {
+      "name": "XAUUSD",
+      "pip_size": 0.01,
+      "pip_value_per_lot": 1.0,
+      "max_spread_pips": 5.0,
+      "point_digits": 2,
+      "min_lot": 0.01,
+      "max_lot": 5.0,
+      "lot_step": 0.01,
+      "enabled": true,
+      "preferred_timeframe": "M15",
+      "htf_timeframe": "H4"
+    }
+  ]
+}
 
 ============================================
-  Report Complete - 2026-02-28 17:10:53 UTC
+  Report Complete - 2026-02-28 17:23:12 UTC
 ============================================
 
 WORKFLOW_EXIT_CODE=0
