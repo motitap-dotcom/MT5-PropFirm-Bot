@@ -1,0 +1,71 @@
+============================================
+  PropFirmBot - Deploy & Restart
+  2026-02-28 18:16:13 UTC
+============================================
+
+>>> Updating repo...
+Current branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
+Your branch is up to date with 'origin/claude/check-bot-status-1N9wR'.
+Already up to date.
+Updated branch: claude/check-bot-status-1N9wR
+Latest commit: 5fcf68d Fix deploy script: use nohup to prevent SSH timeout
+
+>>> Copying EA files...
+  Copied: PropFirmBot.mq5
+  Copied: AccountStateManager.mqh
+  Copied: Dashboard.mqh
+  Copied: Guardian.mqh
+  Copied: NewsFilter.mqh
+  Copied: Notifications.mqh
+  Copied: RiskManager.mqh
+  Copied: SignalEngine.mqh
+  Copied: StatusWriter.mqh
+  Copied: TradeAnalyzer.mqh
+  Copied: TradeJournal.mqh
+  Copied: TradeManager.mqh
+
+Files in EA directory:
+-rw-r--r-- 1 root root  15380 Feb 28 18:16 AccountStateManager.mqh
+-rw-r--r-- 1 root root  12411 Feb 28 18:16 Dashboard.mqh
+-rw-r--r-- 1 root root  22365 Feb 28 18:16 Guardian.mqh
+-rw-r--r-- 1 root root  10622 Feb 28 18:16 NewsFilter.mqh
+-rw-r--r-- 1 root root  11971 Feb 28 18:16 Notifications.mqh
+-rw-r--r-- 1 root root 163174 Feb 27 08:11 PropFirmBot.ex5
+-rw-r--r-- 1 root root  34567 Feb 28 18:16 PropFirmBot.mq5
+-rw-r--r-- 1 root root  25491 Feb 28 18:16 RiskManager.mqh
+-rw-r--r-- 1 root root  25579 Feb 28 18:16 SignalEngine.mqh
+-rw-r--r-- 1 root root   8535 Feb 28 18:16 StatusWriter.mqh
+-rw-r--r-- 1 root root  22240 Feb 28 18:16 TradeAnalyzer.mqh
+-rw-r--r-- 1 root root   9141 Feb 28 18:16 TradeJournal.mqh
+-rw-r--r-- 1 root root  14433 Feb 28 18:16 TradeManager.mqh
+
+>>> Stopping MT5...
+MT5 killed
+
+>>> Starting MT5...
+MT5 started with PID: 814864
+
+>>> Verification...
+MT5 processes: 2
+MT5: RUNNING OK
+root      814864  3.9  0.1 2686336 14404 ?       S<   18:16   0:00 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
+root      814886 83.6  2.6 1229288 213104 ?      S<l  18:16   0:04 C:\Program Files\MetaTrader 5\terminal64.exe /config:/root/.wine/drive_c/Program Files/MetaTrader 5/config/startup.ini
+Xvfb: RUNNING
+x11vnc: RUNNING
+
+>>> EA .ex5 file (will be recompiled by MT5 on startup):
+-rw-r--r-- 1 root root 163174 Feb 27 08:11 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+
+>>> Source files updated:
+-rw-r--r-- 1 root root 34567 Feb 28 18:16 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
+-rw-r--r-- 1 root root 25491 Feb 28 18:16 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/RiskManager.mqh
+-rw-r--r-- 1 root root 25579 Feb 28 18:16 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/SignalEngine.mqh
+
+============================================
+  Deploy Complete - 2026-02-28 18:16:21 UTC
+  MT5 will auto-compile EA on startup
+  NOTE: EA needs to be re-attached to chart
+  (or MT5 remembers from last session)
+============================================
+
+WORKFLOW_EXIT_CODE=0
