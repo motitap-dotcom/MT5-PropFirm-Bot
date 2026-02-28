@@ -1,77 +1,117 @@
-=== VERIFY 2026-02-23 08:33:46 UTC ===
---- MT5 Process ---
-root       82625  0.0  0.1 2685416 14132 ?       S<   08:20   0:00 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe /login:11797849 /password:gazDE62##
-root       82694  0.0  2.0 298212 168312 ?       S<   08:20   0:00 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
-root       84456  0.0  0.1 2669780 14208 pts/3   S    08:28   0:00 start.exe /exec terminal64.exe /login:11797849 /password:gazDE62##
-root       84521 23.1  3.7 1395612 304372 pts/3  Sl   08:28   1:13 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
+============================================
+  PropFirmBot Status Report
+  2026-02-28 17:10:53 UTC
+============================================
 
---- Outbound Connections ---
+>>> MT5 PROCESS <<<
+STATUS: RUNNING
+root      426793  0.0  0.1 2687116 14284 ?       S<   Feb27   0:00 start.exe /exec terminal64.exe
+root      426843 17.9  3.6 2561972 298748 ?      S<l  Feb27 351:50 C:\Program Files\MetaTrader 5\terminal64.exe /config:C:\Program Files\MetaTrader 5\config\startup.ini
+PID: 426793
+426843
+Uptime: 1-08:37:04 1-08:37:02
+Memory: 14 MB292 MB
+CPU:  0.0
+17.9%
+
+>>> VNC STATUS <<<
+Xvfb: RUNNING
+x11vnc: RUNNING
+
+>>> EA FILES <<<
+EA directory exists
+-rw-r--r-- 1 root root 163174 Feb 27 08:11 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+Compiled EA: OK
+Total files: 13
+
+>>> CONFIG FILES <<<
+-rw-r--r-- 1 root root 1620 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/account_state.json
+-rw-r--r-- 1 root root 1469 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/challenge_rules.json
+-rw-r--r-- 1 root root 1336 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/funded_rules.json
+-rw-r--r-- 1 root root 1159 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/notifications.json
+-rw-r--r-- 1 root root 1805 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/risk_params.json
+-rw-r--r-- 1 root root  918 Feb 27 21:59 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/status.json
+-rw-r--r-- 1 root root 1244 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/symbols.json
+
+>>> MT5 TERMINAL LOG (today) <<<
+Log size: 836 bytes
+--- Last 30 lines ---
+ÿþCM	0	04:31:20.446	Network	'11797849': scanning network for access points
+HK	0	04:31:57.656	Network	'11797849': scanning network finished
+CL	0	10:31:21.008	Network	'11797849': scanning network for access points
+HH	0	10:31:58.243	Network	'11797849': scanning network finished
+DO	0	16:31:22.930	Network	'11797849': scanning network for access points
+DF	0	16:32:00.214	Network	'11797849': scanning network finished
+
+>>> EA LOG (today) <<<
+No EA log for today (20260228)
+Latest EA logs:
+-rw-r--r-- 1 root root 2127586 Feb 27 21:59 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260227.log
+-rw-r--r-- 1 root root   36174 Feb 25 16:30 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260225.log
+-rw-r--r-- 1 root root  297152 Feb 24 22:15 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260224.log
+-rw-r--r-- 1 root root  133168 Feb 23 23:47 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260223.log
+-rw-r--r-- 1 root root   92702 Feb 22 22:39 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260222.log
+
+--- Last EA log:  ---
+basename: extra operand â€˜5/MQL5/Logs/20260227.logâ€™
+Try 'basename --help' for more information.
+EE	0	21:57:41.193	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+DI	0	21:57:41.194	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+LN	0	21:57:51.283	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+MM	0	21:57:51.284	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+LJ	0	21:57:55.137	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+PR	0	21:57:55.137	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+EG	0	21:58:05.509	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+IF	0	21:58:05.509	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+CS	0	21:58:21.132	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+GK	0	21:58:21.132	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+OL	0	21:58:25.154	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+KO	0	21:58:25.154	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+IH	0	21:58:39.438	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+FD	0	21:58:39.439	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+LE	0	21:58:47.265	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+QH	0	21:58:47.266	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+HQ	0	21:58:51.075	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+MS	0	21:58:51.075	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
+CO	0	21:58:55.087	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
+FO	0	21:58:55.088	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
+
+>>> NETWORK CONNECTIONS <<<
+Outbound connections (non-SSH/VNC):
 Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
-0      0       77.237.234.2:51068 194.164.179.244:443         
+0      0       77.237.234.2:45082 194.164.179.244:443         
+0      0       77.237.234.2:40573      65.2.67.50:443         
 
---- Terminal Log (latest) ---
-Size: 10286 bytes
-NR	0	07:45:27.325	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-RH	0	07:45:27.328	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-FS	0	07:45:27.328	Terminal	C:\Program Files\MetaTrader 5
-PF	2	07:45:27.917	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-LH	2	07:45:27.917	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-RJ	0	07:45:30.819	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-JQ	0	07:50:05.644	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-RN	0	07:50:05.645	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-RQ	0	07:50:05.645	Terminal	C:\Program Files\MetaTrader 5
-NG	2	07:50:06.202	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-RF	2	07:50:06.202	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-PI	0	07:50:09.622	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-HD	2	07:55:19.682	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
-QL	0	07:55:19.690	Experts	expert PropFirmBot (EURUSD,M15) removed
-NH	0	08:28:32.295	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-QE	0	08:28:32.301	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-QH	0	08:28:32.301	Terminal	C:\Program Files\MetaTrader 5
-GL	2	08:28:32.932	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-DM	2	08:28:32.933	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-IP	0	08:28:37.725	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-OR	0	08:32:07.682	Experts	expert PropFirmBot (EURUSD,M15) removed
-GF	0	08:32:07.691	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-CR	3	08:32:07.916	Experts	automated trading is disabled because the account has been changed
-CE	2	08:32:08.029	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-FK	0	08:32:14.199	Experts	automated trading is enabled
+DNS resolution:
+Name:	google.com
+Address: 2a00:1450:4001:81c::200e
 
---- EA Log Today ---
-EA LOG EXISTS! Size: 18074 bytes
-EI	0	08:32:22.908	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-KQ	0	08:32:22.908	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-QR	0	08:32:22.908	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
-KJ	0	08:32:22.908	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
-KP	0	08:32:22.908	PropFirmBot (EURUSD,M15)	Target: NO TARGET
-GD	0	08:32:22.908	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
-GS	0	08:32:22.908	PropFirmBot (EURUSD,M15)	[GUARDIAN 2024.08.23 23:58:59] INIT | Bal=$2000.00 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-FI	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20240823.csv | Initial balance: $2000.00
-OK	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
-PP	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
-LL	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-HM	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-CO	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
-IF	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-GI	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY
-EO	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-LN	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-NN	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-OR	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-IP	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
-QL	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
-GR	0	08:32:22.910	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-QS	0	08:32:22.911	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-LI	0	08:32:22.911	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-IQ	0	08:32:22.911	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-ID	0	08:32:22.911	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-MP	0	08:32:22.911	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-GF	0	08:32:22.911	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-GO	0	08:32:22.911	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-CE	0	08:32:22.911	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
 
---- Wine Version ---
-wine-9.0 (Ubuntu 9.0~repack-4build3)
+>>> TRADE ACTIVITY <<<
+No EA log to check
 
-=== DONE ===
-EXIT_CODE=0
+>>> WATCHDOG <<<
+Watchdog cron: INSTALLED
+*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
+MT5 service: NOT configured as systemd service
+
+>>> SYSTEM HEALTH <<<
+Uptime:  17:10:53 up 6 days,  5:00,  8 users,  load average: 0.15, 0.23, 0.20
+
+Memory:
+               total        used        free      shared  buff/cache   available
+Mem:           7.8Gi       1.3Gi       6.0Gi        31Mi       877Mi       6.5Gi
+
+Disk:
+/dev/sda1       145G   16G  130G  11% /
+
+Load avg: 0.15 0.23 0.20 1/374 800120
+
+>>> WINE <<<
+wine-11.3 (Staging)
+
+============================================
+  Report Complete - 2026-02-28 17:10:53 UTC
+============================================
+
+WORKFLOW_EXIT_CODE=0
