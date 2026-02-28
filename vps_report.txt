@@ -1,1093 +1,158 @@
 ============================================
-  WHY IS THE BOT NOT TRADING?
-  Deep Diagnostic - 2026-02-28 17:37:51 UTC
+  PropFirmBot Status Report
+  2026-02-28 18:17:41 UTC
 ============================================
 
->>> ALL EA LOG FILES <<<
--rw-r--r-- 1 root root  91K Feb 22 22:39 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260222.log
--rw-r--r-- 1 root root 131K Feb 23 23:47 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260223.log
--rw-r--r-- 1 root root 291K Feb 24 22:15 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260224.log
--rw-r--r-- 1 root root  36K Feb 25 16:30 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260225.log
--rw-r--r-- 1 root root 2.1M Feb 27 21:59 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260227.log
+>>> MT5 PROCESS <<<
+STATUS: RUNNING
+root      814864  0.2  0.1 2686336 14404 ?       S<   18:16   0:00 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
+root      814886 15.1  2.9 1364136 242484 ?      S<l  18:16   0:12 C:\Program Files\MetaTrader 5\terminal64.exe /config:/root/.wine/drive_c/Program Files/MetaTrader 5/config/startup.ini
+PID: 814864
+814886
+Uptime: 01:24 01:24
+Memory: 14 MB237 MB
+CPU:  0.2
+15.1%
 
->>> ALL TERMINAL LOG FILES <<<
--rw-r--r-- 1 root root  12K Feb 22 22:39 /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260222.log
--rw-r--r-- 1 root root  22K Feb 23 22:46 /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260223.log
--rw-r--r-- 1 root root 425K Feb 24 22:13 /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260224.log
--rw-r--r-- 1 root root 8.5K Feb 25 18:21 /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260225.log
--rw-r--r-- 1 root root  28K Feb 26 23:03 /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260226.log
--rw-r--r-- 1 root root  15K Feb 27 22:32 /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260227.log
--rw-r--r-- 1 root root  836 Feb 28 16:32 /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260228.log
--rw-r--r-- 1 root root  72K Feb 25 15:58 /root/.wine/drive_c/Program Files/MetaTrader 5/logs/metaeditor.log
+>>> VNC STATUS <<<
+Xvfb: RUNNING
+x11vnc: RUNNING
 
-============================================
->>> FULL EA LOG ANALYSIS <<<
-============================================
-Analyzing: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260227.log
-Size: 2127586 bytes
+>>> EA FILES <<<
+EA directory exists
+-rw-r--r-- 1 root root 163174 Feb 27 08:11 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+Compiled EA: OK
+Total files: 13
 
---- [1] SIGNAL ENGINE lines ---
-LE	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-ED	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-CD	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-LK	0	08:18:15.412	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-CR	0	08:34:05.805	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-FP	0	08:34:05.805	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-LQ	0	08:34:05.805	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-GP	0	08:34:05.847	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-QP	0	08:34:10.359	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-PF	0	08:34:10.359	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-JF	0	08:34:10.359	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+>>> CONFIG FILES <<<
+-rw-r--r-- 1 root root 1620 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/account_state.json
+-rw-r--r-- 1 root root 1469 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/challenge_rules.json
+-rw-r--r-- 1 root root 1336 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/funded_rules.json
+-rw-r--r-- 1 root root 1159 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/notifications.json
+-rw-r--r-- 1 root root 1805 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/risk_params.json
+-rw-r--r-- 1 root root  902 Feb 28 18:16 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/status.json
+-rw-r--r-- 1 root root 1244 Feb 26 22:56 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/symbols.json
 
---- [2] TRADE / ORDER / POSITION lines ---
-RD	0	08:18:13.200	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-QG	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-MS	0	08:34:05.198	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-PS	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-PH	0	08:34:06.001	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-HP	0	08:34:10.357	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-KD	0	08:34:10.358	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-LF	0	08:34:16.145	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-HI	0	08:49:06.085	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1204 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-LO	0	08:49:18.128	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1216 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-CQ	0	09:04:06.138	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2566 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-PS	0	09:04:18.146	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2576 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-CK	0	09:19:06.742	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3687 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-MI	0	09:19:27.603	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3705 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-GH	0	09:34:07.687	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=4688 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-FQ	0	09:34:31.185	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=4700 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-NR	0	09:49:07.502	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=5547 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-NO	0	09:49:35.482	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=5572 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-RO	0	10:04:07.059	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=7378 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-MD	0	10:04:35.097	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=7415 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-ME	0	10:19:08.714	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=8445 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-KH	0	10:19:35.211	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=8465 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-IQ	0	10:34:09.478	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=9287 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-DM	0	10:34:35.062	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=9303 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-FK	0	10:49:12.775	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=10172 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-RH	0	10:49:36.127	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=10175 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-QI	0	11:04:12.108	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=11125 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-KK	0	11:04:37.229	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=11131 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-HN	0	11:19:15.755	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=11965 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-CO	0	11:19:37.438	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=11971 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-RF	0	11:34:15.127	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=12786 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-DD	0	11:34:37.109	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=12816 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-QH	0	11:49:15.362	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=13727 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-II	0	11:49:38.844	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=13754 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-MK	0	12:04:15.056	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=15011 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-PH	0	12:04:42.044	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=15028 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-PH	0	12:19:15.590	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=16072 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-OF	0	12:19:42.939	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=16098 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-OR	0	12:34:16.973	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=17130 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-ND	0	12:34:42.117	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=17138 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-RL	0	12:49:17.182	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=18144 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-GE	0	12:49:42.919	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=18172 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-PN	0	13:04:18.335	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=19403 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-JN	0	13:04:43.140	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=19438 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-CF	0	13:19:18.754	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=21244 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-MO	0	13:19:43.136	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=21347 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-NI	0	13:34:18.307	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=24591 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-NE	0	13:34:43.145	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=24700 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-PN	0	13:49:18.500	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=27971 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-PJ	0	13:49:44.017	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=28039 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-
---- [3] SESSION FILTER lines ---
-HE	0	17:00:07.185	PropFirmBot (EURUSD,M15)	London: WR=0% | NY: WR=0%
-DN	0	17:00:07.237	PropFirmBot (EURUSD,M15)	London: WR=0% | NY: WR=0%
-
---- [4] SPREAD FILTER lines ---
-QG	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-PS	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-QH	0	08:34:06.002	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-KD	0	08:34:10.358	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-PN	0	08:45:00.177	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-PQ	0	09:00:00.139	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-IN	0	09:15:01.294	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-OG	0	09:30:01.101	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-NJ	0	09:45:00.121	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-GE	0	10:00:00.165	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-DI	0	10:15:00.199	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-QO	0	10:30:00.146	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-RR	0	10:45:00.354	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-HE	0	11:00:00.082	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-IF	0	11:15:00.469	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-LN	0	11:30:00.768	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-EJ	0	11:45:00.774	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-KJ	0	12:00:00.400	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-HG	0	12:15:00.182	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-KI	0	12:30:00.667	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-PP	0	12:45:00.327	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-HK	0	15:30:00.166	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-PM	0	15:45:00.230	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-KH	0	16:00:00.062	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-KJ	0	16:15:00.068	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-RG	0	16:30:00.145	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-LG	0	16:45:00.121	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-ML	0	17:00:07.185	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-KI	0	17:15:00.340	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-MI	0	17:30:00.198	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-
---- [5] GUARDIAN / RISK lines ---
-RD	0	08:18:13.200	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-HJ	0	08:18:13.200	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
-FI	0	08:18:13.245	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.02.25 20:19:30] INIT | Bal=$2000.00 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-EI	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-QK	0	08:18:15.585	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-FP	0	08:18:15.585	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-DG	0	08:34:05.192	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
-MS	0	08:34:05.198	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-GN	0	08:34:05.198	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
-JD	0	08:34:05.244	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.02.27 10:34:05] INIT | Bal=$1998.90 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-RR	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-DF	0	08:34:06.001	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-OL	0	08:34:06.001	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-PH	0	08:34:06.001	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-KD	0	08:34:06.002	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 10:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-QH	0	08:34:06.002	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-JG	0	08:34:10.354	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
-HP	0	08:34:10.357	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-RN	0	08:34:10.357	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
-QE	0	08:34:10.357	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.02.27 10:34:10] INIT | Bal=$1998.90 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-ID	0	08:34:10.358	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-GH	0	08:34:10.843	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-LM	0	08:34:10.843	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-LF	0	08:34:16.145	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-IF	0	08:34:16.152	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 10:30 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-QO	0	08:45:00.175	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 10:45 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-LN	0	08:45:00.177	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 10:45 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-PN	0	08:45:00.177	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-HI	0	08:49:06.085	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1204 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-LO	0	08:49:18.128	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1216 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-CO	0	09:00:00.135	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 11:00 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-HO	0	09:00:00.139	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 11:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-PQ	0	09:00:00.139	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-CQ	0	09:04:06.138	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2566 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-PS	0	09:04:18.146	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2576 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-QI	0	09:15:01.293	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 11:15 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-IN	0	09:15:01.294	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 11:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-IN	0	09:15:01.294	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-CK	0	09:19:06.742	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3687 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-MI	0	09:19:27.603	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3705 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-RF	0	09:30:01.100	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 11:30 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-JI	0	09:30:01.101	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 11:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-OG	0	09:30:01.101	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-GH	0	09:34:07.687	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=4688 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-FQ	0	09:34:31.185	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=4700 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-EO	0	09:45:00.120	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 11:45 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-JN	0	09:45:00.120	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 11:45 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-NJ	0	09:45:00.121	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-NR	0	09:49:07.502	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=5547 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-NO	0	09:49:35.482	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=5572 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-
---- [6] BALANCE / EQUITY / ACCOUNT lines ---
-MN	0	08:18:13.198	PropFirmBot (EURUSD,M15)	[WARNING] Account balance still 0 after 20 attempts. Using configured size: $2000
-GL	0	08:18:13.199	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-PP	0	08:18:13.199	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-NO	0	08:18:13.200	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-RD	0	08:18:13.200	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-OK	0	08:18:13.200	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-FL	0	08:18:13.200	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-LK	0	08:18:13.200	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-ID	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260225.csv | Initial balance: $2000.00
-JF	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
-DG	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
-EI	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-QG	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-LE	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-ED	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-CD	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-LK	0	08:18:15.412	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-ES	0	08:18:15.585	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-FH	0	08:18:15.585	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-DG	0	08:34:05.192	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
-PG	0	08:34:05.195	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
-KG	0	08:34:05.196	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-DK	0	08:34:05.196	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-MR	0	08:34:05.198	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-MS	0	08:34:05.198	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-LF	0	08:34:05.198	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-EG	0	08:34:05.198	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-OO	0	08:34:05.198	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-DS	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260227.csv | Initial balance: $1998.90
-EQ	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
-
---- [7] ERROR / WARNING lines ---
-MN	0	08:18:13.198	PropFirmBot (EURUSD,M15)	[WARNING] Account balance still 0 after 20 attempts. Using configured size: $2000
-IM	0	08:34:10.358	PropFirmBot (EURUSD,M15)	[Journal] ERROR: Cannot open PropFirmBot_Journal_20260227.csv: 5004
-PH	0	08:34:10.358	PropFirmBot (EURUSD,M15)	[WARNING] Journal init failed - continuing without CSV logging
-OF	0	08:34:20.262	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-HR	0	08:34:23.172	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-ID	0	08:34:23.172	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-PP	0	08:34:27.127	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-KL	0	08:34:33.149	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-FN	0	08:34:33.150	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-CJ	0	08:34:44.541	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-PG	0	08:35:12.788	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-QS	0	08:35:24.382	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-NL	0	08:35:39.118	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-MH	0	08:35:48.153	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-PE	0	08:35:55.217	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-QG	0	08:35:55.217	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-QR	0	08:35:59.135	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-GO	0	08:36:09.030	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-CK	0	08:36:23.117	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-JD	0	08:36:27.936	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-LP	0	08:36:54.068	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-JM	0	08:36:58.343	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-DI	0	08:37:03.115	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-DR	0	08:37:23.348	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-ED	0	08:37:23.348	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-LP	0	08:37:28.338	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-HL	0	08:37:35.514	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-RI	0	08:37:59.594	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-LE	0	08:38:03.251	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-MN	0	08:38:19.723	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-LP	0	08:38:19.723	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-HO	0	08:38:49.426	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-PH	0	08:38:54.941	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-QD	0	08:38:57.848	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-GQ	0	08:39:03.116	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-MM	0	08:39:07.114	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-LF	0	08:39:13.947	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-PR	0	08:39:25.355	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-QD	0	08:39:25.355	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-RP	0	08:39:30.573	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-JM	0	08:39:43.401	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-GO	0	08:39:43.401	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-FJ	0	08:40:00.466	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-PG	0	08:40:04.776	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-RI	0	08:40:04.777	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-DE	0	08:40:24.158	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-DQ	0	08:40:29.867	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-GJ	0	08:41:08.152	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-JL	0	08:41:08.152	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-GK	0	08:41:12.818	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-
---- [8] INIT / DEINIT / STARTUP lines ---
-MN	0	08:18:13.198	PropFirmBot (EURUSD,M15)	[WARNING] Account balance still 0 after 20 attempts. Using configured size: $2000
-PP	0	08:18:13.199	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
-GL	0	08:18:13.199	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-OK	0	08:18:13.200	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-FI	0	08:18:13.245	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.02.25 20:19:30] INIT | Bal=$2000.00 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-ID	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260225.csv | Initial balance: $2000.00
-JF	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
-DG	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
-EI	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-QG	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-NR	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
-JM	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-LE	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-ED	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-CD	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-LK	0	08:18:15.412	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-ES	0	08:18:15.585	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-HQ	0	08:18:15.585	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-NK	0	08:18:15.585	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-DG	0	08:34:05.192	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
-PG	0	08:34:05.195	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
-HK	0	08:34:05.196	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
-KG	0	08:34:05.196	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-LF	0	08:34:05.198	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-JD	0	08:34:05.244	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.02.27 10:34:05] INIT | Bal=$1998.90 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-DS	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260227.csv | Initial balance: $1998.90
-EQ	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
-EJ	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
-RR	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-PS	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-
---- [9] TICK / TIMER lines (sample) ---
-PH	0	08:34:06.001	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-LF	0	08:34:16.145	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-HI	0	08:49:06.085	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1204 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-LO	0	08:49:18.128	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1216 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-CQ	0	09:04:06.138	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2566 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-PS	0	09:04:18.146	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2576 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-CK	0	09:19:06.742	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3687 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-MI	0	09:19:27.603	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3705 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-GH	0	09:34:07.687	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=4688 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-FQ	0	09:34:31.185	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=4700 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-... total tick/timer lines: 108
-
---- [10] TELEGRAM lines ---
-LE	0	08:18:15.412	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-PF	0	08:18:15.585	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-OH	0	08:34:05.847	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-QK	0	08:34:06.001	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-KJ	0	08:34:10.359	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-FE	0	08:34:10.843	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-
---- [11] NEWS FILTER lines ---
-NR	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
-JM	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-HN	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
-PS	0	08:18:15.585	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-GI	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
-QH	0	08:34:05.805	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-OS	0	08:34:05.805	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
-QN	0	08:34:06.001	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-PG	0	08:34:10.358	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
-MN	0	08:34:10.359	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-KQ	0	08:34:10.359	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY
-FP	0	08:34:10.843	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-HR	0	09:45:00.121	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 2 relevant events from calendar
-JK	0	09:45:00.121	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 2 relevant events from calendar
-IF	0	10:45:00.353	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 2 relevant events from calendar
-IJ	0	10:45:00.353	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 2 relevant events from calendar
-OR	0	11:45:00.774	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 2 relevant events from calendar
-KH	0	11:45:00.774	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 2 relevant events from calendar
-ED	0	12:45:00.326	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 2 relevant events from calendar
-FH	0	12:45:00.327	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 2 relevant events from calendar
-
---- [12] COMPLETE FIRST 100 LINES (to see startup) ---
-ÿþDO	0	08:18:03.110	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
-CF	0	08:18:03.113	PropFirmBot (EURUSD,M15)	==============================================
-PD	0	08:18:03.113	PropFirmBot (EURUSD,M15)	  PropFirmBot v3.0 - FULL TRADING SYSTEM
-GL	0	08:18:03.113	PropFirmBot (EURUSD,M15)	  ALL MODULES ACTIVE
-QD	0	08:18:03.113	PropFirmBot (EURUSD,M15)	==============================================
-MN	0	08:18:13.198	PropFirmBot (EURUSD,M15)	[WARNING] Account balance still 0 after 20 attempts. Using configured size: $2000
-PP	0	08:18:13.199	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
-GL	0	08:18:13.199	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-PP	0	08:18:13.199	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-NO	0	08:18:13.200	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-RD	0	08:18:13.200	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-OK	0	08:18:13.200	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-FL	0	08:18:13.200	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-LK	0	08:18:13.200	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-RL	0	08:18:13.200	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
-LE	0	08:18:13.200	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
-LN	0	08:18:13.200	PropFirmBot (EURUSD,M15)	Target: NO TARGET
-HJ	0	08:18:13.200	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
-FI	0	08:18:13.245	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.02.25 20:19:30] INIT | Bal=$2000.00 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-ID	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260225.csv | Initial balance: $2000.00
-JF	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
-DG	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
-EI	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-QG	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-NR	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
-JM	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-HN	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
-LE	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-ED	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-CD	0	08:18:15.397	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-LK	0	08:18:15.412	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-LE	0	08:18:15.412	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-ES	0	08:18:15.585	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-HQ	0	08:18:15.585	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-QK	0	08:18:15.585	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-PS	0	08:18:15.585	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-PF	0	08:18:15.585	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-PQ	0	08:18:15.585	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-FH	0	08:18:15.585	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-FP	0	08:18:15.585	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-NK	0	08:18:15.585	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-DG	0	08:34:05.192	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
-GN	0	08:34:05.195	PropFirmBot (EURUSD,M15)	==============================================
-PL	0	08:34:05.195	PropFirmBot (EURUSD,M15)	  PropFirmBot v3.0 - FULL TRADING SYSTEM
-CD	0	08:34:05.195	PropFirmBot (EURUSD,M15)	  ALL MODULES ACTIVE
-IL	0	08:34:05.195	PropFirmBot (EURUSD,M15)	==============================================
-PG	0	08:34:05.195	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
-HK	0	08:34:05.196	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
-KG	0	08:34:05.196	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-DK	0	08:34:05.196	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-MR	0	08:34:05.198	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-MS	0	08:34:05.198	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-LF	0	08:34:05.198	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-EG	0	08:34:05.198	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-OO	0	08:34:05.198	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-QH	0	08:34:05.198	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
-KP	0	08:34:05.198	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
-KJ	0	08:34:05.198	PropFirmBot (EURUSD,M15)	Target: NO TARGET
-GN	0	08:34:05.198	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
-JD	0	08:34:05.244	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.02.27 10:34:05] INIT | Bal=$1998.90 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-DS	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260227.csv | Initial balance: $1998.90
-EQ	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
-EJ	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
-RR	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-PS	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-GI	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
-QH	0	08:34:05.805	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-OS	0	08:34:05.805	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
-CR	0	08:34:05.805	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-FP	0	08:34:05.805	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-LQ	0	08:34:05.805	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-GP	0	08:34:05.847	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-OH	0	08:34:05.847	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-OG	0	08:34:06.000	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-IL	0	08:34:06.001	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-DF	0	08:34:06.001	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-QN	0	08:34:06.001	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-QK	0	08:34:06.001	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-EM	0	08:34:06.001	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-OE	0	08:34:06.001	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-OL	0	08:34:06.001	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-KP	0	08:34:06.001	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-PH	0	08:34:06.001	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-KD	0	08:34:06.002	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.27 10:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-QH	0	08:34:06.002	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-JG	0	08:34:10.354	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
-JN	0	08:34:10.356	PropFirmBot (EURUSD,M15)	==============================================
-MO	0	08:34:10.356	PropFirmBot (EURUSD,M15)	  PropFirmBot v3.0 - FULL TRADING SYSTEM
-FD	0	08:34:10.356	PropFirmBot (EURUSD,M15)	  ALL MODULES ACTIVE
-LM	0	08:34:10.356	PropFirmBot (EURUSD,M15)	==============================================
-QP	0	08:34:10.356	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
-CK	0	08:34:10.356	PropFirmBot (EURUSD,M15)	[INIT] Symbols (3): EURUSD, GBPUSD, USDJPY
-OP	0	08:34:10.356	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-HL	0	08:34:10.356	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-LR	0	08:34:10.357	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-HP	0	08:34:10.357	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-IG	0	08:34:10.357	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-DG	0	08:34:10.357	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-FO	0	08:34:10.357	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-HH	0	08:34:10.357	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
-
---- [13] COMPLETE LAST 100 LINES (latest activity) ---
-NI	0	21:52:16.162	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-QE	0	21:52:16.163	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-FR	0	21:52:21.133	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-CI	0	21:52:21.134	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-MN	0	21:52:36.886	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-RN	0	21:52:36.887	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-GK	0	21:52:46.272	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-CR	0	21:52:46.272	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-LG	0	21:52:50.432	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-PG	0	21:52:50.432	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-CP	0	21:52:57.157	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-NK	0	21:52:57.158	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-KL	0	21:53:01.274	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-QP	0	21:53:01.276	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-HI	0	21:53:04.076	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-CD	0	21:53:04.077	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-EE	0	21:53:12.191	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-HI	0	21:53:12.192	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-FN	0	21:53:17.261	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-JM	0	21:53:17.261	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-RJ	0	21:53:30.455	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-KR	0	21:53:30.456	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-HG	0	21:54:05.117	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-QF	0	21:54:05.118	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-JS	0	21:54:15.491	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-CK	0	21:54:15.492	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-DL	0	21:54:27.289	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-PO	0	21:54:27.290	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-OH	0	21:54:30.198	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-LD	0	21:54:30.199	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-LE	0	21:54:42.080	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-OH	0	21:54:42.081	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-FQ	0	21:54:51.239	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-JM	0	21:54:51.239	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-QJ	0	21:54:56.093	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-MQ	0	21:54:56.093	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-FF	0	21:54:59.213	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-CF	0	21:54:59.214	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-QS	0	21:55:12.812	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-NJ	0	21:55:12.813	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-HO	0	21:55:15.953	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-DO	0	21:55:15.953	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-CH	0	21:55:26.200	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-HS	0	21:55:26.201	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-LD	0	21:55:35.274	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-PH	0	21:55:35.274	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-QQ	0	21:55:41.159	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-CL	0	21:55:41.160	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-GM	0	21:55:46.329	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-CQ	0	21:55:46.329	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-GF	0	21:55:53.105	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-CE	0	21:55:53.105	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-PR	0	21:55:57.274	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-LJ	0	21:55:57.274	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-HO	0	21:56:10.265	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-EN	0	21:56:10.266	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-CK	0	21:56:22.872	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-HS	0	21:56:22.873	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-CD	0	21:56:26.166	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-HG	0	21:56:26.167	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-QP	0	21:56:30.231	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-ML	0	21:56:30.231	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-RM	0	21:56:40.068	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-MP	0	21:56:40.069	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-PI	0	21:56:46.200	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-LE	0	21:56:46.200	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-CR	0	21:56:50.808	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-GI	0	21:56:50.808	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-HN	0	21:57:00.339	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-DN	0	21:57:00.339	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-FK	0	21:57:06.067	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-JR	0	21:57:06.067	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-JG	0	21:57:13.090	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-EG	0	21:57:13.091	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-GP	0	21:57:17.053	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-JK	0	21:57:17.054	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-GL	0	21:57:21.128	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-CP	0	21:57:21.128	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-GI	0	21:57:31.165	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-FD	0	21:57:31.166	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-EE	0	21:57:41.193	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-DI	0	21:57:41.194	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-LN	0	21:57:51.283	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-MM	0	21:57:51.284	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-LJ	0	21:57:55.137	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-PR	0	21:57:55.137	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-EG	0	21:58:05.509	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-IF	0	21:58:05.509	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-CS	0	21:58:21.132	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-GK	0	21:58:21.132	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-OL	0	21:58:25.154	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-KO	0	21:58:25.154	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-IH	0	21:58:39.438	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-FD	0	21:58:39.439	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-LE	0	21:58:47.265	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-QH	0	21:58:47.266	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-HQ	0	21:58:51.075	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-MS	0	21:58:51.075	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-CO	0	21:58:55.087	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-FO	0	21:58:55.088	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-
---- [14] UNIQUE MESSAGE TYPES (counts) ---
-   4567 TIME	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Cannot write PropFirmBot\status.json (error 5004) - retrying with FolderCreate
-   4153 TIME	PropFirmBot (EURUSD,M15)	[StatusWriter] Retry succeeded
-    414 TIME	PropFirmBot (EURUSD,M15)	[StatusWriter] ERROR: Retry also failed (error 5004)
-     36 TIME	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-     16 TIME	PropFirmBot (EURUSD,M15)	[NEWBAR] Blocked by Guardian: Weekend guard
-     11 TIME	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-     10 TIME	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 2 relevant events from calendar
-      6 TIME	PropFirmBot (EURUSD,M15)	==============================================
-      3 TIME	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-      3 TIME	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-      3 TIME	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-      3 TIME	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-      3 TIME	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-      3 TIME	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
-      3 TIME	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-      3 TIME	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-      3 TIME	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-      3 TIME	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-      3 TIME	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-      3 TIME	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-      3 TIME	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-      3 TIME	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-      3 TIME	PropFirmBot (EURUSD,M15)	Target: NO TARGET
-      3 TIME	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
-      3 TIME	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
-      3 TIME	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
-      3 TIME	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-      3 TIME	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-      3 TIME	PropFirmBot (EURUSD,M15)	  PropFirmBot v3.0 - FULL TRADING SYSTEM
-      3 TIME	PropFirmBot (EURUSD,M15)	  ALL MODULES ACTIVE
-      3 TIME	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-      3 TIME	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-      3 TIME	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-      3 TIME	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-      3 TIME	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-      3 TIME	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-      2 TIME	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-      2 TIME	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-      2 TIME	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
-      2 TIME	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 1 relevant events from calendar
-
-============================================
->>> SECOND EA LOG: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260225.log <<<
-Size: 36174 bytes
-
---- Signal lines ---
-NI	0	15:54:25.042	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-LI	0	15:54:25.043	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-FO	0	15:54:25.043	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-DF	0	15:58:22.229	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-MG	0	15:58:22.229	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-KE	0	15:58:22.229	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-DL	0	15:58:34.509	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-MM	0	15:58:34.509	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-KS	0	15:58:34.509	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-NJ	0	16:29:28.174	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-KH	0	16:29:28.174	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-EH	0	16:29:28.174	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-
---- Trade/Order lines ---
-CH	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-DK	0	15:54:24.596	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-OO	0	15:54:25.168	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-HE	0	15:58:22.050	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] Reason=2 | Phase=FUNDED | Journal: Trades: 0 | Wins: 0 | Losses: 0 | WR: 0.0%
-DF	0	15:58:22.228	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-IF	0	15:58:22.229	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-GE	0	15:58:22.358	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-IO	0	15:58:34.326	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] Reason=2 | Phase=FUNDED | Journal: Trades: 0 | Wins: 0 | Losses: 0 | WR: 0.0%
-HL	0	15:58:34.508	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-IP	0	15:58:34.509	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-MK	0	15:58:34.724	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-CH	0	16:13:34.597	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2168 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-QH	0	16:28:38.078	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3468 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-RK	0	16:29:27.756	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-QJ	0	16:29:27.791	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-QP	0	16:29:32.156	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-
---- Error lines ---
-KN	0	15:58:22.049	PropFirmBot (EURUSD,M15)	[Notify] Telegram failed: HTTP 1003
-FH	0	15:58:34.326	PropFirmBot (EURUSD,M15)	[Notify] Telegram failed: HTTP 1003
-
---- First 50 lines ---
-ÿþFO	0	15:54:24.560	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
-FF	0	15:54:24.562	PropFirmBot (EURUSD,M15)	==============================================
-QD	0	15:54:24.562	PropFirmBot (EURUSD,M15)	  PropFirmBot v3.0 - FULL TRADING SYSTEM
-JL	0	15:54:24.562	PropFirmBot (EURUSD,M15)	  ALL MODULES ACTIVE
-PD	0	15:54:24.562	PropFirmBot (EURUSD,M15)	==============================================
-MO	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
-GS	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[INIT] Symbols (3): EURUSD, GBPUSD, USDJPY
-KH	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-DD	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-OK	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-CH	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-FO	0	15:54:24.562	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-GH	0	15:54:24.562	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-IP	0	15:54:24.562	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-CS	0	15:54:24.562	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
-II	0	15:54:24.562	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
-QR	0	15:54:24.562	PropFirmBot (EURUSD,M15)	Target: NO TARGET
-MG	0	15:54:24.562	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
-JM	0	15:54:24.595	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.02.25 17:54:24] INIT | Bal=$1998.90 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-FH	0	15:54:24.596	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260225.csv | Initial balance: $1998.90
-EJ	0	15:54:24.596	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
-DS	0	15:54:24.596	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
-RM	0	15:54:24.596	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-DK	0	15:54:24.596	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-GN	0	15:54:24.596	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
-RQ	0	15:54:25.042	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-PF	0	15:54:25.042	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY
-NI	0	15:54:25.042	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-LI	0	15:54:25.043	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-FO	0	15:54:25.043	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-OQ	0	15:54:25.043	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-OL	0	15:54:25.168	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-JE	0	15:54:25.168	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-KO	0	15:54:25.168	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-RG	0	15:54:25.168	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-RR	0	15:54:25.168	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-NE	0	15:54:25.168	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-PL	0	15:54:25.168	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-HD	0	15:54:25.168	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-LO	0	15:54:25.168	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-OO	0	15:54:25.168	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-FO	0	15:54:25.169	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.25 17:45 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-KN	0	15:58:22.049	PropFirmBot (EURUSD,M15)	[Notify] Telegram failed: HTTP 1003
-HE	0	15:58:22.050	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] Reason=2 | Phase=FUNDED | Journal: Trades: 0 | Wins: 0 | Losses: 0 | WR: 0.0%
-KN	0	15:58:22.050	PropFirmBot (EURUSD,M15)	Gross Profit: $0.00 | Gross Loss: $0.00
-MG	0	15:58:22.050	PropFirmBot (EURUSD,M15)	Net PnL: $0.00 | PF: 0.00
-MS	0	15:58:22.050	PropFirmBot (EURUSD,M15)	Largest Win: $0.00 | Largest Loss: $0.00
-JH	0	15:58:22.050	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] EA stopped. Net PnL=$0.00 WinRate=0.0%
-QI	0	15:58:22.093	PropFirmBot (EURUSD,M15)	[DEINIT] PropFirmBot stopped. Reason: 2
-QQ	0	15:58:22.226	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
-
---- Last 50 lines ---
-PS	0	15:58:34.725	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.25 17:45 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-CR	0	16:00:00.136	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.25 18:00 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-CH	0	16:13:34.597	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2168 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-FS	0	16:15:00.993	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.25 18:15 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-MO	0	16:25:10.220	Experts	automated trading is disabled
-HH	0	16:25:11.036	Experts	automated trading is enabled
-QH	0	16:28:38.078	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3468 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-ON	0	16:29:27.754	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
-RG	0	16:29:27.755	PropFirmBot (EURUSD,M15)	==============================================
-EG	0	16:29:27.755	PropFirmBot (EURUSD,M15)	  PropFirmBot v3.0 - FULL TRADING SYSTEM
-NM	0	16:29:27.755	PropFirmBot (EURUSD,M15)	  ALL MODULES ACTIVE
-DE	0	16:29:27.755	PropFirmBot (EURUSD,M15)	==============================================
-IH	0	16:29:27.755	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
-KR	0	16:29:27.755	PropFirmBot (EURUSD,M15)	[INIT] Symbols (3): EURUSD, GBPUSD, USDJPY
-GO	0	16:29:27.755	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-PS	0	16:29:27.755	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-FJ	0	16:29:27.756	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-RK	0	16:29:27.756	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-ON	0	16:29:27.756	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-NO	0	16:29:27.756	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-LG	0	16:29:27.756	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-RP	0	16:29:27.756	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
-LH	0	16:29:27.756	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
-DM	0	16:29:27.756	PropFirmBot (EURUSD,M15)	Target: NO TARGET
-HF	0	16:29:27.756	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
-GL	0	16:29:27.789	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.02.25 18:29:27] INIT | Bal=$1998.90 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-OK	0	16:29:27.791	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260225.csv | Initial balance: $1998.90
-PI	0	16:29:27.791	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
-QR	0	16:29:27.791	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
-CJ	0	16:29:27.791	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-QJ	0	16:29:27.791	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-NQ	0	16:29:27.791	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
-RP	0	16:29:28.174	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-PG	0	16:29:28.174	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY
-NJ	0	16:29:28.174	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-KH	0	16:29:28.174	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-EH	0	16:29:28.174	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-PP	0	16:29:28.174	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-CO	0	16:29:28.340	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-ND	0	16:29:28.340	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-GN	0	16:29:28.340	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-FF	0	16:29:28.340	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-FS	0	16:29:28.340	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-JD	0	16:29:28.340	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-DM	0	16:29:28.340	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-LS	0	16:29:28.340	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-HH	0	16:29:28.340	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-QP	0	16:29:32.156	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-NL	0	16:29:32.157	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.25 18:15 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-DO	0	16:30:00.247	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.25 18:30 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-
-============================================
->>> TERMINAL LOG ANALYSIS <<<
-============================================
-Analyzing: /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260228.log
-
---- Expert/EA related ---
-
---- Connection/Login ---
-
---- Errors ---
-
---- Full log ---
+>>> MT5 TERMINAL LOG (today) <<<
+Log size: 2372 bytes
+--- Last 30 lines ---
 ÿþCM	0	04:31:20.446	Network	'11797849': scanning network for access points
 HK	0	04:31:57.656	Network	'11797849': scanning network finished
 CL	0	10:31:21.008	Network	'11797849': scanning network for access points
 HH	0	10:31:58.243	Network	'11797849': scanning network finished
 DO	0	16:31:22.930	Network	'11797849': scanning network for access points
 DF	0	16:32:00.214	Network	'11797849': scanning network finished
+IS	0	18:04:53.320	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+ND	0	18:04:53.323	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+OL	0	18:04:53.323	Terminal	C:\Program Files\MetaTrader 5
+GE	0	18:05:03.986	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+MS	0	18:16:18.144	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+HD	0	18:16:18.145	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+EL	0	18:16:18.145	Terminal	C:\Program Files\MetaTrader 5
+EE	0	18:16:21.232	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 
->>> AUTOTRADING CHECK <<<
-Config files:
-total 540
-drwxr-xr-x  4 root root   4096 Feb 28 16:31 .
-drwxr-xr-x 10 root root   4096 Feb 27 08:33 ..
--rw-r--r--  1 root root   6967 Feb 28 16:31 accounts.dat
--rw-r--r--  1 root root  29628 Feb 27 08:34 agents.dat
-drwxr-xr-x  2 root root   4096 Feb 23 07:04 certificates
--rw-r--r--  1 root root    834 Feb 25 16:25 common.ini
--rw-r--r--  1 root root   2496 Feb 26 22:13 cookies.dat
--rw-r--r--  1 root root 380488 Feb 27 08:18 dnsperf.dat
--rw-r--r--  1 root root     84 Feb 23 22:19 jupyter.ini
--rw-r--r--  1 root root   5816 Feb 23 22:46 metaeditor.ini
-drwxr-xr-x  2 root root   4096 Feb 23 07:04 servers
--rw-r--r--  1 root root  62444 Feb 28 16:31 servers.dat
--rw-r--r--  1 root root   5908 Feb 26 22:54 settings.ini
--rw-r--r--  1 root root    439 Feb 27 08:33 startup.ini
--rw-r--r--  1 root root  15990 Feb 27 19:22 terminal.ini
+>>> EA LOG (today) <<<
+EA Log size: 15650 bytes
+Total lines: 82
+--- Last 40 lines ---
+JO	0	18:16:26.369	PropFirmBot (EURUSD,M15)	==============================================
+MO	0	18:16:26.369	PropFirmBot (EURUSD,M15)	  PropFirmBot v3.0 - FULL TRADING SYSTEM
+FE	0	18:16:26.369	PropFirmBot (EURUSD,M15)	  ALL MODULES ACTIVE
+LM	0	18:16:26.369	PropFirmBot (EURUSD,M15)	==============================================
+CQ	0	18:16:36.354	PropFirmBot (EURUSD,M15)	[WARNING] Account balance still 0 after 20 attempts. Using configured size: $2000
+IO	0	18:16:36.354	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+RK	0	18:16:36.354	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
+IG	0	18:16:36.354	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
+EF	0	18:16:36.355	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+IO	0	18:16:36.355	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+HR	0	18:16:36.355	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+MK	0	18:16:36.355	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
+CR	0	18:16:36.355	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+IE	0	18:16:36.355	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
+CL	0	18:16:36.355	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
+CQ	0	18:16:36.355	PropFirmBot (EURUSD,M15)	Target: NO TARGET
+OE	0	18:16:36.355	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
+RP	0	18:16:36.396	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.02.27 23:59:58] INIT | Bal=$2000.00 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+CO	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260227.csv | Initial balance: $2000.00
+FM	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+HN	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+IN	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+MN	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+RM	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+MG	0	18:16:36.754	PropFirmBot (EURUSD,M15)	[NewsFilter] Calendar returned 0 events (may be unavailable)
+QE	0	18:16:36.754	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
+FH	0	18:16:36.755	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+CN	0	18:16:36.755	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+MN	0	18:16:36.755	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+JM	0	18:16:36.760	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+RR	0	18:16:36.760	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+MM	0	18:16:36.963	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+DK	0	18:16:36.963	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+IQ	0	18:16:36.963	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+LH	0	18:16:36.963	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+LM	0	18:16:36.963	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+HG	0	18:16:36.963	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+NN	0	18:16:36.963	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+NF	0	18:16:36.963	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+RN	0	18:16:36.963	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
 
-=== accounts.dat ===
-  C o p y r i g h t   2 0 0 0 - 2 0 2 6 ,   M e t a Q u o t e s   L t d .                                                         A c c o u n t s                            >ÚÜ«BZdã¡Ü
-yÑ                                                                                                                                                                                                                                            ÷‰S˜e¤¨#„e6Èõdk!%ü	ÿ(ÓÌÕðn”pØ:;g>ÛxmF4Ï¼ÌÃt»3H"=£ÐÞÂômÇüæÅRŽÒvò® ³Ÿ†~ 1Pf±A‘4búx`ÕÓé,`MßlâNÚò;HK¸)oàkÖ]·O£ž;ñïíK'}Œ|ÆqY¼Íô]Z•KgîÇ›ç4¸»'¬/-•¨&ÄùçÛ©K÷ÄÃà¶ˆº5õ§Â*=p…Fa³µ³xÉC™Zë¾‡b6“qšp®ÍF‰>Õà‘±n«b‚ÐŠíÞ\|áKÙzAìˆ/<îï)Õ×ºZ­®§q¶´ñFÁ¤ûŒçØ?®%Ûjš7-ÉÆÏöt’nÚ<=i@ÝzoH6Ñ¾‘ÎÅv!½5J$?¥ÒàÄöoÉþèÇTÔxô°¢µ¡ˆ€"3Rh³C“6düzb×Õë.bOánäPÜô=JMº+qâmØ_¹Q¥ =óñïM)åì[ôÜ"/L¦Èw¸ÏÖ]f:|É!$|qo×êWõ*Ú¬X%$Aé–|ñVdu#‹žÑæ§ÂÙ*¤ú»LèÃ—ôÒûÑ.§êðŸ6A{îòÏîÃðã1nëNr?½ÝB¬w2ÓèpšEáˆ•GHðœûÞr†â'²_	@»xV´¡3¾¯1 OH]OãØÎrluCÁ üx³¿À”k|Žùo~k[˜ã”Sï‡¢(U*.§N83|[†Âr²Ô/!WCIAŒÉßDÔPó¤ê20)lÔÁ:Ç‰ay£°Ã0È˜lóMå9¢4Ñ‡…ƒ°á½˜PTWðØ+H¢Äs´ËÒYb6xÅ xýmkÓæSñ&Ö¨T! =å’xíR`q‡š{Íâ£¾Õ& ö·Hä¿“ðÎ÷Í*£æì›2=wêîËê¿ìß-jçJn;¹Ù>¨{6×ìtžIåŒ™KL†24·
-{rÎžK
-õ,§dîB ª›Œ;ñ4I”(òè6áÌÕ†‡cØÿ , =Ç2ù”T‘ˆ9ä€øçh•£‡¹2ÈŒÆÁ«ŠS—;·ÙsexdKCåö+vVù'¿=%ÓÑ”×yf™&ùeµþ{ì2£.™ zfÏaþ´²°ÝêÅ@}:„:KXuÏñ áBøÿ†c¥òJM¥*š˜pƒ•3
-Ÿm\½¼ùÏÕëÑ-’Öz†4œ¯â÷¸Ó%'%ê;µÌ]0ùÔ¨ãâ ?¸û°GRŒÿ#àÿÔôBü_ƒPÎîS½Kì‰³^ú¡®`a›GI,Ì ‡ã(³`
-A¼yWµ¢4¿°2¡PI^
-žh^¬WBKüzýÙNuv¢y³=¨o
-÷Êþ¯Zönƒ]xÞý/¨><7! É±-OéÛîÚÁ¹[l‹¡ì|Ìo5³›$g›ˆ§‰-vƒ†ódª¦˜òŠÞGÙv,*(U†b=¸õù²ü•}²ÃÐíGiYºpwþÛjÂÅ¢x‹ø–Ë¹­{MùÆÅâ¸Š¼7’÷©Ä,? r‡Hcµ·µzËE›\íÀ‰d8•sœr°ÏH‹‘@×â“³p­d‘„ÒŒïà^~ãM Û|‘CîŠ1>ðñ+×Ù¼\¯° ©s¸Cð¯šÑL	“çE2ÄO@Â1à–Ùîš.øî<çÒÛŒ
-i£Þ2	¦CÍ8ÿš‡Z—Ž?ê†þín›©†ÿ¢f’Z9ó/AåTv'ØÐARAW›+{LäbJ¿½ÓJ7ÉVÌ8ÄÜ%25¢YÊUÀG¡9öˆ%ÛÙ×X4`Ûlp@ŠcKôsš¼CÖŒüƒ¢v×$“-+ú´é×Ë™käã Ö¨ÚU;°#Ç4âJ]>¥fÓÕÓ˜éc¹zÞ§‚V³‘ºÎíf©¯^õ :­±ÑŽË­‚¯¢ð-ª1þ|œk>ùš¯7a¨O\Iõ÷ÚzÍÎ>5Ç‘ÖaÍ¸ïj'±cPâm^àOþ´÷¸LZðùª(«‡Áü#$P'ÄaëV/¸¥xµ¬]¤1&Œ¹Ç«ÝVì°êåÏ®;w»_Ûý—‰œˆog	9Oš*zKãaI¾¼ÒÓYrfEŠ‰á*7:§^ÏZÅL¦>’û*àÞÜ	:ñl©­f°I1fw„¡ûÌn$+²»ÑvyÑVÆÄ,?¬Jma/­zy–l>pëÑF«¹]ÊxàóÔ&;üiki.ùO¡t=ìI'P&dƒü?Eô‹–ÐCGg$aCE8˜ÕRµÙ¦$D©æ¡BWß	´P÷¶·ñŸ‚"uvæÝo9~	¶u`—ÏY­øŠˆ÷¦\Ÿ´`ô¾´­˜¡RÐS/i¤ËÌøÏl	“þ×Å`M ]T°LÄÙ³Î4aoS…þ”X’wVãcƒ¥?1D0±Âá÷BÒ"Åó‹	ñfdz½ñÞpýsßkƒÌÙÜIº qügîHà4/Ì‚€~«Ü¸“KORëÓ&C¿n¯ÆÍT]1sÀsøhfÎáNì!ýÈšF/×	„jßDRöcyŒm¿Ô•°Ç’è©:Ö±…âÀé¿ý•ØÞ$/iÜà ½úÜ±ÞÑ\Ù<`-«Ë0šm(ÉÞf;×~‹=>x$&	©üýmdöÀ=üç™Và4’œ~-ã&;ç{E;‰4(ÙWÚ¶ð+RSVó…ê&zMŠ2ÝyñàûaŽœ€²+Á…¿º¤ƒL4°Òl^q]D<Þï$oÿOò ¸6“‘§ê* ˜°ù	vç-ž)”uaÊ\ù¯­«Ø	åÀ;x|5 5FSpÊì›Ü=óúŠ^ íEH %•“û{N<0þÐ|IHe;?º zˆ,™G¯Â£õ
-Ëæ8:8ýNÈßpCç»öõ3RËÃZeŸ6ó0T)#
-G Bé	 Š8óìý'òŽy†LMã‘tghØÏa+pû¨gR‰ÁKŸýê|øzé˜N‘¦Ræ°¦ôŸŠ“DÂE![–½¾êÁ^û…ðÉ·R?OF÷¢>¶Ë¥À&SaEwð†J„iHÕUùu—1#6"	£´Óé4Ä·å}ûãXVl¯ãÐbïeÑ]u¾ËÎ;¬òcîYà:Ò&!¾trpÎª… =AúDÝÅú5±`¡¸¿FO#e²
-eêZXÀÓ@ÞõÃ•A* ÒeÚ?Mñ^t‡hºÏ«ýÿýÂã¤5Ñ¬€Ý»äºøÓÙˆ*d×Ûû¸õ‚W×Ê\™yjèm×ªe£Íx»Èz{µacFæ9:ª¡3ýBÍz9$[Ö“qÏ¼NÙÊL»j cx$¸‚xÆq^g–ô.i’“¿– ÑÌ^7%À­è%h°L´ÉÐëk˜‰m°)Þ¢¬§áÀcŸ…)ÐòâÔƒo3+©º·Í}%È‚¶žpnë.ü¡.Å1Þö\ip”Ú%°oö#» ‰o­«Ùö¤,0ÄÕ½—¨ÆãXz]žÿµ¼CL b¯
-bçWU½Ð=ÛþòÀ’>
-'ýÏ|b×<Jî[	q„e·Ì¨úüú¿Šà¡2Î©}Ú¸á·õÐÖ…'aÔØøµòÔ©ÖÉTÑ4X%£Ã(’e ÁÖ^ˆ3Ïvƒ56p¡ôõe\î¸ýˆ5ôß‘NØ,Šw	”…v%Û3ßs=3, ÑOÒ®è#JKwNëˆ}VDßÌŸÜÓ„/ËCX2M³àîÒ}×öÕbžâ†$¾°Ã¯–Ž0A`vÁQ¡Dr
-ˆpåãù<p]ï|ò^êKX[È9ð{æmÇ_³®Kÿý*[7ÊÎ‡ÑjR‡˜¥Â>í.ELÓÜ°ò?—šòwçåM`Ík Ž‚P"Î›š·_‘ògÌÚ~ë™õG\8ŠŒŠO p1Â•^9jHqG…¤`f¬·ñdhˆE‚d9fY§äaÄèµ3S¸"õ°QfîÃ_ÅÆ ¬®‘1„…õì~HÅ„o¦!Þh¼™$—µk®ÃoÍÃ¼§°aßb>x³ÚÛÞ{¢æÔo\/l   ¶Hq¶"ÏëÖ~ùÅOƒá/ßÐ Hþ$9—+ÕËPûˆ‘&¤N*@gh”k¥/šsaüé¼ùð¡Lè`uOjÐýï!š0ô/*óÒLðlŽ(- øš«Êà+»®ÜtòÚOMc¦ÚÇYæ\ÈTlµÂÅ2£éZåP×1É†µkig”Å¡|÷48ñ;Ô¼ñ,   ÁS(mÖƒp[¼7ÂL—õÌ^ÜÍî§]”©aõŒ‚Ð{fo ž!ý7r™šÆ:×aÌ¥“.î+"Ó~’§œ/=!SÌb&`[E$±í1ÕQsÿþåÝ¯Å ð“ÁY×¿42H‹¿¬>ËA­9Qš§ªˆÎ?Ê5¼®kýšPNLyAXÓô¯ù’w|Œ™¶2á"ƒ9@ÇÐ¤æ3‹ŽækÛÙATÁ_”‚vDÂŽ«S… æ[ÀÎrßõé;P,~€~C”d%¶‰R-^<e;y˜TZ	 «åX\|9vX-ZM›ØU¸Ü©'G¬é¤EZâ·Sú¹ºô ¢…%xyéàr<¹xcš¶Hq¶"ÏëÖ~ùÅOƒá/ßÐ Hþ$9—+ÕËL÷±º*¨+A|£¤Ð§DákÖ¯8%ø5,Ýˆ$œ±‹¦9G+]Öl0hcM,ÊKïk',ÿ÷™ªÉß*º
-­ÛsñÙNLb¥ÙÆXå[ÇSk´ÁÄ1¢èYäOÖ0È…´jhf“Ä {ö37ð:Ó»ð+   ÄVSì™kV¼7Úd‰çåw0!ü™O¤¹_ó‰ù¤¼ÅvôwSÈïðó-·"ûé„qDx)Ôpèý×òX…“w©"¸|¶±›zC‡+§ÉcUhT;3ÕæföFé¯-Šˆžá”!—§ðý mÞ$• ‹lXÁSð¦¤¢Ï€Ê=¸õù²ü•}²ÃÐíGiYºpwþÛjÂÅ¢x‹ø–Ë¹­{MùÆÅâ¸Š¼7’÷©Ä,? r‡Hcµ·µzËE›\íÀ‰d8•sœr°ÏH‹‘@×â“³p­d‘„ÒŒïà^~ãM Û|‘CîŠ1>ðñ+×Ù¼\¯° ©s¸Cð¯šÑÄVSì™kV¼7Úd‰çåw0!ü™O¤¹_óŒ‚é”JS4²5K†­®Ú±Nëuà¹§B/?6ç’.¦»•°CQ5gàv:toY8ÅEée‡!&ùñ“¤ÃÙ$´§ÕmëÓHF\ŸÓÀRßUÁMe®»¾+œâSÞIÐ*Â®db`>Œÿz·»t¾W?t…’¯	+Ú|29ÀÉß,„‡ßdÔÒ:MºX{o=»ˆ‡¤zL~ùßT¹ÇkØ†îâ4I
-%wyw<]¯‚K&úW5^4r‘
-MS™¤ÞQUu2oQ&SF”ÑN±Õ¢ @¥â>SÛ°Ló ²³í™›~qrâÙk5z²q\“¶Hq¶"ÏëÖ~ùÅOƒá/ßÐ Hþ$9—+ÕËL÷©²CÁvRŒÇîïò,¶!úèƒpC€w(ÓoçüÖñW„’v¨!·{·²œ{PŽÒvò® ³Ÿ†~ 1Pf±A‘4búx`ÕÓé,`MßlâNÚò;HK¸)oàkÖ]·O£ž;ñïíK'}º¾wÁZBwˆ•²   ÆXVÏ|ú}žÃ!=Ïj[ób Ö*?Óg{&%.ìjíÉ>ef’i£-˜q_úçº÷îŸJæ^sMhÎû	í˜.ò,'ð}¹ý¡?ÙËÞÊ±©K\{‘Ül¼_%£‹ þW‹x
-—yfsvãTš–ˆâzÎ7ÉfEöD‡?CüFßÇü7‘³b£ºÁHQ%g´gì\ZÂÕBà÷Å—C,ÔgÜAOó`v‰j¼Ñ’­ÿÿÄå¦7
-Ó®‚ß½æ¼ú’ÕÛŠ!,fÙÝýº÷Ù®ÛÎYÖ9]*¨È-—j%ÆÛc8Ô{ˆ:;u!#¦ùújaó½:ùäÆXVÏ|ú}žÃ!=Ïj[ób Ö*?Óg~)-6ÒPã¿ù4[\ˆ_ü™#ŽgUðÝ°íä•@ÜTiC^ÄñÿãŽ$è"æs¯ó—5ÏÁÔÀ§ŸARq‡Òb²Uƒ™öô
-Mn oû\ilÙJŒ÷~ØpÄ-¿\;ì^¡Y]`ùá'4Q«Í|½ÔÛbk?Î&)vtÜï\ú/ß±]*)Fî ›ö[iz(£„Öë¬ÇÞ/©ÿÀQ$íÈœù× Ö3¬ïõ¤;F€ó÷ÔóÈõè6sðSwDÂâG±„?àõ}§Rî•¢TU;= À„{×§Tþ5¶H|Á8åÍ¸ÏJCÍeÃßq¯ qh 5ÁUOEáŒ!ª(Ò®ÈyzÃšEâ…;)¶£v³ª[¢/	$Š·Å©ÛTê®èãÍ¬9u¹]Ùû•‡š†me7M˜(xIá_G¼ºÐG4ÆSÉ5ÁÙ"/2ŸVÇR½Dž6Šó…"ØÖÔ2éd¡¥^¨A)^o|™   ÂT,qÒ÷™cíoÍ‹™Š=¬u+_t©KAµ`zƒ‹;aœÃÄðÇd‹öÏ½XEULý¨D¼Ñ«Æ,YgK}öŒPŠ…oNÛ[ÿ{7)<(©ºÙï:Ê½ëƒé^\rµéÖhõk×c{ÄÑÔA²øiô_æ@Ø,•'Äzxv£T¦”ÑÕŽØqYŽŸ¬É#Eô5–LSÚã·ùFž¡ù~îìTgÔr§•‰W)Õ¢¡¾”f˜ùnÓá…ò üNc$?‘“‘V§!w8Éœe@qOxNŒ«$gm³¾økoL‰k@m`®ëhËï¼:Z¿)ü·XmõÊfÌÍ³µ˜8‹Œüó…O”Ì‹v­¶Hq¶"ÏëÖ~ùÅOƒá/ßÐ Hþ$9—+ÕËL÷©²CÁwSÈïðó-·"ûé„qDx)Ôpèý×òX…“w©"¸|´¯™x	Dˆ,¨ÊdViU<4Öçg÷Gê°.‹‰Ÿâ•"˜¨ñþnß%–!ŒmYÂTñ§¥£ÐÝ¸3pt-wø->Kh   ÆX_Äqìuÿ}Ûñƒ?0œˆ>³ÈFÚž”ÖXa!Ÿ"þ8sš›Çž;ØbÍ¦”/ï,#Ô“¨‚0>"TÍc'a\F%²î2ÖRt ÿæÞ€‘°Æ¡ñ”ÂZØÀ53IŒÀ­?ÌB®:R›¨«‰Ï@Ë6½¯lþ›QOMz+‘ôo¬°i³L4iz‡¤þ Ïq'.µ¾’Ô!y|ÔYÉÇ/B¯M‚pd2°}|™oAsîÔI®¼`Í{ãö×)>ÿlnl1‚üR¤w@ïL*S)g†ÿBH÷Ž™ÓFJj'dFH;‰ÆC¦Ê—5š×’3HÐú¥Aèõ§¨âŽsfg×Î`*oú§fQˆ¶Hq¶"ÏëÖ~ùÅOƒá/ßÐ Hþ$9—+ÕËL÷©²CÁpL†Áèéì‰&°ôâ}j=zq"ÍiáöÐëQ~Œp¢±u­¨’qý8| œ¾XJ]I0(ÊÛú[ë;Þ¤"
-}“Ö
-÷‰Œø„œåòõbÓŠ€aùM¶Hå›™—ÄõÑ¬'dh!kì!2?\   ÄVSïœkV£êtûYq ‘!Å9NÀT* ZÃÌ}û~Z”Ïö÷#ú—4¾)ð‹xKˆ0ÛwïÞù_Œš~°)¿ƒ½¸¢JŽ2®Ðj\o[B:Üí"mýMð¶4‘¥è	›(ž
-–®÷tå+œ'’s_ÈZ÷­«©Ö‡õHÃ ½ ˆ½ÎÛøRt#dÅ{‚	æ(uÍÐ(­ƒ–¡ÖÄ¸†XÑÐíÃ•ÇB(´!Ï7J+}’SnÀÂÀ…ÖP¦gøË”oC ~§}»ÚS–œKâí'šž¾{¸šoœÝ—úëi‰îX+æ‡œ$Nù•<Iûü6âäÇgº»+"´~ÃNûº¥Ü¶Hq¶"ÏëÖ~ùÅOƒá/ßÐ Hþ$9—+ÕËPûˆ‘&¤N*@GHFºWáL%®›n«¢Sþš'‚¯½¡ÓLâ¦âÝÇ¦-i­QÍï‰{ŽzaYû+AŒl=ÕS;°®Ä;(ºG½)µÍ#&“J»F±8’*~çyÌÊÈõ&ÝX•™Rœ5Rcp   ÆXVÏ|	ô–aëoo½®Ã?T0Ä´ªÌwV_#¡$ :uœÉ =ÚdÏ¨–1ñ.%Ö•ª„Ÿ2@$VÏe)c^H'´ð4ØTvèà‚“²È£ó–Ä\ÚÂ75KŽÂ¯AÎD°<Tª­‹ÑBÍ8¿±n SQO|-Ÿâ]šžW¡:"Whu’ì½þ_£¬€ÂgjÂG·µ0;p^R òžkj‡]/aÜÂ7œªN»iÑäÅ,íZ\Zpê@’e.	Ý:AUtí06å|‡Á48XR4	6)w´1”¸…#ˆòÅ€!6¾è“/Öã•–Ð|~aTUÅ¼N]è•T?v    
-=== agents.dat ===
-ü  C o p y r i g h t   2 0 0 0 - 2 0 2 6 ,   M e t a Q u o t e s   L t d .                                                         A g e n t s                     }»âÃ§Ü    üK<ãÆ9âäød¶ B^                                                                                                                                                                                                                                            ÁxcR¡1-ð•}Zé‘ N‘B¬J8hw÷í˜©$*KPe}çéøØ[¬AíŸôÔÔù‡È‰öpA_†“‘¤Søý	)@Á×šªoJnJwÂ7õua0	[_dïDÓ¤ñGòcïÊ,þàÀ(Ò+\-“l»/Ê™SÍM?ìÁlKº³mUÙîfô×cqíaÜP(‰…dµÖè´ÁDJHv¯ŒWú`ÈÞ&<}ÊPÝ€¸’Žø	øbÅpäØZtÎdÏgÃXµx+P¯h]ÿ½þj‡ÑoâŒõ¬âÿâ·¸Å ¨:†Î ïj_±µƒ)_ãØwÐ¤WøÑˆsb±A= æÎ†¨+ÿM°a¼Z+H‘x/‡ý¨¹4:[`u÷ùèk*(¼Qý¯ää	—Ø™€‘Qo –£¡´c 9PÑçªºZ~Z‡ÒG…q@kotÿTã´W*sÿÚ<)ðÐ8â;l=£|Ë?Ú©cÝ]Oü‘)Ñ|[ÊÃ|c¦»~«ë%äXƒ¶®†¤ _°ù ­à‡ù÷Mf¦ƒªRº_Gbªé*[áNñøÍ7|k²Gò+ãýWíXðLá>´Ù8ñæˆF‡ó&Zøk~5kˆk@A&N©1”ÃW‰xóè:§>²èla› Y˜-à™Züë:ÊÆ‰oWž1´ˆÖ9êEã´Ñ¸†1B½Ã¤ä¡éþ€‚‘qô³±EÚ¥†8mm’ a"	Úø)¨,*=ì)‘–¢ÂÙZp3Cãã[ÐŽúÉ¢ôøýˆÝl=Šà³‹üˆcÅ²—yYÁkÄõÆ,šTÈc2ìfæØ…²ZäS¥Lìp…ý‹n®ú„øs¦ç¿Lj†ð;t!Õ3?3~æì¶"k4áïa÷*ÏA+*W*ƒIEfê(³‚)Uz7å*ž[æ©òšlñë˜E²ñ>Ü®Ï!Ë4ë!>!ö÷Ü_çJyÅ?.©žð]ôÂhž"Q¶Nã–7OÇ²¡ð€|?%ÅTçj>Œï û™j‡Ð·nÆF<çøsyµ£Á`u÷ùèk*(¼Qý¯ää	—Ø™€‘Qo –£¡´c 9PÑçªºZ~Z‡ÒG…q@kotÿTã´W*sÿÚ<)ðÐ8â;l=£|Ë?Ú©cÝ]Oünù^öÕD–=öÝavî|_ŸÝ¦eàT,‰h¹Úì¸Å¡HNLz“³[þdÌ!	â*@ÎTá„¼–’üüfÉtèÜ^xÒhÓkÇ\¹|/T³laÁn‹¡Õs”æù°ææ»¼¡É$¬>ŠÒóncµ"¹‡-cçÜ{Ô¨[üÕŒwfµEAêÒŠ¬/Q´eÀ^/L•|3‹¬½8>_dy‘ûýì“o.,ÀU ³èè›Ü
-„•Us¤š#§¥¸g¤=TÕë®¾ƒ^‚^‹ÖK	‰uDosxXç¸[.wÞ@-ôÔ<æ?pA§€ÏCÞ­gáaS •-Õ€_Î Ç€gë xé)uƒÿsî!b:›—vÇèúÆÓ¯V\Zˆ¡ÁžirÚ/ð8NÜbï’Ê¤ 
-
-"t×‚öêl†àváyÕjÇŠ=b&ÁzoÏ|™¯ã¢ôž¾ôôÉÊ¯×2ºL˜à|qÃ0Ç•;qõê$‰â!¶i
-"ãš…tÃSOøà˜'º=_ÂsÎl=Z£ŠA™ºËFL-m*r‡Ÿ	ú¡}<:Îc.Áöö©ê«’£c²¨1µ³Æu²+Kbãù¼Ì‘ll™äY—ƒR+}†fõÆi<…ìN; âJôM~OµŽ#ÝQì»uïoa£;ãŽmÜ.ÕŽuù†÷7ƒ‘ü/pH©¥„ÕöÔá½djh–¯Ï¬w€è=%þF\êpý Ø²®)0‚åøz”î„ï‡ãxÕ˜Kp4Ïˆ}ÝŠ§½ñ°¬Ì×Ø½å@È+Z¦î ŠÑ>Õ£Iø2—ð/Äw0ñ¨“‚Ña] î¦5ÈKmÐÜzKh±˜O§'ÈÙTZ;{8€•­(¯‹JHÜq<Ï$)·ø¹& ±qÀ¶?ÃÁÔƒÀ(-9YpñÊÚŸzžz§òg%¥‘`9‹”tÔ!wJ"“ú\I.ðX[Œ]Ãœ1ë_úÉƒý}o±Iñœ{ê<ãœƒ”"E‘Ÿ
-=~V·³’ãâïËrxv¤½Ýº…(ŽöK3Tj«ø~®æÀ¼&7&>óžˆ¢ü’ý•ñ†ã¦Y~BÝ–‹-ë,˜µËÿ¾º#Ú-åæËóNÖ9h´ü.˜ßLã±W@¥þ=Ò…&>ÿ¶¡ßok.ü´CÖY-{ÞêˆYv¿¦]µ5+ÖçbhI‰FŽ£»%'6½™XVêJ+Ý27ÅÇ4®¿ÎÄMÑÏâ‘Î6;Gg~ÿØè­ˆ¬ˆµ u3³ŸnG™¢-‚â/…X0¡-jW<þfiškÑª?ùm×‘‹}*¿Wÿª‰øJñª‘*¢0SŸ­)KŒdÅÁ ñ$ðýÙ€†„²ËëÈ“6œYAbx¹Œ¼ôÎÊ4E4Lž¬ –°
- £ÿ”ñ´gŒPë¤™;ù:¦ÃÙ«ÌÈ1è;óôÙ\äGvÂ
-<+¦›íZñ¿e›N³Kà“4LÄ¯ží}y<"
-ÂQäg;‰ìø–g„Í´kÃC9äõpvW—Tœ±É35D$Ë§fdøX9ë@  EÓÕB¼Í«ÜÒ[ßÝðŸÜDIUuŒ#æö»–º–ÃƒAÁ­|U§«°;ð=“f>¯;xeJ,tw¨yß¸M{åŸ™‹8Íe¸—Xÿ¸Ÿ#8°>!a­»7«&YšrÓÏ®ÿ 2þçŽ”’ÀÙùÖ¡DªgO(p†Çš'ÊÜØBSBZ¬º."¤¾®±¢ÿÂuš^ù²§IH´Ñç¹Ú,Ö?ö,I,çjòU„ÐJ9´©ûhÿÍs©-"\ÁYî¡BZÒ½¬û‹‡J0Ð_òuI—ú«¤u’ÛÂyÑQGò~„e¥bª¿×ACR2Ùµtr›fGùN..Sá"ãPÊÛ›¹êàiíëþ­êRWcƒš1ôÉ¤È¤Ñ‘OÏ»Šcµ¹¾Iž-þK¡tL½I$†sX:‚,…¶‡íÆ[‰$ó­'§™FÛsÆ¥fÆ­1F¾L/o»ÉE¹4g¨€áÝ¼.@õœ¢ Îçä¯R¸ u]6~”Õ"¨5ØêæPaPhºÈ<0²Ì&¼'¿°Ðƒ¨lÀµWVÂßõ)Çè:äM:W:õx c’Þ&XGÂ·	vÛ·;0jÏ(gü¯Ph)àËº	™•X>&Þm ƒW¥¹²ƒ éÐ‡ß_U Œ’s³p¸ÍåOQ`@çÃ‚€©tU\<<aï0ñ^Øé©Çøîwûù»ø`eq‘¨)?×²Ö²ß*Ÿ]ÝÉ˜qÃÇÌW¬;Y¯‚ZËW2”fH(:“Ä•ûÔi#—2»5µ§Té)Ô³"tÔ»?TÌZ=}É×SÇBu¶ŽïëÊ<N'ª°®Üõò½`Æ.ƒkDŒ¢ã0¶Cæøô^o^vÈ+ÖJ>ÀÚ4Ê5Í)¾Þ‘¶zÎÃe#dÐí7ÕöH‰¿
-'
-ßàÅíHÐ3b®ö(’‡ÙFÝ«Q‡ :Ÿø7Ì 8ù°›ŠÙie(ö®=ÐS'uØ‰ä‚Sp¹ W¯/%Ðá\bCƒ@ˆµ!0·“RPäyD%×,1¿ Á.¨¹y—È¾GËÉÜ‹È05AaxùÒâ§‚¦‚¯úo-­™hA“—œ'|Ü)R*›ÁxcR¡1-ð•}Zé‘ N‘B¯M;„k"zúð›¬'-NSh€êìûÛ‚^¯Dð¢÷××üŠËŒùs„Db“‰–”§V“û ,CÄÚ­rMqMzÅ:øxd3^bgòGÖ§ôJõfòÍ/ãÃ+Õ._0–o¾2ÍœVÐPBï„ÄoN½¶nUÙîfô×cqíaÜP(‰…dµÖè´ÁDJHv¯ŒWú`ÈÞ&<}ÊPÝ€¸’Žø	øbÅpäØZtÎdÏgÃXµx+P¯h]ÿ½þj‡ÑoâŒõ¬âÿâ·¸Å ¨:†Î ïj_±µƒ)_ãØwÐ¤WøÑˆsb±A= æÎ†¨+ÿM°a¼Z+H‘x/‡ý¨¹4:[`u÷ùèk*(¼Qý¯ää	—Ø™€‘Qo –£¡´c 9PÑçªºZ~Z‡ÒG…q@kotÿTã´W*sÿÚ<)ðÐ8â;l=£|Ë?Ú©cÝ]Oü‘)Ñ|[ÊÃ|c¦»~«ë%äXƒ¶®†¤ _°ù ­à‡ù÷Mf¦ƒªRº_Gbªé*[áNñøÍ7|k²Gò+ãýWíXðLá>´Ù8ñæˆF‡ó&Zøk~5kˆk@A&N©1”ÃW‰xóè:§>²èla› Y˜-à™Züë:ÊÆ‰oWž1´ˆÖ9êEã´Ñ¸†1B½Ã¤ä¡éþ€‚‘qô³±EÚ¥†8mm’ a"	Úø)¨,*=ì)‘–¢ÂÙZp3Cãã[ÐŽúÉ¢ôøýˆÝl=Šà³‹üˆcÅ²—yYÁkÄõÆ,šTÈc2ìfæØ…²ZäS¥Lìp…ý‹n®ú„øs¦ç¿&ž+ÒWÙkƒ?íMóOš:‹j÷~ý-Àþ=Ë	“?™Y‚@ò,üµø”÷ýe5ÚRHÌ°2ÙªãNÙ*ü0ÎïAëTA^Aü$j™å-_NÉ¾}âˆ¾B7qÖ/n¶Wo0çÒÁ œ_E-åtŠ^¬À¹Š§ð×Žæf\“™•ƒá@Um×ÙèÈoK
-œ1üÝäÄÄéw¸yæ`q1O€vÿƒ”C€èíù0±ÇŠš_:^:g²'åeQ ùKOTß4Ã”á7
-âSßº	îÐ°ÂLƒ\ñ«º‰C½=/ÜŽÙ~Öµ$vÖ½AVÎ\?4½ÆEÀó4miH™ºÌ˜¥(.,Zs“p;ÞD¬éÂ
- a®4ÁdœvrÜíÜôF©TÈ¼>X²H³K§<™\4ø“LAã¡âNkµStÆpÙÆãÆ›œ©Œïj²äÓNC•™gCÇ¼ö[´óˆ;ÜôµlWF•%!äÊ²jùŒã1”E >,u\këáŒÿ?üDYqÛÝìÌsO 5 á“èÈÈí{¼}êdu5S„z‡…˜G„ìñý4µËŽžc>b>k¶+éiU$ýOSXã8Ç˜å;æWã¾ òÔ´ÆP!‡`õ¯#¾GÁA3àuµ`?® §`GËàXæÉ	UcßSÎB{wV§ÈÚ¦³6<:h¡~IìRº÷Ð.o¼BÏrª„€êûêT·bÖÊLfÀVÁYµJ§jB¡ZOñ¯ð\yÃa‚Ô~çžÔñÔ©ª·šý,xÀòá\Q£§uQÕÊiÂ–IêÃzeT£3/òØÀxšñ?¢S®L:ƒj!yùïš«&,M
-RgéëúÚ]®Cï¡öÖÖû‰Ê‹ørƒCa’ˆ•“¦U’úÿ+BÃÙœ¬qLpLyÄ9÷wc2]afñFÕ¦óIôeñÌ. âÂ*Ô-^/•n½1Ì›UÏOAîƒÃnM¼µnUÙîfô×cqíaÜP(‰…dµÖè´ÁDJHv¯ŒWú`ÈÞ&<}ÊPÝ€¸’Žø	øbÅpäØZtÎdÏgÃXµx+P¯h]ÿ½þj‡ÑoâŒõ¬âÿâ·¸Å ¨:†Î ïj_±µƒ)_ãØwÐ¤WøÑˆsb±A= æÎ†¨+ÿM°a¼Z+H‘x/‡ý¨¹4:[`u÷ùèk*(¼Qý¯ää	—Ø™€‘Qo –£¡´c 9PÑçªºZ~Z‡ÒG…q@kotÿTã´W*sÿÚ<)ðÐ8â;l=£|Ë?Ú©cÝ]Oü‘)Ñ|[ÊÃ|cçütå%qûoê^6—“rÃäöÂÏ«RXV„½šenÖ+ì4J‹Ø^ëŽÆ œpÓ~òæh‚ÜrÝuÑfÃ†9^"½vkËx•«ß}žðšºððÅÆ«Ó.¶H”Üýxm¿,Ã‘7mñæ …Þ²eß–p¿OKôÜ”#¶9[¾oÊh9VŸ†=•¶ÇBH)i&nƒ›öy86Ê_*½òò¥æ§ŽŸ_}®¤-±¯Âq®'G^ßõ¸ÈhŒh•àU“N'y}‚bñÂe8èJ7þÞFðIzK±ŠÙMè·qëk]
-Ÿ7ßŠiØ*ÑŠqõ
-‚ó3	}ø+lD¥¡€ÑòÐÝ¹`fd’«Ë¨s|ä9!úBX™ælùœÔ®ª%,~áŒ ôvê€ëƒßtÑ”Gl0Ë„yÙ†£¹í‹¬þ¨ÈþþÓÔ¹á<Ä'V¢ê†{Í:ÑŸE{ÿô.“ì+Às,í¤~Í]Yê¢1ÄGiÌ}ØvGd­”K£#ÄÕPV7w4|‘©$«‡FDØm8Ë   %³ôµ"œ­m‹¼²;¿½Ð¼$)5UlíÆÖ›všv£îc!¡\5‡‹pÿÐsFöXE*ìTþWˆY¿˜-ç[öÅùyk­Eí˜wæ8ß˜A›‹9zR³¯Žß ÞëÇntr ¹Ù¶$ŠòG/Pf§ôzªâ¼¸"3":Œïš„žøŽù‘í‚ß¢Uz>Ù’‡)ç(”±Çû™º¶Ö)áâÇïJÒ5d°ø*”‰ÛHß­S‰<¡ú9Î":û²ŒÛkg*ø°?ÒU)wÚ‹æ„Ur»¢Y±1'Òã^dE…BŠŸ·!#2¹•TRæ{F'Ù.3ÁÃ0ª»{™ÊÀIÍËÞÊ27CczûÔä©„¨„±üq/¯›jC•™ž)~Þ+T,)fS8úbe–gÍ¦;õiÓ‡y&»Sû¦…ôFí¦&ž,O›©%™Gˆ`Á½œí ìùÕ|‚€®ÇçÄ2˜ U=^tµˆ¸ðÊÆ0A0Hšý¨’¬œŸûí°cˆLç •7õ6¢¿Õ	§ÈÄ-ä7ïðÕýXàCr¾8'¢—éVí»a—J¯GÜ0H	À«šéyu8¾Màc7…è™ô’c€É°g¿?5àñlrS“P˜­Å/1@ Ç£b`ô‰T5ç<AÏÑ>¸É‰§ØÎWÛÙì›Ø@EQqˆ	âò·’¶’¿
-=½©xQ£§¬7Œì9b:«7taF(ps¤uÛ´Iwá›•‡4Éa	´“Tû´›4¬:]©·3§"U–nÏËªû.úãŠŽ¼ÕõÒ@¦cK$l‚Ã–#ÆþØÔ>O>V¨¶* ºª­	žû¾q–Zõ®£ED°ÍãµÖ(-ißêê¿À¥Í(°BŽÖ÷rg¹&½‹1gëàØ¬_ Ù{j¹IEîÖŽ°3U¸iÄb3P™€7°Á<B#c h}•ÿð—s20ÄY$·ììŸà¡ˆ™Yw¨ž'«©¼k¨!AXÙï²Â‡b†bÚOyH!sw|\ë¼	_2
-{ÁxcR¡1-ð•}Zé‘ N‘B®L:ƒj!yùïš«&,M
-RgéëúÚ]®Cï¡öÖÖû‰Ê‹ørƒCa’ˆ•“¦U’úÿ+BÃÙœ¬qLpLyÄ9÷wc2]afñFÕ¦óIôeñÌ. âÂ*Ô-^/•n½1Ì›UÏOAîƒÃnM¼µoVÚïgõØdrîbÝQ)Š†e¶×éµÂžEKIw°XûaÉß'=~ËQÞ¹“ù
-ùcÆqåÙ[uÏeÐhÄY¶y,Q°i^ ¾ÿkˆžÒp‘ãö­ã ã¸¹žÆ!©;‡Ïðk`²¶„*`äÙxÑ¥XùÒ‰tc²B>çÏ‡©, N±b½[,I’y0ˆþ©º5;\avŽøú	él+)½Rþ°åå
-˜Ùš’Rp¡— ¤¢µd¡	:QÒè«»€[[ˆÓH†rAlpu UäµX+t Û=*ñÑ9ã<m>¤}Ì@ÛªdÞ^Pý’*Ò}\ËÄ}d©¾{	¨è"ÛOšÍW/ÓÏŽß(:q~3Ú”’¨ÁÁž ÃkÓx`{Ãð1RØEèñÔ>{j³Hó*âüVìWïKà= ³Øœ7ðå‡E†ò%Y÷j}4j‡j?@%M¨0“ÂVˆwòç9¦=±çk`šÿX—,ß€˜Yûê9ÉÅˆnV0³‡Õ8éDâ³Ð ·…0A¼Â£ã èýpó²°DÙ¤…7Œll‘`!ŽÙ÷(§+)<ë(•¡ÁØYo2BââZÏùÈ¡ó÷ü‡Ük<‰ß²Šû‡bÄ±–xXÀjÃôÅ+™SÇb1ëeå×„±YãR¤Këo„üŠm­ùƒ÷r¥æ¾sMâ<XQü„¾5ÜK˜¶õgWF¾TôŽA˜à#ð«ÞŠ³€³ueÌ~³ŒÓoÆ`SsÄðaºè¡Ó©!ŒúˆÕ	§ÈÄ-ä7ïðÕýXàCr¾8'¢—éVí»a—J¯GÜ0H	À«šéyu8¾Màc7…è™ô’c€É°g¿?5àñlr¼ªÆg|”þ ï–r1/ÃX#¶ëëžß ‡˜Xv§&ª¨»j§ @WØî±Á†a…aŽÙNŒxG rv{[ê»^1	záC0÷×?éBsDªƒÒFá°jädVg WýÜKDýäh}õƒf¦äŸlç[3”oÀáó¿Ì¨OUSšº—bkÓ(é1GˆÕ[è‹Ã™mÐ{ïãeÙoÚrÎcÀƒ6[ºsh
-È	u’¨Üz›í— ·í
-íÂÃ¨Ð+³E‘Ùúuj¼)ÀŽ4jîã‚Û¯bÜ“~m¼LHñÙ‘ ³6
-X»lÇe6Sœƒ:’³Ä?E&f#k€˜óšv53Ç\'ºïï¢ã¤‹œ\z«¡*®¬¿n«$D[ÜòµÅŠe‰e’ÝR|K$vz
-_î¿b5~
-åG4ûÛCíFwH®‡ÖJå´nèhZœ4Ü‡fÕ'Î‡nòð0|Šzõ(iA¢ž}ÎïÍÚ¶]ca¨È¥pyá6÷?U–ãiö™Ñ«§"){Þ‰ýñsç}è€ÜqÎ‘Di-ÈvÖƒ ¶êˆ©û¥ÅûûÐÑ¶Þ9Á$SŸçƒxÊ7ÎœBxüñ+é(½p)ê¡Œ{ÊZVÿçŸ.ÁDfÉzÕsDaª‘H  ÁÒMS4t1yŽ¦!¨„CAÕj5Èýý"°ñ²™ªjˆ¹¯8¼ºÍ|¹!&2Riê ÃÓ˜s—s ë`žŠY2„ˆmüÍpCŒóUB'	éQûT…V¼•*äXóÂ|övhªBê•tã5Ü•| þ>Š˜ˆ6wO°¬‹ÜýÛèÄkqo¶Ö³~!‡ïD,Mc¤ñw§ß¹µ07‰ì—ÿ›õ‹öŽêÜŸRw;Ö„&ä%‘®Äø–·	³Ó	&	ÞßÄìGÏ2a­õ'‘†ØEÜªP†
-ÿ9ž÷6Ë~7ø¯š‰Øhd'õ­<ÏR&t×ˆãRo¸ŸV®.$Ïà[aB‚?‡œ´ /¶’QOãxC$Ö+0¾ÿÀ-§¸x–Ç½FÊÈÛŠÇ/4@`wøÑá¦¥®ùn,¬˜g@’–›&{
-Û(~Q)š&cP5÷_	b“dÊ£8òfÐŠ„v#¸Pø£‚ñCê£Š#›)L˜¦"–D…]¾º™êéöÒy}«ÄäÁŒ/•ýR:[q²ÿ…µíÇÃ->-E—ú¥©™œøê­`…Iä’4ò3Ÿ¼Ò¤ÅÁ*á4ìíÒúUÝ@o»5$Ÿ”æSê¸^”G¬DÙŒ-E½¨—ævr5»JÝ`4‚å–ñ`}Æ­d¼<2ÝîioPM•ªÂ,.=Ä _]ñ†Q2ä9>ÌÎ;µÆ†¤ÕËTØÖé˜Õ=BNn…ßï´³¼|:º¦uN ¤©4‰é6Œ_7¨4q^C%mp¡rØ±F tÞ˜’„1Æ^±ÿQø±˜1©7Z¦´0¤R“kÌÈ§ø+÷à‡‹¹ÒòÏš=£`H!iÀ“ ÃûÕÑ;L;S¥³'·§ª›ø»n“Wò« B A­Êà²Ó%Ï8ï%B%úûàcëN}ÉC2­¢ôaøÆl¢&UºRçš;SË¶¥ô„€C)ÉXënBó¤ÿn‹Ô»rÊJ@ëüw}^ž[£¸Ð:<K+Ò®mkÿ”_@òG''LÚÜIÃÔ”²ãÙbæä÷¦ãKP\|“*íýÂÁÊŠHÈ´ƒ\®²·B—&÷DšmE¶BlQ3{%~¯€æ¿T‚ì¦  ’?Ôl¿ž_¿¦*?·E(h´Â>²-`¡yÚÖµ'9î•›™Çà Ý¨K±nV/wÎ¡.Ñ	ãßIZIa³Á5)«Åµ ¸©É|¡e ¹®PO»Øî"Àá3ÝFý3P3	îqù\‹×Q@»°oÔz°4)cÈ!`õ¨Ia"ÙÄ³’ŽQ7×fù|Pž²«|™âÉ€ØXNù
-…‹l¬i±ÆÞHJY9à¼{y¢mN U55Zè)êWÑâ¢Àñçpôò´ñY^jŠ¡"8ûÐ«Ï«Ø#˜VÖÂ‘j¼ÀÅP¥4R¨{SÄP+z_A!‰3Œ½ŽôÍb+ú´.® Mâz"Í¬mÍ´8MÅS6vÂÐLÀ;n¯‡èäÃ5G ü£©§Õîë¶Y¿'|d=…›Ü)¯<ßñíWhWoÁ$ÏC7¹Ó-Ã.Æ"·×Š¯sÇ¼^]Éæü0ÎïAëTA^Aü$j™å-_NÉ¾}âˆ¾B7qÖ/n¶Wo0çÒÁ œ_E-åtŠ^¬À¹Š§ð×Žæf\“™zºw¿ÔìVXgGîÊ‰‡°{\cCChö7øeßð°Îÿõ~ Âÿglx˜¯0F	Þ¹Ý¹æ1¦däÐŸxÊÎÓ^³B`¶‰aÒ^9›ˆmO/—AšËœÛp*ž9Â<¼®[ðˆ0Ûº){"ÛÂF[ÓaD„ÐÞZÎI|½•öòÑ"CU!.
+>>> NETWORK CONNECTIONS <<<
+Outbound connections (non-SSH/VNC):
+Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
+0      0       77.237.234.2:55874 149.154.166.110:443         
+0      0       77.237.234.2:51416 194.164.179.244:443         
 
-=== common.ini ===
-[Common]
-Login=11797849
-ProxyEnable=0
-CertInstall=0
-NewsEnable=0
-Environment=F008C7293503CED0045B07842FC57A638AA2FD5F10DEE8EA7AD19815A339B9A21E36157778467577E33A229F2FC5240D
-Server=FundedNext-Server
-ProxyType=0
-ProxyAddress=
-EnableOpenCL=7
-ProxyAuth=
-Services=4294967295
-NewsLanguages=
-Source=download.mql5.com
-[StartUp]
-Expert=PropFirmBot\PropFirmBot
-ExpertParameters=
-Symbol=EURUSD
-Period=M15
-[Experts]
-AllowLiveTrading=1
-AllowDllImport=0
-Enabled=1
-Account=1
-Profile=0
-Chart=0
-Api=0
-DisableOpenCL=
-WebRequest=1
-WebRequestUrl=7FD432023C960D48DEB1226C4CA79933EC41824AD52F6AA5784B4E98197419B32D82FBC346A0F934FDD00C563590039D55AAE1A9
+DNS resolution:
+Name:	google.com
+Address: 2a00:1450:4001:81c::200e
 
-=== cookies.dat ===
-   C o p y r i g h t   2 0 0 0 - 2 0 2 6 ,   M e t a Q u o t e s   L t d .                                                         c o o k i e s                                                                                                       . c d n f x . n e t                                                                                                             _fz_uniq                                                        5189778274539812731                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {ko|    
-=== dnsperf.dat ===
-	   C o p y r i g h t   2 0 0 0 - 2 0 2 6 ,   M e t a Q u o t e s   L t d .                                                         D N S                           1                                   *S¡i                                             Ö2Š§³Íú:sq¼wÕ-Õ8ý	×J75"ÝvÈÌŠù¡ñ§Ÿá´’5«d¯5nø–Â>ì~¼þœ^b5ÑÆSâ?‰Êƒ³û<DÃóx­d&ydú-cí3ÔR@$rzë2•ßwgq ë;¥<²;û=š˜åð_jÈù.ýHzÝºvÁ›¶f¾ÏÌ²TìLwFûeÞ«‚×#¥>ë¨z1§8Ñ/Na\öÖ¥ƒ5Óz>*áæò[¤/s—DÌà³)2Ê!''#úþì‹òû®Fp2õÜbÌ^DJï¿ÝüËØ'l¾CÅšùt¤x’ /ô*$QÏ<˜ØŽ Y²aö|%Jk&g¿·6ŽÆÒÐw4deÒ¼:YÝpšô’òt7R/#”›ÏðlÏß×amçÞƒçiQþ"ÔÔâ/ü>ÍiwpD6ZR°`-®dX‹¹·Hÿ©à¯Oˆf›8?M\¸ùf½CK¾²@¹òúøD‰ã a–î&2"OÊ	*å&~¿|ÆG·˜j·3›Ý‰^$æ*Ac ±]“ìSÖ2{ i?ÿ­ÎS @†ÕÿQ¼c–â¹½Y·ðšéõÖðwÜÖÆ›å™8s²>$òâs·`Þ'sÄÇ¤ztø¾NH¥¨Ïa¶tËÒö*&DñX@ºKld0…åü]ZÜlqæ€±‡GF¿Õ?ªzh?û·vì!>ÚO2?ðîˆËbœö.ëw³“+È^Ã%Çä^•Ý·*˜õ­R¶¿ƒþv#iˆÐÊË‘Ãc€g2ð¡ô¡É	§ådËýÓÌ+oAbegÜŠž®w”–üT	¨Þî{G(Ñieœ«@¦è’òÇ[‚ÙÔ[fþ:³Å¤>âË)¿;"Ã˜”ýæÂ48&<„tÊÃ¦„Â`x‚ËNs/@ç2Wœ§þÎÉãP'€¶¸tMC§ÊR°$}ESð¨z¯­-, iâž7ÙkÎ6 ‘ÎO+ðÔwãÃ­¯ô›wh«NkvíAÜ
-à±Uú¸´Ÿã•zÂ.pa._H¶€my¾XVkX(®16—Œè,/®¦½l¨t¾¯œ=þwvõ¶i™& Gò~›a@Ùb;£2å-gsîSI™ŽïÇ	å^îÜ/Ý`m5~¨k<™ÖÂQÑÁ÷‚þ°w>½â¾Uyî”U¨ÙÃ³_£+ëþ‹2Tàüa¦Ì¬ô{ÇŸSŸ„£Š“MD¼›G
-t%Ð•«Üèõ–ôÂŒîAT¸‚aÇÕ]kïÁ¼@pO°³b@Èø&ùÀ‰¸7WÂþPRVÉNÚO.hÐ}cËe÷O˜¤Ã;É•—œ;ZÉ‘‚óóäÔ\n—ÜWC„ù¿K¿ë\%^=Ð¸ñW·+·"£änBþ‡šÙ÷âÈ´!K¼ð@sWîYåö«éë×¦ë éVÃqíEÍ,eX²™Ä_œøzM
- 3Ä½tøUÚYU1ë€ß*§$*‡†Ø5Åø°mõÙ1ð–sK­ƒrP&£Ñ(
-£'†˜õðgå˜…íÏ†ÊÛ‰ÖÍ÷]ãÔ	,'øbðSKó%}ª5qGìàÜ°cÓ`ÀÏ×¾Øõ%¶¬ÍŒ¦§W aïpé­ôôf@ífo‘t¦q}”Ç¤ù	èÊ_SãŽÿ[ÂÓÄŸ…b-ö@›òËz¡½N3i×Lò:š<‡†”_ÆLuìõXGÊóLúÇ–@!ÃÉ½Sc˜^þ£±îp:j9?!-Ã
-e„Ð>¯ûŸeÍµ?ä|1`$Žÿ
-D)¤IGç\¶è¿ý…âö°ö‚/|ëÁY*ób„®iQgtÚ…Ìãú”Pb6aH¼²‹°»Òò3í"?q6áo`ü¿whN+ëDUŠ¶µæHTì}f¦ç¿ñE˜­¶GÀ?­ÿÏY<ûMé;º>nÐÔ|áþˆYF.áÿÈÝ(F0ê:Ñâ7|±|x|øxa¥Ê|èéJU%ww~Mñ{K¿JBnZÌ1¢X…À‹±ð¹7ùïßõLóã£Ý™f<Î!ð‡*ZbƒõBŸ´#ïÞ"|r“¯Î2‹×sÝØh›Ê‚6ŠW©ù¦ÅUg™—,$š¬uý±A›+Bòý¹£ºlŠ¼m6é\-]Oìºƒ¼ Q#±ÃzO;;x|vË‚1TIüŽ@b<ðÔç)ðnY”nÒI
-D²}ŒÍÁg^Ó*›fv“Ô/#:ºû§,¼Z>	A+ë©ìœTŒ¤!³ ë„ç]C³Hÿ%pWr[€,¤Ir×úÕ­¤×ÔDd—¼¡6ÞkZLL³«{j¾XùGB"¢X	.¢‚ÎÜ<“šÕé(c]qÄS¾‹‘îôB½-¿kËñßyOcß¿Öýo ¼ÎðÊÜ-Ý.<MZ™§æË}ýn¼MðEE±˜0ñ	^’NôÞjŽ¬£ýÆÕ²Œ'âOµÄH4¡.mœ-â¸3¢Úœ¤½ºG¤Ÿæôgò ºÌƒ·Dœ¤’F¬ÉÝ¯€ú»Ðûya ZçÁ¿´Ø»(cã©çµÇiC›Ìù°ª¦ú”n…Ûû‡-\·J_u…:]@GýYåè¾®Tž#Ú|ãU`m3ÙUµ¨@+¾ÒC=Œ$^¸i]E‡+U‰ l­¤•‚­äÏŽ!¾8ñM¾¦…Â­DÞ'lÊ^ÒÙx§·þ¹‚d‘4tÉL
-\áÒwô½,…§òg¬#ETWª¥•´@Ârñ‰ä?€âÈ+äÙ•I˜ k!‰íãoÿ3ÜØx‡µï"÷ÆDNÝrFÀÛ+Î»ë3›6ÿàƒ–;b+¡Øþ‰}ûÓ­áŽCï^'£ÜäâLhjÁmax´ÖeùË%¹ôløO¼‡áwQß‚Ú0ú§§”­ass´ŸžTêÓùä—º5¨½6+±ùð¿7°`¨.‚ü©BÌ8¾AŠ±Ëœ¬˜B¶ÿ‰ËJÈµ2y£¸·¿z¨¬Å°Ëž‡|(4¤/{5úÑfÈ‰–/K£]çÅ¸CWó‡µ[­û„{­ðãËTžæ
-û‚yS2TÖþXYôPU@\¸‰Ç{œnñ¥oUtòf'¦ñ’W^=êígëEWeÄ§˜p£Y	hòqû¡Ð¥T•}D„w‹»ˆ¬é»VA5¯0!D7'¬7áX|½è~yk8ï ‘_Ðƒ³n´K2Ý6¸4wÑ£èP/‘˜Ø¾oÊ[!þÐ·£X£R¸††l’áaDÄEùÔÖçù”¶”ûgReÁÂe3Â4)Ø¾¶Ó;YŸ«-z(x4mNæ»^ô&i- S§cƒÍ¾"0€QåŠqðé¬ÎËæ±ÁÝAëóSÞ2nw0UÉ}´;äSÏ¥¾<Y£QCÑƒ)³,ì–×uZ¼1f}ÛPV;8DX·ÞžâÂú{<êëÛô pð‹EÛÃÒ
-eÙ®—¸<Ú`P_³´ÕÑ&¼¨îLwbQ‰U¨EDèŽé^[üd,4ñÈ(ÿsRgÅÔïGkÃaP„i˜qcïY…óùÌXÁ|­Á-ÊÚšÁ|ÅmÕt.¤W[ç:ìYj!¹.n]Óû‘„Õª™,IóU7ËY–!;@š²Dõ°Ø	`’$sY4óó2“™ŽYnÒÍ#||\­eÔ³ÐYfÅ¬˜}Ø“tñ¸~J¬îÎ+ê‚/Ã^R˜õòÊm6o´Ñ«dLÇFa?N‘Èk¿ß#•­û{îñk<É0ƒœ}-ÉñíÝçc¨öþoy lz#&";[ÒinÙùMÝ´o‰ÈÂÞ!¡=Œ4Êì¿zl™[ËÚËG%§ŽØVfE¨á @eáÒY÷½Áë•^ÃÏß™5ÇÊiH,š§AÌØtGŽ@'7OÄ=üS"3“ŠmÒÙÇòöïå;t³Ïfô\IÙš,‘à‡O«I¾šÁüæºæ*í;‰s­¦Bn7Äá¹‰°ÔŠþàE¨:vŒÅ
-Ý¡ÜÙáßèª 84×<tYdŸZÇg!CîO·+¿˜F{ð7ûoH*åèzhÃWöº—é¹ÿšˆÈÚIZSmDX¶DZ ×´BŒæ[dí¼‚½f×ê-FƒóŠ§›JaöŽ¡]hëdšŒ@<K	Ô4Çh=tN\¸ >gûû\ŸÉ@H\_ó¥ÖŸÃÍ•ÃqD–h¨}DRB«±M+ª€Š´7¯Ëî¸ælt><Ø]¥?àÍ ûoÎ>—ÍÎ¡¡óã‡ÓB!»Å”ŒšÌ	YÆ/žïŒÐr¥¯"ðóÅSo	zFÐYŽ­íº`çz&8õ
-#æÿG³Ësö£/°ê|Åè%ykj²ª±ÿóÝá*«ÖUF;ÀbR#NŒž²Xå-¼;EÿôÒé6Þ3 ¸ô¡a=›Ê…²bâ:°‰"G )s§õ89=—Ë¹Ü1i/hB™U×¯„?„iÜ,ZƒqTßÈòyï&î"-ÁUQ‹~ð¬Ök3Høc£d„•ÎÇÜ±HÀÄÚéµ)•ÄûÝåA^Ú|•Ùb±Žø
-·A$'¢Ê‡°)'‘÷1úŽ2ªªGŠ^þl8 µÒbÿïº8­&ð2-ÆÁ”çÈß¾Á‚>Ù´Îe‘o¹½¿a¹#¾îâ}€…Õô~ü’ü°‰*ÄûÊk]–F6t°’b§üjL`ž`Z&ðêy.tò¼^"ó¸¡hÅ~©Þ]ˆ!b]ýëÍ‘Þ÷œãü09§ FøpzE¡×©m€•>X-ZÃ»€)Á=G@Üyµö¼u>£ˆî˜ÍÖ§Õx ”©€¨Ìf6ðÔl:ù5×”ãû5–«S”Åk#kkb»»²š{CgQ‡Ð~á!ÍÏ×öpF¡D¬õ­è«"ßPWï­:\oÂršÜ]ÎÅ/B×ô`;õ{`x”,`<ŸÓ-Z¦ÐÁÃí{¤Ö4§R¦„]D#B6¨t·8ï>A°_3€¦™Btº;¿W Ž©›Á3gÒOÇÊ^ç] èÒ½	ÑÁNYºy@:ö œrš^ØÓÑ>]$R|7Åîl~!ÔQŸ<c= þéYÏÖØ)—¬s—·Ò0k»`Û‰>èÏ[ŒÚEJƒ[×U¦t–°-¯G˜¤òƒ«üp|µ¶…öÇ Ö² X°0Æá&dËñîuÛæ]¿Ñ6~TêÉ‰K­Û} :)–ƒ§‰Wë‹Zc÷é€Œaøž	s5³ÁxL:eãlìGOÒ\ÔÒåûŒWAþ„”ë€5+Gr·ìƒƒ#½â¦èyè	S’?ÍYQNC…\Ë…@¬_XãÁL˜)-ËöÇ¨06µqÎ]ì‹¶`]DsFÝ7bB€l ‘2ˆËØ#³à"˜`'§¢¿çüÄªr¼UžD¡­Ééf:eT Ýe¦¨n‰ñ*ìV/ýy|LœsÍ¹í…÷<æî›=«¤£-9ÓÀÞv±‹kZ ±$³nœôŽ¶‚àÀø…®Ó‰]Ç«‘§ÇH&c‰°™Ÿª^IñˆÎfŠŠñÝO³M&1To(e'¬Â0 ¬ñLÆ¿"5_|i÷jƒŒ%;ïjÊshzlÉÃV#9F~w½Í¦‚³¤ÓÅmÛÙk­S—xWEÜ¥jŒ;xçÂ™¸~‹ƒ%‡	È¼±{¼„"È‹!tÑL¨ÄŠNSˆŽá$jI{u!\oOWXëQÒMu.§1vZ<)n‰á&hK3 	¯°Ð{/4"ÔÒ}r•6ýÄ8“ï‰°âƒú‹?Tßøƒd‰ãÄŠ+äXÙKn‡F\~Ãý~„MlT{P¥‰ÛkV|j˜LYËdJ,ÈÈý×s‹ â¡QB³ütc£æ>—¿V»œ=ºMÂÊÐû¼ÐÐáî·¬6{ø‚”)Ì§Oxóæxô“f6 éÕ+cº™wÚ‘–Œ;¢YNÇ#¨¹æ©%æ€º/z/4·’ÐjËÆI%B9k§%˜\‚Æ–“ôôì‡w¯°.p½3Îå˜ˆk
-‰—%kßé¸æÔ;îßeVV–âïíœ¥“„¥ò %h´¢ªbà¢ÏÆl¯£ÿ‹^j}ñX6Ì‡¦N•8Ù0g€>ª’1üÃ©‰lú>§ãf²ç<+”–f^hÐ/zW~ÙêÇ¬ÇÂmŒVd•ñ`%BÂÏúZaÔmì[ý/_‡×Ù/›ù³ ú^}~5!C„¾Ee!+µ=.Yw¡ÐBl™gbg%±œÉPê¹
-hwî ”‡ýIƒ¼¥m"G1ó‰KÒ/ðÖ‹õqÒöWÀ â'&17M„æãÄvÚîMì9ø[,^>Íöë!µ%Wf€ör$æƒf3—n˜#£t•yò‰@»rÄ-÷îãØ€WÕšdNgÏšÿ`±óP°ObN¼®û¯TraI‰ÎÆ‚X|žÐg¦aw(mhæÊ†/#¤·zÎûÜ»Ó,ÝÙ°J‡á›­éœ™ŠØŒð°j  Æð6
-CT„`]á:›µhkˆÞJ_èŸÈyû4¾5Y;>×§ö10E9”©9€7WÒ^â+<ý™^NOêå"D36oš·))÷5µòë1²šé»µ–a„à€©åd­ó—Œhiµç»u—Q–Ë«…9¢;ê{]s`ÁYT[ÌÎúè°—/¹~†œ¨ÏºÕ} rd]™Ô”œg%¤= 0]ä¿¤„þIÿ<}yHÙCÀÄëU…cÍ]%Š²!H¨lŽ~H^Ë?œ\ ãŒ¡!WI_äÉÌ¯÷“kðþ¼‡U·|\6xç#ÕŸ_e8C>ªêŸ>ë–³Ð]«ŒW‹½"ù²’£Riy­æ#å!%v·X‹ÖíKðœKíP7,ò(hFSG}/¬Â-Kf¡ƒÙ7K,¹¹ˆ0CLúc1µð#gp á¿í’™à¡¢Í2Šµ NA%~VÀÿJÃü²ÉÇ ï%4ãº¥Àæ$X’Þ‚k|ö—]´¤‘è¬{ŽÁ-êJ[^“Ð”=8¿usOûTÀ4ñ¤‰ï¢02í+‹˜!× ñ–ºïá[ð"ßö¼ôš?K¢õ{þ=ÒUSƒVãx6»{ýÃ
-ûšBÆ¹È´¡|Xõ;3€0ìÌ¹|¼Ítv»X=—z]+“uîxn||öÙ³õ¿èû‹j”Àg¼å‡ó&WË¾‚9Ýû¸aÞDV’—t*Aˆ³O§‹æ ¥ë!c||—ãkï]–²†–Ö=•>õâLqsšC`¡%ëœ\xM-3EkHÀç`-ò‡ì
-ò'‹Ü4ôElh'¸8.àRc}
-9ý¬UÁìˆøBBA5¦Aö{èYø8ñÌ‡°ñÄ
-H‘À`vˆpbH’0<
-ž£pí½OÚ€¢ÌÉwêã5]hôåÃd«"‚ðÅwf¾3ð ž:-|{†Ö&"é(¾^^¹Xº5‡gj™Ê[Þ:¬Ö­ïe×è˜²ÇzXµu‚‘ ©túHFXSÙ5®JxÄÅò_õ	CQ†že¶Ì†|1,vŠ’è“AG$·ÿ
-vþ×ÜKø®ë5˜“eæiò÷VÏz«²îPß˜Ü|ˆ{â±Hô74D®ºüBœýÚ§Ø9:jÀ’oÇü‚uÁKÉ%
-•±*
-'8éßu‹lè•¯"âv±î¤R`6]¯H˜—¤òéÓ¡Ÿ¹Uyf CÁxaíÄ¼äà°Lÿñ¾æcûÖç—¸Ô„Ni‰¾ÜMVOE±Û—±IìˆÚ¢a¡"ØuŽ¿°k¥q\CéžW:þWè>L…°Å/¿põB£…jyàÝ­äÎ.q)þ«V^‰ãü)fârEÏï§[²?@Ê¨y—êÃï1z7¤xDX˜1{=“¥è=U”QuüÇ¡¾9‡cã"vý/É4µ‹-æ¡_¥ìwd*ÍåŠ}“àX~V„KS@rC[¿bâÔ1÷ïÍôÞ¥aÎNQ-FUpy}…ywf‘¦!üíƒÇÄZÌfæ~A;Ç§p¨äqþõ~;ö»=q
-Å£	)ÇtýoL€ß½àY$H6p§œÚb²µ{-Þ÷¢Ã	À÷róµÉÑi:MS˜ b¸ Å…‰]»4QÙ­$±å.º=ƒzÔ¨z=JªF úëÖÑ‡¯òWmP½W+:<Ê3ÝD	$(>Û[­ÿ:«¼eÖÿrTäÔ:³·DÇc^Î”ÆŠ2Lôˆéæ€xn¡Í-¶?*+ïNŠÝ3ƒ“6Ï€©ïYô½SfS¹ï ƒ½BØ bXZ¶àNâôæÎëïùAy‰íšù¹‘y¸øO¹Ýw“üÌR['Ï‡ÝÙù€'}WØÉý$hI\åˆ¶;Ü´ðäêu;BuŒbîæ<@ÿnDcùEÅw¤¡Uè÷¸¹¬á )²‚#Îï3ê®Àr£7$º@CâÄ!\l²f¯>!}ŒÐpøÅkŠsíPuµÜfÅCÊ†Ù[I¸{Ï— òM`Óš’o†²²«æ”LŸ„íI%¾­r>.ª+3îEp´€_¯bQj±U>°ÏeŸÔ¨‹Eo+ :[¡ÜÜ×:¦š_– ÅDõüS0×i‹Kâç@	šZlIñ~ÆÞ†Ni$ûY/~lÄ‚ÑiöÑ>ÆÙºª^™XˆÀ†êdóAšQ¨Þ^Ï‰ªN„Ä—Á”8}®½ÿÐiÄŽ?×u«h,YiÁ'vA‹±œ6øø®ÑÀâ³¥¯î2Œ›xõl#>ý•ôìÒ}LÅºÚ+-\‹§Sò&7ÿðŒJôikšn¢L‹ «hÍ¢¸è6ÃsòxæI_<xÀ¼à½#‘•_u/Ô×Bâj¿±ð¼í9ç;î“Û’ð<í~D–s#xI‘òâÑÅ:†B_ö¡—Ê^@ä³Ñ+&º«!CCÓ1a£#Ú=&Îó‚[È6¿ÄÐ¦G
- ØÛŠÂtÉèêg¤ ¿kfè¶ƒþúÎº;p«þMÃc†üÍp¹$è1bÅïÞ~wef§·—ix/‰Ã Öä!	4“ø1– NÅÙ€AN@‚T"o1ÌöÙ\ÐÃñ04‡lè2Ëk¶ª4pK ÐØá4‰5Æ€ïÇw[Î.ö ¥çŠ¯cí7EF–/g*Û‘Š 
-®£ûXr]†™¥d¸bÁ(	WbC#ÛFÍª„8äa¸EqÝƒ‡€øœ¯]¦^•¶ˆkKŠgC»àZ£Ì©ˆ|(æ5IˆÆhDZ_@ò~Õl-ÛVŽÊ×v'!~‰/}yçà:X )<Ûtoùî[úºŠË¬ò{´ÑîH‘-°±ÂÊù"Ú^¬ñFT“:IoÝ‰Rc®²­‹±zV&ë½Hµ;Rz{	âÆ~01ÄœYFún°¹¸'=SáÀ­ô®Ý¾ÎŸ.6u™…Ë‹C“s}¾Ž|9Ð4Ñƒ	ˆ6{òbY?PF ö/jøªÐŠº„Ù¼õ¸Ëû<Rg–Ð•
-1û¶È¼/wô«ÑõÏˆ'Œ÷IÝC›ÉˆÏµŠì€§[SyÀn.8áßäªàþÛ¬Tò±»¿€gZ¢"çËÍùeŽ‡Á¼Vd‰Wƒ†|ž[Ú}1GSëS•L|=¦´={ËÊd•+' Ìýn•§Òœ5pv*rlG*Tj;2f>Lzs
-¿HÁ•3é<¦ÇyZÞWÆT^8$Ø¬ëOOÐ‰Ð§Œª/Ý^ }29*D]®„õN6uJ-oÜí9Rl}Lô**p(<µµÒ1 ©û^I9Š>K<îTP«·~­‹Þ]¢­¯úÇuDNµ4é™m¸K¶òw¶tÜ[1îËBqÛN/Çn²¶*ÉEY°ßÁ±!äËsä–Â((í¤¡\:‘¥îÀ0¾Ó†ñS”=`QZuªö_×°54ž¸ÜÖÏJRŠ¶†–ìèæC¦W«uBÉ´Sçã!G`Ÿ·{¬(Ôâ¤€4×ÞWÁ…°f©˜«(+p‰ýç yQ2°]µ18,îANÞ,|¹:®)Õ+ªK©Àþ{Nâ) p1‹é›ñMg¿cY].·°#~ûš[›.ù¶´»¥Xã…:B@X´·œ Ö2Š§³Íú:pn¡\ðHø®A™äðÎûQ<:/ê+ƒ·#Â¤"YÕèðæ\Ô€×Jè$'øNÓ{>ZÊÑð¼ ‚'m*«¡až1öh¿Ïÿ„öfÝßÝî¹sÚ?|ªêÜ˜¨s ±WÛíùŸé†$@§]Pé¡.÷˜a2Fìç¼•ÙåÖ±f àBTéW"•Y¦3i;J´sÅïQ¿³=¼êöDöwPÏÁiäñ£¨/ALŽ å@FÔ§-òÚQy¿z<ëQ[&Y+(1pKÅÒmÒ,S…­€ÀÕÚGè˜M©Ê0áWˆ«zÔn;Ÿ1‚&f¦|7q[åJÐy?ú;“Õ‹
 
-=== jupyter.ini ===
-ÿþN o t e b o o k A p p . d i s a b l e _ c h e c k _ x s r f B o o l = T r u e  
- 
-=== metaeditor.ini ===
-ÿþ[ W i n d o w ]  
- T y p e = 3  
- L e f t = 0  
- T o p = 0  
- R i g h t = 8 0 0  
- B o t t o m = 6 0 0  
- L S a v e = - 8  
- T S a v e = - 8  
- R S a v e = 1 2 8 8  
- B S a v e = 9 7 2  
- [ R e B a r S t a t e - B a n d 1 ]  
- B a n d I D = 2 6 3  
- B a n d S i z e = 7 1 1  
- B a n d S t y l e = 1 0 7 3 7 4 2 3 4 1  
- [ R e B a r S t a t e - B a n d 2 ]  
- B a n d I D = 2 7 5  
- B a n d S i z e = 6 5  
- B a n d S t y l e = 1 0 7 3 7 4 2 3 4 0  
- [ B a r S t a t e _ 3 2 8 0 8 ]  
- s i z e H o r z C X = 2 0 0  
- s i z e H o r z C Y = 2 0 0  
- s i z e V e r t C X = 2 1 2  
- s i z e V e r t C Y = 6 9 0  
- s i z e F l o a t C X = 2 0 0  
- s i z e F l o a t C Y = 2 0 0  
- [ B a r S t a t e _ 3 2 9 0 7 ]  
- s i z e H o r z C X = 1 2 8 4  
- s i z e H o r z C Y = 1 8 5  
- s i z e V e r t C X = 2 0 0  
- s i z e V e r t C Y = 2 0 0  
+>>> TRADE ACTIVITY <<<
+PropFirmBot mentions:
+HN	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+IN	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+MN	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+RM	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+MG	0	18:16:36.754	PropFirmBot (EURUSD,M15)	[NewsFilter] Calendar returned 0 events (may be unavailable)
+QE	0	18:16:36.754	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
+FH	0	18:16:36.755	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+CN	0	18:16:36.755	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+MN	0	18:16:36.755	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+JM	0	18:16:36.760	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+RR	0	18:16:36.760	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+MM	0	18:16:36.963	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+DK	0	18:16:36.963	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+IQ	0	18:16:36.963	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+LH	0	18:16:36.963	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+LM	0	18:16:36.963	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+HG	0	18:16:36.963	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+NN	0	18:16:36.963	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+NF	0	18:16:36.963	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+RN	0	18:16:36.963	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+grep: (standard input): binary file matches
 
-=== servers.dat ===
-ú  C o p y r i g h t   2 0 0 0 - 2 0 2 6 ,   M e t a Q u o t e s   L t d .                                                         S e r v e r s                                                                                                                                                                                                                                                                                          Â$|ÀÌÝ
-Ô`^ËxÐt*Ú2GS4Êfdê¥æ>È¸ïØôÞY’š˜¹tµ`-6ð9)Vã¾Ñ)NƒÛ<Ç ^~9zÒÉH ØäÔ|µ½»Ü—Ø0Q†Þ"?Ò©°îÉ
-b•KúR°¼Êåöêè	Ä]Ó‰mÅ‰•äÝkiå •íKóK£¯Ó H42}8yÑÈGŸ×ãÓ «lu3UQ©ê w¯»ñÉëçåÁZÃ–Y‘º1ksq’MŽæË{Ó%1@ŽÇûù4ïYb÷bºòþî’ÊÒÐñ¬íEÖŒc›§—Ä?x€~ŸZ›óÆEÕáÑþéÏÃÁâÞ6CRÕm¤° ÍÈïãá½þVÇ}üT‹—½êež¦¤Å€Á¥¤ÜËÿ,§àèæ5ð[œïkƒºÆ¶ãJƒ‹‰«f•íO´wƒIvÃü64e [³’H¢úP\v£*c][MsË6ìZ²ØäæÓ.,|7xÐÇFžÖâÒÿz³»¹Ú•Ö.n$£û8eÎ><i$U­ÀvÄlxX….g][LyÑ(ÞiÁÍÙú'¢Û×ÕØ“å=GýEûÆó[”¯­ô¯Ác­	6ê#É:’æœ!y‡“·äk¤œš<Eî¤k“Ÿµâl¥—•‡Bºj ¥ý6cê#¼Äd™ñ©#‹¸ 9¼Ì$\¤ü -ó,Î?—í£pžª®Ûb›“‘ˆC¼eª
-<iÕ,*z5O§Ñ‡<”þ
-ÏüC|¾¼ì§Ñ)S	²
-sZ‡1j/-t/Dœ}3²
-BN>kh…Ðô5Î„Y±éõå•ü_]~9zÒ'ÝhÀà§PË
-~…êÊõÂ~Ì$b¡é{Ž¯j«DúyÑ	2­æîìÈ	a¢X×/gscDLJk&g¿ ¶5ÅÑÁîi¢ª¨É„Å^“ë#/LÇ 'â#{¼rñI}ª%^fd…@ÙÐO§ßëÛƒ¼ÄÂãžß7x.­=I9fá" Aü=•ÖŒc›§—Ä?x€~ŸZ›ó4êiÁùõ"ÖÞÜý¸ùQ’HÇWcS€û4<:[W¯ð¦%}µÁ±ÞY’š˜¹tµNƒÛ<·ðøöÒk¬bá9q}mšNVTu0qÉ
-À?—ÏÛËøs¬´²ÓŽÏ'hõ-9)VÑ
-1ì-…Æ|ûS‹—‡´/hpnJ‹ã$ÚY±éõåÆÎÌí¨éA‚8·GSCpë$,*KGŸà–m¥±¡ÎI‚Šˆ©d¥ý>ôsËÿ,§àèæÂ[œRÑ)am]Š>FDe a¹ú°/‡¿Ë»ècœ¤¢Ã~¿Xå)FÁú !Üu¶lëC{‡w¤X`^:{ÓÊI¡ÙåÕ}¶¾¼Ý˜Ù1r(§ÿ7C3`Û;ö7Ð†]•¡‘¾9rzx™T•í.äc»óÿï—ÐØÖ÷²óKŒBÁQ]Mzõ.64UQ©ê w¯»«ØSŒ”’³n¯Hþ}Õ	6±êòðÌe¦\Û3kwg”HPNo*kÃº9‘ÉÕÅòm¦®¬ÍˆÉ!b—ï'3#PË
-+æ'ÀvõM…‘®)bjh‰D…ÝÔS«ãïß‡ÀÈÆç¢ã;|2±	AM=jå&$E A™ÚgŸ«›ÈC|„‚£^Ÿ÷8îmÅý	ù&¡Úâà¼ýU–LË#[gW„ÿ8@>_[³ôª)¹Åµâ]–žœ½x¹R‡ß#@»ôüúÖo°få=uqžRZXy4uÍÄC›ÓßÏüw°¸¶×’Ó+l"¡ù1=-ZÕ5ð1‰Ê€ÿW›‹¸3ltr“Nç(Þ]µíùé‘ÊÒÐñ¬íE†<»KWGtï(0.O
-K£äšq©µ¥ÒM†ŽŒ­h©BøwÏ0«äìêÆ_ VÕ-eqaŽ	BJHi$e½þ´3‹ÃÏ¿ìg ¨¦Ç‚Ã\‘é!-JÅþ%à!yºpïG‹{¨#\dbƒ>×ÎM¥ÝéÙºÂÀáœÝ5v,«;G7dß ?ú;“ÔŠ	a™¥•Â=v~|X™ñ2èg¿÷ó ›ÔÜÚû¶÷OFÅUaQ~ù2:8YU­î¤#{³¿¯ÜW˜–·r³LÙ:µîöôÐiª`ß7o{k˜LTRs.oÇ¾=•ÍÙÉöqª²°ÑŒÍ%f›ó+7'TÏ/ê+ƒÄzùQ3    ¶V®…‘äÿ831r->–¸n„Üz†/ŠÃúøÔm®dã;soœPXVw2sËÂA™ÑÝÍúu®¶´ÕÑ)j Ÿ÷/;+XÓ3î/‡È~ýU™‰¶1jrp‘Lå&Ü[³ë÷çÈÐÎïªëC„:¹IUErí&.,MI¡â˜o§³£ÐK„ŒŠ«f§ÿ@öuÍ.©âêè	Ä]žTÓ+co_Œ@HFg"c»ü²1‰ÁÍ½êež¦¤Å€ÁZç+HÃü#Þw¸níE}‰y¦!Zb`<}ÕÌK£Ûç×¸À¾ßšÛ3t*©9E5bÝ=ø9‘Òˆ_—£“À;t|z›V—ï0æe½õñ™ÒÚØù´õMŽDÃS_O|÷086WS«ì¢!y±½­ÚUŽ–”µp±	J ×8³ìôòÎg¨^Ý5myi–JRPq,mÅ¼;“   v,“ë8eÔ%#j%W¯È~Í%s]Š5nGE\lÄ1çU­åñá‰ÂÊÈé¤å=~4³CO?lç (&GC›Ü’i¡­ÊE~†„¥`¡ù:ðoÇÿû(£Üäâ¾ÿW˜NÍ%]iY†:B@a]µö¬+ƒ»Ç·ä_˜ ž¿z»T
-‰á%B½öþüØq²hç? ¶V®…‘äÿ831r->–¸n„Üz†/ŠÃù÷Ól­câ:r~n›OWUv1rÊÁ@˜ÐÜÌùt­µ³ÔÐ(ižö.:*WÒ2í.†Ç}üTŒ˜ˆµ0iqoKŒä%ÛZ²êöæŽÇÏÍî©êBƒ9¸HTDqì%-+LH á—n¦²¢ÏJƒ‹‰ªe¦þ?õtÌ -¨áéçÃ\SÒ*bn^‹?GEf!bºû±0ˆÀÌ¼éd¥£ÄÀYŽæ*GÂû"Ýv·mìD|ˆx¥ Ya_€;|ÔËJ¢ÚæÖ~·¿½Þ™Ú2s)¨ 8D4aÜ<÷8Ñ‡^–¢’¿:s{yšU–î/åd¼ô ð˜ÑÙ×ø³ôLCÂR^N{ö/75VRªë¡ x°¼¬ÙT•“´o°Iÿ~Ö
-7²ëóñÍf§]Ü4lxh•IQOp+lÄ»:’   Ð}ÕlxX…0iKI[f¾È~Åo{Z‡8qOM^`¸Ãy›óS€Áú64anÆ½<”ÌØÈõp©±¯Ð‹Ì$ešò*6&SÎ.é*‚ÃyøPˆ”„±,emkŒGˆà!×V®æòâŠÃËÉê¥æ>5´DP@mè!)'HDœÝ“j¢®žËF‡…¦a¢ú;ñpÈ ¶V®…‘äÿ831r->–¸n„Üz†/ŠÃøöÒk¬bá9q}mšNVTu0qÉ
-À?—ÏÛËøs¬´²ÓŽÏ'hõ-9)VÑ
-1ì-…Æ|ûS‹—‡´/hpnJ‹ã$ÚY±éõåÆÎÌí¨éA‚8·GSCpë$,*KGŸà–m¥±¡ÎI‚Šˆ©d¥ý>ôsËÿ,§àèæÂ[œRÑ)am]Š>FDe a¹ú°/‡¿Ë»ècœ¤¢Ã~¿Xå)FÁú !Üu¶lëC{‡w¤X`^:{ÓÊI¡ÙåÕ}¶¾¼Ý˜Ù1r(§ÿ7C3`Û;ö7Ð†]•¡‘¾9rzx™T•í.äc»óÿï—ÐØÖ÷²óKŒBÁQ]Mzõ.64UQ©ê w¯»«ØSŒ”’³n¯Hþ}Õ	6±êòðÌe¦\Û3kwg”HPNo*kÃº9‘   Ð}ÕlxX…0iKI[f¾È~Åo{Z‡8qOM^`¸Ãy›óS€Áú31k&RªÛ‘h ¬œÉD}…ƒ¤_ ø9ïnÆþ
-ú'¢Ûãá½þV—MÌ$\hX… 9A?`\´õ«*‚ºÆ¶ã^—Ÿ¾yºS	ˆà$A¼õýû×p±gæ>v‚rŸS[Yz5vÎÅDœ ¶V®…‘äÿ831r->–¸n„Üz†/ŠÃÿýÙr³iè@x„t¡U][|7xÐÇFžÖâÒÿz³»¹Ú•Ö.o%¤ü4@0]Ø8ó4ŒÍƒZ’žŽ»6owu–Q’ê+á`¸ðüì”ÍÕÓô¯ðH‰?¾NZJwò+31RN¦çt¬¸¨ÕP‰‘°k¬EûzÒ
-3®çïíÉ
-b£YØ0htd‘EMKl'hÀ·6ŽÆÒÂïj£«©Ê…Æ_”ì$0 MÈ	(ã$|½sòJ‚Ž~«&_ge†A‚ÚÑP¨àìÜ	„½ÅÃäŸà8y/®>J:gâ#!Bý>–×dœ¨˜Å@y [œô5ëjÂúö#ž×ßÝþ¹úR“IÈ XdTü5=;\X°ñ§&~¶Â²ßZ“›™ºu¶O„Ü =¸ñù÷Ól­câ:r~n›OWUv1rÊÁ@˜   v,“ë8eÔ%#j%W¯È~Í%s]Š5nGE\iÁ;ñEåñá‰ÂÊÈé¤å=~4³CO?lç (&GC›Ü’i¡­ÊE~†„¥`¡ù:ðoÇÿû(£Üäâ¾ÿW˜NÍ%]iY†:B@a]µö¬+ƒ»Ç·ä_˜ ž¿z»T
-‰á%B½öþüØq²hç? ¶V®…‘äÿ831r->–¸n„Üz†/ŠÃþüØq²hç?wƒs T\Z{6wÏÆEÕáÑþy²º¸Ù”Õ-n$£û3?/\×7ò3‹Ì‚Y‘º5nvt•P‘é*à_·ïûë“ÌÔÒó®ïGˆ>½MYIvñ*20QM¥æœs«·§ÔOˆŽ¯j«DúyÑ	2­æîìÈ	a¢X×/gscDLJk&g¿ ¶5ÅÑÁîi¢ª¨É„Å^“ë#/LÇ 'â#{¼rñI}ª%^fd…@ÙÐO§ßëÛƒ¼ÄÂãžß7x.­=I9fá" Aü=•ÖŒc›§—Ä?x€~ŸZ›ó4êiÁùõ"ÖÞÜý¸ùQ’HÇWcS€û4<:[W¯ð¦%}µÁ±ÞY’š˜¹tµNƒÛ<·ðøöÒk¬bá9q}mšNVTu0qÉ
-À?—   v,“ë8eÔ%#j%W¯È~Í%s^‹?x¸¶í¨Ý5BøDœÔàÐýx±¹·Ø“Ô,m#¢ú2>.[Ö6ñ2ŠË XœŒ¹4mus”Oè)ß^¶îúê’ËÓÑò­îF‡=¼LXHuð)1/PL¤å›rª¶¦ÓN‡®iªCùxÐ1¬åíëÇ`¡WÖ. ¶V®…‘äÿ831r->–¸n„Üz†/ŠÃýû×p±gæ>v‚rŸS[Yz5vÎÅDœÔàÐýx±¹·Ø“Ô,m#¢ú2>.[Ö6ñ2ŠË XœŒ¹4mus”Oè)ß^¶îúê’ËÓÑò­îF‡=¼LXHuð)1/PL¤å›rª¶¦ÓN‡®iªCùxÐ1¬åíëÇ`¡WÖ.frb
-CKIj%f¾ÿµ4ŒÄÐÀíh¡©§ÈƒÄ]’ê".KÆÿ&á"z»qðH€Œ|©$]ec„?€ØÏN¦ÞêÚ‚»ÃÁâÞ6w-¬<H8eà!@û<”Õ‹
-bš¦–Ã>w}žYšò3éhÀøô!œÕÝÛü·øP‘GÆVbRú3;9ZV®ï¥$|´À°ÝX‘™—¸s´M‚Ú;¶ï÷õÑj«aà8p|l™MUSt/pÈ	¿>–   Ð}ÕlxX…0iKI[f¾È~Åo{Z‡8qOM^`¸Ãy›ó)DqÖ#!v1A™ÚgŸ«›ÈC|„‚£^Ÿ÷8îmÅý	ù&¡Úâà¼ýU–LË#[gW„ÿ8@>_[³ôª)¹Åµâ]–žœ½x¹R‡ß#@»ôüúÖo°få=uqžRZXy4uÍÄC› ¶V®…‘äÿ831r->–¸n„Üz†/ŠÃüúÖo°få=uqžRZXy4uÍÄC›ÓßÏüw°¸¶×’Ó+l"¡ù1=-ZÕ5ð1‰Ê€ÿW›‹¸3ltr“Nç(Þ]µíùé‘ÊÒÐñ¬íE†<»KWGtï(0.O
-K£äšq©µ¥ÒM†ŽŒ­h©BøwÏ0«äìêÆ_ VÕ-eqaŽ	BJHi$e½þ´3‹ÃÏ¿ìg ¨¦Ç‚Ã\‘é!-JÅþ%à!yºpïG‹{¨#\dbƒ>×ÎM¥ÝéÙºÂÀáœÝ5v,«;G7dß ?ú;“ÔŠ	a™¥•Â=v~|X™ñ2èg¿÷ó ›ÔÜÚû¶÷OFÅUaQ~ù2:8YU­î¤#{³¿¯ÜW˜–·r³LÙ:µîöôÐiª`ß7o{k˜LTRs.oÇ¾=•    Ö6Ž¥±ÄñX×uÍk!Ô,u¢o¨ÑÏ”OõMü²\ºÆÕK><g"W¯ÄzÊ"ZfVƒþ7?=^Z²ó©(€¸Ä´á\•›¼w¸Q†Þ"?ºóûùÕn¯eä<t€pQYWx3tÌÃBšÒÞÎûv¯·µÖ‘Ò*k! ø0<,YÔ4ï0ˆÉþV ¶V®…‘äÿ831r->–¸n„Üz†/ŠÃóñÍf§]Ü4lxh•IQOp+lÄ»:’ÊÖÆón§¯­Î‰Ê"c˜ð(4$QÌ,ç(€ÁwöN†’‚¯*ckiŠE†ÞÕT¬äðàˆÁÉÇè£ä<}3²
-BN>kæ'%FBšÛ‘h ¬œÉD}…ƒ¤_ ø9ïnÆþ
-ú'¢Ûãá½þV—MÌ$\hX… 9A?`\´õ«*‚ºÆ¶ã^—Ÿ¾yºS	ˆà$A¼õýû×p±gæ>v‚rŸS[Yz5vÎÅDœÔàÐýx±¹·Ø“Ô,m#¢ú2>.[Ö6ñ2ŠË XœŒ¹4mus”Oè)ß^¶îúê’ËÓÑò­îF‡=¼LXHuð)1/PL¤å›rª¶¦ÓN‡®iªCùxÐ1¬åíëÇ`¡WÖ.frb
-CKIj%f¾ÿµ4Œ   v,“ë8eÔ%#j%W¯È~Í%s^‹?x¸¶í¨Ø0HþH èôäŒÅÍËì§è@7¶FRBoê#+)JFžß•l¤° ÍH‰‡¨c¤ü=órÊþ+¦ßçåÁZ›QÐ(`l\‰=ECd`¸ù¯.†¾Êºçb›£¡Â}¾WŒä(EÀùÿ ÛtµkêB ¶V®…‘äÿ831r->–¸n„Üz†/ŠÃòðÌe¦\Û3kwg”HPNo*kÃº9‘ÉÕÅòm¦®¬ÍˆÉ!b—ï'3#PË
-+æ'ÀvõM…‘®)bjh‰D…ÝÔS«ãïß‡ÀÈÆç¢ã;|2±	AM=jå&$E A™ÚgŸ«›ÈC|„‚£^Ÿ÷8îmÅý	ù&¡Úâà¼ýU–LË#[gW„ÿ8@>_[³ôª)¹Åµâ]–žœ½x¹R‡ß#@»ôüúÖo°få=uqžRZXy4uÍÄC›ÓßÏüw°¸¶×’Ó+l"¡ù1=-ZÕ5ð1‰Ê€ÿW›‹¸3ltr“Nç(Þ]µíùé‘ÊÒÐñ¬íE†<»KWGtï(0.O
-K£äšq©µ¥ÒM†ŽŒ­h©BøwÏ0«äìêÆ_ VÕ-eqaŽ	BJHi$e½þ´3‹   Ð}ÕlxX…0iKI[f¾È~Åo{Z‡8qOM^`¸Ãy›ó)DqÖ&$|7M¥ÖŒc›§—Ä?x€~ŸZ›ó4êiÁùõ"ÖÞÜý¸ùQ’HÇWcS€û4<:[W¯ð¦%}µÁ±ÞY’š˜¹tµNƒÛ<·ðøöÒk¬bá9q}mšNVTu0qÉ
-À?— ¶V®…‘äÿ831r->–¸n„Üz†/ŠÃúø)ä%}¾tóKƒ¬'`hf‡BƒÛÒQ©áíÝ
+>>> WATCHDOG <<<
+Watchdog cron: INSTALLED
+*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
+MT5 service: NOT configured as systemd service
 
-=== settings.ini ===
-ø  C o p y r i g h t   2 0 0 0 - 2 0 2 6 ,   M e t a Q u o t e s   L t d .                                                         S e t t i n g s                 ²ár§Ü    æôc¹·wð[ˆËAæÖ                                                                                                                                                                                                                                            Åec·ÊI=<’Ê`WGÿ(À¢Ç.ü÷oâQs0Ü¾iM+œŸuy…®ÈÉ¬cBè žï(¶Tšfë«-(v\ º_¥zE*çáMInß™—í,mGØ	Ä‰Þcg¬ñVÈ 0"Ù2#Í!£ö•ËÌØ‘»óÌ!å·‘ïs)“¼kLÝm$ÈÕ¨¸’
-E1v,ÔÙèŸ·nç¨R¸]šüCù­!Â†X-ÕRËœ‡;t½:CÄE«5ÍB’Ó)x³0
-»ò#¾“³‡?{/ï!øTq[¿…ù”˜Y¤‘nL°pëêþ·‹(zâl^¾Ò¢¦Æ+!QU*oøÈ}ûùÕP^ŽÜ”½U7\Ã›‘Œk3ò¯’[=èÌ˜ªô•ø-GH+âÁgn§5Óåj‚*¬§õ‘ÛŸ9Þ$ùÄ©f`ÌÈí“^Šl«“ìÆWˆC]âæ+pÕGŸ¯¡X±™¢L "uJKW:r‹K Œd‹6nò¨;ê…Ë\ì£GT'7‰Ä°õ«SXg6íf'Ñ7Ü{Âx, A—×¬TÑ›þ–J›ºó‘–<¹ÂCŽÄ*´ƒLÁRŽ¨÷2Œ¯‰—:q¢=˜2¾ú®n wÓðÚ>xØ#íË/ïjþi}6
-§ùaëÝ=Q!%Eª ÐÔ©îw–GüŽ‚zxTÏÝ[<Ô¶ÛBê²Žq.Ú¼gK)šswƒ¬ÆÇªa@æžœí&´R˜dé©+&tZ¸]£xC(åßKGlÝ	—•ë*kEÖÂ‡ÜaeªïTÆ. ×0!Ë¡ô“ÉÊÖ¹ñ
-Êã
-µíq'‘ºiJÛk"ÆÓ¦¶C/t*Ò×æµlå¦P¶[˜úA÷«À„V+ÓP}Éš…9r»8AÂC©3Ë@Ñ'v‹±.¹ð!¼‘±…=y-íöRoY½ƒ÷’–W¢lJ®né}èüµ‰&xàj\¼Ð ¤Ä)OS(möÆ{Žù÷ÓN\ŒÚ’»S5ZÁ™Š i1ð­Y;æÊ–¨ò“ö+EF)à¿el¥3Ñãh€(ª¥óÙ7Ü"÷ŽÂ§d^ÊÆë‘\ˆj©‘êÄU†A[àä)nÓE­ŸV¯— Jž sHIU8p‰IžŠb‰4lð¦9èƒÉZê¡ER%5‡Â®ó©QVe4ëd%Ï5ÚyÀv*ž?•ÕªRÏ™ü”H™¸ñ”:·ÀA‹ŒÂ(²J¿PŒ¦õ
-0Š­‡•8o ;–0¼ø¬lžuÑîØ<vÖ!ëÉ-íhüg{4¥÷_éÛ;O#C¨žÎÒ§ìu”EúŒ€xvRÍÛY:Ò´Ù@	è°Œo,ØºeI'˜›quªÄÅ¨_>äœšë$²P–bçÿ§)$rX‹¶[¡vA&ãÝIEjÛ•“é(iCÔÀ…Ú_c¨íRÄ,Õ.ÉŸò‘ÇÈÔ·ïÈ	á³ëo%¸gHÙi ÄÑ¤´ŽA-r(ÐÕä›³jã¤N´Y–ø?õ©¾‚T)ÑN{Ç˜ƒ7p¹6?À
-A§1 É>ŽÏ%t‰¯	,·îº¯ƒ;w+ëôPmW»õ”U jH¬lç{æú³‡$vÞhZºÎž¢Â'MQ&kôÄyŒÿ÷õÑLZŠØ¹Q3X¿—ˆþg/î«ŽW9äÈ”¦ð‘ô )CD'Þ½cj£1Ïáf~&¨£ñ×›
-5Ú õŒÀ¥b\ÈÄéZ†h§èÂS„?YÞâ'lÑC›«T­•žHœqFGS6n‡Gœˆ`‡2jî¤7æÇXèŸCP#3…À¬ñ§OTc2éb#Í3Øw¾t(œ=“Ó¨PÍ—ú’F—¶ï’8µ¾?‰ŠÀ&°H½NŠ¤ó.ˆ«…“6mž9”.ºöªjœsÏìÖ: tÔéÇ+ëfúey2£õ]çÙ9M!A¦œÌÐ¥ês’CøŠ~vtPËÙ	W8Ð²×>}æ®Šm*Ö¸cG%–™os¨ÂÃ¦]<âš˜é"°N”`åý¥'"pV‰´YŸt?$áÛGChÙ“‘ç&gAÒ¾ƒØ]a¦ëPÂ*Ó,ÇðÅÆÒ‹µíÆß±‹ém#¶e F×gÂÏ¢²Œ?+p&ÎÓâ™±há¢L²W”ö=ó§¼€R'ÏLyÅ–5n·4=¾	?¥/þÇ<ŒÍ	#r‡­*µì¸­9u)éòNkU¹óŽ’Sž‹hFªjåyäø±…"tÜfX¸Ìœ À%KO$iòÂwŠ	ýõóÏJXˆÖŽ·O1V½•‹†üe-	ì©ŒU7âÆ’¤îòþ'AB%Ü»ah¡/Íßd|$¦¡ï‹Õ™3ØóŠ¾£`ZÆÂçX„f¥æÀQ‚=WÜà%jÏA™©›R«“œFšoDEQ
-4l…Eš†^…0
-hì¢5äÅVæAN!1ƒ¾ªï¥MRa0ç`!Ë1Öu¼r&š;ÿ‘Ñ¦NË•øD• ´í‹6³¼=‡ˆ¾$®}F»Lˆ¢ñ,†©ƒ‘4kœ7’, ¸ô¨hšqÍêÔ8þrÒ
-çÅ)édøcw0¡ó[å×7K?¤šÊÎ£èqAö	ˆ|trNÉ×U6Î°Õ<
-{ä¬ˆk(Ô¶aE#”—mq}¦ÀÁ¤[:à˜–ç ®L’^ãû£% n
-T‡²Wr	="ßÙEAf×‘å$e?Ð¼Ö[_¤éNÀ(Ñ*Å›îÃÄÐ‰³ëÄÝ¯‰çk!‹´cþDÕeÀÍ °Š=)n$ÌÑà—¯fß J°U’ô;ñ¥º~P%ÍJwÃ”3l
-µ2;¼=£-üÅ:ŠË!p…«(³ê¶‹«7s'çðLiS·}ñŒQœ‰fD¨hãwâö¯ƒ rÚdV¶Êšž¾#IM"gðÀuˆûóñÍHV†ÔŒµM/T»“‰„úc+ê§ŠS5àÄ¢ìðü%?@#Ú¹_fŸ-ËÝbz"¤Ÿí‰Ó—1Öñˆ¼¡^XÄÀå‹V‚d£‹ä¾O€; UÚÞ#hÍ?—§™P©‘šD˜mBCO2jƒC˜„\ƒ.fê 
-3â}ÃTä›?L/	¼¨í£KP_.å^É/Ôsºp$˜9ýÏ¤LÉ“öŽB“þ²ë‰Ž4±º;…†¼"¬{D¹	J† ï*„§2iš5
-*þ¶ò¦f˜oËèÒ6üpÐåÃ'çböau.ŸñYãÕ5I=¢˜ÈÌ¡æoŽ?ô†zrpLÇÕS4Ì®Ó:yâª†i&	Ò´_C!’•ko{¤¾¿¢Y8Þ–”å¬J\áù¡#lR…°U›p; Ý×C?d
-Õã"
-c=ÎÿºÔY]¢çL¾&Ï(Ã™ì‹ÁÂÎ‡±éÂÛ­‡åi‰²aüBÓc¾Ëž®ˆ ;'l"ÊÏÞ•­dÝžH®Sò9ï£¸|N#ËHuÁ’}1j³09º;¡+úÃ8ˆÉnƒ©& ±è´‰©}5q%åîJgQµ{ïŠŽOš‡dB¦fáuàô­pØbT´È˜œ¼!GK eî¾s†ùñïËFT„ÒŠ³K-R¹‘‡‚øa)è¥ˆQ3ÞÂŽ ê‹îú#=>!Ø·]d+ÉÛ`x ¢ë‡Ñ•/Ôï†ºŸ\VÂ¾ã‰T€b¡‰â¼M~9þSØÜ!fË=•¥—N§˜B–k
-@AM0hA–‚Z,dèž1à{ÁRâ™=J-º¦ë¡IN],ã\Ç-Òq¸n"–7ûÍ¢JÇ‘ôŒ@‘ü°é‡Œ2¯¸9ƒ„º ªyB·H„ží(‚¥0g˜3Ž(ü´ð¤d–mÉæÐ4ún	ÎãÁ%å`ô_s, ïWáÓ3G; –ÆÊŸämŒ=ò„xpnJÅÓQ	2Ê¬Ñ8wà¨„g$Ð²]A“i
-my¢¼½ W6Ü”’ãªHŽZß÷Ÿ!jPƒ®S™n9ÛÕA=bÓÿ‹á a;Ìý¸}ÒW[ åJ¼$Í&Á—ê‰¿ÀÌ…¯ç ÀÙ «…ãg‡°_ú@Ña¼Éœ¬†þ9%j ÈÍÜ“«bÛœF¬QŽð7í¡¶zL!ÉFs¿{/h±.7¸9Ÿ)øÁ6†Çl§$þ¯æ²‡§{3o#ãìHeO³yíˆŒM˜…b@¤dßsÞò«nÖ`R²Æ–šºEIcì¼q„÷ïíÉDR‚Ðˆ±I+P·…€ö_'æ£†O1ÜÀŒžè‰ìø!;<Öµ[b›)ÇÙ^v ›é…Ï“-Òí„¸ZTÀ¼á‡R~
-`Ÿ‡àºK|7üQÖÚdÉ;“£•L¥–@”i>?K.f?”€X*bæœ/Þy¿Pà—;H+}¸¤éŸGL[*áZÅ+Ðo¶l ”5ù‹Ë HÅòŠ>ú®ç…Š0­¶7‚¸¨w@µF‚œë &€£}‹.e–1Œ&ú²î¢b”kÇäÎ2ølÌá¿#ã^ò]q*þ›íUßÑ1E9ž”ÄÈâkŠ;ð‚vnlHÃÑO0ÈªÏ6ÿuÞ¦‚e"Î°[?Ž‘gkw º»žU4Ú’á¨FŒXÝõhN¬Q—l7ÙÓ?;`Ñý‹‰ß_9Êû¶{ÐUYžãHº"Ë$¿•è‡½¾Êƒ­åþ¾ÿ×þ©ƒáe…®]ø>Ï_ºÇšª„ü7#hÆËÚ‘©`ÙšDªOŒî5ëŸ´x
-JÇDq	½Žy-f	¯,5¶ 7'ö¿4„Åj¥ÿ"ü
-­ä°…¥y1m!áêFcM±wë†ŠK–ƒ`>¢bÝqÜð©}lÔ^P°Ä”˜¸CGaê	ºo‚õíëÇBP€Î†¯G)Nµƒ~ô]%ä¡„M/Ú¾Šœæ‡êö9:Ô³Y`™'Å×\tž™çƒÍ‘ +Ðë‚¶›XR¾ºß…P|
-^…Þ¸Iz5úOÔØbÇ9‘¡“J£‹”>’g<=I,d}=’~V}(`äš-Üw½NÞ•9F){¶¢çEJY(ßXÃ)Îm´j’3÷‰ÉžFÃðˆ<ø¬åƒˆ.«´5€¶¦u>³D€šéþ$~¡{‰,c”/Š$ø°ì `’iÅâÌ0öj	Êß½!á\ð[o(ü™ëSÝÏ/C7œ’ÂÆ›àiˆ9î€tljFÁÏÿM.Æ¨Í4ýsÜ¤€c Ì®Y=	Œeiuž¸¹œS2ØŽß¦DŠVÛó›fLªO•j5×Ñ=9^Ïû‰‡Ý]7Èù´yÎSWœáF¸ É"
-½“æ…»¼È«ãü¼ýÕü§ßcƒ¬[ö<Í]¸Å˜¨‚ú5!fÄÉØ§^×˜B¨MŠì3é²vHÅBo»Œw+d­*3´þÿ5›%ô½2‚Ãÿh}£ý ú«â®ƒ	£w/kßèDaK¯ué„ˆI”^< `ÛoÚî§{jÒ\N®Â’–¶AE_è¸m€ÿóëéÅ@N~Ì„­E'L³‹|ò[#ÿâŸ‚K-Ø¼ˆšä…èô78Ò±W^—%Ã	ÕZrœ—åËþ)Îé€´™VP¼¸ÝƒNz\›ƒÜ¶Gx3øMÒÖ`Å7Ÿ‘H¡‰’<e:;G *b{;|T{& ^â˜+Úu»LÜ“7D'y´ å›CHW&ÝVÁ'Ì	k²h1õ‡ÇœDÁ‹î†:‹öªã†,©²3}~´¤s<±B~˜çü"|Ÿy‡*a’-ˆ"ö®êž^gÃàÊ.ôhÈ Ý»ßZîYm&ú—éQÛÍ-A5šÀÄ™Þg†7ìÿ~rjhD¿ÍýK,Ä¦Ë2
- ûqÚ¢~aÊ¬W;Šcgsœ¶·šQ0ÖŽŒÝ¤BˆTÙñ™d J}¨M“hÿ3ÕÏ;7\Íù‡…Û[5Æ÷²wÌQUšßD¶Ç »‘äƒ¹ºÆ©áúºûÓú¥ÝaªYô:Ë[¶Ã–¦€ø3dÂÇÖ¥\Õ–@¦Kˆê1ç›°tFÃ@
-m¹Š
-u)b «(1²üý3™#ò»0€Áýf{¡ûø©à¬¡u-iÝæB_I­sç‚†G’\:ž^ÙmØì¥yhÐZL¬À”´?C]æ¶k~ýñéçÃ>L|Ê‚«C%J±‰zðY!ýà€I+Öº†˜	âƒæò56Ð¯U\•#ÁÓXpš•ãÉü'Ìç~²—TNº¶ÛLxZ™Ú´Ev1öKÐÔ^Ã5FŸ‡:Žc89Eþ(`y9ŽzRy$þ\à– )Øs¹JÚ‘5B%ÿw²žã™AFU$ÛT¿%Êi°fŽ/ó…ÅšB¿‰ì„8	‰ô¨á„*§°1{|²¢q:¯ÿ@|–åú zw…(_+ † ô¬èœ\ŽeÁÞÈ,òfÆþÛ¹ÝXìWk$ø•çOÙË+?3˜Ž¾Â—Üe„5êý|phfB½ËûI*Â¤É0þùoØ |_ÿÈªU9ˆ‹aeqš´µ˜O.ÔŒŠÛ¢@†R×ï—bþH{¦K‘fý1ÓÍ95Z Ë÷…ƒÙ Y3Äõ°uÊOS˜ÝB´Å¹â·¸Ä}§ßø¸ùÑø£}Û_¨Wò8ÉY´Á”¤~ö1bÀÅÔ‹£ZÓ”>¤I†è/å™®rDÁ>k·ˆs'`þ©&/°úû1—!ð¹.~¿ûdyŸùö§ÞªŸs+gÛä@]G«qå€„E}Z8œ\×kÖê£wfÎXJª¾Ž’²=A[ä´i|ûïçåÁ<JzÈ€©A#H¯‡}xîWûÞ›~G)Ô¸„–
-àäð34Î­S	Z“!¿ÑVn˜“á}Ç‹ú%Êå|°•RL¸´ÙJvX—Ø²Ct/ôIÎÒ\Á3‹›
-=== startup.ini ===
-[Common]
-Login=11797849
-Password=gazDE62##
-Server=FundedNext-Server
-ProxyEnable=0
-CertInstall=0
-NewsEnable=0
-EnableOpenCL=7
-Services=4294967295
-Source=download.mql5.com
-[StartUp]
-Expert=PropFirmBot\PropFirmBot
-ExpertParameters=
-Symbol=EURUSD
-Period=M15
-[Experts]
-AllowLiveTrading=1
-AllowDllImport=0
-Enabled=1
-Account=1
-Profile=0
-Chart=0
-WebRequest=1
-[Charts]
-ProfileLast=Default
-MaxBars=100000
-TradeHistory=1
-TradeLevels=1
-PreloadCharts=1
+>>> SYSTEM HEALTH <<<
+Uptime:  18:17:41 up 6 days,  6:07,  9 users,  load average: 0.21, 0.40, 0.37
 
-=== terminal.ini ===
-ÿþ[ W i n d o w ]  
- F u l l s c r e e n = 0  
- T y p e = 3  
- L e f t = 0  
- T o p = 0  
- R i g h t = 1 9 2 0  
- B o t t o m = 1 0 8 0  
- L S a v e = 0  
- T S a v e = 0  
- R S a v e = 1 9 2 0  
- B S a v e = 1 0 8 0  
- S h e e t _ 2 8 9 _ l e f t = 3 4 4  
- S h e e t _ 2 8 9 _ t o p = 3 8 2  
- S h e e t _ 5 4 5 _ l e f t = 3 4 8  
- S h e e t _ 5 4 5 _ t o p = 4 1 8  
- S h e e t _ 5 4 5 _ w i d t h = 6 2 1  
- S h e e t _ 5 4 5 _ h e i g h t = 3 1 5  
- D l g _ 1 3 3 _ l e f t = 4 3 5  
- D l g _ 1 3 3 _ t o p = 3 7 4  
- S h e e t _ 3 6 0 _ l e f t = 2 4 4  
- S h e e t _ 3 6 0 _ t o p = 2 6 2  
- [ T o o l b a r s ]  
- A r r a n g e = 1  
- T o o l b a r _ 2 4 8 = 3 2 9 1 0 , 3 2 9 0 9 , 3 2 9 0 8 , - 1 , 3 2 9 1 1 , 3 2 9 1 2 , - 1 , 3 2 9 0 6 , 3 2 9 0 5 ,  
- T o o l b a r _ 3 4 6 = 5 2 6 0 0 , 5 2 6 0 1 , - 1 , 5 2 6 0 2 , 5 2 6 0 3 , 5 2 6 0 4 , 5 2 6 0 7 , 5 2 6 1 2 , 5 2 6 2 6 , 5 2 6 2 5 , 5 2 6 2 7 ,  
- T o o l b a r _ 3 4 7 = 5 2 6 0 0 , 5 2 6 0 1 , - 1 , 5 2 6 0 2 , 5 2 6 0 3 , 5 2 6 0 4 , 5 2 6 0 7 , 5 2 6 1 2 , 5 2 6 2 5 , 5 2 6 2 7 ,  
- T o o l b a r _ 4 8 8 = 3 2 9 0 4 , 3 2 8 4 2 , 3 3 7 3 0 , - 1 , 3 2 8 5 0 , 3 9 1 5 9 , 3 9 1 5 8 , 3 2 8 7 8 , 3 2 8 7 9 , - 1 , 3 2 8 5 1 , 3 2 8 4 8 , - 1 , 3 2 9 1 0 , 3 2 9 0 9 , 3 2 9 0 8 , - 1 , 3 2 9 1 1 , 3 2 9 1 2 , 3 3 5 2 7 , - 1 , 3 2 9 0 6 , 3 2 9 0 5 , - 1 , 3 2 9 3 3 ,  
- [ R e B a r S t a t e - B a n d 0 ]  
- B a n d I D = 5 9 3 9 2  
- B a n d S i z e = 3 2 7 6 7  
+Memory:
+               total        used        free      shared  buff/cache   available
+Mem:           7.8Gi       1.2Gi       6.0Gi        32Mi       863Mi       6.6Gi
 
->>> CHART PROFILES <<<
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart05.chr
+Disk:
+/dev/sda1       145G   16G  130G  11% /
 
-=== /root/.wine/drive_c/Program ===
+Load avg: 0.21 0.40 0.37 1/372 815369
 
-=== Files/MetaTrader ===
-
-=== 5/MQL5/Profiles/Charts/British ===
-
-=== Pound/chart02.chr ===
-
-=== /root/.wine/drive_c/Program ===
-
-=== Files/MetaTrader ===
-
-=== 5/MQL5/Profiles/Charts/British ===
-
-=== Pound/chart03.chr ===
-
-=== /root/.wine/drive_c/Program ===
-
-=== Files/MetaTrader ===
-
-=== 5/MQL5/Profiles/Charts/British ===
-
-=== Pound/chart04.chr ===
+>>> WINE <<<
+wine-11.3 (Staging)
 
 ============================================
-  Diagnostic Complete - 2026-02-28 17:37:51 UTC
+  Report Complete - 2026-02-28 18:17:41 UTC
 ============================================
 
 WORKFLOW_EXIT_CODE=0
