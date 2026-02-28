@@ -501,18 +501,18 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
    // Primary strategy
    signal = g_signals[signal_index].GetSignal(InpStrategy, sl_price, tp_price);
 
-   // Check if strategy is working (self-learning)
+   // Check if strategy is working (self-learning) - only LOG, don't block
    if(signal != SIGNAL_NONE && InpSelfLearning)
    {
       string strat_name = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
       if(!g_analyzer.IsStrategyWorking(strat_name))
       {
-         PrintFormat("[ANALYZER] %s strategy underperforming - checking fallback", strat_name);
-         signal = SIGNAL_NONE; // Force fallback
+         PrintFormat("[ANALYZER] %s strategy underperforming - but allowing signal (was: %d)", strat_name, signal);
+         // Don't block valid signals - just log the warning
       }
    }
 
-   // Fallback
+   // Fallback: also try EMA if primary SMC found nothing
    if(signal == SIGNAL_NONE && InpUseFallback && InpStrategy == STRATEGY_SMC)
       signal = g_signals[signal_index].GetSignal(STRATEGY_EMA_CROSS, sl_price, tp_price);
 

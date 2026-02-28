@@ -2,40 +2,44 @@ name: VPS Fix and Restart MT5
 
 on:
   push:
+    branches:
+      - 'claude/**'
     paths:
       - '.github/workflows/vps-fix.yml'
-      - 'scripts/fix_and_restart.sh'
-      - 'scripts/clean_restart.sh'
-      - 'scripts/upgrade_wine.sh'
-      - 'scripts/fix_wine_version.sh'
-      - 'scripts/force_wine11.sh'
-      - 'scripts/install_mt5_linux.sh'
+      - 'scripts/deploy_and_restart.sh'
+      - 'EA/*.mq5'
+      - 'EA/*.mqh'
 
 permissions:
   contents: write
 
 jobs:
-  fix-vps:
+  deploy-vps:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: claude/build-cfd-trading-bot-fl0ld
 
-      - name: Fix and restart MT5 on VPS
+      - name: Deploy EA to VPS and restart MT5
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          chmod +x scripts/fix_and_restart.sh scripts/clean_restart.sh
-          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/install_mt5_linux.sh root@77.237.234.2:/tmp/fix.sh
-          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 "bash /tmp/fix.sh" > vps_fix_report.txt 2>&1 || true
-          echo "EXIT_CODE=$?" >> vps_fix_report.txt
-          cat vps_fix_report.txt
+          chmod +x scripts/deploy_and_restart.sh
 
-      - name: Commit fix report
+          # First update the repo on VPS
+          BRANCH=$(git branch --show-current)
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 "cd /root/MT5-PropFirm-Bot && git fetch origin && (git checkout $BRANCH 2>/dev/null || true) && git pull origin $BRANCH 2>/dev/null || true" > /dev/null 2>&1 || true
+
+          # Copy and run deploy script
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/deploy_and_restart.sh root@77.237.234.2:/tmp/deploy.sh
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 "bash /tmp/deploy.sh" > vps_deploy_report.txt 2>&1 || true
+          echo "" >> vps_deploy_report.txt
+          echo "WORKFLOW_EXIT_CODE=$?" >> vps_deploy_report.txt
+          cat vps_deploy_report.txt
+
+      - name: Commit deploy report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f vps_fix_report.txt
-          git commit -m "VPS fix report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push origin claude/build-cfd-trading-bot-fl0ld || true
+          git add -f vps_deploy_report.txt
+          git commit -m "Deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push origin HEAD || true
