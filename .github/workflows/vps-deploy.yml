@@ -1,0 +1,47 @@
+name: Deploy EA to VPS
+
+on:
+  push:
+    paths:
+      - '.github/workflows/vps-deploy.yml'
+      - 'scripts/deploy_ea.sh'
+      - 'EA/*.mq5'
+      - 'EA/*.mqh'
+
+permissions:
+  contents: write
+
+jobs:
+  deploy-ea:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/check-bot-status-push-6Nwjj
+
+      - name: Deploy EA files to VPS
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          echo "=== Uploading EA files ==="
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no root@77.237.234.2 "mkdir -p /tmp/ea_deploy"
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no EA/*.mq5 EA/*.mqh root@77.237.234.2:/tmp/ea_deploy/
+          echo "EA files uploaded"
+
+          echo "=== Uploading deploy script ==="
+          sshpass -p 'Moti0417!' scp -o StrictHostKeyChecking=no scripts/deploy_ea.sh root@77.237.234.2:/tmp/deploy_ea.sh
+          echo "Deploy script uploaded"
+
+          echo "=== Running deployment ==="
+          sshpass -p 'Moti0417!' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 root@77.237.234.2 "bash /tmp/deploy_ea.sh" > vps_deploy_report.txt 2>&1 || true
+          echo "EXIT_CODE=$?" >> vps_deploy_report.txt
+          cat vps_deploy_report.txt
+
+      - name: Commit deploy report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f vps_deploy_report.txt
+          git commit -m "EA deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push origin claude/check-bot-status-push-6Nwjj || true
