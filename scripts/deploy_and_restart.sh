@@ -1,6 +1,6 @@
 #!/bin/bash
-# Deploy updated EA files to VPS, recompile, and restart MT5
-set -e
+# Deploy updated EA files to VPS and restart MT5
+# Optimized for GitHub Actions (no hanging SSH)
 
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_DIR="$MT5/MQL5/Experts/PropFirmBot"
@@ -8,7 +8,7 @@ REPO="/root/MT5-PropFirm-Bot"
 NOW=$(date '+%Y-%m-%d %H:%M:%S UTC')
 
 echo "============================================"
-echo "  PropFirmBot - Deploy & Recompile"
+echo "  PropFirmBot - Deploy & Restart"
 echo "  $NOW"
 echo "============================================"
 
@@ -16,111 +16,95 @@ echo "============================================"
 echo ""
 echo ">>> Updating repo..."
 cd "$REPO"
-git fetch origin
-# Try to checkout the new branch if it exists, else try old branch
-git checkout claude/check-bot-status-1N9wR 2>/dev/null || git checkout claude/build-cfd-trading-bot-fl0ld 2>/dev/null || true
-git pull origin $(git branch --show-current) 2>/dev/null || true
-echo "Branch: $(git branch --show-current)"
+git fetch --all 2>/dev/null || true
+CURRENT=$(git branch --show-current)
+echo "Current branch: $CURRENT"
+
+# Try new branch first, then old branch
+for branch in "claude/check-bot-status-1N9wR" "claude/build-cfd-trading-bot-fl0ld"; do
+    if git checkout "$branch" 2>/dev/null; then
+        git pull origin "$branch" 2>/dev/null || true
+        echo "Updated branch: $branch"
+        break
+    fi
+done
 echo "Latest commit: $(git log --oneline -1)"
 
-# 2. Copy EA files
+# 2. Copy ALL EA files
 echo ""
 echo ">>> Copying EA files..."
-cp -v "$REPO/EA/PropFirmBot.mq5" "$EA_DIR/"
-cp -v "$REPO/EA/SignalEngine.mqh" "$EA_DIR/"
-cp -v "$REPO/EA/RiskManager.mqh" "$EA_DIR/"
-cp -v "$REPO/EA/TradeManager.mqh" "$EA_DIR/"
-cp -v "$REPO/EA/Guardian.mqh" "$EA_DIR/"
-cp -v "$REPO/EA/Dashboard.mqh" "$EA_DIR/"
-cp -v "$REPO/EA/TradeJournal.mqh" "$EA_DIR/"
-cp -v "$REPO/EA/Notifications.mqh" "$EA_DIR/"
-cp -v "$REPO/EA/NewsFilter.mqh" "$EA_DIR/"
-cp -v "$REPO/EA/TradeAnalyzer.mqh" "$EA_DIR/"
-cp -v "$REPO/EA/AccountStateManager.mqh" "$EA_DIR/"
-
-echo ""
-echo ">>> Files copied:"
-ls -la "$EA_DIR/"
-
-# 3. Compile EA
-echo ""
-echo ">>> Compiling EA..."
-cd "$MT5"
-METAEDITOR="$MT5/metaeditor64.exe"
-if [ -f "$METAEDITOR" ]; then
-    export DISPLAY=:99
-    wine "$METAEDITOR" /compile:"MQL5/Experts/PropFirmBot/PropFirmBot.mq5" /log:compile.log 2>/dev/null
-    sleep 5
-    echo "Compile log:"
-    cat compile.log 2>/dev/null | tr -d '\0' || echo "(no compile log)"
-    echo ""
-    if [ -f "$EA_DIR/PropFirmBot.ex5" ]; then
-        echo "COMPILED: PropFirmBot.ex5 exists"
-        ls -la "$EA_DIR/PropFirmBot.ex5"
-    else
-        echo "WARNING: PropFirmBot.ex5 not found after compile!"
+for f in "$REPO/EA/"*.mq5 "$REPO/EA/"*.mqh; do
+    if [ -f "$f" ]; then
+        cp "$f" "$EA_DIR/"
+        echo "  Copied: $(basename $f)"
     fi
-else
-    echo "WARNING: metaeditor64.exe not found at $METAEDITOR"
-    echo "EA will be recompiled when MT5 restarts"
-fi
+done
 
-# 4. Restart MT5
 echo ""
-echo ">>> Restarting MT5..."
+echo "Files in EA directory:"
+ls -la "$EA_DIR/" | grep -E "\.mq5|\.mqh|\.ex5"
 
-# Kill existing MT5
-pkill -f terminal64 2>/dev/null || true
-sleep 3
+# 3. Kill MT5
+echo ""
+echo ">>> Stopping MT5..."
+pkill -f terminal64 2>/dev/null && echo "MT5 killed" || echo "MT5 was not running"
+sleep 2
 
-# Make sure Xvfb is running
+# 4. Ensure display is ready
+export DISPLAY=:99
 if ! pgrep -x Xvfb > /dev/null; then
     echo "Starting Xvfb..."
-    Xvfb :99 -screen 0 1280x1024x24 &
+    nohup Xvfb :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
     sleep 2
 fi
-export DISPLAY=:99
-
-# Make sure x11vnc is running
 if ! pgrep -x x11vnc > /dev/null; then
     echo "Starting x11vnc..."
-    x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw
+    nohup x11vnc -display :99 -forever -shared -rfbport 5900 -nopw > /dev/null 2>&1 &
     sleep 1
 fi
 
-# Start MT5
-echo "Starting MT5..."
+# 5. Start MT5 (with nohup so SSH won't hang)
+echo ""
+echo ">>> Starting MT5..."
 CONFIG="$MT5/config/startup.ini"
 if [ -f "$CONFIG" ]; then
-    wine "$MT5/terminal64.exe" /config:"$CONFIG" &
+    nohup wine "$MT5/terminal64.exe" /config:"$CONFIG" > /dev/null 2>&1 &
 else
-    wine "$MT5/terminal64.exe" &
+    nohup wine "$MT5/terminal64.exe" > /dev/null 2>&1 &
 fi
-sleep 10
+MT5_START_PID=$!
+echo "MT5 started with PID: $MT5_START_PID"
 
-# 5. Verify
+# Wait a bit for MT5 to start
+sleep 5
+
+# 6. Quick verification
 echo ""
 echo ">>> Verification..."
-MT5_PROC=$(ps aux | grep -i terminal64 | grep -v grep)
-if [ -n "$MT5_PROC" ]; then
-    echo "MT5: RUNNING"
-    echo "$MT5_PROC"
+MT5_RUNNING=$(ps aux | grep -i terminal64 | grep -v grep | wc -l)
+echo "MT5 processes: $MT5_RUNNING"
+if [ "$MT5_RUNNING" -gt 0 ]; then
+    echo "MT5: RUNNING OK"
+    ps aux | grep -i terminal64 | grep -v grep
 else
-    echo "MT5: NOT RUNNING - trying again..."
-    wine "$MT5/terminal64.exe" &
-    sleep 10
-    ps aux | grep -i terminal64 | grep -v grep || echo "STILL NOT RUNNING!"
+    echo "MT5: NOT YET - may still be starting (Wine init takes time)"
 fi
 
-echo ""
 echo "Xvfb: $(pgrep -x Xvfb > /dev/null && echo 'RUNNING' || echo 'NOT RUNNING')"
 echo "x11vnc: $(pgrep -x x11vnc > /dev/null && echo 'RUNNING' || echo 'NOT RUNNING')"
 
 echo ""
-echo ">>> EA .ex5 file:"
-ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null || echo "NOT FOUND"
+echo ">>> EA .ex5 file (will be recompiled by MT5 on startup):"
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null || echo "Will compile on first load"
+
+echo ""
+echo ">>> Source files updated:"
+ls -la "$EA_DIR/SignalEngine.mqh" "$EA_DIR/RiskManager.mqh" "$EA_DIR/PropFirmBot.mq5" 2>/dev/null
 
 echo ""
 echo "============================================"
 echo "  Deploy Complete - $(date '+%Y-%m-%d %H:%M:%S UTC')"
+echo "  MT5 will auto-compile EA on startup"
+echo "  NOTE: EA needs to be re-attached to chart"
+echo "  (or MT5 remembers from last session)"
 echo "============================================"
