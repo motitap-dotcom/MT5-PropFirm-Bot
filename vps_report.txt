@@ -1,76 +1,118 @@
-=== VERIFY 2026-03-01 15:37:51 UTC ===
---- MT5 Process ---
-root     1075263  0.1  0.1 2687116 14200 ?       S<   15:36   0:00 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe /login:11797849 /password:gazDE62##
-root     1075322 12.2  2.5 1316360 208672 ?      S<l  15:36   0:12 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
+╔══════════════════════════════════════════════════════╗
+║  PropFirmBot LIVE Verification - 2026-03-01 20:11:02 UTC  ║
+╚══════════════════════════════════════════════════════╝
 
---- Outbound Connections ---
-Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
-0      0       77.237.234.2:43854 149.154.166.110:443         
-0      0       77.237.234.2:52838 194.164.179.244:443         
+━━━ 1. MT5 Process ━━━
+✅ MT5 is RUNNING (PID: 1075263)
+   CPU: 0.0% | MEM: 0.1% | Start: 15:36 0:00
+   CPU: 6.5% | MEM: 2.5% | Start: 15:36 18:02
 
---- Terminal Log (latest) ---
-Size: 21582 bytes
-MS	0	15:38:40.597	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-EG	2	15:38:45.101	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-EI	0	15:46:07.616	Experts	expert PropFirmBot (EURUSD,M15) removed
-RM	0	15:46:07.619	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-DF	2	15:46:10.927	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-MG	0	15:51:24.236	Experts	automated trading is disabled
-JP	0	15:51:25.572	Experts	automated trading is enabled
-DL	0	17:56:56.001	Experts	expert PropFirmBot (EURUSD,M15) removed
-OH	0	17:56:56.006	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-HK	2	17:56:57.260	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-CQ	0	21:38:52.803	Network	'11797849': authorized on FundedNext-Server
-GK	0	21:38:53.742	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-IH	0	21:38:53.742	Network	'11797849': trading has been enabled - hedging mode
-LK	0	21:38:54.543	Experts	expert PropFirmBot (EURUSD,M15) removed
-CO	0	21:38:54.548	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-IG	0	21:38:54.654	Network	'11797849': scanning network for access points
-MQ	0	21:38:59.189	Network	'11797849': scanning network finished
-LH	0	22:22:44.526	Experts	expert PropFirmBot (EURUSD,M15) removed
-CS	0	22:22:44.538	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-EE	0	22:22:56.027	Experts	expert PropFirmBot (EURUSD,M15) removed
-NQ	0	22:22:56.039	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-IS	0	22:23:08.834	Experts	expert PropFirmBot (EURUSD,M15) removed
-FG	0	22:23:08.851	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-MQ	0	22:46:37.415	Experts	expert PropFirmBot (EURUSD,M15) removed
-QD	0	22:46:37.424	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+━━━ 2. Display & VNC ━━━
+✅ Xvfb running
+✅ x11vnc running
 
---- EA Log Today ---
-EA LOG EXISTS! Size: 133168 bytes
-IE	0	22:46:37.758	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-EO	0	22:46:37.758	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-GF	0	22:46:37.758	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-ON	0	22:46:37.758	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-CF	0	22:46:37.758	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-HF	0	22:46:38.757	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$2000.00 | Eq=$2000.00 | DD=0.00% | Positions=0
-FF	0	22:46:38.758	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.24 00:45 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-JG	0	22:46:38.758	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-DR	0	22:46:38.758	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-FM	0	22:46:38.758	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-KI	0	23:00:00.243	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.24 01:00 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-GG	0	23:00:00.243	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-MQ	0	23:00:00.243	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-KL	0	23:00:00.243	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-NG	0	23:01:40.477	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=384 | State=GUARDIAN_ACTIVE | Bal=$2000.00 | Eq=$2000.00 | DD=0.00% | Positions=0
-QG	0	23:15:00.236	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.24 01:15 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-QH	0	23:15:00.236	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-KS	0	23:15:00.236	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-MN	0	23:15:00.236	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-CI	0	23:16:45.776	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=696 | State=GUARDIAN_ACTIVE | Bal=$2000.00 | Eq=$2000.00 | DD=0.00% | Positions=0
-GE	0	23:30:00.177	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.24 01:30 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-NJ	0	23:30:00.177	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-HE	0	23:30:00.177	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-JP	0	23:30:00.177	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-CK	0	23:31:49.392	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=947 | State=GUARDIAN_ACTIVE | Bal=$2000.00 | Eq=$2000.00 | DD=0.00% | Positions=0
-CS	0	23:45:00.155	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.02.24 01:45 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-HL	0	23:45:00.155	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-FG	0	23:45:00.155	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-DR	0	23:45:00.155	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
-NO	0	23:46:49.664	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1415 | State=GUARDIAN_ACTIVE | Bal=$2000.00 | Eq=$2000.00 | DD=0.00% | Positions=0
+━━━ 3. Broker Connection ━━━
+✅ Active connections:
+   Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
+   0      0       77.237.234.2:35734   13.226.155.13:443         
+   0      0       77.237.234.2:52838 194.164.179.244:443         
+   0      0       77.237.234.2:48418    140.82.121.3:443         
+   0      0       77.237.234.2:39668   13.226.155.45:443         
 
---- Wine Version ---
-wine-11.3 (Staging)
+━━━ 4. EA Installation ━━━
+✅ PropFirmBot.ex5: 163174 bytes (compiled: 2026-02-27 08:11:55)
+   Source files: 12
 
-=== DONE ===
+━━━ 5. Terminal Log ━━━
+basename: extra operand ‘5/logs/20260301.log’
+Try 'basename --help' for more information.
+Log file:  (1244 bytes)
+--- Last 25 lines ---
+   ��IO	2	09:56:52.725	Terminal	terminal process already started
+   PM	0	09:56:52.725	Terminal	exit with code 0
+   FK	0	09:56:52.725	Terminal	stopped with 0
+   GR	0	09:56:52.840	Terminal	shutdown with 0
+   IH	0	15:35:55.328	Terminal	shutdown with 0
+   RJ	0	15:36:08.246	Terminal	MetaTrader 5 x64 build 5660 started for MetaQuotes Ltd.
+   FJ	0	15:36:08.247	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 128 / 144 Gb disk, GMT+0
+   HK	0	15:36:08.247	Terminal	C:\Program Files\MetaTrader 5
+   LL	0	15:36:11.268	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+
+━━━ 6. EA Activity Log ━━━
+✅ EA Log:  (7826 bytes)
+basename: extra operand ‘5/MQL5/Logs/20260301.log’
+Try 'basename --help' for more information.
+   Heartbeats: 0
+0 | NewBars: 0
+0 | Signals: 0
+0
+   Trades: 0
+0 | Errors: 0
+0 | Blocked: 0
+0
+
+   --- Last 20 EA entries ---
+   LG	0	15:36:26.483	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+   MI	0	15:36:26.483	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+   IG	0	15:36:26.483	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+   FR	0	15:36:26.483	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+   MN	0	15:36:26.787	PropFirmBot (EURUSD,M15)	[NewsFilter] Calendar returned 0 events (may be unavailable)
+   QL	0	15:36:26.787	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
+   EG	0	15:36:26.787	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+   QG	0	15:36:26.788	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+   GE	0	15:36:26.788	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+   ED	0	15:36:26.794	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+   MK	0	15:36:26.794	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+   PR	0	15:36:27.105	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+   HP	0	15:36:27.106	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+   EJ	0	15:36:27.106	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+   PQ	0	15:36:27.106	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+   PD	0	15:36:27.106	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+   DP	0	15:36:27.106	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+   RI	0	15:36:27.106	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+   RO	0	15:36:27.106	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+   NE	0	15:36:27.106	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+
+━━━ 7. Account State ━━━
+
+━━━ 8. Config Files ━━━
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/account_state.json’
+Try 'basename --help' for more information.
+   ✅  (1620 bytes)
+   ✅  (1469 bytes)
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/challenge_rules.json’
+Try 'basename --help' for more information.
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/funded_rules.json’
+Try 'basename --help' for more information.
+   ✅  (1336 bytes)
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/notifications.json’
+Try 'basename --help' for more information.
+   ✅  (1159 bytes)
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/risk_params.json’
+Try 'basename --help' for more information.
+   ✅  (1805 bytes)
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/status.json’
+Try 'basename --help' for more information.
+   ✅  (902 bytes)
+basename: extra operand ‘5/MQL5/Files/PropFirmBot/symbols.json’
+Try 'basename --help' for more information.
+   ✅  (1244 bytes)
+
+━━━ 9. Telegram Connectivity ━━━
+✅ Telegram Bot online: PropFirmBot
+✅ Status sent to Telegram
+
+━━━ 10. VPS Health ━━━
+   Uptime: up 1 week, 8 hours, 0 minutes
+   Load: 0.24 0.26 0.21
+   Memory: 1386MB / 7941MB (17%)
+   Disk: 11% used, 129G free
+
+━━━ 11. Watchdog ━━━
+✅ Watchdog cron found:
+   */2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
+
+╔══════════════════════════════════════════════════════╗
+║  Verification Complete - 2026-03-01 20:11:02 UTC     ║
+╚══════════════════════════════════════════════════════╝
 EXIT_CODE=0
