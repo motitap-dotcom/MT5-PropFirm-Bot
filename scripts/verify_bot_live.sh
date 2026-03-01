@@ -326,11 +326,14 @@ if [ -n "$TG_TOKEN" ]; then
 
         # Send verification message
         if [ -n "$TG_CHAT" ]; then
+            MT5_STATUS="DOWN"; [ "$MT5_RUNNING" = "true" ] && MT5_STATUS="RUNNING"
+            EA_STATUS="MISSING"; [ -f "$EA_DIR/PropFirmBot.ex5" ] && EA_STATUS="COMPILED"
+            HB_STATUS="N/A"; [ -n "$HEARTBEAT" ] && HB_STATUS="ACTIVE"
             VERIFY_MSG="Bot Verification Report - $(date '+%Y-%m-%d %H:%M UTC')
 
-MT5: $([ \"$MT5_RUNNING\" = true ] && echo 'RUNNING' || echo 'DOWN')
-EA: $([ -f \"$EA_DIR/PropFirmBot.ex5\" ] && echo 'COMPILED' || echo 'MISSING')
-Heartbeat: $([ -n \"$HEARTBEAT\" ] && echo 'ACTIVE' || echo 'N/A')
+MT5: ${MT5_STATUS}
+EA: ${EA_STATUS}
+Heartbeat: ${HB_STATUS}
 Errors: ${ERROR_COUNT:-0}
 Trades today: ${TRADE_COUNT:-0}
 Connections: $MT5_CONNS
@@ -444,16 +447,19 @@ echo ""
 
 # Send final summary to Telegram if available
 if [ -n "$TG_TOKEN" ] && [ -n "$TG_CHAT" ]; then
-    EMOJI="$([ \"$FINAL_STATUS\" = 'HEALTHY' ] && echo '✅' || ([ \"$FINAL_STATUS\" = 'WARNING' ] && echo '⚠️' || echo '❌'))"
+    EMOJI=""; case "$FINAL_STATUS" in HEALTHY) EMOJI="OK";; WARNING) EMOJI="WARN";; *) EMOJI="ALERT";; esac
+    MT5_LINE="Down"; [ "$MT5_RUNNING" = "true" ] && MT5_LINE="Running"
+    EA_LINE="Missing"; [ -f "$EA_DIR/PropFirmBot.ex5" ] && EA_LINE="Compiled"
+    NET_LINE="No connections"; [ "$MT5_CONNS" -gt 0 ] 2>/dev/null && NET_LINE="Connected ($MT5_CONNS)"
 
-    SUMMARY_MSG="${EMOJI} PropFirmBot Verification Complete
+    SUMMARY_MSG="[${EMOJI}] PropFirmBot Verification Complete
 
 Status: ${FINAL_STATUS}
 Passed: ${PASS} | Failed: ${FAIL} | Warnings: ${WARN}
 
-MT5: $([ \"$MT5_RUNNING\" = true ] && echo '✅ Running' || echo '❌ Down')
-EA: $([ -f \"$EA_DIR/PropFirmBot.ex5\" ] && echo '✅ Compiled' || echo '❌ Missing')
-Network: $([ \"$MT5_CONNS\" -gt 0 ] && echo '✅ Connected' || echo '⚠️ No connections')
+MT5: ${MT5_LINE}
+EA: ${EA_LINE}
+Network: ${NET_LINE}
 Memory: ${MEM_PCT}%
 Disk: ${DISK_PCT}%
 
