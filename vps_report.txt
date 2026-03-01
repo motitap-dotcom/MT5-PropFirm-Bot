@@ -1,11 +1,11 @@
 ╔══════════════════════════════════════════════════════╗
-║  PropFirmBot LIVE Verification - 2026-03-01 20:11:02 UTC  ║
+║  PropFirmBot LIVE Verification - 2026-03-01 20:13:13 UTC  ║
 ╚══════════════════════════════════════════════════════╝
 
 ━━━ 1. MT5 Process ━━━
 ✅ MT5 is RUNNING (PID: 1075263)
    CPU: 0.0% | MEM: 0.1% | Start: 15:36 0:00
-   CPU: 6.5% | MEM: 2.5% | Start: 15:36 18:02
+   CPU: 6.5% | MEM: 2.5% | Start: 15:36 18:12
 
 ━━━ 2. Display & VNC ━━━
 ✅ Xvfb running
@@ -16,7 +16,7 @@
    Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
    0      0       77.237.234.2:35734   13.226.155.13:443         
    0      0       77.237.234.2:52838 194.164.179.244:443         
-   0      0       77.237.234.2:48418    140.82.121.3:443         
+   0      0       77.237.234.2:36656  87.248.119.251:443         
    0      0       77.237.234.2:39668   13.226.155.45:443         
 
 ━━━ 4. EA Installation ━━━
@@ -24,9 +24,7 @@
    Source files: 12
 
 ━━━ 5. Terminal Log ━━━
-basename: extra operand ‘5/logs/20260301.log’
-Try 'basename --help' for more information.
-Log file:  (1244 bytes)
+Log file: 20260301.log (1244 bytes)
 --- Last 25 lines ---
    ��IO	2	09:56:52.725	Terminal	terminal process already started
    PM	0	09:56:52.725	Terminal	exit with code 0
@@ -39,17 +37,9 @@ Log file:  (1244 bytes)
    LL	0	15:36:11.268	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 
 ━━━ 6. EA Activity Log ━━━
-✅ EA Log:  (7826 bytes)
-basename: extra operand ‘5/MQL5/Logs/20260301.log’
-Try 'basename --help' for more information.
-   Heartbeats: 0
-0 | NewBars: 0
-0 | Signals: 0
-0
-   Trades: 0
-0 | Errors: 0
-0 | Blocked: 0
-0
+✅ EA Log: 20260301.log (7826 bytes)
+   Heartbeats: 0 | NewBars: 0 | Signals: 0
+   Trades: 0 | Errors: 0 | Blocked: 0
 
    --- Last 20 EA entries ---
    LG	0	15:36:26.483	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
@@ -76,36 +66,22 @@ Try 'basename --help' for more information.
 ━━━ 7. Account State ━━━
 
 ━━━ 8. Config Files ━━━
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/account_state.json’
-Try 'basename --help' for more information.
-   ✅  (1620 bytes)
-   ✅  (1469 bytes)
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/challenge_rules.json’
-Try 'basename --help' for more information.
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/funded_rules.json’
-Try 'basename --help' for more information.
-   ✅  (1336 bytes)
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/notifications.json’
-Try 'basename --help' for more information.
-   ✅  (1159 bytes)
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/risk_params.json’
-Try 'basename --help' for more information.
-   ✅  (1805 bytes)
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/status.json’
-Try 'basename --help' for more information.
-   ✅  (902 bytes)
-basename: extra operand ‘5/MQL5/Files/PropFirmBot/symbols.json’
-Try 'basename --help' for more information.
-   ✅  (1244 bytes)
+   ✅ account_state.json (1620 bytes)
+   ✅ challenge_rules.json (1469 bytes)
+   ✅ funded_rules.json (1336 bytes)
+   ✅ notifications.json (1159 bytes)
+   ✅ risk_params.json (1805 bytes)
+   ✅ status.json (902 bytes)
+   ✅ symbols.json (1244 bytes)
 
 ━━━ 9. Telegram Connectivity ━━━
 ✅ Telegram Bot online: PropFirmBot
 ✅ Status sent to Telegram
 
 ━━━ 10. VPS Health ━━━
-   Uptime: up 1 week, 8 hours, 0 minutes
-   Load: 0.24 0.26 0.21
-   Memory: 1386MB / 7941MB (17%)
+   Uptime: up 1 week, 8 hours, 2 minutes
+   Load: 0.28 0.24 0.20
+   Memory: 1406MB / 7941MB (17%)
    Disk: 11% used, 129G free
 
 ━━━ 11. Watchdog ━━━
@@ -113,6 +89,6 @@ Try 'basename --help' for more information.
    */2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
 
 ╔══════════════════════════════════════════════════════╗
-║  Verification Complete - 2026-03-01 20:11:02 UTC     ║
+║  Verification Complete - 2026-03-01 20:13:13 UTC     ║
 ╚══════════════════════════════════════════════════════╝
 EXIT_CODE=0
