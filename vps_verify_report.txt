@@ -1,13 +1,13 @@
 
 ==============================================
   PropFirmBot - LIVE VERIFICATION
-  2026-03-01 21:36:58 UTC
+  2026-03-01 21:40:52 UTC
 ==============================================
 
-[ENV] No .env file found, using defaults from script
-[ENV] Telegram Token: NOT SET
-[ENV] Telegram Chat: NOT SET
-[ENV] Account: NOT SET
+[ENV] Loading credentials from /root/.env
+[ENV] Telegram Token: SET (46 chars)8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g
+[ENV] Telegram Chat: 7013213983
+[ENV] Account: 11797849
 
 --- 1. MT5 Process ---
   [PASS] MT5 is RUNNING (PID: 1075263)
@@ -32,7 +32,7 @@
        symbols.json - valid JSON
 
 --- 5. EA Status File ---
-  [FAIL] status.json is 21627s old - EA may not be writing!
+  [FAIL] status.json is 21861s old - EA may not be writing!
        Content:
        timestamp: 2026.02.27 23:59:58
        server_time: 2026.02.27 23:59:58
@@ -43,7 +43,7 @@
        positions: {'count': 0, 'open': []}
 
 --- 6. MT5 Terminal Logs ---
-  [PASS] Today's terminal log exists (1244 bytes, 21646s ago)
+  [PASS] Today's terminal log exists (1244 bytes, 21880s ago)
        Last 15 lines:
        ÿþIO	2	09:56:52.725	Terminal	terminal process already started
        PM	0	09:56:52.725	Terminal	exit with code 0
@@ -56,7 +56,7 @@
        LL	0	15:36:11.268	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 
 --- 7. EA Logs ---
-  [PASS] Today's EA log exists (7826 bytes, 21585s ago)
+  [PASS] Today's EA log exists (7826 bytes, 21819s ago)
   [PASS] No errors in today's EA log
        No trades today (market may be closed)
        Last 20 EA log lines:
@@ -90,20 +90,28 @@
   [PASS] MT5 has active server connections
        Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
        0      0       77.237.234.2:52838 194.164.179.244:443         
-       0      0       77.237.234.2:32840   13.226.155.45:443         
+       0      284     77.237.234.2:32840   13.226.155.45:443         
        0      0       77.237.234.2:54194   13.226.155.59:443         
 
 --- 10. Telegram Bot ---
-  [WARN] No Telegram token available (set TELEGRAM_TOKEN in .env)
+  [PASS] Telegram Bot ONLINE: PropFirmBot (@MyPropFirmTrader_bot)
+       Recent updates: 2
+/tmp/verify_bot_live.sh: line 337: [: too many arguments
+  [PASS] Verification report sent to Telegram!
 
 --- 11. Environment File ---
-  [WARN] No .env file found on server
-       Searched: /root/.env, /root/MT5-PropFirm-Bot/.env, /root/propfirmbot/.env
+  [PASS] .env found at /root/.env
+       Variables defined:
+       TELEGRAM_TOKEN = 8452****
+       TELEGRAM_CHAT_ID = 7013****
+       MT5_ACCOUNT = 1179****
+       MT5_SERVER = Fund****
+       VPS_IP = 77.2****
 
 --- 12. System Health ---
-       Uptime: up 1 week, 9 hours, 26 minutes
-       CPU Load: 0.29 0.16 0.19
-       Memory: 1362MB / 7941MB (17%)
+       Uptime: up 1 week, 9 hours, 30 minutes
+       CPU Load: 0.22 0.18 0.18
+       Memory: 1388MB / 7941MB (17%)
   [PASS] Memory usage OK (17%)
        Disk: 11% used (129G free)
   [PASS] Disk usage OK (11%)
@@ -115,13 +123,15 @@
 
 ==============================================
   VERIFICATION SUMMARY
-  Passed: 16
+  Passed: 19
   Failed: 1
-  Warnings: 3
+  Warnings: 1
 
   BOT STATUS: RUNNING WITH ISSUES
 ==============================================
 
+/tmp/verify_bot_live.sh: line 460: [: too many arguments
+/tmp/verify_bot_live.sh: line 460: [: "4": integer expression expected
 VERIFICATION_COMPLETE
 EXIT_STATUS=WARNING
 EXIT_CODE=0
