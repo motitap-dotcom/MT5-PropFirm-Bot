@@ -1,0 +1,173 @@
+╔══════════════════════════════════════════════╗
+║     PropFirmBot Status Report                ║
+║     2026-03-01 09:09:15 UTC              ║
+╚══════════════════════════════════════════════╝
+
+=== MT5 PROCESS ===
+STATUS: ✅ MT5 IS RUNNING
+  PID: 819568 | CPU: 0.0% | MEM: 0.1% | Uptime: 0:00
+  PID: 819618 | CPU: 11.7% | MEM: 2.5% | Uptime: 103:06
+
+=== VNC ===
+STATUS: ✅ VNC RUNNING (port 5900)
+Xvfb: ✅ Running
+
+=== EA FILES ===
+EA Directory: ✅ EXISTS
+Files:
+  AccountStateManager.mqh (15380 bytes, Feb 28)
+  Dashboard.mqh (12411 bytes, Feb 28)
+  Guardian.mqh (22365 bytes, Feb 28)
+  NewsFilter.mqh (10622 bytes, Feb 28)
+  Notifications.mqh (11971 bytes, Feb 28)
+  PropFirmBot.ex5 (163174 bytes, Feb 27)
+  PropFirmBot.ex5.bak (163174 bytes, Feb 28)
+  PropFirmBot.mq5 (34468 bytes, Feb 28)
+  RiskManager.mqh (25422 bytes, Feb 28)
+  SignalEngine.mqh (23087 bytes, Feb 28)
+  StatusWriter.mqh (8535 bytes, Feb 28)
+  TradeAnalyzer.mqh (22240 bytes, Feb 28)
+  TradeJournal.mqh (9141 bytes, Feb 28)
+  TradeManager.mqh (14433 bytes, Feb 28)
+Compiled EA: ✅ PropFirmBot.ex5 exists
+  Size: 163174 bytes, Modified: 2026-02-27 08:11:55.560362073 +0000
+
+=== CONFIG FILES ===
+Config Directory: ✅ EXISTS
+  account_state.json (1620 bytes)
+  challenge_rules.json (1469 bytes)
+  funded_rules.json (1336 bytes)
+  notifications.json (1159 bytes)
+  risk_params.json (1805 bytes)
+  status.json (902 bytes)
+  symbols.json (1244 bytes)
+
+=== NETWORK CONNECTIONS ===
+Outbound connections (non-SSH/VNC):
+Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
+0      0       77.237.234.2:41048 194.164.179.244:443         
+0      0       77.237.234.2:39838    34.120.3.201:443         
+0      0       77.237.234.2:8888  216.180.246.114:21254       
+Broker connection: ✅ LIKELY CONNECTED
+
+=== MT5 TERMINAL LOG (latest) ===
+File: /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260228.log
+Size: 5000 bytes
+--- Last 25 lines ---
+DO	0	16:31:22.930	Network	'11797849': scanning network for access points
+DF	0	16:32:00.214	Network	'11797849': scanning network finished
+IS	0	18:04:53.320	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+ND	0	18:04:53.323	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+OL	0	18:04:53.323	Terminal	C:\Program Files\MetaTrader 5
+GE	0	18:05:03.986	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+MS	0	18:16:18.144	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+HD	0	18:16:18.145	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+EL	0	18:16:18.145	Terminal	C:\Program Files\MetaTrader 5
+EE	0	18:16:21.232	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+OL	0	18:21:12.668	Terminal	shutdown with 0
+RE	0	18:21:26.357	Terminal	updating C:\Program Files\MetaTrader 5\MQL5 folder
+LM	0	18:21:26.659	Terminal	no changes
+GG	0	18:21:26.998	Terminal	MetaTrader 5 x64 build 5660 started for MetaQuotes Ltd.
+LQ	0	18:21:26.999	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+IP	0	18:21:26.999	Terminal	C:\Program Files\MetaTrader 5
+HI	0	18:21:29.589	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+JG	0	18:27:04.508	Terminal	MetaTrader 5 x64 build 5660 started for MetaQuotes Ltd.
+MQ	0	18:27:04.509	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+HP	0	18:27:04.509	Terminal	C:\Program Files\MetaTrader 5
+KI	0	18:27:07.254	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+JG	0	18:32:58.437	Terminal	MetaTrader 5 x64 build 5660 started for MetaQuotes Ltd.
+LQ	0	18:32:58.442	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0
+IP	0	18:32:58.442	Terminal	C:\Program Files\MetaTrader 5
+HI	0	18:33:01.094	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+
+=== EA LOG (latest) ===
+File: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260228.log
+Size: 39122 bytes
+--- Last 30 lines ---
+CG	0	18:33:16.300	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+RP	0	18:33:16.300	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
+HO	0	18:33:16.300	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+FH	0	18:33:16.300	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
+HQ	0	18:33:16.300	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
+HJ	0	18:33:16.300	PropFirmBot (EURUSD,M15)	Target: NO TARGET
+LN	0	18:33:16.300	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
+CE	0	18:33:16.341	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.02.27 23:59:58] INIT | Bal=$2000.00 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+PP	0	18:33:16.342	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260227.csv | Initial balance: $2000.00
+QR	0	18:33:16.342	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+KK	0	18:33:16.342	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+NE	0	18:33:16.342	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+JS	0	18:33:16.342	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+EF	0	18:33:16.342	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+MJ	0	18:33:16.641	PropFirmBot (EURUSD,M15)	[NewsFilter] Calendar returned 0 events (may be unavailable)
+QP	0	18:33:16.641	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
+ES	0	18:33:16.641	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+DS	0	18:33:16.641	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+NQ	0	18:33:16.641	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+LP	0	18:33:16.648	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+DO	0	18:33:16.648	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+NF	0	18:33:16.769	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+KL	0	18:33:16.770	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+RF	0	18:33:16.770	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+CM	0	18:33:16.770	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+CH	0	18:33:16.770	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+OL	0	18:33:16.770	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+EE	0	18:33:16.770	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+EK	0	18:33:16.770	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+IQ	0	18:33:16.770	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+
+=== STATUS JSON ===
+✅ status.json exists
+{
+  "timestamp": "2026.02.27 23:59:58",
+  "server_time": "2026.02.27 23:59:58",
+  "gmt_time": "2026.02.28 18:33:21",
+  "account": {
+    "number": 11797849,
+    "name": "FundedNext-Stellar Instant Account- moti tapiro",
+    "server": "FundedNext-Server",
+    "currency": "USD",
+    "leverage": 30,
+    "balance": 0.00,
+    "equity": 0.00,
+    "margin": 0.00,
+    "free_margin": 0.00,
+    "floating_pnl": 0.00,
+    "initial_balance": 2000.00,
+    "total_pnl": -2000.00,
+    "profit_percent": -100.00
+  },
+  "guardian": {
+    "state": "ACTIVE",
+    "daily_dd": 0.00,
+    "total_dd": 0.00,
+    "halt_message": "",
+    "connection_ok": true,
+    "can_trade": true
+  },
+  "today": {
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "profit": 0.00,
+    "loss": 0.00,
+    "net": 0.00,
+    "consec_losses": 0
+  },
+  "positions": {
+    "count": 0,
+    "open": []
+  }
+}
+=== SYSTEM RESOURCES ===
+Disk: 16G used / 145G total (11% used)
+Memory: 1.3Gi used / 7.8Gi total
+CPU Load:  0.56, 0.42, 0.45
+Uptime: up 6 days, 20 hours, 58 minutes
+
+=== WATCHDOG/CRON ===
+*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
+*/5 * * * * cd /root/Tradovate-Bot && bash /root/tradovate-bot/server_cron.sh >> /var/log/tradovate-cron.log 2>&1
+
+╔══════════════════════════════════════════════╗
+║     END OF REPORT                            ║
+╚══════════════════════════════════════════════╝
