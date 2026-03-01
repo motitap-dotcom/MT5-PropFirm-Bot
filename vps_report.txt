@@ -1,11 +1,12 @@
-=== VERIFY 2026-03-01 15:35:34 UTC ===
+=== VERIFY 2026-03-01 15:37:51 UTC ===
 --- MT5 Process ---
-root      819568  0.0  0.1 2686336 14360 ?       S<   Feb28   0:00 start.exe /exec terminal64.exe
-root      819618 14.2  2.5 1380024 209252 ?      S<l  Feb28 180:16 C:\Program Files\MetaTrader 5\terminal64.exe /config:/root/.wine/drive_c/Program Files/MetaTrader 5/config/startup.ini
+root     1075263  0.1  0.1 2687116 14200 ?       S<   15:36   0:00 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe /login:11797849 /password:gazDE62##
+root     1075322 12.2  2.5 1316360 208672 ?      S<l  15:36   0:12 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
 
 --- Outbound Connections ---
 Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
-0      0       77.237.234.2:41048 194.164.179.244:443         
+0      0       77.237.234.2:43854 149.154.166.110:443         
+0      0       77.237.234.2:52838 194.164.179.244:443         
 
 --- Terminal Log (latest) ---
 Size: 21582 bytes
