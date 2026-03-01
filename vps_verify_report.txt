@@ -1,0 +1,127 @@
+
+==============================================
+  PropFirmBot - LIVE VERIFICATION
+  2026-03-01 21:36:58 UTC
+==============================================
+
+[ENV] No .env file found, using defaults from script
+[ENV] Telegram Token: NOT SET
+[ENV] Telegram Chat: NOT SET
+[ENV] Account: NOT SET
+
+--- 1. MT5 Process ---
+  [PASS] MT5 is RUNNING (PID: 1075263)
+       CPU: 0.0% | MEM: 0.1% | Started: Sun Mar  1 15:36:05 2026
+
+--- 2. Display & VNC ---
+  [PASS] Xvfb display is RUNNING (PID: 346800)
+  [PASS] VNC server is RUNNING (PID: 346808)
+
+--- 3. EA Files ---
+  [PASS] All 12 source files present
+  [PASS] PropFirmBot.ex5 compiled (163174 bytes, 2026-02-27 08:11:55)
+
+--- 4. Config Files ---
+  [PASS] 7 config JSON files present
+       account_state.json - valid JSON
+       challenge_rules.json - valid JSON
+       funded_rules.json - valid JSON
+       notifications.json - valid JSON
+       risk_params.json - valid JSON
+       status.json - valid JSON
+       symbols.json - valid JSON
+
+--- 5. EA Status File ---
+  [FAIL] status.json is 21627s old - EA may not be writing!
+       Content:
+       timestamp: 2026.02.27 23:59:58
+       server_time: 2026.02.27 23:59:58
+       gmt_time: 2026.03.01 15:36:32
+       account: {'number': 11797849, 'name': 'FundedNext-Stellar Instant Account- moti tapiro', 'server': 'FundedNext-Server', 'currency': 'USD', 'leverage': 30, 'balance': 0.0, 'equity': 0.0, 'margin': 0.0, 'free_margin': 0.0, 'floating_pnl': 0.0, 'initial_balance': 2000.0, 'total_pnl': -2000.0, 'profit_percent': -100.0}
+       guardian: {'state': 'ACTIVE', 'daily_dd': 0.0, 'total_dd': 0.0, 'halt_message': '', 'connection_ok': True, 'can_trade': True}
+       today: {'trades': 0, 'wins': 0, 'losses': 0, 'profit': 0.0, 'loss': 0.0, 'net': 0.0, 'consec_losses': 0}
+       positions: {'count': 0, 'open': []}
+
+--- 6. MT5 Terminal Logs ---
+  [PASS] Today's terminal log exists (1244 bytes, 21646s ago)
+       Last 15 lines:
+       ÿþIO	2	09:56:52.725	Terminal	terminal process already started
+       PM	0	09:56:52.725	Terminal	exit with code 0
+       FK	0	09:56:52.725	Terminal	stopped with 0
+       GR	0	09:56:52.840	Terminal	shutdown with 0
+       IH	0	15:35:55.328	Terminal	shutdown with 0
+       RJ	0	15:36:08.246	Terminal	MetaTrader 5 x64 build 5660 started for MetaQuotes Ltd.
+       FJ	0	15:36:08.247	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 128 / 144 Gb disk, GMT+0
+       HK	0	15:36:08.247	Terminal	C:\Program Files\MetaTrader 5
+       LL	0	15:36:11.268	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+
+--- 7. EA Logs ---
+  [PASS] Today's EA log exists (7826 bytes, 21585s ago)
+  [PASS] No errors in today's EA log
+       No trades today (market may be closed)
+       Last 20 EA log lines:
+       MI	0	15:36:26.483	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+       IG	0	15:36:26.483	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+       FR	0	15:36:26.483	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+       MN	0	15:36:26.787	PropFirmBot (EURUSD,M15)	[NewsFilter] Calendar returned 0 events (may be unavailable)
+       QL	0	15:36:26.787	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
+       EG	0	15:36:26.787	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+       QG	0	15:36:26.788	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+       GE	0	15:36:26.788	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+       ED	0	15:36:26.794	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+       MK	0	15:36:26.794	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+       PR	0	15:36:27.105	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+       HP	0	15:36:27.106	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+       EJ	0	15:36:27.106	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+       PQ	0	15:36:27.106	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+       PD	0	15:36:27.106	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+       DP	0	15:36:27.106	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+       RI	0	15:36:27.106	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+       RO	0	15:36:27.106	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+       NE	0	15:36:27.106	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+
+--- 8. Trade Journal ---
+       No trade journal files (bot may not have traded yet)
+
+--- 9. Network & MT5 Connection ---
+  [PASS] Internet connectivity OK
+  [PASS] DNS resolution OK
+       Active outbound connections: 4
+  [PASS] MT5 has active server connections
+       Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
+       0      0       77.237.234.2:52838 194.164.179.244:443         
+       0      0       77.237.234.2:32840   13.226.155.45:443         
+       0      0       77.237.234.2:54194   13.226.155.59:443         
+
+--- 10. Telegram Bot ---
+  [WARN] No Telegram token available (set TELEGRAM_TOKEN in .env)
+
+--- 11. Environment File ---
+  [WARN] No .env file found on server
+       Searched: /root/.env, /root/MT5-PropFirm-Bot/.env, /root/propfirmbot/.env
+
+--- 12. System Health ---
+       Uptime: up 1 week, 9 hours, 26 minutes
+       CPU Load: 0.29 0.16 0.19
+       Memory: 1362MB / 7941MB (17%)
+  [PASS] Memory usage OK (17%)
+       Disk: 11% used (129G free)
+  [PASS] Disk usage OK (11%)
+
+--- 13. Services ---
+  [PASS] Service xvfb is ACTIVE
+  [PASS] Service x11vnc is ACTIVE
+  [WARN] Service mt5 exists but is NOT active
+
+==============================================
+  VERIFICATION SUMMARY
+  Passed: 16
+  Failed: 1
+  Warnings: 3
+
+  BOT STATUS: RUNNING WITH ISSUES
+==============================================
+
+VERIFICATION_COMPLETE
+EXIT_STATUS=WARNING
+EXIT_CODE=0
