@@ -1,7 +1,7 @@
 {
   "id": "cmd-1772145900",
   "status": "success",
-  "timestamp": "2026-02-26T22:54:56Z",
+  "timestamp": "2026-03-01T09:57:09Z",
   "hostname": "vmi3096165",
-  "output": "mt5.service updated with quoted path\nmt5: inactive\nroot      347655  4.6  2.4 854564 203272 ?       S<l  22:53   0:03 C:\\Program Files\\MetaTrader 5\\terminal64.exe\n=== Terminal log ===\nNH\t0\t22:49:48.497\tTerminal\tMetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.\r\nHH\t0\t22:49:48.497\tTerminal\tWindows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0\r\nMI\t0\t22:49:48.497\tTerminal\tC:\\Program Files\\MetaTrader 5\r\nLR\t0\t22:50:39.765\tTerminal\tMetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.\r\nJR\t0\t22:50:39.765\tTerminal\tWindows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0\r\nGS\t0\t22:50:39.765\tTerminal\tC:\\Program Files\\MetaTrader 5\r\nLD\t0\t22:53:36.934\tTerminal\tMetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.\r\nIL\t0\t22:53:36.935\tTerminal\tWindows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 129 / 144 Gb disk, GMT+0\r\nDE\t0\t22:53:36.935\tTerminal\tC:\\Program Files\\MetaTrader 5\r\n"
+  "output": "mt5.service updated with quoted path\nmt5: inactive\nroot      819568  0.0  0.1 2686336 14360 ?       S<   Feb28   0:00 start.exe /exec terminal64.exe\nroot      819618 11.9  2.5 1379956 209180 ?      S<l  Feb28 110:13 C:\\Program Files\\MetaTrader 5\\terminal64.exe /config:/root/.wine/drive_c/Program Files/MetaTrader 5/config/startup.ini\n=== Terminal log ===\n\udcff\udcfeIO\t2\t09:56:52.725\tTerminal\tterminal process already started\r\nPM\t0\t09:56:52.725\tTerminal\texit with code 0\r\nFK\t0\t09:56:52.725\tTerminal\tstopped with 0\r\nGR\t0\t09:56:52.840\tTerminal\tshutdown with 0\r\n"
 }
