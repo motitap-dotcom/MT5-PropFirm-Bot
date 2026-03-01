@@ -1,5 +1,15 @@
 # PropFirmBot - Project Memory
 
+## MANDATORY: Server Communication Method (DO NOT SKIP)
+**ALL server/VPS interaction MUST go through GitHub repo only - Push & Listen method.**
+- NEVER use direct SSH, SCP, or any direct connection to the VPS
+- NEVER ask the user to run SSH commands on the server
+- ONLY method: edit repo files → git push → GitHub Actions runs on server → results committed back → git pull to read
+- Trigger files: `trigger-check.txt` (for vps-check), workflow files, or `workflow_dispatch`
+- Available workflows: `vps-check.yml`, `setup-and-verify.yml`, `vps-fix.yml`, `deploy-ea.yml`
+- All credentials are in GitHub Secrets and /root/.env on the server
+- This rule applies to ALL operations: checking status, deploying code, fixing issues, monitoring
+
 ## User Info
 - Name: Noa (נועה)
 - Language: Hebrew (עברית) - always respond in Hebrew
@@ -88,16 +98,18 @@
 10. TradeAnalyzer.mqh - Performance analytics
 11. AccountStateManager.mqh - Phase management (Challenge/Funded/Scaling)
 
-## Working Method
-- Claude's environment CANNOT SSH to VPS (port 22 blocked from sandbox)
-- Noa runs commands on VPS via SSH from her Windows PowerShell
-- Noa views MT5 via VNC (RealVNC client on Windows)
-- Claude prepares scripts/commands, Noa pastes them
+## Working Method - Push & Listen (MANDATORY)
+- **ALL server communication goes through GitHub repo ONLY**
+- Push changes to repo → GitHub Actions runs on VPS → results committed back
+- NEVER use direct SSH/SCP - only Push & Listen via GitHub Actions
+- Noa views MT5 via VNC (RealVNC client on Windows) for visual checks only
+- Trigger bot check: modify `trigger-check.txt` and push
+- GitHub Actions workflows handle: deploy, verify, fix, restart
+- All credentials in GitHub Secrets + /root/.env on server
 
 ## Noa's Tools
-- VNC client: RealVNC (on Windows)
-- Terminal: PowerShell (Windows) → SSH to VPS
-- SSH: ssh root@77.237.234.2 (password: Moti0417!)
+- VNC client: RealVNC (on Windows) - for visual MT5 monitoring only
+- Git: pushes to repo trigger server actions automatically
 
 ## How to Resume Work
 - MT5 is running on VPS at 77.237.234.2
