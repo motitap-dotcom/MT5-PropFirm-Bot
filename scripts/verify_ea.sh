@@ -65,7 +65,9 @@ if [ -z "$TERM_LOG" ]; then
     TERM_LOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
 fi
 if [ -n "$TERM_LOG" ] && [ -f "$TERM_LOG" ]; then
-    echo "Log file: $(basename $TERM_LOG) ($(stat -c%s "$TERM_LOG") bytes)"
+    TERM_NAME=$(basename "$TERM_LOG")
+    TERM_SIZE=$(stat -c%s "$TERM_LOG" 2>/dev/null)
+    echo "Log file: $TERM_NAME ($TERM_SIZE bytes)"
     echo "--- Last 25 lines ---"
     cat "$TERM_LOG" | tr -d '\0' | tail -25 | while IFS= read -r line; do echo "   $line"; done
 else
@@ -87,15 +89,16 @@ if [ -z "$EA_LOG" ]; then
 fi
 if [ -n "$EA_LOG" ] && [ -f "$EA_LOG" ]; then
     EA_SIZE=$(stat -c%s "$EA_LOG" 2>/dev/null)
-    echo "✅ EA Log: $(basename $EA_LOG) ($EA_SIZE bytes)"
+    EA_NAME=$(basename "$EA_LOG")
+    echo "✅ EA Log: $EA_NAME ($EA_SIZE bytes)"
 
     # Count key events
-    HEARTBEATS=$(grep -c "HEARTBEAT" "$EA_LOG" 2>/dev/null || echo 0)
-    NEWBARS=$(grep -c "NEWBAR" "$EA_LOG" 2>/dev/null || echo 0)
-    SIGNALS=$(grep -c "SIGNAL\|signal" "$EA_LOG" 2>/dev/null || echo 0)
-    TRADES=$(grep -c "TRADE\|OrderSend\|OPENED\|CLOSED" "$EA_LOG" 2>/dev/null || echo 0)
-    ERRORS=$(grep -c "error\|ERROR\|failed\|FAILED" "$EA_LOG" 2>/dev/null || echo 0)
-    BLOCKED=$(grep -c "BLOCKED" "$EA_LOG" 2>/dev/null || echo 0)
+    HEARTBEATS=$(grep -c "HEARTBEAT" "$EA_LOG" 2>/dev/null); HEARTBEATS=${HEARTBEATS:-0}
+    NEWBARS=$(grep -c "NEWBAR" "$EA_LOG" 2>/dev/null); NEWBARS=${NEWBARS:-0}
+    SIGNALS=$(grep -c "SIGNAL\|signal" "$EA_LOG" 2>/dev/null); SIGNALS=${SIGNALS:-0}
+    TRADES=$(grep -c "TRADE\|OrderSend\|OPENED\|CLOSED" "$EA_LOG" 2>/dev/null); TRADES=${TRADES:-0}
+    ERRORS=$(grep -c "error\|ERROR\|failed\|FAILED" "$EA_LOG" 2>/dev/null); ERRORS=${ERRORS:-0}
+    BLOCKED=$(grep -c "BLOCKED" "$EA_LOG" 2>/dev/null); BLOCKED=${BLOCKED:-0}
 
     echo "   Heartbeats: $HEARTBEATS | NewBars: $NEWBARS | Signals: $SIGNALS"
     echo "   Trades: $TRADES | Errors: $ERRORS | Blocked: $BLOCKED"
@@ -148,7 +151,11 @@ echo "━━━ 8. Config Files ━━━"
 CONFIG_DIR="$MT5/MQL5/Files/PropFirmBot"
 if [ -d "$CONFIG_DIR" ]; then
     for f in "$CONFIG_DIR"/*.json; do
-        [ -f "$f" ] && echo "   ✅ $(basename $f) ($(stat -c%s "$f") bytes)"
+        if [ -f "$f" ]; then
+            FNAME=$(basename "$f")
+            FSIZE=$(stat -c%s "$f" 2>/dev/null)
+            echo "   ✅ $FNAME ($FSIZE bytes)"
+        fi
     done
 else
     echo "   ⚠️  Config directory not found"
