@@ -1,0 +1,78 @@
+name: Deploy WhatsApp Service
+
+on:
+  push:
+    paths:
+      - 'whatsapp-service/**'
+      - 'scripts/setup-whatsapp-service.sh'
+      - '.github/workflows/deploy-whatsapp.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy WhatsApp service to VPS
+        env:
+          VPS_IP: ${{ secrets.VPS_IP }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          WHATSAPP_TOKEN: ${{ secrets.WHATSAPP_TOKEN }}
+          WHATSAPP_PHONE_ID: ${{ secrets.WHATSAPP_PHONE_ID }}
+          WHATSAPP_MY_NUMBER: ${{ secrets.WHATSAPP_MY_NUMBER }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          echo "=== Uploading WhatsApp service files ==="
+          chmod +x scripts/setup-whatsapp-service.sh
+
+          # Upload all files
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no \
+            ${VPS_USER}@${VPS_IP} "mkdir -p /root/MT5-PropFirm-Bot/whatsapp-service /root/MT5-PropFirm-Bot/scripts"
+
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no \
+            whatsapp-service/app.py \
+            whatsapp-service/requirements.txt \
+            whatsapp-service/.env.template \
+            ${VPS_USER}@${VPS_IP}:/root/MT5-PropFirm-Bot/whatsapp-service/
+
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no \
+            scripts/setup-whatsapp-service.sh \
+            ${VPS_USER}@${VPS_IP}:/root/MT5-PropFirm-Bot/scripts/
+
+          # Write .env with secrets (if secrets are configured)
+          if [ -n "$WHATSAPP_TOKEN" ] && [ -n "$WHATSAPP_PHONE_ID" ]; then
+            echo "=== Writing .env with credentials ==="
+            sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no \
+              ${VPS_USER}@${VPS_IP} "cat > /root/whatsapp-service/.env << ENVEOF
+          WHATSAPP_TOKEN=${WHATSAPP_TOKEN}
+          WHATSAPP_PHONE_ID=${WHATSAPP_PHONE_ID}
+          MY_PHONE_NUMBER=${WHATSAPP_MY_NUMBER}
+          ENVEOF"
+          else
+            echo "WARNING: WhatsApp secrets not configured in GitHub - skipping .env"
+          fi
+
+          echo "=== Running setup script ==="
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no \
+            -o ConnectTimeout=15 \
+            ${VPS_USER}@${VPS_IP} \
+            "bash /root/MT5-PropFirm-Bot/scripts/setup-whatsapp-service.sh" > whatsapp_deploy_report.txt 2>&1 || true
+
+          echo ""
+          echo "=== DEPLOY REPORT ==="
+          cat whatsapp_deploy_report.txt
+
+      - name: Commit deploy report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f whatsapp_deploy_report.txt
+          git commit -m "WhatsApp service deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push || true
