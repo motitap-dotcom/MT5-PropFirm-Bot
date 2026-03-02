@@ -1,110 +1,157 @@
-# PropFirmBot - Project Memory
+# PropFirmBot - הוראות לעבודה עם Claude
 
-## User Info
-- Name: Noa (נועה)
-- Language: Hebrew (עברית) - always respond in Hebrew
-- Experience level: Not a developer - needs simple, step-by-step instructions
-- Local machine: Windows (has PowerShell)
+## חוקים קבועים (לא משתנים!)
 
-## Account Details
-- Prop firm: FundedNext
-- Account type: Stellar Instant (direct funded - NO challenge phase)
-- Account number: 11797849
-- Server: FundedNext-Server
-- Password: gazDE62##
-- Account size: $2,000
-- Profit split: 70% (up to 80%)
+1. **תמיד לדבר בעברית** - כל התקשורת עם נועה בעברית בלבד
+2. **תקשורת עם השרת רק דרך GitHub Actions (Push & Listen)** - אף פעם לא SSH ישיר, אף פעם לא לתת פקודות SSH לנועה, אף פעם לא להגיד "אני לא יכול להתחבר לשרת"
+3. **שם המשתמש: נועה** - לא מפתחת, צריכה הוראות פשוטות וברורות
+4. **מחשב מקומי:** Windows עם PowerShell
+5. **VPS:** Contabo, IP 77.237.234.2, Ubuntu Linux
 
-## FundedNext Stellar Instant Rules (CRITICAL)
-- NO daily drawdown limit (0%)
-- 6% TRAILING total drawdown (from equity high water mark, NOT from initial balance)
-- NO profit target
-- NO minimum trading days
-- EA trading: ALLOWED
-- News trading: ALLOWED (max 40% profit from single day)
-- Weekend holding: ALLOWED
-- Min equity at start: $1,880 ($2,000 - 6%)
-- Consistency rule: max 40% of total profit in a single day
+## שיטת Push & Listen - כך עובדים עם השרת (חובה!)
 
-## Telegram Bot
-- Token: 8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g
-- Chat ID: 7013213983
-- Bot is configured and working
+כשצריך לבדוק/לתקן/לעדכן משהו על השרת, התהליך הוא **תמיד**:
 
-## VPS Details
-- Provider: Contabo
-- IP: 77.237.234.2
-- OS: LINUX (Ubuntu) - NOT Windows!
-- SSH root password: Moti0417!
-- Contabo panel password: qA4P9f3ra5bw
-- Connection method: SSH (not RDP!)
-- Connect: ssh root@77.237.234.2
+1. לערוך קובץ בריפו (קוד, config, script, או קובץ trigger)
+2. לעשות `git commit` + `git push`
+3. GitHub Actions workflow רץ **אוטומטית** על השרת
+4. התוצאות נכתבות חזרה לריפו (commit מהשרת)
+5. לעשות `git pull` כדי לקרוא את התוצאות
 
-## What's Been Done
-- [x] All EA files created (PropFirmBot.mq5 + 10 .mqh modules)
-- [x] Telegram bot configured with token and chat ID
-- [x] All configs updated for Stellar Instant rules (trailing DD, no daily DD)
-- [x] Guardian.mqh modified for trailing drawdown (equity high water mark)
-- [x] Risk params set: 0.5% per trade, soft DD 3.5%, critical 5.0%, hard 6.0%
-- [x] Linux VPS setup scripts ready (Wine + MT5 + monitoring)
-- [x] Deploy script updated with all 11 EA files
-- [x] All code pushed to branch claude/build-cfd-trading-bot-fl0ld
-- [x] VPS setup complete - Wine + MT5 installed on Contabo VPS
-- [x] MT5 running on VPS (accessible via VNC)
-- [x] FundedNext account connected in MT5 (account 11797849, FundedNext-Server)
-- [x] MT5 shows connected and working on VPS
+### פעולות נפוצות - מה לעשות בכל מצב:
 
-## What's Been Completed (ALL DONE!)
-- [x] Deploy EA files to MT5 data folder on VPS
-- [x] EA compiled (PropFirmBot.ex5 - 196KB)
-- [x] EA attached to EURUSD M15 chart
-- [x] AutoTrading enabled (green button)
-- [ ] Verify Telegram notifications work from live EA
-- [ ] Set up VPS monitoring (watchdog)
+| בקשה מנועה | מה לעשות |
+|---|---|
+| "תבדוק אם הבוט פעיל" | לערוך `trigger-check.txt` עם תאריך/שעה → push → vps-check workflow רץ → תוצאה ב-`vps_report.txt` |
+| "תתקן משהו על השרת" | לערוך את הסקריפט הרלוונטי ב-`scripts/` → push → vps-fix workflow רץ → תוצאה ב-`vps_fix_report.txt` |
+| "תעשה deploy" | לערוך קבצי EA ב-`EA/` או configs ב-`configs/` → push → deploy-ea workflow רץ → תוצאה ב-`deploy_report.txt` |
+| "מה המצב?" | לבדוק קבצי תוצאות (vps_report.txt, logs) בריפו → אם אין/ישנים, להפעיל trigger check |
 
-## VPS Current State (Updated 2026-02-22)
-- MT5 is RUNNING on VPS with PropFirmBot EA ACTIVE
-- FundedNext account LOGGED IN and CONNECTED (account 11797849)
-- EA attached to EURUSD M15 chart
-- AutoTrading is ON (green)
-- Wine + VNC working
-- Bot is LIVE and trading
+### חשוב - אל תגיד "אני לא יכול לבדוק"!
 
-## Critical Code Changes Made
-1. **Guardian.mqh**: Added trailing drawdown - calculates DD from equity high water mark instead of initial balance when `m_trailing_dd=true`. Skips daily DD checks when daily DD limit is 0.
-2. **PropFirmBot.mq5**: Default inputs set for Stellar Instant (PHASE_FUNDED, 0 daily DD, 6.0 total DD, Telegram credentials)
-3. **All config JSONs**: Updated for 6% trailing DD, no daily limit, funded instant phase
+- אם מבקשים לבדוק את השרת → **תשתמש ב-workflow**
+- אם אין workflow מתאים → **תיצור אחד**
+- אם `trigger-check.txt` לא קיים → **תיצור אותו**
+- אם סקריפט בדיקה לא קיים → **תיצור אותו**
+- **תמיד תנסה לפעול, לא רק להגיד "אי אפשר"**
 
-## EA Modules (11 files)
-1. PropFirmBot.mq5 - Main EA
-2. SignalEngine.mqh - Trading signals (multi-timeframe)
-3. RiskManager.mqh - Position sizing & risk
-4. TradeManager.mqh - Trade execution
-5. Guardian.mqh - Drawdown protection (5 safety layers)
-6. Dashboard.mqh - On-chart display
-7. TradeJournal.mqh - Trade logging
-8. Notifications.mqh - Telegram/Push/Email alerts
-9. NewsFilter.mqh - News event filtering
-10. TradeAnalyzer.mqh - Performance analytics
-11. AccountStateManager.mqh - Phase management (Challenge/Funded/Scaling)
+## Workflows קיימים (.github/workflows/)
 
-## Working Method
-- Claude's environment CANNOT SSH to VPS (port 22 blocked from sandbox)
-- Noa runs commands on VPS via SSH from her Windows PowerShell
-- Noa views MT5 via VNC (RealVNC client on Windows)
-- Claude prepares scripts/commands, Noa pastes them
+### 1. `vps-check.yml` - VPS Status Check
+- **מתי רץ:** כש-push משנה את `trigger-check.txt`, סקריפטים ב-`scripts/`, או workflow_dispatch
+- **מה עושה:** מעלה סקריפט בדיקה לשרת, מריץ אותו, שומר תוצאות
+- **תוצאה:** `vps_report.txt` (נכתב חזרה לריפו)
+- **טריגרים:** `trigger-check.txt`, `scripts/remote_check.sh`, `scripts/deep_check.sh`, `scripts/connection_check.sh`, `scripts/network_check.sh`, `scripts/quick_check.sh`, `scripts/verify_ea.sh`
 
-## Noa's Tools
-- VNC client: RealVNC (on Windows)
-- Terminal: PowerShell (Windows) → SSH to VPS
-- SSH: ssh root@77.237.234.2 (password: Moti0417!)
+### 2. `deploy-ea.yml` - Deploy EA to VPS
+- **מתי רץ:** כש-push משנה קבצים ב-`EA/` או `configs/`
+- **מה עושה:** מעתיק קבצי EA ו-config לשרת, מקמפל מחדש
+- **תוצאה:** `deploy_report.txt` + הודעת טלגרם
+- **טריגרים:** כל שינוי ב-`EA/**` או `configs/**`
 
-## How to Resume Work
-- MT5 is running on VPS at 77.237.234.2
-- VNC for MT5 GUI: connect to 77.237.234.2:5900 (no password, via RealVNC)
-- Repo on VPS: /root/MT5-PropFirm-Bot (branch: claude/build-cfd-trading-bot-fl0ld)
-- MT5 installed at: /root/.wine/drive_c/Program Files/MetaTrader 5/
-- EA files at: .../MQL5/Experts/PropFirmBot/ (all 11 files + .ex5 compiled)
-- Config files at: .../MQL5/Files/PropFirmBot/ (6 JSON files)
-- VNC server: x11vnc on display :99, port 5900
-- Start VNC: Xvfb :99 -screen 0 1280x1024x24 & x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw
+### 3. `vps-fix.yml` - VPS Fix and Restart MT5
+- **מתי רץ:** כש-push משנה סקריפטי תיקון
+- **מה עושה:** מעלה סקריפט תיקון לשרת ומריץ אותו
+- **תוצאה:** `vps_fix_report.txt`
+- **טריגרים:** `scripts/fix_and_restart.sh`, `scripts/clean_restart.sh`, `scripts/upgrade_wine.sh`, `scripts/fix_wine_version.sh`, `scripts/force_wine11.sh`, `scripts/install_mt5_linux.sh`
+
+## פרטי הפרויקט
+
+### Prop Firm Account
+- **חברה:** FundedNext
+- **סוג חשבון:** Stellar Instant (funded ישיר - בלי challenge)
+- **מספר חשבון:** 11797849
+- **שרת:** FundedNext-Server
+- **גודל חשבון:** $2,000
+- **חלוקת רווחים:** 70% (עד 80%)
+
+### חוקי מסחר קריטיים (FundedNext Stellar Instant)
+- **אין** daily drawdown limit (0%)
+- **6% TRAILING total drawdown** (מ-equity high water mark, לא מהבאלנס ההתחלתי!)
+- **אין** profit target
+- **אין** מינימום ימי מסחר
+- EA trading: **מותר**
+- News trading: **מותר** (מקסימום 40% רווח מיום בודד)
+- Weekend holding: **מותר**
+- Min equity: $1,880 ($2,000 - 6%)
+- Consistency rule: מקסימום 40% מסך הרווח ביום אחד
+
+### Telegram Bot
+- Token: `8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g`
+- Chat ID: `7013213983`
+
+### EA Modules (11 קבצים)
+1. `PropFirmBot.mq5` - Main EA
+2. `SignalEngine.mqh` - Trading signals (multi-timeframe)
+3. `RiskManager.mqh` - Position sizing & risk
+4. `TradeManager.mqh` - Trade execution
+5. `Guardian.mqh` - Drawdown protection (5 safety layers, trailing DD)
+6. `Dashboard.mqh` - On-chart display
+7. `TradeJournal.mqh` - Trade logging
+8. `Notifications.mqh` - Telegram/Push/Email alerts
+9. `NewsFilter.mqh` - News event filtering
+10. `TradeAnalyzer.mqh` - Performance analytics
+11. `AccountStateManager.mqh` - Phase management
+
+### שינויים קריטיים בקוד
+1. **Guardian.mqh**: Trailing drawdown - מחשב DD מ-equity high water mark (לא מהבאלנס ההתחלתי) כש-`m_trailing_dd=true`. מדלג על בדיקות daily DD כשהגבול הוא 0.
+2. **PropFirmBot.mq5**: Default inputs מוגדרים ל-Stellar Instant (PHASE_FUNDED, 0 daily DD, 6.0 total DD, Telegram credentials)
+3. **Config JSONs**: מעודכנים ל-6% trailing DD, ללא daily limit, funded instant phase
+
+## סטטוס עדכני (Updated 2026-03-02)
+
+- MT5 רץ על VPS עם PropFirmBot EA פעיל
+- חשבון FundedNext מחובר (11797849)
+- EA מחובר ל-EURUSD M15 chart
+- AutoTrading דולק (ירוק)
+- Wine + VNC עובדים
+- הבוט חי וסוחר
+
+### מה בוצע:
+- [x] כל קבצי EA נוצרו וקומפלו
+- [x] Telegram bot מוגדר
+- [x] Configs מעודכנים לחוקי Stellar Instant
+- [x] VPS מוגדר עם Wine + MT5
+- [x] EA מקומפל ומחובר לגרף
+- [x] AutoTrading פעיל
+
+### מה נשאר:
+- [ ] לוודא שהודעות Telegram מגיעות מה-EA
+- [ ] להגדיר VPS monitoring (watchdog)
+
+## How to Resume Work (לחלון חדש)
+
+### מבנה הפרויקט:
+- **ריפו:** `/home/user/MT5-PropFirm-Bot`
+- **קבצי EA:** `EA/` (כל 11 הקבצים)
+- **Configs:** `configs/` (קבצי JSON)
+- **Scripts:** `scripts/` (סקריפטים לשרת)
+- **Workflows:** `.github/workflows/` (3 workflows)
+- **Trigger file:** `trigger-check.txt`
+
+### על השרת (VPS):
+- **MT5 path:** `/root/.wine/drive_c/Program Files/MetaTrader 5/`
+- **EA files:** `.../MQL5/Experts/PropFirmBot/`
+- **Config files:** `.../MQL5/Files/PropFirmBot/`
+- **VNC:** port 5900 על display :99
+
+### איך לבדוק סטטוס:
+1. לערוך `trigger-check.txt` (להוסיף תאריך חדש)
+2. `git add trigger-check.txt && git commit -m "check status" && git push`
+3. לחכות שה-workflow ירוץ (1-2 דקות)
+4. `git pull` ולקרוא את `vps_report.txt`
+
+### איך לעשות deploy:
+1. לערוך קבצים ב-`EA/` או `configs/`
+2. `git add . && git commit -m "update EA" && git push`
+3. workflow deploy-ea רץ אוטומטית
+4. `git pull` ולקרוא את `deploy_report.txt`
+
+### איך לתקן בעיה בשרת:
+1. לערוך/ליצור סקריפט תיקון ב-`scripts/`
+2. `git add . && git commit -m "fix: description" && git push`
+3. workflow vps-fix רץ אוטומטית
+4. `git pull` ולקרוא את `vps_fix_report.txt`
+
+### נועה רואה את MT5 דרך:
+- **RealVNC** (על Windows) → `77.237.234.2:5900` (בלי סיסמה)
