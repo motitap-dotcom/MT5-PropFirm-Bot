@@ -22,42 +22,79 @@ jobs:
           VPS_IP: ${{ secrets.VPS_IP }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
           VPS_USER: ${{ secrets.VPS_USER }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
 
-          MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
-          EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
-          CONFIG_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
+          # Create a tar archive of EA and config files
+          tar czf /tmp/ea_deploy.tar.gz EA/ configs/
 
-          echo "=== Deploying EA files ==="
-          for f in EA/*.mq5 EA/*.mqh; do
-            [ -f "$f" ] && echo "  Copying $f..." && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${EA_DIR}/\""
-          done
+          # Upload archive to VPS
+          echo "=== Uploading EA archive to VPS ==="
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no /tmp/ea_deploy.tar.gz ${VPS_USER}@${VPS_IP}:/tmp/ea_deploy.tar.gz
 
-          echo "=== Deploying config files ==="
-          for f in configs/*.json; do
-            [ -f "$f" ] && echo "  Copying $f..." && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${CONFIG_DIR}/\""
-          done
-
-          echo "=== Recompiling EA on VPS ==="
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} bash -c "'
+          # Deploy on VPS via SSH
+          echo "=== Deploying on VPS ==="
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} << 'REMOTE_SCRIPT'
+            set -e
             export DISPLAY=:99
-            cd \"${EA_DIR}\"
-            # Use MetaEditor to compile
-            WINEPREFIX=/root/.wine wine \"/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe\" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
-            sleep 5
-            ls -la *.ex5 2>/dev/null && echo \"Compilation OK\" || echo \"Warning: .ex5 not updated\"
-            echo \"\"
-            echo \"=== Restarting MT5 to reload EA ===\"
+
+            MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
+            EA_DIR="$MT5_DIR/MQL5/Experts/PropFirmBot"
+            CONFIG_DIR="$MT5_DIR/MQL5/Files/PropFirmBot"
+
+            # Extract archive
+            cd /tmp
+            tar xzf ea_deploy.tar.gz
+
+            # Copy EA files
+            echo "--- Copying EA files ---"
+            mkdir -p "$EA_DIR"
+            cp -v /tmp/EA/*.mq5 "$EA_DIR/" 2>/dev/null || true
+            cp -v /tmp/EA/*.mqh "$EA_DIR/" 2>/dev/null || true
+            echo "EA files copied: $(ls "$EA_DIR"/*.mq5 "$EA_DIR"/*.mqh 2>/dev/null | wc -l) files"
+
+            # Copy config files
+            echo "--- Copying config files ---"
+            mkdir -p "$CONFIG_DIR"
+            cp -v /tmp/configs/*.json "$CONFIG_DIR/" 2>/dev/null || true
+            echo "Config files copied: $(ls "$CONFIG_DIR"/*.json 2>/dev/null | wc -l) files"
+
+            # Recompile EA
+            echo "--- Recompiling EA ---"
+            METAEDITOR="$MT5_DIR/metaeditor64.exe"
+            if [ -f "$METAEDITOR" ]; then
+              cd "$EA_DIR"
+              WINEPREFIX=/root/.wine wine "$METAEDITOR" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
+              sleep 5
+              if [ -f "$EA_DIR/PropFirmBot.ex5" ]; then
+                echo "Compiled: $(ls -la "$EA_DIR/PropFirmBot.ex5")"
+              else
+                echo "WARNING: ex5 file not found after compilation"
+              fi
+            else
+              echo "WARNING: MetaEditor not found at $METAEDITOR"
+            fi
+
+            # Restart MT5 to reload the EA
+            echo "--- Restarting MT5 ---"
             pkill -f terminal64 2>/dev/null || true
-            sleep 2
-            cd \"/root/.wine/drive_c/Program Files/MetaTrader 5\"
+            sleep 3
+            cd "$MT5_DIR"
             WINEPREFIX=/root/.wine wine terminal64.exe &
             sleep 10
-            pgrep -f terminal64 && echo \"MT5 restarted OK\" || echo \"MT5 restart FAILED\"
-          '"
+
+            if pgrep -f terminal64 > /dev/null 2>&1; then
+              echo "MT5 restarted successfully"
+              ps aux | grep terminal64 | grep -v grep
+            else
+              echo "ERROR: MT5 failed to restart"
+            fi
+
+            # Cleanup
+            rm -rf /tmp/EA /tmp/configs /tmp/ea_deploy.tar.gz
+
+            echo "=== Deploy complete ==="
+          REMOTE_SCRIPT
 
       - name: Send Telegram notification
         if: always()
@@ -67,20 +104,10 @@ jobs:
         run: |
           STATUS="${{ job.status }}"
           if [ "$STATUS" = "success" ]; then
-            MSG="✅ EA deployed and recompiled on VPS. Bot restarting with updated signals."
+            MSG="✅ EA v3.10 deployed to VPS - signal diagnostics + wider spreads active"
           else
-            MSG="❌ EA deployment failed - check GitHub Actions"
+            MSG="❌ EA deployment failed - check GitHub Actions logs"
           fi
           curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d text="${MSG}" \
-            -d parse_mode="HTML" > /dev/null 2>&1 || true
-
-      - name: Commit deploy report
-        if: always()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f deploy_report.txt 2>/dev/null || true
-          git commit -m "EA deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" 2>/dev/null || true
-          git push || true
+            -d text="${MSG}" > /dev/null 2>&1 || true
