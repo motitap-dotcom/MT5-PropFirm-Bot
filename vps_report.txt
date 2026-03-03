@@ -1,14 +1,14 @@
-=== VPS CHECK 2026-03-03 11:10:13 UTC ===
+=== VPS CHECK 2026-03-03 11:20:40 UTC ===
 --- MT5 Process ---
 MT5 is RUNNING ✅
 PID:1622396 CPU:0.0% MEM:0.1% START:10:42
-PID:1622466 CPU:30.7% MEM:2.5% START:10:43
+PID:1622466 CPU:30.3% MEM:2.5% START:10:43
 
 --- Outbound Connections ---
 Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
 0      0       77.237.234.2:60418 194.164.179.244:443         
 0      0       77.237.234.2:43436   13.226.155.59:443         
-0      0       77.237.234.2:56010  13.226.155.107:443         
+0      0       77.237.234.2:40064   13.226.155.45:443         
 
 --- Terminal Log (today) ---
 Size: 1094 bytes
@@ -55,9 +55,9 @@ OE	0	10:43:51.152	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DO
 
 --- Disk & Memory ---
 Disk: 16G used / 145G total (11% used)
-RAM: 1.2Gi used / 7.8Gi total
+RAM: 1.3Gi used / 7.8Gi total
 
 --- Uptime ---
- 11:10:13 up 8 days, 22:59, 10 users,  load average: 1.20, 0.84, 0.77
+ 11:20:41 up 8 days, 23:10, 10 users,  load average: 1.01, 0.95, 0.86
 
 === DONE ===
