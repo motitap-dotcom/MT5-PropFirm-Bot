@@ -1,1 +1,1 @@
-check-post-deploy-v310-verify
+check-post-compile-verify-v310
