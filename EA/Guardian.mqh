@@ -115,7 +115,7 @@ public:
    ENUM_GUARDIAN_STATE GetState()      { return m_state; }
    ENUM_HALT_REASON GetHaltReason()    { return m_halt_reason; }
    string   GetHaltMessage()           { return m_halt_message; }
-   bool     CanTrade()                 { return m_state == GUARDIAN_ACTIVE; }
+   bool     CanTrade()                 { return m_state <= GUARDIAN_CAUTION; }
    bool     MustCloseAll()             { return m_state >= GUARDIAN_EMERGENCY; }
    bool     IsDead()                   { return m_state == GUARDIAN_SHUTDOWN; }
    bool     IsCaution()                { return m_state == GUARDIAN_CAUTION; }
@@ -430,7 +430,8 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
    }
 
    // ===== LAYER 5: CAUTION (reduce risk) =====
-   if((m_soft_daily_dd_pct > 0 && daily_dd >= m_soft_daily_dd_pct * 0.6) || total_dd >= m_soft_total_dd_pct * 0.6)
+   // Trigger at 80% of soft limit (was 60% - too sensitive for small accounts)
+   if((m_soft_daily_dd_pct > 0 && daily_dd >= m_soft_daily_dd_pct * 0.8) || total_dd >= m_soft_total_dd_pct * 0.8)
    {
       m_state = GUARDIAN_CAUTION;
       m_halt_message = "Approaching DD limits - reduced risk";

@@ -514,9 +514,16 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
 
    // Fallback
    if(signal == SIGNAL_NONE && InpUseFallback && InpStrategy == STRATEGY_SMC)
+   {
+      PrintFormat("[SIGNAL] %s: SMC=NONE, trying EMA fallback...", symbol);
       signal = g_signals[signal_index].GetSignal(STRATEGY_EMA_CROSS, sl_price, tp_price);
+   }
 
-   if(signal == SIGNAL_NONE) return;
+   if(signal == SIGNAL_NONE)
+   {
+      PrintFormat("[SIGNAL] %s: No signal from any strategy", symbol);
+      return;
+   }
 
    // Validate RR
    double entry_price = (signal == SIGNAL_BUY)
@@ -552,14 +559,8 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
       if(lot < min_lot) lot = min_lot;
    }
 
-   // ACCOUNT PHASE: Apply phase risk multiplier
-   lot = lot * g_account.GetRiskMultiplier();
-   {
-      double min_lot = SymbolInfoDouble(symbol, SYMBOL_VOLUME_MIN);
-      double lot_step = SymbolInfoDouble(symbol, SYMBOL_VOLUME_STEP);
-      if(lot_step > 0) lot = MathFloor(lot / lot_step) * lot_step;
-      if(lot < min_lot) lot = min_lot;
-   }
+   // NOTE: Phase risk multiplier already applied during Init (risk_pct * GetRiskMultiplier())
+   // Do NOT apply again here to avoid double-reduction
 
    // CAUTION MODE: halve the lot size
    if(caution_mode)
