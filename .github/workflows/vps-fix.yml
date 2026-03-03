@@ -6,6 +6,7 @@ on:
       - '.github/workflows/vps-fix.yml'
       - 'scripts/fix_and_restart.sh'
       - 'scripts/clean_restart.sh'
+      - 'scripts/restart_mt5.sh'
       - 'scripts/upgrade_wine.sh'
       - 'scripts/fix_wine_version.sh'
       - 'scripts/force_wine11.sh'
@@ -21,26 +22,36 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: claude/build-cfd-trading-bot-fl0ld
 
-      - name: Fix and restart MT5 on VPS
+      - name: Restart MT5 on VPS
         env:
           VPS_IP: ${{ secrets.VPS_IP }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
           VPS_USER: ${{ secrets.VPS_USER }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          chmod +x scripts/fix_and_restart.sh scripts/clean_restart.sh
-          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no scripts/install_mt5_linux.sh ${VPS_USER}@${VPS_IP}:/tmp/fix.sh
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} "bash /tmp/fix.sh" > vps_fix_report.txt 2>&1 || true
+          chmod +x scripts/restart_mt5.sh
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no scripts/restart_mt5.sh ${VPS_USER}@${VPS_IP}:/tmp/restart.sh
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} "bash /tmp/restart.sh" > vps_fix_report.txt 2>&1 || true
           echo "EXIT_CODE=$?" >> vps_fix_report.txt
           cat vps_fix_report.txt
+
+      - name: Send Telegram notification
+        if: always()
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          STATUS="${{ job.status }}"
+          MSG="MT5 Restart: ${STATUS} - Check VNC to verify EA is running"
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
+            -d text="${MSG}" > /dev/null 2>&1 || true
 
       - name: Commit fix report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f vps_fix_report.txt
-          git commit -m "VPS fix report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push origin claude/build-cfd-trading-bot-fl0ld || true
+          git diff --staged --quiet || git commit -m "VPS restart report $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push || true
