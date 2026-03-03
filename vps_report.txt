@@ -1,52 +1,239 @@
-=== VERIFY 2026-03-03 13:12:34 UTC ===
+=== EA DIAGNOSTICS 2026-03-03 21:24:49 UTC ===
+
 --- MT5 Process ---
-root     1640853 87.5  2.7 1683732 223348 ?      R<l  12:14  50:48 C:\Program Files\MetaTrader 5\terminal64.exe
+root     1793844  0.3  0.1 2686336 14088 ?       S<   21:23   0:00 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe /login:11797849 /password:gazDE62##
+root     1793921 42.7  2.7 1755116 222888 ?      R<l  21:23   0:28 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
+
+--- Account Connection ---
+Terminal log: /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260303.log (24642 bytes)
+HN	0	19:45:18.933	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.03 21:39:59
+KN	0	19:45:19.628	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+IM	0	19:45:19.628	Network	'11797849': trading has been enabled - hedging mode
+PN	0	19:50:03.014	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.16 ms, build 5660)
+GN	0	19:50:03.015	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.03 21:45:18
+PO	0	19:50:03.903	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+FL	0	19:50:03.903	Network	'11797849': trading has been enabled - hedging mode
+HI	0	19:54:43.492	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.16 ms, build 5660)
+II	0	19:54:43.492	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.03 21:50:02
+JF	0	19:54:44.188	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+PE	0	19:54:44.188	Network	'11797849': trading has been enabled - hedging mode
+FF	0	21:23:53.533	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.16 ms, build 5660)
+PG	0	21:23:53.533	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.03 21:54:43
+FG	0	21:23:54.533	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+PD	0	21:23:54.533	Network	'11797849': trading has been enabled - hedging mode
+
+--- EA Log Today (20260303) ---
+EA LOG EXISTS: 152658 bytes
+
+=== LAST 80 LINES ===
+ND	0	20:30:00.068	PropFirmBot (EURUSD,M15)	[HTF] EURUSD: BEARISH | Price=1.16214 < EMA50=1.17540 < EMA200=1.17848
+GI	0	20:30:00.068	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16145 Slow[0]=1.16063 | Fast[1]=1.16128 Slow[1]=1.16048 | RSI=59.0 | HTF=-1 | CrossUp=no CrossDn=no
+HP	0	20:30:00.068	PropFirmBot (EURUSD,M15)	[HTF] GBPUSD: BEARISH | Price=1.33668 < EMA50=1.34618 < EMA200=1.35246
+QM	0	20:30:00.068	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+GD	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[HTF] GBPUSD: BEARISH | Price=1.33668 < EMA50=1.34618 < EMA200=1.35246
+DI	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33555 Slow[0]=1.33399 | Fast[1]=1.33527 Slow[1]=1.33372 | RSI=65.8 | HTF=-1 | CrossUp=no CrossDn=no
+JR	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[HTF] USDJPY: BULLISH | Price=157.53700 > EMA50=156.16067 > EMA200=155.58638
+EL	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=no | OB=no | FVG=no
+RE	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[HTF] USDJPY: BULLISH | Price=157.53700 > EMA50=156.16067 > EMA200=155.58638
+CK	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[EMA] USDJPY: Fast[0]=157.63376 Slow[0]=157.68844 | Fast[1]=157.65795 Slow[1]=157.70359 | RSI=42.0 | HTF=1 | CrossUp=no CrossDn=no
+HN	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+MI	0	20:39:44.694	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=5956 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+DR	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 22:45 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+DD	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[HTF] EURUSD: BEARISH | Price=1.16190 < EMA50=1.17539 < EMA200=1.17848
+QF	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+JH	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[HTF] EURUSD: BEARISH | Price=1.16190 < EMA50=1.17539 < EMA200=1.17848
+DF	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16150 Slow[0]=1.16073 | Fast[1]=1.16140 Slow[1]=1.16061 | RSI=57.6 | HTF=-1 | CrossUp=no CrossDn=no
+KE	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[HTF] GBPUSD: BEARISH | Price=1.33645 < EMA50=1.34617 < EMA200=1.35246
+FH	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+KI	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[HTF] GBPUSD: BEARISH | Price=1.33645 < EMA50=1.34617 < EMA200=1.35246
+KD	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33570 Slow[0]=1.33420 | Fast[1]=1.33551 Slow[1]=1.33397 | RSI=64.4 | HTF=-1 | CrossUp=no CrossDn=no
+GE	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[HTF] USDJPY: BULLISH | Price=157.59000 > EMA50=156.16275 > EMA200=155.58691
+QH	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=no | OB=no | FVG=no
+OI	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[HTF] USDJPY: BULLISH | Price=157.59000 > EMA50=156.16275 > EMA200=155.58691
+GD	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[EMA] USDJPY: Fast[0]=157.61817 Slow[0]=157.67144 | Fast[1]=157.62521 Slow[1]=157.67958 | RSI=45.0 | HTF=1 | CrossUp=no CrossDn=no
+LJ	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+JD	0	20:54:44.604	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=7294 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+IG	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 23:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+HE	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 5 relevant events from calendar
+DD	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+JO	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+HJ	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+ND	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+EL	0	21:09:45.216	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=8503 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+CO	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 23:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+NQ	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+HK	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+JF	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+DQ	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+KO	0	21:23:55.254	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
+KF	0	21:23:55.256	PropFirmBot (EURUSD,M15)	==============================================
+DG	0	21:23:55.256	PropFirmBot (EURUSD,M15)	  PropFirmBot v3.0 - FULL TRADING SYSTEM
+OL	0	21:23:55.256	PropFirmBot (EURUSD,M15)	  ALL MODULES ACTIVE
+MD	0	21:23:55.256	PropFirmBot (EURUSD,M15)	==============================================
+DH	0	21:23:55.256	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
+MS	0	21:23:55.256	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+JO	0	21:23:55.256	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
+QS	0	21:23:55.256	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
+MJ	0	21:23:55.257	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+MK	0	21:23:55.257	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+LN	0	21:23:55.257	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+EO	0	21:23:55.257	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
+OF	0	21:23:55.257	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+QQ	0	21:23:55.257	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
+KH	0	21:23:55.257	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
+KM	0	21:23:55.257	PropFirmBot (EURUSD,M15)	Target: NO TARGET
+GI	0	21:23:55.257	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
+FL	0	21:23:55.301	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.03 23:23:55] INIT | Bal=$1998.90 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+IK	0	21:23:55.302	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260303.csv | Initial balance: $1998.90
+EI	0	21:23:55.302	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+ER	0	21:23:55.302	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+RK	0	21:23:55.302	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+PJ	0	21:23:55.302	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+GP	0	21:23:55.302	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+KS	0	21:23:55.803	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
+MH	0	21:23:55.803	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
+IK	0	21:23:55.803	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+HK	0	21:23:55.803	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+RI	0	21:23:55.803	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+CH	0	21:23:55.816	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+KG	0	21:23:55.816	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+JN	0	21:23:56.092	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+OD	0	21:23:56.092	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+NN	0	21:23:56.092	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+HE	0	21:23:56.093	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+HP	0	21:23:56.093	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+LD	0	21:23:56.093	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+JM	0	21:23:56.093	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+JS	0	21:23:56.093	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+FI	0	21:23:56.093	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+
+=== SIGNAL SCAN RESULTS ===
+QM	0	20:30:00.068	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+GD	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[HTF] GBPUSD: BEARISH | Price=1.33668 < EMA50=1.34618 < EMA200=1.35246
+DI	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33555 Slow[0]=1.33399 | Fast[1]=1.33527 Slow[1]=1.33372 | RSI=65.8 | HTF=-1 | CrossUp=no CrossDn=no
+JR	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[HTF] USDJPY: BULLISH | Price=157.53700 > EMA50=156.16067 > EMA200=155.58638
+EL	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=no | OB=no | FVG=no
+RE	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[HTF] USDJPY: BULLISH | Price=157.53700 > EMA50=156.16067 > EMA200=155.58638
+CK	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[EMA] USDJPY: Fast[0]=157.63376 Slow[0]=157.68844 | Fast[1]=157.65795 Slow[1]=157.70359 | RSI=42.0 | HTF=1 | CrossUp=no CrossDn=no
+HN	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+MI	0	20:39:44.694	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=5956 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+DR	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 22:45 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+DD	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[HTF] EURUSD: BEARISH | Price=1.16190 < EMA50=1.17539 < EMA200=1.17848
+QF	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+JH	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[HTF] EURUSD: BEARISH | Price=1.16190 < EMA50=1.17539 < EMA200=1.17848
+DF	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16150 Slow[0]=1.16073 | Fast[1]=1.16140 Slow[1]=1.16061 | RSI=57.6 | HTF=-1 | CrossUp=no CrossDn=no
+KE	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[HTF] GBPUSD: BEARISH | Price=1.33645 < EMA50=1.34617 < EMA200=1.35246
+FH	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+KI	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[HTF] GBPUSD: BEARISH | Price=1.33645 < EMA50=1.34617 < EMA200=1.35246
+KD	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33570 Slow[0]=1.33420 | Fast[1]=1.33551 Slow[1]=1.33397 | RSI=64.4 | HTF=-1 | CrossUp=no CrossDn=no
+GE	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[HTF] USDJPY: BULLISH | Price=157.59000 > EMA50=156.16275 > EMA200=155.58691
+QH	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=no | OB=no | FVG=no
+OI	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[HTF] USDJPY: BULLISH | Price=157.59000 > EMA50=156.16275 > EMA200=155.58691
+GD	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[EMA] USDJPY: Fast[0]=157.61817 Slow[0]=157.67144 | Fast[1]=157.62521 Slow[1]=157.67958 | RSI=45.0 | HTF=1 | CrossUp=no CrossDn=no
+LJ	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+JD	0	20:54:44.604	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=7294 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+IG	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 23:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+HE	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 5 relevant events from calendar
+DD	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+JO	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+HJ	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+ND	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+EL	0	21:09:45.216	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=8503 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+CO	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 23:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+NQ	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+HK	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+JF	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+DQ	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+MK	0	21:23:55.257	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+FL	0	21:23:55.301	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.03 23:23:55] INIT | Bal=$1998.90 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+RK	0	21:23:55.302	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+PJ	0	21:23:55.302	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+GP	0	21:23:55.302	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+KS	0	21:23:55.803	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
+MH	0	21:23:55.803	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
+IK	0	21:23:55.803	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+HK	0	21:23:55.803	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+RI	0	21:23:55.803	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+CH	0	21:23:55.816	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+JN	0	21:23:56.092	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+NN	0	21:23:56.092	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+HE	0	21:23:56.093	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+
+=== TRADE ATTEMPTS ===
+GR	0	19:39:22.907	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+CR	0	19:40:01.438	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+EQ	0	19:45:19.834	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+IQ	0	19:54:44.382	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+FI	0	19:54:44.950	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+QH	0	19:54:44.950	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+DD	0	19:54:44.950	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=YES | OB=no | FVG=no
+KD	0	20:00:00.183	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+LR	0	20:00:00.183	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+GE	0	20:00:00.183	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=no | OB=no | FVG=no
+LM	0	20:15:00.281	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+GQ	0	20:15:00.281	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+LQ	0	20:15:00.281	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=no | OB=no | FVG=no
+FQ	0	20:30:00.068	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+QM	0	20:30:00.068	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+EL	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=no | OB=no | FVG=no
+QF	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+FH	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+QH	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=no | OB=no | FVG=no
+PJ	0	21:23:55.302	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+
+=== ERRORS ===
+RL	0	19:00:00.075	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+KH	0	19:15:01.503	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+HG	0	19:30:00.160	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+OH	0	19:35:22.935	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+KH	0	19:39:23.518	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+KK	0	19:40:02.483	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+LK	0	19:45:20.441	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+IJ	0	19:54:44.950	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+FG	0	20:00:00.183	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+QS	0	20:15:00.281	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+HN	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+LJ	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+DD	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+JO	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+HJ	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+ND	0	21:00:00.363	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+NQ	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+HK	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+JF	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+DQ	0	21:15:00.084	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
 
 --- Outbound Connections ---
 Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
-0      0       77.237.234.2:37600  13.226.155.107:443         
-0      0       77.237.234.2:45746    34.120.3.201:443         
-0      0       77.237.234.2:37861   18.168.91.222:443         
-0      0       77.237.234.2:46016   13.226.155.13:443         
-0      0       77.237.234.2:57596 194.164.179.244:443         
+0      0       77.237.234.2:46088 149.154.166.110:443         
+0      0       77.237.234.2:35672   13.226.155.45:443         
+0      0       77.237.234.2:39842   13.226.155.45:443         
+0      0       77.237.234.2:34452 194.164.179.244:443         
+0      0       77.237.234.2:36571   18.168.91.222:443         
 
---- Terminal Log (latest) ---
-Size: 21582 bytes
-MS	0	15:38:40.597	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-EG	2	15:38:45.101	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-EI	0	15:46:07.616	Experts	expert PropFirmBot (EURUSD,M15) removed
-RM	0	15:46:07.619	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-DF	2	15:46:10.927	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-MG	0	15:51:24.236	Experts	automated trading is disabled
-JP	0	15:51:25.572	Experts	automated trading is enabled
-DL	0	17:56:56.001	Experts	expert PropFirmBot (EURUSD,M15) removed
-OH	0	17:56:56.006	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-HK	2	17:56:57.260	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-CQ	0	21:38:52.803	Network	'11797849': authorized on FundedNext-Server
-GK	0	21:38:53.742	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-IH	0	21:38:53.742	Network	'11797849': trading has been enabled - hedging mode
-LK	0	21:38:54.543	Experts	expert PropFirmBot (EURUSD,M15) removed
-CO	0	21:38:54.548	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-IG	0	21:38:54.654	Network	'11797849': scanning network for access points
-MQ	0	21:38:59.189	Network	'11797849': scanning network finished
-LH	0	22:22:44.526	Experts	expert PropFirmBot (EURUSD,M15) removed
-CS	0	22:22:44.538	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-EE	0	22:22:56.027	Experts	expert PropFirmBot (EURUSD,M15) removed
-NQ	0	22:22:56.039	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-IS	0	22:23:08.834	Experts	expert PropFirmBot (EURUSD,M15) removed
-FG	0	22:23:08.851	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-MQ	0	22:46:37.415	Experts	expert PropFirmBot (EURUSD,M15) removed
-QD	0	22:46:37.424	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+--- EA File Check ---
+EA files:
+-rw-r--r-- 1 root root 163578 Mar  3 19:54 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
 
---- EA Log Today ---
-No EA log for today
-Latest EA log:
--rw-r--r-- 1 root root   28592 Mar  3 13:00 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260303.log
--rw-r--r-- 1 root root    7826 Mar  1 15:37 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260301.log
--rw-r--r-- 1 root root   39122 Feb 28 18:34 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260228.log
+Source files:
+12
+source files found
+
+--- AutoTrading Status ---
+
+--- VNC/Display Status ---
+root      346800  0.9  0.4 220396 38912 ?        Ss   Feb26  64:17 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
+root      346808  0.3  0.2  44204 23252 ?        Ss   Feb26  25:22 /usr/bin/x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -xkb
 
 --- Wine Version ---
 wine-11.3 (Staging)
 
-=== DONE ===
+--- Disk Space ---
+/dev/sda1       145G   17G  128G  12% /
+
+--- Memory ---
+               total        used        free      shared  buff/cache   available
+Mem:           7.8Gi       1.3Gi       5.6Gi        31Mi       1.2Gi       6.5Gi
+
+=== DIAGNOSTICS DONE ===
 EXIT_CODE=0
