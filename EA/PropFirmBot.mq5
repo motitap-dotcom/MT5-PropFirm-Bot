@@ -10,6 +10,7 @@
 #property description "  Guardian watchdog | News filter | Trade analyzer"
 #property description "  Telegram alerts | Account state management"
 #property description "  Self-learning risk adaptation"
+#property description "  v3.10: Signal diagnostics + relaxed SMC + wider spreads"
 #property strict
 
 // Include all modules
