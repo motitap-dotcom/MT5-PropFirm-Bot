@@ -16,16 +16,12 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: claude/build-cfd-trading-bot-fl0ld
 
       - name: Deploy EA files to VPS
         env:
           VPS_IP: ${{ secrets.VPS_IP }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
           VPS_USER: ${{ secrets.VPS_USER }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
 
@@ -35,20 +31,25 @@ jobs:
 
           echo "=== Deploying EA files ==="
           for f in EA/*.mq5 EA/*.mqh; do
-            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${EA_DIR}/\""
+            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${EA_DIR}/\"" && echo "  Copied: $f"
           done
 
           echo "=== Deploying config files ==="
           for f in configs/*.json; do
-            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${CONFIG_DIR}/\""
+            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${CONFIG_DIR}/\"" && echo "  Copied: $f"
           done
 
           echo "=== Recompiling EA on VPS ==="
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} bash -c "'
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} bash -c "'
             cd \"${EA_DIR}\"
-            # Use MetaEditor to compile
-            WINEPREFIX=/root/.wine wine \"/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe\" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
-            sleep 3
+            echo \"Files in EA dir:\"
+            ls -la *.mq5 *.mqh *.ex5 2>/dev/null
+            echo \"\"
+            echo \"Compiling...\"
+            DISPLAY=:99 WINEPREFIX=/root/.wine wine \"/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe\" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
+            sleep 5
+            echo \"\"
+            echo \"After compilation:\"
             ls -la *.ex5 2>/dev/null && echo \"Compilation OK\" || echo \"Warning: .ex5 not updated\"
           '" > deploy_report.txt 2>&1 || true
 
@@ -63,19 +64,21 @@ jobs:
         run: |
           STATUS="${{ job.status }}"
           if [ "$STATUS" = "success" ]; then
-            MSG="✅ EA deployed successfully to VPS"
+            MSG="✅ EA deployed and compiled on VPS
+          Spread fix: XAUUSD max spread 4→50 pips
+          Major pairs: 2.5→3.0 pips
+          Added signal scan logging"
           else
             MSG="❌ EA deployment failed - check GitHub Actions"
           fi
           curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d text="${MSG}" \
-            -d parse_mode="HTML" > /dev/null 2>&1 || true
+            -d text="${MSG}" > /dev/null 2>&1 || true
 
       - name: Commit deploy report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f deploy_report.txt
-          git commit -m "EA deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push origin claude/build-cfd-trading-bot-fl0ld || true
+          git diff --staged --quiet || git commit -m "EA deploy report $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push || true

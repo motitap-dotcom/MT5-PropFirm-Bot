@@ -70,8 +70,8 @@ input int      InpMaxDailyTrades  = 8;          // Max Trades Per Day
 input int      InpMaxConsecLosses = 5;          // Max Consecutive Losses
 
 // --- Spread Filter ---
-input double   InpMaxSpreadMajor  = 2.5;        // Max Spread Major (pips)
-input double   InpMaxSpreadXAU    = 4.0;        // Max Spread XAUUSD (pips)
+input double   InpMaxSpreadMajor  = 3.0;        // Max Spread Major (pips)
+input double   InpMaxSpreadXAU    = 50.0;       // Max Spread XAUUSD (pips)
 
 // --- News Filter ---
 input bool     InpNewsFilterOn    = true;        // News Filter Enabled
@@ -514,7 +514,13 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
 
    // Fallback
    if(signal == SIGNAL_NONE && InpUseFallback && InpStrategy == STRATEGY_SMC)
+   {
       signal = g_signals[signal_index].GetSignal(STRATEGY_EMA_CROSS, sl_price, tp_price);
+      if(signal == SIGNAL_NONE)
+         PrintFormat("[SCAN] %s: No SMC or EMA signal found", symbol);
+   }
+   else if(signal == SIGNAL_NONE)
+      PrintFormat("[SCAN] %s: No signal from primary strategy", symbol);
 
    if(signal == SIGNAL_NONE) return;
 

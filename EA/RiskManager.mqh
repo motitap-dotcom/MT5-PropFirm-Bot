@@ -126,7 +126,7 @@ CRiskManager::CRiskManager()
    m_daily_start_balance= 0;
    m_daily_reset_time   = 0;
    m_max_spread_major   = 3.0;
-   m_max_spread_xau     = 5.0;
+   m_max_spread_xau     = 50.0;
    m_london_start_hour  = 7;
    m_london_end_hour    = 16;
    m_ny_start_hour      = 12;
@@ -363,6 +363,9 @@ bool CRiskManager::IsSpreadAcceptable(string symbol)
       max_spread = m_max_spread_xau;
    else
       max_spread = m_max_spread_major;
+
+   if(spread_pips > max_spread)
+      PrintFormat("[RiskMgr] %s spread=%.1f pips (max=%.1f) - BLOCKED", symbol, spread_pips, max_spread);
 
    return spread_pips <= max_spread;
 }
