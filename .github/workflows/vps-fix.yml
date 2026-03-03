@@ -21,19 +21,50 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: claude/build-cfd-trading-bot-fl0ld
+
+      - name: Setup SSH connection
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          # Determine connection method: SSH Key or Password
+          if [ -n "${{ secrets.VPS_SSH_KEY }}" ]; then
+            echo "Using SSH Key authentication"
+            echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/vps_key
+            chmod 600 ~/.ssh/vps_key
+          elif [ -n "${{ secrets.VPS_PASSWORD }}" ]; then
+            echo "Using password authentication"
+            sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+          else
+            echo "ERROR: No SSH credentials found! Set VPS_SSH_KEY or VPS_PASSWORD in GitHub Secrets"
+            exit 1
+          fi
+
+          # Determine host and user
+          VPS_HOST="${{ secrets.VPS_HOST }}"
+          [ -z "$VPS_HOST" ] && VPS_HOST="${{ secrets.VPS_IP }}"
+          VPS_USER="${{ secrets.VPS_USER }}"
+          [ -z "$VPS_USER" ] && VPS_USER="root"
+          VPS_PORT="${{ secrets.VPS_PORT }}"
+          [ -z "$VPS_PORT" ] && VPS_PORT="22"
+
+          echo "VPS_HOST=${VPS_HOST}" >> $GITHUB_ENV
+          echo "VPS_USER=${VPS_USER}" >> $GITHUB_ENV
+          echo "VPS_PORT=${VPS_PORT}" >> $GITHUB_ENV
 
       - name: Fix and restart MT5 on VPS
-        env:
-          VPS_IP: ${{ secrets.VPS_IP }}
-          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-          VPS_USER: ${{ secrets.VPS_USER }}
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          chmod +x scripts/fix_and_restart.sh scripts/clean_restart.sh
-          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no scripts/install_mt5_linux.sh ${VPS_USER}@${VPS_IP}:/tmp/fix.sh
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} "bash /tmp/fix.sh" > vps_fix_report.txt 2>&1 || true
+          if [ -f ~/.ssh/vps_key ]; then
+            SSH="ssh -i ~/.ssh/vps_key -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 -p ${VPS_PORT}"
+            SCP="scp -i ~/.ssh/vps_key -o StrictHostKeyChecking=no -P ${VPS_PORT}"
+          else
+            SSH="sshpass -p '${{ secrets.VPS_PASSWORD }}' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 -p ${VPS_PORT}"
+            SCP="sshpass -p '${{ secrets.VPS_PASSWORD }}' scp -o StrictHostKeyChecking=no -P ${VPS_PORT}"
+          fi
+
+          chmod +x scripts/fix_and_restart.sh scripts/clean_restart.sh scripts/install_mt5_linux.sh 2>/dev/null || true
+          $SCP scripts/install_mt5_linux.sh ${VPS_USER}@${VPS_HOST}:/tmp/fix.sh
+          $SSH ${VPS_USER}@${VPS_HOST} "bash /tmp/fix.sh" > vps_fix_report.txt 2>&1 || true
           echo "EXIT_CODE=$?" >> vps_fix_report.txt
           cat vps_fix_report.txt
 
@@ -43,4 +74,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f vps_fix_report.txt
           git commit -m "VPS fix report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push origin claude/build-cfd-trading-bot-fl0ld || true
+          git push || true

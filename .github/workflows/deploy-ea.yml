@@ -16,37 +16,73 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: claude/build-cfd-trading-bot-fl0ld
+
+      - name: Setup SSH connection
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          # Determine connection method: SSH Key or Password
+          if [ -n "${{ secrets.VPS_SSH_KEY }}" ]; then
+            echo "Using SSH Key authentication"
+            echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/vps_key
+            chmod 600 ~/.ssh/vps_key
+            SSH_CMD="ssh -i ~/.ssh/vps_key -o StrictHostKeyChecking=no -o ConnectTimeout=15"
+            SCP_CMD="scp -i ~/.ssh/vps_key -o StrictHostKeyChecking=no"
+          elif [ -n "${{ secrets.VPS_PASSWORD }}" ]; then
+            echo "Using password authentication"
+            sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+            SSH_CMD="sshpass -p '${{ secrets.VPS_PASSWORD }}' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15"
+            SCP_CMD="sshpass -p '${{ secrets.VPS_PASSWORD }}' scp -o StrictHostKeyChecking=no"
+          else
+            echo "ERROR: No SSH credentials found! Set VPS_SSH_KEY or VPS_PASSWORD in GitHub Secrets"
+            exit 1
+          fi
+
+          # Save commands for other steps
+          echo "SSH_CMD=${SSH_CMD}" >> $GITHUB_ENV
+          echo "SCP_CMD=${SCP_CMD}" >> $GITHUB_ENV
+
+          # Determine host and user
+          VPS_HOST="${{ secrets.VPS_HOST }}"
+          [ -z "$VPS_HOST" ] && VPS_HOST="${{ secrets.VPS_IP }}"
+          VPS_USER="${{ secrets.VPS_USER }}"
+          [ -z "$VPS_USER" ] && VPS_USER="root"
+          VPS_PORT="${{ secrets.VPS_PORT }}"
+          [ -z "$VPS_PORT" ] && VPS_PORT="22"
+
+          echo "VPS_HOST=${VPS_HOST}" >> $GITHUB_ENV
+          echo "VPS_USER=${VPS_USER}" >> $GITHUB_ENV
+          echo "VPS_PORT=${VPS_PORT}" >> $GITHUB_ENV
 
       - name: Deploy EA files to VPS
-        env:
-          VPS_IP: ${{ secrets.VPS_IP }}
-          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-
           MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
           EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
           CONFIG_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
 
+          # Build SSH/SCP commands with port
+          if [ -f ~/.ssh/vps_key ]; then
+            SSH="ssh -i ~/.ssh/vps_key -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}"
+            SCP="scp -i ~/.ssh/vps_key -o StrictHostKeyChecking=no -P ${VPS_PORT}"
+          else
+            SSH="sshpass -p '${{ secrets.VPS_PASSWORD }}' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}"
+            SCP="sshpass -p '${{ secrets.VPS_PASSWORD }}' scp -o StrictHostKeyChecking=no -P ${VPS_PORT}"
+          fi
+
           echo "=== Deploying EA files ==="
           for f in EA/*.mq5 EA/*.mqh; do
-            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${EA_DIR}/\""
+            [ -f "$f" ] && $SCP "$f" "${VPS_USER}@${VPS_HOST}:\"${EA_DIR}/\""
           done
 
           echo "=== Deploying config files ==="
           for f in configs/*.json; do
-            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${CONFIG_DIR}/\""
+            [ -f "$f" ] && $SCP "$f" "${VPS_USER}@${VPS_HOST}:\"${CONFIG_DIR}/\""
           done
 
           echo "=== Recompiling EA on VPS ==="
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} bash -c "'
+          $SSH ${VPS_USER}@${VPS_HOST} bash -c "'
             cd \"${EA_DIR}\"
-            # Use MetaEditor to compile
             WINEPREFIX=/root/.wine wine \"/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe\" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
             sleep 3
             ls -la *.ex5 2>/dev/null && echo \"Compilation OK\" || echo \"Warning: .ex5 not updated\"
@@ -61,6 +97,10 @@ jobs:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
+          if [ -z "$TELEGRAM_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+            echo "Telegram not configured, skipping notification"
+            exit 0
+          fi
           STATUS="${{ job.status }}"
           if [ "$STATUS" = "success" ]; then
             MSG="✅ EA deployed successfully to VPS"
@@ -78,4 +118,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f deploy_report.txt
           git commit -m "EA deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push origin claude/build-cfd-trading-bot-fl0ld || true
+          git push || true
