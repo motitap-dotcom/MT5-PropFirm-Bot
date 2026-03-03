@@ -5,7 +5,7 @@
 //|                     News Filter + Notifications + Self-Learning   |
 //+------------------------------------------------------------------+
 #property copyright   "PropFirmBot"
-#property version     "3.00"
+#property version     "3.10"
 #property description "Complete prop firm trading system with:"
 #property description "  Guardian watchdog | News filter | Trade analyzer"
 #property description "  Telegram alerts | Account state management"
