@@ -10,6 +10,7 @@ on:
       - 'scripts/fix_wine_version.sh'
       - 'scripts/force_wine11.sh'
       - 'scripts/install_mt5_linux.sh'
+      - 'scripts/compile_ea.sh'
   workflow_dispatch:
 
 permissions:
@@ -22,15 +23,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fix and restart MT5 on VPS
+      - name: Run fix/compile script on VPS
         env:
           VPS_IP: ${{ secrets.VPS_IP }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
           VPS_USER: ${{ secrets.VPS_USER }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          chmod +x scripts/fix_and_restart.sh scripts/clean_restart.sh
-          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no scripts/install_mt5_linux.sh ${VPS_USER}@${VPS_IP}:/tmp/fix.sh
+          # Find the latest script to run
+          if [ -f scripts/compile_ea.sh ]; then
+            SCRIPT=scripts/compile_ea.sh
+          elif [ -f scripts/fix_and_restart.sh ]; then
+            SCRIPT=scripts/fix_and_restart.sh
+          else
+            SCRIPT=scripts/install_mt5_linux.sh
+          fi
+          echo "Running: $SCRIPT"
+          chmod +x "$SCRIPT"
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$SCRIPT" ${VPS_USER}@${VPS_IP}:/tmp/fix.sh
           sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} "bash /tmp/fix.sh" > vps_fix_report.txt 2>&1 || true
           echo "EXIT_CODE=$?" >> vps_fix_report.txt
           cat vps_fix_report.txt
