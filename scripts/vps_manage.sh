@@ -82,28 +82,49 @@ case "$ACTION" in
     ;;
 
   view-trades)
-    echo "--- Open Trades ---"
-    EALOG="$MT5/MQL5/Logs/${TODAY}.log"
-    if [ -f "$EALOG" ]; then
-        # Look for trade entries
-        cat "$EALOG" | tr -d '\0' | grep -i "order\|trade\|position\|open\|close\|buy\|sell" | tail -20
-        echo ""
-        TRADE_COUNT=$(cat "$EALOG" | tr -d '\0' | grep -ci "order sent\|position opened\|trade opened" 2>/dev/null || echo "0")
-        echo "Trade signals today: $TRADE_COUNT"
-    else
-        echo "No EA log for today"
-    fi
+    echo "--- All EA Log Files ---"
+    ls -lt "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -10
 
     echo ""
-    echo "--- Recent EA Activity ---"
-    # Check last 3 days of logs
-    for i in 0 1 2; do
+    echo "--- Trade History (last 10 days) ---"
+    for i in $(seq 0 10); do
         LOGDATE=$(date -d "-${i} days" '+%Y%m%d' 2>/dev/null || date -v-${i}d '+%Y%m%d' 2>/dev/null)
         LOGFILE="$MT5/MQL5/Logs/${LOGDATE}.log"
         if [ -f "$LOGFILE" ]; then
-            SIGNALS=$(cat "$LOGFILE" | tr -d '\0' | grep -ci "signal\|order\|trade" 2>/dev/null || echo "0")
-            SIZE=$(stat -c%s "$LOGFILE" 2>/dev/null || echo "0")
-            echo "  ${LOGDATE}: ${SIZE} bytes, ${SIGNALS} trade-related entries"
+            TRADES=$(cat "$LOGFILE" | tr -d '\0' | grep -cia "order\|trade\|position\|buy\|sell\|profit\|close" 2>/dev/null || echo "0")
+            if [ "$TRADES" -gt 0 ]; then
+                echo ""
+                echo "=== ${LOGDATE} ($TRADES trade entries) ==="
+                cat "$LOGFILE" | tr -d '\0' | grep -ia "order\|trade\|position\|buy\|sell\|profit\|close\|balance\|equity" | tail -30
+            fi
+        fi
+    done
+
+    echo ""
+    echo "--- Terminal Trade Log (last 10 days) ---"
+    for i in $(seq 0 10); do
+        LOGDATE=$(date -d "-${i} days" '+%Y%m%d' 2>/dev/null || date -v-${i}d '+%Y%m%d' 2>/dev/null)
+        TLOG="$MT5/logs/${LOGDATE}.log"
+        if [ -f "$TLOG" ]; then
+            TRADES=$(cat "$TLOG" | tr -d '\0' | grep -cia "order\|trade\|position\|buy\|sell\|deal" 2>/dev/null || echo "0")
+            if [ "$TRADES" -gt 0 ]; then
+                echo ""
+                echo "=== Terminal ${LOGDATE} ($TRADES entries) ==="
+                cat "$TLOG" | tr -d '\0' | grep -ia "order\|trade\|position\|buy\|sell\|deal\|profit" | tail -20
+            fi
+        fi
+    done
+
+    echo ""
+    echo "--- Trade Journal CSV Files ---"
+    ls -lt "$MT5/MQL5/Files/PropFirmBot/"*ournal* 2>/dev/null | head -5
+    ls -lt "$MT5/MQL5/Files/PropFirmBot/"*.csv 2>/dev/null | head -5
+    # Show content of all journal files
+    for f in "$MT5/MQL5/Files/PropFirmBot/"*.csv; do
+        if [ -f "$f" ]; then
+            echo ""
+            echo "=== $(basename $f) ==="
+            cat "$f" | tail -20
         fi
     done
     ;;
