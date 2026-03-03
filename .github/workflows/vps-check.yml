@@ -24,43 +24,64 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup SSH connection
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          INPUT_VPS_HOST: ${{ secrets.VPS_HOST }}
+          INPUT_VPS_IP: ${{ secrets.VPS_IP }}
+          INPUT_VPS_USER: ${{ secrets.VPS_USER }}
+          INPUT_VPS_PORT: ${{ secrets.VPS_PORT }}
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
           # Determine connection method: SSH Key or Password
-          if [ -n "${{ secrets.VPS_SSH_KEY }}" ]; then
+          if [ -n "$VPS_SSH_KEY" ]; then
             echo "Using SSH Key authentication"
-            echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/vps_key
+            echo "$VPS_SSH_KEY" > ~/.ssh/vps_key
             chmod 600 ~/.ssh/vps_key
-          elif [ -n "${{ secrets.VPS_PASSWORD }}" ]; then
+          elif [ -n "$VPS_PASSWORD" ]; then
             echo "Using password authentication"
             sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
           else
-            echo "ERROR: No SSH credentials found! Set VPS_SSH_KEY or VPS_PASSWORD in GitHub Secrets"
+            echo "========================================="
+            echo "ERROR: No SSH credentials configured!"
+            echo ""
+            echo "Go to: GitHub repo → Settings → Secrets and variables → Actions"
+            echo "Add these secrets:"
+            echo "  VPS_PASSWORD = your VPS root password"
+            echo "  VPS_HOST     = your VPS IP address"
+            echo "========================================="
             exit 1
           fi
 
           # Determine host and user
-          VPS_HOST="${{ secrets.VPS_HOST }}"
-          [ -z "$VPS_HOST" ] && VPS_HOST="${{ secrets.VPS_IP }}"
-          VPS_USER="${{ secrets.VPS_USER }}"
+          VPS_HOST="${INPUT_VPS_HOST}"
+          [ -z "$VPS_HOST" ] && VPS_HOST="${INPUT_VPS_IP}"
+          if [ -z "$VPS_HOST" ]; then
+            echo "ERROR: VPS_HOST or VPS_IP secret is not set!"
+            exit 1
+          fi
+          VPS_USER="${INPUT_VPS_USER}"
           [ -z "$VPS_USER" ] && VPS_USER="root"
-          VPS_PORT="${{ secrets.VPS_PORT }}"
+          VPS_PORT="${INPUT_VPS_PORT}"
           [ -z "$VPS_PORT" ] && VPS_PORT="22"
 
           echo "VPS_HOST=${VPS_HOST}" >> $GITHUB_ENV
           echo "VPS_USER=${VPS_USER}" >> $GITHUB_ENV
           echo "VPS_PORT=${VPS_PORT}" >> $GITHUB_ENV
+          echo "Connection: ${VPS_USER}@${VPS_HOST}:${VPS_PORT}"
 
       - name: Run VPS diagnostics
+        env:
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
         run: |
           if [ -f ~/.ssh/vps_key ]; then
             SSH="ssh -i ~/.ssh/vps_key -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}"
             SCP="scp -i ~/.ssh/vps_key -o StrictHostKeyChecking=no -P ${VPS_PORT}"
           else
-            SSH="sshpass -p '${{ secrets.VPS_PASSWORD }}' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}"
-            SCP="sshpass -p '${{ secrets.VPS_PASSWORD }}' scp -o StrictHostKeyChecking=no -P ${VPS_PORT}"
+            SSH="sshpass -p ${VPS_PASSWORD} ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}"
+            SCP="sshpass -p ${VPS_PASSWORD} scp -o StrictHostKeyChecking=no -P ${VPS_PORT}"
           fi
 
           chmod +x scripts/remote_check.sh scripts/deep_check.sh scripts/verify_ea.sh 2>/dev/null || true
