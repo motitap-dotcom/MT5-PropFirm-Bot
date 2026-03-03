@@ -1,0 +1,151 @@
+name: Deploy EA and Restart MT5
+
+on:
+  push:
+    paths:
+      - 'EA/**'
+      - '.github/workflows/deploy-restart.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy-restart:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/add-bot-status-updates-lANq7
+
+      - name: Deploy, Compile, and Restart
+        env:
+          VPS_IP: ${{ secrets.VPS_IP }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
+          EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
+          CONFIG_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
+
+          echo "=== Step 1: Deploy EA files ==="
+          for f in EA/*.mq5 EA/*.mqh; do
+            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${EA_DIR}/\""
+            echo "  Deployed: $f"
+          done
+
+          echo "=== Step 2: Deploy config files ==="
+          for f in configs/*.json; do
+            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${CONFIG_DIR}/\""
+            echo "  Deployed: $f"
+          done
+
+          echo "=== Step 3: Deploy verify script ==="
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no scripts/verify_ea.sh "${VPS_USER}@${VPS_IP}:/tmp/verify_ea.sh"
+
+          echo "=== Step 4: Compile, Restart MT5, and Verify ==="
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} bash << 'REMOTE_SCRIPT'
+          set -e
+          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+          EA_DIR="$MT5/MQL5/Experts/PropFirmBot"
+
+          echo "--- Compiling EA ---"
+          cd "$EA_DIR"
+          WINEPREFIX=/root/.wine wine "$MT5/metaeditor64.exe" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
+          sleep 5
+          ls -la *.ex5 2>/dev/null && echo "Compilation OK" || echo "Warning: .ex5 not found"
+
+          echo ""
+          echo "--- Stopping MT5 ---"
+          # Gracefully close MT5
+          pkill -f "terminal64.exe" 2>/dev/null || true
+          sleep 3
+          # Force kill if still running
+          pkill -9 -f "terminal64.exe" 2>/dev/null || true
+          sleep 2
+          echo "MT5 stopped"
+
+          echo ""
+          echo "--- Starting VNC display ---"
+          # Ensure display is running
+          if ! pgrep -f "Xvfb :99" > /dev/null 2>&1; then
+              Xvfb :99 -screen 0 1280x1024x24 &
+              sleep 2
+          fi
+
+          # Ensure VNC is running
+          if ! pgrep -f "x11vnc" > /dev/null 2>&1; then
+              x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw 2>/dev/null || true
+              sleep 1
+          fi
+          echo "Display ready"
+
+          echo ""
+          echo "--- Starting MT5 ---"
+          export DISPLAY=:99
+          export WINEPREFIX=/root/.wine
+          cd "$MT5"
+          nohup wine terminal64.exe /portable > /tmp/mt5_output.log 2>&1 &
+          MT5_PID=$!
+          echo "MT5 started with PID $MT5_PID"
+
+          echo ""
+          echo "--- Waiting for MT5 to initialize (45 seconds) ---"
+          sleep 45
+
+          echo ""
+          echo "--- Post-restart verification ---"
+          ps aux | grep terminal64 | grep -v grep || echo "WARNING: MT5 not running!"
+
+          # Check for account connection in terminal log
+          TERM_LOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
+          if [ -n "$TERM_LOG" ]; then
+              echo ""
+              echo "--- Terminal log (last 20 lines) ---"
+              cat "$TERM_LOG" | tr -d '\0' | tail -20
+          fi
+
+          # Run full diagnostics
+          echo ""
+          echo "--- Running full diagnostics ---"
+          bash /tmp/verify_ea.sh 2>&1 | tail -60
+          REMOTE_SCRIPT
+          EXIT_CODE=$?
+          echo "EXIT_CODE=$EXIT_CODE"
+
+      - name: Save deploy report
+        if: always()
+        run: |
+          echo "Deploy+Restart completed at $(date -u '+%Y-%m-%d %H:%M UTC')" > deploy_restart_report.txt
+          echo "Exit code: $?" >> deploy_restart_report.txt
+
+      - name: Send Telegram notification
+        if: always()
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          STATUS="${{ job.status }}"
+          if [ "$STATUS" = "success" ]; then
+            MSG="✅ EA deployed and MT5 restarted successfully! New strategies: SMC + EMA Cross + EMA Trend Pullback"
+          else
+            MSG="❌ EA deploy/restart had issues - check GitHub Actions"
+          fi
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
+            -d text="${MSG}" \
+            -d parse_mode="HTML" > /dev/null 2>&1 || true
+
+      - name: Commit report
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f deploy_restart_report.txt
+          git commit -m "Deploy+restart report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push origin claude/add-bot-status-updates-lANq7 || true

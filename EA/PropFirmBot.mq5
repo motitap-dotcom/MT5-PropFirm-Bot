@@ -458,48 +458,55 @@ void OnTick()
    bool caution_mode = g_guardian.IsCaution();
 
    // Scan symbols for signals
+   int signals_found = 0;
    for(int i = 0; i < g_symbol_count; i++)
    {
-      ProcessSymbol(g_symbols[i], i, caution_mode);
+      if(ProcessSymbol(g_symbols[i], i, caution_mode))
+         signals_found++;
    }
+
+   if(signals_found == 0)
+      PrintFormat("[NEWBAR] No signals found across %d symbols", g_symbol_count);
 }
 
 //+------------------------------------------------------------------+
 //| Process signals for one symbol                                    |
 //+------------------------------------------------------------------+
-void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
+bool ProcessSymbol(string symbol, int signal_index, bool caution_mode)
 {
    // Pre-flight checks
-   if(!g_risk.CanOpenTrade(symbol)) return;
-   if(!g_trade.CanTradeNow(symbol)) return;
-   if(g_trade.CountSymbolPositions(symbol) > 0) return;
+   if(!g_risk.CanOpenTrade(symbol)) return false;
+   if(!g_trade.CanTradeNow(symbol)) return false;
+   if(g_trade.CountSymbolPositions(symbol) > 0) return false;
 
    // Spread anomaly check
    if(!g_guardian.CheckSpreadAnomaly(symbol))
    {
       PrintFormat("[GUARDIAN] %s spread anomaly - skipping", symbol);
-      return;
+      return false;
    }
 
    // News filter: per-symbol check
    if(InpNewsFilterOn && !g_news.IsSafeToTradeSymbol(symbol))
    {
       PrintFormat("[NEWS] %s blocked: %s", symbol, g_news.GetBlockReason());
-      return;
+      return false;
    }
 
    // Self-learning: check if symbol is auto-blocked
    if(InpSelfLearning && InpAutoBlockSymbol && g_analyzer.IsSymbolBlocked(symbol))
    {
       PrintFormat("[ANALYZER] %s blocked due to poor performance", symbol);
-      return;
+      return false;
    }
 
    double sl_price = 0, tp_price = 0;
    ENUM_SIGNAL_TYPE signal = SIGNAL_NONE;
+   string used_strategy = "";
 
-   // Primary strategy
+   // Primary strategy: SMC
    signal = g_signals[signal_index].GetSignal(InpStrategy, sl_price, tp_price);
+   if(signal != SIGNAL_NONE) used_strategy = "SMC";
 
    // Check if strategy is working (self-learning)
    if(signal != SIGNAL_NONE && InpSelfLearning)
@@ -508,15 +515,25 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
       if(!g_analyzer.IsStrategyWorking(strat_name))
       {
          PrintFormat("[ANALYZER] %s strategy underperforming - checking fallback", strat_name);
-         signal = SIGNAL_NONE; // Force fallback
+         signal = SIGNAL_NONE;
       }
    }
 
-   // Fallback
+   // Fallback 1: EMA Crossover
    if(signal == SIGNAL_NONE && InpUseFallback && InpStrategy == STRATEGY_SMC)
+   {
       signal = g_signals[signal_index].GetSignal(STRATEGY_EMA_CROSS, sl_price, tp_price);
+      if(signal != SIGNAL_NONE) used_strategy = "EMA_CROSS";
+   }
 
-   if(signal == SIGNAL_NONE) return;
+   // Fallback 2: EMA Trend Pullback (less strict, more frequent signals)
+   if(signal == SIGNAL_NONE && InpUseFallback)
+   {
+      signal = g_signals[signal_index].GetSignal(STRATEGY_EMA_TREND, sl_price, tp_price);
+      if(signal != SIGNAL_NONE) used_strategy = "EMA_TREND";
+   }
+
+   if(signal == SIGNAL_NONE) return false;
 
    // Validate RR
    double entry_price = (signal == SIGNAL_BUY)
@@ -525,18 +542,18 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
 
    double sl_dist = MathAbs(entry_price - sl_price);
    double tp_dist = MathAbs(tp_price - entry_price);
-   if(sl_dist <= 0) return;
+   if(sl_dist <= 0) return false;
 
    double rr = tp_dist / sl_dist;
    if(rr < InpMinRR)
    {
       PrintFormat("[FILTER] %s RR=%.1f < %.1f", symbol, rr, InpMinRR);
-      return;
+      return false;
    }
 
    // Calculate lot size
    double lot = g_risk.CalculateLotSize(symbol, sl_dist);
-   if(lot <= 0) return;
+   if(lot <= 0) return false;
 
    // SELF-LEARNING: Apply risk adjustment
    if(InpSelfLearning)
@@ -572,7 +589,7 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
    }
 
    // Execute
-   string strategy_name = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
+   string strategy_name = used_strategy;
    ulong ticket = 0;
 
    if(signal == SIGNAL_BUY)
@@ -606,12 +623,14 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
       // Update position snapshot
       TakePositionSnapshot();
 
-      PrintFormat("[TRADE] %s %s | Lot=%.2f | SL=%.5f | TP=%.5f | RR=%.1f | #%d%s%s",
+      PrintFormat("[TRADE] %s %s | Lot=%.2f | SL=%.5f | TP=%.5f | RR=%.1f | #%d | Strategy=%s%s%s",
                   symbol, signal == SIGNAL_BUY ? "BUY" : "SELL",
-                  lot, sl_price, tp_price, rr, ticket,
+                  lot, sl_price, tp_price, rr, ticket, strategy_name,
                   caution_mode ? " [CAUTION]" : "",
                   g_analyzer.ShouldReduceRisk() ? " [REDUCED_RISK]" : "");
+      return true;
    }
+   return false;
 }
 
 //+------------------------------------------------------------------+

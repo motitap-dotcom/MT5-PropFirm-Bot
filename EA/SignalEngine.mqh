@@ -19,7 +19,8 @@ enum ENUM_SIGNAL_TYPE
 enum ENUM_STRATEGY_TYPE
 {
    STRATEGY_SMC       = 0,  // Smart Money Concepts (primary)
-   STRATEGY_EMA_CROSS = 1   // EMA Crossover (fallback)
+   STRATEGY_EMA_CROSS = 1,  // EMA Crossover (fallback)
+   STRATEGY_EMA_TREND = 2   // EMA Trend Pullback (second fallback)
 };
 
 //+------------------------------------------------------------------+
@@ -88,6 +89,7 @@ public:
    // Main signal methods
    ENUM_SIGNAL_TYPE  GetSMCSignal(double &sl_price, double &tp_price);
    ENUM_SIGNAL_TYPE  GetEMACrossSignal(double &sl_price, double &tp_price);
+   ENUM_SIGNAL_TYPE  GetEMATrendSignal(double &sl_price, double &tp_price);
    ENUM_SIGNAL_TYPE  GetSignal(ENUM_STRATEGY_TYPE strategy, double &sl_price, double &tp_price);
 
    // Utility
@@ -595,6 +597,105 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
 }
 
 //+------------------------------------------------------------------+
+//| EMA Trend Pullback Signal                                         |
+//| Trades pullbacks within an established trend - more frequent      |
+//+------------------------------------------------------------------+
+ENUM_SIGNAL_TYPE CSignalEngine::GetEMATrendSignal(double &sl_price, double &tp_price)
+{
+   sl_price = 0;
+   tp_price = 0;
+
+   // Need more bars to confirm established trend
+   double ema_f[6], ema_s[6], rsi_buf[6], atr_buf[3];
+   ArraySetAsSeries(ema_f, true);
+   ArraySetAsSeries(ema_s, true);
+   ArraySetAsSeries(rsi_buf, true);
+   ArraySetAsSeries(atr_buf, true);
+
+   if(CopyBuffer(m_handle_ema_fast, 0, 0, 6, ema_f) < 6) return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_ema_slow, 0, 0, 6, ema_s) < 6) return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_rsi, 0, 0, 6, rsi_buf) < 6)     return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_atr, 0, 0, 3, atr_buf) < 3)     return SIGNAL_NONE;
+
+   double atr = atr_buf[0];
+   if(atr <= 0) return SIGNAL_NONE;
+
+   // Established bullish trend: EMA9 > EMA21 for at least 3 bars
+   bool bullish_trend = ema_f[0] > ema_s[0] &&
+                        ema_f[1] > ema_s[1] &&
+                        ema_f[2] > ema_s[2];
+
+   // Established bearish trend: EMA9 < EMA21 for at least 3 bars
+   bool bearish_trend = ema_f[0] < ema_s[0] &&
+                        ema_f[1] < ema_s[1] &&
+                        ema_f[2] < ema_s[2];
+
+   if(!bullish_trend && !bearish_trend) return SIGNAL_NONE;
+
+   // Get price data for pullback detection
+   MqlRates rates[];
+   ArraySetAsSeries(rates, true);
+   if(CopyRates(m_symbol, m_tf_entry, 0, 6, rates) < 6) return SIGNAL_NONE;
+
+   // BUY: Bullish trend + pullback recovery
+   if(bullish_trend)
+   {
+      // Pullback evidence: RSI dipped below 45 in recent bars and is now recovering
+      bool rsi_dipped = false;
+      for(int i = 1; i <= 4; i++)
+      {
+         if(rsi_buf[i] < 45) { rsi_dipped = true; break; }
+      }
+      bool rsi_recovering = rsi_buf[0] > rsi_buf[1] && rsi_buf[0] > 40 && rsi_buf[0] < 70;
+
+      // Price pullback: bar[1] low came within 0.5*ATR of slow EMA (touched support)
+      bool price_pullback = rates[1].low <= ema_s[1] + (atr * 0.5);
+
+      // Need RSI dip+recovery, or price touched EMA support with RSI not overbought
+      if((rsi_dipped && rsi_recovering) || (price_pullback && rsi_buf[0] < 60))
+      {
+         double entry = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
+         sl_price = entry - (atr * 2.0);
+         double sl_distance = entry - sl_price;
+         tp_price = entry + (sl_distance * 2.0);
+
+         PrintFormat("[EMA_TREND] BUY %s: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f RSIdip=%s PricePB=%s",
+                     m_symbol, entry, sl_price, tp_price, rsi_buf[0],
+                     rsi_dipped ? "Y" : "N", price_pullback ? "Y" : "N");
+         return SIGNAL_BUY;
+      }
+   }
+
+   // SELL: Bearish trend + pullback recovery
+   if(bearish_trend)
+   {
+      bool rsi_spiked = false;
+      for(int i = 1; i <= 4; i++)
+      {
+         if(rsi_buf[i] > 55) { rsi_spiked = true; break; }
+      }
+      bool rsi_declining = rsi_buf[0] < rsi_buf[1] && rsi_buf[0] < 60 && rsi_buf[0] > 30;
+
+      bool price_pullback = rates[1].high >= ema_s[1] - (atr * 0.5);
+
+      if((rsi_spiked && rsi_declining) || (price_pullback && rsi_buf[0] > 40))
+      {
+         double entry = SymbolInfoDouble(m_symbol, SYMBOL_BID);
+         sl_price = entry + (atr * 2.0);
+         double sl_distance = sl_price - entry;
+         tp_price = entry - (sl_distance * 2.0);
+
+         PrintFormat("[EMA_TREND] SELL %s: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f RSIspike=%s PricePB=%s",
+                     m_symbol, entry, sl_price, tp_price, rsi_buf[0],
+                     rsi_spiked ? "Y" : "N", price_pullback ? "Y" : "N");
+         return SIGNAL_SELL;
+      }
+   }
+
+   return SIGNAL_NONE;
+}
+
+//+------------------------------------------------------------------+
 //| Main signal dispatcher                                            |
 //+------------------------------------------------------------------+
 ENUM_SIGNAL_TYPE CSignalEngine::GetSignal(ENUM_STRATEGY_TYPE strategy, double &sl_price, double &tp_price)
@@ -606,6 +707,9 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSignal(ENUM_STRATEGY_TYPE strategy, double &s
 
       case STRATEGY_EMA_CROSS:
          return GetEMACrossSignal(sl_price, tp_price);
+
+      case STRATEGY_EMA_TREND:
+         return GetEMATrendSignal(sl_price, tp_price);
 
       default:
          return SIGNAL_NONE;

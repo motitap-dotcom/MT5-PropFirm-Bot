@@ -3,7 +3,6 @@ name: Deploy EA to VPS
 on:
   push:
     paths:
-      - 'EA/**'
       - 'configs/**'
   workflow_dispatch:
 
@@ -17,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: claude/build-cfd-trading-bot-fl0ld
+          ref: claude/add-bot-status-updates-lANq7
 
       - name: Deploy EA files to VPS
         env:
@@ -78,4 +77,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f deploy_report.txt
           git commit -m "EA deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push origin claude/build-cfd-trading-bot-fl0ld || true
+          git push origin claude/add-bot-status-updates-lANq7 || true
