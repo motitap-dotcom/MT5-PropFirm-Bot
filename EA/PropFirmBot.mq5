@@ -6,7 +6,7 @@
 //+------------------------------------------------------------------+
 #property copyright   "PropFirmBot"
 #property version     "3.10"
-#property description "Complete prop firm trading system with:"
+#property description "Complete prop firm trading system v3.10 with:"
 #property description "  Guardian watchdog | News filter | Trade analyzer"
 #property description "  Telegram alerts | Account state management"
 #property description "  Self-learning risk adaptation"
