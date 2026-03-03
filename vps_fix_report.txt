@@ -1,4 +1,4 @@
-=== INSTALL MT5 LINUX 2026-02-23 08:18:47 UTC ===
+=== INSTALL MT5 LINUX 2026-03-03 18:41:05 UTC ===
 --- 1. Stop everything ---
 Stopped
 
@@ -6,27 +6,19 @@ Stopped
 Display OK
 
 --- 3. Download MT5 ---
--rw-r--r-- 1 root root 22765928 Feb 23 08:18 mt5setup.exe
-Downloaded: 22765928 bytes
+-rw-r--r-- 1 root root 22821632 Mar  3 18:41 mt5setup.exe
+Downloaded: 22821632 bytes
 
 --- 4. Install MT5 ---
 reg: The operation completed successfully
-Installer PID: 82350
+Installer PID: 1758531
 Waiting for installer (up to 2 min)...
   ...still installing (10s)
   ...still installing (20s)
-  ...still installing (30s)
-  ...still installing (40s)
-  ...still installing (50s)
-  ...still installing (60s)
-  ...still installing (70s)
-  ...still installing (80s)
-  ...still installing (90s)
-  ...still installing (100s)
-  ...still installing (110s)
-Installer finished at iteration 12
+Installer finished at iteration 3
 
 --- 5. Find MT5 ---
+/root/.wine/drive_c/Program Files/FundedNext MT5 Terminal/terminal64.exe
 /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
 
 MT5 directories:
@@ -45,37 +37,46 @@ MT5 started from: /root/.wine/drive_c/Program Files/MetaTrader 5
 MT5 running: YES
 
 Outbound connections:
-Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
+Recv-Q Send-Q            Local Address:Port                               Peer Address:Port Process
+0      0                  77.237.234.2:60532                             151.101.65.55:443         
+0      0                  77.237.234.2:53918                              34.120.3.201:443         
+0      0                  77.237.234.2:40282                             54.88.169.116:443         
+0      0                  77.237.234.2:33624                              34.120.3.201:443         
+0      0                  77.237.234.2:46274                              34.120.3.201:443         
+0      0                  77.237.234.2:54306                              34.120.3.201:443         
+0      0                  77.237.234.2:53864                              34.120.3.201:443         
+0      0                  77.237.234.2:51212                             35.186.238.68:443         
+0      0                  77.237.234.2:42152                              34.120.3.201:443         
 
 Terminal log:
-ID	0	07:39:13.126	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-NR	0	07:45:27.325	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-RH	0	07:45:27.328	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-FS	0	07:45:27.328	Terminal	C:\Program Files\MetaTrader 5
-PF	2	07:45:27.917	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-LH	2	07:45:27.917	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-RJ	0	07:45:30.819	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-JQ	0	07:50:05.644	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
-RN	0	07:50:05.645	Terminal	Windows 10 build 19043 on Wine 9.0 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 136 / 144 Gb disk, admin, GMT+0
-RQ	0	07:50:05.645	Terminal	C:\Program Files\MetaTrader 5
-NG	2	07:50:06.202	Terminal	unstable and unsupported Wine 9.0 Linux 6.8.0-100-generic, please upgrade to Wine 10.0 or later
-RF	2	07:50:06.202	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
-PI	0	07:50:09.622	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-HD	2	07:55:19.682	Experts	initializing of PropFirmBot (EURUSD,M15) failed with code 0 (symbol synchronization timeout)
-QL	0	07:55:19.690	Experts	expert PropFirmBot (EURUSD,M15) removed
+CS	0	13:52:17.979	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.16 ms, build 5660)
+RS	0	13:52:17.979	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.03 15:40:19
+EP	0	13:52:19.563	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+RS	0	13:52:19.564	Network	'11797849': trading has been enabled - hedging mode
+NJ	0	18:03:15.962	Network	'11797849': scanning network for access points
+IJ	0	18:03:20.918	Network	'11797849': scanning network finished
+RP	0	18:41:41.144	Terminal	shutdown with 0
+DQ	0	18:41:59.680	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+LR	0	18:41:59.681	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 1 / 7 Gb memory, 128 / 144 Gb disk, GMT+0
+OR	0	18:41:59.681	Terminal	C:\Program Files\MetaTrader 5
+EK	0	18:42:02.782	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+KS	0	18:42:04.465	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.16 ms, build 5660)
+MS	0	18:42:04.465	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.03 15:52:17
+EP	0	18:42:05.421	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+KS	0	18:42:05.421	Network	'11797849': trading has been enabled - hedging mode
 
 EA log:
 EXISTS!
-PS	0	22:38:21.873	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-RJ	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-GK	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-NQ	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-OI	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-OL	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-KG	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-QN	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-IF	0	22:38:22.005	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-MM	0	22:38:22.005	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+QG	0	18:42:06.837	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+PO	0	18:42:06.837	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+PJ	0	18:42:06.837	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+PN	0	18:42:06.837	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+FD	0	18:42:06.837	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+FM	0	18:42:06.837	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+NG	0	18:42:06.837	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+EG	0	18:42:06.837	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+FG	0	18:42:06.852	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 20:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+PI	0	18:42:06.852	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 
 === DONE ===
 EXIT_CODE=0
