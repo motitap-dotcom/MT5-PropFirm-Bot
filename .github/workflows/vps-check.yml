@@ -23,7 +23,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: claude/build-cfd-trading-bot-fl0ld
+          ref: ${{ github.ref_name }}
+
+      - name: Check secrets are configured
+        env:
+          VPS_IP: ${{ secrets.VPS_IP }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          if [ -z "$VPS_IP" ] || [ -z "$VPS_PASSWORD" ] || [ -z "$VPS_USER" ]; then
+            echo "ERROR: GitHub Secrets not configured!"
+            echo "Go to: Settings > Secrets and variables > Actions"
+            echo "Add: VPS_IP, VPS_USER, VPS_PASSWORD"
+            exit 1
+          fi
+          echo "Secrets OK"
 
       - name: Run VPS diagnostics
         env:
@@ -32,9 +46,18 @@ jobs:
           VPS_USER: ${{ secrets.VPS_USER }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          chmod +x scripts/remote_check.sh scripts/deep_check.sh
-          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no scripts/verify_ea.sh ${VPS_USER}@${VPS_IP}:/tmp/check.sh
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} "bash /tmp/check.sh" > vps_report.txt 2>&1
+          chmod +x scripts/verify_ea.sh
+          echo "Connecting to VPS at $VPS_IP..."
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no -o ConnectTimeout=10 scripts/verify_ea.sh ${VPS_USER}@${VPS_IP}:/tmp/check.sh 2>&1 || {
+            echo "SCP failed - VPS may be unreachable" > vps_report.txt
+            echo "EXIT_CODE=1" >> vps_report.txt
+            cat vps_report.txt
+            exit 0
+          }
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} "bash /tmp/check.sh" > vps_report.txt 2>&1 || {
+            echo "SSH command failed" >> vps_report.txt
+            echo "EXIT_CODE=1" >> vps_report.txt
+          }
           echo "EXIT_CODE=$?" >> vps_report.txt
           cat vps_report.txt
 
@@ -44,4 +67,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f vps_report.txt
           git commit -m "VPS status report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push origin claude/build-cfd-trading-bot-fl0ld || true
+          git push origin ${{ github.ref_name }} || true
