@@ -4,97 +4,79 @@
 + WINEPREFIX=/root/.wine
 + MT5='/root/.wine/drive_c/Program Files/MetaTrader 5'
 + EA_DIR='/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot'
-+ EDITOR='/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe'
 ++ date -u '+%Y-%m-%d %H:%M:%S UTC'
-=== EA Compilation 2026-03-03 19:39:12 UTC ===
---- Source files ---
-+ echo '=== EA Compilation 2026-03-03 19:39:12 UTC ==='
-+ echo '--- Source files ---'
-+ ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5' '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh' '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Dashboard.mqh' '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Guardian.mqh' '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/NewsFilter.mqh' '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Notifications.mqh' '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/RiskManager.mqh' '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/SignalEngine.mqh' '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/StatusWriter.mqh' '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeAnalyzer.mqh' '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeJournal.mqh' '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeManager.mqh'
-+ head -15
--rw-r--r-- 1 root root 15380 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh
--rw-r--r-- 1 root root 12411 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Dashboard.mqh
--rw-r--r-- 1 root root 22365 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Guardian.mqh
--rw-r--r-- 1 root root 10622 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/NewsFilter.mqh
--rw-r--r-- 1 root root 11971 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Notifications.mqh
--rw-r--r-- 1 root root 34556 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
--rw-r--r-- 1 root root 25422 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/RiskManager.mqh
--rw-r--r-- 1 root root 24680 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/SignalEngine.mqh
--rw-r--r-- 1 root root  8535 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/StatusWriter.mqh
--rw-r--r-- 1 root root 22240 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeAnalyzer.mqh
--rw-r--r-- 1 root root  9141 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeJournal.mqh
--rw-r--r-- 1 root root 14433 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeManager.mqh
+=== EA Compilation 2026-03-03 19:45:04 UTC ===
+--- Searching for MetaEditor ---
++ echo '=== EA Compilation 2026-03-03 19:45:04 UTC ==='
++ echo '--- Searching for MetaEditor ---'
++ find /root/.wine -name 'metaeditor*.exe' -type f
++ find /root/.wine -name 'MetaEditor*.exe' -type f
+/root/.wine/drive_c/Program Files/FundedNext MT5 Terminal/MetaEditor64.exe
+/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe
 
---- Current .ex5 ---
 + echo ''
-+ echo '--- Current .ex5 ---'
+--- Files in MT5 root ---
++ echo '--- Files in MT5 root ---'
++ ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe' '/root/.wine/drive_c/Program Files/MetaTrader 5/metatester64.exe' '/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe' '/root/.wine/drive_c/Program Files/MetaTrader 5/uninstall.exe'
+-rwxr-xr-x 1 root root 108233832 Mar  3 10:42 /root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe
+-rwxr-xr-x 1 root root  21243720 Mar  3 10:42 /root/.wine/drive_c/Program Files/MetaTrader 5/metatester64.exe
+-rwxr-xr-x 1 root root 110114264 Mar  3 10:42 /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
+-rwxr-xr-x 1 root root  22821632 Mar  3 18:41 /root/.wine/drive_c/Program Files/MetaTrader 5/uninstall.exe
+
+--- Current .ex5 state ---
++ echo ''
++ echo '--- Current .ex5 state ---'
 + ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5'
 -rw-r--r-- 1 root root 163174 Feb 27 08:11 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
-Before: size=163174 mtime=1772179915
+++ stat -c%Y '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5'
 
 --- Stopping MT5 ---
-++ stat -c%s '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5'
-+ BEFORE_SIZE=163174
-++ stat -c%Y '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5'
 + BEFORE_TIME=1772179915
-+ echo 'Before: size=163174 mtime=1772179915'
 + echo ''
 + echo '--- Stopping MT5 ---'
 + pkill -f terminal64
 + sleep 3
-+ pgrep -f terminal64
-MT5 stopped
-+ echo 'MT5 stopped'
-+ cp '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5' '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5.bak2'
-
---- Method 1: MetaEditor compile ---
-+ echo ''
-+ echo '--- Method 1: MetaEditor compile ---'
-MetaEditor not found!
++ EDITOR=
+++ find /root/.wine -name metaeditor64.exe -type f
+++ head -1
+++ find /root/.wine -name MetaEditor64.exe -type f
+++ head -1
+Found MetaEditor at: /root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe
++ for path in "$MT5/metaeditor64.exe" "$MT5/MetaEditor64.exe" "$MT5/metaeditor.exe" "$MT5/MetaEditor.exe" "/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe" $(find /root/.wine -name "metaeditor64.exe" -type f 2> /dev/null | head -1) $(find /root/.wine -name "MetaEditor64.exe" -type f 2> /dev/null | head -1)
 + '[' -f '/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe' ']'
-+ echo 'MetaEditor not found!'
-
---- Method 2: MT5 terminal compile ---
-+ echo ''
-+ echo '--- Method 2: MT5 terminal compile ---'
-++ stat -c%Y '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5'
-Trying via MT5 terminal...
-+ AFTER_TIME2=1772179915
-+ '[' 1772179915 -le 1772179915 ']'
-+ echo 'Trying via MT5 terminal...'
-+ cd '/root/.wine/drive_c/Program Files/MetaTrader 5'
-+ MT5_PID=1773365
-+ sleep 30
-+ timeout 60 wine terminal64.exe /portable
-+ kill 1773365
++ for path in "$MT5/metaeditor64.exe" "$MT5/MetaEditor64.exe" "$MT5/metaeditor.exe" "$MT5/MetaEditor.exe" "/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe" $(find /root/.wine -name "metaeditor64.exe" -type f 2> /dev/null | head -1) $(find /root/.wine -name "MetaEditor64.exe" -type f 2> /dev/null | head -1)
++ '[' -f '/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe' ']'
++ EDITOR='/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe'
++ echo 'Found MetaEditor at: /root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe'
++ break
+--- Compiling with MetaEditor ---
++ '[' -n '/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe' ']'
++ echo '--- Compiling with MetaEditor ---'
++ cd '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot'
++ timeout 45 wine '/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe' '/compile:/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5' /log
+0198:err:module:import_dll Library dbghelp.dll (which is needed by L"C:\\Program Files\\MetaTrader 5\\MetaEditor64.exe") not found
+0198:err:module:loader_init Importing dlls for L"C:\\Program Files\\MetaTrader 5\\MetaEditor64.exe" failed, status c0000135
 + sleep 3
-++ stat -c%s '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5'
-+ AFTER_SIZE2=163174
-++ stat -c%Y '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5'
-+ AFTER_TIME2=1772179915
-+ echo 'After Method 2: size=163174 mtime=1772179915'
-After Method 2: size=163174 mtime=1772179915
-Method 2 also failed
++ for logfile in "$EA_DIR/PropFirmBot.log" "$EA_DIR/"*.log
++ '[' -f '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.log' ']'
++ for logfile in "$EA_DIR/PropFirmBot.log" "$EA_DIR/"*.log
++ '[' -f '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/*.log' ']'
 
---- Starting MT5 ---
-+ '[' 1772179915 -gt 1772179915 ']'
-+ echo 'Method 2 also failed'
+--- Ensuring MT5 is running ---
 + echo ''
-+ echo '--- Starting MT5 ---'
-+ pkill -f terminal64
-+ true
-+ sleep 2
++ echo '--- Ensuring MT5 is running ---'
++ pgrep -f terminal64
 + cd '/root/.wine/drive_c/Program Files/MetaTrader 5'
 + disown
-+ sleep 8
 + nohup wine terminal64.exe
++ sleep 8
 + pgrep -f terminal64
 ++ pgrep -f terminal64
 ++ head -1
-MT5 started OK (PID: 1773572)
+MT5 running OK (PID: 1774771)
 
 --- Final .ex5 state ---
-+ echo 'MT5 started OK (PID: 1773572)'
++ echo 'MT5 running OK (PID: 1774771)'
 + echo ''
 + echo '--- Final .ex5 state ---'
 + ls -la '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5'
