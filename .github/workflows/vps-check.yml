@@ -5,11 +5,6 @@ on:
     paths:
       - '.github/workflows/vps-check.yml'
       - 'trigger-check.txt'
-      - 'scripts/remote_check.sh'
-      - 'scripts/deep_check.sh'
-      - 'scripts/connection_check.sh'
-      - 'scripts/network_check.sh'
-      - 'scripts/quick_check.sh'
       - 'scripts/verify_ea.sh'
   workflow_dispatch:
 
@@ -19,76 +14,56 @@ permissions:
 jobs:
   check-vps:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup SSH connection
-        env:
-          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
-          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-          INPUT_VPS_HOST: ${{ secrets.VPS_HOST }}
-          INPUT_VPS_IP: ${{ secrets.VPS_IP }}
-          INPUT_VPS_USER: ${{ secrets.VPS_USER }}
-          INPUT_VPS_PORT: ${{ secrets.VPS_PORT }}
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
+      - name: Install sshpass
+        run: sudo apt-get install -y -qq sshpass > /dev/null 2>&1
 
-          # Determine connection method: SSH Key or Password
-          if [ -n "$VPS_SSH_KEY" ]; then
-            echo "Using SSH Key authentication"
-            echo "$VPS_SSH_KEY" > ~/.ssh/vps_key
-            chmod 600 ~/.ssh/vps_key
-          elif [ -n "$VPS_PASSWORD" ]; then
-            echo "Using password authentication"
-            sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          else
-            echo "========================================="
-            echo "ERROR: No SSH credentials configured!"
-            echo ""
-            echo "Go to: GitHub repo → Settings → Secrets and variables → Actions"
-            echo "Add these secrets:"
-            echo "  VPS_PASSWORD = your VPS root password"
-            echo "  VPS_HOST     = your VPS IP address"
-            echo "========================================="
+      - name: Check VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+        run: |
+          if [ -z "$VPS_HOST" ] || [ -z "$VPS_PASSWORD" ]; then
+            echo "ERROR: VPS_HOST or VPS_PASSWORD secret is missing!"
+            echo "Go to: GitHub repo → Settings → Secrets → Actions"
+            echo "Add: VPS_HOST and VPS_PASSWORD"
             exit 1
           fi
 
-          # Determine host and user
-          VPS_HOST="${INPUT_VPS_HOST}"
-          [ -z "$VPS_HOST" ] && VPS_HOST="${INPUT_VPS_IP}"
-          if [ -z "$VPS_HOST" ]; then
-            echo "ERROR: VPS_HOST or VPS_IP secret is not set!"
-            exit 1
-          fi
-          VPS_USER="${INPUT_VPS_USER}"
-          [ -z "$VPS_USER" ] && VPS_USER="root"
-          VPS_PORT="${INPUT_VPS_PORT}"
-          [ -z "$VPS_PORT" ] && VPS_PORT="22"
+          echo "Connecting to ${VPS_HOST}..."
+          SSH="sshpass -p ${VPS_PASSWORD} ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=2 -p 22 root@${VPS_HOST}"
+          SCP="sshpass -p ${VPS_PASSWORD} scp -o StrictHostKeyChecking=no -P 22"
 
-          echo "VPS_HOST=${VPS_HOST}" >> $GITHUB_ENV
-          echo "VPS_USER=${VPS_USER}" >> $GITHUB_ENV
-          echo "VPS_PORT=${VPS_PORT}" >> $GITHUB_ENV
-          echo "Connection: ${VPS_USER}@${VPS_HOST}:${VPS_PORT}"
-
-      - name: Run VPS diagnostics
-        env:
-          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-        run: |
-          if [ -f ~/.ssh/vps_key ]; then
-            SSH="ssh -i ~/.ssh/vps_key -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}"
-            SCP="scp -i ~/.ssh/vps_key -o StrictHostKeyChecking=no -P ${VPS_PORT}"
-          else
-            SSH="sshpass -p ${VPS_PASSWORD} ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}"
-            SCP="sshpass -p ${VPS_PASSWORD} scp -o StrictHostKeyChecking=no -P ${VPS_PORT}"
-          fi
-
-          chmod +x scripts/remote_check.sh scripts/deep_check.sh scripts/verify_ea.sh 2>/dev/null || true
-          $SCP scripts/verify_ea.sh ${VPS_USER}@${VPS_HOST}:/tmp/check.sh
-          $SSH ${VPS_USER}@${VPS_HOST} "bash /tmp/check.sh" > vps_report.txt 2>&1
-          echo "EXIT_CODE=$?" >> vps_report.txt
+          chmod +x scripts/verify_ea.sh
+          $SCP scripts/verify_ea.sh root@${VPS_HOST}:/tmp/check.sh
+          $SSH "bash /tmp/check.sh" > vps_report.txt 2>&1 || true
           cat vps_report.txt
+
+      - name: Send Telegram notification
+        if: always()
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ -z "$TELEGRAM_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+            echo "Telegram secrets not configured, skipping notification"
+            exit 0
+          fi
+          STATUS="✅"
+          if grep -q "NOT RUNNING" vps_report.txt 2>/dev/null; then
+            STATUS="🔴"
+          fi
+          MSG="${STATUS} VPS Check $(date -u '+%H:%M UTC')
+          $(head -30 vps_report.txt 2>/dev/null || echo 'No report')"
+          # Telegram max message is 4096 chars
+          MSG="${MSG:0:4000}"
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
+            -d text="${MSG}" \
+            -d parse_mode="" > /dev/null 2>&1 || true
 
       - name: Commit report
         run: |
