@@ -1,27 +1,308 @@
-=== PropFirmBot | VIEW-BALANCE | 2026-03-03 11:28:51 UTC ===
+=== PropFirmBot | VIEW-TRADES | 2026-03-03 11:31:35 UTC ===
 
---- Account Info ---
-DP	0	10:43:48.477	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
+--- All EA Log Files ---
+-rw-r--r-- 1 root root    7826 Mar  3 10:44 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260303.log
+-rw-r--r-- 1 root root    7826 Mar  1 15:37 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260301.log
+-rw-r--r-- 1 root root   39122 Feb 28 18:34 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260228.log
+-rw-r--r-- 1 root root 2127586 Feb 27 21:59 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260227.log
+-rw-r--r-- 1 root root   36174 Feb 25 16:30 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260225.log
+-rw-r--r-- 1 root root  297152 Feb 24 22:15 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260224.log
+
+--- Trade History (last 10 days) ---
+
+=== 20260303 (3 trade entries) ===
+JN	0	10:43:48.477	PropFirmBot (EURUSD,M15)	[WARNING] Account balance still 0 after 20 attempts. Using configured size: $2000
 OO	0	10:43:48.480	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
 KD	0	10:43:48.480	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-NK	0	10:43:48.480	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-GL	0	10:43:48.480	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
 QK	0	10:43:48.480	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-KL	0	10:43:48.480	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
-QE	0	10:43:48.480	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
-MI	0	10:43:48.558	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.02.27 23:59:58] INIT | Bal=$2000.00 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
 PD	0	10:43:48.562	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260227.csv | Initial balance: $2000.00
 QF	0	10:43:48.562	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
-KG	0	10:43:48.562	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
 NI	0	10:43:48.562	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-DD	0	10:43:50.971	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-KI	0	10:43:51.152	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-grep: (standard input): binary file matches
+JG	0	10:43:48.562	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
 
---- Guardian Status ---
-MI	0	10:43:48.558	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.02.27 23:59:58] INIT | Bal=$2000.00 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-HJ	0	10:43:51.152	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+=== 20260301 (3 trade entries) ===
+FN	0	15:36:26.438	PropFirmBot (EURUSD,M15)	[WARNING] Account balance still 0 after 20 attempts. Using configured size: $2000
+RO	0	15:36:26.440	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+ND	0	15:36:26.440	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+PK	0	15:36:26.440	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+PD	0	15:36:26.482	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260227.csv | Initial balance: $2000.00
+RF	0	15:36:26.483	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+MI	0	15:36:26.483	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+IG	0	15:36:26.483	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
 
---- Trade Journal Files ---
+=== 20260228 (15 trade entries) ===
+IO	0	18:16:36.355	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+CR	0	18:16:36.355	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+CO	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260227.csv | Initial balance: $2000.00
+FM	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+IN	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+MN	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+GH	0	18:21:44.733	PropFirmBot (EURUSD,M15)	[WARNING] Account balance still 0 after 20 attempts. Using configured size: $2000
+DM	0	18:21:44.735	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+HF	0	18:21:44.735	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+FI	0	18:21:44.735	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+MF	0	18:21:44.776	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260227.csv | Initial balance: $2000.00
+LD	0	18:21:44.776	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+OG	0	18:21:44.776	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+CE	0	18:21:44.776	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+LS	0	18:27:22.419	PropFirmBot (EURUSD,M15)	[WARNING] Account balance still 0 after 20 attempts. Using configured size: $2000
+CD	0	18:27:22.420	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+GI	0	18:27:22.420	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+EP	0	18:27:22.420	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+MI	0	18:27:22.462	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260227.csv | Initial balance: $2000.00
+LK	0	18:27:22.462	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+OL	0	18:27:22.462	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+CL	0	18:27:22.462	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+HJ	0	18:33:16.299	PropFirmBot (EURUSD,M15)	[WARNING] Account balance still 0 after 20 attempts. Using configured size: $2000
+JS	0	18:33:16.300	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+FP	0	18:33:16.300	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+HO	0	18:33:16.300	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+PP	0	18:33:16.342	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260227.csv | Initial balance: $2000.00
+QR	0	18:33:16.342	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+NE	0	18:33:16.342	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=2000.00 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+JS	0	18:33:16.342	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+
+=== 20260227 (123 trade entries) ===
+EF	0	18:19:23.959	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=65774 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+DP	0	18:20:00.276	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=65776 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+EM	0	18:34:23.613	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=66773 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+PM	0	18:35:00.480	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=66796 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+DP	0	18:49:26.537	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=67591 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+JM	0	18:50:00.327	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=67590 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+GE	0	19:04:26.411	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=68374 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+ON	0	19:05:00.593	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=68389 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+EJ	0	19:19:34.354	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=68940 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+EJ	0	19:20:00.109	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=68961 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+QJ	0	19:34:40.135	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=69575 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+GO	0	19:35:00.397	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=69574 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+EN	0	19:49:40.715	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=70029 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+MG	0	19:50:00.596	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=70031 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+KQ	0	20:04:40.090	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=70509 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+RO	0	20:05:14.019	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=70512 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+NH	0	20:19:40.236	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=70900 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+FD	0	20:20:13.105	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=70925 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+EJ	0	20:34:43.354	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=71392 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+NM	0	20:35:16.269	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=71412 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+OQ	0	20:49:44.362	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=71828 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+HL	0	20:50:18.078	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=71860 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+OJ	0	21:04:44.086	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=73133 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+LF	0	21:05:31.803	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=73156 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+HK	0	21:19:47.498	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=73606 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+GI	0	21:20:31.148	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=73622 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+PE	0	21:34:49.536	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=73910 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+EQ	0	21:35:34.146	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=73924 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+GS	0	21:49:51.495	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=74292 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+GR	0	21:50:40.752	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=74317 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+
+=== 20260225 (22 trade entries) ===
+DM	0	15:58:22.228	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+DF	0	15:58:22.228	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+JJ	0	15:58:22.228	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+LF	0	15:58:22.228	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260225.csv | Initial balance: $1998.90
+KD	0	15:58:22.228	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+GG	0	15:58:22.229	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+IF	0	15:58:22.229	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+GE	0	15:58:22.358	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+IO	0	15:58:34.326	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] Reason=2 | Phase=FUNDED | Journal: Trades: 0 | Wins: 0 | Losses: 0 | WR: 0.0%
+RP	0	15:58:34.326	PropFirmBot (EURUSD,M15)	Gross Profit: $0.00 | Gross Loss: $0.00
+RS	0	15:58:34.508	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
+DG	0	15:58:34.508	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+HL	0	15:58:34.508	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+FL	0	15:58:34.508	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+OL	0	15:58:34.509	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260225.csv | Initial balance: $1998.90
+PN	0	15:58:34.509	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+KQ	0	15:58:34.509	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+IP	0	15:58:34.509	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+MK	0	15:58:34.724	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+CH	0	16:13:34.597	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2168 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+QH	0	16:28:38.078	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3468 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+IH	0	16:29:27.755	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
+FJ	0	16:29:27.756	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+RK	0	16:29:27.756	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+LG	0	16:29:27.756	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+OK	0	16:29:27.791	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260225.csv | Initial balance: $1998.90
+PI	0	16:29:27.791	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+CJ	0	16:29:27.791	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+QJ	0	16:29:27.791	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+QP	0	16:29:32.156	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+
+=== 20260224 (243 trade entries) ===
+QJ	0	21:54:47.089	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+FG	0	21:54:47.120	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260224.csv | Initial balance: $1998.90
+FE	0	21:54:47.120	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+QG	0	21:54:47.120	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+OF	0	21:54:47.120	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+QE	0	22:03:53.212	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
+HM	0	22:03:53.213	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+HF	0	22:03:53.213	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+FJ	0	22:03:53.213	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+MF	0	22:03:53.250	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260225.csv | Initial balance: $1998.90
+ND	0	22:03:53.250	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+IG	0	22:03:53.250	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+GF	0	22:03:53.250	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+NF	0	22:05:48.527	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
+DM	0	22:05:48.527	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+DF	0	22:05:48.527	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+JI	0	22:05:48.527	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+OF	0	22:05:48.555	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260225.csv | Initial balance: $1998.90
+PD	0	22:05:48.555	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+CD	0	22:05:48.555	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+EE	0	22:05:48.555	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+JF	0	22:13:14.208	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
+OL	0	22:13:14.209	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+OQ	0	22:13:14.209	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+MI	0	22:13:14.209	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+MQ	0	22:13:14.261	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260225.csv | Initial balance: $1998.90
+NS	0	22:13:14.261	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+ID	0	22:13:14.261	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+GE	0	22:13:14.261	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+JF	0	22:13:26.435	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+
+--- Terminal Trade Log (last 10 days) ---
+
+=== Terminal 20260303 (3 entries) ===
+PQ	0	10:43:10.873	Terminal	updating C:\Program Files\MetaTrader 5\MQL5 folder
+JS	0	10:43:15.129	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+OL	0	10:43:15.159	Terminal	C:\Program Files\MetaTrader 5
+
+=== Terminal 20260301 (2 entries) ===
+RJ	0	15:36:08.246	Terminal	MetaTrader 5 x64 build 5660 started for MetaQuotes Ltd.
+HK	0	15:36:08.247	Terminal	C:\Program Files\MetaTrader 5
+
+=== Terminal 20260228 (11 entries) ===
+IS	0	18:04:53.320	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+OL	0	18:04:53.323	Terminal	C:\Program Files\MetaTrader 5
+MS	0	18:16:18.144	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+EL	0	18:16:18.145	Terminal	C:\Program Files\MetaTrader 5
+RE	0	18:21:26.357	Terminal	updating C:\Program Files\MetaTrader 5\MQL5 folder
+GG	0	18:21:26.998	Terminal	MetaTrader 5 x64 build 5660 started for MetaQuotes Ltd.
+IP	0	18:21:26.999	Terminal	C:\Program Files\MetaTrader 5
+JG	0	18:27:04.508	Terminal	MetaTrader 5 x64 build 5660 started for MetaQuotes Ltd.
+HP	0	18:27:04.509	Terminal	C:\Program Files\MetaTrader 5
+JG	0	18:32:58.437	Terminal	MetaTrader 5 x64 build 5660 started for MetaQuotes Ltd.
+IP	0	18:32:58.442	Terminal	C:\Program Files\MetaTrader 5
+
+=== Terminal 20260227 (26 entries) ===
+JI	0	07:56:08.940	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+NJ	0	07:56:08.941	Terminal	C:\Program Files\MetaTrader 5
+JI	0	08:02:28.742	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+NJ	0	08:02:28.743	Terminal	C:\Program Files\MetaTrader 5
+LI	0	08:04:04.986	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+MJ	0	08:04:04.988	Terminal	C:\Program Files\MetaTrader 5
+QI	0	08:10:04.410	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+CJ	0	08:10:04.413	Terminal	C:\Program Files\MetaTrader 5
+PI	0	08:12:02.406	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+IJ	0	08:12:02.411	Terminal	C:\Program Files\MetaTrader 5
+OI	0	08:17:48.181	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+HJ	0	08:17:48.185	Terminal	C:\Program Files\MetaTrader 5
+OK	0	08:33:51.411	Startup	successfully initialized from start config "C:\Program Files\MetaTrader 5\config\startup.ini"
+JE	0	08:33:51.713	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+OF	0	08:33:51.715	Terminal	C:\Program Files\MetaTrader 5
+DL	0	08:33:51.715	Terminal	launched with C:\Program Files\MetaTrader 5\config\startup.ini
+LK	0	08:34:04.267	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+KG	0	08:34:12.450	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+GO	0	22:31:18.978	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+DK	0	22:31:19.016	Trades	use MetaTrader VPS Hosting Service to speed up the execution: 6.39 ms via 'VPS New York NY3 05' instead of 302.87 ms
+
+=== Terminal 20260226 (56 entries) ===
+IK	0	22:15:56.920	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+KD	0	22:15:56.923	Terminal	C:\Program Files\MetaTrader 5
+JE	0	22:22:08.515	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+OF	0	22:22:08.520	Terminal	C:\Program Files\MetaTrader 5
+MN	0	22:34:21.389	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+NO	0	22:34:21.390	Terminal	C:\Program Files\MetaTrader 5
+EN	0	22:38:28.924	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+MO	0	22:38:28.925	Terminal	C:\Program Files\MetaTrader 5
+GP	0	22:39:54.607	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+IQ	0	22:39:54.608	Terminal	C:\Program Files\MetaTrader 5
+GP	0	22:44:36.807	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+IQ	0	22:44:36.808	Terminal	C:\Program Files\MetaTrader 5
+NH	0	22:49:48.497	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+MI	0	22:49:48.497	Terminal	C:\Program Files\MetaTrader 5
+LR	0	22:50:39.765	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+GS	0	22:50:39.765	Terminal	C:\Program Files\MetaTrader 5
+LD	0	22:53:36.934	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+DE	0	22:53:36.935	Terminal	C:\Program Files\MetaTrader 5
+HN	0	22:56:58.683	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+KO	0	22:56:58.683	Terminal	C:\Program Files\MetaTrader 5
+
+=== Terminal 20260225 (13 entries) ===
+ÿþLO	0	15:54:20.325	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+NH	0	15:54:20.326	Terminal	C:\Program Files\MetaTrader 5
+QM	2	15:54:20.853	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+IL	0	15:54:24.422	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+GI	0	16:29:22.970	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+OI	0	16:29:22.971	Terminal	C:\Program Files\MetaTrader 5
+CN	2	16:29:23.565	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+OJ	0	16:29:27.594	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+DF	0	16:41:33.010	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+DF	0	16:41:33.011	Terminal	C:\Program Files\MetaTrader 5
+GS	2	16:41:33.584	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+OM	0	16:41:37.162	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+MN	0	18:20:34.047	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+
+=== Terminal 20260224 (987 entries) ===
+FN	2	22:11:47.711	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+RQ	0	22:11:51.836	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+JQ	0	22:11:51.837	Terminal	C:\Program Files\MetaTrader 5
+KF	2	22:11:52.477	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+EI	0	22:11:57.376	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+EI	0	22:11:57.377	Terminal	C:\Program Files\MetaTrader 5
+FN	2	22:11:57.925	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+LQ	0	22:12:07.553	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+JQ	0	22:12:07.554	Terminal	C:\Program Files\MetaTrader 5
+GG	2	22:12:08.185	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+FI	0	22:12:12.669	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+EJ	0	22:12:12.669	Terminal	C:\Program Files\MetaTrader 5
+QO	2	22:12:13.228	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+LR	0	22:12:28.996	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+QR	0	22:12:28.998	Terminal	C:\Program Files\MetaTrader 5
+HG	2	22:12:29.701	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+DJ	0	22:12:59.729	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+LJ	0	22:12:59.731	Terminal	C:\Program Files\MetaTrader 5
+QO	2	22:13:00.452	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+HK	0	22:13:12.481	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+
+=== Terminal 20260223 (29 entries) ===
+CI	2	07:39:11.266	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+NR	0	07:45:27.325	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+FS	0	07:45:27.328	Terminal	C:\Program Files\MetaTrader 5
+LH	2	07:45:27.917	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+JQ	0	07:50:05.644	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+RQ	0	07:50:05.645	Terminal	C:\Program Files\MetaTrader 5
+RF	2	07:50:06.202	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+NH	0	08:28:32.295	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+QH	0	08:28:32.301	Terminal	C:\Program Files\MetaTrader 5
+DM	2	08:28:32.933	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+FO	0	15:15:09.341	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+GH	0	15:15:09.343	Terminal	C:\Program Files\MetaTrader 5
+LM	2	15:15:10.638	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+QI	0	15:23:44.153	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+QJ	0	15:23:44.156	Terminal	C:\Program Files\MetaTrader 5
+GO	2	15:23:44.949	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+EK	0	15:38:34.215	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+GD	0	15:38:34.216	Terminal	C:\Program Files\MetaTrader 5
+CQ	2	15:38:34.940	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+GK	0	21:38:53.742	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+
+=== Terminal 20260222 (16 entries) ===
+KQ	0	18:29:34.694	Terminal	updating C:\Program Files\MetaTrader 5\MQL5 folder
+PR	0	18:29:35.577	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+JS	0	18:29:35.578	Terminal	C:\Program Files\MetaTrader 5
+PP	2	18:29:36.593	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+LI	0	21:05:19.672	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+OI	0	21:05:19.672	Terminal	C:\Program Files\MetaTrader 5
+NN	2	21:05:20.534	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+NO	0	21:10:39.926	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+FO	0	21:10:39.927	Terminal	C:\Program Files\MetaTrader 5
+CM	2	21:10:40.665	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+KH	0	22:02:36.298	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+OI	0	22:02:36.299	Terminal	C:\Program Files\MetaTrader 5
+FN	2	22:02:36.991	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+MS	0	22:38:02.391	Terminal	MetaTrader 5 x64 build 5640 started for MetaQuotes Ltd.
+OL	0	22:38:02.392	Terminal	C:\Program Files\MetaTrader 5
+HI	2	22:38:03.217	Terminal	please uninstall and download from https://www.metatrader5.com/en/download the latest version for Linux or Mac
+
+--- Trade Journal CSV Files ---
 
 === DONE ===
