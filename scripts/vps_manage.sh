@@ -113,7 +113,7 @@ case "$ACTION" in
     EALOG="$MT5/MQL5/Logs/${TODAY}.log"
     if [ -f "$EALOG" ]; then
         # Look for balance/equity info
-        cat "$EALOG" | tr -d '\0' | grep -i "balance\|equity\|profit\|drawdown\|DD\|account\|Bal=" | tail -15
+        cat "$EALOG" | tr -d '\0' | grep -ia "balance\|equity\|profit\|drawdown\|DD\|account\|Bal=" | tail -15
     else
         echo "No EA log for today - checking recent logs..."
         for i in 0 1 2 3; do
@@ -121,7 +121,7 @@ case "$ACTION" in
             LOGFILE="$MT5/MQL5/Logs/${LOGDATE}.log"
             if [ -f "$LOGFILE" ]; then
                 echo "From ${LOGDATE}:"
-                cat "$LOGFILE" | tr -d '\0' | grep -i "balance\|equity\|profit\|drawdown\|DD\|Bal=" | tail -10
+                cat "$LOGFILE" | tr -d '\0' | grep -ia "balance\|equity\|profit\|drawdown\|DD\|Bal=" | tail -10
                 break
             fi
         done
@@ -130,7 +130,7 @@ case "$ACTION" in
     echo ""
     echo "--- Guardian Status ---"
     if [ -f "$EALOG" ]; then
-        cat "$EALOG" | tr -d '\0' | grep -i "guardian\|GUARDIAN" | tail -5
+        cat "$EALOG" | tr -d '\0' | grep -ia "guardian\|GUARDIAN" | tail -5
     fi
 
     echo ""
