@@ -1,39 +1,46 @@
 #!/bin/bash
 # Restart MT5 with recompilation of EA
+# IMPORTANT: uses nohup to prevent SSH session from hanging
 echo "=== RESTART MT5 $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_DIR="$MT5/MQL5/Experts/PropFirmBot"
 
+export DISPLAY=:99
+export WINEPREFIX=/root/.wine
+
 echo "--- 1. Current state ---"
 ps aux | grep terminal64 | grep -v grep || echo "MT5 not running"
 echo ""
 
-echo "--- 2. Compile EA ---"
-cd "$EA_DIR"
-echo "Source files:"
-ls -la *.mq5 *.mqh 2>/dev/null | head -5
-echo "Current .ex5:"
-ls -la *.ex5 2>/dev/null
+echo "--- 2. Stop MT5 ---"
+pkill -f terminal64 2>/dev/null || true
+sleep 3
+if pgrep -f terminal64 > /dev/null 2>&1; then
+    echo "Force killing..."
+    pkill -9 -f terminal64
+    sleep 2
+fi
+echo "MT5 stopped"
+# Kill any leftover Wine processes from compilation
+pkill -f metaeditor 2>/dev/null || true
+pkill -f wineserver 2>/dev/null || true
+sleep 2
 echo ""
 
-# Try MetaEditor compilation
-export DISPLAY=:99
-export WINEPREFIX=/root/.wine
-wine "$MT5/metaeditor64.exe" /compile:"$EA_DIR/PropFirmBot.mq5" /log 2>/dev/null &
-COMPILER_PID=$!
-sleep 10
-kill $COMPILER_PID 2>/dev/null
-wait $COMPILER_PID 2>/dev/null
-
-echo "After MetaEditor compile:"
+echo "--- 3. Compile EA ---"
+echo "Source files (newest first):"
+ls -lt "$EA_DIR/"*.mq5 "$EA_DIR/"*.mqh 2>/dev/null | head -5
+echo "Current .ex5:"
 ls -la "$EA_DIR/"*.ex5 2>/dev/null
 echo ""
 
-echo "--- 3. Stop MT5 ---"
-pkill -f terminal64 2>/dev/null || true
-sleep 3
-pgrep -f terminal64 > /dev/null 2>&1 && { echo "Force killing..."; pkill -9 -f terminal64; sleep 2; } || echo "MT5 stopped"
+# Try MetaEditor compilation with timeout
+timeout 20 wine "$MT5/metaeditor64.exe" /compile:"$EA_DIR/PropFirmBot.mq5" /log 2>/dev/null || true
+sleep 2
+
+echo "After compile attempt:"
+ls -la "$EA_DIR/"*.ex5 2>/dev/null
 echo ""
 
 echo "--- 4. Ensure display is running ---"
@@ -53,12 +60,12 @@ else
 fi
 echo ""
 
-echo "--- 5. Start MT5 ---"
+echo "--- 5. Start MT5 (nohup) ---"
 cd "$MT5"
-DISPLAY=:99 WINEPREFIX=/root/.wine wine "$MT5/terminal64.exe" &
-MT5_PID=$!
-echo "MT5 started PID=$MT5_PID"
-sleep 15
+nohup wine "$MT5/terminal64.exe" > /dev/null 2>&1 &
+disown
+echo "MT5 launch command sent"
+sleep 20
 
 echo ""
 echo "--- 6. Verify ---"
@@ -66,7 +73,16 @@ if pgrep -f terminal64 > /dev/null 2>&1; then
     echo "MT5: RUNNING"
     ps aux | grep terminal64 | grep -v grep | awk '{printf "PID: %s | CPU: %s%% | MEM: %s%%\n", $2, $3, $4}'
 else
-    echo "MT5: NOT RUNNING - PROBLEM!"
+    echo "MT5: NOT RUNNING - attempting second start..."
+    nohup wine "$MT5/terminal64.exe" > /dev/null 2>&1 &
+    disown
+    sleep 15
+    if pgrep -f terminal64 > /dev/null 2>&1; then
+        echo "MT5: RUNNING (second attempt)"
+        ps aux | grep terminal64 | grep -v grep | awk '{printf "PID: %s | CPU: %s%% | MEM: %s%%\n", $2, $3, $4}'
+    else
+        echo "MT5: FAILED TO START"
+    fi
 fi
 
 echo ""
@@ -74,13 +90,18 @@ echo "Outbound connections:"
 ss -tn state established 2>/dev/null | grep -v ":22 \|:5900 \|:53 " | head -5
 
 echo ""
-echo "EA .ex5 status:"
+echo "EA .ex5:"
 ls -la "$EA_DIR/"*.ex5 2>/dev/null
 
 echo ""
-echo "Terminal log (last 10 lines):"
+echo "Terminal log (last 15 lines):"
 TLOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
-[ -n "$TLOG" ] && cat "$TLOG" | tr -d '\0' | tail -10
+[ -n "$TLOG" ] && cat "$TLOG" | tr -d '\0' | tail -15
+
+echo ""
+echo "EA log (last 10 lines):"
+EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+[ -n "$EALOG" ] && cat "$EALOG" | tr -d '\0' | tail -10
 
 echo ""
 echo "=== RESTART DONE ==="
