@@ -1,14 +1,14 @@
-=== VERIFY 2026-03-03 13:12:34 UTC ===
+=== VERIFY 2026-03-03 21:49:07 UTC ===
 --- MT5 Process ---
-root     1640853 87.5  2.7 1683732 223348 ?      R<l  12:14  50:48 C:\Program Files\MetaTrader 5\terminal64.exe
+root     1793844  0.0  0.1 2686336 14088 ?       S<   21:23   0:00 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe /login:11797849 /password:gazDE62##
+root     1793921 16.1  2.7 1755116 223348 ?      S<l  21:23   4:06 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
 
 --- Outbound Connections ---
 Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
-0      0       77.237.234.2:37600  13.226.155.107:443         
-0      0       77.237.234.2:45746    34.120.3.201:443         
-0      0       77.237.234.2:37861   18.168.91.222:443         
-0      0       77.237.234.2:46016   13.226.155.13:443         
-0      0       77.237.234.2:57596 194.164.179.244:443         
+0      0       77.237.234.2:35672   13.226.155.45:443         
+0      0       77.237.234.2:39842   13.226.155.45:443         
+0      0       77.237.234.2:34452 194.164.179.244:443         
+0      0       77.237.234.2:36571   18.168.91.222:443         
 
 --- Terminal Log (latest) ---
 Size: 21582 bytes
@@ -41,7 +41,7 @@ QD	0	22:46:37.424	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 --- EA Log Today ---
 No EA log for today
 Latest EA log:
--rw-r--r-- 1 root root   28592 Mar  3 13:00 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260303.log
+-rw-r--r-- 1 root root  156044 Mar  3 21:45 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260303.log
 -rw-r--r-- 1 root root    7826 Mar  1 15:37 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260301.log
 -rw-r--r-- 1 root root   39122 Feb 28 18:34 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260228.log
 
