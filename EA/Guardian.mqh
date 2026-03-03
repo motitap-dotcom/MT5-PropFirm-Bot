@@ -115,7 +115,7 @@ public:
    ENUM_GUARDIAN_STATE GetState()      { return m_state; }
    ENUM_HALT_REASON GetHaltReason()    { return m_halt_reason; }
    string   GetHaltMessage()           { return m_halt_message; }
-   bool     CanTrade()                 { return m_state == GUARDIAN_ACTIVE; }
+   bool     CanTrade()                 { return m_state <= GUARDIAN_CAUTION; }
    bool     MustCloseAll()             { return m_state >= GUARDIAN_EMERGENCY; }
    bool     IsDead()                   { return m_state == GUARDIAN_SHUTDOWN; }
    bool     IsCaution()                { return m_state == GUARDIAN_CAUTION; }
@@ -165,7 +165,7 @@ CGuardian::CGuardian()
    m_daily_trade_count = 0;
    m_max_equity_drop_pct = 2.0;
    m_last_tick_time = 0;
-   m_tick_gap_limit_sec = 120;
+   m_tick_gap_limit_sec = 300;
    m_conn_failures = 0;
    m_conn_healthy = true;
    m_magic = 0;
