@@ -13,11 +13,11 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy EA files to VPS
+      - name: Upload files to VPS
         env:
           VPS_IP: ${{ secrets.VPS_IP }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
@@ -25,76 +25,57 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
 
-          # Create a tar archive of EA and config files
+          # Create tar archive
           tar czf /tmp/ea_deploy.tar.gz EA/ configs/
+          echo "Archive size: $(ls -la /tmp/ea_deploy.tar.gz | awk '{print $5}') bytes"
 
-          # Upload archive to VPS
-          echo "=== Uploading EA archive to VPS ==="
-          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no /tmp/ea_deploy.tar.gz ${VPS_USER}@${VPS_IP}:/tmp/ea_deploy.tar.gz
+          # Upload to VPS
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no -o ConnectTimeout=10 /tmp/ea_deploy.tar.gz ${VPS_USER}@${VPS_IP}:/tmp/ea_deploy.tar.gz
+          echo "Upload complete"
 
-          # Deploy on VPS via SSH
-          echo "=== Deploying on VPS ==="
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} << 'REMOTE_SCRIPT'
-            set -e
-            export DISPLAY=:99
+      - name: Deploy and restart on VPS
+        env:
+          VPS_IP: ${{ secrets.VPS_IP }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 -o ServerAliveInterval=5 ${VPS_USER}@${VPS_IP} 'bash -s' << 'ENDSSH'
+          set -x
+          export DISPLAY=:99
 
-            MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
-            EA_DIR="$MT5_DIR/MQL5/Experts/PropFirmBot"
-            CONFIG_DIR="$MT5_DIR/MQL5/Files/PropFirmBot"
+          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+          EA_DIR="$MT5/MQL5/Experts/PropFirmBot"
+          CFG_DIR="$MT5/MQL5/Files/PropFirmBot"
 
-            # Extract archive
-            cd /tmp
-            tar xzf ea_deploy.tar.gz
+          # Extract uploaded archive
+          cd /tmp && tar xzf ea_deploy.tar.gz
 
-            # Copy EA files
-            echo "--- Copying EA files ---"
-            mkdir -p "$EA_DIR"
-            cp -v /tmp/EA/*.mq5 "$EA_DIR/" 2>/dev/null || true
-            cp -v /tmp/EA/*.mqh "$EA_DIR/" 2>/dev/null || true
-            echo "EA files copied: $(ls "$EA_DIR"/*.mq5 "$EA_DIR"/*.mqh 2>/dev/null | wc -l) files"
+          # Copy files
+          cp -v /tmp/EA/*.mq5 "$EA_DIR/" 2>/dev/null
+          cp -v /tmp/EA/*.mqh "$EA_DIR/" 2>/dev/null
+          cp -v /tmp/configs/*.json "$CFG_DIR/" 2>/dev/null
 
-            # Copy config files
-            echo "--- Copying config files ---"
-            mkdir -p "$CONFIG_DIR"
-            cp -v /tmp/configs/*.json "$CONFIG_DIR/" 2>/dev/null || true
-            echo "Config files copied: $(ls "$CONFIG_DIR"/*.json 2>/dev/null | wc -l) files"
+          # Compile EA (with 30s timeout to avoid hanging)
+          echo "=== Compiling ==="
+          cd "$EA_DIR"
+          timeout 30 wine "$MT5/metaeditor64.exe" /compile:PropFirmBot.mq5 /log 2>/dev/null || echo "Compile timeout/error (continuing anyway)"
+          sleep 2
+          ls -la PropFirmBot.ex5 2>/dev/null
 
-            # Recompile EA
-            echo "--- Recompiling EA ---"
-            METAEDITOR="$MT5_DIR/metaeditor64.exe"
-            if [ -f "$METAEDITOR" ]; then
-              cd "$EA_DIR"
-              WINEPREFIX=/root/.wine wine "$METAEDITOR" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
-              sleep 5
-              if [ -f "$EA_DIR/PropFirmBot.ex5" ]; then
-                echo "Compiled: $(ls -la "$EA_DIR/PropFirmBot.ex5")"
-              else
-                echo "WARNING: ex5 file not found after compilation"
-              fi
-            else
-              echo "WARNING: MetaEditor not found at $METAEDITOR"
-            fi
+          # Restart MT5
+          echo "=== Restarting MT5 ==="
+          pkill -f terminal64 2>/dev/null || true
+          sleep 2
+          cd "$MT5"
+          nohup wine terminal64.exe > /dev/null 2>&1 &
+          disown
+          sleep 5
+          pgrep -f terminal64 > /dev/null && echo "MT5_OK" || echo "MT5_FAIL"
 
-            # Restart MT5 to reload the EA
-            echo "--- Restarting MT5 ---"
-            pkill -f terminal64 2>/dev/null || true
-            sleep 3
-            cd "$MT5_DIR"
-            WINEPREFIX=/root/.wine wine terminal64.exe &
-            sleep 10
-
-            if pgrep -f terminal64 > /dev/null 2>&1; then
-              echo "MT5 restarted successfully"
-              ps aux | grep terminal64 | grep -v grep
-            else
-              echo "ERROR: MT5 failed to restart"
-            fi
-
-            # Cleanup
-            rm -rf /tmp/EA /tmp/configs /tmp/ea_deploy.tar.gz
-
-            echo "=== Deploy complete ==="
-          REMOTE_SCRIPT
+          # Cleanup
+          rm -rf /tmp/EA /tmp/configs /tmp/ea_deploy.tar.gz
+          echo "=== DONE ==="
+          ENDSSH
 
       - name: Send Telegram notification
         if: always()
@@ -103,11 +84,6 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           STATUS="${{ job.status }}"
-          if [ "$STATUS" = "success" ]; then
-            MSG="✅ EA v3.10 deployed to VPS - signal diagnostics + wider spreads active"
-          else
-            MSG="❌ EA deployment failed - check GitHub Actions logs"
-          fi
+          [ "$STATUS" = "success" ] && MSG="✅ EA v3.10 deployed - diagnostics active" || MSG="❌ Deploy failed"
           curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-            -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d text="${MSG}" > /dev/null 2>&1 || true
+            -d chat_id="${TELEGRAM_CHAT_ID}" -d text="${MSG}" > /dev/null 2>&1 || true
