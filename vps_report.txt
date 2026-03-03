@@ -1,8 +1,8 @@
-=== FULL STATUS CHECK 2026-03-03 18:34:49 UTC ===
+=== FULL STATUS CHECK 2026-03-03 19:36:27 UTC ===
 
 --- MT5 Process ---
-STATUS: RUNNING (PID 1676354)
-CPU: 71.9% | RAM: 2.3% | Uptime: 04:42:48
+STATUS: RUNNING (PID 1772352)
+CPU: 42.4% | RAM: 2.7% | Uptime: 01:13
 
 --- VNC & Display ---
 Xvfb: RUNNING
@@ -10,11 +10,11 @@ VNC: RUNNING
 
 --- Outbound Connections ---
 Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
-0      0       77.237.234.2:56390   13.226.155.59:443         
-0      0       77.237.234.2:46667   18.168.91.222:443         
-0      0       77.237.234.2:8080   130.12.180.107:46028       
-0      0       77.237.234.2:33048 194.164.179.244:443         
-0      0       77.237.234.2:43234   13.226.155.59:443         
+0      0       77.237.234.2:34518  13.226.155.107:443         
+0      0       77.237.234.2:55674   13.226.155.13:443         
+0      0       77.237.234.2:33305   18.168.91.222:443         
+0      0       77.237.234.2:50132 149.154.166.110:443         
+0      0       77.237.234.2:43936 194.164.179.244:443         
 
 --- Terminal Log (latest) ---
 No terminal logs found
@@ -22,69 +22,69 @@ No terminal logs found
 --- EA Log ---
 basename: extra operand ‘5/MQL5/Logs/20260303.log’
 Try 'basename --help' for more information.
-File:  | Size: 62282 bytes
+File:  | Size: 90498 bytes
 --- Last 50 lines ---
-DO	0	15:07:21.080	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=21804 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-KO	0	15:15:00.060	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 17:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-HQ	0	15:15:00.060	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-IL	0	15:22:21.366	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=28273 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-LP	0	15:30:00.168	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 17:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-FL	0	15:30:00.168	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-EH	0	15:37:21.354	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=34637 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-ND	0	15:45:00.137	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 17:45 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-FH	0	15:45:00.137	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-CE	0	15:52:21.608	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=40613 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-QI	0	16:00:00.253	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 18:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-MK	0	16:00:00.258	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 5 relevant events from calendar
-FS	0	16:00:00.258	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-HM	0	16:07:22.480	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=45538 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-CQ	0	16:15:00.345	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 18:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-DO	0	16:15:00.346	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-HJ	0	16:22:23.016	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=50186 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-PR	0	16:30:00.632	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 18:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-KJ	0	16:30:00.632	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-JF	0	16:37:22.767	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=54948 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-EF	0	16:45:00.312	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 18:45 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-HF	0	16:45:00.312	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-CS	0	16:52:22.117	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=61187 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-JF	0	17:00:00.202	PropFirmBot (EURUSD,M15)	[JOURNAL] [ANALYSIS] Trades: 0 | Risk Adj: 100%
-NO	0	17:00:00.203	PropFirmBot (EURUSD,M15)	Blocked: 0 symbols
-CI	0	17:00:00.203	PropFirmBot (EURUSD,M15)	SMC: 0 trades WR=0% PF=0.00
-GQ	0	17:00:00.203	PropFirmBot (EURUSD,M15)	EMA: 0 trades WR=0% PF=0.00
-LJ	0	17:00:00.203	PropFirmBot (EURUSD,M15)	London: WR=0% | NY: WR=0%
-RM	0	17:00:00.421	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 19:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-QO	0	17:00:00.422	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 5 relevant events from calendar
-IO	0	17:00:00.423	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-DI	0	17:07:22.136	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=66440 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-FE	0	17:15:00.416	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 19:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-OJ	0	17:15:00.416	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-CF	0	17:22:22.169	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=70047 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-RF	0	17:30:00.124	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 19:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-JF	0	17:30:00.124	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-CR	0	17:37:22.122	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=73614 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-KJ	0	17:45:00.080	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 19:45 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-EE	0	17:45:00.080	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-OO	0	17:52:24.216	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=76751 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-LO	0	18:00:00.062	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 20:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-CM	0	18:00:00.063	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 5 relevant events from calendar
-LM	0	18:00:00.063	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-FG	0	18:07:24.130	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=79407 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-LG	0	18:15:00.095	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 20:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-OH	0	18:15:00.095	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-MD	0	18:22:24.344	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=81056 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
-KH	0	18:30:00.207	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 20:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-MD	0	18:30:00.207	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+CD	0	19:15:01.503	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 21:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+KH	0	19:15:01.503	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+KF	0	19:16:50.097	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3526 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+QI	0	19:30:00.160	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 21:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+HG	0	19:30:00.160	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+HR	0	19:31:51.612	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=5157 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+CP	0	19:35:22.272	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
+HM	0	19:35:22.275	PropFirmBot (EURUSD,M15)	==============================================
+OL	0	19:35:22.275	PropFirmBot (EURUSD,M15)	  PropFirmBot v3.0 - FULL TRADING SYSTEM
+DK	0	19:35:22.275	PropFirmBot (EURUSD,M15)	  ALL MODULES ACTIVE
+JS	0	19:35:22.275	PropFirmBot (EURUSD,M15)	==============================================
+OG	0	19:35:22.275	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1998.90 (after 0 waits)
+JD	0	19:35:22.275	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+MP	0	19:35:22.275	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
+FL	0	19:35:22.275	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
+HS	0	19:35:22.276	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+HP	0	19:35:22.276	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
+IG	0	19:35:22.276	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+PP	0	19:35:22.276	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
+FO	0	19:35:22.276	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
+DH	0	19:35:22.276	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
+JQ	0	19:35:22.276	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
+JJ	0	19:35:22.276	PropFirmBot (EURUSD,M15)	Target: NO TARGET
+NN	0	19:35:22.276	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
+QE	0	19:35:22.327	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.03 21:35:22] INIT | Bal=$1998.90 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+NP	0	19:35:22.330	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260303.csv | Initial balance: $1998.90
+RR	0	19:35:22.330	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+RK	0	19:35:22.330	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+ER	0	19:35:22.330	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.90 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+CS	0	19:35:22.330	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+LI	0	19:35:22.330	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+KH	0	19:35:22.788	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
+MS	0	19:35:22.788	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
+IR	0	19:35:22.788	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+HP	0	19:35:22.788	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+RP	0	19:35:22.788	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+LG	0	19:35:22.794	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+DH	0	19:35:22.794	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+PG	0	19:35:22.934	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+IM	0	19:35:22.934	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+DG	0	19:35:22.934	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+QN	0	19:35:22.934	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+QK	0	19:35:22.934	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+EM	0	19:35:22.934	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+OD	0	19:35:22.934	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+OL	0	19:35:22.934	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+KP	0	19:35:22.934	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+PH	0	19:35:22.934	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+RG	0	19:35:22.935	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 21:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+OH	0	19:35:22.935	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 
 --- Trade/Signal activity ---
 Trade entries: 0 | Signal entries: 0 | Guardian entries: 0
 --- Recent signals/trades ---
 
 --- EA Status JSON ---
-Last updated: 2026-03-03 18:34:45 (4s ago)
+Last updated: 2026-03-03 19:36:22 (5s ago)
 {
-  "timestamp": "2026.03.03 20:34:45",
-  "server_time": "2026.03.03 20:34:45",
-  "gmt_time": "2026.03.03 18:34:45",
+  "timestamp": "2026.03.03 21:36:22",
+  "server_time": "2026.03.03 21:36:22",
+  "gmt_time": "2026.03.03 19:36:22",
   "account": {
     "number": 11797849,
     "name": "FundedNext-Stellar Instant Account- moti tapiro",
@@ -123,41 +123,41 @@ Last updated: 2026-03-03 18:34:45 (4s ago)
   }
 }
 --- Config Files ---
--rw-r--r-- 1 root root 1620 Mar  3 12:14 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/account_state.json
--rw-r--r-- 1 root root 1469 Mar  3 12:14 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/challenge_rules.json
--rw-r--r-- 1 root root 1336 Mar  3 12:14 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/funded_rules.json
--rw-r--r-- 1 root root 1159 Mar  3 12:14 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/notifications.json
--rw-r--r-- 1 root root 1805 Mar  3 12:14 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/risk_params.json
--rw-r--r-- 1 root root  904 Mar  3 18:34 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/status.json
--rw-r--r-- 1 root root 1244 Mar  3 12:14 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/symbols.json
+-rw-r--r-- 1 root root 1620 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/account_state.json
+-rw-r--r-- 1 root root 1469 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/challenge_rules.json
+-rw-r--r-- 1 root root 1336 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/funded_rules.json
+-rw-r--r-- 1 root root 1159 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/notifications.json
+-rw-r--r-- 1 root root 1805 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/risk_params.json
+-rw-r--r-- 1 root root  904 Mar  3 19:36 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/status.json
+-rw-r--r-- 1 root root 1244 Mar  3 19:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/symbols.json
 
 --- Trade Journal ---
 No trade journal found
 
 --- EA Files ---
-total 560
+total 564
 drwxr-xr-x 2 root root   4096 Feb 28 18:26 .
 drwxr-xr-x 6 root root   4096 Feb 26 21:55 ..
--rw-r--r-- 1 root root  15380 Mar  3 12:14 AccountStateManager.mqh
--rw-r--r-- 1 root root  12411 Mar  3 12:14 Dashboard.mqh
--rw-r--r-- 1 root root  22365 Mar  3 12:14 Guardian.mqh
--rw-r--r-- 1 root root  10622 Mar  3 12:14 NewsFilter.mqh
--rw-r--r-- 1 root root  11971 Mar  3 12:14 Notifications.mqh
+-rw-r--r-- 1 root root  15380 Mar  3 19:35 AccountStateManager.mqh
+-rw-r--r-- 1 root root  12411 Mar  3 19:35 Dashboard.mqh
+-rw-r--r-- 1 root root  22365 Mar  3 19:35 Guardian.mqh
+-rw-r--r-- 1 root root  10622 Mar  3 19:35 NewsFilter.mqh
+-rw-r--r-- 1 root root  11971 Mar  3 19:35 Notifications.mqh
 -rw-r--r-- 1 root root 163174 Feb 27 08:11 PropFirmBot.ex5
 -rw-r--r-- 1 root root 163174 Feb 28 18:32 PropFirmBot.ex5.bak
--rw-r--r-- 1 root root  35475 Mar  3 12:14 PropFirmBot.mq5
--rw-r--r-- 1 root root  25422 Mar  3 12:14 RiskManager.mqh
--rw-r--r-- 1 root root  23087 Mar  3 12:14 SignalEngine.mqh
--rw-r--r-- 1 root root   8535 Mar  3 12:14 StatusWriter.mqh
--rw-r--r-- 1 root root  22240 Mar  3 12:14 TradeAnalyzer.mqh
--rw-r--r-- 1 root root   9141 Mar  3 12:14 TradeJournal.mqh
--rw-r--r-- 1 root root  14433 Mar  3 12:14 TradeManager.mqh
+-rw-r--r-- 1 root root  34556 Mar  3 19:35 PropFirmBot.mq5
+-rw-r--r-- 1 root root  25422 Mar  3 19:35 RiskManager.mqh
+-rw-r--r-- 1 root root  24680 Mar  3 19:35 SignalEngine.mqh
+-rw-r--r-- 1 root root   8535 Mar  3 19:35 StatusWriter.mqh
+-rw-r--r-- 1 root root  22240 Mar  3 19:35 TradeAnalyzer.mqh
+-rw-r--r-- 1 root root   9141 Mar  3 19:35 TradeJournal.mqh
+-rw-r--r-- 1 root root  14433 Mar  3 19:35 TradeManager.mqh
 PropFirmBot.ex5: 163174 bytes, compiled: 2026-02-27 08:11:55
 
 --- System Health ---
-Uptime: up 1 week, 2 days, 6 hours, 24 minutes
-Load: 0.93 0.96 1.03
-Memory: 1389MB / 7941MB (17%)
+Uptime: up 1 week, 2 days, 7 hours, 25 minutes
+Load: 0.79 0.72 1.58
+Memory: 1252MB / 7941MB (15%)
 Disk: 12% used, 129G free
 
 --- Wine Version ---
