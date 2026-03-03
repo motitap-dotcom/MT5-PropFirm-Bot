@@ -169,15 +169,30 @@ int OnInit()
    Print("==============================================");
 
    // Wait for account data to load (common issue with Wine/MT5)
+   // Use exponential backoff: 500ms, 1s, 1.5s, 2s... up to 60 seconds total
    int wait_attempts = 0;
-   while(AccountInfoDouble(ACCOUNT_BALANCE) <= 0 && wait_attempts < 20)
+   int max_attempts = 40;
+   while(AccountInfoDouble(ACCOUNT_BALANCE) <= 0 && wait_attempts < max_attempts)
    {
-      Sleep(500);
+      int sleep_ms = 500 + (wait_attempts * 250); // 500ms → 10.25s per attempt
+      if(sleep_ms > 3000) sleep_ms = 3000;        // Cap at 3 seconds
+      Sleep(sleep_ms);
       wait_attempts++;
+      if(wait_attempts % 10 == 0)
+         PrintFormat("[INIT] Waiting for account data... attempt %d/%d (balance=%.2f, equity=%.2f)",
+                     wait_attempts, max_attempts,
+                     AccountInfoDouble(ACCOUNT_BALANCE),
+                     AccountInfoDouble(ACCOUNT_EQUITY));
    }
    if(AccountInfoDouble(ACCOUNT_BALANCE) <= 0)
+   {
       PrintFormat("[WARNING] Account balance still 0 after %d attempts. Using configured size: $%.0f",
                   wait_attempts, InpAccountSize);
+      PrintFormat("[WARNING] Account login: %d | Server: %s | Trade allowed: %s",
+                  (int)AccountInfoInteger(ACCOUNT_LOGIN),
+                  AccountInfoString(ACCOUNT_SERVER),
+                  AccountInfoInteger(ACCOUNT_TRADE_ALLOWED) ? "YES" : "NO");
+   }
    else
       PrintFormat("[INIT] Account balance loaded: $%.2f (after %d waits)",
                   AccountInfoDouble(ACCOUNT_BALANCE), wait_attempts);
@@ -357,12 +372,14 @@ void OnTick()
    {
       double eq = AccountInfoDouble(ACCOUNT_EQUITY);
       double bal = AccountInfoDouble(ACCOUNT_BALANCE);
-      PrintFormat("[HEARTBEAT] Ticks=%d | State=%s | Bal=$%.2f | Eq=$%.2f | DD=%.2f%% | Positions=%d",
+      PrintFormat("[HEARTBEAT] Ticks=%d | State=%s | Bal=$%.2f | Eq=$%.2f | DD=%.2f%% | Positions=%d | Login=%d | TradeOK=%s",
                   g_tick_count,
                   EnumToString(g_guardian.GetState()),
                   bal, eq,
                   g_guardian.TotalDD(),
-                  g_trade.CountOpenPositions());
+                  g_trade.CountOpenPositions(),
+                  (int)AccountInfoInteger(ACCOUNT_LOGIN),
+                  AccountInfoInteger(ACCOUNT_TRADE_ALLOWED) ? "YES" : "NO");
       g_last_heartbeat = TimeCurrent();
    }
 
