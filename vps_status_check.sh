@@ -160,6 +160,86 @@ echo ""
 echo "━━━ 10. Network Status ━━━"
 echo "   Internet: $(ping -c 1 -W 2 8.8.8.8 > /dev/null 2>&1 && echo '✅ OK' || echo '❌ NO INTERNET')"
 echo "   DNS: $(ping -c 1 -W 2 google.com > /dev/null 2>&1 && echo '✅ OK' || echo '❌ DNS FAILED')"
+echo "   MT5 Connections:"
+ss -tn state established 2>/dev/null | grep -v ":22 \|:5900 \|:53 " | while IFS= read -r line; do
+    echo "   $line"
+done
+echo ""
+
+# 11. MT5 Server Authorization (check terminal log)
+echo "━━━ 11. MT5 Server Authorization ━━━"
+TERM_LOG_DIR="$MT5_DIR/logs"
+if [ -d "$TERM_LOG_DIR" ]; then
+    TERM_LOG=$(ls -t "$TERM_LOG_DIR"/*.log 2>/dev/null | head -1)
+    if [ -n "$TERM_LOG" ]; then
+        echo "   Terminal log: $(basename $TERM_LOG) ($(stat -c%s "$TERM_LOG") bytes)"
+        # Check authorization status
+        LAST_AUTH=$(grep -i "authorized\|authorization.*failed\|Invalid account" "$TERM_LOG" 2>/dev/null | tr -d '\0' | tail -3)
+        if [ -n "$LAST_AUTH" ]; then
+            echo "   --- Last auth messages ---"
+            echo "$LAST_AUTH" | while IFS= read -r line; do echo "   $line"; done
+        fi
+        # Check trading status
+        TRADE_STATUS=$(grep -i "trading has been\|automated trading\|automat" "$TERM_LOG" 2>/dev/null | tr -d '\0' | tail -3)
+        if [ -n "$TRADE_STATUS" ]; then
+            echo "   --- Trading status ---"
+            echo "$TRADE_STATUS" | while IFS= read -r line; do echo "   $line"; done
+        fi
+        # Check positions/orders
+        POS_INFO=$(grep -i "positions\|orders\|synchronized" "$TERM_LOG" 2>/dev/null | tr -d '\0' | tail -3)
+        if [ -n "$POS_INFO" ]; then
+            echo "   --- Positions/Orders ---"
+            echo "$POS_INFO" | while IFS= read -r line; do echo "   $line"; done
+        fi
+        echo "   --- Last 15 terminal log lines ---"
+        cat "$TERM_LOG" | tr -d '\0' | tail -15 | while IFS= read -r line; do
+            echo "   $line"
+        done
+    fi
+fi
+echo ""
+
+# 12. Summary
+echo "━━━ 12. QUICK SUMMARY ━━━"
+# MT5 running?
+if pgrep -f "terminal64" > /dev/null 2>&1; then
+    echo "   MT5 Process:     ✅ RUNNING"
+else
+    echo "   MT5 Process:     ❌ NOT RUNNING"
+fi
+# Server connected?
+if [ -n "$TERM_LOG" ]; then
+    LAST_AUTH_LINE=$(grep -i "authorized\|authorization.*failed" "$TERM_LOG" 2>/dev/null | tr -d '\0' | tail -1)
+    if echo "$LAST_AUTH_LINE" | grep -qi "authorized on"; then
+        echo "   Server:          ✅ CONNECTED"
+    else
+        echo "   Server:          ❌ DISCONNECTED or FAILED"
+    fi
+fi
+# AutoTrading?
+if [ -n "$TERM_LOG" ]; then
+    LAST_AT=$(grep -i "automated trading\|automat" "$TERM_LOG" 2>/dev/null | tr -d '\0' | tail -1)
+    if echo "$LAST_AT" | grep -qi "enabled"; then
+        echo "   AutoTrading:     ✅ ENABLED"
+    elif echo "$LAST_AT" | grep -qi "disabled"; then
+        echo "   AutoTrading:     ❌ DISABLED"
+    else
+        echo "   AutoTrading:     ⚠️  UNKNOWN"
+    fi
+fi
+# EA loaded?
+if [ -n "$LATEST_LOG" ] 2>/dev/null; then
+    LAST_EA=$(grep -i "PropFirmBot.*loaded\|PropFirmBot.*removed\|PropFirmBot.*failed" "$LATEST_LOG" 2>/dev/null | tr -d '\0' | tail -1)
+    if echo "$LAST_EA" | grep -qi "loaded successfully"; then
+        echo "   EA Status:       ✅ LOADED"
+    elif echo "$LAST_EA" | grep -qi "removed"; then
+        echo "   EA Status:       ⚠️  REMOVED (reloading?)"
+    elif echo "$LAST_EA" | grep -qi "failed"; then
+        echo "   EA Status:       ❌ FAILED"
+    else
+        echo "   EA Status:       ⚠️  UNKNOWN"
+    fi
+fi
 echo ""
 
 echo "╔══════════════════════════════════════════════════╗"
