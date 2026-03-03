@@ -1,52 +1,116 @@
-=== VERIFY 2026-03-03 13:12:34 UTC ===
---- MT5 Process ---
-root     1640853 87.5  2.7 1683732 223348 ?      R<l  12:14  50:48 C:\Program Files\MetaTrader 5\terminal64.exe
+=== PROPFIRMBOT STATUS 2026-03-03 13:31:54 UTC ===
 
---- Outbound Connections ---
+━━━ MT5 PROCESS ━━━
+STATUS: RUNNING
+PID: 1640853 | CPU: 87.2% | MEM: 2.7% | Since: 12:14 67:31
+
+━━━ VNC ━━━
+VNC: RUNNING
+XVFB: RUNNING
+
+━━━ NETWORK ━━━
+Internet: OK
+DNS: OK
+Outbound connections:
 Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
 0      0       77.237.234.2:37600  13.226.155.107:443         
-0      0       77.237.234.2:45746    34.120.3.201:443         
 0      0       77.237.234.2:37861   18.168.91.222:443         
-0      0       77.237.234.2:46016   13.226.155.13:443         
+0      0       77.237.234.2:48970  13.226.155.107:443         
 0      0       77.237.234.2:57596 194.164.179.244:443         
 
---- Terminal Log (latest) ---
-Size: 21582 bytes
-MS	0	15:38:40.597	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-EG	2	15:38:45.101	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-EI	0	15:46:07.616	Experts	expert PropFirmBot (EURUSD,M15) removed
-RM	0	15:46:07.619	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-DF	2	15:46:10.927	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-MG	0	15:51:24.236	Experts	automated trading is disabled
-JP	0	15:51:25.572	Experts	automated trading is enabled
-DL	0	17:56:56.001	Experts	expert PropFirmBot (EURUSD,M15) removed
-OH	0	17:56:56.006	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-HK	2	17:56:57.260	Network	'11797849': authorization on FundedNext-Server failed (Invalid account)
-CQ	0	21:38:52.803	Network	'11797849': authorized on FundedNext-Server
-GK	0	21:38:53.742	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-IH	0	21:38:53.742	Network	'11797849': trading has been enabled - hedging mode
-LK	0	21:38:54.543	Experts	expert PropFirmBot (EURUSD,M15) removed
-CO	0	21:38:54.548	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-IG	0	21:38:54.654	Network	'11797849': scanning network for access points
-MQ	0	21:38:59.189	Network	'11797849': scanning network finished
-LH	0	22:22:44.526	Experts	expert PropFirmBot (EURUSD,M15) removed
-CS	0	22:22:44.538	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-EE	0	22:22:56.027	Experts	expert PropFirmBot (EURUSD,M15) removed
-NQ	0	22:22:56.039	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-IS	0	22:23:08.834	Experts	expert PropFirmBot (EURUSD,M15) removed
-FG	0	22:23:08.851	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-MQ	0	22:46:37.415	Experts	expert PropFirmBot (EURUSD,M15) removed
-QD	0	22:46:37.424	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+━━━ TERMINAL LOG ━━━
+basename: extra operand ‘5/logs/20260303.log’
+Try 'basename --help' for more information.
+File:  | Size: 5844 bytes | Modified: 2026-03-03 12:15:01
+--- Authorization ---
+--- Trading Status ---
+--- Sync & Positions ---
+--- Last 25 Lines ---
+OL	0	10:43:15.159	Terminal	C:\Program Files\MetaTrader 5
+FE	0	10:43:31.746	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+MO	0	12:03:09.434	Experts	expert PropFirmBot (EURUSD,M15) removed
+PK	0	12:03:09.442	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+DL	0	12:03:11.650	Network	'11797849': authorized on FundedNext-Server through Access Server India (ping: 302.31 ms, build 5660)
+ES	0	12:03:11.656	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.02.28 00:31:17
+LS	0	12:03:13.783	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+FP	0	12:03:13.783	Network	'11797849': trading has been enabled - hedging mode
+EN	0	12:03:14.038	Trades	use MetaTrader VPS Hosting Service to speed up the execution: 0.88 ms via 'VPS Ashburn DC2 01' instead of 302.31 ms
+QL	0	12:03:15.262	Network	'11797849': scanning network for access points
+DI	0	12:03:21.202	Network	'11797849': scanning network finished
+JQ	0	12:03:21.202	Network	'11797849': auto connecting to a better access point with 93 % quality (previous: 72 %)
+NO	1	12:03:21.213	Network	'11797849': connection to FundedNext-Server lost
+FF	0	12:03:22.122	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.16 ms, build 5660)
+RG	0	12:03:22.122	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.03 14:03:10
+FG	0	12:03:22.879	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+PD	0	12:03:22.879	Network	'11797849': trading has been enabled - hedging mode
+RS	0	12:14:37.341	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+ED	0	12:14:37.342	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 128 / 144 Gb disk, GMT+0
+CL	0	12:14:37.342	Terminal	C:\Program Files\MetaTrader 5
+OE	0	12:14:51.462	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+MQ	0	12:14:51.769	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.16 ms, build 5660)
+NQ	0	12:14:51.769	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.03 14:03:22
+PN	0	12:14:52.896	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+RM	0	12:14:52.896	Network	'11797849': trading has been enabled - hedging mode
 
---- EA Log Today ---
-No EA log for today
-Latest EA log:
--rw-r--r-- 1 root root   28592 Mar  3 13:00 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260303.log
--rw-r--r-- 1 root root    7826 Mar  1 15:37 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260301.log
--rw-r--r-- 1 root root   39122 Feb 28 18:34 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260228.log
+━━━ EA LOG ━━━
+basename: extra operand ‘5/MQL5/Logs/20260303.log’
+Try 'basename --help' for more information.
+File:  | Size: 30208 bytes | Modified: 2026-03-03 13:30:20
+Total lines: 154
+--- PropFirmBot entries ---
+--- Last 30 Lines ---
+CH	0	12:14:55.751	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+LI	0	12:14:55.753	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+QS	0	12:14:55.753	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+DK	0	12:14:55.753	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+DN	0	12:14:55.753	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+PJ	0	12:14:55.753	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+FP	0	12:14:55.753	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+FI	0	12:14:55.753	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+JS	0	12:14:55.753	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+EK	0	12:14:55.753	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+FS	0	12:14:55.754	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 14:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+GM	0	12:14:55.755	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+HI	0	12:15:00.339	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 14:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+RG	0	12:15:00.339	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+KR	0	12:29:55.225	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3565 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+FJ	0	12:30:00.140	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 14:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+NR	0	12:30:00.141	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+FM	0	12:44:55.248	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=6165 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+MN	0	12:45:01.290	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 14:45 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+PN	0	12:45:01.290	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+EI	0	12:59:55.092	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=8820 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+DR	0	13:00:00.193	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 15:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+MJ	0	13:00:00.193	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+NG	0	13:14:57.182	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=12109 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+QG	0	13:15:00.194	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 15:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+OE	0	13:15:00.195	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
+FE	0	13:15:00.196	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+RO	0	13:29:57.061	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=14734 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+JO	0	13:30:00.184	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.03 15:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+RQ	0	13:30:00.184	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 
---- Wine Version ---
-wine-11.3 (Staging)
+━━━ EA FILES ━━━
+EX5:
+-rw-r--r-- 1 root root 163174 Feb 27 08:11 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+Source files: 12
+
+━━━ TRADE JOURNAL ━━━
+NO TRADE JOURNAL (bot has not traded yet)
+
+━━━ SYSTEM ━━━
+Uptime: up 1 week, 2 days, 1 hour, 21 minutes
+CPU Load: 2.64 2.10 2.13
+Memory: 1245MB / 7941MB
+Disk: 11% used, 129G free
+Wine: wine-11.3 (Staging)
+
+━━━ SUMMARY ━━━
+MT5_PROCESS=RUNNING
+SERVER=DISCONNECTED
+AUTOTRADING=DISABLED
+EA=NOT_LOADED
+TRADES=NO
 
 === DONE ===
 EXIT_CODE=0
