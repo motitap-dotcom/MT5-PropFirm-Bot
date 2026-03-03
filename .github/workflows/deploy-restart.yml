@@ -50,35 +50,51 @@ jobs:
 
           echo "=== Step 4: Compile, Restart MT5, and Verify ==="
           sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} bash << 'REMOTE_SCRIPT'
-          set -e
           MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
           EA_DIR="$MT5/MQL5/Experts/PropFirmBot"
+          export DISPLAY=:99
+          export WINEPREFIX=/root/.wine
 
-          echo "--- Compiling EA ---"
-          cd "$EA_DIR"
-          WINEPREFIX=/root/.wine wine "$MT5/metaeditor64.exe" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
-          sleep 5
-          ls -la *.ex5 2>/dev/null && echo "Compilation OK" || echo "Warning: .ex5 not found"
-
-          echo ""
-          echo "--- Stopping MT5 ---"
-          # Gracefully close MT5
+          echo "--- Stopping MT5 first ---"
           pkill -f "terminal64.exe" 2>/dev/null || true
           sleep 3
-          # Force kill if still running
           pkill -9 -f "terminal64.exe" 2>/dev/null || true
+          pkill -9 -f "metaeditor" 2>/dev/null || true
           sleep 2
           echo "MT5 stopped"
 
           echo ""
+          echo "--- Removing old .ex5 to force recompile ---"
+          rm -f "$EA_DIR/PropFirmBot.ex5"
+          echo "Old .ex5 removed"
+
+          echo ""
+          echo "--- Source files deployed ---"
+          ls -la "$EA_DIR/"*.mq5 "$EA_DIR/"*.mqh 2>/dev/null | head -15
+
+          echo ""
+          echo "--- Attempting MetaEditor compile ---"
+          cd "$EA_DIR"
+          timeout 30 wine "$MT5/metaeditor64.exe" /compile:"$EA_DIR/PropFirmBot.mq5" /log:"$EA_DIR/compile.log" /inc:"$MT5/MQL5" 2>/dev/null || true
+          sleep 5
+
+          # Check compilation result
+          if [ -f "$EA_DIR/PropFirmBot.ex5" ]; then
+              echo "MetaEditor compilation SUCCEEDED!"
+              ls -la "$EA_DIR/PropFirmBot.ex5"
+          else
+              echo "MetaEditor compile failed. Checking compile log..."
+              cat "$EA_DIR/compile.log" 2>/dev/null | tr -d '\0' | tail -20 || echo "No compile log"
+              echo ""
+              echo "Will rely on MT5 auto-compile when loading EA..."
+          fi
+
+          echo ""
           echo "--- Starting VNC display ---"
-          # Ensure display is running
           if ! pgrep -f "Xvfb :99" > /dev/null 2>&1; then
               Xvfb :99 -screen 0 1280x1024x24 &
               sleep 2
           fi
-
-          # Ensure VNC is running
           if ! pgrep -f "x11vnc" > /dev/null 2>&1; then
               x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw 2>/dev/null || true
               sleep 1
@@ -86,23 +102,29 @@ jobs:
           echo "Display ready"
 
           echo ""
-          echo "--- Starting MT5 ---"
-          export DISPLAY=:99
-          export WINEPREFIX=/root/.wine
+          echo "--- Starting MT5 with auto-login ---"
           cd "$MT5"
-          nohup wine terminal64.exe /portable > /tmp/mt5_output.log 2>&1 &
+          nohup wine terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server > /tmp/mt5_output.log 2>&1 &
           MT5_PID=$!
           echo "MT5 started with PID $MT5_PID"
 
           echo ""
-          echo "--- Waiting for MT5 to initialize (45 seconds) ---"
-          sleep 45
+          echo "--- Waiting for MT5 to initialize and auto-compile (60 seconds) ---"
+          sleep 60
+
+          echo ""
+          echo "--- Checking .ex5 after MT5 auto-compile ---"
+          if [ -f "$EA_DIR/PropFirmBot.ex5" ]; then
+              echo "EA COMPILED:"
+              ls -la "$EA_DIR/PropFirmBot.ex5"
+          else
+              echo "WARNING: .ex5 still not found! EA may not be running."
+          fi
 
           echo ""
           echo "--- Post-restart verification ---"
           ps aux | grep terminal64 | grep -v grep || echo "WARNING: MT5 not running!"
 
-          # Check for account connection in terminal log
           TERM_LOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
           if [ -n "$TERM_LOG" ]; then
               echo ""
@@ -110,10 +132,17 @@ jobs:
               cat "$TERM_LOG" | tr -d '\0' | tail -20
           fi
 
-          # Run full diagnostics
           echo ""
-          echo "--- Running full diagnostics ---"
-          bash /tmp/verify_ea.sh 2>&1 | tail -60
+          echo "--- EA Log check ---"
+          TODAY=$(date '+%Y%m%d')
+          EA_LOG="$MT5/MQL5/Logs/${TODAY}.log"
+          if [ -f "$EA_LOG" ]; then
+              echo "EA log size: $(stat -c%s "$EA_LOG") bytes"
+              echo "Last 20 lines:"
+              cat "$EA_LOG" | tr -d '\0' | tail -20
+          else
+              echo "No EA log for today yet"
+          fi
           REMOTE_SCRIPT
           EXIT_CODE=$?
           echo "EXIT_CODE=$EXIT_CODE"
