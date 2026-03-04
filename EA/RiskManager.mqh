@@ -67,7 +67,7 @@ public:
    void              Init(double account_size,
                           double risk_pct = 0.75,
                           double max_risk_pct = 1.0,
-                          int max_positions = 2,
+                          int max_positions = 3,
                           double daily_dd_guard = 3.0,
                           double total_dd_guard = 7.0,
                           long magic = 123456);
@@ -120,7 +120,7 @@ CRiskManager::CRiskManager()
    m_account_size       = 2000;
    m_risk_per_trade     = 0.75;
    m_max_risk_per_trade = 1.0;
-   m_max_open_positions = 2;
+   m_max_open_positions = 3;
    m_daily_dd_guard_pct = 3.0;
    m_total_dd_guard_pct = 7.0;
    m_daily_start_balance= 0;
