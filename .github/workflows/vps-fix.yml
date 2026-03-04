@@ -1,46 +1,68 @@
-name: VPS Fix and Restart MT5
+name: VPS Quick Deploy
 
 on:
   push:
     paths:
       - '.github/workflows/vps-fix.yml'
-      - 'scripts/fix_and_restart.sh'
-      - 'scripts/clean_restart.sh'
-      - 'scripts/upgrade_wine.sh'
-      - 'scripts/fix_wine_version.sh'
-      - 'scripts/force_wine11.sh'
-      - 'scripts/install_mt5_linux.sh'
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  fix-vps:
+  deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
           ref: claude/fix-bot-server-connection-JbPec
+          fetch-depth: 0
 
-      - name: Fix and restart MT5 on VPS
+      - name: Deploy to VPS
         env:
           VPS_IP: ${{ secrets.VPS_IP }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
           VPS_USER: ${{ secrets.VPS_USER }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          chmod +x scripts/fix_and_restart.sh scripts/clean_restart.sh
-          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no scripts/install_mt5_linux.sh ${VPS_USER}@${VPS_IP}:/tmp/fix.sh
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} "bash /tmp/fix.sh" > vps_fix_report.txt 2>&1 || true
-          echo "EXIT_CODE=$?" >> vps_fix_report.txt
-          cat vps_fix_report.txt
+          echo "=== QUICK DEPLOY $(date -u) ===" > vps_report.txt
 
-      - name: Commit fix report
+          # Step 1: Pull code on VPS
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${VPS_USER}@${VPS_IP} \
+            "cd /root/MT5-PropFirm-Bot && git fetch origin claude/fix-bot-server-connection-JbPec && git checkout claude/fix-bot-server-connection-JbPec && git pull origin claude/fix-bot-server-connection-JbPec" >> vps_report.txt 2>&1
+          echo "GIT_PULL=$?" >> vps_report.txt
+
+          # Step 2: Copy EA files
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${VPS_USER}@${VPS_IP} \
+            'cp /root/MT5-PropFirm-Bot/EA/*.mq5 /root/MT5-PropFirm-Bot/EA/*.mqh "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/" && echo "COPY OK"' >> vps_report.txt 2>&1
+
+          # Step 3: Stop MT5
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${VPS_USER}@${VPS_IP} \
+            'pkill -f terminal64.exe; sleep 3; echo "MT5 STOPPED"' >> vps_report.txt 2>&1
+
+          # Step 4: Start MT5
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${VPS_USER}@${VPS_IP} \
+            'DISPLAY=:99 WINEPREFIX=/root/.wine nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" /login:11797849 /password:gazDE62## /server:FundedNext-Server > /dev/null 2>&1 & sleep 2; echo "MT5 START CMD SENT"' >> vps_report.txt 2>&1
+
+          # Step 5: Wait and check
+          sleep 20
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${VPS_USER}@${VPS_IP} \
+            'pgrep -la terminal64 || echo "MT5 NOT RUNNING"; ss -tn state established | grep -v ":22 \|:5900 " | head -5' >> vps_report.txt 2>&1
+
+          # Step 6: Show logs
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${VPS_USER}@${VPS_IP} \
+            'EALOG=$(ls -t "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/"*.log 2>/dev/null | head -1); [ -n "$EALOG" ] && cat "$EALOG" | tr -d "\0" | tail -20; echo "---"; TLOG=$(ls -t "/root/.wine/drive_c/Program Files/MetaTrader 5/logs/"*.log 2>/dev/null | head -1); [ -n "$TLOG" ] && cat "$TLOG" | tr -d "\0" | tail -10' >> vps_report.txt 2>&1
+
+          echo "=== DONE ===" >> vps_report.txt
+          cat vps_report.txt
+
+      - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f vps_fix_report.txt
-          git commit -m "VPS fix report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push origin claude/fix-bot-server-connection-JbPec || true
+          git fetch origin claude/fix-bot-server-connection-JbPec
+          git reset --soft origin/claude/fix-bot-server-connection-JbPec
+          git add -f vps_report.txt
+          git commit -m "VPS deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push origin HEAD:claude/fix-bot-server-connection-JbPec || true
