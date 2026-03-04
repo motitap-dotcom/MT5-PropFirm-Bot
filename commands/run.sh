@@ -1,60 +1,81 @@
 #!/bin/bash
 # =============================================================
-# Restart MT5 on VPS
+# Diagnose why EA is not trading - 2026-03-04
 # =============================================================
 
-echo "=== Restarting MT5 - $(date) ==="
+echo "=== EA Trading Diagnosis - $(date) ==="
 
-# Kill any stuck MT5 processes
-echo "--- Stopping old MT5 processes ---"
-pkill -f terminal64 2>/dev/null || echo "No MT5 process to kill"
-pkill -f metatrader 2>/dev/null || true
-sleep 2
-
-# Make sure Xvfb is running
-echo "--- Checking display server ---"
-if ! pgrep -x Xvfb > /dev/null; then
-    echo "Starting Xvfb..."
-    Xvfb :99 -screen 0 1280x1024x24 &
-    sleep 2
-else
-    echo "Xvfb already running"
-fi
-export DISPLAY=:99
-
-# Make sure VNC is running
-echo "--- Checking VNC ---"
-if ! pgrep -x x11vnc > /dev/null; then
-    echo "Starting x11vnc..."
-    x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw 2>/dev/null
-    sleep 1
-else
-    echo "x11vnc already running"
-fi
-
-# Start MT5
-echo "--- Starting MT5 ---"
-cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
-WINEPREFIX=/root/.wine DISPLAY=:99 wine terminal64.exe /portable &
-MT5_PID=$!
-echo "MT5 started with PID: $MT5_PID"
-
-# Wait for MT5 to initialize
-sleep 10
-
-# Verify
+# 1. Check if MT5 is running
 echo ""
-echo "--- Verification ---"
-if pgrep -a terminal64; then
-    echo "MT5 is RUNNING!"
-else
-    echo "WARNING: MT5 may not have started properly"
+echo "--- MT5 Process ---"
+pgrep -a terminal64 || echo "MT5 NOT RUNNING!"
+
+# 2. Check account status
+echo ""
+echo "--- Account Connection (Terminal Log last 30 lines) ---"
+TERM_LOG="/root/.wine/drive_c/Program Files/MetaTrader 5/Logs"
+LATEST_TERM=$(ls -t "$TERM_LOG"/*.log 2>/dev/null | head -1)
+if [ -n "$LATEST_TERM" ]; then
+    tail -30 "$LATEST_TERM" | strings
 fi
 
+# 3. Check EA log - this is where trading decisions are logged
 echo ""
-echo "--- System Status ---"
-echo "Uptime: $(uptime)"
-echo "Memory: $(free -h | grep Mem)"
+echo "--- EA Log Today (last 100 lines) ---"
+EA_LOG="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs"
+TODAY=$(date +%Y%m%d)
+if [ -f "$EA_LOG/${TODAY}.log" ]; then
+    tail -100 "$EA_LOG/${TODAY}.log" | strings
+else
+    echo "No EA log for today ($TODAY)"
+    echo "Available EA logs:"
+    ls -la "$EA_LOG"/*.log 2>/dev/null | tail -5
+    LATEST_EA=$(ls -t "$EA_LOG"/*.log 2>/dev/null | head -1)
+    if [ -n "$LATEST_EA" ]; then
+        echo ""
+        echo "--- Latest EA log: $LATEST_EA (last 100 lines) ---"
+        tail -100 "$LATEST_EA" | strings
+    fi
+fi
+
+# 4. Check AutoTrading status
+echo ""
+echo "--- AutoTrading Config ---"
+TERMINAL_INI="/root/.wine/drive_c/Program Files/MetaTrader 5/config/common.ini"
+if [ -f "$TERMINAL_INI" ]; then
+    cat "$TERMINAL_INI" | strings
+else
+    echo "No common.ini found"
+    # Try alternate locations
+    find "/root/.wine/drive_c/Program Files/MetaTrader 5/" -name "*.ini" -type f 2>/dev/null | head -10
+fi
+
+# 5. Check if EA is actually attached
+echo ""
+echo "--- Chart Config ---"
+CHART_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles"
+find "$CHART_DIR" -name "*.chr" -type f 2>/dev/null | while read chr; do
+    echo "Chart file: $chr"
+    strings "$chr" | grep -i -A2 "expert\|propfirm\|autotrading" | head -10
+done
+
+# 6. Check trade history
+echo ""
+echo "--- Open Positions & Orders ---"
+# Look in EA status file if exists
+STATUS_FILE="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/status.json"
+if [ -f "$STATUS_FILE" ]; then
+    echo "Status file:"
+    cat "$STATUS_FILE" | strings
+fi
+
+# 7. Check spread/signal blocks
+echo ""
+echo "--- Recent BLOCKED/SIGNAL messages (from EA log) ---"
+LATEST_EA=$(ls -t "$EA_LOG"/*.log 2>/dev/null | head -1)
+if [ -n "$LATEST_EA" ]; then
+    strings "$LATEST_EA" | grep -i "BLOCK\|SIGNAL\|TRADE\|ORDER\|REJECT\|ERROR\|WARNING\|HEARTBEAT" | tail -40
+fi
 
 echo ""
 echo "=== Done ==="
