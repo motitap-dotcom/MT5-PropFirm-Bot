@@ -19,7 +19,7 @@ jobs:
           ref: claude/fix-bot-server-connection-JbPec
           fetch-depth: 0
 
-      - name: Recovery and recompile
+      - name: Deploy watchdog to VPS
         env:
           VPS_IP: ${{ secrets.VPS_IP }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
@@ -27,43 +27,53 @@ jobs:
         run: |
           set +e
           REPORT="deploy_result.txt"
-          echo "=== RECOVERY $(date -u) ===" > $REPORT
+          echo "=== WATCHDOG DEPLOY $(date -u) ===" > $REPORT
 
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
 
-          # Short SSH helper - no retries, just report
           run_ssh() {
-            local desc="$1"; local cmd="$2"; local timeout="${3:-30}"
+            local desc="$1"; local cmd="$2"
             echo "[$desc]" >> $REPORT
             result=$(sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} "$cmd" 2>&1)
-            local rc=$?
             echo "$result" >> $REPORT
-            echo "rc=$rc" >> $REPORT
+            echo "rc=$?" >> $REPORT
             echo "" >> $REPORT
-            return $rc
           }
 
-          # Step 1: Check current state (quick)
-          run_ssh "CHECK_STATE" 'EA="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"; ls -la "$EA/PropFirmBot.ex5" 2>/dev/null || echo "NO .ex5!"; ls -la "$EA/PropFirmBot.ex5.bak" 2>/dev/null || echo "NO .bak!"; ls -la "$EA/PropFirmBot.mq5" 2>/dev/null; ps aux | grep terminal64 | grep -v grep || echo "MT5 NOT RUNNING"'
+          # Step 1: Upload watchdog script
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no scripts/watchdog.sh ${VPS_USER}@${VPS_IP}:/root/MT5-PropFirm-Bot/scripts/watchdog.sh 2>> $REPORT
+          echo "SCP watchdog: $?" >> $REPORT
 
-          # Step 2: Restore .bak if .ex5 is missing
-          run_ssh "RESTORE" 'EA="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"; if [ ! -f "$EA/PropFirmBot.ex5" ] && [ -f "$EA/PropFirmBot.ex5.bak" ]; then cp "$EA/PropFirmBot.ex5.bak" "$EA/PropFirmBot.ex5" && echo "RESTORED from backup"; elif [ -f "$EA/PropFirmBot.ex5" ]; then echo "ex5 exists, no restore needed"; else echo "NO ex5 and NO bak - need to compile!"; fi; ls -la "$EA/PropFirmBot.ex5" 2>/dev/null'
+          # Step 2: Set up cron and make executable
+          run_ssh "SETUP_CRON" '
+            chmod +x /root/MT5-PropFirm-Bot/scripts/watchdog.sh
+            # Remove old watchdog cron if exists
+            crontab -l 2>/dev/null | grep -v watchdog > /tmp/crontab_clean.txt
+            # Add new cron: every 15 minutes
+            echo "*/15 * * * * /root/MT5-PropFirm-Bot/scripts/watchdog.sh >> /var/log/propfirmbot_watchdog.log 2>&1" >> /tmp/crontab_clean.txt
+            crontab /tmp/crontab_clean.txt
+            rm -f /tmp/crontab_clean.txt
+            echo "Current crontab:"
+            crontab -l
+          '
 
-          # Step 3: Kill MT5 if running (short command, won't timeout)
-          run_ssh "KILL_MT5" 'PID=$(pgrep -f "terminal64.exe" | head -1); if [ -n "$PID" ]; then kill $PID 2>/dev/null; echo "Killed PID $PID"; else echo "MT5 not running"; fi'
+          # Step 3: Run watchdog once to test
+          run_ssh "TEST_WATCHDOG" 'bash /root/MT5-PropFirm-Bot/scripts/watchdog.sh 2>&1'
 
-          # Wait for MT5 to fully stop
-          sleep 5
-
-          # Step 4: Start MT5 (fire and forget via nohup)
-          run_ssh "START_MT5" 'export DISPLAY=:99; export WINEPREFIX=/root/.wine; nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" /login:11797849 /password:gazDE62## /server:FundedNext-Server > /tmp/mt5_start.log 2>&1 & echo "MT5 started PID=$!"'
-
-          # Wait for MT5 to init
-          echo "Waiting 25s for MT5 init..." >> $REPORT
-          sleep 25
-
-          # Step 5: Check if MT5 is running and EA loaded
-          run_ssh "VERIFY" 'MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"; echo "=== PROCESS ==="; ps aux | grep -E "terminal64|wine" | grep -v grep | head -5; echo ""; echo "=== .EX5 FILE ==="; ls -la "$MT5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5" 2>/dev/null || echo "STILL NO .ex5!"; echo ""; echo "=== TERMINAL LOG ==="; TLOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1); [ -n "$TLOG" ] && tail -c 2000 "$TLOG" | tr -d "\0" | tail -15; echo ""; echo "=== EA LOG (last 25) ==="; TODAY=$(date -u "+%Y%m%d"); EALOG="$MT5/MQL5/Logs/${TODAY}.log"; [ -f "$EALOG" ] && tail -c 5000 "$EALOG" | tr -d "\0" | tail -25 || echo "No EA log"; echo ""; echo "=== CONNECTIONS ==="; ss -tn state established | grep -v ":22 \|:5900 " | head -3'
+          # Step 4: Quick status check
+          run_ssh "STATUS" '
+            MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+            echo "=== MT5 ==="
+            ps aux | grep terminal64 | grep -v grep | head -1 || echo "NOT RUNNING"
+            echo ""
+            echo "=== ACCOUNT ==="
+            TODAY=$(date -u "+%Y%m%d")
+            EALOG="$MT5/MQL5/Logs/${TODAY}.log"
+            [ -f "$EALOG" ] && tr -d "\0" < "$EALOG" | grep "\[HEARTBEAT\]" | tail -1 || echo "No heartbeat"
+            echo ""
+            echo "=== LAST 5 SIGNALS ==="
+            [ -f "$EALOG" ] && tr -d "\0" < "$EALOG" | grep -E "\[SMC\].*signal|\[EMA\].*signal|\[TRADE\]" | tail -5 || echo "No signals"
+          '
 
           echo "=== DONE $(date -u) ===" >> $REPORT
           cat $REPORT
@@ -76,5 +86,5 @@ jobs:
           git fetch origin claude/fix-bot-server-connection-JbPec
           git reset --soft origin/claude/fix-bot-server-connection-JbPec
           git add -f deploy_result.txt 2>/dev/null || true
-          git commit -m "Recovery result $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git commit -m "Watchdog deploy $(date -u '+%Y-%m-%d %H:%M UTC')" || true
           git push origin HEAD:claude/fix-bot-server-connection-JbPec || true
