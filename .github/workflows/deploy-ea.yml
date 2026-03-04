@@ -19,41 +19,114 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
+      - name: Install SSH tools
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+      - name: Verify secrets exist
+        env:
+          VPS_IP: ${{ secrets.VPS_IP }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          echo "Checking secrets..."
+          if [ -z "$VPS_IP" ]; then echo "ERROR: VPS_IP secret is empty!"; exit 1; fi
+          if [ -z "$VPS_PASSWORD" ]; then echo "ERROR: VPS_PASSWORD secret is empty!"; exit 1; fi
+          if [ -z "$VPS_USER" ]; then echo "ERROR: VPS_USER secret is empty!"; exit 1; fi
+          echo "All secrets present. VPS_IP length: ${#VPS_IP}, VPS_USER length: ${#VPS_USER}"
+
+      - name: Test SSH connection
+        env:
+          VPS_IP: ${{ secrets.VPS_IP }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          echo "Testing SSH connection to ${VPS_USER}@${VPS_IP}..."
+          for attempt in 1 2 3; do
+            if sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 "${VPS_USER}@${VPS_IP}" "echo 'SSH OK'; hostname; uptime" 2>&1; then
+              echo "SSH connection successful on attempt $attempt"
+              exit 0
+            else
+              echo "Attempt $attempt failed (exit code $?), retrying in ${attempt}s..."
+              sleep $attempt
+            fi
+          done
+          echo "ERROR: SSH connection failed after 3 attempts"
+          exit 1
+
       - name: Deploy EA files to VPS
         env:
           VPS_IP: ${{ secrets.VPS_IP }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
           VPS_USER: ${{ secrets.VPS_USER }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-
           MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
           EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
           CONFIG_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
 
+          # Ensure directories exist
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no "${VPS_USER}@${VPS_IP}" "mkdir -p '${EA_DIR}' '${CONFIG_DIR}'"
+
           echo "=== Deploying EA files ==="
+          DEPLOYED=0
+          FAILED=0
           for f in EA/*.mq5 EA/*.mqh; do
-            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${EA_DIR}/\""
+            if [ -f "$f" ]; then
+              fname=$(basename "$f")
+              if sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${EA_DIR}/\"" 2>&1; then
+                echo "  OK: $fname"
+                DEPLOYED=$((DEPLOYED + 1))
+              else
+                echo "  FAIL: $fname"
+                FAILED=$((FAILED + 1))
+              fi
+            fi
           done
 
           echo "=== Deploying config files ==="
           for f in configs/*.json; do
-            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${CONFIG_DIR}/\""
+            if [ -f "$f" ]; then
+              fname=$(basename "$f")
+              if sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${CONFIG_DIR}/\"" 2>&1; then
+                echo "  OK: $fname"
+                DEPLOYED=$((DEPLOYED + 1))
+              else
+                echo "  FAIL: $fname"
+                FAILED=$((FAILED + 1))
+              fi
+            fi
           done
 
-          echo "=== Recompiling EA on VPS ==="
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} bash -c "'
-            cd \"${EA_DIR}\"
-            # Use MetaEditor to compile
-            WINEPREFIX=/root/.wine wine \"/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe\" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
-            sleep 3
-            ls -la *.ex5 2>/dev/null && echo \"Compilation OK\" || echo \"Warning: .ex5 not updated\"
-          '" > deploy_report.txt 2>&1 || true
+          echo "=== Deploy summary: $DEPLOYED OK, $FAILED failed ==="
+          if [ "$DEPLOYED" -eq 0 ]; then
+            echo "ERROR: No files deployed!"
+            exit 1
+          fi
 
-          echo "EXIT_CODE=$?" >> deploy_report.txt
-          cat deploy_report.txt
+      - name: Compile EA on VPS
+        env:
+          VPS_IP: ${{ secrets.VPS_IP }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
+          EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
+
+          echo "=== Compiling EA on VPS ==="
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no "${VPS_USER}@${VPS_IP}" bash -c "'
+            export DISPLAY=:99
+            export WINEPREFIX=/root/.wine
+            cd \"${EA_DIR}\"
+            echo \"Files in EA dir:\"
+            ls -la *.mq5 *.mqh 2>/dev/null | wc -l
+            echo \"Attempting compile...\"
+            wine \"/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe\" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
+            sleep 5
+            if [ -f PropFirmBot.ex5 ]; then
+              echo \"SUCCESS: PropFirmBot.ex5 exists ($(ls -la PropFirmBot.ex5 | awk \"{print \\$5}\") bytes)\"
+            else
+              echo \"WARNING: PropFirmBot.ex5 not found - manual compile needed\"
+            fi
+          '" 2>&1 | tee deploy_report.txt || true
 
       - name: Send Telegram notification
         if: always()
@@ -62,10 +135,20 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           STATUS="${{ job.status }}"
+          BRANCH="${{ github.ref_name }}"
+          COMMIT="${{ github.event.head_commit.message }}"
+          SHORT_MSG=$(echo "$COMMIT" | head -1 | cut -c1-60)
+
           if [ "$STATUS" = "success" ]; then
-            MSG="✅ EA deployed successfully to VPS"
+            MSG="✅ EA deployed to VPS!
+Branch: ${BRANCH}
+Commit: ${SHORT_MSG}
+Files updated and compiled."
           else
-            MSG="❌ EA deployment failed - check GitHub Actions"
+            MSG="❌ EA deploy FAILED
+Branch: ${BRANCH}
+Commit: ${SHORT_MSG}
+Check GitHub Actions for details."
           fi
           curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \
@@ -73,9 +156,12 @@ jobs:
             -d parse_mode="HTML" > /dev/null 2>&1 || true
 
       - name: Commit deploy report
+        if: always()
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f deploy_report.txt
-          git commit -m "EA deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push origin HEAD || true
+          if [ -f deploy_report.txt ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add -f deploy_report.txt
+            git commit -m "EA deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+            git push origin HEAD || true
+          fi
