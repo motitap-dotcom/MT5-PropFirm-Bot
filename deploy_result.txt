@@ -1,26 +1,81 @@
-=== FORCE RECOMPILE Wed Mar  4 08:45:42 UTC 2026 ===
-[RECOMPILE] attempt 1 failed (rc=255): Warning: Permanently added '77.237.234.2' (ED25519) to the list of known hosts.
-=== CURRENT STATE ===
--rw-r--r-- 1 root root 163578 Mar  3 19:54 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+=== RECOVERY Wed Mar  4 08:48:49 UTC 2026 ===
+[CHECK_STATE]
+Warning: Permanently added '77.237.234.2' (ED25519) to the list of known hosts.
+NO .ex5!
+-rw-r--r-- 1 root root 163578 Mar  4 08:45 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5.bak
 -rw-r--r-- 1 root root 35338 Mar  4 08:33 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
+root     1922602  0.5  0.1 2686340 14268 ?       S<   08:48   0:00 start.exe /exec terminal64.exe /login:11797849 /password:gazDE62##
+root     1922661 37.9  2.3 1484940 192856 ?      R<l  08:48   0:20 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
+rc=0
 
-=== BACKUP AND DELETE OLD .ex5 ===
-Deleted old .ex5
+[RESTORE]
+RESTORED from backup
+-rw-r--r-- 1 root root 163578 Mar  4 08:49 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+rc=0
 
-=== STOP MT5 ===
-[RECOMPILE] attempt 2 failed (rc=255): === CURRENT STATE ===
--rw-r--r-- 1 root root 35338 Mar  4 08:33 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
+[KILL_MT5]
+Killed PID 1922602
+rc=0
 
-=== BACKUP AND DELETE OLD .ex5 ===
-Deleted old .ex5
+[START_MT5]
+MT5 started PID=1923109
+rc=0
 
-=== STOP MT5 ===
-[RECOMPILE] attempt 3 failed (rc=255): === CURRENT STATE ===
--rw-r--r-- 1 root root 35338 Mar  4 08:33 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
+Waiting 25s for MT5 init...
+[VERIFY]
+=== PROCESS ===
+root      426805  0.0  0.0 520040  6300 ?        S<sl Feb27   0:22 C:\windows\system32\winedevice.exe
+root      426826  5.6  0.0 744552  7848 ?        S<sl Feb27 407:11 C:\windows\system32\winedevice.exe
+root     1622410  0.0  0.0 520040  6324 ?        S<sl Mar03   0:06 C:\windows\system32\winedevice.exe
+root     1622440  7.9  0.0 744552  7820 ?        S<sl Mar03 106:02 C:\windows\system32\winedevice.exe
+root     1923109  0.6  0.1 2686336 14088 ?       S<   08:49   0:00 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe /login:11797849 /password:gazDE62##
 
-=== BACKUP AND DELETE OLD .ex5 ===
-Deleted old .ex5
+=== .EX5 FILE ===
+-rw-r--r-- 1 root root 163578 Mar  4 08:49 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
 
-=== STOP MT5 ===
-[RECOMPILE] GAVE UP
-=== DONE Wed Mar  4 08:46:14 UTC 2026 ===
+=== TERMINAL LOG ===
+synchronized with FundedNext Ltd: 2 positions, 0 orders, 76 symbols, 0 spreads
+HL	0	08:48:14.405	Network	'11797849': trading has been enabled - hedging mode
+GK	0	08:49:13.453	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+DM	0	08:49:13.457	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+CD	0	08:49:13.457	Terminal	C:\Program Files\MetaTrader 5
+HM	0	08:49:21.074	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+QI	0	08:49:21.721	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.67 ms, build 5660)
+NI	0	08:49:21.721	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.04 10:48:13
+IF	0	08:49:22.419	Network	'11797849': terminal synchronized with FundedNext Ltd: 2 positions, 0 orders, 76 symbols, 0 spreads
+ME	0	08:49:22.419	Network	'11797849': trading has been enabled - hedging mode
+
+=== EA LOG (last 25) ===
+LP	0	08:49:22.612	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1998.20 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+OP	0	08:49:22.612	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+LK	0	08:49:22.612	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+CJ	0	08:49:23.092	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
+EQ	0	08:49:23.092	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
+QL	0	08:49:23.092	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+HM	0	08:49:23.092	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+JS	0	08:49:23.092	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+RR	0	08:49:23.110	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+RN	0	08:49:23.110	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+MH	0	08:49:23.364	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+ON	0	08:49:23.365	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+JD	0	08:49:23.365	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+GL	0	08:49:23.365	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+GI	0	08:49:23.365	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+GJ	0	08:49:23.365	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+MS	0	08:49:23.365	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+MI	0	08:49:23.365	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+ER	0	08:49:23.365	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+JK	0	08:49:23.365	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.20 | Eq=$2006.23 | DD=0.00% | Positions=2
+RR	0	08:49:23.365	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.04 10:45 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+KI	0	08:49:23.365	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Maximum open positions reached
+OE	0	08:49:23.365	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Maximum open positions reached
+CQ	0	08:49:23.365	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Maximum open positions reached
+NN	0	08:49:23.365	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+
+=== CONNECTIONS ===
+Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
+0      0       77.237.234.2:41940   13.226.155.59:443         
+0      0       77.237.234.2:60576 149.154.166.110:443         
+rc=0
+
+=== DONE Wed Mar  4 08:49:35 UTC 2026 ===
