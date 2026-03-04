@@ -1,5 +1,5 @@
 #!/bin/bash
-# Delete old state file + restart EA - 2026-03-04
+# Delete old state file + restart EA - 2026-03-04 v2
 echo "=== Fix MaxPositions - $(date) ==="
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
