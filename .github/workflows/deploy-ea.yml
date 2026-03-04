@@ -99,7 +99,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull origin claude/fix-bot-server-connection-JbPec --rebase || true
+          git fetch origin claude/fix-bot-server-connection-JbPec
+          git reset --soft origin/claude/fix-bot-server-connection-JbPec
           git add -f deploy_report.txt
           git commit -m "EA deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push origin claude/fix-bot-server-connection-JbPec || true
+          git push origin HEAD:claude/fix-bot-server-connection-JbPec || true
