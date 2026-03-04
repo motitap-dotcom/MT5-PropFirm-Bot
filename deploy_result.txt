@@ -1,0 +1,76 @@
+=== VPS DEPLOY Wed Mar  4 08:33:25 UTC 2026 ===
+Secrets OK: IP=77.237.234.2 USER=root PASS_LEN=9
+/usr/bin/sshpass
+[PING] attempt 1...
+[PING] OK
+Warning: Permanently added '77.237.234.2' (ED25519) to the list of known hosts.
+VPS reachable at Wed Mar  4 08:33:32 UTC 2026
+Linux vmi3096165 6.8.0-100-generic #100-Ubuntu SMP PREEMPT_DYNAMIC Tue Jan 13 16:40:06 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+[GIT_PULL] attempt 1...
+[GIT_PULL] OK
+From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
+ * branch            claude/fix-bot-server-connection-JbPec -> FETCH_HEAD
+Switched to branch 'claude/fix-bot-server-connection-JbPec'
+Your branch is behind 'origin/claude/fix-bot-server-connection-JbPec' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+HEAD is now at c05e39c Robust VPS deploy workflow with retry logic and error reporting
+HEAD: c05e39c Robust VPS deploy workflow with retry logic and error reporting
+[COPY_EA] attempt 1...
+[COPY_EA] OK
+-rw-r--r-- 1 root root 35338 Mar  4 08:33 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
+COPY OK
+[STOP_MT5] attempt 1...
+[STOP_MT5] failed (rc=255): 
+[STOP_MT5] attempt 2...
+[STOP_MT5] failed (rc=255): 
+[STOP_MT5] attempt 3...
+[STOP_MT5] failed (rc=255): 
+[STOP_MT5] GAVE UP after 3 attempts
+[START_MT5] attempt 1...
+[START_MT5] OK
+MT5 START CMD SENT
+Waiting 25 seconds for MT5 to start...
+[CHECK] attempt 1...
+[CHECK] OK
+MT5 NOT RUNNING
+---CONNECTIONS---
+Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
+0      0       77.237.234.2:48462    34.120.3.201:443         
+0      0       77.237.234.2:41940   13.226.155.59:443         
+0      0       77.237.234.2:43350 194.164.179.244:443         
+0      0       77.237.234.2:36924  13.226.155.107:443         
+---LOGS---
+levant events from calendar
+HL	0	08:34:11.267	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
+LG	0	08:34:11.267	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+MG	0	08:34:11.267	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+CF	0	08:34:11.267	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+DE	0	08:34:11.283	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+LK	0	08:34:11.283	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+CR	0	08:34:11.408	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+RS	0	08:34:11.408	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+GI	0	08:34:11.408	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+JQ	0	08:34:11.408	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+JD	0	08:34:11.408	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+JO	0	08:34:11.408	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+DF	0	08:34:11.408	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+LN	0	08:34:11.408	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+DE	0	08:34:11.408	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+ME	0	08:34:11.408	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.20 | Eq=$2003.64 | DD=0.00% | Positions=2
+RI	0	08:34:11.409	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.04 10:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+MD	0	08:34:11.409	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Maximum open positions reached
+IP	0	08:34:11.409	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Maximum open positions reached
+EL	0	08:34:11.409	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Maximum open positions reached
+DH	0	08:34:11.409	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+---TERMINAL---
+NN	0	08:34:05.128	Terminal	stopped with 0
+OM	0	08:34:05.236	Terminal	shutdown with 0
+CD	0	08:34:05.542	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+CO	0	08:34:05.543	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+DF	0	08:34:05.543	Terminal	C:\Program Files\MetaTrader 5
+PN	0	08:34:09.047	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+OF	0	08:34:09.952	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 91.67 ms, build 5660)
+JG	0	08:34:09.952	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.04 10:20:20
+NG	0	08:34:10.673	Network	'11797849': terminal synchronized with FundedNext Ltd: 2 positions, 0 orders, 76 symbols, 0 spreads
+JD	0	08:34:10.673	Network	'11797849': trading has been enabled - hedging mode
+=== DONE Wed Mar  4 08:34:31 UTC 2026 ===
