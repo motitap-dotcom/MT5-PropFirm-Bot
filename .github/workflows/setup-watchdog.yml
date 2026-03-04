@@ -1,0 +1,75 @@
+name: Setup Watchdog & Test Telegram
+
+on:
+  push:
+    paths:
+      - '.github/workflows/setup-watchdog.yml'
+      - 'scripts/watchdog.sh'
+      - 'scripts/setup_watchdog.sh'
+      - 'scripts/test_telegram.sh'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/fix-bot-communication-J0QSp
+
+      - name: Setup watchdog and test Telegram on VPS
+        env:
+          VPS_IP: ${{ secrets.VPS_IP }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          # Copy scripts to VPS
+          echo "=== Copying scripts to VPS ==="
+          for f in scripts/watchdog.sh scripts/setup_watchdog.sh scripts/test_telegram.sh; do
+            sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:/root/MT5-PropFirm-Bot/$f"
+          done
+
+          # Run setup on VPS
+          echo "=== Running setup on VPS ==="
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} bash -c "'
+            cd /root/MT5-PropFirm-Bot
+
+            # Pull latest code
+            git fetch origin claude/fix-bot-communication-J0QSp 2>/dev/null || true
+            git checkout claude/fix-bot-communication-J0QSp 2>/dev/null || true
+            git pull origin claude/fix-bot-communication-J0QSp 2>/dev/null || true
+
+            # Make scripts executable
+            chmod +x scripts/watchdog.sh scripts/setup_watchdog.sh scripts/test_telegram.sh
+
+            # Install watchdog cron
+            echo \"=== Installing Watchdog ===\"
+            bash scripts/setup_watchdog.sh
+
+            # Test Telegram
+            echo \"\"
+            echo \"=== Testing Telegram ===\"
+            bash scripts/test_telegram.sh
+
+            # Run watchdog once to verify
+            echo \"\"
+            echo \"=== Running Watchdog Check ===\"
+            bash scripts/watchdog.sh
+          '" > setup_report.txt 2>&1 || true
+
+          echo "EXIT_CODE=$?" >> setup_report.txt
+          cat setup_report.txt
+
+      - name: Commit setup report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f setup_report.txt
+          git commit -m "Watchdog setup report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push origin claude/fix-bot-communication-J0QSp || true
