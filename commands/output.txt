@@ -1,11 +1,264 @@
-=== EA Logs Analysis - Wed Mar  4 12:06:48 UTC 2026 ===
+=== EA Logs Analysis - Wed Mar  4 12:09:20 UTC 2026 ===
 ========== TRADE ACTIONS ==========
+
+--- 20260225.log ---
+EJ	0	15:54:24.596	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+DS	0	15:54:24.596	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
+KN	0	15:58:22.049	PropFirmBot (EURUSD,M15)	[Notify] Telegram failed: HTTP 1003
+HE	0	15:58:22.050	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] Reason=2 | Phase=FUNDED | Journal: Trades: 0 | Wins: 0 | Losses: 0 | WR: 0.0%
+JH	0	15:58:22.050	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] EA stopped. Net PnL=$0.00 WinRate=0.0%
+KD	0	15:58:22.228	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+QI	0	15:58:22.229	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
+FH	0	15:58:34.326	PropFirmBot (EURUSD,M15)	[Notify] Telegram failed: HTTP 1003
+IO	0	15:58:34.326	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] Reason=2 | Phase=FUNDED | Journal: Trades: 0 | Wins: 0 | Losses: 0 | WR: 0.0%
+OR	0	15:58:34.326	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] EA stopped. Net PnL=$0.00 WinRate=0.0%
+PN	0	15:58:34.509	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+QO	0	15:58:34.509	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
+PI	0	16:29:27.791	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+QR	0	16:29:27.791	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
+
+--- 20260227.log ---
+JF	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+DG	0	08:18:13.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+EQ	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+EJ	0	08:34:05.247	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+KH	0	08:34:10.358	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
+QS	0	17:00:07.185	PropFirmBot (EURUSD,M15)	[JOURNAL] [ANALYSIS] Trades: 0 | Risk Adj: 100%
+QK	0	17:00:07.237	PropFirmBot (EURUSD,M15)	[JOURNAL] [ANALYSIS] Trades: 0 | Risk Adj: 100%
+EH	0	20:00:08.199	PropFirmBot (EURUSD,M15)	[JOURNAL] [STATE_CHANGE] GUARDIAN_ACTIVE -> GUARDIAN_HALTED: Weekend guard
+DQ	0	20:00:08.266	PropFirmBot (EURUSD,M15)	[JOURNAL] [STATE_CHANGE] GUARDIAN_ACTIVE -> GUARDIAN_HALTED: Weekend guard
+
+--- 20260228.log ---
+DF	0	18:05:19.606	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+JG	0	18:05:19.606	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+FM	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+HN	0	18:16:36.397	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+LD	0	18:21:44.776	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+RI	0	18:21:44.776	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+LK	0	18:27:22.462	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+RP	0	18:27:22.462	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+QR	0	18:33:16.342	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+KK	0	18:33:16.342	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+
+--- 20260301.log ---
+RF	0	15:36:26.483	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+LG	0	15:36:26.483	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+
+--- 20260303.log ---
+QF	0	10:43:48.562	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$2000.00 Magic=202502
+KG	0	10:43:48.562	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+JK	0	12:03:09.396	PropFirmBot (EURUSD,M15)	[Notify] Telegram failed: HTTP 1003
+QP	0	12:03:09.400	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] Reason=6 | Phase=FUNDED | Journal: Trades: 0 | Wins: 0 | Losses: 0 | WR: 0.0%
+CL	0	12:03:09.400	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] EA stopped. Net PnL=$0.00 WinRate=0.0%
+EO	0	12:03:14.231	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+IL	0	12:03:14.231	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+EN	0	12:14:54.840	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+EO	0	12:14:54.840	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+NI	0	13:40:21.546	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+NR	0	13:40:21.546	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+NN	0	13:52:20.517	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+RO	0	13:52:20.517	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+JF	0	17:00:00.202	PropFirmBot (EURUSD,M15)	[JOURNAL] [ANALYSIS] Trades: 0 | Risk Adj: 100%
+DR	0	18:42:06.142	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+HK	0	18:42:06.142	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+MG	0	18:46:48.415	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+EE	0	18:46:48.415	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+RR	0	19:35:22.330	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+RK	0	19:35:22.330	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+JQ	0	19:39:22.907	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+FJ	0	19:39:22.907	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+CP	0	19:40:01.437	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+KJ	0	19:40:01.437	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+LP	0	19:45:19.834	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+PM	0	19:45:19.834	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+LO	0	19:54:44.382	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+LL	0	19:54:44.382	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+EI	0	21:23:55.302	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+ER	0	21:23:55.302	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+QP	0	21:49:45.286	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+IJ	0	21:49:45.286	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+HJ	0	21:52:08.223	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] Reason=1 | Phase=FUNDED | Journal: Trades: 0 | Wins: 0 | Losses: 0 | WR: 0.0%
+GG	0	21:52:08.223	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] EA stopped. Net PnL=$0.00 WinRate=0.0%
+LI	0	21:52:36.562	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+RR	0	21:52:36.563	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
+FM	0	21:52:50.099	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] Reason=1 | Phase=FUNDED | Journal: Trades: 0 | Wins: 0 | Losses: 0 | WR: 0.0%
+FP	0	21:52:50.100	PropFirmBot (EURUSD,M15)	[JOURNAL] [SHUTDOWN] EA stopped. Net PnL=$0.00 WinRate=0.0%
+KM	0	21:52:59.177	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+RN	0	21:52:59.177	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
+
+--- 20260304.log ---
+QQ	0	07:22:05.856	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.90 Magic=202502
+MJ	0	07:22:05.856	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+GS	0	07:30:00.126	PropFirmBot (EURUSD,M15)	[SMC] BUY signal: Entry=157.34400 SL=157.24250 TP=157.54700 | LiqSweep=N OB=N FVG=Y
+MN	0	07:30:00.510	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY opened: USDJPY Lot=0.06 Entry=157.34400 SL=157.24300 TP=157.54700 Ticket=160672737
+NF	0	07:30:00.529	PropFirmBot (EURUSD,M15)	[JOURNAL] OPEN BUY USDJPY | Lot=0.06 Entry=157.34400 SL=157.24250 TP=157.54700 | #160672737 | SMC
+FQ	0	07:30:00.813	PropFirmBot (EURUSD,M15)	[TRADE] USDJPY BUY | Lot=0.06 | SL=157.24250 | TP=157.54700 | RR=2.0 | #160672737
+JN	0	07:32:02.807	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.48 Magic=202502
+EO	0	07:32:02.807	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+OO	0	07:45:23.959	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.48 Magic=202502
+PL	0	07:45:23.959	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+IP	0	07:56:54.506	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.48 Magic=202502
+NM	0	07:56:54.506	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+LK	0	08:15:00.258	PropFirmBot (EURUSD,M15)	[SMC] SELL signal: Entry=1.16090 SL=1.16200 TP=1.15871 | LiqSweep=N OB=N FVG=Y
+GI	0	08:15:00.508	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL opened: EURUSD Lot=0.04 Entry=1.16090 SL=1.16200 TP=1.15871 Ticket=160685350
+GE	0	08:15:00.509	PropFirmBot (EURUSD,M15)	[JOURNAL] OPEN SELL EURUSD | Lot=0.04 Entry=1.16090 SL=1.16200 TP=1.15871 | #160685350 | SMC
+EE	0	08:15:00.649	PropFirmBot (EURUSD,M15)	[TRADE] EURUSD SELL | Lot=0.04 | SL=1.16200 | TP=1.15871 | RR=2.0 | #160685350
+DE	0	08:20:22.058	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.20 Magic=202502
+EG	0	08:20:22.058	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+KD	0	08:34:10.879	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.20 Magic=202502
+JI	0	08:34:10.879	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+NP	0	08:37:54.567	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.20 Magic=202502
+CM	0	08:37:54.567	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+OO	0	08:49:22.612	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1998.20 Magic=202502
+FL	0	08:49:22.612	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+LE	0	09:33:46.749	PropFirmBot (EURUSD,M15)	[JOURNAL] CLOSE #160672737 BUY USDJPY | PnL=$-3.85 (-10.1 pips) | SL | Bal=$1994.35 | #1 W0 L1 WR=0%
+FO	0	09:33:46.843	PropFirmBot (EURUSD,M15)	[CLOSED] #160672737 BUY USDJPY | PnL=$-3.85 (-10.1 pips) | SL
+OR	0	09:41:48.785	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1994.35 Magic=202502
+JK	0	09:41:48.785	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+GQ	0	09:50:41.476	PropFirmBot (EURUSD,M15)	[JOURNAL] CLOSE #160685350 SELL EURUSD | PnL=$-4.40 (-11.0 pips) | SL | Bal=$1989.95 | #1 W0 L1 WR=0%
+DM	0	09:50:41.566	PropFirmBot (EURUSD,M15)	[CLOSED] #160685350 SELL EURUSD | PnL=$-4.40 (-11.0 pips) | SL
+DR	0	10:30:00.088	PropFirmBot (EURUSD,M15)	[SMC] BUY signal: Entry=157.15200 SL=156.93750 TP=157.58100 | LiqSweep=Y OB=Y FVG=N
+JN	0	10:30:00.343	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY opened: USDJPY Lot=0.03 Entry=157.15200 SL=156.93800 TP=157.58100 Ticket=160727946
+GF	0	10:30:00.345	PropFirmBot (EURUSD,M15)	[JOURNAL] OPEN BUY USDJPY | Lot=0.03 Entry=157.15200 SL=156.93750 TP=157.58100 | #160727946 | SMC
+MQ	0	10:30:00.490	PropFirmBot (EURUSD,M15)	[TRADE] USDJPY BUY | Lot=0.03 | SL=156.93750 | TP=157.58100 | RR=2.0 | #160727946
+QK	0	11:04:11.056	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1989.74 Magic=202502
+CP	0	11:04:11.056	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+OK	0	11:09:27.531	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1989.74 Magic=202502
+QQ	0	11:09:27.531	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+JH	0	11:39:27.942	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1989.74 Magic=202502
+HR	0	11:39:27.942	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+DF	0	11:45:00.075	PropFirmBot (EURUSD,M15)	[SMC] SELL signal: Entry=1.16348 SL=1.16496 TP=1.16051 | LiqSweep=N OB=N FVG=Y
+QJ	0	11:45:00.339	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL opened: EURUSD Lot=0.02 Entry=1.16348 SL=1.16496 TP=1.16051 Ticket=160744298
+HQ	0	11:45:00.340	PropFirmBot (EURUSD,M15)	[JOURNAL] OPEN SELL EURUSD | Lot=0.02 Entry=1.16348 SL=1.16496 TP=1.16051 | #160744298 | SMC
+FQ	0	11:45:00.471	PropFirmBot (EURUSD,M15)	[TRADE] EURUSD SELL | Lot=0.02 | SL=1.16496 | TP=1.16051 | RR=2.0 | #160744298
+LI	0	11:47:16.371	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1989.60 Magic=202502
+ER	0	11:47:16.371	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
 
 ========== BLOCKED SUMMARY ==========
 
+--- 20260227.log ---
+     36 BLOCKED: Spread too wide on XAUUSD
+
+--- 20260303.log ---
+     54 BLOCKED: Outside trading session
+     45 BLOCKED: Spread too wide on XAUUSD
+
+--- 20260304.log ---
+     84 BLOCKED: Outside trading session
+     33 BLOCKED: Maximum open positions reached
+     31 BLOCKED: Spread too wide on XAUUSD
+
 ========== HEARTBEAT ==========
 
-========== SIGNALS ==========
+--- 20260225.log ---
+OO	0	15:54:25.168	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+GE	0	15:58:22.358	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+MK	0	15:58:34.724	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+CH	0	16:13:34.597	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2168 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+QH	0	16:28:38.078	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3468 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+QP	0	16:29:32.156	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+
+--- 20260227.log ---
+OQ	0	20:49:44.362	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=71828 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+HL	0	20:50:18.078	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=71860 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+OJ	0	21:04:44.086	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=73133 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+LF	0	21:05:31.803	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=73156 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+HK	0	21:19:47.498	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=73606 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+GI	0	21:20:31.148	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=73622 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+PE	0	21:34:49.536	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=73910 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+EQ	0	21:35:34.146	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=73924 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+GS	0	21:49:51.495	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=74292 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+GR	0	21:50:40.752	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=74317 | State=GUARDIAN_HALTED | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+
+--- 20260303.log ---
+HP	0	21:52:39.778	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+CM	0	21:52:59.388	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+JI	0	22:08:08.819	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=825 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+JH	0	22:23:10.438	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1173 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+GN	0	22:38:11.511	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1599 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+OM	0	22:53:11.649	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2131 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+IO	0	23:08:14.099	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2684 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+MM	0	23:23:14.163	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3396 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+CS	0	23:38:17.212	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=3932 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+MQ	0	23:53:17.140	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=4662 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+
+--- 20260304.log ---
+IE	0	10:11:49.131	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=6483 | State=GUARDIAN_ACTIVE | Bal=$1989.95 | Eq=$1989.95 | DD=0.13% | Positions=0
+JS	0	10:26:49.230	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=11541 | State=GUARDIAN_ACTIVE | Bal=$1989.95 | Eq=$1989.95 | DD=0.13% | Positions=0
+KG	0	10:41:49.970	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=14363 | State=GUARDIAN_ACTIVE | Bal=$1989.74 | Eq=$1990.39 | DD=0.11% | Positions=1
+HO	0	10:56:49.338	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=16654 | State=GUARDIAN_ACTIVE | Bal=$1989.74 | Eq=$1992.87 | DD=0.01% | Positions=1
+IO	0	11:04:11.862	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1989.74 | Eq=$1992.58 | DD=0.00% | Positions=1
+JN	0	11:09:28.295	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1989.74 | Eq=$1992.92 | DD=0.00% | Positions=1
+DR	0	11:24:28.215	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2285 | State=GUARDIAN_ACTIVE | Bal=$1989.74 | Eq=$1988.67 | DD=0.22% | Positions=1
+LQ	0	11:39:28.890	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1989.74 | Eq=$1989.74 | DD=0.00% | Positions=1
+NQ	0	11:47:17.776	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1989.60 | Eq=$1988.75 | DD=0.00% | Positions=2
+ON	0	12:02:17.172	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1861 | State=GUARDIAN_ACTIVE | Bal=$1989.60 | Eq=$1989.27 | DD=0.13% | Positions=2
+
+========== SIGNALS & SCANS ==========
+
+--- 20260303.log ---
+FI	0	19:54:44.950	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+CE	0	19:54:44.950	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16095 Slow[0]=1.16020 | Fast[1]=1.16073 Slow[1]=1.16004 | RSI=58.5 | HTF=-1 | CrossUp=no CrossDn=no
+QH	0	19:54:44.950	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+LD	0	19:54:44.950	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33465 Slow[0]=1.33318 | Fast[1]=1.33430 Slow[1]=1.33289 | RSI=64.9 | HTF=-1 | CrossUp=no CrossDn=no
+DD	0	19:54:44.950	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=YES | OB=no | FVG=no
+KD	0	19:54:44.950	PropFirmBot (EURUSD,M15)	[EMA] USDJPY: Fast[0]=157.68259 Slow[0]=157.71765 | Fast[1]=157.69499 Slow[1]=157.72611 | RSI=45.7 | HTF=1 | CrossUp=no CrossDn=no
+KD	0	20:00:00.183	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+QP	0	20:00:00.183	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16091 Slow[0]=1.16025 | Fast[1]=1.16083 Slow[1]=1.16015 | RSI=55.3 | HTF=-1 | CrossUp=no CrossDn=no
+LR	0	20:00:00.183	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+PN	0	20:00:00.183	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33476 Slow[0]=1.33335 | Fast[1]=1.33456 Slow[1]=1.33313 | RSI=62.3 | HTF=-1 | CrossUp=no CrossDn=no
+GE	0	20:00:00.183	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=no | OB=no | FVG=no
+NR	0	20:00:00.183	PropFirmBot (EURUSD,M15)	[EMA] USDJPY: Fast[0]=157.68435 Slow[0]=157.71559 | Fast[1]=157.68919 Slow[1]=157.72065 | RSI=47.3 | HTF=1 | CrossUp=no CrossDn=no
+LM	0	20:15:00.281	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+QM	0	20:15:00.281	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16124 Slow[0]=1.16046 | Fast[1]=1.16106 Slow[1]=1.16031 | RSI=58.3 | HTF=-1 | CrossUp=no CrossDn=no
+GQ	0	20:15:00.281	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+GM	0	20:15:00.281	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33491 Slow[0]=1.33342 | Fast[1]=1.33456 Slow[1]=1.33313 | RSI=64.8 | HTF=-1 | CrossUp=no CrossDn=no
+LQ	0	20:15:00.281	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=no | OB=no | FVG=no
+DO	0	20:15:00.281	PropFirmBot (EURUSD,M15)	[EMA] USDJPY: Fast[0]=157.63316 Slow[0]=157.68817 | Fast[1]=157.65795 Slow[1]=157.70359 | RSI=41.9 | HTF=1 | CrossUp=no CrossDn=no
+FQ	0	20:30:00.068	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+GI	0	20:30:00.068	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16145 Slow[0]=1.16063 | Fast[1]=1.16128 Slow[1]=1.16048 | RSI=59.0 | HTF=-1 | CrossUp=no CrossDn=no
+QM	0	20:30:00.068	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+DI	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33555 Slow[0]=1.33399 | Fast[1]=1.33527 Slow[1]=1.33372 | RSI=65.8 | HTF=-1 | CrossUp=no CrossDn=no
+EL	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=no | OB=no | FVG=no
+CK	0	20:30:00.069	PropFirmBot (EURUSD,M15)	[EMA] USDJPY: Fast[0]=157.63376 Slow[0]=157.68844 | Fast[1]=157.65795 Slow[1]=157.70359 | RSI=42.0 | HTF=1 | CrossUp=no CrossDn=no
+QF	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+DF	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16150 Slow[0]=1.16073 | Fast[1]=1.16140 Slow[1]=1.16061 | RSI=57.6 | HTF=-1 | CrossUp=no CrossDn=no
+FH	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+KD	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33570 Slow[0]=1.33420 | Fast[1]=1.33551 Slow[1]=1.33397 | RSI=64.4 | HTF=-1 | CrossUp=no CrossDn=no
+QH	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=no | OB=no | FVG=no
+GD	0	20:45:02.209	PropFirmBot (EURUSD,M15)	[EMA] USDJPY: Fast[0]=157.61817 Slow[0]=157.67144 | Fast[1]=157.62521 Slow[1]=157.67958 | RSI=45.0 | HTF=1 | CrossUp=no CrossDn=no
+
+--- 20260304.log ---
+MN	0	10:30:00.088	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+LN	0	10:30:00.088	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16225 Slow[0]=1.16145 | Fast[1]=1.16192 Slow[1]=1.16124 | RSI=65.1 | HTF=-1 | CrossUp=no CrossDn=no
+DO	0	10:30:00.088	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+PO	0	10:30:00.088	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33683 Slow[0]=1.33552 | Fast[1]=1.33650 Slow[1]=1.33525 | RSI=64.9 | HTF=-1 | CrossUp=no CrossDn=no
+OS	0	10:30:00.088	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=YES | OB=YES | FVG=no
+NS	0	11:00:00.209	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+HK	0	11:00:00.209	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16265 Slow[0]=1.16178 | Fast[1]=1.16246 Slow[1]=1.16162 | RSI=63.8 | HTF=-1 | CrossUp=no CrossDn=no
+CS	0	11:00:00.209	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+HK	0	11:00:00.209	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33716 Slow[0]=1.33590 | Fast[1]=1.33698 Slow[1]=1.33570 | RSI=63.0 | HTF=-1 | CrossUp=no CrossDn=no
+CR	0	11:04:11.864	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+OJ	0	11:04:11.864	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16271 Slow[0]=1.16181 | Fast[1]=1.16246 Slow[1]=1.16162 | RSI=65.3 | HTF=-1 | CrossUp=no CrossDn=no
+FP	0	11:04:11.864	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+EH	0	11:04:11.864	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33720 Slow[0]=1.33592 | Fast[1]=1.33698 Slow[1]=1.33570 | RSI=63.7 | HTF=-1 | CrossUp=no CrossDn=no
+EQ	0	11:09:28.296	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+CI	0	11:09:28.296	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16266 Slow[0]=1.16178 | Fast[1]=1.16246 Slow[1]=1.16162 | RSI=64.0 | HTF=-1 | CrossUp=no CrossDn=no
+DQ	0	11:09:28.296	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+OI	0	11:09:28.296	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33711 Slow[0]=1.33588 | Fast[1]=1.33698 Slow[1]=1.33570 | RSI=61.4 | HTF=-1 | CrossUp=no CrossDn=no
+IJ	0	11:15:00.332	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+NR	0	11:15:00.332	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16320 Slow[0]=1.16212 | Fast[1]=1.16287 Slow[1]=1.16188 | RSI=68.6 | HTF=-1 | CrossUp=no CrossDn=no
+PH	0	11:15:00.332	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=no
+FP	0	11:15:00.332	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33738 Slow[0]=1.33600 | Fast[1]=1.33698 Slow[1]=1.33570 | RSI=66.8 | HTF=-1 | CrossUp=no CrossDn=no
+KQ	0	11:30:00.171	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+MM	0	11:30:00.171	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16343 Slow[0]=1.16232 | Fast[1]=1.16319 Slow[1]=1.16211 | RSI=67.8 | HTF=-1 | CrossUp=no CrossDn=no
+DQ	0	11:30:00.171	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+KM	0	11:30:00.171	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33816 Slow[0]=1.33661 | Fast[1]=1.33781 Slow[1]=1.33632 | RSI=68.5 | HTF=-1 | CrossUp=no CrossDn=no
+FP	0	11:39:28.890	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+HL	0	11:39:28.890	PropFirmBot (EURUSD,M15)	[EMA] EURUSD: Fast[0]=1.16333 Slow[0]=1.16228 | Fast[1]=1.16319 Slow[1]=1.16211 | RSI=63.4 | HTF=-1 | CrossUp=no CrossDn=no
+QQ	0	11:39:28.890	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=YES | OB=no | FVG=no
+LM	0	11:39:28.890	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD: Fast[0]=1.33797 Slow[0]=1.33653 | Fast[1]=1.33781 Slow[1]=1.33632 | RSI=62.6 | HTF=-1 | CrossUp=no CrossDn=no
+DI	0	11:45:00.075	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=no | OB=no | FVG=YES
 
 ========== TERMINAL LOGS ==========
 
