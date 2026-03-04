@@ -129,7 +129,7 @@ CAccountStateManager::CAccountStateManager()
    m_last_trading_day        = 0;
    m_phase_start_balance     = 0;
    m_risk_multiplier         = 1.0;
-   m_max_positions           = 2;
+   m_max_positions           = 3;
    m_max_daily_trades        = 8;
 
    m_state_file = "PropFirmBot_AccountState.dat";
@@ -149,7 +149,7 @@ void CAccountStateManager::InitChallenge(double account_size, double profit_targ
    if(m_phase == PHASE_CHALLENGE)
    {
       m_risk_multiplier  = 1.0;
-      m_max_positions    = 2;
+      m_max_positions    = 3;
       m_max_daily_trades = 8;
       m_phase_start_balance = account_size;
    }
@@ -191,7 +191,7 @@ void CAccountStateManager::SwitchToFunded(double funded_balance)
 
    // Funded mode: more conservative
    m_risk_multiplier  = 0.7;    // Reduce risk to 70%
-   m_max_positions    = 2;
+   m_max_positions    = 3;
    m_max_daily_trades = 6;      // Fewer trades, more selective
 
    SaveState();
@@ -223,7 +223,7 @@ void CAccountStateManager::SwitchToChallenge()
    m_phase = PHASE_CHALLENGE;
    m_trading_days = 0;
    m_risk_multiplier  = 1.0;
-   m_max_positions    = 2;
+   m_max_positions    = 3;
    m_max_daily_trades = 8;
    m_phase_start_balance = m_challenge_account_size;
 

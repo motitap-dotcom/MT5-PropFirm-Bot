@@ -64,7 +64,7 @@ input double   InpFVGMinPoints    = 50.0;       // Min FVG Size (points)
 // --- Risk Management ---
 input double   InpRiskPercent     = 0.5;        // Risk Per Trade (%)
 input double   InpMaxRiskPercent  = 0.75;       // Max Risk Per Trade (%)
-input int      InpMaxPositions    = 2;          // Max Open Positions
+input int      InpMaxPositions    = 3;          // Max Open Positions
 input double   InpMinRR           = 2.0;        // Min Risk:Reward
 input int      InpMaxDailyTrades  = 8;          // Max Trades Per Day
 input int      InpMaxConsecLosses = 5;          // Max Consecutive Losses

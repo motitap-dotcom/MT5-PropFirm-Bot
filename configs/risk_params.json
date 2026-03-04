@@ -5,7 +5,7 @@
   "risk_per_trade_percent": 0.5,
   "max_risk_per_trade_percent": 0.75,
   "min_risk_per_trade_percent": 0.25,
-  "max_open_positions": 2,
+  "max_open_positions": 3,
   "max_daily_trades": 6,
   "max_consecutive_losses": 4,
   "min_risk_reward_ratio": 2.0,
@@ -44,9 +44,10 @@
 
   "session_filter": {
     "london_start_utc": "07:00",
-    "london_end_utc": "11:00",
+    "london_end_utc": "16:00",
     "newyork_start_utc": "12:00",
-    "newyork_end_utc": "16:00"
+    "newyork_end_utc": "21:00",
+    "_note": "Continuous session 07:00-21:00 UTC (overlap London+NY)"
   },
 
   "weekend_guard": {
