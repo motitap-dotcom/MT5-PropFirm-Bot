@@ -70,8 +70,8 @@ input int      InpMaxDailyTrades  = 8;          // Max Trades Per Day
 input int      InpMaxConsecLosses = 5;          // Max Consecutive Losses
 
 // --- Spread Filter ---
-input double   InpMaxSpreadMajor  = 2.5;        // Max Spread Major (pips)
-input double   InpMaxSpreadXAU    = 4.0;        // Max Spread XAUUSD (pips)
+input double   InpMaxSpreadMajor  = 4.0;        // Max Spread Major (pips)
+input double   InpMaxSpreadXAU    = 8.0;        // Max Spread XAUUSD (pips)
 
 // --- News Filter ---
 input bool     InpNewsFilterOn    = true;        // News Filter Enabled

@@ -19,8 +19,8 @@
   },
 
   "spread_filter": {
-    "major_pairs_max_pips": 2.5,
-    "xauusd_max_pips": 4.0,
+    "major_pairs_max_pips": 4.0,
+    "xauusd_max_pips": 8.0,
     "spread_anomaly_multiplier": 3.0
   },
 
