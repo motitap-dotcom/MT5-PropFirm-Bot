@@ -1,23 +1,16 @@
 #!/bin/bash
-echo "=== Fix MaxPositions - $(date) ==="
+echo "=== Verify Settings - $(date) ==="
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
-# Step 1: Delete old state file
-STATE="$MT5/MQL5/Files/PropFirmBot/PropFirmBot_AccountState.dat"
-if [ -f "$STATE" ]; then
-    rm -f "$STATE" && echo "AccountState.dat DELETED"
-else
-    echo "AccountState.dat not found (clean)"
-fi
+echo "--- EA log (last 25 lines) ---"
+LATEST=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+[ -n "$LATEST" ] && cat "$LATEST" | tr -d '\0' | tail -25
 
-# Step 2: Restart MT5 (nohup so SSH doesnt hang)
-pkill -f terminal64 2>/dev/null
-sleep 3
-export DISPLAY=:99
-cd "$MT5"
-nohup wine terminal64.exe /portable > /dev/null 2>&1 &
-sleep 8
+echo ""
+echo "--- Status JSON ---"
+cat "$MT5/MQL5/Files/PropFirmBot/status.json" 2>/dev/null | tr -d '\0'
 
-# Step 3: Quick verify
-ps aux | grep "[t]erminal64" | head -1 && echo "MT5 RUNNING" || echo "MT5 NOT RUNNING"
+echo ""
+echo "--- AccountState.dat ---"
+ls -la "$MT5/MQL5/Files/PropFirmBot/PropFirmBot_AccountState.dat" 2>/dev/null || echo "No state file"
 echo "=== Done ==="
