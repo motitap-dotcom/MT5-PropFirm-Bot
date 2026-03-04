@@ -1,4 +1,6 @@
-=== Quick Check - Wed Mar  4 13:34:05 UTC 2026 ===
-hello from VPS
+=== Fix MaxPositions - Wed Mar  4 13:36:31 UTC 2026 ===
+AccountState.dat not found (clean)
+root     1986240  4.7  0.1 2687116 13844 ?       S<   13:36   0:00 start.exe /exec terminal64.exe
+MT5 RUNNING
 === Done ===
 EXIT_CODE=0
