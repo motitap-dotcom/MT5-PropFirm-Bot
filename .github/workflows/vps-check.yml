@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: claude/build-cfd-trading-bot-fl0ld
+          ref: claude/fix-bot-communication-J0QSp
 
       - name: Run VPS diagnostics
         env:
@@ -44,4 +44,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f vps_report.txt
           git commit -m "VPS status report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push origin claude/build-cfd-trading-bot-fl0ld || true
+          git push origin claude/fix-bot-communication-J0QSp || true

@@ -48,7 +48,7 @@
 - [x] Risk params set: 0.5% per trade, soft DD 3.5%, critical 5.0%, hard 6.0%
 - [x] Linux VPS setup scripts ready (Wine + MT5 + monitoring)
 - [x] Deploy script updated with all 11 EA files
-- [x] All code pushed to branch claude/build-cfd-trading-bot-fl0ld
+- [x] All code pushed to branch claude/fix-bot-communication-J0QSp
 - [x] VPS setup complete - Wine + MT5 installed on Contabo VPS
 - [x] MT5 running on VPS (accessible via VNC)
 - [x] FundedNext account connected in MT5 (account 11797849, FundedNext-Server)
@@ -59,10 +59,10 @@
 - [x] EA compiled (PropFirmBot.ex5 - 196KB)
 - [x] EA attached to EURUSD M15 chart
 - [x] AutoTrading enabled (green button)
-- [ ] Verify Telegram notifications work from live EA
-- [ ] Set up VPS monitoring (watchdog)
+- [x] Telegram test script ready (scripts/test_telegram.sh)
+- [x] Watchdog monitoring script ready (scripts/watchdog.sh + setup_watchdog.sh)
 
-## VPS Current State (Updated 2026-02-22)
+## VPS Current State (Updated 2026-03-04)
 - MT5 is RUNNING on VPS with PropFirmBot EA ACTIVE
 - FundedNext account LOGGED IN and CONNECTED (account 11797849)
 - EA attached to EURUSD M15 chart
@@ -88,6 +88,28 @@
 10. TradeAnalyzer.mqh - Performance analytics
 11. AccountStateManager.mqh - Phase management (Challenge/Funded/Scaling)
 
+## GitHub Actions Workflows (3)
+1. **deploy-ea.yml** - Auto-deploy EA files to VPS when EA/ or configs/ change
+2. **vps-check.yml** - Run VPS diagnostics (manual trigger or push trigger-check.txt)
+3. **vps-fix.yml** - Fix and restart MT5 on VPS (manual trigger or push scripts)
+- All workflows use branch: `claude/fix-bot-communication-J0QSp`
+- All credentials via GitHub Secrets (VPS_IP, VPS_PASSWORD, VPS_USER, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID)
+
+## Key Scripts (on VPS)
+- **watchdog.sh** - Auto-monitor MT5 every 5 min, restart if down, Telegram alerts
+- **setup_watchdog.sh** - One-time setup: installs watchdog as cron job
+- **test_telegram.sh** - Test Telegram connection from VPS
+- **clean_restart.sh** - Full clean restart of MT5
+- **fix_and_restart.sh** - Fix connection issues and restart MT5
+- **verify_ea.sh** - Verify EA is running and check logs
+
+## Noa's Quick Commands (paste in SSH)
+- Check MT5 status: `bash /root/MT5-PropFirm-Bot/scripts/verify_ea.sh`
+- Test Telegram: `bash /root/MT5-PropFirm-Bot/scripts/test_telegram.sh`
+- Install watchdog: `bash /root/MT5-PropFirm-Bot/scripts/setup_watchdog.sh`
+- Restart MT5: `bash /root/MT5-PropFirm-Bot/scripts/clean_restart.sh`
+- Check watchdog log: `tail -50 /var/log/watchdog.log`
+
 ## Working Method
 - Claude's environment CANNOT SSH to VPS (port 22 blocked from sandbox)
 - Noa runs commands on VPS via SSH from her Windows PowerShell
@@ -102,7 +124,7 @@
 ## How to Resume Work
 - MT5 is running on VPS at 77.237.234.2
 - VNC for MT5 GUI: connect to 77.237.234.2:5900 (no password, via RealVNC)
-- Repo on VPS: /root/MT5-PropFirm-Bot (branch: claude/build-cfd-trading-bot-fl0ld)
+- Repo on VPS: /root/MT5-PropFirm-Bot (branch: claude/fix-bot-communication-J0QSp)
 - MT5 installed at: /root/.wine/drive_c/Program Files/MetaTrader 5/
 - EA files at: .../MQL5/Experts/PropFirmBot/ (all 11 files + .ex5 compiled)
 - Config files at: .../MQL5/Files/PropFirmBot/ (6 JSON files)
