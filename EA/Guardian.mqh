@@ -115,7 +115,7 @@ public:
    ENUM_GUARDIAN_STATE GetState()      { return m_state; }
    ENUM_HALT_REASON GetHaltReason()    { return m_halt_reason; }
    string   GetHaltMessage()           { return m_halt_message; }
-   bool     CanTrade()                 { return m_state == GUARDIAN_ACTIVE; }
+   bool     CanTrade()                 { return m_state == GUARDIAN_ACTIVE || m_state == GUARDIAN_CAUTION; }
    bool     MustCloseAll()             { return m_state >= GUARDIAN_EMERGENCY; }
    bool     IsDead()                   { return m_state == GUARDIAN_SHUTDOWN; }
    bool     IsCaution()                { return m_state == GUARDIAN_CAUTION; }
@@ -157,8 +157,8 @@ CGuardian::CGuardian()
    m_trailing_dd = true;
    m_soft_daily_dd_pct = 0;
    m_crit_daily_dd_pct = 0;
-   m_soft_total_dd_pct = 3.5;
-   m_crit_total_dd_pct = 5.0;
+   m_soft_total_dd_pct = 4.5;
+   m_crit_total_dd_pct = 5.4;
    m_max_consec_losses = 5;
    m_consec_losses = 0;
    m_max_daily_trades = 10;
@@ -212,9 +212,11 @@ bool CGuardian::Init(double balance, double hard_daily, double hard_total,
 
    if(m_trailing_dd)
    {
-      // Trailing DD: tighter buffers since DD is from equity high water
-      m_soft_total_dd_pct  = hard_total * 0.58;  // ~3.5% for 6%
-      m_crit_total_dd_pct  = hard_total * 0.83;  // ~5.0% for 6%
+      // Trailing DD: buffers from equity high water mark
+      // Soft = 75% of hard limit (~4.5% for 6%) - reduces risk, still trades
+      // Crit = 90% of hard limit (~5.4% for 6%) - emergency close
+      m_soft_total_dd_pct  = hard_total * 0.75;  // ~4.5% for 6%
+      m_crit_total_dd_pct  = hard_total * 0.90;  // ~5.4% for 6%
    }
    else
    {

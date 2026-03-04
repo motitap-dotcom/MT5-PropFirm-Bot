@@ -230,10 +230,15 @@ int OnInit()
    // === RISK MANAGER ===
    double risk_pct = InpRiskPercent * g_account.GetRiskMultiplier();
    double max_risk = InpMaxRiskPercent * g_account.GetRiskMultiplier();
+   // RiskManager DD guards: use relaxed values since Guardian is the master watchdog
+   // Daily: disabled for Stellar Instant (0 - 1.0 = -1.0, will be treated as disabled)
+   // Total: hard limit - 1.5% buffer (6.0 - 1.5 = 4.5%)
+   double rm_daily_dd = g_account.GetDailyDDLimit() > 0 ? g_account.GetDailyDDLimit() - 2.0 : -1.0;
+   double rm_total_dd = g_account.GetTotalDDLimit() - 1.5;
    g_risk.Init(g_account.GetAccountSize(), risk_pct, max_risk,
                g_account.GetMaxPositions(),
-               g_account.GetDailyDDLimit() - 2.0,
-               g_account.GetTotalDDLimit() - 3.0,
+               rm_daily_dd,
+               rm_total_dd,
                InpMagicNumber);
    g_risk.SetSpreadFilter(InpMaxSpreadMajor, InpMaxSpreadXAU);
    g_risk.SetSessionFilter(InpLondonStart, InpLondonEnd, InpNYStart, InpNYEnd);
@@ -436,14 +441,20 @@ void OnTick()
       return;  // Same bar - no new signal scan
    g_last_bar_time = current_bar;
 
-   PrintFormat("[NEWBAR] %s | Guardian=%s | Scanning %d symbols...",
+   PrintFormat("[NEWBAR] %s | Guardian=%s | Eq=$%.2f | DD=%.2f%% | Scanning %d symbols...",
               TimeToString(current_bar, TIME_DATE|TIME_MINUTES),
-              EnumToString(g_guardian.GetState()), g_symbol_count);
+              EnumToString(g_guardian.GetState()),
+              AccountInfoDouble(ACCOUNT_EQUITY),
+              g_guardian.TotalDD(),
+              g_symbol_count);
 
    // Only scan for signals if Guardian says we can trade
    if(!g_guardian.CanTrade())
    {
-      PrintFormat("[NEWBAR] Blocked by Guardian: %s", g_guardian.GetHaltMessage());
+      PrintFormat("[NEWBAR] Blocked by Guardian: state=%s reason=%s msg=%s",
+                  EnumToString(g_guardian.GetState()),
+                  EnumToString(g_guardian.GetHaltReason()),
+                  g_guardian.GetHaltMessage());
       return;
    }
 
@@ -469,10 +480,22 @@ void OnTick()
 //+------------------------------------------------------------------+
 void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
 {
-   // Pre-flight checks
-   if(!g_risk.CanOpenTrade(symbol)) return;
-   if(!g_trade.CanTradeNow(symbol)) return;
-   if(g_trade.CountSymbolPositions(symbol) > 0) return;
+   // Pre-flight checks with detailed logging
+   if(!g_risk.CanOpenTrade(symbol))
+   {
+      // RiskManager already prints the specific reason
+      return;
+   }
+   if(!g_trade.CanTradeNow(symbol))
+   {
+      PrintFormat("[DIAG] %s blocked: Min bar gap not met", symbol);
+      return;
+   }
+   if(g_trade.CountSymbolPositions(symbol) > 0)
+   {
+      PrintFormat("[DIAG] %s blocked: Already has open position", symbol);
+      return;
+   }
 
    // Spread anomaly check
    if(!g_guardian.CheckSpreadAnomaly(symbol))
@@ -514,9 +537,17 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
 
    // Fallback
    if(signal == SIGNAL_NONE && InpUseFallback && InpStrategy == STRATEGY_SMC)
+   {
       signal = g_signals[signal_index].GetSignal(STRATEGY_EMA_CROSS, sl_price, tp_price);
+      if(signal != SIGNAL_NONE)
+         PrintFormat("[DIAG] %s: SMC=NONE, using EMA fallback signal=%d", symbol, signal);
+   }
 
-   if(signal == SIGNAL_NONE) return;
+   if(signal == SIGNAL_NONE)
+   {
+      PrintFormat("[DIAG] %s: No signal from any strategy", symbol);
+      return;
+   }
 
    // Validate RR
    double entry_price = (signal == SIGNAL_BUY)

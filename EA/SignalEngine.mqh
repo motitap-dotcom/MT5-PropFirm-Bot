@@ -463,7 +463,11 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
 
    // Step 1: Get H4 bias
    int htf_bias = GetHTFBias();
-   if(htf_bias == 0) return SIGNAL_NONE; // No clear trend
+   if(htf_bias == 0)
+   {
+      PrintFormat("[SMC] %s: No H4 bias (EMA50/200 not aligned) - no signal", m_symbol);
+      return SIGNAL_NONE;
+   }
 
    // Step 2: Get ATR for SL/TP calculation
    if(CopyBuffer(m_handle_atr, 0, 0, 3, m_atr) < 3) return SIGNAL_NONE;
@@ -478,6 +482,12 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
       bool has_liquidity_sweep = DetectLiquiditySweep(true, 30);
       bool has_bullish_ob = DetectBullishOrderBlock(0, ob_high, ob_low);
       bool has_bullish_fvg = DetectBullishFVG(0, fvg_high, fvg_low);
+
+      PrintFormat("[SMC] %s BUY check: LiqSweep=%s OB=%s FVG=%s",
+                  m_symbol,
+                  has_liquidity_sweep ? "Y" : "N",
+                  has_bullish_ob ? "Y" : "N",
+                  has_bullish_fvg ? "Y" : "N");
 
       // Need liquidity sweep + (order block OR fair value gap)
       if(has_liquidity_sweep && (has_bullish_ob || has_bullish_fvg))
@@ -512,6 +522,12 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
       bool has_liquidity_sweep = DetectLiquiditySweep(false, 30);
       bool has_bearish_ob = DetectBearishOrderBlock(0, ob_high, ob_low);
       bool has_bearish_fvg = DetectBearishFVG(0, fvg_high, fvg_low);
+
+      PrintFormat("[SMC] %s SELL check: LiqSweep=%s OB=%s FVG=%s",
+                  m_symbol,
+                  has_liquidity_sweep ? "Y" : "N",
+                  has_bearish_ob ? "Y" : "N",
+                  has_bearish_fvg ? "Y" : "N");
 
       if(has_liquidity_sweep && (has_bearish_ob || has_bearish_fvg))
       {
@@ -564,6 +580,10 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
    bool cross_up = (m_ema_fast[1] <= m_ema_slow[1]) && (m_ema_fast[0] > m_ema_slow[0]);
    // EMA 9 crossed below EMA 21
    bool cross_down = (m_ema_fast[1] >= m_ema_slow[1]) && (m_ema_fast[0] < m_ema_slow[0]);
+
+   PrintFormat("[EMA] %s: CrossUp=%s CrossDown=%s RSI=%.1f HTF=%d | EMA9=%.5f EMA21=%.5f",
+               m_symbol, cross_up ? "Y" : "N", cross_down ? "Y" : "N",
+               m_rsi[0], htf_bias, m_ema_fast[0], m_ema_slow[0]);
 
    // BUY: EMA cross up + RSI not overbought + bullish or neutral HTF
    if(cross_up && m_rsi[0] < m_rsi_overbought && m_rsi[0] > m_rsi_oversold && htf_bias >= 0)
