@@ -1,62 +1,24 @@
-=== Quick Status - Wed Mar  4 12:26:45 UTC 2026 ===
+=== MT5 Process Check - Wed Mar  4 12:28:59 UTC 2026 ===
+--- All wine/terminal processes ---
+root      334849  0.0  0.0   7984  3504 ?        Ss   Feb26   3:50 /bin/bash /root/MT5-PropFirm-Bot/relay/daemon.sh
+root      426805  0.0  0.0 520040  6300 ?        S<sl Feb27   0:24 C:\windows\system32\winedevice.exe
+root      426826  5.6  0.0 744552  7848 ?        S<sl Feb27 423:29 C:\windows\system32\winedevice.exe
+root      464624  0.0  0.1 302308 15980 ?        S<sl Feb27   0:10 C:\windows\system32\explorer.exe C:\Program Files\MetaTrader 5
+root      979278  0.0  0.0   7872  3240 ?        Ss   Mar01   0:12 /bin/bash /root/MT5-PropFirm-Bot/scripts/git_bridge.sh
+root     1365428  0.0  0.2  34784 20148 ?        Ss   Mar02   1:36 /usr/bin/python3 /root/MT5-PropFirm-Bot/management/server.py
+root     1622410  0.0  0.0 520040  6332 ?        S<sl Mar03   0:07 C:\windows\system32\winedevice.exe
+root     1622440  7.9  0.0 744552  7820 ?        S<sl Mar03 122:09 C:\windows\system32\winedevice.exe
+root     1970047  0.1  0.1 2686336 14080 ?       S<   12:18   0:00 start.exe /exec terminal64.exe
+root     1970050 38.2  0.1  18616 15904 ?        Ss   12:18   3:53 /opt/wine-staging/lib/wine/../../bin/wineserver
+root     1970063  0.1  0.2 520040 17668 ?        S<sl 12:18   0:01 C:\windows\system32\winedevice.exe
+root     1970085 10.9  0.2 744552 23160 ?        S<sl 12:18   1:06 C:\windows\system32\winedevice.exe
+root     1970126 96.5  2.7 1681076 222908 ?      S<l  12:18   9:39 C:\Program Files\MetaTrader 5\terminal64.exe /portable
+--- Xvfb ---
+346800 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
+--- x11vnc ---
+346808 /usr/bin/x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -xkb
 
---- MT5 Process ---
-MT5 NOT RUNNING
-
---- EA files timestamp ---
-Mar 4 12:18 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
-
---- Config timestamp ---
-Mar 4 12:18 5/MQL5/Files/PropFirmBot/account_state.json
-Mar 4 12:18 5/MQL5/Files/PropFirmBot/challenge_rules.json
-Mar 4 12:18 5/MQL5/Files/PropFirmBot/funded_rules.json
-Mar 4 12:18 5/MQL5/Files/PropFirmBot/notifications.json
-Mar 4 12:18 5/MQL5/Files/PropFirmBot/risk_params.json
-Mar 4 12:26 5/MQL5/Files/PropFirmBot/status.json
-Mar 4 12:18 5/MQL5/Files/PropFirmBot/symbols.json
-
---- AccountState.dat exists? ---
-DELETED (good - will re-init)
-
---- Status.json ---
-  "timestamp": "2026.03.04 14:26:45",
-  "server_time": "2026.03.04 14:26:45",
-  "gmt_time": "2026.03.04 12:26:45",
-  "account": {
-    "number": 11797849,
-    "name": "FundedNext-Stellar Instant Account- moti tapiro",
-    "server": "FundedNext-Server",
-    "currency": "USD",
-    "leverage": 30,
-    "balance": 1989.60,
-    "equity": 1991.08,
-    "margin": 177.57,
-    "free_margin": 1813.51,
-    "floating_pnl": 1.48,
-    "initial_balance": 1989.60,
-    "total_pnl": 1.48,
-    "profit_percent": 0.07
-  },
-  "guardian": {
-    "state": "ACTIVE",
-    "daily_dd": 0.00,
-    "total_dd": 0.02,
-    "halt_message": "",
-    "connection_ok": true,
-    "can_trade": true
-  },
-  "today": {
-    "trades": 0,
-    "wins": 0,
-    "losses": 0,
-    "profit": 0.00,
-    "loss": 0.00,
-    "net": 0.00,
-    "consec_losses": 0
-  },
-  "positions": {
-    "count": 2,
-    "open": [{"ticket":160744298,"symbol":"EURUSD","type":"SELL","volume":0.02,"open_price":1.16348,"current_price":1.16338,"sl":1.16496,"tp":1.16051,"profit":0.20,"pips":1.0,"open_time":"2026.03.04 13:45","comment":"PFBot_SMC"},{"ticket":160727946,"symbol":"USDJPY","type":"BUY","volume":0.03,"open_price":157.15100,"current_price":157.21800,"sl":156.93800,"tp":157.58100,"profit":1.28,"pips":6.7,"open_time":"2026.03.04 12:30","comment":"PFBot_SMC"}]
-
+--- If MT5 not running, start it ---
+MT5 is already running!
 === Done ===
 EXIT_CODE=0
