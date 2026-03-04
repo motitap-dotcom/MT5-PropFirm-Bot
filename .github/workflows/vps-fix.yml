@@ -19,7 +19,7 @@ jobs:
           ref: claude/fix-bot-server-connection-JbPec
           fetch-depth: 0
 
-      - name: Deploy to VPS
+      - name: Check and fix VPS
         env:
           VPS_IP: ${{ secrets.VPS_IP }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
@@ -27,31 +27,13 @@ jobs:
         run: |
           set +e
           REPORT="deploy_result.txt"
-          echo "=== VPS DEPLOY $(date -u) ===" > $REPORT
+          echo "=== VPS CHECK $(date -u) ===" > $REPORT
 
-          # Check secrets
-          if [ -z "$VPS_IP" ] || [ -z "$VPS_PASSWORD" ] || [ -z "$VPS_USER" ]; then
-            echo "ERROR: Missing VPS secrets! IP='$VPS_IP' USER='$VPS_USER' PASS_LEN=${#VPS_PASSWORD}" >> $REPORT
-            cat $REPORT
-            exit 1
-          fi
-          echo "Secrets OK: IP=$VPS_IP USER=$VPS_USER PASS_LEN=${#VPS_PASSWORD}" >> $REPORT
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
 
-          # Install sshpass with retry
-          for i in 1 2 3; do
-            sudo apt-get update -qq 2>/dev/null && sudo apt-get install -y -qq sshpass 2>/dev/null && break
-            echo "apt retry $i..." >> $REPORT
-            sleep 2
-          done
-          which sshpass >> $REPORT 2>&1 || { echo "FATAL: sshpass not installed" >> $REPORT; cat $REPORT; exit 1; }
-
-          # SSH function with retry
           ssh_cmd() {
-            local desc="$1"
-            local cmd="$2"
-            local result=""
+            local desc="$1"; local cmd="$2"
             for attempt in 1 2 3; do
-              echo "[$desc] attempt $attempt..." >> $REPORT
               result=$(sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ServerAliveInterval=15 -o ServerAliveCountMax=3 ${VPS_USER}@${VPS_IP} "$cmd" 2>&1)
               local rc=$?
               if [ $rc -eq 0 ]; then
@@ -59,49 +41,138 @@ jobs:
                 echo "$result" >> $REPORT
                 return 0
               fi
-              echo "[$desc] failed (rc=$rc): $result" >> $REPORT
+              echo "[$desc] attempt $attempt failed (rc=$rc): $result" >> $REPORT
               sleep $((attempt * 3))
             done
-            echo "[$desc] GAVE UP after 3 attempts" >> $REPORT
+            echo "[$desc] GAVE UP" >> $REPORT
             return 1
           }
 
-          # SCP function with retry
-          scp_cmd() {
-            local src="$1"
-            local dst="$2"
-            for attempt in 1 2 3; do
-              sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$src" "${VPS_USER}@${VPS_IP}:$dst" 2>> $REPORT
-              if [ $? -eq 0 ]; then
-                echo "SCP OK: $src -> $dst" >> $REPORT
-                return 0
-              fi
-              echo "SCP retry $attempt for $src" >> $REPORT
-              sleep $((attempt * 3))
-            done
-            echo "SCP FAILED: $src" >> $REPORT
-            return 1
-          }
+          # Check if display server and MT5 are running
+          ssh_cmd "STATUS" '
+            echo "=== PROCESS CHECK ==="
+            echo "Wine processes:"
+            ps aux | grep -E "wine|terminal64|metaeditor" | grep -v grep || echo "NO WINE PROCESSES"
+            echo ""
+            echo "Display server:"
+            ps aux | grep -E "Xvfb|x11vnc" | grep -v grep || echo "NO DISPLAY SERVER"
+            echo ""
+            echo "=== FILE TIMESTAMPS ==="
+            ls -la "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5" 2>/dev/null
+            ls -la "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5" 2>/dev/null
+            echo ""
+            MQ5_TIME=$(stat -c%Y "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5" 2>/dev/null || echo 0)
+            EX5_TIME=$(stat -c%Y "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5" 2>/dev/null || echo 0)
+            echo "MQ5 epoch: $MQ5_TIME"
+            echo "EX5 epoch: $EX5_TIME"
+            if [ "$MQ5_TIME" -gt "$EX5_TIME" ]; then
+              echo "WARNING: .mq5 is NEWER than .ex5 - needs recompilation!"
+            else
+              echo "OK: .ex5 is up to date"
+            fi
+          '
 
-          # Step 1: Test connectivity
-          ssh_cmd "PING" "echo 'VPS reachable at $(date)'; uname -a"
+          # Ensure display server is running, then start MT5 if needed
+          ssh_cmd "ENSURE_MT5" '
+            # Ensure display server
+            if ! pgrep -x Xvfb > /dev/null 2>&1; then
+              echo "Starting Xvfb..."
+              Xvfb :99 -screen 0 1280x1024x24 &
+              sleep 2
+            fi
+            if ! pgrep -x x11vnc > /dev/null 2>&1; then
+              echo "Starting x11vnc..."
+              x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw 2>/dev/null
+              sleep 1
+            fi
 
-          # Step 2: Pull latest code on VPS
-          ssh_cmd "GIT_PULL" "cd /root/MT5-PropFirm-Bot && git fetch origin claude/fix-bot-server-connection-JbPec 2>&1 && git checkout claude/fix-bot-server-connection-JbPec 2>&1 && git reset --hard origin/claude/fix-bot-server-connection-JbPec 2>&1 && echo 'HEAD: $(git log --oneline -1)'"
+            # Check if MT5 is running
+            MT5_PID=$(ps aux | grep "terminal64.exe" | grep -v grep | awk "{print \$2}" | head -1)
+            if [ -n "$MT5_PID" ]; then
+              echo "MT5 is RUNNING (PID: $MT5_PID)"
+              echo "Killing to force recompile..."
+              kill $MT5_PID 2>/dev/null
+              sleep 5
+            else
+              echo "MT5 is NOT running - will start it"
+            fi
 
-          # Step 3: Copy EA files on VPS
-          ssh_cmd "COPY_EA" 'cp /root/MT5-PropFirm-Bot/EA/*.mq5 /root/MT5-PropFirm-Bot/EA/*.mqh "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/" 2>&1 && ls -la "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/"*.mq5 | head -3 && echo "COPY OK"'
+            # Start MT5
+            export DISPLAY=:99
+            export WINEPREFIX=/root/.wine
+            nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" \
+              /login:11797849 /password:gazDE62## /server:FundedNext-Server \
+              > /tmp/mt5_start.log 2>&1 &
+            MT5_NEW_PID=$!
+            echo "Started MT5 (PID: $MT5_NEW_PID)"
+            sleep 20
 
-          # Step 4: Stop MT5
-          ssh_cmd "STOP_MT5" 'pkill -f terminal64.exe 2>/dev/null; sleep 3; pgrep -la terminal64 && echo "STILL RUNNING" || echo "MT5 STOPPED"'
+            # Verify it is still running
+            if kill -0 $MT5_NEW_PID 2>/dev/null; then
+              echo "MT5 still running after 20s - GOOD"
+            else
+              echo "MT5 PID $MT5_NEW_PID is DEAD!"
+              echo "--- Start log ---"
+              cat /tmp/mt5_start.log 2>/dev/null | tail -20
+              echo "--- All wine processes ---"
+              ps aux | grep wine | grep -v grep
+            fi
+          '
 
-          # Step 5: Start MT5
-          ssh_cmd "START_MT5" 'export DISPLAY=:99; export WINEPREFIX=/root/.wine; nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" /login:11797849 /password:gazDE62## /server:FundedNext-Server > /dev/null 2>&1 & sleep 2; echo "MT5 START CMD SENT"'
+          # Wait a bit more for full initialization
+          sleep 15
 
-          # Step 6: Wait and check
-          echo "Waiting 25 seconds for MT5 to start..." >> $REPORT
-          sleep 25
-          ssh_cmd "CHECK" 'pgrep -la terminal64 || echo "MT5 NOT RUNNING"; echo "---CONNECTIONS---"; ss -tn state established | grep -v ":22 \|:5900 " | head -5; echo "---LOGS---"; EALOG=$(ls -t "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/"*.log 2>/dev/null | head -1); [ -n "$EALOG" ] && tail -c 4000 "$EALOG" | tr -d "\0" | tail -30; echo "---TERMINAL---"; TLOG=$(ls -t "/root/.wine/drive_c/Program Files/MetaTrader 5/logs/"*.log 2>/dev/null | head -1); [ -n "$TLOG" ] && tail -c 2000 "$TLOG" | tr -d "\0" | tail -10'
+          # Get detailed logs
+          ssh_cmd "EA_LOGS" '
+            MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+            TODAY=$(date -u "+%Y%m%d")
+
+            echo "=== MT5 PROCESS ==="
+            ps aux | grep -E "wine|terminal64" | grep -v grep | head -5
+
+            echo ""
+            echo "=== CONNECTIONS ==="
+            ss -tn state established | grep -v ":22 \|:5900 " | head -5
+
+            echo ""
+            echo "=== TERMINAL LOG (last 20) ==="
+            TLOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
+            [ -n "$TLOG" ] && tail -c 5000 "$TLOG" | tr -d "\0" | tail -20
+
+            echo ""
+            echo "=== EA LOG TODAY (last 60 lines) ==="
+            EALOG="$MT5/MQL5/Logs/${TODAY}.log"
+            if [ -f "$EALOG" ]; then
+              echo "Size: $(stat -c%s "$EALOG") bytes"
+              CLEAN="/tmp/ea_clean.txt"
+              tr -d "\0" < "$EALOG" > "$CLEAN"
+              tail -60 "$CLEAN"
+              echo ""
+              echo "=== SIGNAL SUMMARY ==="
+              echo "NEWBAR: $(grep -c "\[NEWBAR\]" "$CLEAN")"
+              echo "SCAN: $(grep -c "\[SCAN\]" "$CLEAN")"
+              echo "PREFLIGHT: $(grep -c "\[PREFLIGHT\]" "$CLEAN")"
+              echo "SMC: $(grep -c "\[SMC\]" "$CLEAN")"
+              echo "EMA: $(grep -c "\[EMA\]" "$CLEAN")"
+              echo "TRADE: $(grep -c "\[TRADE\]" "$CLEAN")"
+              echo "BLOCKED: $(grep -c "\[RiskMgr\] BLOCKED" "$CLEAN")"
+              echo "HEARTBEAT: $(grep -c "\[HEARTBEAT\]" "$CLEAN")"
+              echo ""
+              echo "=== LAST 3 HEARTBEATS ==="
+              grep "\[HEARTBEAT\]" "$CLEAN" | tail -3
+              echo ""
+              echo "=== SIGNAL ACTIVITY ==="
+              grep -E "\[SCAN\]|\[SMC\]|\[EMA\]|\[SIGNAL\]|\[PREFLIGHT\]" "$CLEAN" | tail -20
+              rm -f "$CLEAN"
+            else
+              echo "No EA log for today!"
+              ls -lt "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -3
+            fi
+
+            echo ""
+            echo "=== .EX5 TIMESTAMP ==="
+            ls -la "$MT5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5" 2>/dev/null
+          '
 
           echo "=== DONE $(date -u) ===" >> $REPORT
           cat $REPORT
@@ -114,5 +185,5 @@ jobs:
           git fetch origin claude/fix-bot-server-connection-JbPec
           git reset --soft origin/claude/fix-bot-server-connection-JbPec
           git add -f deploy_result.txt 2>/dev/null || true
-          git commit -m "Deploy result $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git commit -m "VPS check $(date -u '+%Y-%m-%d %H:%M UTC')" || true
           git push origin HEAD:claude/fix-bot-server-connection-JbPec || true
