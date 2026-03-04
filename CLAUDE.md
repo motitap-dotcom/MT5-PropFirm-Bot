@@ -1,5 +1,42 @@
 # PropFirmBot - Project Memory
 
+## ⚠️ MANDATORY WORKFLOW - READ FIRST ⚠️
+
+**כל אינטראקציה עם ה-VPS חייבת לעבור דרך הריפו בלבד!**
+
+Claude **לא יכול** להתחבר ישירות ל-VPS (פורט 22 חסום מה-sandbox).
+הדרך היחידה לנהל את הבוט, לבדוק סטטוס, להריץ פקודות, לעדכן קוד - היא:
+
+### שיטת העבודה (Push & Listen):
+```
+Claude עושה שינוי בריפו → Push ל-GitHub → GitHub Actions מריץ על VPS → תוצאה חוזרת לריפו
+```
+
+### פקודות זמינות (GitHub Actions Workflows):
+
+| פעולה | איך להפעיל | קובץ תוצאה |
+|-------|------------|-------------|
+| **בדיקת סטטוס VPS** | לערוך `commands/check_status.sh` ולדחוף | `commands/output.txt` |
+| **הרצת פקודה על VPS** | לכתוב פקודה ב-`commands/run.sh` ולדחוף | `commands/output.txt` |
+| **עדכון קוד EA** | לערוך קבצים ב-`EA/` או `configs/` ולדחוף | `deploy_report.txt` |
+| **תיקון ואתחול MT5** | לערוך `scripts/fix_and_restart.sh` ולדחוף | `vps_fix_report.txt` |
+
+### זרימת עבודה לכל בקשה:
+
+1. **בקשת סטטוס**: כתוב סקריפט ב-`commands/run.sh` → push → המתן לתוצאה ב-`commands/output.txt`
+2. **שינוי קוד**: ערוך קבצי EA/configs → push → GitHub Actions מעדכן ומקמפל על VPS
+3. **תיקון בעיה**: כתוב סקריפט תיקון ב-`commands/run.sh` → push → בדוק תוצאה
+4. **קבלת לוגים**: כתוב פקודת לוג ב-`commands/run.sh` → push → קרא תוצאה
+
+### חשוב מאוד:
+- **אף פעם** אל תנסה SSH ישירות - זה לא יעבוד
+- **אף פעם** אל תבקש מנועה להריץ פקודות ידנית - תשתמש ב-workflow
+- **תמיד** תעבוד דרך push → GitHub Actions → תוצאה בריפו
+- אחרי push, תמתין כ-30-60 שניות ואז תעשה `git pull` לקרוא את התוצאה
+- הענף הפעיל ל-workflows: נקבע אוטומטית לפי `${{ github.ref }}`
+
+---
+
 ## User Info
 - Name: Noa (נועה)
 - Language: Hebrew (עברית) - always respond in Hebrew
@@ -53,14 +90,7 @@
 - [x] MT5 running on VPS (accessible via VNC)
 - [x] FundedNext account connected in MT5 (account 11797849, FundedNext-Server)
 - [x] MT5 shows connected and working on VPS
-
-## What's Been Completed (ALL DONE!)
-- [x] Deploy EA files to MT5 data folder on VPS
-- [x] EA compiled (PropFirmBot.ex5 - 196KB)
-- [x] EA attached to EURUSD M15 chart
-- [x] AutoTrading enabled (green button)
-- [ ] Verify Telegram notifications work from live EA
-- [ ] Set up VPS monitoring (watchdog)
+- [x] GitHub Actions workflows configured (deploy, check, fix, run commands)
 
 ## VPS Current State (Updated 2026-02-22)
 - MT5 is RUNNING on VPS with PropFirmBot EA ACTIVE
@@ -90,9 +120,10 @@
 
 ## Working Method
 - Claude's environment CANNOT SSH to VPS (port 22 blocked from sandbox)
-- Noa runs commands on VPS via SSH from her Windows PowerShell
-- Noa views MT5 via VNC (RealVNC client on Windows)
-- Claude prepares scripts/commands, Noa pastes them
+- ALL VPS operations go through: push to repo → GitHub Actions → VPS execution → results in repo
+- Available workflows: vps-command (run anything), deploy-ea (update code), vps-check (status), vps-fix (restart)
+- After pushing, wait ~30-60 seconds then git pull to read results
+- Noa can also SSH manually from PowerShell if needed: ssh root@77.237.234.2
 
 ## Noa's Tools
 - VNC client: RealVNC (on Windows)
