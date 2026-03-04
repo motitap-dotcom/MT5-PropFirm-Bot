@@ -19,7 +19,7 @@ jobs:
           ref: claude/fix-bot-server-connection-JbPec
           fetch-depth: 0
 
-      - name: Force recompile EA on VPS
+      - name: Recovery and recompile
         env:
           VPS_IP: ${{ secrets.VPS_IP }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
@@ -27,113 +27,43 @@ jobs:
         run: |
           set +e
           REPORT="deploy_result.txt"
-          echo "=== FORCE RECOMPILE $(date -u) ===" > $REPORT
+          echo "=== RECOVERY $(date -u) ===" > $REPORT
 
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
 
-          ssh_cmd() {
-            local desc="$1"; local cmd="$2"
-            for attempt in 1 2 3; do
-              result=$(sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ServerAliveInterval=15 -o ServerAliveCountMax=3 ${VPS_USER}@${VPS_IP} "$cmd" 2>&1)
-              local rc=$?
-              if [ $rc -eq 0 ]; then
-                echo "[$desc] OK" >> $REPORT
-                echo "$result" >> $REPORT
-                return 0
-              fi
-              echo "[$desc] attempt $attempt failed (rc=$rc): $result" >> $REPORT
-              sleep $((attempt * 3))
-            done
-            echo "[$desc] GAVE UP" >> $REPORT
-            return 1
+          # Short SSH helper - no retries, just report
+          run_ssh() {
+            local desc="$1"; local cmd="$2"; local timeout="${3:-30}"
+            echo "[$desc]" >> $REPORT
+            result=$(sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} "$cmd" 2>&1)
+            local rc=$?
+            echo "$result" >> $REPORT
+            echo "rc=$rc" >> $REPORT
+            echo "" >> $REPORT
+            return $rc
           }
 
-          # Step 1: Backup old .ex5 and delete it to force recompilation
-          ssh_cmd "RECOMPILE" '
-            MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
-            EA_DIR="$MT5/MQL5/Experts/PropFirmBot"
+          # Step 1: Check current state (quick)
+          run_ssh "CHECK_STATE" 'EA="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"; ls -la "$EA/PropFirmBot.ex5" 2>/dev/null || echo "NO .ex5!"; ls -la "$EA/PropFirmBot.ex5.bak" 2>/dev/null || echo "NO .bak!"; ls -la "$EA/PropFirmBot.mq5" 2>/dev/null; ps aux | grep terminal64 | grep -v grep || echo "MT5 NOT RUNNING"'
 
-            echo "=== CURRENT STATE ==="
-            ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
-            ls -la "$EA_DIR/PropFirmBot.mq5" 2>/dev/null
+          # Step 2: Restore .bak if .ex5 is missing
+          run_ssh "RESTORE" 'EA="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"; if [ ! -f "$EA/PropFirmBot.ex5" ] && [ -f "$EA/PropFirmBot.ex5.bak" ]; then cp "$EA/PropFirmBot.ex5.bak" "$EA/PropFirmBot.ex5" && echo "RESTORED from backup"; elif [ -f "$EA/PropFirmBot.ex5" ]; then echo "ex5 exists, no restore needed"; else echo "NO ex5 and NO bak - need to compile!"; fi; ls -la "$EA/PropFirmBot.ex5" 2>/dev/null'
 
-            echo ""
-            echo "=== BACKUP AND DELETE OLD .ex5 ==="
-            cp "$EA_DIR/PropFirmBot.ex5" "$EA_DIR/PropFirmBot.ex5.bak" 2>/dev/null
-            rm -f "$EA_DIR/PropFirmBot.ex5"
-            echo "Deleted old .ex5"
+          # Step 3: Kill MT5 if running (short command, won't timeout)
+          run_ssh "KILL_MT5" 'PID=$(pgrep -f "terminal64.exe" | head -1); if [ -n "$PID" ]; then kill $PID 2>/dev/null; echo "Killed PID $PID"; else echo "MT5 not running"; fi'
 
-            echo ""
-            echo "=== STOP MT5 ==="
-            pkill -f terminal64.exe 2>/dev/null
-            sleep 5
-            pgrep -la terminal64 && echo "STILL RUNNING!" || echo "MT5 stopped"
+          # Wait for MT5 to fully stop
+          sleep 5
 
-            echo ""
-            echo "=== START MT5 (should trigger compile) ==="
-            export DISPLAY=:99
-            export WINEPREFIX=/root/.wine
-            nohup wine "$MT5/terminal64.exe" \
-              /login:11797849 /password:gazDE62## /server:FundedNext-Server \
-              > /tmp/mt5_start.log 2>&1 &
-            MT5_PID=$!
-            echo "MT5 PID: $MT5_PID"
+          # Step 4: Start MT5 (fire and forget via nohup)
+          run_ssh "START_MT5" 'export DISPLAY=:99; export WINEPREFIX=/root/.wine; nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" /login:11797849 /password:gazDE62## /server:FundedNext-Server > /tmp/mt5_start.log 2>&1 & echo "MT5 started PID=$!"'
 
-            echo ""
-            echo "=== WAITING 30s for compile + init ==="
-            sleep 30
+          # Wait for MT5 to init
+          echo "Waiting 25s for MT5 init..." >> $REPORT
+          sleep 25
 
-            echo ""
-            echo "=== CHECK COMPILATION ==="
-            if [ -f "$EA_DIR/PropFirmBot.ex5" ]; then
-              echo "SUCCESS: .ex5 exists!"
-              ls -la "$EA_DIR/PropFirmBot.ex5"
-              ls -la "$EA_DIR/PropFirmBot.ex5.bak" 2>/dev/null
-              OLD_SIZE=$(stat -c%s "$EA_DIR/PropFirmBot.ex5.bak" 2>/dev/null || echo 0)
-              NEW_SIZE=$(stat -c%s "$EA_DIR/PropFirmBot.ex5" 2>/dev/null || echo 0)
-              echo "Old size: $OLD_SIZE bytes"
-              echo "New size: $NEW_SIZE bytes"
-              if [ "$NEW_SIZE" != "$OLD_SIZE" ]; then
-                echo "SIZE CHANGED - new compilation!"
-              else
-                echo "Same size - might be copy from backup"
-              fi
-            else
-              echo "FAILED: No .ex5 created!"
-              echo "Restoring backup..."
-              cp "$EA_DIR/PropFirmBot.ex5.bak" "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
-              echo "Backup restored, restarting MT5..."
-              pkill -f terminal64.exe 2>/dev/null
-              sleep 3
-              nohup wine "$MT5/terminal64.exe" \
-                /login:11797849 /password:gazDE62## /server:FundedNext-Server \
-                > /tmp/mt5_start.log 2>&1 &
-              sleep 15
-            fi
-
-            echo ""
-            echo "=== MT5 PROCESS ==="
-            ps aux | grep terminal64 | grep -v grep || echo "MT5 NOT RUNNING!"
-
-            echo ""
-            echo "=== TERMINAL LOG ==="
-            TLOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
-            [ -n "$TLOG" ] && tail -c 3000 "$TLOG" | tr -d "\0" | tail -15
-
-            echo ""
-            echo "=== EA LOG (last 20) ==="
-            TODAY=$(date -u "+%Y%m%d")
-            EALOG="$MT5/MQL5/Logs/${TODAY}.log"
-            [ -f "$EALOG" ] && tail -c 5000 "$EALOG" | tr -d "\0" | tail -20 || echo "No EA log"
-
-            echo ""
-            echo "=== COMPILE LOG (if any) ==="
-            ls -la "$EA_DIR/"*.log 2>/dev/null || echo "No compile logs"
-            [ -f "$EA_DIR/PropFirmBot.log" ] && cat "$EA_DIR/PropFirmBot.log" | tr -d "\0" | tail -10
-
-            # Cleanup backup
-            rm -f "$EA_DIR/PropFirmBot.ex5.bak" 2>/dev/null
-          '
+          # Step 5: Check if MT5 is running and EA loaded
+          run_ssh "VERIFY" 'MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"; echo "=== PROCESS ==="; ps aux | grep -E "terminal64|wine" | grep -v grep | head -5; echo ""; echo "=== .EX5 FILE ==="; ls -la "$MT5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5" 2>/dev/null || echo "STILL NO .ex5!"; echo ""; echo "=== TERMINAL LOG ==="; TLOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1); [ -n "$TLOG" ] && tail -c 2000 "$TLOG" | tr -d "\0" | tail -15; echo ""; echo "=== EA LOG (last 25) ==="; TODAY=$(date -u "+%Y%m%d"); EALOG="$MT5/MQL5/Logs/${TODAY}.log"; [ -f "$EALOG" ] && tail -c 5000 "$EALOG" | tr -d "\0" | tail -25 || echo "No EA log"; echo ""; echo "=== CONNECTIONS ==="; ss -tn state established | grep -v ":22 \|:5900 " | head -3'
 
           echo "=== DONE $(date -u) ===" >> $REPORT
           cat $REPORT
@@ -146,5 +76,5 @@ jobs:
           git fetch origin claude/fix-bot-server-connection-JbPec
           git reset --soft origin/claude/fix-bot-server-connection-JbPec
           git add -f deploy_result.txt 2>/dev/null || true
-          git commit -m "Recompile result $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git commit -m "Recovery result $(date -u '+%Y-%m-%d %H:%M UTC')" || true
           git push origin HEAD:claude/fix-bot-server-connection-JbPec || true
