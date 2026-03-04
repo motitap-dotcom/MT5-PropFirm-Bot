@@ -1,0 +1,26 @@
+=== Installing Watchdog ===
+=== Setting up Watchdog ===
+Watchdog cron already exists - updating...
+
+Cron jobs:
+
+*/5 * * * * cd /root/Tradovate-Bot && bash /root/tradovate-bot/server_cron.sh >> /var/log/tradovate-cron.log 2>&1
+*/2 * * * * /opt/hyrotrader-bot/scripts/auto_deploy.sh
+*/5 * * * * /root/MT5-PropFirm-Bot/scripts/watchdog.sh >> /var/log/watchdog.log 2>&1
+
+✅ Watchdog installed! Checks every 5 minutes.
+   Log: /var/log/watchdog.log
+   Test: bash /root/MT5-PropFirm-Bot/scripts/watchdog.sh
+=== Done ===
+
+=== Testing Telegram ===
+=== Telegram Test 2026-03-04 09:43:36 UTC ===
+Sending test message...
+✅ Telegram is working!
+=== Done ===
+
+=== Running Watchdog Check ===
+=== Watchdog 2026-03-04 09:43:37 UTC ===
+MT5 is running - OK
+=== Done ===
+EXIT_CODE=0
