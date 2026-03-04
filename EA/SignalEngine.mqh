@@ -465,7 +465,20 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
    int htf_bias = GetHTFBias();
    if(htf_bias == 0)
    {
-      PrintFormat("[SMC] %s: No H4 bias (EMA50/200 not aligned) - skipping", m_symbol);
+      // Log with H4 indicator values for debugging
+      double h4_close[], h4_50[], h4_200[];
+      ArraySetAsSeries(h4_close, true);
+      ArraySetAsSeries(h4_50, true);
+      ArraySetAsSeries(h4_200, true);
+      int c1 = CopyClose(m_symbol, m_tf_htf, 0, 1, h4_close);
+      int c2 = CopyBuffer(m_handle_ema_h4_50, 0, 0, 1, h4_50);
+      int c3 = CopyBuffer(m_handle_ema_h4_200, 0, 0, 1, h4_200);
+      if(c1 > 0 && c2 > 0 && c3 > 0)
+         PrintFormat("[SMC] %s: No H4 bias | Close=%.5f EMA50=%.5f EMA200=%.5f",
+                     m_symbol, h4_close[0], h4_50[0], h4_200[0]);
+      else
+         PrintFormat("[SMC] %s: No H4 bias (CopyBuffer failed: close=%d ema50=%d ema200=%d)",
+                     m_symbol, c1, c2, c3);
       return SIGNAL_NONE;
    }
 
@@ -564,11 +577,17 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
    sl_price = 0;
    tp_price = 0;
 
-   // Copy indicator data
-   if(CopyBuffer(m_handle_ema_fast, 0, 0, 3, m_ema_fast) < 3) return SIGNAL_NONE;
-   if(CopyBuffer(m_handle_ema_slow, 0, 0, 3, m_ema_slow) < 3) return SIGNAL_NONE;
-   if(CopyBuffer(m_handle_rsi, 0, 0, 3, m_rsi) < 3)           return SIGNAL_NONE;
-   if(CopyBuffer(m_handle_atr, 0, 0, 3, m_atr) < 3)           return SIGNAL_NONE;
+   // Copy indicator data - with error logging
+   int cf = CopyBuffer(m_handle_ema_fast, 0, 0, 3, m_ema_fast);
+   int cs = CopyBuffer(m_handle_ema_slow, 0, 0, 3, m_ema_slow);
+   int cr = CopyBuffer(m_handle_rsi, 0, 0, 3, m_rsi);
+   int ca = CopyBuffer(m_handle_atr, 0, 0, 3, m_atr);
+   if(cf < 3 || cs < 3 || cr < 3 || ca < 3)
+   {
+      PrintFormat("[EMA] %s: CopyBuffer failed (fast=%d slow=%d rsi=%d atr=%d)",
+                  m_symbol, cf, cs, cr, ca);
+      return SIGNAL_NONE;
+   }
 
    double atr = m_atr[0];
    if(atr <= 0) return SIGNAL_NONE;
@@ -612,6 +631,12 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
    bool buy_signal = cross_up || recent_cross_up;
    bool sell_signal = cross_down || recent_cross_down;
 
+   PrintFormat("[EMA] %s: Fast=%.5f Slow=%.5f | CrossUp=%s CrossDn=%s RecentUp=%s RecentDn=%s | RSI=%.1f | HTF=%d",
+              m_symbol, m_ema_fast[0], m_ema_slow[0],
+              cross_up ? "Y" : "N", cross_down ? "Y" : "N",
+              recent_cross_up ? "Y" : "N", recent_cross_down ? "Y" : "N",
+              m_rsi[0], htf_bias);
+
    // BUY: EMA cross up + RSI not overbought + bullish or neutral HTF
    if(buy_signal && m_rsi[0] < m_rsi_overbought && m_rsi[0] > m_rsi_oversold && htf_bias >= 0)
    {
@@ -639,6 +664,18 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
                   cross_down ? "CROSSOVER" : "RECENT_CROSS");
       return SIGNAL_SELL;
    }
+
+   // No signal - log why
+   if(!buy_signal && !sell_signal)
+      PrintFormat("[EMA] %s: No crossover detected", m_symbol);
+   else if(buy_signal && (m_rsi[0] >= m_rsi_overbought || m_rsi[0] <= m_rsi_oversold))
+      PrintFormat("[EMA] %s: BUY cross but RSI=%.1f out of range", m_symbol, m_rsi[0]);
+   else if(sell_signal && (m_rsi[0] >= m_rsi_overbought || m_rsi[0] <= m_rsi_oversold))
+      PrintFormat("[EMA] %s: SELL cross but RSI=%.1f out of range", m_symbol, m_rsi[0]);
+   else if(buy_signal && htf_bias < 0)
+      PrintFormat("[EMA] %s: BUY cross but HTF bearish", m_symbol);
+   else if(sell_signal && htf_bias > 0)
+      PrintFormat("[EMA] %s: SELL cross but HTF bullish", m_symbol);
 
    return SIGNAL_NONE;
 }
