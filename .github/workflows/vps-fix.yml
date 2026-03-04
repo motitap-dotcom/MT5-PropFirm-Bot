@@ -12,7 +12,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,44 +25,94 @@ jobs:
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
           VPS_USER: ${{ secrets.VPS_USER }}
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          echo "=== QUICK DEPLOY $(date -u) ===" > vps_report.txt
+          set +e
+          REPORT="deploy_result.txt"
+          echo "=== VPS DEPLOY $(date -u) ===" > $REPORT
 
-          # Step 1: Pull code on VPS
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${VPS_USER}@${VPS_IP} \
-            "cd /root/MT5-PropFirm-Bot && git fetch origin claude/fix-bot-server-connection-JbPec && git checkout claude/fix-bot-server-connection-JbPec && git pull origin claude/fix-bot-server-connection-JbPec" >> vps_report.txt 2>&1
-          echo "GIT_PULL=$?" >> vps_report.txt
+          # Check secrets
+          if [ -z "$VPS_IP" ] || [ -z "$VPS_PASSWORD" ] || [ -z "$VPS_USER" ]; then
+            echo "ERROR: Missing VPS secrets! IP='$VPS_IP' USER='$VPS_USER' PASS_LEN=${#VPS_PASSWORD}" >> $REPORT
+            cat $REPORT
+            exit 1
+          fi
+          echo "Secrets OK: IP=$VPS_IP USER=$VPS_USER PASS_LEN=${#VPS_PASSWORD}" >> $REPORT
 
-          # Step 2: Copy EA files
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${VPS_USER}@${VPS_IP} \
-            'cp /root/MT5-PropFirm-Bot/EA/*.mq5 /root/MT5-PropFirm-Bot/EA/*.mqh "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/" && echo "COPY OK"' >> vps_report.txt 2>&1
+          # Install sshpass with retry
+          for i in 1 2 3; do
+            sudo apt-get update -qq 2>/dev/null && sudo apt-get install -y -qq sshpass 2>/dev/null && break
+            echo "apt retry $i..." >> $REPORT
+            sleep 2
+          done
+          which sshpass >> $REPORT 2>&1 || { echo "FATAL: sshpass not installed" >> $REPORT; cat $REPORT; exit 1; }
 
-          # Step 3: Stop MT5
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${VPS_USER}@${VPS_IP} \
-            'pkill -f terminal64.exe; sleep 3; echo "MT5 STOPPED"' >> vps_report.txt 2>&1
+          # SSH function with retry
+          ssh_cmd() {
+            local desc="$1"
+            local cmd="$2"
+            local result=""
+            for attempt in 1 2 3; do
+              echo "[$desc] attempt $attempt..." >> $REPORT
+              result=$(sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ServerAliveInterval=15 -o ServerAliveCountMax=3 ${VPS_USER}@${VPS_IP} "$cmd" 2>&1)
+              local rc=$?
+              if [ $rc -eq 0 ]; then
+                echo "[$desc] OK" >> $REPORT
+                echo "$result" >> $REPORT
+                return 0
+              fi
+              echo "[$desc] failed (rc=$rc): $result" >> $REPORT
+              sleep $((attempt * 3))
+            done
+            echo "[$desc] GAVE UP after 3 attempts" >> $REPORT
+            return 1
+          }
 
-          # Step 4: Start MT5
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${VPS_USER}@${VPS_IP} \
-            'DISPLAY=:99 WINEPREFIX=/root/.wine nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" /login:11797849 /password:gazDE62## /server:FundedNext-Server > /dev/null 2>&1 & sleep 2; echo "MT5 START CMD SENT"' >> vps_report.txt 2>&1
+          # SCP function with retry
+          scp_cmd() {
+            local src="$1"
+            local dst="$2"
+            for attempt in 1 2 3; do
+              sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$src" "${VPS_USER}@${VPS_IP}:$dst" 2>> $REPORT
+              if [ $? -eq 0 ]; then
+                echo "SCP OK: $src -> $dst" >> $REPORT
+                return 0
+              fi
+              echo "SCP retry $attempt for $src" >> $REPORT
+              sleep $((attempt * 3))
+            done
+            echo "SCP FAILED: $src" >> $REPORT
+            return 1
+          }
 
-          # Step 5: Wait and check
-          sleep 20
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${VPS_USER}@${VPS_IP} \
-            'pgrep -la terminal64 || echo "MT5 NOT RUNNING"; ss -tn state established | grep -v ":22 \|:5900 " | head -5' >> vps_report.txt 2>&1
+          # Step 1: Test connectivity
+          ssh_cmd "PING" "echo 'VPS reachable at $(date)'; uname -a"
 
-          # Step 6: Show logs
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${VPS_USER}@${VPS_IP} \
-            'EALOG=$(ls -t "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/"*.log 2>/dev/null | head -1); [ -n "$EALOG" ] && cat "$EALOG" | tr -d "\0" | tail -20; echo "---"; TLOG=$(ls -t "/root/.wine/drive_c/Program Files/MetaTrader 5/logs/"*.log 2>/dev/null | head -1); [ -n "$TLOG" ] && cat "$TLOG" | tr -d "\0" | tail -10' >> vps_report.txt 2>&1
+          # Step 2: Pull latest code on VPS
+          ssh_cmd "GIT_PULL" "cd /root/MT5-PropFirm-Bot && git fetch origin claude/fix-bot-server-connection-JbPec 2>&1 && git checkout claude/fix-bot-server-connection-JbPec 2>&1 && git reset --hard origin/claude/fix-bot-server-connection-JbPec 2>&1 && echo 'HEAD: $(git log --oneline -1)'"
 
-          echo "=== DONE ===" >> vps_report.txt
-          cat vps_report.txt
+          # Step 3: Copy EA files on VPS
+          ssh_cmd "COPY_EA" 'cp /root/MT5-PropFirm-Bot/EA/*.mq5 /root/MT5-PropFirm-Bot/EA/*.mqh "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/" 2>&1 && ls -la "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/"*.mq5 | head -3 && echo "COPY OK"'
 
-      - name: Commit
+          # Step 4: Stop MT5
+          ssh_cmd "STOP_MT5" 'pkill -f terminal64.exe 2>/dev/null; sleep 3; pgrep -la terminal64 && echo "STILL RUNNING" || echo "MT5 STOPPED"'
+
+          # Step 5: Start MT5
+          ssh_cmd "START_MT5" 'export DISPLAY=:99; export WINEPREFIX=/root/.wine; nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" /login:11797849 /password:gazDE62## /server:FundedNext-Server > /dev/null 2>&1 & sleep 2; echo "MT5 START CMD SENT"'
+
+          # Step 6: Wait and check
+          echo "Waiting 25 seconds for MT5 to start..." >> $REPORT
+          sleep 25
+          ssh_cmd "CHECK" 'pgrep -la terminal64 || echo "MT5 NOT RUNNING"; echo "---CONNECTIONS---"; ss -tn state established | grep -v ":22 \|:5900 " | head -5; echo "---LOGS---"; EALOG=$(ls -t "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/"*.log 2>/dev/null | head -1); [ -n "$EALOG" ] && tail -c 4000 "$EALOG" | tr -d "\0" | tail -30; echo "---TERMINAL---"; TLOG=$(ls -t "/root/.wine/drive_c/Program Files/MetaTrader 5/logs/"*.log 2>/dev/null | head -1); [ -n "$TLOG" ] && tail -c 2000 "$TLOG" | tr -d "\0" | tail -10'
+
+          echo "=== DONE $(date -u) ===" >> $REPORT
+          cat $REPORT
+
+      - name: Commit report
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin claude/fix-bot-server-connection-JbPec
           git reset --soft origin/claude/fix-bot-server-connection-JbPec
-          git add -f vps_report.txt
-          git commit -m "VPS deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git add -f deploy_result.txt 2>/dev/null || true
+          git commit -m "Deploy result $(date -u '+%Y-%m-%d %H:%M UTC')" || true
           git push origin HEAD:claude/fix-bot-server-connection-JbPec || true
