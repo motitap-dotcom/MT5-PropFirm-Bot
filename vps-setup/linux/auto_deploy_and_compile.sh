@@ -23,15 +23,15 @@ echo -e "${YELLOW}[1/5] Pulling latest code...${NC}"
 cd /root
 if [ -d "MT5-PropFirm-Bot" ]; then
     cd MT5-PropFirm-Bot
-    git fetch origin claude/build-cfd-trading-bot-fl0ld 2>/dev/null || true
-    git checkout claude/build-cfd-trading-bot-fl0ld 2>/dev/null || true
-    git pull origin claude/build-cfd-trading-bot-fl0ld 2>/dev/null || true
+    git fetch origin claude/debug-bot-transactions-wRINL 2>/dev/null || true
+    git checkout claude/debug-bot-transactions-wRINL 2>/dev/null || true
+    git pull origin claude/debug-bot-transactions-wRINL 2>/dev/null || true
     echo -e "${GREEN}[OK] Code updated${NC}"
 else
     echo -e "${YELLOW}Cloning repository...${NC}"
     git clone https://github.com/motitap-dotcom/MT5-PropFirm-Bot.git
     cd MT5-PropFirm-Bot
-    git checkout claude/build-cfd-trading-bot-fl0ld
+    git checkout claude/debug-bot-transactions-wRINL
     echo -e "${GREEN}[OK] Code cloned${NC}"
 fi
 
@@ -95,6 +95,7 @@ EA_FILES=(
     "NewsFilter.mqh"
     "TradeAnalyzer.mqh"
     "AccountStateManager.mqh"
+    "StatusWriter.mqh"
 )
 
 COPIED=0
