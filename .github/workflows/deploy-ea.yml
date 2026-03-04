@@ -5,6 +5,7 @@ on:
     paths:
       - 'EA/**'
       - 'configs/**'
+      - '.github/workflows/deploy-ea.yml'
   workflow_dispatch:
 
 permissions:
