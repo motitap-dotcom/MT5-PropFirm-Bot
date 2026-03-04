@@ -1,43 +1,60 @@
 #!/bin/bash
 # =============================================================
-# VPS Command Runner
-# Edit this file and push to run commands on VPS
-# Output will appear in commands/output.txt after ~60 seconds
+# Restart MT5 on VPS
 # =============================================================
 
-echo "=== VPS Status Check - $(date) ==="
-echo ""
+echo "=== Restarting MT5 - $(date) ==="
 
-# MT5 Process
-echo "--- MT5 Process ---"
-pgrep -a terminal64 || echo "MT5 NOT running!"
-echo ""
+# Kill any stuck MT5 processes
+echo "--- Stopping old MT5 processes ---"
+pkill -f terminal64 2>/dev/null || echo "No MT5 process to kill"
+pkill -f metatrader 2>/dev/null || true
+sleep 2
 
-# Account connection
-echo "--- MT5 Logs (last 20 lines) ---"
-MT5_LOG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs"
-if [ -d "$MT5_LOG_DIR" ]; then
-    LATEST_LOG=$(ls -t "$MT5_LOG_DIR"/*.log 2>/dev/null | head -1)
-    if [ -f "$LATEST_LOG" ]; then
-        tail -20 "$LATEST_LOG"
-    else
-        echo "No log files found"
-    fi
+# Make sure Xvfb is running
+echo "--- Checking display server ---"
+if ! pgrep -x Xvfb > /dev/null; then
+    echo "Starting Xvfb..."
+    Xvfb :99 -screen 0 1280x1024x24 &
+    sleep 2
 else
-    echo "Log directory not found"
+    echo "Xvfb already running"
 fi
-echo ""
+export DISPLAY=:99
 
-# EA Status
-echo "--- EA Files ---"
-ls -la "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/" 2>/dev/null || echo "EA directory not found"
-echo ""
+# Make sure VNC is running
+echo "--- Checking VNC ---"
+if ! pgrep -x x11vnc > /dev/null; then
+    echo "Starting x11vnc..."
+    x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw 2>/dev/null
+    sleep 1
+else
+    echo "x11vnc already running"
+fi
 
-# System resources
-echo "--- System ---"
+# Start MT5
+echo "--- Starting MT5 ---"
+cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
+WINEPREFIX=/root/.wine DISPLAY=:99 wine terminal64.exe /portable &
+MT5_PID=$!
+echo "MT5 started with PID: $MT5_PID"
+
+# Wait for MT5 to initialize
+sleep 10
+
+# Verify
+echo ""
+echo "--- Verification ---"
+if pgrep -a terminal64; then
+    echo "MT5 is RUNNING!"
+else
+    echo "WARNING: MT5 may not have started properly"
+fi
+
+echo ""
+echo "--- System Status ---"
 echo "Uptime: $(uptime)"
 echo "Memory: $(free -h | grep Mem)"
-echo "Disk: $(df -h / | tail -1)"
-echo ""
 
+echo ""
 echo "=== Done ==="
