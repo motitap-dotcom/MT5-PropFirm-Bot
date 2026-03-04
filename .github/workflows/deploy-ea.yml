@@ -43,13 +43,42 @@ jobs:
             [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${CONFIG_DIR}/\""
           done
 
-          echo "=== Recompiling EA on VPS ==="
+          echo "=== Restarting MT5 to load updated EA ==="
           sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} bash -c "'
-            cd \"${EA_DIR}\"
-            # Use MetaEditor to compile
-            WINEPREFIX=/root/.wine wine \"/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe\" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
-            sleep 3
-            ls -la *.ex5 2>/dev/null && echo \"Compilation OK\" || echo \"Warning: .ex5 not updated\"
+            EA_DIR=\"${EA_DIR}\"
+            MT5=\"${MT5_BASE}\"
+
+            echo \"--- Stopping MT5 ---\"
+            MT5_PID=\$(pgrep -f terminal64.exe | head -1)
+            if [ -n \"\$MT5_PID\" ]; then
+              kill \$MT5_PID
+              sleep 5
+              echo \"MT5 stopped (was PID \$MT5_PID)\"
+            fi
+
+            echo \"--- Starting MT5 fresh (will auto-compile .mq5) ---\"
+            export DISPLAY=:99
+            export WINEPREFIX=/root/.wine
+            wine \"\$MT5/terminal64.exe\" /login:11797849 /password:gazDE62## /server:FundedNext-Server &
+            sleep 20
+
+            echo \"--- Checking if running ---\"
+            pgrep -la terminal64 || echo \"MT5 FAILED TO START!\"
+
+            echo \"--- .ex5 status ---\"
+            ls -la \"\$EA_DIR/\"*.ex5 2>/dev/null || echo \"No .ex5 found!\"
+
+            echo \"--- Latest terminal log ---\"
+            TLOG=\$(ls -t \"\$MT5/logs/\"*.log 2>/dev/null | head -1)
+            if [ -n \"\$TLOG\" ]; then
+              cat \"\$TLOG\" | tr -d \"\\0\" | tail -10
+            fi
+
+            echo \"--- Latest EA log ---\"
+            EALOG=\$(ls -t \"\$MT5/MQL5/Logs/\"*.log 2>/dev/null | head -1)
+            if [ -n \"\$EALOG\" ]; then
+              cat \"\$EALOG\" | tr -d \"\\0\" | tail -10
+            fi
           '" > deploy_report.txt 2>&1 || true
 
           echo "EXIT_CODE=$?" >> deploy_report.txt
@@ -63,7 +92,7 @@ jobs:
         run: |
           STATUS="${{ job.status }}"
           if [ "$STATUS" = "success" ]; then
-            MSG="✅ EA deployed successfully to VPS"
+            MSG="✅ EA v3.11 deployed & MT5 restarted on VPS"
           else
             MSG="❌ EA deployment failed - check GitHub Actions"
           fi

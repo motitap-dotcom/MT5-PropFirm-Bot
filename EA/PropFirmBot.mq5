@@ -5,7 +5,7 @@
 //|                     News Filter + Notifications + Self-Learning   |
 //+------------------------------------------------------------------+
 #property copyright   "PropFirmBot"
-#property version     "3.10"
+#property version     "3.11"
 #property description "Complete prop firm trading system with:"
 #property description "  Guardian watchdog | News filter | Trade analyzer"
 #property description "  Telegram alerts | Account state management"
@@ -469,10 +469,21 @@ void OnTick()
 //+------------------------------------------------------------------+
 void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
 {
-   // Pre-flight checks
-   if(!g_risk.CanOpenTrade(symbol)) return;
-   if(!g_trade.CanTradeNow(symbol)) return;
-   if(g_trade.CountSymbolPositions(symbol) > 0) return;
+   // Pre-flight checks with full logging
+   if(!g_risk.CanOpenTrade(symbol)) return;  // Already logs BLOCKED reason
+
+   if(!g_trade.CanTradeNow(symbol))
+   {
+      PrintFormat("[PREFLIGHT] %s: Too soon since last trade (min %d bars gap)", symbol, InpMinBarGap);
+      return;
+   }
+
+   int sym_positions = g_trade.CountSymbolPositions(symbol);
+   if(sym_positions > 0)
+   {
+      PrintFormat("[PREFLIGHT] %s: Already has %d open position(s)", symbol, sym_positions);
+      return;
+   }
 
    // Spread anomaly check
    if(!g_guardian.CheckSpreadAnomaly(symbol))
@@ -495,11 +506,17 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
       return;
    }
 
+   PrintFormat("[SCAN] %s: All pre-flight checks passed, scanning for signals...", symbol);
+
    double sl_price = 0, tp_price = 0;
    ENUM_SIGNAL_TYPE signal = SIGNAL_NONE;
 
    // Primary strategy
    signal = g_signals[signal_index].GetSignal(InpStrategy, sl_price, tp_price);
+   PrintFormat("[SCAN] %s: Primary strategy (%s) returned: %s | SL=%.5f TP=%.5f",
+              symbol, InpStrategy == STRATEGY_SMC ? "SMC" : "EMA",
+              signal == SIGNAL_BUY ? "BUY" : signal == SIGNAL_SELL ? "SELL" : "NONE",
+              sl_price, tp_price);
 
    // Check if strategy is working (self-learning)
    if(signal != SIGNAL_NONE && InpSelfLearning)
@@ -517,6 +534,9 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
    {
       PrintFormat("[SIGNAL] %s: SMC=NONE, trying EMA fallback...", symbol);
       signal = g_signals[signal_index].GetSignal(STRATEGY_EMA_CROSS, sl_price, tp_price);
+      PrintFormat("[SIGNAL] %s: EMA fallback returned: %s | SL=%.5f TP=%.5f",
+                 symbol, signal == SIGNAL_BUY ? "BUY" : signal == SIGNAL_SELL ? "SELL" : "NONE",
+                 sl_price, tp_price);
    }
 
    if(signal == SIGNAL_NONE)
