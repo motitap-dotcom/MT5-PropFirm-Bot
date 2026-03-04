@@ -20,7 +20,7 @@ jobs:
           ref: claude/fix-bot-server-connection-JbPec
           fetch-depth: 0
 
-      - name: Deploy EA files and restart MT5
+      - name: Deploy and restart
         env:
           VPS_IP: ${{ secrets.VPS_IP }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
@@ -28,74 +28,63 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
 
-          MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
-          EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
-          CONFIG_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
+          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+          EA_DIR="$MT5/MQL5/Experts/PropFirmBot"
+          CFG_DIR="$MT5/MQL5/Files/PropFirmBot"
 
-          {
-            echo "=== DEPLOY $(date -u '+%Y-%m-%d %H:%M:%S UTC') ==="
+          # Upload EA files
+          echo "=== DEPLOY $(date -u) ===" > deploy_report.txt
+          for f in EA/*.mq5 EA/*.mqh; do
+            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${EA_DIR}/\"" 2>&1
+            echo "Uploaded: $f" >> deploy_report.txt
+          done
 
-            echo "--- Uploading EA files ---"
-            for f in EA/*.mq5 EA/*.mqh; do
-              [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${EA_DIR}/\""
-              echo "  Uploaded: $f"
-            done
+          # Upload config files
+          for f in configs/*.json; do
+            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${CFG_DIR}/\"" 2>&1
+          done
 
-            echo "--- Uploading config files ---"
-            for f in configs/*.json; do
-              [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${CONFIG_DIR}/\""
-            done
+          # Create restart script
+          cat > /tmp/restart_mt5.sh << 'SCRIPT'
+          #!/bin/bash
+          MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+          echo "Stopping MT5..."
+          pkill -f terminal64.exe 2>/dev/null || true
+          sleep 5
+          echo "Starting MT5..."
+          export DISPLAY=:99
+          export WINEPREFIX=/root/.wine
+          nohup wine "$MT5/terminal64.exe" /login:11797849 /password:gazDE62## /server:FundedNext-Server > /dev/null 2>&1 &
+          sleep 20
+          echo "Status:"
+          pgrep -la terminal64 || echo "MT5 FAILED!"
+          ls -la "$MT5/MQL5/Experts/PropFirmBot/"*.ex5 2>/dev/null
+          TLOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
+          [ -n "$TLOG" ] && cat "$TLOG" | tr -d '\0' | tail -5
+          EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+          [ -n "$EALOG" ] && cat "$EALOG" | tr -d '\0' | tail -5
+          ss -tn state established | grep -v ":22 \|:5900 " | head -5
+          SCRIPT
 
-            echo "--- Restarting MT5 on VPS ---"
-            sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} bash << 'REMOTE_SCRIPT'
-              MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
-              echo "Stopping MT5..."
-              pkill -f terminal64.exe 2>/dev/null || true
-              sleep 5
-              echo "MT5 stopped"
+          # Upload and run restart script
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no /tmp/restart_mt5.sh "${VPS_USER}@${VPS_IP}:/tmp/restart_mt5.sh"
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} "bash /tmp/restart_mt5.sh" >> deploy_report.txt 2>&1
 
-              echo "Starting MT5..."
-              export DISPLAY=:99
-              export WINEPREFIX=/root/.wine
-              nohup wine "$MT5/terminal64.exe" /login:11797849 /password:gazDE62## /server:FundedNext-Server > /dev/null 2>&1 &
-              sleep 20
-
-              echo "Checking MT5 status..."
-              pgrep -la terminal64 || echo "MT5 FAILED TO START!"
-
-              echo "EA file status:"
-              ls -la "$MT5/MQL5/Experts/PropFirmBot/"*.ex5 2>/dev/null || echo "No .ex5"
-              ls -la "$MT5/MQL5/Experts/PropFirmBot/"*.mq5 2>/dev/null | head -2
-
-              echo "Terminal log (last 10):"
-              TLOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
-              [ -n "$TLOG" ] && cat "$TLOG" | tr -d '\0' | tail -10
-
-              echo "EA log (last 10):"
-              EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-              [ -n "$EALOG" ] && cat "$EALOG" | tr -d '\0' | tail -10
-
-              echo "Connections:"
-              ss -tn state established | grep -v ":22 \|:5900 \|:53 " | head -5
-          REMOTE_SCRIPT
-
-            echo "=== DEPLOY DONE ==="
-          } > deploy_report.txt 2>&1
-
+          echo "EXIT=$?" >> deploy_report.txt
           cat deploy_report.txt
 
-      - name: Send Telegram notification
+      - name: Telegram notify
         if: always()
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           STATUS="${{ job.status }}"
-          [ "$STATUS" = "success" ] && MSG="✅ EA deployed & MT5 restarted" || MSG="❌ Deploy failed"
+          [ "$STATUS" = "success" ] && MSG="✅ EA v3.11 deployed" || MSG="❌ Deploy failed"
           curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" -d text="${MSG}" > /dev/null 2>&1 || true
 
-      - name: Commit deploy report
+      - name: Commit report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

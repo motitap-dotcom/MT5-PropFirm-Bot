@@ -137,8 +137,8 @@ CRiskManager::CRiskManager()
    m_trailing_distance  = 20;
    m_breakeven_activation=20;
    m_breakeven_offset   = 2;
-   m_profit_target_pct  = 10.0;
-   m_challenge_mode     = true;
+   m_profit_target_pct  = 0;
+   m_challenge_mode     = false;
    m_target_reached     = false;
    m_magic_number       = 123456;
 }
