@@ -1,39 +1,68 @@
 # PropFirmBot - Project Memory
 
-## ⚠️ MANDATORY WORKFLOW - READ FIRST ⚠️
+## ⚠️⚠️⚠️ MANDATORY WORKFLOW - ABSOLUTE REQUIREMENT ⚠️⚠️⚠️
 
-**כל אינטראקציה עם ה-VPS חייבת לעבור דרך הריפו בלבד!**
+### 🚫 NEVER DO THESE:
+- **NEVER** try to SSH/connect directly to VPS - it WILL fail (port 22 blocked from sandbox)
+- **NEVER** ask Noa to run commands manually - use the workflow
+- **NEVER** suggest direct VPS operations as an alternative
+- **NEVER** try `curl`, `nc`, `telnet`, or any direct network connection to VPS
 
-Claude **לא יכול** להתחבר ישירות ל-VPS (פורט 22 חסום מה-sandbox).
-הדרך היחידה לנהל את הבוט, לבדוק סטטוס, להריץ פקודות, לעדכן קוד - היא:
-
-### שיטת העבודה (Push & Listen):
+### ✅ THE ONLY WAY TO INTERACT WITH VPS:
 ```
-Claude עושה שינוי בריפו → Push ל-GitHub → GitHub Actions מריץ על VPS → תוצאה חוזרת לריפו
+1. Write/edit a file in the repo (commands/run.sh, EA/*, configs/*, scripts/*)
+2. git add + git commit + git push
+3. GitHub Actions detects the push, SSHs to VPS, runs the command
+4. GitHub Actions commits the output back to the repo
+5. git pull to read the results
 ```
 
-### פקודות זמינות (GitHub Actions Workflows):
+**This is called "Push & Listen" and is the ONLY method available.**
 
-| פעולה | איך להפעיל | קובץ תוצאה |
-|-------|------------|-------------|
-| **בדיקת סטטוס VPS** | לערוך `commands/check_status.sh` ולדחוף | `commands/output.txt` |
-| **הרצת פקודה על VPS** | לכתוב פקודה ב-`commands/run.sh` ולדחוף | `commands/output.txt` |
-| **עדכון קוד EA** | לערוך קבצים ב-`EA/` או `configs/` ולדחוף | `deploy_report.txt` |
-| **תיקון ואתחול MT5** | לערוך `scripts/fix_and_restart.sh` ולדחוף | `vps_fix_report.txt` |
+### Step-by-Step for Every VPS Operation:
 
-### זרימת עבודה לכל בקשה:
+#### To run any command on VPS:
+```bash
+# 1. Write the command to commands/run.sh
+# 2. Push:
+git add commands/run.sh && git commit -m "description" && git push -u origin <branch-name>
+# 3. Wait 60-90 seconds
+# 4. Pull results:
+git pull origin <branch-name>
+# 5. Read output:
+cat commands/output.txt
+```
 
-1. **בקשת סטטוס**: כתוב סקריפט ב-`commands/run.sh` → push → המתן לתוצאה ב-`commands/output.txt`
-2. **שינוי קוד**: ערוך קבצי EA/configs → push → GitHub Actions מעדכן ומקמפל על VPS
-3. **תיקון בעיה**: כתוב סקריפט תיקון ב-`commands/run.sh` → push → בדוק תוצאה
-4. **קבלת לוגים**: כתוב פקודת לוג ב-`commands/run.sh` → push → קרא תוצאה
+#### To check VPS status:
+```bash
+# Edit commands/check_status.sh → push → read commands/output.txt
+```
 
-### חשוב מאוד:
-- **אף פעם** אל תנסה SSH ישירות - זה לא יעבוד
-- **אף פעם** אל תבקש מנועה להריץ פקודות ידנית - תשתמש ב-workflow
-- **תמיד** תעבוד דרך push → GitHub Actions → תוצאה בריפו
-- אחרי push, תמתין כ-30-60 שניות ואז תעשה `git pull` לקרוא את התוצאה
-- הענף הפעיל ל-workflows: נקבע אוטומטית לפי `${{ github.ref }}`
+#### To deploy EA code changes:
+```bash
+# Edit files in EA/ or configs/ → push → read deploy_report.txt
+```
+
+#### To fix/restart MT5:
+```bash
+# Edit scripts/fix_and_restart.sh → push → read vps_fix_report.txt
+```
+
+### Workflow Triggers (GitHub Actions):
+
+| Workflow | Trigger File(s) | Output File | YAML |
+|----------|-----------------|-------------|------|
+| **vps-command** | `commands/run.sh` | `commands/output.txt` | `.github/workflows/vps-command.yml` |
+| **vps-check** | `commands/check_status.sh`, `scripts/verify_ea.sh`, `scripts/*.sh` | `vps_report.txt` | `.github/workflows/vps-check.yml` |
+| **deploy-ea** | `EA/**`, `configs/**` | `deploy_report.txt` | `.github/workflows/deploy-ea.yml` |
+| **vps-fix** | `scripts/fix_and_restart.sh`, `scripts/clean_restart.sh`, `scripts/install_mt5_linux.sh` | `vps_fix_report.txt` | `.github/workflows/vps-fix.yml` |
+
+### Troubleshooting Workflows:
+- If `git pull` shows no new output after 2 minutes: workflow may have failed - check GitHub Actions tab
+- Workflows work on ANY branch (no branch restrictions)
+- Each workflow pushes results back to the SAME branch that triggered it
+- If workflow doesn't trigger: make sure the file path matches the `paths:` filter in the YAML exactly
+- The file content MUST actually change for GitHub to detect a push (add a timestamp comment if needed)
 
 ---
 
@@ -76,6 +105,7 @@ Claude עושה שינוי בריפו → Push ל-GitHub → GitHub Actions מר
 - Contabo panel password: qA4P9f3ra5bw
 - Connection method: SSH (not RDP!)
 - Connect: ssh root@77.237.234.2
+- **Claude CANNOT use SSH directly** - must use Push & Listen workflow only!
 
 ## What's Been Done
 - [x] All EA files created (PropFirmBot.mq5 + 10 .mqh modules)
@@ -85,20 +115,20 @@ Claude עושה שינוי בריפו → Push ל-GitHub → GitHub Actions מר
 - [x] Risk params set: 0.5% per trade, soft DD 3.5%, critical 5.0%, hard 6.0%
 - [x] Linux VPS setup scripts ready (Wine + MT5 + monitoring)
 - [x] Deploy script updated with all 11 EA files
-- [x] All code pushed to branch claude/build-cfd-trading-bot-fl0ld
 - [x] VPS setup complete - Wine + MT5 installed on Contabo VPS
 - [x] MT5 running on VPS (accessible via VNC)
 - [x] FundedNext account connected in MT5 (account 11797849, FundedNext-Server)
 - [x] MT5 shows connected and working on VPS
 - [x] GitHub Actions workflows configured (deploy, check, fix, run commands)
 
-## VPS Current State (Updated 2026-02-22)
-- MT5 is RUNNING on VPS with PropFirmBot EA ACTIVE
-- FundedNext account LOGGED IN and CONNECTED (account 11797849)
-- EA attached to EURUSD M15 chart
-- AutoTrading is ON (green)
-- Wine + VNC working
-- Bot is LIVE and trading
+## VPS Current State (Updated 2026-03-04)
+- MT5 was last seen NOT RUNNING (needs restart)
+- Last known balance: $1,989.74 (equity: $1,992.87)
+- Last known DD: 0.11%
+- Had 1 open position (USDJPY BUY)
+- FundedNext account LOGGED IN (account 11797849)
+- EA was attached to EURUSD M15 chart
+- Wine + VNC were working
 
 ## Critical Code Changes Made
 1. **Guardian.mqh**: Added trailing drawdown - calculates DD from equity high water mark instead of initial balance when `m_trailing_dd=true`. Skips daily DD checks when daily DD limit is 0.
@@ -118,11 +148,12 @@ Claude עושה שינוי בריפו → Push ל-GitHub → GitHub Actions מר
 10. TradeAnalyzer.mqh - Performance analytics
 11. AccountStateManager.mqh - Phase management (Challenge/Funded/Scaling)
 
-## Working Method
+## Working Method (REPEAT - READ THIS EVERY SESSION)
 - Claude's environment CANNOT SSH to VPS (port 22 blocked from sandbox)
-- ALL VPS operations go through: push to repo → GitHub Actions → VPS execution → results in repo
+- ALL VPS operations MUST go through: edit file → push to repo → GitHub Actions runs on VPS → results committed back to repo → git pull to read
 - Available workflows: vps-command (run anything), deploy-ea (update code), vps-check (status), vps-fix (restart)
-- After pushing, wait ~30-60 seconds then git pull to read results
+- After pushing, wait ~60-90 seconds then git pull to read results
+- If results don't appear after 2 minutes, the workflow may have failed
 - Noa can also SSH manually from PowerShell if needed: ssh root@77.237.234.2
 
 ## Noa's Tools
@@ -131,9 +162,9 @@ Claude עושה שינוי בריפו → Push ל-GitHub → GitHub Actions מר
 - SSH: ssh root@77.237.234.2 (password: Moti0417!)
 
 ## How to Resume Work
-- MT5 is running on VPS at 77.237.234.2
+- VPS at 77.237.234.2
 - VNC for MT5 GUI: connect to 77.237.234.2:5900 (no password, via RealVNC)
-- Repo on VPS: /root/MT5-PropFirm-Bot (branch: claude/build-cfd-trading-bot-fl0ld)
+- Repo on VPS: /root/MT5-PropFirm-Bot
 - MT5 installed at: /root/.wine/drive_c/Program Files/MetaTrader 5/
 - EA files at: .../MQL5/Experts/PropFirmBot/ (all 11 files + .ex5 compiled)
 - Config files at: .../MQL5/Files/PropFirmBot/ (6 JSON files)

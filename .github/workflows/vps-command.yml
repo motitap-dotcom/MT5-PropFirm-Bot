@@ -15,6 +15,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       - name: Execute command on VPS
         env:
@@ -61,4 +63,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f commands/output.txt
           git commit -m "VPS command output $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push || true
+          git push origin HEAD:${{ github.ref_name }} || true
