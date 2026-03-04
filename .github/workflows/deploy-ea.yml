@@ -33,101 +33,85 @@ jobs:
           if [ -z "$VPS_IP" ]; then echo "ERROR: VPS_IP secret is empty!"; exit 1; fi
           if [ -z "$VPS_PASSWORD" ]; then echo "ERROR: VPS_PASSWORD secret is empty!"; exit 1; fi
           if [ -z "$VPS_USER" ]; then echo "ERROR: VPS_USER secret is empty!"; exit 1; fi
-          echo "All secrets present. VPS_IP length: ${#VPS_IP}, VPS_USER length: ${#VPS_USER}"
+          echo "All secrets present."
 
-      - name: Test SSH connection
+      - name: Deploy and compile via SSH
         env:
           VPS_IP: ${{ secrets.VPS_IP }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
           VPS_USER: ${{ secrets.VPS_USER }}
+          BRANCH: ${{ github.ref_name }}
         run: |
-          echo "Testing SSH connection to ${VPS_USER}@${VPS_IP}..."
-          for attempt in 1 2 3; do
-            if sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 "${VPS_USER}@${VPS_IP}" "echo 'SSH OK'; hostname; uptime" 2>&1; then
-              echo "SSH connection successful on attempt $attempt"
-              exit 0
-            else
-              echo "Attempt $attempt failed (exit code $?), retrying in ${attempt}s..."
-              sleep $attempt
-            fi
-          done
-          echo "ERROR: SSH connection failed after 3 attempts"
-          exit 1
+          echo "=== Deploying via git pull + copy on VPS ==="
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 "${VPS_USER}@${VPS_IP}" bash << 'REMOTE_SCRIPT'
+            set -e
+            echo "=== Step 1: Update repo ==="
+            cd /root/MT5-PropFirm-Bot || {
+              echo "Repo not found, cloning..."
+              cd /root
+              git clone https://github.com/motitap-dotcom/MT5-PropFirm-Bot.git
+              cd MT5-PropFirm-Bot
+            }
 
-      - name: Deploy EA files to VPS
-        env:
-          VPS_IP: ${{ secrets.VPS_IP }}
-          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-        run: |
-          MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
-          EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
-          CONFIG_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
+            BRANCH="${BRANCH:-claude/debug-bot-transactions-wRINL}"
+            git fetch origin "$BRANCH" 2>/dev/null || git fetch --all
+            git checkout "$BRANCH" 2>/dev/null || true
+            git pull origin "$BRANCH" 2>/dev/null || git pull
+            echo "Git updated to $(git log --oneline -1)"
 
-          # Ensure directories exist
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no "${VPS_USER}@${VPS_IP}" "mkdir -p '${EA_DIR}' '${CONFIG_DIR}'"
-
-          echo "=== Deploying EA files ==="
-          DEPLOYED=0
-          FAILED=0
-          for f in EA/*.mq5 EA/*.mqh; do
-            if [ -f "$f" ]; then
-              fname=$(basename "$f")
-              if sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${EA_DIR}/\"" 2>&1; then
-                echo "  OK: $fname"
-                DEPLOYED=$((DEPLOYED + 1))
-              else
-                echo "  FAIL: $fname"
-                FAILED=$((FAILED + 1))
+            echo "=== Step 2: Find MT5 ==="
+            MT5_PATH=""
+            for p in "/root/.wine/drive_c/Program Files/MetaTrader 5" \
+                     "/root/.wine/drive_c/Program Files (x86)/MetaTrader 5"; do
+              if [ -f "$p/terminal64.exe" ]; then
+                MT5_PATH="$p"
+                break
               fi
+            done
+            if [ -z "$MT5_PATH" ]; then
+              echo "ERROR: MT5 not found!"
+              exit 1
             fi
-          done
+            echo "MT5 at: $MT5_PATH"
 
-          echo "=== Deploying config files ==="
-          for f in configs/*.json; do
-            if [ -f "$f" ]; then
-              fname=$(basename "$f")
-              if sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${CONFIG_DIR}/\"" 2>&1; then
-                echo "  OK: $fname"
-                DEPLOYED=$((DEPLOYED + 1))
-              else
-                echo "  FAIL: $fname"
-                FAILED=$((FAILED + 1))
+            EA_DEST="$MT5_PATH/MQL5/Experts/PropFirmBot"
+            CONFIG_DEST="$MT5_PATH/MQL5/Files/PropFirmBot"
+            mkdir -p "$EA_DEST" "$CONFIG_DEST"
+
+            echo "=== Step 3: Copy EA files ==="
+            COPIED=0
+            for f in EA/*.mq5 EA/*.mqh; do
+              if [ -f "$f" ]; then
+                cp -f "$f" "$EA_DEST/"
+                echo "  OK: $(basename $f)"
+                COPIED=$((COPIED + 1))
               fi
+            done
+            echo "Copied $COPIED EA files"
+
+            echo "=== Step 4: Copy config files ==="
+            if [ -d "configs" ]; then
+              for f in configs/*.json; do
+                [ -f "$f" ] && cp -f "$f" "$CONFIG_DEST/" && echo "  OK: $(basename $f)"
+              done
             fi
-          done
 
-          echo "=== Deploy summary: $DEPLOYED OK, $FAILED failed ==="
-          if [ "$DEPLOYED" -eq 0 ]; then
-            echo "ERROR: No files deployed!"
-            exit 1
-          fi
-
-      - name: Compile EA on VPS
-        env:
-          VPS_IP: ${{ secrets.VPS_IP }}
-          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-        run: |
-          MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
-          EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
-
-          echo "=== Compiling EA on VPS ==="
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no "${VPS_USER}@${VPS_IP}" bash -c "'
+            echo "=== Step 5: Compile ==="
             export DISPLAY=:99
             export WINEPREFIX=/root/.wine
-            cd \"${EA_DIR}\"
-            echo \"Files in EA dir:\"
-            ls -la *.mq5 *.mqh 2>/dev/null | wc -l
-            echo \"Attempting compile...\"
-            wine \"/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe\" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
-            sleep 5
-            if [ -f PropFirmBot.ex5 ]; then
-              echo \"SUCCESS: PropFirmBot.ex5 exists ($(ls -la PropFirmBot.ex5 | awk \"{print \\$5}\") bytes)\"
-            else
-              echo \"WARNING: PropFirmBot.ex5 not found - manual compile needed\"
+            if [ -f "$MT5_PATH/metaeditor64.exe" ]; then
+              wine "$MT5_PATH/metaeditor64.exe" /compile:"$EA_DEST/PropFirmBot.mq5" /log 2>/dev/null || true
+              sleep 5
             fi
-          '" 2>&1 | tee deploy_report.txt || true
+            if [ -f "$EA_DEST/PropFirmBot.ex5" ]; then
+              SIZE=$(stat -c%s "$EA_DEST/PropFirmBot.ex5" 2>/dev/null || echo "?")
+              echo "SUCCESS: PropFirmBot.ex5 ($SIZE bytes)"
+            else
+              echo "WARNING: .ex5 not updated - may need manual compile via VNC"
+            fi
+
+            echo "=== DEPLOY COMPLETE ==="
+          REMOTE_SCRIPT
 
       - name: Send Telegram notification
         if: always()
@@ -137,9 +121,7 @@ jobs:
         run: |
           STATUS="${{ job.status }}"
           BRANCH="${{ github.ref_name }}"
-          COMMIT="${{ github.event.head_commit.message }}"
-          SHORT_MSG=$(echo "$COMMIT" | head -1 | cut -c1-60)
-
+          SHORT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -1 | cut -c1-60)
           if [ "$STATUS" = "success" ]; then
             MSG="EA deployed to VPS! Branch: ${BRANCH} | ${SHORT_MSG}"
           else
@@ -147,16 +129,4 @@ jobs:
           fi
           curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d text="${MSG}" \
-            -d parse_mode="HTML" > /dev/null 2>&1 || true
-
-      - name: Commit deploy report
-        if: always()
-        run: |
-          if [ -f deploy_report.txt ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add -f deploy_report.txt
-            git commit -m "EA deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-            git push origin HEAD || true
-          fi
+            -d text="${MSG}" > /dev/null 2>&1 || true
