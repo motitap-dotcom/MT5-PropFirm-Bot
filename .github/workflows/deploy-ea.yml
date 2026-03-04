@@ -18,14 +18,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: claude/fix-bot-server-connection-JbPec
+          fetch-depth: 0
 
-      - name: Deploy EA files to VPS
+      - name: Deploy EA files and restart MT5
         env:
           VPS_IP: ${{ secrets.VPS_IP }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
           VPS_USER: ${{ secrets.VPS_USER }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
 
@@ -33,55 +32,56 @@ jobs:
           EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
           CONFIG_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
 
-          echo "=== Deploying EA files ==="
-          for f in EA/*.mq5 EA/*.mqh; do
-            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${EA_DIR}/\""
-          done
+          {
+            echo "=== DEPLOY $(date -u '+%Y-%m-%d %H:%M:%S UTC') ==="
 
-          echo "=== Deploying config files ==="
-          for f in configs/*.json; do
-            [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${CONFIG_DIR}/\""
-          done
+            echo "--- Uploading EA files ---"
+            for f in EA/*.mq5 EA/*.mqh; do
+              [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${EA_DIR}/\""
+              echo "  Uploaded: $f"
+            done
 
-          echo "=== Restarting MT5 to load updated EA ==="
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} bash -c "'
-            EA_DIR=\"${EA_DIR}\"
-            MT5=\"${MT5_BASE}\"
+            echo "--- Uploading config files ---"
+            for f in configs/*.json; do
+              [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${CONFIG_DIR}/\""
+            done
 
-            echo \"--- Stopping MT5 ---\"
-            MT5_PID=\$(pgrep -f terminal64.exe | head -1)
-            if [ -n \"\$MT5_PID\" ]; then
-              kill \$MT5_PID
+            echo "--- Restarting MT5 on VPS ---"
+            sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} bash << 'REMOTE_SCRIPT'
+              MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+              echo "Stopping MT5..."
+              pkill -f terminal64.exe 2>/dev/null || true
               sleep 5
-              echo \"MT5 stopped (was PID \$MT5_PID)\"
-            fi
+              echo "MT5 stopped"
 
-            echo \"--- Starting MT5 fresh (will auto-compile .mq5) ---\"
-            export DISPLAY=:99
-            export WINEPREFIX=/root/.wine
-            wine \"\$MT5/terminal64.exe\" /login:11797849 /password:gazDE62## /server:FundedNext-Server &
-            sleep 20
+              echo "Starting MT5..."
+              export DISPLAY=:99
+              export WINEPREFIX=/root/.wine
+              nohup wine "$MT5/terminal64.exe" /login:11797849 /password:gazDE62## /server:FundedNext-Server > /dev/null 2>&1 &
+              sleep 20
 
-            echo \"--- Checking if running ---\"
-            pgrep -la terminal64 || echo \"MT5 FAILED TO START!\"
+              echo "Checking MT5 status..."
+              pgrep -la terminal64 || echo "MT5 FAILED TO START!"
 
-            echo \"--- .ex5 status ---\"
-            ls -la \"\$EA_DIR/\"*.ex5 2>/dev/null || echo \"No .ex5 found!\"
+              echo "EA file status:"
+              ls -la "$MT5/MQL5/Experts/PropFirmBot/"*.ex5 2>/dev/null || echo "No .ex5"
+              ls -la "$MT5/MQL5/Experts/PropFirmBot/"*.mq5 2>/dev/null | head -2
 
-            echo \"--- Latest terminal log ---\"
-            TLOG=\$(ls -t \"\$MT5/logs/\"*.log 2>/dev/null | head -1)
-            if [ -n \"\$TLOG\" ]; then
-              cat \"\$TLOG\" | tr -d \"\\0\" | tail -10
-            fi
+              echo "Terminal log (last 10):"
+              TLOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
+              [ -n "$TLOG" ] && cat "$TLOG" | tr -d '\0' | tail -10
 
-            echo \"--- Latest EA log ---\"
-            EALOG=\$(ls -t \"\$MT5/MQL5/Logs/\"*.log 2>/dev/null | head -1)
-            if [ -n \"\$EALOG\" ]; then
-              cat \"\$EALOG\" | tr -d \"\\0\" | tail -10
-            fi
-          '" > deploy_report.txt 2>&1 || true
+              echo "EA log (last 10):"
+              EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+              [ -n "$EALOG" ] && cat "$EALOG" | tr -d '\0' | tail -10
 
-          echo "EXIT_CODE=$?" >> deploy_report.txt
+              echo "Connections:"
+              ss -tn state established | grep -v ":22 \|:5900 \|:53 " | head -5
+          REMOTE_SCRIPT
+
+            echo "=== DEPLOY DONE ==="
+          } > deploy_report.txt 2>&1
+
           cat deploy_report.txt
 
       - name: Send Telegram notification
@@ -91,20 +91,15 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           STATUS="${{ job.status }}"
-          if [ "$STATUS" = "success" ]; then
-            MSG="✅ EA v3.11 deployed & MT5 restarted on VPS"
-          else
-            MSG="❌ EA deployment failed - check GitHub Actions"
-          fi
+          [ "$STATUS" = "success" ] && MSG="✅ EA deployed & MT5 restarted" || MSG="❌ Deploy failed"
           curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-            -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d text="${MSG}" \
-            -d parse_mode="HTML" > /dev/null 2>&1 || true
+            -d chat_id="${TELEGRAM_CHAT_ID}" -d text="${MSG}" > /dev/null 2>&1 || true
 
       - name: Commit deploy report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull origin claude/fix-bot-server-connection-JbPec --rebase || true
           git add -f deploy_report.txt
           git commit -m "EA deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
           git push origin claude/fix-bot-server-connection-JbPec || true

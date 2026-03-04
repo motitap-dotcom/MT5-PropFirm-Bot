@@ -19,7 +19,7 @@ permissions:
 jobs:
   check-vps:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,7 +34,7 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
           chmod +x scripts/remote_check.sh scripts/deep_check.sh
           sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no scripts/verify_ea.sh ${VPS_USER}@${VPS_IP}:/tmp/check.sh
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} "bash /tmp/check.sh" > vps_report.txt 2>&1
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} "bash /tmp/check.sh" > vps_report.txt 2>&1
           echo "EXIT_CODE=$?" >> vps_report.txt
           cat vps_report.txt
 
@@ -42,6 +42,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull origin claude/fix-bot-server-connection-JbPec --rebase || true
           git add -f vps_report.txt
           git commit -m "VPS status report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
           git push origin claude/fix-bot-server-connection-JbPec || true
