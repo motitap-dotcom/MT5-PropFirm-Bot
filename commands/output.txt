@@ -1,40 +1,50 @@
 ============================================
-  VPS STATUS CHECK (READ ONLY)
-  2026-03-05 14:27:21 UTC
+  FIX: AutoTrading + mt5.service
+  2026-03-05 14:36:29 UTC
 ============================================
 
-=== [1] RUNNING PROCESSES ===
---- MT5 ---
-MT5: RUNNING
-root     2275491  1.7  0.1 2686336 14000 ?       S<   14:26   0:00 start.exe /exec terminal64.exe /portable /login:11797849 /password:gazDE62##
-root     2275553 65.3  2.6 1670148 216252 ?      S<l  14:26   0:25 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server
+=== [1] FIXING AutoTrading ===
+--- Current startup.ini ---
+[StartUp]
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+Symbol=EURUSD
+Period=M15
+[Experts]
+AllowLiveTrading=1
+AllowDllImport=0
+Enabled=1
+Account=11797849
+Profile=0
+AllowWebRequest=1
+WebRequestUrl1=https://api.telegram.org
 
---- Xvfb ---
-Xvfb: RUNNING
-root      346800  1.9  0.7 241836 60100 ?        Ss   Feb26 189:41 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
+--- Updated startup.ini ---
+[StartUp]
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+Symbol=EURUSD
+Period=M15
+[Experts]
+AllowLiveTrading=1
+AllowDllImport=0
+Enabled=1
+Account=11797849
+Profile=0
+AllowWebRequest=1
+WebRequestUrl1=https://api.telegram.org
 
---- x11vnc ---
-VNC: RUNNING
+[Common]
+AutoTrading=1
 
---- Wine ---
-wine-11.3 (Staging)
+terminal64.ini not found at /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.ini
 
-=== [2] SYSTEMD SERVICES ===
---- xvfb.service ---
-  File: EXISTS
-  Enabled: enabled
-  Active: active
---- mt5.service ---
-  File: EXISTS
-  Enabled: enabled
-  Active: inactive
-NO
---- x11vnc.service ---
-  File: EXISTS
-  Enabled: enabled
-  Active: active
+=== [2] FIXING mt5.service ===
+Stopping current MT5 process...
+MT5 stopped.
 
---- mt5.service content ---
+Updating mt5.service...
+--- New mt5.service ---
 [Unit]
 Description=MetaTrader 5 Trading Terminal
 After=network.target xvfb.service
@@ -46,7 +56,7 @@ User=root
 Environment=DISPLAY=:99
 Environment=WINEPREFIX=/root/.wine
 ExecStartPre=/bin/sleep 5
-ExecStart=/usr/bin/wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" /portable
+ExecStart=/usr/bin/wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" /portable /login:11797849 /server:FundedNext-Server
 Restart=always
 RestartSec=30
 StartLimitIntervalSec=600
@@ -55,166 +65,69 @@ StartLimitBurst=10
 [Install]
 WantedBy=multi-user.target
 
---- xvfb.service content ---
-[Unit]
-Description=X Virtual Frame Buffer for MT5
-After=network.target
+Reloading systemd...
+Starting mt5.service...
+--- mt5.service status ---
+● mt5.service - MetaTrader 5 Trading Terminal
+     Loaded: loaded (/etc/systemd/system/mt5.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2026-03-05 14:36:37 UTC; 10s ago
+    Process: 2278382 ExecStartPre=/bin/sleep 5 (code=exited, status=0/SUCCESS)
+   Main PID: 2278397 (start.exe)
+      Tasks: 68 (limit: 9483)
+     Memory: 303.4M (peak: 408.8M)
+        CPU: 13.342s
+     CGroup: /system.slice/mt5.service
+             ├─2278397 start.exe /exec "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" /portable /login:11797849
+             ├─2278400 /opt/wine-staging/lib/wine/../../bin/wineserver
+             ├─2278406 "C:\\windows\\system32\\services.exe"
+             ├─2278409 "C:\\windows\\system32\\winedevice.exe"
+             ├─2278419 "C:\\windows\\system32\\plugplay.exe"
+             ├─2278425 "C:\\windows\\system32\\svchost.exe" -k LocalServiceNetworkRestricted
+             ├─2278434 "C:\\windows\\system32\\winedevice.exe"
+             ├─2278458 "C:\\Program Files\\MetaTrader 5\\terminal64.exe" /portable /login:11797849 /server:FundedNext-Server
+             ├─2278460 "C:\\windows\\system32\\explorer.exe" /desktop
+             ├─2278475 "C:\\windows\\system32\\rpcss.exe"
+             └─2278513 "C:\\Program Files\\MetaTrader 5\\metaeditor64.exe" /portable "/compile:C:\\Program Files\\MetaTrader 5\\MQL5" "/inc:C:\\Program Files\\MetaTrader 5\\MQL5" /time:1772720814 /flg:0 /stop:se320_959178850
 
-[Service]
-Type=simple
-ExecStart=/usr/bin/Xvfb :99 -screen 0 1280x1024x24
-Restart=always
-RestartSec=5
+=== [3] VERIFICATION ===
+--- MT5 Process ---
+MT5: RUNNING
+root     2278397  2.5  0.1 2686336 14020 ?       S<s  14:36   0:00 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe /portable /login:11797849
+root     2278458 59.7  1.9 807132 159408 ?       S<l  14:36   0:04 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /server:FundedNext-Server
 
-[Install]
-WantedBy=multi-user.target
+--- mt5.service ---
+  Enabled: enabled
+  Active: active
 
-=== [3] CRON & WATCHDOG ===
---- Crontab ---
+Waiting 20 more seconds for MT5 to initialize...
+--- Latest EA log (last 15 lines) ---
+LD	0	14:37:00.314	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+RM	0	14:37:00.314	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+DP	0	14:37:00.314	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 100%
+LI	0	14:37:00.314	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+QQ	0	14:37:01.845	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
+EM	0	14:37:01.848	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.05 16:30 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+JR	0	14:37:01.849	PropFirmBot (EURUSD,M15)	[EMA] SELL signal: Entry=1.33472 SL=1.33655 TP=1.33105 RSI=47.8
+CP	0	14:37:01.849	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=9.91 SL_pts=0.0 Lot=0.05
+MP	0	14:37:01.849	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 GBPUSD sl: 1.33655 tp: 1.33105 [auto trading disabled by client]
+OL	0	14:37:01.849	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+EM	0	14:37:02.350	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 GBPUSD sl: 1.33655 tp: 1.33105 [auto trading disabled by client]
+JQ	0	14:37:02.350	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+HO	0	14:37:02.854	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 GBPUSD sl: 1.33655 tp: 1.33105 [auto trading disabled by client]
+DG	0	14:37:02.854	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+RD	0	14:37:03.345	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 
-*/5 * * * * cd /root/Tradovate-Bot && bash /root/tradovate-bot/server_cron.sh >> /var/log/tradovate-cron.log 2>&1
-*/2 * * * * /opt/hyrotrader-bot/scripts/auto_deploy.sh
-@reboot nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &
-*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
-0 6 * * * /root/PropFirmBot/scripts/daily_report.sh  # PropFirmBot daily report
-
---- Watchdog script ---
-EXISTS at /root/PropFirmBot/scripts/watchdog.sh
-
---- Watchdog log (last 15 lines) ---
-From /root/PropFirmBot/logs/watchdog.log:
-2026-03-04 08:20:02 [ALERT] MT5 down! Restarting...
-2026-03-04 08:20:02 [RESTARTED] PID:1914900
-1915015
-2026-03-04 08:28:01 [OK] PID:1914900
-1915015
-2026-03-04 08:34:01 [ALERT] MT5 down! Restarting...
-2026-03-04 08:34:01 [RESTARTED] PID:1919087
-1919189
-2026-03-04 08:42:01 [OK] PID:1920150
-1920200
-2026-03-04 08:46:01 [ALERT] MT5 down! Restarting...
-2026-03-04 08:46:01 [ERROR] Restart failed!
-2026-03-04 08:48:01 [ALERT] MT5 down! Restarting...
-2026-03-04 08:48:01 [RESTARTED] PID:1922602
-1922661
-
-=== [4] MT5 LOGS ===
---- EA Logs ---
-File: 20260305.log (77156 bytes)
-Last 30 lines:
-FI	0	14:27:10.792	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.50% | MaxPos=3 | DailyDD=-2.0% | TotalDD=3.0%
-RH	0	14:27:10.792	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-QR	0	14:27:10.792	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
-IM	0	14:27:11.056	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-GN	0	14:27:11.056	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
-KE	0	14:27:11.056	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-FE	0	14:27:11.102	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-HK	0	14:27:11.153	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-RK	0	14:27:11.178	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-RE	0	14:27:11.178	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-MP	0	14:27:11.201	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-EF	0	14:27:11.202	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-PK	0	14:27:11.202	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-MS	0	14:27:11.202	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-MF	0	14:27:11.202	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-QR	0	14:27:11.202	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-KK	0	14:27:11.202	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-IR	0	14:27:11.202	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 100%
-QK	0	14:27:11.202	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-JS	0	14:27:11.202	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
-GK	0	14:27:11.207	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.05 16:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-CD	0	14:27:11.323	PropFirmBot (EURUSD,M15)	[EMA] SELL signal: Entry=1.33427 SL=1.33617 TP=1.33048 RSI=45.4
-JN	0	14:27:11.323	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=9.91 SL_pts=0.0 Lot=0.05
-FR	0	14:27:11.323	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 GBPUSD sl: 1.33617 tp: 1.33048 [auto trading disabled by client]
-NR	0	14:27:11.323	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
-HO	0	14:27:11.815	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 GBPUSD sl: 1.33617 tp: 1.33048 [auto trading disabled by client]
-QG	0	14:27:11.815	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
-JI	0	14:27:12.317	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 GBPUSD sl: 1.33617 tp: 1.33048 [auto trading disabled by client]
-PE	0	14:27:12.317	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
-GF	0	14:27:12.822	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-
---- Terminal Logs ---
-File: 20260305.log (47818 bytes)
-Last 20 lines:
-JK	0	13:09:32.261	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-NN	0	13:11:27.509	Startup	successfully initialized from start config "C:\Program Files\MetaTrader 5\config\startup.ini"
-GR	0	13:11:29.732	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
-CE	0	13:11:29.734	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 5 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
-QS	0	13:11:29.734	Terminal	C:\Program Files\MetaTrader 5
-NG	0	13:11:29.734	Terminal	launched with C:\Program Files\MetaTrader 5\config\startup.ini
-FQ	0	13:11:59.184	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-NM	0	13:11:59.472	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
-FM	0	13:11:59.472	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 15:09:17
-NJ	0	13:12:00.777	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-MI	0	13:12:00.778	Network	'11797849': trading has been enabled - hedging mode
-FF	0	13:12:13.527	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-IL	0	14:26:51.561	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
-PD	0	14:26:51.568	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 5 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
-RM	0	14:26:51.568	Terminal	C:\Program Files\MetaTrader 5
-CF	0	14:27:06.512	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-FN	0	14:27:07.011	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
-LN	0	14:27:07.011	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 15:11:58
+--- Latest Terminal log (last 10 lines) ---
 NO	0	14:27:08.068	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
 HL	0	14:27:08.068	Network	'11797849': trading has been enabled - hedging mode
+DK	0	14:36:46.808	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+KM	0	14:36:46.821	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 5 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+ID	0	14:36:46.821	Terminal	C:\Program Files\MetaTrader 5
+HM	0	14:36:58.284	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+KI	0	14:36:59.174	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
+EI	0	14:36:59.175	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 16:27:06
+GI	0	14:36:59.957	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+IE	0	14:36:59.957	Network	'11797849': trading has been enabled - hedging mode
 
-=== [5] EA FILES ===
---- Experts dir ---
-total 1376
-drwxr-xr-x 2 root root   4096 Mar  5 13:14 .
-drwxr-xr-x 6 root root   4096 Mar  5 13:11 ..
--rw-r--r-- 1 root root  15380 Mar  5 13:14 AccountStateManager.mqh
--rw-r--r-- 1 root root  12411 Mar  5 13:14 Dashboard.mqh
--rw-r--r-- 1 root root  22396 Mar  5 13:14 Guardian.mqh
--rw-r--r-- 1 root root  10622 Mar  5 13:14 NewsFilter.mqh
--rw-r--r-- 1 root root  11971 Mar  5 13:14 Notifications.mqh
--rw-r--r-- 1 root root 163452 Mar  5 13:08 PropFirmBot.ex5
--rw-r--r-- 1 root root 163578 Mar  4 08:45 PropFirmBot.ex5.bak
--rw-r--r-- 1 root root 163174 Mar  3 19:39 PropFirmBot.ex5.bak2
--rw-r--r-- 1 root root 163340 Mar  5 09:47 PropFirmBot.ex5.bak_20260305_0947
--rw-r--r-- 1 root root 164640 Mar  5 11:25 PropFirmBot.ex5.bak_before_param_fix
--rw-r--r-- 1 root root 162634 Mar  4 14:15 PropFirmBot.ex5.bak_before_recompile
--rw-r--r-- 1 root root 163578 Mar  4 12:33 PropFirmBot.ex5.before_update
--rw-r--r-- 1 root root   7334 Mar  5 13:08 PropFirmBot.log
--rw-r--r-- 1 root root  34704 Mar  5 13:14 PropFirmBot.mq5
--rw-r--r-- 1 root root  25420 Mar  5 13:14 RiskManager.mqh
--rw-r--r-- 1 root root  25335 Mar  5 13:14 SignalEngine.mqh
--rw-r--r-- 1 root root   8535 Mar  5 13:14 StatusWriter.mqh
--rw-r--r-- 1 root root  22240 Mar  5 13:14 TradeAnalyzer.mqh
--rw-r--r-- 1 root root   9141 Mar  5 13:14 TradeJournal.mqh
--rw-r--r-- 1 root root  14433 Mar  5 13:14 TradeManager.mqh
-
---- Config files ---
-total 40
-drwxr-xr-x 2 root root 4096 Mar  5 13:09 .
-drwxr-xr-x 3 root root 4096 Feb 22 21:00 ..
--rw-r--r-- 1 root root 1620 Mar  5 12:08 account_state.json
--rw-r--r-- 1 root root 1469 Mar  5 12:08 challenge_rules.json
--rw-r--r-- 1 root root 1336 Mar  5 12:08 funded_rules.json
--rw-r--r-- 1 root root 1159 Mar  5 12:08 notifications.json
--rw-r--r-- 1 root root 1805 Mar  5 12:08 risk_params.json
--rw-r--r-- 1 root root  904 Mar  5 14:27 status.json
--rw-r--r-- 1 root root 1244 Mar  5 12:08 symbols.json
--rw-r--r-- 1 root root 3032 Mar  5 14:27 telegram_queue.txt
-
-=== [6] NETWORK ===
---- Outbound connections ---
-Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
-0      0       77.237.234.2:22        37.60.47.71:3495        
-0      0       77.237.234.2:5900    116.118.51.76:48054       
-0      4536    77.237.234.2:22      52.161.69.169:57417       
-0      0       77.237.234.2:5900      5.29.16.235:19723       
-0      0       77.237.234.2:32844    3.173.161.48:443         
-0      0       77.237.234.2:53266   78.140.180.54:443         
-0      0       77.237.234.2:42493   18.168.91.222:443         
-0      0       77.237.234.2:22        5.29.16.235:19731       
-3450   0       77.237.234.2:50036 194.164.179.244:443         
-
-=== [7] SYSTEM ===
-Uptime: up 1 week, 4 days, 2 hours, 16 minutes
-Memory: Mem:           7.8Gi       2.3Gi       4.4Gi        45Mi       1.4Gi       5.4Gi
-Disk:   /dev/sda1       145G   18G  128G  12% /
-Kernel: 6.8.0-100-generic
-
-=== CHECK DONE 2026-03-05 14:27:22 UTC ===
+=== FIX DONE 2026-03-05 14:37:09 UTC ===
 EXIT_CODE=0
