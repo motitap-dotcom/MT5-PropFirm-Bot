@@ -1,97 +1,89 @@
 #!/bin/bash
 # =============================================================
-# Deploy updated EA files and restart MT5
+# Check EA logs + deploy updated RiskManager with wider spreads
 # =============================================================
 
 echo "============================================"
-echo "  Deploy EA + Restart MT5"
+echo "  Deploy fix + Check EA logs"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
-CONFIG_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
 REPO="/root/MT5-PropFirm-Bot"
 
 # Step 1: Pull latest code
 echo "=== [1] Pull latest code ==="
 cd "$REPO"
 git fetch --all 2>&1
-git checkout claude/build-cfd-trading-bot-fl0ld 2>&1
-git pull origin claude/build-cfd-trading-bot-fl0ld 2>&1
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+git pull --rebase origin "$CURRENT_BRANCH" 2>&1 || git pull --ff-only origin "$CURRENT_BRANCH" 2>&1 || echo "Pull failed, using local files"
 echo ""
 
-# Step 2: Create directories
-echo "=== [2] Create directories ==="
-mkdir -p "$EA_DIR"
-mkdir -p "$CONFIG_DIR"
-ls -la "$EA_DIR/" 2>&1
+# Step 2: Copy updated RiskManager
+echo "=== [2] Copy updated RiskManager ==="
+cp -v "$REPO"/EA/RiskManager.mqh "$EA_DIR/" 2>&1
 echo ""
 
-# Step 3: Copy EA files
-echo "=== [3] Copy EA files ==="
-cp -v "$REPO"/EA/*.mq5 "$EA_DIR/" 2>&1
-cp -v "$REPO"/EA/*.mqh "$EA_DIR/" 2>&1
+# Step 3: Check spread settings in new file
+echo "=== [3] New spread settings ==="
+grep -n "m_max_spread" "$EA_DIR/RiskManager.mqh" | head -5
 echo ""
 
-# Step 4: Copy config files
-echo "=== [4] Copy config files ==="
-cp -v "$REPO"/configs/*.json "$CONFIG_DIR/" 2>&1 || echo "(no config files to copy)"
+# Step 4: Show full EA log
+echo "=== [4] EA Expert Log (last 80 lines) ==="
+LATEST_LOG=$(ls -t "$MT5_BASE/MQL5/Logs/"*.log 2>/dev/null | head -1)
+if [ -n "$LATEST_LOG" ]; then
+    echo "Log file: $LATEST_LOG"
+    # Remove Unicode padding for readability
+    tail -80 "$LATEST_LOG" 2>/dev/null | sed 's/ \x00//g; s/\x00//g' | strings
+else
+    echo "(no log files found)"
+fi
 echo ""
 
-# Step 5: List deployed files
-echo "=== [5] Deployed files ==="
-ls -la "$EA_DIR/" 2>&1
+# Step 5: Check terminal log too
+echo "=== [5] Terminal Journal (last 30 lines) ==="
+TERM_LOG=$(ls -t "$MT5_BASE/logs/"*.log 2>/dev/null | head -1)
+if [ -n "$TERM_LOG" ]; then
+    echo "Log file: $TERM_LOG"
+    tail -30 "$TERM_LOG" 2>/dev/null | sed 's/ \x00//g; s/\x00//g' | strings
+else
+    echo "(no terminal logs found)"
+fi
 echo ""
 
-# Step 6: Try to compile
-echo "=== [6] Compile EA ==="
-WINEPREFIX=/root/.wine wine "$MT5_BASE/metaeditor64.exe" /compile:"$EA_DIR/PropFirmBot.mq5" /log 2>/dev/null &
-COMPILE_PID=$!
-sleep 10
-kill $COMPILE_PID 2>/dev/null || true
-ls -la "$EA_DIR/"*.ex5 2>&1 && echo "Compilation OK" || echo "Warning: .ex5 not found - MT5 will compile on load"
-echo ""
-
-# Step 7: Restart MT5
-echo "=== [7] Restart MT5 ==="
-# Kill existing MT5
+# Step 6: Restart MT5 to load new code
+echo "=== [6] Restart MT5 ==="
 pkill -f terminal64.exe 2>/dev/null || true
 sleep 3
 
-# Ensure display is running
 export DISPLAY=:99
 if ! pgrep -x Xvfb > /dev/null; then
     Xvfb :99 -screen 0 1280x1024x24 &
     sleep 2
 fi
 
-# Start MT5
 cd "$MT5_BASE"
 WINEPREFIX=/root/.wine wine "$MT5_BASE/terminal64.exe" /login:11797849 /password:gazDE62## /server:FundedNext-Server &
-sleep 10
+sleep 15
 
-# Check if MT5 is running
-echo "=== [8] Verify ==="
+# Step 7: Verify
+echo "=== [7] Verify ==="
 if pgrep -f terminal64.exe > /dev/null; then
     echo "MT5 is RUNNING"
 else
     echo "MT5 FAILED to start!"
 fi
 
-# Check connections
-ss -tnp | grep -i wine 2>/dev/null | head -5
+# Check latest log after restart
 echo ""
-
-# Show latest terminal log
-echo "=== [9] Terminal log (last 20 lines) ==="
+echo "=== [8] Post-restart log ==="
 LATEST_LOG=$(ls -t "$MT5_BASE/MQL5/Logs/"*.log 2>/dev/null | head -1)
 if [ -n "$LATEST_LOG" ]; then
-    tail -20 "$LATEST_LOG" 2>/dev/null
-else
-    echo "(no log files found)"
+    tail -20 "$LATEST_LOG" 2>/dev/null | sed 's/ \x00//g; s/\x00//g' | strings
 fi
-echo ""
 
+echo ""
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
