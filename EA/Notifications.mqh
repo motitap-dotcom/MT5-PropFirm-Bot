@@ -50,8 +50,12 @@ private:
                                int wins, int losses, double daily_dd, double total_dd);
 
    bool     SendTelegram(string message);
+   bool     SendTelegramViaFile(string message);
    void     SendPush(string message);
    void     SendEmail(string subject, string body);
+
+   // File-based relay path
+   string   m_relay_file;
 
 public:
             CNotifications();
@@ -95,6 +99,7 @@ CNotifications::CNotifications()
    m_last_warning_time  = 0;
    m_info_cooldown      = 60;     // 1 min between info
    m_warning_cooldown   = 30;     // 30s between warnings
+   m_relay_file         = "PropFirmBot/telegram_queue.txt";
 }
 
 //+------------------------------------------------------------------+
@@ -147,9 +152,12 @@ bool CNotifications::SendTelegram(string message)
    {
       int err = GetLastError();
       if(err == 4014)
-         Print("[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest");
+      {
+         // WebRequest blocked (common on Wine/Linux) - use file relay
+         return SendTelegramViaFile(message);
+      }
       else
-         PrintFormat("[Notify] Telegram connection failed: error %d. Check internet connection.", err);
+         PrintFormat("[Notify] Telegram connection failed: error %d", err);
       return false;
    }
 
@@ -159,6 +167,28 @@ bool CNotifications::SendTelegram(string message)
       return false;
    }
 
+   return true;
+}
+
+//+------------------------------------------------------------------+
+bool CNotifications::SendTelegramViaFile(string message)
+{
+   // Write message to file for external relay daemon to pick up and send
+   int handle = FileOpen(m_relay_file, FILE_WRITE|FILE_READ|FILE_TXT|FILE_SHARE_READ|FILE_SHARE_WRITE);
+   if(handle == INVALID_HANDLE)
+   {
+      PrintFormat("[Notify] Cannot open relay file: %s", m_relay_file);
+      return false;
+   }
+
+   // Seek to end
+   FileSeek(handle, 0, SEEK_END);
+
+   // Write timestamp + message (one line per message)
+   string line = TimeToString(TimeCurrent(), TIME_DATE|TIME_SECONDS) + "|" + message;
+   FileWriteString(handle, line + "\n");
+
+   FileClose(handle);
    return true;
 }
 
