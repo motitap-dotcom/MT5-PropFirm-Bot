@@ -1,115 +1,22 @@
-=== FIX #2 - Thu Mar  5 11:36:19 UTC 2026 ===
+=== QUICK STATUS CHECK - Thu Mar  5 11:39:25 UTC 2026 ===
 
---- STEP 1: Kill MT5 ---
-MT5 stopped
+--- MT5 Processes ---
+root      334849  0.0  0.0   8500  4032 ?        Ss   Feb26   4:45 /bin/bash /root/MT5-PropFirm-Bot/relay/daemon.sh
+root      426805  0.0  0.0 520040  6300 ?        S<sl Feb27   0:29 C:\windows\system32\winedevice.exe
+root      426826  6.2  0.0 744552  7848 ?        S<sl Feb27 548:26 C:\windows\system32\winedevice.exe
+root      979278  0.0  0.0   7872  3240 ?        Ss   Mar01   0:16 /bin/bash /root/MT5-PropFirm-Bot/scripts/git_bridge.sh
+root     1365428  0.0  0.2  34784 20296 ?        Ss   Mar02   2:41 /usr/bin/python3 /root/MT5-PropFirm-Bot/management/server.py
+root     1622410  0.0  0.0 520040  6336 ?        S<sl Mar03   0:13 C:\windows\system32\winedevice.exe
+root     1622440  8.3  0.0 744552  7820 ?        S<sl Mar03 246:13 C:\windows\system32\winedevice.exe
+root     2234125  0.1  0.1 2686336 14012 ?       S<   11:25   0:00 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
+root     2234128 16.0  0.1  18584 15892 ?        Rs   11:25   2:15 /opt/wine-staging/lib/wine/../../bin/wineserver
+root     2234138  0.1  0.2 520040 17604 ?        S<sl 11:25   0:00 C:\windows\system32\winedevice.exe
 
---- STEP 2: Delete saved state file ---
-No state file found in common files
-Found: /root/.wine/drive_c/users/root/AppData/Roaming/MetaQuotes/Terminal/Common/Files/PropFirmBot_AccountState.dat - deleting...
-
---- STEP 3: Fix Telegram WebRequest ---
-Current common.ini:
-[Common]
-Login=11797849
-ProxyEnable=0
-CertInstall=0
-NewsEnable=0
-Environment=F008C7293503CED0045B07842FC57A638AA2FD5F10DEE8EA7AD19815A339B9A21E36157778467577E33A229F2FC5240D
-Server=FundedNext-Server
-ProxyType=0
-ProxyAddress=
-EnableOpenCL=7
-ProxyAuth=
-Services=4294967295
-NewsLanguages=
-Source=download.mql5.com
-[StartUp]
-Expert=PropFirmBot\PropFirmBot
-ExpertParameters=
-Symbol=EURUSD
-Period=M15
-[Experts]
-AllowWebRequest=1
-WebRequestUrl1=https://api.telegram.org
-AllowLiveTrading=1
-AllowDllImport=0
-Enabled=1
-Account=11797849
-Profile=0
-[Charts]
-ProfileLast=Default
-MaxBars=100000
-PrintColor=0
-SaveDeleted=0
-TradeHistory=1
-TradeLevels=1
-TradeLevelsDrag=0
-ObsoleteLasttime=1772635517
-PreloadCharts=1
-
-
-Updated common.ini:
-[Common]
-Login=11797849
-ProxyEnable=0
-CertInstall=0
-NewsEnable=0
-Environment=F008C7293503CED0045B07842FC57A638AA2FD5F10DEE8EA7AD19815A339B9A21E36157778467577E33A229F2FC5240D
-Server=FundedNext-Server
-ProxyType=0
-ProxyAddress=
-EnableOpenCL=7
-ProxyAuth=
-Services=4294967295
-NewsLanguages=
-Source=download.mql5.com
-
-[StartUp]
-Expert=PropFirmBot\PropFirmBot
-ExpertParameters=
-Symbol=EURUSD
-Period=M15
-
-[Experts]
-AllowLiveTrading=1
-AllowDllImport=0
-Enabled=1
-Account=11797849
-Profile=0
-AllowWebRequest=1
-WebRequestUrl1=https://api.telegram.org
-
-[Charts]
-ProfileLast=Default
-MaxBars=100000
-PrintColor=0
-SaveDeleted=0
-TradeHistory=1
-TradeLevels=1
-TradeLevelsDrag=0
-ObsoleteLasttime=1772635517
-PreloadCharts=1
-
-
---- STEP 4: Wine registry WebRequest ---
-Terminal dir: /root/.wine/drive_c/users/root/AppData/Roaming/MetaQuotes/Terminal/D0E8209F77C8CF37AD8BF550E51FF075
-
---- STEP 5: Recompile EA ---
-Compilation OK! Size: 164640 bytes
-
---- STEP 6: Restart MT5 ---
-MT5 started, waiting 25 seconds for initialization...
---- STEP 7: Verification ---
-MT5 processes:
-
-VNC status:
-346808 /usr/bin/x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -xkb
-
-Network connections:
+--- Network Connections ---
 ESTAB      0      0       77.237.234.2:45683  18.168.91.222:443   users:(("main",pid=2234185,fd=19),("wineserver",pid=2234128,fd=345))
 
---- EA Logs (checking for new params) ---
-Log file: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260305.log
+--- EA Log (last 80 lines via strings) ---
+Log: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260305.log (size: 111980 bytes)
 
 --- Status JSON ---
 {
@@ -153,5 +60,15 @@ Log file: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260305.log
     "open": []
   }
 }
-=== DONE - Thu Mar  5 11:36:53 UTC 2026 ===
+--- Check if state file was recreated ---
+
+--- common.ini WebRequest section ---
+[Experts]
+AllowLiveTrading=1
+AllowDllImport=0
+Enabled=1
+Account=11797849
+Profile=0
+
+=== DONE ===
 EXIT_CODE=0
