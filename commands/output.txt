@@ -1,70 +1,59 @@
-=== FIX #18 - Thu Mar  5 13:02:22 UTC 2026 ===
+=== FIX #19 - Thu Mar  5 13:04:46 UTC 2026 ===
 --- STEP 1: Stop MT5 ---
 MT5 stopped: OK
 
---- STEP 2: Create chart01.chr ---
-chart01.chr created successfully
-Size: 1064 chars
-Verify chart01.chr:
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr: Unicode text, UTF-16, little-endian text
--rw-r--r-- 1 root root 2130 Mar  5 13:02 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr
-
-Expert section check:
-<expert>
-name=PropFirmBot\PropFirmBot
-path=Experts\PropFirmBot\PropFirmBot.ex5
-flags=343
-window_num=0
-<inputs>
---
-</expert>
-
-<window>
-height=100
-
-<indicator>
-
---- STEP 3: Verify common.ini ---
+--- STEP 2: Create startup config ---
+startup.ini created:
 [StartUp]
 Expert=PropFirmBot\PropFirmBot
 ExpertParameters=
 Symbol=EURUSD
 Period=M15
 [Experts]
+AllowLiveTrading=1
+AllowDllImport=0
+Enabled=1
+Account=11797849
+Profile=0
+AllowWebRequest=1
+WebRequestUrl1=https://api.telegram.org
 
---- STEP 4: Verify .ex5 ---
--rw-r--r-- 1 root root 164640 Mar  5 10:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+--- STEP 3: Verify chart profile ---
+chart01.chr exists: NO
 
---- STEP 5: VNC check ---
-Xvfb: 346800
-x11vnc: 346808
-
---- STEP 6: Clean old state file ---
-Old state files deleted
-
---- STEP 7: Start MT5 ---
-Waiting 25 seconds for MT5 to start and load EA...
+--- STEP 4: Start MT5 with /config ---
+Starting MT5 with /config:config\startup.ini ...
+MT5 PID: 2256974
+Waiting 45 seconds for MT5 to fully initialize...
 MT5 is RUNNING
 
---- STEP 8: Check EA status ---
-Terminal log (last 15 lines):
-DG	0	12:35:07.958	Network	'11797849': trading has been enabled - hedging mode
-EL	0	12:39:39.349	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
-PG	0	12:39:39.355	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 5 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
-FM	0	12:39:39.355	Terminal	C:\Program Files\MetaTrader 5
-HD	0	12:39:56.784	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
-ID	0	12:39:56.790	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:35:06
-QE	0	12:39:58.117	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-CF	0	12:39:58.117	Network	'11797849': trading has been enabled - hedging mode
-NM	0	12:46:03.648	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
-KG	0	12:46:03.648	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 4 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
-JN	0	12:46:03.648	Terminal	C:\Program Files\MetaTrader 5
-RE	0	12:46:19.341	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
-KE	0	12:46:19.341	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:39:56
-LE	0	12:46:20.865	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-JF	0	12:46:20.865	Network	'11797849': trading has been enabled - hedging mode
+--- STEP 5: Check EA status ---
+Latest log: /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260305.log
 
-Expert-related log entries:
+Terminal log - NEW entries (after 13:00):
+MF	0	12:19:09.050	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+GE	0	12:19:09.050	Network	'11797849': trading has been enabled - hedging mode
+IF	0	12:25:25.775	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:19:06
+JG	0	12:30:12.178	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:25:25
+FG	0	12:35:06.647	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:30:11
+ID	0	12:39:56.790	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:35:06
+KE	0	12:46:19.341	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:39:56
+DN	0	13:02:33.767	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+NF	0	13:02:33.781	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 5 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+IO	0	13:02:33.782	Terminal	C:\Program Files\MetaTrader 5
+RG	0	13:02:55.137	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+KL	0	13:02:55.846	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
+LL	0	13:02:55.846	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:46:18
+OL	0	13:02:57.548	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+IO	0	13:02:57.548	Network	'11797849': trading has been enabled - hedging mode
+KK	0	13:04:56.296	Startup	successfully initialized from start config "C:\Program Files\MetaTrader 5\config\startup.ini"
+HE	0	13:04:57.082	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+FN	0	13:04:57.086	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 5 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+PF	0	13:04:57.086	Terminal	C:\Program Files\MetaTrader 5
+KL	0	13:04:57.086	Terminal	launched with C:\Program Files\MetaTrader 5\config\startup.ini
+
+Expert-related entries (ALL):
+LF	0	09:48:02.400	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 DM	0	09:53:34.537	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 GD	0	09:58:22.842	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 NE	0	10:06:23.708	Experts	expert PropFirmBot (EURUSD,M15) removed
@@ -75,14 +64,53 @@ QQ	0	10:15:49.851	Experts	expert PropFirmBot (EURUSD,M15) removed
 DD	0	10:15:49.881	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 KD	0	10:17:53.023	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 KH	0	11:07:47.385	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+RG	0	13:02:55.137	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 
-No EA log file - EA may not have loaded
+EA LOG EXISTS: 9568 bytes
+Content:
+KJ	0	13:02:58.225	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+IJ	0	13:02:58.282	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+IF	0	13:02:58.282	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+CL	0	13:02:58.282	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
+KH	0	13:02:58.282	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
+EF	0	13:02:58.282	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+GL	0	13:02:58.283	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+RE	0	13:02:58.283	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+OM	0	13:02:58.283	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+OH	0	13:02:58.283	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+OL	0	13:02:58.283	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+ER	0	13:02:58.283	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+EK	0	13:02:58.283	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+MQ	0	13:02:58.283	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+FI	0	13:02:58.283	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
+GE	0	13:02:58.285	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.05 15:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+MI	0	13:02:58.285	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL scan: HTF=BEAR | LiqSweep=N | OB=N | FVG=Y | ATR=0.00091
+MJ	0	13:02:58.385	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD SELL scan: HTF=BEAR | LiqSweep=N | OB=N | FVG=N | ATR=0.00128
+PG	0	13:02:58.385	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY scan: HTF=BULL | LiqSweep=N | OB=N | FVG=N | ATR=0.08186
+CG	0	13:02:58.385	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 
---- STEP 9: Telegram relay ---
-Telegram relay RUNNING
+--- STEP 6: Window info ---
+MT5 window: 33554433
+Title: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
 
---- STEP 10: Test Telegram ---
-Telegram: OK
+--- STEP 7: GUI automation attempt ---
+Last expert loaded at: 13:02:55 (current: 13:05)
+EA WAS LOADED RECENTLY - SUCCESS!
 
-=== DONE - Thu Mar  5 13:02:54 UTC 2026 ===
+Activating MT5 window...
+Right-clicking center of chart...
+Window size: 1280x998, center: 640,499
+Opening Navigator (Ctrl+N)...
+Taking screenshot...
+Screenshot saved
+Trying Insert menu...
+
+After GUI automation - checking log...
+QQ	0	10:15:49.851	Experts	expert PropFirmBot (EURUSD,M15) removed
+DD	0	10:15:49.881	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+KD	0	10:17:53.023	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+KH	0	11:07:47.385	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+RG	0	13:02:55.137	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+
+=== DONE - Thu Mar  5 13:05:47 UTC 2026 ===
 EXIT_CODE=0
