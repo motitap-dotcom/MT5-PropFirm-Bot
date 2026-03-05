@@ -1,157 +1,200 @@
 #!/bin/bash
 # =============================================================
-# Fix #7: Fix common.ini + proper EA auto-load + restart
+# Fix #8: Check terminal log + fix profile + force EA load
 # =============================================================
 
-echo "=== FIX #7 - $(date) ==="
+echo "=== FIX #8 - $(date) ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
 FILES_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
-CONFIG_DIR="${MT5_BASE}/config"
 
 # ============================================
-# STEP 1: Kill MT5
+# STEP 1: Check terminal log (NOT EA log)
 # ============================================
-echo "--- STEP 1: Kill MT5 ---"
+echo "--- STEP 1: Terminal logs ---"
+echo "Terminal log dir:"
+ls -la "${MT5_BASE}/logs/" 2>/dev/null | tail -10
+echo ""
+
+TERM_LOG=$(ls -t "${MT5_BASE}/logs/"*.log 2>/dev/null | head -1)
+if [ -f "$TERM_LOG" ]; then
+    echo "Latest terminal log: $TERM_LOG"
+    iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | tail -50
+fi
+echo ""
+
+# Check journal logs too
+echo "Journal dir:"
+ls -la "${MT5_BASE}/MQL5/Logs/" 2>/dev/null
+echo ""
+
+# ============================================
+# STEP 2: Check profile/chart config
+# ============================================
+echo "--- STEP 2: Chart profiles ---"
+echo "Profiles dir:"
+ls -laR "${MT5_BASE}/profiles/" 2>/dev/null | head -20
+echo ""
+
+# Check the default chart template
+echo "Default profile charts:"
+find "${MT5_BASE}/profiles" -name "*.chr" 2>/dev/null | head -10
+for chr in $(find "${MT5_BASE}/profiles" -name "*.chr" 2>/dev/null | head -5); do
+    echo ""
+    echo "=== $chr ==="
+    grep -i "expert\|EA\|PropFirmBot\|autotrading" "$chr" 2>/dev/null | head -10
+done
+echo ""
+
+# ============================================
+# STEP 3: Check .ex5 exists and is valid
+# ============================================
+echo "--- STEP 3: EA file check ---"
+ls -la "$EA_DIR/" 2>/dev/null | head -15
+echo ""
+echo ".ex5 file:"
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
+file "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
+echo ""
+
+# ============================================
+# STEP 4: Kill MT5 and fix
+# ============================================
+echo "--- STEP 4: Kill MT5 ---"
 pkill -9 wineserver 2>/dev/null || true
-pkill -9 -f "wine\|start.exe" 2>/dev/null || true
+pkill -9 -f "wine" 2>/dev/null || true
 sleep 5
-echo "Killed"
-echo ""
 
-# ============================================
-# STEP 2: Show and fix common.ini
-# ============================================
-echo "--- STEP 2: Fix common.ini ---"
-echo "Current common.ini:"
-cat "$CONFIG_DIR/common.ini"
-echo ""
-echo "---"
-
-# Write a clean common.ini
-cat > "$CONFIG_DIR/common.ini" << 'INIEOF'
-[Common]
-Login=11797849
-ProxyEnable=0
-CertInstall=0
-NewsEnable=0
-Server=FundedNext-Server
-ProxyType=0
-ProxyAddress=
-EnableOpenCL=7
-ProxyAuth=
-Services=4294967295
-NewsLanguages=
-Source=download.mql5.com
-[StartUp]
-Expert=PropFirmBot\PropFirmBot
-ExpertParameters=
-Symbol=EURUSD
-Period=M15
-[Experts]
-AllowLiveTrading=1
-AllowDllImport=0
-Enabled=1
-Account=11797849
-Profile=0
-AllowWebRequest=1
-WebRequestUrl1=https://api.telegram.org
-[Charts]
-ProfileLast=Default
-MaxBars=100000
-PrintColor=0
-SaveDeleted=0
-TradeHistory=1
-TradeLevels=1
-TradeLevelsDrag=0
-PreloadCharts=1
-INIEOF
-
-echo "Written clean common.ini"
-cat "$CONFIG_DIR/common.ini"
-echo ""
-
-# ============================================
-# STEP 3: Delete old EA log so we get fresh output
-# ============================================
-echo "--- STEP 3: Clean up ---"
-# Delete state file
+# Force delete saved state
 find /root/.wine -name "PropFirmBot_AccountState.dat" -delete 2>/dev/null
-echo "State deleted"
 
-# Rename today's log to see fresh entries clearly
-LOG_FILE="${MT5_BASE}/MQL5/Logs/20260305.log"
-if [ -f "$LOG_FILE" ]; then
-    mv "$LOG_FILE" "${LOG_FILE}.old"
-    echo "Old log renamed"
+# Remove old journal entry for today
+echo ""
+
+# ============================================
+# STEP 5: Check if chart profile has EA, if not add it
+# ============================================
+echo "--- STEP 5: Ensure EA in chart profile ---"
+DEFAULT_CHART=$(find "${MT5_BASE}/profiles" -name "chart01.chr" 2>/dev/null | head -1)
+if [ -f "$DEFAULT_CHART" ]; then
+    echo "Found chart: $DEFAULT_CHART"
+    if grep -q "PropFirmBot" "$DEFAULT_CHART" 2>/dev/null; then
+        echo "EA already in chart profile"
+    else
+        echo "EA NOT in chart - adding..."
+        # Add EA configuration to chart
+        cat >> "$DEFAULT_CHART" << 'CHREOF'
+<expert>
+name=PropFirmBot\PropFirmBot
+path=PropFirmBot\PropFirmBot.ex5
+expertmode=1
+<inputs>
+</inputs>
+</expert>
+CHREOF
+        echo "EA added to chart"
+    fi
+    echo "Chart content:"
+    cat "$DEFAULT_CHART"
+else
+    echo "No chart profile found!"
+    echo "Creating default profile with EA..."
+    mkdir -p "${MT5_BASE}/profiles/default"
+    cat > "${MT5_BASE}/profiles/default/chart01.chr" << 'CHREOF'
+<chart>
+id=1
+symbol=EURUSD
+period=15
+leftpos=0
+digits=5
+scale=4
+graph=1
+fore=0
+grid=0
+volume=0
+scroll=1
+shift=1
+ohlc=1
+askline=0
+days=0
+descriptions=0
+shift_size=20
+fixed_pos=0
+window_left=0
+window_top=0
+window_right=1280
+window_bottom=1024
+window_type=3
+background_color=0
+foreground_color=16777215
+barup_color=65280
+bardown_color=255
+bullcandle_color=65280
+bearcandle_color=255
+chartline_color=65280
+volumes_color=3329330
+grid_color=10061943
+askline_color=255
+stops_color=255
+<expert>
+name=PropFirmBot\PropFirmBot
+path=PropFirmBot\PropFirmBot.ex5
+expertmode=1
+<inputs>
+</inputs>
+</expert>
+</chart>
+CHREOF
+    echo "Created chart with EA"
 fi
 echo ""
 
 # ============================================
-# STEP 4: Start MT5 fresh
+# STEP 6: Restart MT5
 # ============================================
-echo "--- STEP 4: Start MT5 ---"
+echo "--- STEP 6: Restart MT5 ---"
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
 
 cd "$MT5_BASE"
 nohup wine "$MT5_BASE/terminal64.exe" /portable > /tmp/mt5_stdout.log 2>&1 &
-MT5_PID=$!
-echo "MT5 PID: $MT5_PID"
-echo "Waiting 45 seconds for full initialization..."
-sleep 45
+echo "MT5 starting... (waiting 50 sec)"
+sleep 50
 
 # ============================================
-# STEP 5: FULL verification
+# STEP 7: Check results
 # ============================================
-echo ""
-echo "========== FULL VERIFICATION =========="
+echo "--- STEP 7: Results ---"
 
 echo "Wine processes:"
 pgrep -a wineserver 2>/dev/null
 echo ""
 
-echo "MT5 stdout (if any errors):"
-cat /tmp/mt5_stdout.log 2>/dev/null | tail -5
+echo "Network:"
+ss -tnp | grep "wineserver" | head -3
 echo ""
 
-echo "Network (FundedNext connected?):"
-ss -tnp | grep "main\|wineserver" | head -5
-echo ""
-
-echo "Relay daemon:"
-pgrep -a -f "telegram_relay" | head -1 || echo "NOT running - restarting..."
-if ! pgrep -f "telegram_relay" > /dev/null; then
-    nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &
-    sleep 2
-    pgrep -f "telegram_relay" > /dev/null && echo "Relay restarted OK" || echo "Relay STILL failed"
-fi
-echo ""
-
-echo "--- NEW EA Log ---"
-NEW_LOG="${MT5_BASE}/MQL5/Logs/20260305.log"
+echo "NEW EA Log:"
+NEW_LOG=$(ls -t "${MT5_BASE}/MQL5/Logs/"*.log 2>/dev/null | grep -v ".old" | head -1)
 if [ -f "$NEW_LOG" ]; then
-    LOG_SIZE=$(stat -c%s "$NEW_LOG")
-    echo "New log: $LOG_SIZE bytes"
-    iconv -f UTF-16LE -t UTF-8 "$NEW_LOG" 2>/dev/null | head -50
+    SIZE=$(stat -c%s "$NEW_LOG")
+    echo "Log: $NEW_LOG ($SIZE bytes)"
+    iconv -f UTF-16LE -t UTF-8 "$NEW_LOG" 2>/dev/null | head -40
 else
-    echo "No new log file yet!"
-    echo "Available logs:"
-    ls -la "${MT5_BASE}/MQL5/Logs/" 2>/dev/null | tail -10
+    echo "STILL no EA log!"
 fi
 echo ""
 
-echo "--- Status JSON ---"
-cat "$FILES_DIR/status.json" 2>/dev/null | head -10
+echo "Terminal log (new entries):"
+TERM_LOG=$(ls -t "${MT5_BASE}/logs/"*.log 2>/dev/null | head -1)
+if [ -f "$TERM_LOG" ]; then
+    iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | grep -i "expert\|EA\|error\|failed\|PropFirmBot\|chart\|started" | tail -20
+fi
 echo ""
 
-echo "--- Telegram queue ---"
-ls -la "$FILES_DIR/telegram_queue.txt" 2>/dev/null && echo "Content:" && cat "$FILES_DIR/telegram_queue.txt" 2>/dev/null | head -5
-echo ""
-
-echo "--- Relay log ---"
-cat /var/log/telegram_relay.log 2>/dev/null | tail -5
+echo "Relay:"
+pgrep -f "telegram_relay" > /dev/null && echo "Running" || echo "NOT running"
 echo ""
 
 echo "=== DONE - $(date) ==="
