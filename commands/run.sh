@@ -1,196 +1,180 @@
 #!/bin/bash
 # =============================================================
-# Fix ALL issues: Update EA, Fix Telegram WebRequest, Restart MT5
+# Fix #2: Delete saved state + Fix WebRequest via registry + Restart
 # =============================================================
 
-echo "=== FULL FIX SCRIPT - $(date) ==="
+echo "=== FIX #2 - $(date) ==="
 echo ""
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
-CONFIG_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
 
 # ============================================
-# STEP 1: Fix Telegram WebRequest in MT5 config
+# STEP 1: Kill MT5
 # ============================================
-echo "--- STEP 1: Fix Telegram WebRequest ---"
-
-# Find MT5 terminal config
-TERMINAL_INI="${MT5_BASE}/config/common.ini"
-if [ ! -f "$TERMINAL_INI" ]; then
-    # Try alternate locations
-    TERMINAL_INI=$(find "$MT5_BASE" -name "common.ini" 2>/dev/null | head -1)
-fi
-
-if [ -f "$TERMINAL_INI" ]; then
-    echo "Found config: $TERMINAL_INI"
-    cat "$TERMINAL_INI"
-    echo ""
-
-    # Check if WebRequest URL already exists
-    if grep -q "api.telegram.org" "$TERMINAL_INI" 2>/dev/null; then
-        echo "Telegram WebRequest already configured!"
-    else
-        echo "Adding Telegram WebRequest URL..."
-        # Add WebRequest settings
-        if grep -q "\[Experts\]" "$TERMINAL_INI" 2>/dev/null; then
-            # Section exists, add URL
-            sed -i '/\[Experts\]/a AllowWebRequest=1\nWebRequestUrl1=https://api.telegram.org' "$TERMINAL_INI"
-        else
-            # Add section
-            echo -e "\n[Experts]\nAllowWebRequest=1\nWebRequestUrl1=https://api.telegram.org" >> "$TERMINAL_INI"
-        fi
-        echo "WebRequest URL added!"
-    fi
-else
-    echo "common.ini not found, searching for all config files..."
-    find "$MT5_BASE" -name "*.ini" -type f 2>/dev/null
-fi
-
-# Also check terminal64.ini
-TERM64_INI=$(find "$MT5_BASE" -name "terminal64.ini" 2>/dev/null | head -1)
-if [ -f "$TERM64_INI" ]; then
-    echo ""
-    echo "Found terminal64.ini: $TERM64_INI"
-    if ! grep -q "api.telegram.org" "$TERM64_INI" 2>/dev/null; then
-        if grep -q "\[Experts\]" "$TERM64_INI" 2>/dev/null; then
-            sed -i '/\[Experts\]/a AllowWebRequest=1\nWebRequestUrl1=https://api.telegram.org' "$TERM64_INI"
-        else
-            echo -e "\n[Experts]\nAllowWebRequest=1\nWebRequestUrl1=https://api.telegram.org" >> "$TERM64_INI"
-        fi
-        echo "WebRequest added to terminal64.ini!"
-    else
-        echo "Already configured in terminal64.ini"
-    fi
-fi
-
-echo ""
-
-# ============================================
-# STEP 2: Backup current EA
-# ============================================
-echo "--- STEP 2: Backup current EA ---"
-if [ -f "$EA_DIR/PropFirmBot.ex5" ]; then
-    cp "$EA_DIR/PropFirmBot.ex5" "$EA_DIR/PropFirmBot.ex5.bak_before_param_fix"
-    echo "Backup created"
-else
-    echo "No .ex5 to backup"
-fi
-echo ""
-
-# ============================================
-# STEP 3: Kill MT5, Recompile, Restart
-# ============================================
-echo "--- STEP 3: Kill MT5 ---"
-# Kill any running MT5
-pkill -f terminal64 2>/dev/null || true
-pkill -f metatrader 2>/dev/null || true
-# Kill wine MT5 processes
-pkill -f "MetaTrader" 2>/dev/null || true
-sleep 2
-
-# Verify killed
-if pgrep -f "terminal64\|metatrader\|MetaTrader" > /dev/null 2>&1; then
-    echo "Force killing MT5..."
-    pkill -9 -f "terminal64\|metatrader\|MetaTrader" 2>/dev/null || true
-    sleep 2
-fi
+echo "--- STEP 1: Kill MT5 ---"
+pkill -9 -f "terminal64\|metatrader\|MetaTrader" 2>/dev/null || true
+sleep 3
 echo "MT5 stopped"
 echo ""
 
-echo "--- STEP 4: Recompile EA ---"
+# ============================================
+# STEP 2: Delete saved state file (forces reload from new defaults)
+# ============================================
+echo "--- STEP 2: Delete saved state file ---"
+COMMON_FILES="/root/.wine/drive_c/users/root/Application Data/MetaQuotes/Terminal/Common/Files"
+STATE_FILE=$(find "$COMMON_FILES" -name "PropFirmBot_AccountState.dat" 2>/dev/null)
+if [ -n "$STATE_FILE" ]; then
+    echo "Found state file: $STATE_FILE"
+    rm -f "$STATE_FILE"
+    echo "DELETED - EA will use new defaults on restart"
+else
+    echo "No state file found in common files"
+    # Search everywhere
+    find /root/.wine -name "PropFirmBot_AccountState.dat" 2>/dev/null | while read f; do
+        echo "Found: $f - deleting..."
+        rm -f "$f"
+    done
+fi
+echo ""
+
+# ============================================
+# STEP 3: Fix Telegram WebRequest in common.ini
+# ============================================
+echo "--- STEP 3: Fix Telegram WebRequest ---"
+COMMON_INI="${MT5_BASE}/config/common.ini"
+
+if [ -f "$COMMON_INI" ]; then
+    echo "Current common.ini:"
+    cat "$COMMON_INI"
+    echo ""
+
+    # Remove any previous broken WebRequest additions
+    sed -i '/AllowWebRequest/d' "$COMMON_INI"
+    sed -i '/WebRequestUrl/d' "$COMMON_INI"
+
+    # Add WebRequest properly under [Experts] section
+    # MT5 format: AllowWebRequest=1 and WebRequestUrl1=url
+    python3 -c "
+import configparser
+import io
+
+# Read the file
+with open('$COMMON_INI', 'r') as f:
+    content = f.read()
+
+# Parse it
+config = configparser.ConfigParser()
+config.optionxform = str  # Keep case
+config.read_string(content)
+
+# Ensure [Experts] section has WebRequest
+if 'Experts' not in config:
+    config['Experts'] = {}
+
+config['Experts']['AllowWebRequest'] = '1'
+config['Experts']['WebRequestUrl1'] = 'https://api.telegram.org'
+
+# Write back
+with open('$COMMON_INI', 'w') as f:
+    config.write(f, space_around_delimiters=False)
+" 2>/dev/null
+
+    if [ $? -ne 0 ]; then
+        echo "Python configparser failed, using manual approach..."
+        # Manual: ensure the right format
+        # Remove existing [Experts] section content and recreate
+        sed -i '/^\[Experts\]/,/^\[/{/^\[Experts\]/!{/^\[/!d}}' "$COMMON_INI"
+        sed -i 's/\[Experts\]/[Experts]\nAllowLiveTrading=1\nAllowDllImport=0\nEnabled=1\nAccount=11797849\nProfile=0\nAllowWebRequest=1\nWebRequestUrl1=https:\/\/api.telegram.org/' "$COMMON_INI"
+    fi
+
+    echo ""
+    echo "Updated common.ini:"
+    cat "$COMMON_INI"
+fi
+echo ""
+
+# ============================================
+# STEP 4: Also try Wine registry for WebRequest
+# ============================================
+echo "--- STEP 4: Wine registry WebRequest ---"
+# Find MT5 terminal hash directory
+TERMINAL_DIRS=$(find /root/.wine/drive_c/users -path "*/MetaQuotes/Terminal/*/origin.txt" 2>/dev/null | head -5)
+for origin in $TERMINAL_DIRS; do
+    TERM_DIR=$(dirname "$origin")
+    echo "Terminal dir: $TERM_DIR"
+
+    # Check for terminal.ini
+    if [ -f "$TERM_DIR/config/terminal.ini" ]; then
+        echo "Found terminal.ini"
+        grep -i "webrequest\|AllowWebRequest" "$TERM_DIR/config/terminal.ini" || echo "No WebRequest in terminal.ini"
+    fi
+done
+echo ""
+
+# ============================================
+# STEP 5: Recompile EA with updated AccountStateManager
+# ============================================
+echo "--- STEP 5: Recompile EA ---"
 cd "$EA_DIR"
 WINEPREFIX=/root/.wine wine "$MT5_BASE/metaeditor64.exe" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
 sleep 5
 
-# Check compilation result
 if [ -f "$EA_DIR/PropFirmBot.ex5" ]; then
-    NEW_SIZE=$(stat -c%s "$EA_DIR/PropFirmBot.ex5" 2>/dev/null)
-    echo "Compilation OK! New .ex5 size: $NEW_SIZE bytes"
-    echo "File date: $(ls -la "$EA_DIR/PropFirmBot.ex5")"
+    echo "Compilation OK! Size: $(stat -c%s "$EA_DIR/PropFirmBot.ex5") bytes"
 else
-    echo "ERROR: Compilation failed! No .ex5 file found"
+    echo "ERROR: Compilation failed!"
 fi
 
-# Check compile log
+# Check for errors in compile log
 if [ -f "$EA_DIR/PropFirmBot.log" ]; then
-    echo "Compile log:"
-    cat "$EA_DIR/PropFirmBot.log"
+    grep -i "error" "$EA_DIR/PropFirmBot.log" | head -5 || echo "No errors in compile log"
 fi
 echo ""
 
-echo "--- STEP 5: Restart MT5 ---"
+# ============================================
+# STEP 6: Restart MT5
+# ============================================
+echo "--- STEP 6: Restart MT5 ---"
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
 
-# Start MT5
 cd "$MT5_BASE"
 nohup wine "$MT5_BASE/terminal64.exe" /portable > /dev/null 2>&1 &
-MT5_PID=$!
-echo "MT5 started with PID: $MT5_PID"
-
-# Wait for MT5 to load
-echo "Waiting for MT5 to start..."
-sleep 15
-
-# Check if MT5 is running
-if pgrep -f "terminal64" > /dev/null 2>&1; then
-    echo "MT5 is RUNNING!"
-else
-    # Check wine processes
-    WINE_PROCS=$(pgrep -a -f "wine\|MT5\|MetaTrader" 2>/dev/null)
-    if [ -n "$WINE_PROCS" ]; then
-        echo "MT5 running as wine process:"
-        echo "$WINE_PROCS"
-    else
-        echo "WARNING: MT5 may not have started"
-    fi
-fi
-echo ""
+echo "MT5 started, waiting 25 seconds for initialization..."
+sleep 25
 
 # ============================================
-# STEP 6: Verify everything
+# STEP 7: Full verification
 # ============================================
-echo "--- STEP 6: Full Verification ---"
+echo "--- STEP 7: Verification ---"
 
-echo "Processes:"
-pgrep -a -f "terminal64\|metatrader\|MetaTrader\|wine.*exe" 2>/dev/null | head -10
+echo "MT5 processes:"
+pgrep -a -f "terminal64\|wine.*exe" 2>/dev/null | head -5
 echo ""
 
 echo "VNC status:"
 pgrep -a x11vnc 2>/dev/null || echo "x11vnc NOT running!"
 echo ""
 
-echo "EA files:"
-ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
+echo "Network connections:"
+ss -tnp | grep -i "wine\|terminal\|main" | head -5
 echo ""
 
-echo "Config files:"
-ls -la "$CONFIG_DIR/" 2>/dev/null
-echo ""
-
-echo "Network connections (MT5):"
-sleep 10
-ss -tnp | grep -i "wine\|terminal\|metatrader\|main" | head -10
-echo ""
-
-# Wait a bit more for EA to initialize then check logs
-echo "Waiting for EA to initialize..."
-sleep 20
-
-echo "--- EA Logs (after restart) ---"
+echo "--- EA Logs (checking for new params) ---"
 MT5_LOG_DIR="${MT5_BASE}/MQL5/Logs"
 LATEST_LOG=$(ls -t "$MT5_LOG_DIR"/*.log 2>/dev/null | head -1)
 if [ -f "$LATEST_LOG" ]; then
     echo "Log file: $LATEST_LOG"
-    tail -40 "$LATEST_LOG"
+    # Show last 60 lines for full init sequence
+    tail -60 "$LATEST_LOG" | strings
 else
-    echo "No EA logs found yet"
+    echo "No logs found"
 fi
 echo ""
 
 echo "--- Status JSON ---"
-cat "$CONFIG_DIR/status.json" 2>/dev/null || echo "No status.json"
+cat "${MT5_BASE}/MQL5/Files/PropFirmBot/status.json" 2>/dev/null || echo "No status.json"
 echo ""
 
 echo "=== DONE - $(date) ==="

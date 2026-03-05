@@ -189,10 +189,10 @@ void CAccountStateManager::SwitchToFunded(double funded_balance)
    m_phase_start_balance  = funded_balance;
    m_trading_days         = 0;
 
-   // Funded mode: more conservative
-   m_risk_multiplier  = 0.7;    // Reduce risk to 70%
-   m_max_positions    = 2;
-   m_max_daily_trades = 6;      // Fewer trades, more selective
+   // Funded mode: use full risk (Stellar Instant - no challenge, direct funded)
+   m_risk_multiplier  = 1.0;    // Full risk - already conservative at 0.5%
+   m_max_positions    = 3;
+   m_max_daily_trades = 8;
 
    SaveState();
 
