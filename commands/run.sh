@@ -1,137 +1,115 @@
 #!/bin/bash
 # =============================================================
-# Fix #5: Switch VPS to correct branch + full restart
+# Fix #6: Embed relay + check EA logs from new session
 # =============================================================
 
-echo "=== FIX #5 - $(date) ==="
+echo "=== FIX #6 - $(date) ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
 FILES_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
-REPO_DIR="/root/MT5-PropFirm-Bot"
-TARGET_BRANCH="claude/update-server-vnc-wsD2d"
 
 # ============================================
-# STEP 1: Switch VPS repo to correct branch
+# STEP 1: Create telegram relay inline
 # ============================================
-echo "--- STEP 1: Switch to correct branch ---"
-cd "$REPO_DIR"
-echo "Before: $(git rev-parse --abbrev-ref HEAD)"
-git fetch origin "$TARGET_BRANCH" 2>&1 | tail -3
-git checkout "$TARGET_BRANCH" 2>&1 | tail -3
-git pull origin "$TARGET_BRANCH" 2>&1 | tail -3
-echo "After: $(git rev-parse --abbrev-ref HEAD)"
-echo ""
-
-# ============================================
-# STEP 2: Kill ALL wine/MT5
-# ============================================
-echo "--- STEP 2: Kill all wine ---"
-pkill -9 wineserver 2>/dev/null || true
-pkill -9 -f "wine" 2>/dev/null || true
-pkill -9 -f "start.exe" 2>/dev/null || true
-sleep 5
-echo "Clean: $(pgrep -c wine 2>/dev/null || echo 0) wine processes"
-echo ""
-
-# ============================================
-# STEP 3: Delete state + copy EA + compile
-# ============================================
-echo "--- STEP 3: Setup ---"
-find /root/.wine -name "PropFirmBot_AccountState.dat" -delete 2>/dev/null
-echo "State deleted"
-
-# Copy from repo (now on correct branch)
-cp "$REPO_DIR"/EA/*.mq5 "$EA_DIR/" 2>/dev/null
-cp "$REPO_DIR"/EA/*.mqh "$EA_DIR/" 2>/dev/null
-cp "$REPO_DIR"/configs/*.json "$FILES_DIR/" 2>/dev/null
-echo "Files copied from repo"
-
-# Verify key changes are present
-grep "m_risk_multiplier.*1.0" "$EA_DIR/AccountStateManager.mqh" && echo "AccountState: risk_multiplier=1.0 OK" || echo "AccountState: WRONG"
-grep "m_max_positions.*3" "$EA_DIR/AccountStateManager.mqh" && echo "AccountState: max_positions=3 OK" || echo "AccountState: WRONG"
-grep "InpMaxPositions.*= 3" "$EA_DIR/PropFirmBot.mq5" && echo "PropFirmBot: MaxPositions=3 OK" || echo "PropFirmBot: WRONG"
-grep "SendTelegramViaFile" "$EA_DIR/Notifications.mqh" && echo "Notifications: File relay OK" || echo "Notifications: WRONG"
-echo ""
-
-echo "--- STEP 4: Compile ---"
-export DISPLAY=:99
-export WINEPREFIX=/root/.wine
-cd "$EA_DIR"
-wine "$MT5_BASE/metaeditor64.exe" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
-sleep 8
-
-if [ -f "$EA_DIR/PropFirmBot.ex5" ]; then
-    echo "OK: $(stat -c%s "$EA_DIR/PropFirmBot.ex5") bytes"
-else
-    echo "FAILED"
-fi
-iconv -f UTF-16LE -t UTF-8 "$EA_DIR/PropFirmBot.log" 2>/dev/null | grep -i "error\|warning\|Result" | tail -3
-echo ""
-
-# ============================================
-# STEP 5: Create and start Telegram relay
-# ============================================
-echo "--- STEP 5: Telegram relay ---"
+echo "--- STEP 1: Create telegram relay ---"
 pkill -f "telegram_relay" 2>/dev/null || true
-mkdir -p "$FILES_DIR"
 
-# Start relay from repo script
-chmod +x "$REPO_DIR/scripts/telegram_relay.sh" 2>/dev/null
-nohup bash "$REPO_DIR/scripts/telegram_relay.sh" > /var/log/telegram_relay.log 2>&1 &
+cat > /root/telegram_relay.sh << 'RELAYEOF'
+#!/bin/bash
+TELEGRAM_TOKEN="8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g"
+TELEGRAM_CHAT_ID="7013213983"
+QUEUE_FILE="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/telegram_queue.txt"
+CHECK_INTERVAL=5
+
+send_telegram() {
+    curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+        -d chat_id="${TELEGRAM_CHAT_ID}" \
+        -d text="$1" \
+        -d parse_mode="HTML" > /dev/null 2>&1
+}
+
+echo "[TelegramRelay] Started at $(date)"
+send_telegram "🤖 PropFirmBot Telegram Relay started!"
+
+LAST_POS=0
+[ -f "$QUEUE_FILE" ] && LAST_POS=$(wc -c < "$QUEUE_FILE")
+
+while true; do
+    if [ -f "$QUEUE_FILE" ]; then
+        CURRENT_SIZE=$(wc -c < "$QUEUE_FILE")
+        if [ "$CURRENT_SIZE" -gt "$LAST_POS" ]; then
+            tail -c +$((LAST_POS + 1)) "$QUEUE_FILE" | while IFS= read -r line; do
+                [ -z "$line" ] && continue
+                MESSAGE=$(echo "$line" | sed 's/^[^|]*|//')
+                [ -n "$MESSAGE" ] && send_telegram "$MESSAGE" && echo "[$(date '+%H:%M:%S')] Sent: ${MESSAGE:0:60}..."
+                sleep 1
+            done
+            LAST_POS=$CURRENT_SIZE
+        fi
+    fi
+    sleep $CHECK_INTERVAL
+done
+RELAYEOF
+
+chmod +x /root/telegram_relay.sh
+nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &
 sleep 3
-pgrep -f "telegram_relay" > /dev/null && echo "Relay RUNNING" || echo "Relay FAILED"
+
+if pgrep -f "telegram_relay" > /dev/null; then
+    echo "Relay RUNNING"
+else
+    echo "Relay FAILED"
+fi
 cat /var/log/telegram_relay.log 2>/dev/null | tail -3
 echo ""
 
-# ============================================
-# STEP 6: Kill stale wineserver + Start MT5
-# ============================================
-echo "--- STEP 6: Start MT5 ---"
-pkill -9 wineserver 2>/dev/null || true
-sleep 2
-
-cd "$MT5_BASE"
-nohup wine "$MT5_BASE/terminal64.exe" /portable > /dev/null 2>&1 &
-echo "MT5 starting..."
-sleep 35
+# Add to crontab
+(crontab -l 2>/dev/null | grep -v "telegram_relay"; echo "@reboot nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &") | crontab -
 
 # ============================================
-# STEP 7: Verify EVERYTHING
+# STEP 2: Check if EA already loaded with new code
 # ============================================
-echo ""
-echo "========== VERIFICATION =========="
-
-echo "Network:"
-ss -tnp | grep -i "main\|wineserver" | head -3
-echo ""
-
-echo "Relay:"
-pgrep -a -f "telegram_relay" | head -1 || echo "NOT running"
-echo ""
-
-# Wait for EA to fully init
-sleep 10
-
-echo "--- NEW EA Logs ---"
+echo "--- STEP 2: Check current EA log ---"
 LATEST_LOG=$(ls -t "${MT5_BASE}/MQL5/Logs"/*.log 2>/dev/null | head -1)
 if [ -f "$LATEST_LOG" ]; then
-    echo "Log: $(basename $LATEST_LOG) ($(stat -c%s "$LATEST_LOG") bytes)"
-    # Show ALL init lines from the LATEST session only
-    iconv -f UTF-16LE -t UTF-8 "$LATEST_LOG" 2>/dev/null | grep "12:0[3-9]\|12:1[0-9]\|14:0[3-9]\|14:1[0-9]" | grep -i "RiskMgr\|AccountState\|INIT\|MaxPos\|Risk\|Notify\|BLOCKED\|relay\|HEARTBEAT\|ALL SYSTEMS\|SWITCHED\|multiplier\|Symbols\|FUNDED\|risk_mul" | tail -30
+    LOG_SIZE=$(stat -c%s "$LATEST_LOG")
+    echo "Log file size: $LOG_SIZE bytes"
+
+    # Get ALL init entries from the log
+    echo ""
+    echo "All INIT entries (looking for new session):"
+    iconv -f UTF-16LE -t UTF-8 "$LATEST_LOG" 2>/dev/null | grep -i "AccountState.*SWITCHED\|RiskMgr.*Init\|Risk.*multiplier\|INIT.*ALL SYSTEMS\|HEARTBEAT.*Ticks=1" | tail -10
+    echo ""
+
+    echo "Last 20 lines of EA log:"
+    iconv -f UTF-16LE -t UTF-8 "$LATEST_LOG" 2>/dev/null | tail -20
 fi
 echo ""
 
-echo "--- Status JSON timestamp ---"
-grep "timestamp" "$FILES_DIR/status.json" 2>/dev/null
+# ============================================
+# STEP 3: Check MT5 is actually running the NEW EA
+# ============================================
+echo "--- STEP 3: MT5 status ---"
+echo "Processes:"
+pgrep -a wineserver 2>/dev/null | head -3
 echo ""
 
-echo "--- Telegram queue ---"
-ls -la "$FILES_DIR/telegram_queue.txt" 2>/dev/null && cat "$FILES_DIR/telegram_queue.txt" 2>/dev/null | tail -3
+echo "Network:"
+ss -tnp | grep -i "main\|wineserver" | head -5
 echo ""
 
-echo "--- Relay log ---"
-cat /var/log/telegram_relay.log 2>/dev/null | tail -5
+echo "EA .ex5 file info:"
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
+echo ""
+
+echo "Status JSON:"
+cat "$FILES_DIR/status.json" 2>/dev/null
+echo ""
+
+echo "Telegram queue file:"
+ls -la "$FILES_DIR/telegram_queue.txt" 2>/dev/null || echo "No queue file"
+cat "$FILES_DIR/telegram_queue.txt" 2>/dev/null | head -5
 echo ""
 
 echo "=== DONE - $(date) ==="
