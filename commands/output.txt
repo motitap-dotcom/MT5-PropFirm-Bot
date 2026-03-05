@@ -1,347 +1,185 @@
-=== FIX #16 - Thu Mar  5 12:58:04 UTC 2026 ===
---- STEP 0: Check xdotool ---
-/usr/bin/xdotool
+=== FIX #17 - Thu Mar  5 12:59:55 UTC 2026 ===
+--- STEP 1: Read existing chart profile ---
+Sample chart file: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart01.chr
+File info:
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart01.chr: Unicode text, UTF-16, little-endian text, with CRLF line terminators
 
---- STEP 1: Current MT5 state ---
-MT5 is RUNNING
-No EA log for today - EA NOT loaded
+Hex first bytes:
+00000000: fffe 3c00 6300 6800 6100 7200 7400 3e00  ..<.c.h.a.r.t.>.
+00000010: 0d00 0a00 6900 6400 3d00 3100 3200 3800  ....i.d.=.1.2.8.
+00000020: 3900 3600 3800 3100 3700 3100 3200 3800  9.6.8.1.7.1.2.8.
+00000030: 3100 3000 3100 3500 3600 3200 3500 0d00  1.0.1.5.6.2.5...
+00000040: 0a00 7300 7900 6d00 6200 6f00 6c00 3d00  ..s.y.m.b.o.l.=.
 
---- STEP 2: MT5 windows ---
-75497473
-85983233
-All windows:
-  543: 
-  2097235: 
-  14680065: 
-  14680067: Default IME
-  14680066: 
-  14680068: 
-  14680069: 
-  14680070: 
-  16777217: 
-  14680071: 
-  20971521: 
-  20971523: Default IME
-  20971522: 
-  20971524: 
-  20971525: 
-  20971526: 
-  20971527: 
-  23068673: 
-  27262977: 
-  27262979: Default IME
-  27262978: 
-  27262980: 
-  27262981: 
-  27262982: 
-  27262983: 
-  29360129: 
-  33554434: Default IME
-  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  33554435: 
-  33554436: 
-  33554437: 
-  33554438: 
-  33554439: 
-  33554440: 
-  33554441: 
-  33554442: 
-  33554443: 
-  33554444: 
-  33554445: 
-  33554446: 
-  33554447: 
-  33554448: 
-  33554455: 
-  33554456: 
-  33554457: 
-  37748737: 
-  37748739: Default IME
-  37748738: 
-  37748740: 
-  37748741: 
-  37748742: 
-  37748743: 
-  39845889: 
-  44040194: Default IME
-  44040193: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  44040195: 
-  44040196: 
-  44040197: 
-  44040198: 
-  44040199: 
-  44040200: 
-  44040201: 
-  44040202: 
-  44040203: 
-  44040204: 
-  44040205: 
-  44040206: 
-  44040207: 
-  44040208: 
-  44040215: 
-  44040216: 
-  44040217: 
-  48234497: 
-  48234499: Default IME
-  48234498: 
-  48234500: 
-  48234501: 
-  48234502: 
-  48234503: 
-  50331649: 
-  54525954: Default IME
-  54525953: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  54525955: 
-  54525956: 
-  54525957: 
-  54525958: 
-  54525959: 
-  54525960: 
-  54525961: 
-  54525962: 
-  54525963: 
-  54525964: 
-  54525965: 
-  54525966: 
-  54525967: 
-  54525968: 
-  54525975: 
-  54525976: 
-  54525977: 
-  58720257: 
-  58720259: Default IME
-  58720258: 
-  60817409: 
-  58720260: 
-  58720261: 
-  58720262: 
-  58720263: 
-  65011714: Default IME
-  65011713: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  65011715: 
-  65011716: 
-  65011717: 
-  65011718: 
-  65011719: 
-  65011720: 
-  65011721: 
-  65011722: 
-  65011723: 
-  65011724: 
-  65011725: 
-  65011726: 
-  65011727: 
-  65011728: 
-  65011735: 
-  65011736: 
-  65011737: 
-  69206017: 
-  69206019: Default IME
-  69206018: 
-  69206020: 
-  69206021: 
-  69206022: 
-  69206023: 
-  71303169: 
-  75497474: Default IME
-  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
-  75497475: 
-  75497476: 
-  75497477: 
-  75497478: 
-  75497479: 
-  75497480: 
-  75497481: 
-  75497482: 
-  75497483: 
-  75497484: 
-  75497485: 
-  75497486: 
-  75497487: 
-  75497488: 
-  75497495: 
-  75497496: 
-  75497497: 
-  79691777: 
-  79691779: Default IME
-  79691778: 
-  79691780: 
-  79691781: 
-  79691782: 
-  79691783: 
-  81788929: 
-  85983234: Default IME
-  85983233: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
-  85983235: 
-  85983236: 
-  85983237: 
-  85983238: 
-  85983239: 
-  85983240: 
-  85983241: 
-  85983242: 
-  85983243: 
-  85983244: 
-  85983245: 
-  85983246: 
-  85983247: 
-  85983248: 
-  85983255: 
-  85983256: 
-  85983257: 
-  90177537: 
-  90177539: Default IME
-  90177538: 
-  90177540: 
-  92274689: 
-  90177541: 
-  90177542: 
-  90177543: 
-  96468994: Default IME
-  96468993: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  96468995: 
-  96468996: 
-  96468997: 
-  96468998: 
-  96468999: 
-  96469000: 
-  96469001: 
-  96469002: 
-  96469003: 
-  96469004: 
-  96469005: 
-  96469006: 
-  96469007: 
-  96469008: 
-  96469015: 
-  96469016: 
-  96469017: 
-  100663297: 
-  100663299: Default IME
-  100663298: 
-  100663300: 
-  100663301: 
-  100663302: 
-  100663303: 
-  102760449: 
-  106954754: Default IME
-  106954753: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  106954755: 
-  106954756: 
-  106954757: 
-  106954758: 
-  106954759: 
-  106954760: 
-  106954761: 
-  106954762: 
-  106954763: 
-  106954764: 
-  106954765: 
-  106954766: 
-  106954767: 
-  106954768: 
-  106954775: 
-  106954776: 
-  106954777: 
-  111149057: 
-  111149059: Default IME
-  111149058: 
-  111149060: 
-  111149061: 
-  113246209: 
-  111149062: 
-  111149063: 
-  117440514: Default IME
-  117440513: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  117440515: 
-  117440516: 
-  117440517: 
-  117440518: 
-  117440519: 
-  117440520: 
-  117440521: 
-  117440522: 
-  117440523: 
-  117440524: 
-  117440525: 
-  117440526: 
-  117440527: 
-  117440528: 
-  117440535: 
+Content (trying different encodings):
+--- UTF-16LE ---
+﻿<chart>
+id=128968171281015625
+symbol=EURUSD
+period_type=1
+period_size=24
+digits=4
+tick_size=0.000000
+position_time=1240876800
+scale_fix=0
+scale_fixed_min=1.439000
+scale_fixed_max=1.717000
+scale_fix11=0
+scale_bar=0
+scale_bar_val=0.000000
+scale=4
+mode=1
+fore=0
+grid=1
+volume=0
+scroll=1
+shift=1
+shift_size=20.000000
+fixed_pos=0.000000
+ohlc=0
+bidline=1
+askline=0
+lastline=0
+days=0
+descriptions=0
+window_type=1
+background_color=0
+foreground_color=16777215
+barup_color=65280
+bardown_color=65280
+bullcandle_color=0
+bearcandle_color=16777215
+chartline_color=65280
+volumes_color=3329330
+grid_color=10061943
+bidline_color=10061943
+askline_color=255
+lastline_color=49152
+stops_color=255
 
---- STEP 3: Find MT5 window ---
-MT5 window ID: 75497473
-Window name: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
+<window>
+height=100
 
---- STEP 4: Attach EA via keyboard automation ---
-Step 4a: Open Navigator panel (Ctrl+N)
-Step 4b: Try Insert key to open EA insertion dialog
-Step 4c: Try menu Insert -> Expert Advisors
+<indicator>
+name=Main
+path=
+apply=1
+show_data=1
+scale_inherit=0
+scale_line=0
+scale_line_percent=50
+scale_line_value=0.000000
+scale_fix_min=0
+scale_fix_min_val=0.000000
+scale_fix_max=0
+scale_fix_max_val=0.000000
+--- ASCII ---
 
---- STEP 4d: Trying chart profile approach ---
-Current chart01.chr:
+--- common.ini (hex dump of StartUp section) ---
+[Common]
+Login=11797849
+ProxyEnable=0
+CertInstall=0
+NewsEnable=0
+Environment=F008C7293503CED0045B07842FC57A638AA2FD5F10DEE8EA7AD19815A339B9A21E36157778467577E33A229F2FC5240D
+Server=FundedNext-Server
+ProxyType=0
+ProxyAddress=
+EnableOpenCL=7
+ProxyAuth=
+Services=4294967295
+NewsLanguages=
+Source=download.mql5.com
+[StartUp]
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+Symbol=EURUSD
+Period=M15
+[Experts]
+AllowLiveTrading=1
+AllowDllImport=0
+Enabled=1
+Account=11797849
+Profile=0
+AllowWebRequest=1
+WebRequestUrl1=https://api.telegram.org
+[Charts]
+ProfileLast=Default
+MaxBars=100000
+PrintColor=0
+SaveDeleted=0
+TradeHistory=1
+TradeLevels=1
+TradeLevelsDrag=0
+ObsoleteLasttime=1772635517
+PreloadCharts=1
+
+--- common.ini raw bytes ---
+00000000: 5b43 6f6d 6d6f 6e5d 0a4c 6f67 696e 3d31  [Common].Login=1
+00000010: 3137 3937 3834 390a 5072 6f78 7945 6e61  1797849.ProxyEna
+00000020: 626c 653d 300a 4365 7274 496e 7374 616c  ble=0.CertInstal
+00000030: 6c3d 300a 4e65 7773 456e 6162 6c65 3d30  l=0.NewsEnable=0
+00000040: 0a45 6e76 6972 6f6e 6d65 6e74 3d46 3030  .Environment=F00
+00000050: 3843 3732 3933 3530 3343 4544 3030 3435  8C7293503CED0045
+00000060: 4230 3738 3432 4643 3537 4136 3338 4141  B07842FC57A638AA
+00000070: 3246 4435 4631 3044 4545 3845 4137 4144  2FD5F10DEE8EA7AD
+00000080: 3139 3831 3541 3333 3942 3941 3231 4533  19815A339B9A21E3
+00000090: 3631 3537 3737 3834 3637 3537 3745 3333  6157778467577E33
+000000a0: 4132 3239 4632 4643 3532 3430 440a 5365  A229F2FC5240D.Se
+000000b0: 7276 6572 3d46 756e 6465 644e 6578 742d  rver=FundedNext-
+000000c0: 5365 7276 6572 0a50 726f 7879 5479 7065  Server.ProxyType
+000000d0: 3d30 0a50 726f 7879 4164 6472 6573 733d  =0.ProxyAddress=
+000000e0: 0a45 6e61 626c 654f 7065 6e43 4c3d 370a  .EnableOpenCL=7.
+000000f0: 5072 6f78 7941 7574 683d 0a53 6572 7669  ProxyAuth=.Servi
+00000100: 6365 733d 3432 3934 3936 3732 3935 0a4e  ces=4294967295.N
+00000110: 6577 734c 616e 6775 6167 6573 3d0a 536f  ewsLanguages=.So
+00000120: 7572 6365 3d64 6f77 6e6c 6f61 642e 6d71  urce=download.mq
+00000130: 6c35 2e63 6f6d 0a5b 5374 6172 7455 705d  l5.com.[StartUp]
+00000140: 0a45 7870 6572 743d 5072 6f70 4669 726d  .Expert=PropFirm
+00000150: 426f 745c 5072 6f70 4669 726d 426f 740a  Bot\PropFirmBot.
+00000160: 4578 7065 7274 5061 7261 6d65 7465 7273  ExpertParameters
+00000170: 3d0a 5379 6d62 6f6c 3d45 5552 5553 440a  =.Symbol=EURUSD.
+00000180: 5065 7269 6f64 3d4d 3135 0a5b 4578 7065  Period=M15.[Expe
+00000190: 7274 735d 0a41 6c6c 6f77 4c69 7665 5472  rts].AllowLiveTr
+000001a0: 6164 696e 673d 310a 416c 6c6f 7744 6c6c  ading=1.AllowDll
+000001b0: 496d 706f 7274 3d30 0a45 6e61 626c 6564  Import=0.Enabled
+000001c0: 3d31 0a41 6363 6f75 6e74 3d31 3137 3937  =1.Account=11797
+000001d0: 3834 390a 5072 6f66 696c 653d 300a 416c  849.Profile=0.Al
+000001e0: 6c6f 7757 6562 5265 7175 6573 743d 310a  lowWebRequest=1.
+000001f0: 5765 6252 6571 7565 7374 5572 6c31 3d68  WebRequestUrl1=h
+00000200: 7474 7073 3a2f 2f61 7069 2e74 656c 6567  ttps://api.teleg
+00000210: 7261 6d2e 6f72 670a 5b43 6861 7274 735d  ram.org.[Charts]
+00000220: 0a50 726f 6669 6c65 4c61 7374 3d44 6566  .ProfileLast=Def
+00000230: 6175 6c74 0a4d 6178 4261 7273 3d31 3030  ault.MaxBars=100
+00000240: 3030 300a 5072 696e 7443 6f6c 6f72 3d30  000.PrintColor=0
+00000250: 0a53 6176 6544 656c 6574 6564 3d30 0a54  .SaveDeleted=0.T
+00000260: 7261 6465 4869 7374 6f72 793d 310a 5472  radeHistory=1.Tr
+00000270: 6164 654c 6576 656c 733d 310a 5472 6164  adeLevels=1.Trad
+00000280: 654c 6576 656c 7344 7261 673d 300a 4f62  eLevelsDrag=0.Ob
+00000290: 736f 6c65 7465 4c61 7374 7469 6d65 3d31  soleteLasttime=1
+000002a0: 3737 3236 3335 3531 370a 5072 656c 6f61  772635517.Preloa
+000002b0: 6443 6861 7274 733d 310a                 dCharts=1.
+
+--- STEP 2: Active profile directories ---
+total 24
+drwxr-xr-x 6 root root 4096 Mar  5 12:46 .
+drwxr-xr-x 8 root root 4096 Mar  4 14:59 ..
+drwxr-xr-x 2 root root 4096 Feb 22 18:29 British Pound
+drwxr-xr-x 2 root root 4096 Mar  5 12:46 Default
+drwxr-xr-x 2 root root 4096 Feb 22 18:29 Euro
+drwxr-xr-x 2 root root 4096 Feb 22 18:29 Market Overview
+
+Default dir contents:
 total 8
 drwxr-xr-x 2 root root 4096 Mar  5 12:46 .
 drwxr-xr-x 6 root root 4096 Mar  5 12:46 ..
 
-Expert section in chart profile:
-(none found - binary/UTF-16)
-(no expert section)
+Profile info from terminal config:
+Profile=0
+[Charts]
+ProfileLast=Default
+ObsoleteLasttime=1772635517
+PreloadCharts=1
 
---- STEP 5: Create chart template with EA ---
-File type of chart01.chr:
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr: cannot open `/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr' (No such file or directory)
-
-Hex dump first 20 bytes:
-
-Full chart01.chr content (converted):
-
-=== END chart01.chr ===
-
-All chart profile files:
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart01.chr
-
-Templates:
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates/BollingerBands.tpl
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates/Momentum.tpl
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates/ADX.tpl
-
---- STEP 6: Terminal log (expert-related) ---
-Log file: /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260305.log
-RO	0	10:33:29.293	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-NO	0	10:36:25.867	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-IL	0	10:41:37.535	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-ND	2	10:45:13.828	Terminal	terminal process already started
-IE	0	10:45:34.916	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-JE	0	10:49:19.330	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-NR	0	10:53:02.786	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-IS	0	10:57:48.064	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-CP	0	10:59:50.052	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-KH	0	11:07:47.385	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-DK	0	11:25:59.061	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-PK	0	12:04:29.123	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-PH	0	12:08:51.160	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-KI	0	12:15:16.652	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-MF	0	12:19:09.050	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-HF	0	12:25:27.270	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-LG	0	12:30:13.439	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-RD	0	12:35:07.958	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-QE	0	12:39:58.117	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-LE	0	12:46:20.865	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-
---- STEP 7: common.ini StartUp section ---
-䍛浯潭嵮䰊杯湩ㄽ㜱㜹㐸ਹ牐硯䕹慮汢㵥ਰ敃瑲湉瑳污㵬ਰ敎獷湅扡敬〽䔊癮物湯敭瑮䘽〰䌸㈷㌹〵䌳䑅〰㔴あ㠷㈴䍆㜵㙁㠳䅁䘲㕄ㅆ䐰䕅䔸㝁䑁㤱ㄸ䄵㌳䈹䄹ㄲ㍅ㄶ㜵㜷㐸㜶㜵䔷㌳㉁㤲㉆䍆㈵〴੄敓癲牥䘽湵敤乤硥⵴敓癲牥倊潲祸祔数〽倊潲祸摁牤獥㵳䔊慮汢佥数䍮㵌਷牐硯䅹瑵㵨匊牥楶散㵳㈴㐹㘹㈷㔹上睥䱳湡畧条獥਽潓牵散搽睯汮慯⹤煭㕬挮浯嬊瑓牡啴嵰䔊灸牥㵴牐灯楆浲潂屴牐灯楆浲潂ੴ硅数瑲慐慲敭整獲਽祓扭汯䔽剕单੄敐楲摯䴽㔱嬊硅数瑲嵳䄊汬睯楌敶牔摡湩㵧਱汁潬䑷汬浉潰瑲〽䔊慮汢摥ㄽ䄊捣畯瑮ㄽ㜱㜹㐸ਹ牐景汩㵥ਰ汁潬坷扥敒畱獥㵴਱敗剢煥敵瑳牕ㅬ栽瑴獰⼺愯楰琮汥来慲⹭牯੧䍛慨瑲嵳倊潲楦敬慌瑳䐽晥畡瑬䴊硡慂獲ㄽ〰〰ਰ牐湩䍴汯牯〽匊癡䑥汥瑥摥〽吊慲敤楈瑳牯㵹਱牔摡䱥癥汥㵳਱牔摡䱥癥汥䑳慲㵧ਰ扏潳敬整慌瑳楴敭ㄽ㜷㘲㔳ㄵ਷牐汥慯䍤慨瑲㵳਱
-=== DONE - Thu Mar  5 12:58:17 UTC 2026 ===
+=== DONE - Thu Mar  5 12:59:55 UTC 2026 ===
 EXIT_CODE=0
