@@ -853,14 +853,31 @@ void BuildSymbolList()
    g_symbol_count = 0;
    ArrayResize(g_symbols, 4);
 
-   if(InpTradeEURUSD && SymbolSelect("EURUSD", true))
+   // Always try to add all symbols (ignore input params - MT5 may persist old values)
+   if(SymbolSelect("EURUSD", true))
    { g_symbols[g_symbol_count] = "EURUSD"; g_symbol_count++; }
-   if(InpTradeGBPUSD && SymbolSelect("GBPUSD", true))
+   else
+   { PrintFormat("[INIT] WARNING: EURUSD not available on this broker"); }
+
+   if(SymbolSelect("GBPUSD", true))
    { g_symbols[g_symbol_count] = "GBPUSD"; g_symbol_count++; }
-   if(InpTradeUSDJPY && SymbolSelect("USDJPY", true))
+   else
+   { PrintFormat("[INIT] WARNING: GBPUSD not available on this broker"); }
+
+   if(SymbolSelect("USDJPY", true))
    { g_symbols[g_symbol_count] = "USDJPY"; g_symbol_count++; }
-   if(InpTradeXAUUSD && SymbolSelect("XAUUSD", true))
+   else
+   { PrintFormat("[INIT] WARNING: USDJPY not available on this broker"); }
+
+   if(SymbolSelect("XAUUSD", true))
    { g_symbols[g_symbol_count] = "XAUUSD"; g_symbol_count++; }
+   else
+   { PrintFormat("[INIT] WARNING: XAUUSD not available - trying XAUUSDm...");
+     if(SymbolSelect("XAUUSDm", true))
+     { g_symbols[g_symbol_count] = "XAUUSDm"; g_symbol_count++; }
+     else
+     { PrintFormat("[INIT] WARNING: Neither XAUUSD nor XAUUSDm available on this broker"); }
+   }
 
    ArrayResize(g_symbols, g_symbol_count);
 
