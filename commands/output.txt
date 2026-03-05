@@ -1,129 +1,80 @@
-=== FIX #4 - Thu Mar  5 12:03:35 UTC 2026 ===
---- STEP 1: Git pull on VPS ---
-Current branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
+=== FIX #5 - Thu Mar  5 12:07:54 UTC 2026 ===
+--- STEP 1: Switch to correct branch ---
+Before: claude/claude-md-mm3qa8i9848jcovk-X3DTU
 From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
- * branch            claude/claude-md-mm3qa8i9848jcovk-X3DTU -> FETCH_HEAD
+ * branch            claude/update-server-vnc-wsD2d -> FETCH_HEAD
+Switched to a new branch 'claude/update-server-vnc-wsD2d'
+branch 'claude/update-server-vnc-wsD2d' set up to track 'origin/claude/update-server-vnc-wsD2d'.
+From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
+ * branch            claude/update-server-vnc-wsD2d -> FETCH_HEAD
 Already up to date.
+After: claude/update-server-vnc-wsD2d
 
---- STEP 2: Kill MT5 completely ---
-Wineserver PID 2234128 started: Mar 5
-All wine processes killed
-Remaining wine processes:
-None (clean)
+--- STEP 2: Kill all wine ---
+Clean: 0
+0 wine processes
 
---- STEP 3: Delete state ---
-Done
+--- STEP 3: Setup ---
+State deleted
+Files copied from repo
+   double   m_risk_multiplier;       // 1.0 for challenge, 0.7 for funded
+   m_risk_multiplier         = 1.0;
+      m_risk_multiplier  = 1.0;
+   m_risk_multiplier  = 1.0;    // Full risk - already conservative at 0.5%
+               m_risk_multiplier * 100, m_max_positions, m_max_daily_trades);
+   m_risk_multiplier  = 1.0;
+      m_risk_multiplier * 100, 0, m_max_positions, m_max_daily_trades,
+            m_risk_multiplier * 100);
+AccountState: risk_multiplier=1.0 OK
+   m_max_positions    = 3;
+   m_max_positions    = 3;      // Can open more positions
+AccountState: max_positions=3 OK
+input int      InpMaxPositions    = 3;          // Max Open Positions
+PropFirmBot: MaxPositions=3 OK
+   bool     SendTelegramViaFile(string message);
+         return SendTelegramViaFile(message);
+bool CNotifications::SendTelegramViaFile(string message)
+Notifications: File relay OK
 
---- STEP 4: Copy EA + recompile ---
-EA files copied
-Config files copied
-Compiled OK: 164640 bytes, modified 10:35:51
+--- STEP 4: Compile ---
+OK: 164640 bytes
 Result: 0 errors, 0 warnings, 4918 msec elapsed, cpu='X64 Regular'
 
---- STEP 5: Start Telegram relay ---
-ERROR: /root/MT5-PropFirm-Bot/scripts/telegram_relay.sh not found!
-total 120
-drwxr-xr-x  2 root root  4096 Mar  5 10:35 .
-drwxr-xr-x 17 root root  4096 Mar  5 10:35 ..
--rw-r--r--  1 root root  3915 Feb 23 12:13 clean_restart.sh
--rw-r--r--  1 root root  2206 Feb 23 12:13 connection_check.sh
--rw-r--r--  1 root root  1904 Feb 23 12:13 deep_check.sh
--rwxr-xr-x  1 root root  3403 Feb 23 12:13 deploy_fix.sh
--rw-r--r--  1 root root  3281 Feb 23 12:13 fix_and_restart.sh
--rw-r--r--  1 root root  3393 Feb 23 15:23 fix_and_start.sh
--rw-r--r--  1 root root  4727 Mar  5 10:35 fix_compile_ea.sh
+--- STEP 5: Telegram relay ---
+Relay FAILED
+bash: /root/MT5-PropFirm-Bot/scripts/telegram_relay.sh: No such file or directory
 
 --- STEP 6: Start MT5 ---
-MT5 starting (fresh wineserver)...
---- STEP 7: Verification ---
-Wine processes:
+MT5 starting...
 
-Network (MT5 connected?):
-ESTAB      0      0       77.237.234.2:36271   18.168.91.222:443   users:(("main",pid=2242251,fd=39),("wineserver",pid=2242194,fd=347))
+========== VERIFICATION ==========
+Network:
+ESTAB      0      0       77.237.234.2:46299   18.168.91.222:443   users:(("main",pid=2243352,fd=19),("wineserver",pid=2243286,fd=174))
+ESTAB      0      0       77.237.234.2:50008   78.140.180.54:443   users:(("main",pid=2243352,fd=78),("wineserver",pid=2243286,fd=405))
+ESTAB      0      0       77.237.234.2:58352 194.164.179.199:443   users:(("main",pid=2243352,fd=58),("wineserver",pid=2243286,fd=384))
 
-Relay daemon:
-NOT running
+Relay:
 
---- EA Logs (new session) ---
-Log: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260305.log (111980 bytes)
-PH	0	11:17:03.281	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
-CN	0	11:17:03.283	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
-RL	0	11:17:03.283	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
-IH	0	11:17:03.283	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-RD	0	11:17:03.283	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-LK	0	11:17:03.288	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-HH	0	11:17:03.288	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-IO	0	11:17:03.288	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-RG	0	11:17:03.288	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
-QM	0	11:17:03.337	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.05 13:17:03] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-CH	0	11:17:03.338	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260305.csv | Initial balance: $1981.41
-EJ	0	11:17:03.338	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
-ES	0	11:17:03.338	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
-RM	0	11:17:03.338	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-HK	0	11:17:03.338	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-CN	0	11:17:03.338	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
-DI	0	11:17:03.537	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-OI	0	11:17:03.618	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-PH	0	11:17:04.416	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-QO	0	11:17:04.469	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-IQ	0	11:17:04.469	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-KQ	0	11:17:04.469	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
-CM	0	11:17:04.469	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
-ME	0	11:17:04.469	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-PR	0	11:17:04.470	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-NM	0	11:17:04.470	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-FF	0	11:17:04.470	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-EF	0	11:17:04.470	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
-KF	0	11:17:04.471	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.05 13:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-JF	0	11:17:04.471	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+--- NEW EA Logs ---
+basename: extra operand ‘5/MQL5/Logs/20260305.log’
+Try 'basename --help' for more information.
+Log:  (111980 bytes)
+LQ	0	10:06:45.047	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.05 12:06:44] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+MM	0	10:15:00.245	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.05 12:15 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
+RL	0	10:15:45.286	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.05 12:15:45] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+GD	0	10:15:46.342	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.05 12:15 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
+IJ	0	10:15:52.443	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.05 12:15:52] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+GN	0	10:15:52.446	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.05 12:15 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
+JN	0	10:17:57.895	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.05 12:17:57] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+KR	0	10:17:58.172	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.05 12:15 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
 
---- Status JSON ---
-{
+--- Status JSON timestamp ---
   "timestamp": "2026.03.05 13:25:13",
-  "server_time": "2026.03.05 13:25:13",
-  "gmt_time": "2026.03.05 11:25:13",
-  "account": {
-    "number": 11797849,
-    "name": "FundedNext-Stellar Instant Account- moti tapiro",
-    "server": "FundedNext-Server",
-    "currency": "USD",
-    "leverage": 30,
-    "balance": 1981.41,
-    "equity": 1981.41,
-    "margin": 0.00,
-    "free_margin": 1981.41,
-    "floating_pnl": 0.00,
-    "initial_balance": 1981.41,
-    "total_pnl": 0.00,
-    "profit_percent": 0.00
-  },
-  "guardian": {
-    "state": "ACTIVE",
-    "daily_dd": 0.00,
-    "total_dd": 0.00,
-    "halt_message": "",
-    "connection_ok": true,
-    "can_trade": true
-  },
-  "today": {
-    "trades": 0,
-    "wins": 0,
-    "losses": 0,
-    "profit": 0.00,
-    "loss": 0.00,
-    "net": 0.00,
-    "consec_losses": 0
-  },
-  "positions": {
-    "count": 0,
-    "open": []
-  }
-}
+
 --- Telegram queue ---
-No queue file yet
 
 --- Relay log ---
 bash: /root/MT5-PropFirm-Bot/scripts/telegram_relay.sh: No such file or directory
 
-=== DONE - Thu Mar  5 12:04:32 UTC 2026 ===
+=== DONE - Thu Mar  5 12:09:06 UTC 2026 ===
 EXIT_CODE=0
