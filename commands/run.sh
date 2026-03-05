@@ -1,99 +1,63 @@
 #!/bin/bash
 # =============================================================
-# FIX: Add /autotrading flag to mt5.service
+# DEBUG: Find AutoTrading config in MT5 files
 # =============================================================
 
 echo "============================================"
-echo "  FIX: Enable AutoTrading via CLI flag"
+echo "  DEBUG: Find AutoTrading settings"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
-# ============ STEP 1: Update mt5.service with /autotrading flag ============
-echo "=== [1] Updating mt5.service ==="
-
-cat > /etc/systemd/system/mt5.service << 'SVCEOF'
-[Unit]
-Description=MetaTrader 5 Trading Terminal
-After=network.target xvfb.service
-Requires=xvfb.service
-
-[Service]
-Type=simple
-User=root
-Environment=DISPLAY=:99
-Environment=WINEPREFIX=/root/.wine
-ExecStartPre=/bin/sleep 5
-ExecStart=/usr/bin/wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" /portable /login:11797849 /server:FundedNext-Server /autotrading
-Restart=always
-RestartSec=30
-StartLimitIntervalSec=600
-StartLimitBurst=10
-
-[Install]
-WantedBy=multi-user.target
-SVCEOF
-
-echo "Added /autotrading flag to ExecStart"
-cat /etc/systemd/system/mt5.service
+# ============ Find ALL ini files ============
+echo "=== [1] ALL .ini files in MT5 folder ==="
+find "$MT5" -name "*.ini" -type f 2>/dev/null
 echo ""
 
-# ============ STEP 2: Restart MT5 ============
-echo "=== [2] Restarting MT5 ==="
+# ============ Check each ini for auto/expert/trading ============
+echo "=== [2] AutoTrading related settings in ALL ini files ==="
+for f in $(find "$MT5" -name "*.ini" -type f 2>/dev/null); do
+    matches=$(grep -i "auto\|expert\|trading\|algo" "$f" 2>/dev/null)
+    if [ -n "$matches" ]; then
+        echo "--- $f ---"
+        echo "$matches"
+        echo ""
+    fi
+done
 
-echo "Stopping MT5..."
-systemctl stop mt5.service
-sleep 3
+# ============ Check common.ini specifically ============
+echo "=== [3] Full content of key ini files ==="
 
-# Make sure it's dead
-pkill -9 -f terminal64.exe 2>/dev/null
-pkill -9 -f wineserver 2>/dev/null
-sleep 2
+for f in "$MT5/config/common.ini" "$MT5/community/accounts/current.ini" "$MT5/profiles/default.ini"; do
+    if [ -f "$f" ]; then
+        echo "--- $f ---"
+        cat "$f"
+        echo ""
+    fi
+done
 
-echo "Reloading systemd..."
-systemctl daemon-reload
-
-echo "Starting MT5 with /autotrading..."
-systemctl start mt5.service
-sleep 15
-
-echo "--- mt5.service status ---"
-systemctl status mt5.service --no-pager 2>&1 | head -15
+# ============ Check the portable data folder ============
+echo "=== [4] Check MQL5 folder for settings ==="
+find "$MT5/MQL5" -name "*.ini" -o -name "*.cfg" -o -name "*.set" 2>/dev/null | head -20
 echo ""
 
-# ============ STEP 3: Verify ============
-echo "=== [3] VERIFICATION ==="
-
-echo "--- MT5 Process (checking /autotrading flag) ---"
-ps aux | grep terminal64 | grep -v grep
+# ============ Wine registry ============
+echo "=== [5] Wine registry for MT5 ==="
+grep -r -i "autotrading\|metatrader\|terminal64" /root/.wine/*.reg 2>/dev/null | grep -i "auto\|expert\|trading" | head -20
 echo ""
 
-echo "--- mt5.service ---"
-echo "  Enabled: $(systemctl is-enabled mt5.service 2>/dev/null)"
-echo "  Active: $(systemctl is-active mt5.service 2>/dev/null)"
+# ============ List profiles folder ============
+echo "=== [6] Profiles and tester folders ==="
+ls -la "$MT5/profiles/" 2>/dev/null
+echo ""
+ls -la "$MT5/tester/" 2>/dev/null
 echo ""
 
-echo "Waiting 25 more seconds for EA to process signals..."
-sleep 25
-
-echo "--- Latest EA log (last 20 lines) ---"
-LATEST_LOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-if [ -n "$LATEST_LOG" ]; then
-    cat "$LATEST_LOG" 2>/dev/null | tr -d '\0' | tail -20
-else
-    echo "No EA logs yet"
-fi
+# ============ Check startup.ini content ============
+echo "=== [7] startup.ini full content ==="
+cat "$MT5/config/startup.ini" 2>/dev/null
 echo ""
 
-echo "--- Latest Terminal log (last 10 lines) ---"
-TERM_LOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
-if [ -n "$TERM_LOG" ]; then
-    cat "$TERM_LOG" 2>/dev/null | tr -d '\0' | tail -10
-else
-    echo "No terminal logs yet"
-fi
-echo ""
-
-echo "=== FIX DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+echo "=== DEBUG DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
