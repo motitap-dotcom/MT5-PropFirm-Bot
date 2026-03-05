@@ -1,44 +1,64 @@
 #!/bin/bash
-# Find and fix the XAUUSD param in MT5 chart settings
-echo "=== FIND XAUUSD SETTING $(date) ==="
+# AGGRESSIVE search for XAUUSD param + direct fix
+echo "=== FIX XAUUSD $(date) ==="
 
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
-# Search ALL .chr files for PropFirmBot
-echo "=== ALL CHART FILES WITH PROPFIRMBOT ==="
-find "$MT5" -name "*.chr" 2>/dev/null | while read f; do
+# 1. Find ALL files containing InpTradeXAUUSD or TradeXAUUSD ANYWHERE
+echo "=== SEARCH: Any file with InpTradeXAUUSD ==="
+find "$MT5" -type f 2>/dev/null | xargs grep -rl "InpTradeXAUUSD\|TradeXAUUSD" 2>/dev/null
+
+# 2. Find ALL .chr files (show them all, even without PropFirmBot)
+echo ""
+echo "=== ALL .chr FILES ==="
+find "$MT5" -name "*.chr" 2>/dev/null | head -20
+
+# 3. Find ALL chart profile directories
+echo ""
+echo "=== CHART PROFILE DIRS ==="
+find "$MT5" -type d -name "Charts" 2>/dev/null
+find "$MT5" -type d -name "Profiles" 2>/dev/null
+find "$MT5" -type d -name "Default" 2>/dev/null
+
+# 4. Find ANY file that mentions PropFirmBot (not .ex5/.mq5)
+echo ""
+echo "=== FILES MENTIONING PropFirmBot (config/chart only) ==="
+find "$MT5" -type f \( -name "*.chr" -o -name "*.ini" -o -name "*.set" -o -name "*.cfg" -o -name "*.dat" \) 2>/dev/null | while read f; do
     if grep -q "PropFirmBot" "$f" 2>/dev/null; then
-        echo ""
-        echo "=== FOUND: $f ==="
-        # Show params related to symbols/XAUUSD
-        grep -n "XAUUSD\|xauusd\|InpTrade\|Inp.*XAUUSD" "$f" 2>/dev/null
-        echo "--- All input params: ---"
-        # Show lines between <inputs> and </inputs> or expert params section
-        sed -n '/^<inputs>/,/<\/inputs>/p' "$f" 2>/dev/null | head -40
-        # Also try alternative format
-        grep -A100 "^<expert>" "$f" 2>/dev/null | grep -B1 -A1 "XAUUSD\|inputs" | head -20
+        echo "FOUND: $f"
+        grep -n "PropFirmBot\|InpTrade\|XAUUSD" "$f" 2>/dev/null | head -10
+        echo "---"
     fi
 done
 
-# Also check .set files (preset files)
+# 5. Check if XAUUSD symbol exists in market watch
 echo ""
-echo "=== PRESET FILES ==="
-find "$MT5" -name "*.set" 2>/dev/null | while read f; do
-    if grep -q "PropFirmBot\|XAUUSD" "$f" 2>/dev/null; then
-        echo "Found: $f"
-        grep -i "XAUUSD\|InpTrade" "$f" 2>/dev/null
+echo "=== XAUUSD SYMBOL CHECK ==="
+find "$MT5" -name "symbols.raw" 2>/dev/null | while read f; do
+    echo "Raw symbols file: $f ($(wc -c < "$f") bytes)"
+done
+# Check if XAUUSD is available on this broker
+find "$MT5" -type f -name "*.raw" -o -name "*.sel" 2>/dev/null | while read f; do
+    if strings "$f" 2>/dev/null | grep -q "XAUUSD"; then
+        echo "XAUUSD found in: $f"
     fi
 done
 
-# Check tester directory too
+# 6. Show the terminal.ini for WebRequest setting
 echo ""
-echo "=== LAST USED INPUTS ==="
-find "$MT5" -path "*/Tester/*" -name "*.set" 2>/dev/null | while read f; do
-    if grep -q "PropFirmBot\|InpTrade" "$f" 2>/dev/null; then
-        echo "Found: $f"
-        grep -i "XAUUSD\|InpTrade" "$f" 2>/dev/null
-    fi
-done
+echo "=== TERMINAL.INI ==="
+INI="$MT5/terminal64.ini"
+if [ -f "$INI" ]; then
+    cat "$INI"
+else
+    echo "Not found at $INI"
+    find "$MT5" -name "terminal*.ini" 2>/dev/null
+fi
+
+# 7. List ALL files in Profiles directory
+echo ""
+echo "=== PROFILES DIRECTORY LISTING ==="
+ls -laR "$MT5/Profiles/" 2>/dev/null | head -50
 
 echo ""
 echo "=== DONE ==="
