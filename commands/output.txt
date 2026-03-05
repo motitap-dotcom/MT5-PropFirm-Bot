@@ -1,68 +1,26 @@
 ============================================
-  Setup: mt5_status.json daemon
-  2026-03-05 15:12:27 UTC
+  Update: mt5_status.json format
+  2026-03-05 15:23:58 UTC
 ============================================
 
-=== [1] Checking existing daemon ===
-Daemon not running. Will create and start it.
+=== [1] Stopping current daemon ===
+Stopped.
 
-=== [2] Creating /var/bots/ directory ===
-Done.
+=== [2] Updating writer script ===
+Script updated.
 
-=== [3] Creating status writer script ===
-Script created at /root/PropFirmBot/scripts/mt5_status_writer.sh
-
-=== [4] Creating systemd service ===
-Service file created.
-
-=== [5] Starting daemon ===
-Created symlink /etc/systemd/system/multi-user.target.wants/mt5-status-json.service → /etc/systemd/system/mt5-status-json.service.
+=== [3] Restarting daemon ===
 --- Service status ---
 active
-● mt5-status-json.service - MT5 Status JSON Writer
-     Loaded: loaded (/etc/systemd/system/mt5-status-json.service; enabled; preset: enabled)
-     Active: active (running) since Thu 2026-03-05 15:12:28 UTC; 5s ago
-   Main PID: 2287415 (bash)
-      Tasks: 2 (limit: 9483)
-     Memory: 988.0K (peak: 4.1M)
-        CPU: 292ms
-     CGroup: /system.slice/mt5-status-json.service
-             ├─2287415 /bin/bash /root/PropFirmBot/scripts/mt5_status_writer.sh
-             └─2287460 sleep 30
 
-Mar 05 15:12:28 vmi3096165 systemd[1]: Started mt5-status-json.service - MT5 Status JSON Writer.
-
-=== [6] Verifying /var/bots/mt5_status.json ===
-FILE EXISTS!
+=== [4] Verifying /var/bots/mt5_status.json ===
 {
-  "timestamp": "2026-03-05T15:12:28Z",
-  "mt5": {
-    "running": true,
-    "status": "running",
-    "pid": 2282913
-2282989
-  },
-  "vnc": {
-    "running": true
-  },
-  "ea": {
-    "status": "initialized"
-  },
-  "system": {
-    "cpu_percent": 30.0,
-    "ram_used_mb": 2344,
-    "ram_total_mb": 7941,
-    "ram_percent": 29.5,
-    "disk_usage": "12%",
-    "uptime_seconds": 961320
-  },
-  "broker": {
-    "connections": 6
-  },
-  "watchdog": {
-    "restarts_today": 3
-  }
+  "bot_name": "MT5 Bot",
+  "active": true,
+  "balance": null,
+  "last_trade": "2026-03-05T14:40:33Z",
+  "updated_at": "2026-03-05T15:23:59Z"
 }
 
-=== DONE 2026-03-05 15:12:36 UTC ===
+=== DONE 2026-03-05 15:24:07 UTC ===
 EXIT_CODE=0
