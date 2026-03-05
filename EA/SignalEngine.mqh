@@ -463,12 +463,19 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
 
    // Step 1: Get H4 bias
    int htf_bias = GetHTFBias();
-   if(htf_bias == 0) return SIGNAL_NONE; // No clear trend
+   if(htf_bias == 0)
+   {
+      PrintFormat("[SMC] %s: No HTF bias (H4 EMA50/200 not aligned) - skipping", m_symbol);
+      return SIGNAL_NONE;
+   }
 
    // Step 2: Get ATR for SL/TP calculation
    if(CopyBuffer(m_handle_atr, 0, 0, 3, m_atr) < 3) return SIGNAL_NONE;
    double atr = m_atr[0];
    if(atr <= 0) return SIGNAL_NONE;
+
+   // Minimum SL distance = 1.5x ATR to avoid being stopped out by noise
+   double min_sl_distance = atr * 1.5;
 
    double ob_high, ob_low, fvg_high, fvg_low;
 
@@ -478,6 +485,14 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
       bool has_liquidity_sweep = DetectLiquiditySweep(true, 30);
       bool has_bullish_ob = DetectBullishOrderBlock(0, ob_high, ob_low);
       bool has_bullish_fvg = DetectBullishFVG(0, fvg_high, fvg_low);
+
+      // Log what was detected for debugging
+      PrintFormat("[SMC] %s BUY scan: HTF=BULL | LiqSweep=%s | OB=%s | FVG=%s | ATR=%.5f",
+                  m_symbol,
+                  has_liquidity_sweep ? "Y" : "N",
+                  has_bullish_ob ? "Y" : "N",
+                  has_bullish_fvg ? "Y" : "N",
+                  atr);
 
       // Need liquidity sweep + (order block OR fair value gap)
       if(has_liquidity_sweep && (has_bullish_ob || has_bullish_fvg))
@@ -493,14 +508,20 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
          double sl_distance = entry - sl_price;
          if(sl_distance <= 0) return SIGNAL_NONE;
 
+         // Enforce minimum SL distance based on ATR
+         if(sl_distance < min_sl_distance)
+         {
+            sl_price = entry - min_sl_distance;
+            sl_distance = min_sl_distance;
+         }
+
          // TP at 2:1 minimum RR
          tp_price = entry + (sl_distance * 2.0);
 
-         PrintFormat("[SMC] BUY signal: Entry=%.5f SL=%.5f TP=%.5f | LiqSweep=%s OB=%s FVG=%s",
+         PrintFormat("[SMC] BUY signal: Entry=%.5f SL=%.5f TP=%.5f | SL_pips=%.1f | ATR=%.5f",
                      entry, sl_price, tp_price,
-                     has_liquidity_sweep ? "Y" : "N",
-                     has_bullish_ob ? "Y" : "N",
-                     has_bullish_fvg ? "Y" : "N");
+                     sl_distance / SymbolInfoDouble(m_symbol, SYMBOL_POINT) / 10.0,
+                     atr);
 
          return SIGNAL_BUY;
       }
@@ -512,6 +533,14 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
       bool has_liquidity_sweep = DetectLiquiditySweep(false, 30);
       bool has_bearish_ob = DetectBearishOrderBlock(0, ob_high, ob_low);
       bool has_bearish_fvg = DetectBearishFVG(0, fvg_high, fvg_low);
+
+      // Log what was detected for debugging
+      PrintFormat("[SMC] %s SELL scan: HTF=BEAR | LiqSweep=%s | OB=%s | FVG=%s | ATR=%.5f",
+                  m_symbol,
+                  has_liquidity_sweep ? "Y" : "N",
+                  has_bearish_ob ? "Y" : "N",
+                  has_bearish_fvg ? "Y" : "N",
+                  atr);
 
       if(has_liquidity_sweep && (has_bearish_ob || has_bearish_fvg))
       {
@@ -525,13 +554,19 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
          double sl_distance = sl_price - entry;
          if(sl_distance <= 0) return SIGNAL_NONE;
 
+         // Enforce minimum SL distance based on ATR
+         if(sl_distance < min_sl_distance)
+         {
+            sl_price = entry + min_sl_distance;
+            sl_distance = min_sl_distance;
+         }
+
          tp_price = entry - (sl_distance * 2.0);
 
-         PrintFormat("[SMC] SELL signal: Entry=%.5f SL=%.5f TP=%.5f | LiqSweep=%s OB=%s FVG=%s",
+         PrintFormat("[SMC] SELL signal: Entry=%.5f SL=%.5f TP=%.5f | SL_pips=%.1f | ATR=%.5f",
                      entry, sl_price, tp_price,
-                     has_liquidity_sweep ? "Y" : "N",
-                     has_bearish_ob ? "Y" : "N",
-                     has_bearish_fvg ? "Y" : "N");
+                     sl_distance / SymbolInfoDouble(m_symbol, SYMBOL_POINT) / 10.0,
+                     atr);
 
          return SIGNAL_SELL;
       }
@@ -565,16 +600,25 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
    // EMA 9 crossed below EMA 21
    bool cross_down = (m_ema_fast[1] >= m_ema_slow[1]) && (m_ema_fast[0] < m_ema_slow[0]);
 
+   // Log EMA state for debugging
+   if(cross_up || cross_down)
+   {
+      PrintFormat("[EMA] %s: CrossUp=%s CrossDown=%s | RSI=%.1f | HTF=%d | EMA9=%.5f EMA21=%.5f",
+                  m_symbol, cross_up ? "Y" : "N", cross_down ? "Y" : "N",
+                  m_rsi[0], htf_bias, m_ema_fast[0], m_ema_slow[0]);
+   }
+
    // BUY: EMA cross up + RSI not overbought + bullish or neutral HTF
    if(cross_up && m_rsi[0] < m_rsi_overbought && m_rsi[0] > m_rsi_oversold && htf_bias >= 0)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
-      sl_price = entry - (atr * 1.5);
+      sl_price = entry - (atr * 2.0);  // 2x ATR for better survivability
       double sl_distance = entry - sl_price;
       tp_price = entry + (sl_distance * 2.0);
 
-      PrintFormat("[EMA] BUY signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
-                  entry, sl_price, tp_price, m_rsi[0]);
+      PrintFormat("[EMA] BUY signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f ATR=%.5f SL_pips=%.1f",
+                  entry, sl_price, tp_price, m_rsi[0], atr,
+                  sl_distance / SymbolInfoDouble(m_symbol, SYMBOL_POINT) / 10.0);
       return SIGNAL_BUY;
    }
 
@@ -582,12 +626,13 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
    if(cross_down && m_rsi[0] > m_rsi_oversold && m_rsi[0] < m_rsi_overbought && htf_bias <= 0)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_BID);
-      sl_price = entry + (atr * 1.5);
+      sl_price = entry + (atr * 2.0);  // 2x ATR for better survivability
       double sl_distance = sl_price - entry;
       tp_price = entry - (sl_distance * 2.0);
 
-      PrintFormat("[EMA] SELL signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
-                  entry, sl_price, tp_price, m_rsi[0]);
+      PrintFormat("[EMA] SELL signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f ATR=%.5f SL_pips=%.1f",
+                  entry, sl_price, tp_price, m_rsi[0], atr,
+                  sl_distance / SymbolInfoDouble(m_symbol, SYMBOL_POINT) / 10.0);
       return SIGNAL_SELL;
    }
 
