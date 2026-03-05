@@ -1,64 +1,75 @@
 #!/bin/bash
-# AGGRESSIVE search for XAUUSD param + direct fix
-echo "=== FIX XAUUSD $(date) ==="
+# Find the REAL XAUUSD symbol name + check configs
+echo "=== FIND GOLD SYMBOL $(date) ==="
 
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
-# 1. Find ALL files containing InpTradeXAUUSD or TradeXAUUSD ANYWHERE
-echo "=== SEARCH: Any file with InpTradeXAUUSD ==="
-find "$MT5" -type f 2>/dev/null | xargs grep -rl "InpTradeXAUUSD\|TradeXAUUSD" 2>/dev/null
-
-# 2. Find ALL .chr files (show them all, even without PropFirmBot)
+# 1. Show common.ini and startup.ini (where EA is configured)
+echo "=== common.ini ==="
+cat "$MT5/config/common.ini" 2>/dev/null
 echo ""
-echo "=== ALL .chr FILES ==="
-find "$MT5" -name "*.chr" 2>/dev/null | head -20
+echo "=== startup.ini ==="
+cat "$MT5/config/startup.ini" 2>/dev/null
 
-# 3. Find ALL chart profile directories
+# 2. Find ALL available symbols - search for gold/xau
 echo ""
-echo "=== CHART PROFILE DIRS ==="
-find "$MT5" -type d -name "Charts" 2>/dev/null
-find "$MT5" -type d -name "Profiles" 2>/dev/null
-find "$MT5" -type d -name "Default" 2>/dev/null
+echo "=== SEARCHING FOR GOLD/XAU SYMBOL NAME ==="
+# Check symbols in bases directory
+find "$MT5" -name "symbols.raw" -o -name "symgroups.raw" 2>/dev/null | while read f; do
+    echo "File: $f"
+    strings "$f" 2>/dev/null | grep -i "xau\|gold" | head -10
+done
 
-# 4. Find ANY file that mentions PropFirmBot (not .ex5/.mq5)
+# Also check in any other data files
+find "$MT5/Bases" -type f 2>/dev/null | while read f; do
+    result=$(strings "$f" 2>/dev/null | grep -i "xau\|gold" | head -3)
+    if [ -n "$result" ]; then
+        echo "Found in $f: $result"
+    fi
+done 2>/dev/null | head -20
+
+# 3. Check config/terminal.ini
 echo ""
-echo "=== FILES MENTIONING PropFirmBot (config/chart only) ==="
-find "$MT5" -type f \( -name "*.chr" -o -name "*.ini" -o -name "*.set" -o -name "*.cfg" -o -name "*.dat" \) 2>/dev/null | while read f; do
-    if grep -q "PropFirmBot" "$f" 2>/dev/null; then
-        echo "FOUND: $f"
-        grep -n "PropFirmBot\|InpTrade\|XAUUSD" "$f" 2>/dev/null | head -10
-        echo "---"
+echo "=== terminal.ini ==="
+for f in "$MT5/config/terminal.ini" "$MT5/Config/terminal.ini"; do
+    if [ -f "$f" ]; then
+        echo "File: $f"
+        cat "$f"
     fi
 done
 
-# 5. Check if XAUUSD symbol exists in market watch
+# 4. Check the MQL5 chart profile that MT5 is actually using
 echo ""
-echo "=== XAUUSD SYMBOL CHECK ==="
-find "$MT5" -name "symbols.raw" 2>/dev/null | while read f; do
-    echo "Raw symbols file: $f ($(wc -c < "$f") bytes)"
-done
-# Check if XAUUSD is available on this broker
-find "$MT5" -type f -name "*.raw" -o -name "*.sel" 2>/dev/null | while read f; do
-    if strings "$f" 2>/dev/null | grep -q "XAUUSD"; then
-        echo "XAUUSD found in: $f"
-    fi
-done
+echo "=== MQL5 Default Chart Profile ==="
+for f in "$MT5/MQL5/Profiles/Charts/Default/"*.chr; do
+    echo "--- $f ---"
+    grep -c "." "$f" 2>/dev/null
+    grep "expert\|PropFirmBot\|symbol\|inputs\|InpTrade" "$f" 2>/dev/null | head -10
+done 2>/dev/null
 
-# 6. Show the terminal.ini for WebRequest setting
+# 5. Also check the running MT5 log for symbol errors
 echo ""
-echo "=== TERMINAL.INI ==="
-INI="$MT5/terminal64.ini"
-if [ -f "$INI" ]; then
-    cat "$INI"
-else
-    echo "Not found at $INI"
-    find "$MT5" -name "terminal*.ini" 2>/dev/null
+echo "=== RECENT MT5 LOGS (symbol errors) ==="
+LOGDIR="$MT5/Logs"
+if [ -d "$LOGDIR" ]; then
+    ls -lt "$LOGDIR/"*.log 2>/dev/null | head -3
+    LATEST=$(ls -t "$LOGDIR/"*.log 2>/dev/null | head -1)
+    if [ -n "$LATEST" ]; then
+        # Convert from UTF-16 and search for XAUUSD/symbol errors
+        iconv -f UTF-16LE -t UTF-8 "$LATEST" 2>/dev/null | grep -i "xauusd\|gold\|symbol.*not\|cannot\|error" | tail -20
+    fi
 fi
 
-# 7. List ALL files in Profiles directory
+# 6. Check what symbols the EA actually sees
 echo ""
-echo "=== PROFILES DIRECTORY LISTING ==="
-ls -laR "$MT5/Profiles/" 2>/dev/null | head -50
+echo "=== EA LOGS (symbol info) ==="
+EALOGDIR="$MT5/MQL5/Logs"
+if [ -d "$EALOGDIR" ]; then
+    LATEST=$(ls -t "$EALOGDIR/"*.log 2>/dev/null | head -1)
+    if [ -n "$LATEST" ]; then
+        iconv -f UTF-16LE -t UTF-8 "$LATEST" 2>/dev/null | grep -i "symbol\|XAUUSD\|gold\|Scanning\|INIT\|BuildSymbol" | tail -30
+    fi
+fi
 
 echo ""
 echo "=== DONE ==="
