@@ -1,13 +1,12 @@
 #!/bin/bash
 # =============================================================
-# Fix #10: Use existing chart format + add EA section
+# Fix #11: Write chart profile in UTF-16LE encoding!
 # =============================================================
 
-echo "=== FIX #10 - $(date) ==="
+echo "=== FIX #11 - $(date) ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
 DEFAULT_CHART="$MT5_BASE/MQL5/Profiles/Charts/Default/chart01.chr"
-EURO_CHART="$MT5_BASE/MQL5/Profiles/Charts/Euro/chart01.chr"
 
 # ============================================
 # STEP 1: Kill MT5
@@ -19,65 +18,45 @@ sleep 5
 
 # Delete state
 find /root/.wine -name "PropFirmBot_AccountState.dat" -delete 2>/dev/null
-
+echo "Done"
 echo ""
 
 # ============================================
-# STEP 2: Read existing stock chart for format
+# STEP 2: Write chart in UTF-16LE
 # ============================================
-echo "--- STEP 2: Read Euro chart for format ---"
-if [ -f "$EURO_CHART" ]; then
-    echo "Euro/chart01.chr:"
-    cat "$EURO_CHART"
-else
-    echo "Euro chart not found!"
-fi
-echo ""
+echo "--- STEP 2: Write UTF-16LE chart ---"
 
-# ============================================
-# STEP 3: Create Default chart from stock + EA
-# ============================================
-echo "--- STEP 3: Create Default chart with EA ---"
-
-# Copy the Euro chart as base
-if [ -f "$EURO_CHART" ]; then
-    cp "$EURO_CHART" "$DEFAULT_CHART"
-    echo "Copied Euro chart as base"
-else
-    echo "No Euro chart to copy"
-fi
-
-# Now modify it: change symbol to EURUSD and add EA
-# Read current content
-CURRENT=$(cat "$DEFAULT_CHART" 2>/dev/null)
-
-# Create proper chart with EURUSD and EA
-cat > "$DEFAULT_CHART" << 'CHREOF'
+# Write ASCII first, then convert
+cat > /tmp/chart_ascii.chr << 'CHREOF'
 <chart>
 id=1
 symbol=EURUSD
 period_type=0
 period_size=15
 digits=5
+tick_size=0.000000
+position_time=0
+scale_fix=0
+scale_fixed_min=1.000000
+scale_fixed_max=2.000000
+scale_fix11=0
+scale_bar=0
+scale_bar_val=0.000000
 scale=4
-graph=1
+mode=1
 fore=0
 grid=0
 volume=0
 scroll=1
 shift=1
+shift_size=20.000000
+fixed_pos=0.000000
 ohlc=1
-one_click=0
-one_click_btn=1
+bidline=1
 askline=0
+lastline=0
 days=0
 descriptions=0
-shift_size=20
-fixed_pos=0
-window_left=0
-window_top=0
-window_right=1280
-window_bottom=1024
 window_type=3
 background_color=0
 foreground_color=16777215
@@ -88,7 +67,9 @@ bearcandle_color=255
 chartline_color=65280
 volumes_color=3329330
 grid_color=10061943
+bidline_color=10061943
 askline_color=255
+lastline_color=49152
 stops_color=255
 
 <expert>
@@ -101,7 +82,6 @@ expertmode=33
 
 <window>
 height=100
-objects=0
 
 <indicator>
 name=Main
@@ -116,111 +96,96 @@ scale_fix_min=0
 scale_fix_min_val=0.000000
 scale_fix_max=0
 scale_fix_max_val=0.000000
-expertmode=0
-fixed_height=-1
-
 </indicator>
 </window>
 
 </chart>
 CHREOF
 
-echo "Created chart with EA config"
-echo "Chart content:"
-cat "$DEFAULT_CHART"
+# Convert to UTF-16LE with BOM
+iconv -f UTF-8 -t UTF-16LE /tmp/chart_ascii.chr > "$DEFAULT_CHART"
+
+# Add UTF-16LE BOM at the beginning
+python3 -c "
+import sys
+with open('$DEFAULT_CHART', 'rb') as f:
+    data = f.read()
+# Add BOM if not present
+if not data.startswith(b'\xff\xfe'):
+    with open('$DEFAULT_CHART', 'wb') as f:
+        f.write(b'\xff\xfe' + data)
+    print('BOM added')
+else:
+    print('BOM already present')
+"
+
+echo "Chart file info:"
+ls -la "$DEFAULT_CHART"
+file "$DEFAULT_CHART"
 echo ""
 
-# Also write the order.wnd file
-cat > "$MT5_BASE/MQL5/Profiles/Charts/Default/order.wnd" << 'WNDEOF'
-<chart>
-id=1
-</chart>
-WNDEOF
-echo ""
+# Also write order.wnd in UTF-16LE
+printf '<chart>\r\nid=1\r\n</chart>\r\n' | iconv -f UTF-8 -t UTF-16LE > "$MT5_BASE/MQL5/Profiles/Charts/Default/order.wnd"
+python3 -c "
+with open('$MT5_BASE/MQL5/Profiles/Charts/Default/order.wnd', 'rb') as f:
+    data = f.read()
+if not data.startswith(b'\xff\xfe'):
+    with open('$MT5_BASE/MQL5/Profiles/Charts/Default/order.wnd', 'wb') as f:
+        f.write(b'\xff\xfe' + data)
+"
 
 # ============================================
-# STEP 4: Ensure common.ini is correct
+# STEP 3: Verify chart content
 # ============================================
-echo "--- STEP 4: common.ini ---"
-cat > "$MT5_BASE/config/common.ini" << 'INIEOF'
-[Common]
-Login=11797849
-ProxyEnable=0
-CertInstall=0
-NewsEnable=0
-Server=FundedNext-Server
-ProxyType=0
-ProxyAddress=
-EnableOpenCL=7
-ProxyAuth=
-Services=4294967295
-NewsLanguages=
-Source=download.mql5.com
-[StartUp]
-Expert=PropFirmBot\PropFirmBot
-ExpertParameters=
-Symbol=EURUSD
-Period=M15
-[Experts]
-AllowLiveTrading=1
-AllowDllImport=0
-Enabled=1
-Account=11797849
-Profile=0
-AllowWebRequest=1
-WebRequestUrl1=https://api.telegram.org
-[Charts]
-ProfileLast=Default
-MaxBars=100000
-PrintColor=0
-SaveDeleted=0
-TradeHistory=1
-TradeLevels=1
-TradeLevelsDrag=0
-PreloadCharts=1
-INIEOF
-echo "common.ini written"
+echo "--- STEP 3: Verify chart ---"
+echo "First 20 lines (converted back):"
+iconv -f UTF-16LE -t UTF-8 "$DEFAULT_CHART" 2>/dev/null | head -20
+echo "..."
+echo "Expert section:"
+iconv -f UTF-16LE -t UTF-8 "$DEFAULT_CHART" 2>/dev/null | grep -A5 "expert"
 echo ""
 
 # ============================================
-# STEP 5: Start MT5 and wait
+# STEP 4: Start MT5
 # ============================================
-echo "--- STEP 5: Start MT5 ---"
+echo "--- STEP 4: Start MT5 ---"
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
 
 cd "$MT5_BASE"
 nohup wine "$MT5_BASE/terminal64.exe" /portable > /tmp/mt5_stdout.log 2>&1 &
-echo "MT5 starting... waiting 120 sec"
-sleep 120
+echo "MT5 starting... waiting 90 sec"
+sleep 90
 
 # ============================================
-# STEP 6: Check results
+# STEP 5: Results
 # ============================================
-echo "--- STEP 6: Results ---"
+echo "--- STEP 5: Results ---"
 
 echo "Network:"
 ss -tnp | grep "wineserver" | head -3
 echo ""
 
-echo "Terminal log (last 20 lines):"
+echo "Terminal log (last entries):"
 TERM_LOG=$(ls -t "${MT5_BASE}/logs/"*.log 2>/dev/null | head -1)
-[ -f "$TERM_LOG" ] && iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | tail -20
+[ -f "$TERM_LOG" ] && iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | grep -i "expert\|started\|synchronized\|error\|failed" | tail -10
 echo ""
 
 echo "EA Log:"
-EA_LOG=$(ls -t "${MT5_BASE}/MQL5/Logs/"*.log 2>/dev/null | grep -v ".old" | head -1)
+EA_LOG="${MT5_BASE}/MQL5/Logs/20260305.log"
 if [ -f "$EA_LOG" ]; then
     SIZE=$(stat -c%s "$EA_LOG")
-    echo "Found: $EA_LOG ($SIZE bytes)"
+    echo "FOUND: $EA_LOG ($SIZE bytes)"
     iconv -f UTF-16LE -t UTF-8 "$EA_LOG" 2>/dev/null | head -30
 else
-    echo "NO EA LOG FILE"
+    echo "NO log for today. Available:"
+    ls -la "${MT5_BASE}/MQL5/Logs/" | grep -v ".old"
 fi
 echo ""
 
-echo "Relay:"
-pgrep -f "telegram_relay" > /dev/null && echo "Running" || { nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &; sleep 2; echo "Restarted"; }
+# Restart relay if needed
+pgrep -f "telegram_relay" > /dev/null || { nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 & }
+echo "Relay: $(pgrep -c -f telegram_relay 2>/dev/null) processes"
 echo ""
 
 echo "=== DONE - $(date) ==="
