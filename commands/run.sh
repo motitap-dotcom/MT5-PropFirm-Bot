@@ -1,208 +1,114 @@
 #!/bin/bash
-# Fix chart file encoding (UTF-16LE) + restart MT5
-echo "=== FIX ENCODING $(date) ==="
+# Deep debug: check display, MT5 process state, logs everywhere
+echo "=== DEEP DEBUG $(date) ==="
 
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+
+# 1. Check Xvfb display
+echo "=== DISPLAY ==="
+pgrep -fa Xvfb
+pgrep -fa x11vnc
+echo "DISPLAY=$DISPLAY"
+export DISPLAY=:99
+
+# 2. Check if wine can run anything
+echo ""
+echo "=== WINE TEST ==="
+WINEPREFIX=/root/.wine wine64 cmd /c "echo Wine works" 2>&1 | head -5
+
+# 3. Check MT5 process and its stdout/stderr
+echo ""
+echo "=== MT5 PROCESS DETAILS ==="
+pgrep -fa terminal64
+# Check if terminal is actually responsive
+ls -la /proc/$(pgrep -f "terminal64.exe /portable" | head -1)/fd 2>/dev/null | head -5
+
+# 4. Check ALL log locations
+echo ""
+echo "=== ALL LOG LOCATIONS ==="
+echo "--- MT5/Logs/ ---"
+ls -la "$MT5/Logs/" 2>/dev/null
+echo "--- MT5/MQL5/Logs/ ---"
+ls -la "$MT5/MQL5/Logs/" 2>/dev/null | tail -5
+echo "--- Wine user Logs ---"
+find /root/.wine -name "*.log" -newer "$MT5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5" 2>/dev/null | head -10
+
+# 5. Try to find MT5 crash/error output
+echo ""
+echo "=== WINE OUTPUT ==="
+# Check journalctl for wine errors
+journalctl --since "10 min ago" 2>/dev/null | grep -i "wine\|mt5\|terminal\|error\|crash" | tail -10
+
+# 6. Try restarting Xvfb and x11vnc if not running
+echo ""
+echo "=== FIXING DISPLAY ==="
+if ! pgrep -f Xvfb > /dev/null; then
+    echo "Xvfb NOT running! Starting..."
+    Xvfb :99 -screen 0 1280x1024x24 &
+    sleep 2
+fi
+if ! pgrep -f x11vnc > /dev/null; then
+    echo "x11vnc NOT running! Starting..."
+    x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw 2>/dev/null
+    sleep 1
+fi
+
+# 7. Kill old MT5 and restart properly
+echo ""
+echo "=== RESTARTING MT5 WITH OUTPUT ==="
+pkill -9 -f terminal64 2>/dev/null
+sleep 3
+
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
-
-# 1. Stop MT5
-echo "=== STOPPING MT5 ==="
-pkill -f terminal64 2>/dev/null
-sleep 3
-pkill -9 -f terminal64 2>/dev/null
-sleep 2
-
-# 2. Create proper UTF-16LE chart file using Python
-echo "=== CREATING PROPER CHART FILE ==="
-CHART_DIR="$MT5/MQL5/Profiles/Charts/Default"
-
-python3 << 'PYEOF'
-import codecs
-
-# Read the Euro template (it's UTF-16LE with BOM)
-template_path = "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart01.chr"
-
-try:
-    with open(template_path, 'rb') as f:
-        raw = f.read()
-    # Detect BOM
-    if raw[:2] == b'\xff\xfe':
-        content = raw[2:].decode('utf-16-le')
-    else:
-        content = raw.decode('utf-16-le')
-    print(f"Read template: {len(content)} chars")
-except Exception as e:
-    print(f"Error reading template: {e}")
-    # Fallback: create from scratch
-    content = ""
-
-# Build EA section
-ea_section = """<expert>
-name=PropFirmBot\\PropFirmBot
-path=PropFirmBot\\PropFirmBot.ex5
-flags=343
-window_num=0
-<inputs>
-InpTradeEURUSD=true
-InpTradeGBPUSD=true
-InpTradeUSDJPY=true
-InpTradeXAUUSD=true
-InpRiskPercent=0.5
-InpMaxRiskPercent=0.75
-InpMinRiskPercent=0.25
-InpMaxPositions=3
-InpMaxDailyTrades=8
-InpMaxConsecutiveLosses=5
-InpMinRR=1.5
-InpMaxSpreadMajor=3.5
-InpMaxSpreadXAU=7.0
-InpNewsBefore=15
-InpNewsAfter=15
-InpTrailingActivation=15.0
-InpTrailingDistance=10.0
-InpBEActivation=10.0
-InpBEOffset=2.0
-InpAccountPhase=PHASE_FUNDED
-InpAccountSize=2000
-InpMaxDailyDD=0
-InpMaxTotalDD=6.0
-InpTelegramToken=8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g
-InpTelegramChatID=7013213983
-InpOBLookback=30
-InpFVGMinPoints=30.0
-</inputs>
-</expert>
-"""
-
-if content:
-    # Modify the template
-    import re
-    # Remove existing expert section if any
-    content = re.sub(r'<expert>.*?</expert>\r?\n?', '', content, flags=re.DOTALL)
-    # Change symbol to EURUSD
-    content = re.sub(r'^symbol=.*$', 'symbol=EURUSD', content, flags=re.MULTILINE)
-    # Change period to M15
-    content = re.sub(r'^period_type=.*$', 'period_type=0', content, flags=re.MULTILINE)
-    content = re.sub(r'^period_size=.*$', 'period_size=15', content, flags=re.MULTILINE)
-    # Insert EA before first <window>
-    content = content.replace('<window>', ea_section + '<window>', 1)
-else:
-    # Create minimal chart from scratch
-    content = """<chart>
-id=0
-symbol=EURUSD
-period_type=0
-period_size=15
-digits=5
-tick_size=0.000000
-position_time=0
-scale_fix=0
-scale=4
-mode=1
-fore=0
-grid=1
-volume=0
-scroll=1
-shift=1
-shift_size=20.000000
-fixed_pos=0.000000
-ohlc=0
-bidline=1
-askline=0
-lastline=0
-days=0
-descriptions=0
-window_type=1
-background_color=0
-foreground_color=16777215
-barup_color=65280
-bardown_color=65280
-bullcandle_color=0
-bearcandle_color=16777215
-chartline_color=65280
-volumes_color=3329330
-grid_color=10061943
-bidline_color=10061943
-askline_color=255
-lastline_color=49152
-stops_color=255
-""" + ea_section + """<window>
-height=100
-
-<indicator>
-name=Main
-path=
-apply=1
-show_data=1
-scale_inherit=0
-scale_line=0
-scale_line_percent=50
-scale_line_value=0.000000
-scale_fix_min=0
-scale_fix_min_val=0.000000
-scale_fix_max=0
-scale_fix_max_val=0.000000
-expertmode=0
-fixed_height=-1
-
-</indicator>
-</window>
-</chart>
-"""
-
-# Write as UTF-16LE with BOM
-output_path = "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr"
-with open(output_path, 'wb') as f:
-    f.write(b'\xff\xfe')  # UTF-16LE BOM
-    f.write(content.encode('utf-16-le'))
-
-print(f"Written chart file: {len(content)} chars")
-# Verify
-with open(output_path, 'rb') as f:
-    data = f.read()
-print(f"File size: {len(data)} bytes")
-# Check if PropFirmBot is in the file
-if b'P\x00r\x00o\x00p\x00F\x00i\x00r\x00m\x00' in data:
-    print("PropFirmBot found in chart file!")
-else:
-    print("WARNING: PropFirmBot NOT found in chart file!")
-PYEOF
-
-echo ""
-echo "=== CHART FILE CHECK ==="
-ls -la "$CHART_DIR/chart01.chr"
-# Verify by reading back as UTF-16
-python3 -c "
-f=open('/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr','rb')
-data=f.read()
-text=data[2:].decode('utf-16-le')
-for line in text.split('\n'):
-    line=line.strip()
-    if 'PropFirmBot' in line or 'XAUUSD' in line or 'symbol=' in line or 'period_size=' in line:
-        print(line)
-f.close()
-"
-
-# 3. Start MT5
-echo ""
-echo "=== STARTING MT5 ==="
 cd "$MT5"
-nohup wine64 terminal64.exe /portable > /dev/null 2>&1 &
-echo "Started (PID: $!)"
-echo "Waiting 90 seconds..."
-sleep 90
+# Capture wine output this time
+wine64 terminal64.exe /portable > /tmp/mt5_stdout.txt 2>&1 &
+MT5_PID=$!
+echo "Started MT5 PID: $MT5_PID"
 
-# 4. Check EA logs for NEW entries
+# Wait and check output
+sleep 30
 echo ""
-echo "=== EA LOG ==="
+echo "=== MT5 WINE OUTPUT (first 30s) ==="
+cat /tmp/mt5_stdout.txt 2>/dev/null | head -20
+
+# Is it still running?
+if kill -0 $MT5_PID 2>/dev/null; then
+    echo "MT5 still running (PID: $MT5_PID)"
+else
+    echo "MT5 CRASHED! Exit code: $?"
+fi
+
+# Wait more
+sleep 60
+echo ""
+echo "=== EA LOG AFTER 90s ==="
 EALOGDIR="$MT5/MQL5/Logs"
 LATEST=$(ls -t "$EALOGDIR/"*.log 2>/dev/null | head -1)
 if [ -n "$LATEST" ]; then
-    SIZE=$(stat -c%s "$LATEST" 2>/dev/null)
+    NEWSIZE=$(stat -c%s "$LATEST" 2>/dev/null)
+    echo "Log: $LATEST ($NEWSIZE bytes)"
+    # Compare with old size (102898)
+    if [ "$NEWSIZE" -gt 102898 ]; then
+        echo "NEW LOG ENTRIES DETECTED!"
+    else
+        echo "NO new entries (still $NEWSIZE bytes)"
+    fi
+    iconv -f UTF-16LE -t UTF-8 "$LATEST" 2>/dev/null | tail -20
+fi
+
+# Check main log again
+echo ""
+echo "=== MT5 MAIN LOG ==="
+ls -la "$MT5/Logs/" 2>/dev/null
+LATEST=$(ls -t "$MT5/Logs/"*.log 2>/dev/null | head -1)
+if [ -n "$LATEST" ]; then
+    SIZE=$(stat -c%s "$LATEST")
     echo "File: $LATEST ($SIZE bytes)"
-    # Show last 40 lines - look for new timestamps
-    iconv -f UTF-16LE -t UTF-8 "$LATEST" 2>/dev/null | tail -40
+    iconv -f UTF-16LE -t UTF-8 "$LATEST" 2>/dev/null | tail -20
+else
+    echo "NO main log files found!"
 fi
 
 echo ""
