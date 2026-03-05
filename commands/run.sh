@@ -1,40 +1,29 @@
 #!/bin/bash
-# Fast deploy - no long waits
-echo "=== FAST DEPLOY $(date) ==="
+# Restart MT5 with new EA
+echo "=== RESTART MT5 $(date) ==="
 
-REPO="/root/MT5-PropFirm-Bot"
-EA="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"
-CFG="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot"
-
-# Pull latest
-cd "$REPO"
-git fetch origin claude/bot-server-connection-qmvC0 2>&1 | tail -3
-git checkout claude/bot-server-connection-qmvC0 2>/dev/null
-git reset --hard origin/claude/bot-server-connection-qmvC0 2>&1
-echo "Commit: $(git log --oneline -1)"
-
-# Copy EA files
-cp "$REPO/EA/"*.mq5 "$EA/" && echo "OK: MQ5 copied"
-cp "$REPO/EA/"*.mqh "$EA/" && echo "OK: MQH copied"
-cp "$REPO/configs/"*.json "$CFG/" && echo "OK: Configs copied"
-
-# Verify params
-echo ""
-echo "=== PARAMS CHECK ==="
-grep -E "InpMaxSpreadMajor|InpMinRR|InpTrailingActivation|InpTradeXAUUSD" "$EA/PropFirmBot.mq5" | head -6
-
-# Compile
-echo ""
-echo "=== COMPILE ==="
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
+
+# Kill MT5
+pkill -f terminal64 2>/dev/null
+sleep 4
+
+# Start MT5
 cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
-wine64 metaeditor64.exe /compile:"MQL5/Experts/PropFirmBot/PropFirmBot.mq5" /log:"compile.log" /inc:"MQL5" 2>/dev/null &
-CPID=$!
-sleep 8
-kill $CPID 2>/dev/null
-strings compile.log 2>/dev/null | grep -i "result\|error" | tail -2
-ls -la "$EA/PropFirmBot.ex5"
+wine64 terminal64.exe /portable &
+sleep 12
+
+# Check
+echo "Wine processes:"
+pgrep -a wine 2>/dev/null | head -5
+echo ""
+
+# Check latest log
+LOG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs"
+LATEST=$(ls -t "$LOG_DIR"/*.log 2>/dev/null | head -1)
+echo "Latest log: $(basename "$LATEST" 2>/dev/null)"
+tail -10 "$LATEST" 2>/dev/null
 
 echo ""
 echo "=== DONE $(date) ==="
