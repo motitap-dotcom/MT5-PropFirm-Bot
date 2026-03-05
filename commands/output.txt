@@ -1,26 +1,92 @@
 ============================================
-  Check & Install MT5 Status Daemon
-  2026-03-05 15:52:25 UTC
+  Install MT5 Status Daemon
+  2026-03-05 15:54:35 UTC
 ============================================
 
-=== [1] Pulling latest code ===
-fatal: couldn't find remote ref master
-fatal: 'origin/master' is not a commit and a branch 'master' cannot be created from it
+=== [1] Fetching daemon files ===
+From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
+ * branch            claude/add-trade-data-mt5-f2Bja -> FETCH_HEAD
+-rw-r--r-- 1 root root 1763 Mar  5 15:54 scripts/install_status_daemon.sh
+-rw-r--r-- 1 root root 6617 Mar  5 15:54 scripts/mt5_status_daemon.py
 
-=== [2] Daemon status ===
-fatal: couldn't find remote ref master
-Daemon not running - installing now...
-chmod: cannot access 'scripts/install_status_daemon.sh': No such file or directory
-bash: scripts/install_status_daemon.sh: No such file or directory
+=== [2] Installing daemon ===
+[1;33m[1/3] Creating systemd service...[0m
+[0;32m[OK][0m
+[1;33m[2/3] Enabling and starting service...[0m
+[0;32m[OK][0m
+[1;33m[3/3] Verifying...[0m
+[0;32m[OK] /var/bots/mt5_status.json created successfully[0m
 
-=== [3] /var/bots/mt5_status.json ===
+Content preview:
 {
-    "bot_name": "MT5 Bot",
-    "active": true,
-    "balance": null,
-    "last_trade": "2026-03-05T14:40:33Z",
-    "updated_at": "2026-03-05T15:52:09Z"
+    "updated_at": "2026-03-05 15:54:42",
+    "ea_connected": true,
+    "account": {
+        "balance": 1981.41,
+        "equity": 1981.41,
+        "floating_pnl": 0.0,
+        "margin": 0.0,
+        "free_margin": 1981.41
+    },
+    "guardian_state": "ACTIVE",
+    "daily_dd": 0.0,
+    "total_dd": 0.0,
+    "today": {
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "net": 0.0
+    },
+    "open_positions": {
+        "count": 0,
+        "trades": []
+    },
+    "last_closed": []
 }
 
-=== DONE 2026-03-05 15:52:26 UTC ===
+[0;32mDone![0m
+  Status: systemctl status mt5-status-daemon
+  Logs:   journalctl -u mt5-status-daemon -f
+  Output: cat /var/bots/mt5_status.json
+
+=== [3] Verification ===
+● mt5-status-daemon.service - MT5 Status JSON Daemon
+     Loaded: loaded (/etc/systemd/system/mt5-status-daemon.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2026-03-05 15:54:37 UTC; 12s ago
+   Main PID: 2299585 (python3)
+      Tasks: 1 (limit: 9483)
+     Memory: 5.0M (peak: 5.3M)
+        CPU: 47ms
+     CGroup: /system.slice/mt5-status-daemon.service
+             └─2299585 /usr/bin/python3 /root/MT5-PropFirm-Bot/scripts/mt5_status_daemon.py
+
+Mar 05 15:54:37 vmi3096165 systemd[1]: Started mt5-status-daemon.service - MT5 Status JSON Daemon.
+
+--- /var/bots/mt5_status.json ---
+{
+  "updated_at": "2026-03-05 15:54:47",
+  "ea_connected": true,
+  "account": {
+    "balance": 1981.41,
+    "equity": 1981.41,
+    "floating_pnl": 0.0,
+    "margin": 0.0,
+    "free_margin": 1981.41
+  },
+  "guardian_state": "ACTIVE",
+  "daily_dd": 0.0,
+  "total_dd": 0.0,
+  "today": {
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "net": 0.0
+  },
+  "open_positions": {
+    "count": 0,
+    "trades": []
+  },
+  "last_closed": []
+}
+=== DONE 2026-03-05 15:54:50 UTC ===
 EXIT_CODE=0
