@@ -1,9 +1,106 @@
-=== FIND XAUUSD SETTING Thu Mar  5 10:19:33 UTC 2026 ===
-=== ALL CHART FILES WITH PROPFIRMBOT ===
+=== FIX XAUUSD Thu Mar  5 10:22:22 UTC 2026 ===
+=== SEARCH: Any file with InpTradeXAUUSD ===
 
-=== PRESET FILES ===
+=== ALL .chr FILES ===
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart05.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart06.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart03.chr
 
-=== LAST USED INPUTS ===
+=== CHART PROFILE DIRS ===
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Scripts/Examples/Canvas/Charts
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Include/Charts
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Include/Canvas/Charts
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default
+/root/.wine/drive_c/Program Files/MetaTrader 5/Bases/Default
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default
+
+=== FILES MENTIONING PropFirmBot (config/chart only) ===
+FOUND: /root/.wine/drive_c/Program Files/MetaTrader 5/config/common.ini
+16:Expert=PropFirmBot\PropFirmBot
+---
+FOUND: /root/.wine/drive_c/Program Files/MetaTrader 5/config/startup.ini
+12:Expert=PropFirmBot\PropFirmBot
+---
+
+=== XAUUSD SYMBOL CHECK ===
+
+=== TERMINAL.INI ===
+Not found at /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.ini
+/root/.wine/drive_c/Program Files/MetaTrader 5/config/terminal.ini
+/root/.wine/drive_c/Program Files/MetaTrader 5/Config/terminal.ini
+
+=== PROFILES DIRECTORY LISTING ===
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/:
+total 20
+drwxr-xr-x  5 root root 4096 Feb 22 18:22 .
+drwxr-xr-x 10 root root 4096 Mar  5 09:56 ..
+drwxr-xr-x  6 root root 4096 Feb 22 18:22 Charts
+drwxr-xr-x  2 root root 4096 Feb 22 18:22 SymbolSets
+drwxr-xr-x  2 root root 4096 Feb 22 18:22 Templates
+
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts:
+total 24
+drwxr-xr-x 6 root root 4096 Feb 22 18:22 .
+drwxr-xr-x 5 root root 4096 Feb 22 18:22 ..
+drwxr-xr-x 2 root root 4096 Feb 22 18:22 British Pound
+drwxr-xr-x 2 root root 4096 Feb 22 18:22 Default
+drwxr-xr-x 2 root root 4096 Feb 22 18:22 Euro
+drwxr-xr-x 2 root root 4096 Feb 22 18:22 Market Overview
+
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound:
+total 44
+drwxr-xr-x 2 root root 4096 Feb 22 18:22 .
+drwxr-xr-x 6 root root 4096 Feb 22 18:22 ..
+-rw-r--r-- 1 root root 4434 Feb 22 18:22 chart01.chr
+-rw-r--r-- 1 root root 4432 Feb 22 18:22 chart02.chr
+-rw-r--r-- 1 root root 4432 Feb 22 18:22 chart03.chr
+-rw-r--r-- 1 root root 4434 Feb 22 18:22 chart04.chr
+-rw-r--r-- 1 root root  106 Feb 22 18:22 order.wnd
+
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default:
+total 28
+drwxr-xr-x 2 root root 4096 Feb 22 18:22 .
+drwxr-xr-x 6 root root 4096 Feb 22 18:22 ..
+-rw-r--r-- 1 root root 2766 Feb 22 18:22 chart01.chr
+-rw-r--r-- 1 root root 2766 Feb 22 18:22 chart02.chr
+-rw-r--r-- 1 root root 3174 Feb 22 18:22 chart03.chr
+-rw-r--r-- 1 root root 3050 Feb 22 18:22 chart04.chr
+-rw-r--r-- 1 root root  106 Feb 22 18:22 order.wnd
+
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro:
+total 44
+drwxr-xr-x 2 root root 4096 Feb 22 18:22 .
+drwxr-xr-x 6 root root 4096 Feb 22 18:22 ..
+-rw-r--r-- 1 root root 4434 Feb 22 18:22 chart01.chr
+-rw-r--r-- 1 root root 4432 Feb 22 18:22 chart02.chr
+-rw-r--r-- 1 root root 4432 Feb 22 18:22 chart03.chr
+-rw-r--r-- 1 root root 4434 Feb 22 18:22 chart04.chr
+-rw-r--r-- 1 root root  106 Feb 22 18:22 order.wnd
+
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview:
+total 32
+drwxr-xr-x 2 root root 4096 Feb 22 18:22 .
 
 === DONE ===
 EXIT_CODE=0
