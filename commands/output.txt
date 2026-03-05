@@ -1,15 +1,16 @@
-=== FIX #11 - Thu Mar  5 12:34:37 UTC 2026 ===
+=== FIX #12 - Thu Mar  5 12:39:22 UTC 2026 ===
 --- STEP 1: Kill MT5 ---
 Done
 
---- STEP 2: Write UTF-16LE chart ---
-BOM added
-Chart file info:
+--- STEP 2: Restore common.ini ---
+Restored with Environment key
+
+--- STEP 3: Check chart that MT5 saved when EA was working ---
+Default chart01.chr size/encoding:
 -rw-r--r-- 1 root root 2058 Mar  5 12:34 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr
 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr: Unicode text, UTF-16, little-endian text
 
---- STEP 3: Verify chart ---
-First 20 lines (converted back):
+Content (UTF-16 to UTF-8):
 ﻿<chart>
 id=1
 symbol=EURUSD
@@ -30,8 +31,30 @@ fore=0
 grid=0
 volume=0
 scroll=1
-...
-Expert section:
+shift=1
+shift_size=20.000000
+fixed_pos=0.000000
+ohlc=1
+bidline=1
+askline=0
+lastline=0
+days=0
+descriptions=0
+window_type=3
+background_color=0
+foreground_color=16777215
+barup_color=65280
+bardown_color=255
+bullcandle_color=65280
+bearcandle_color=255
+chartline_color=65280
+volumes_color=3329330
+grid_color=10061943
+bidline_color=10061943
+askline_color=255
+lastline_color=49152
+stops_color=255
+
 <expert>
 name=PropFirmBot\PropFirmBot
 path=PropFirmBot\PropFirmBot.ex5
@@ -44,37 +67,47 @@ expertmode=33
 height=100
 
 <indicator>
+name=Main
+path=
+apply=1
+show_data=1
 
 --- STEP 4: Start MT5 ---
-MT5 starting... waiting 90 sec
+MT5 starting... waiting 180 sec (3 minutes)
 --- STEP 5: Results ---
-Network:
-ESTAB      0      0       77.237.234.2:37069  18.168.91.222:443   users:(("main",pid=2249333,fd=19),("wineserver",pid=2249283,fd=326))
+Terminal log (all expert references):
+DM	0	09:53:34.537	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+GD	0	09:58:22.842	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+NE	0	10:06:23.708	Experts	expert PropFirmBot (EURUSD,M15) removed
+JQ	0	10:06:40.620	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+OS	0	10:15:35.346	Experts	expert PropFirmBot (EURUSD,M15) removed
+IG	0	10:15:39.287	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+QQ	0	10:15:49.851	Experts	expert PropFirmBot (EURUSD,M15) removed
+DD	0	10:15:49.881	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+KD	0	10:17:53.023	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+KH	0	11:07:47.385	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 
-Terminal log (last entries):
-OP	0	12:14:59.195	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
-KI	0	12:15:16.652	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-HQ	0	12:18:50.894	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
-MF	0	12:19:09.050	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-MR	0	12:25:09.631	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
-HF	0	12:25:27.270	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-OS	0	12:29:57.441	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
-LG	0	12:30:13.439	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-CS	0	12:34:52.338	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+Terminal log (last 10 lines):
+FG	0	12:35:06.647	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:30:11
 RD	0	12:35:07.958	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+DG	0	12:35:07.958	Network	'11797849': trading has been enabled - hedging mode
+EL	0	12:39:39.349	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+PG	0	12:39:39.355	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 5 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+FM	0	12:39:39.355	Terminal	C:\Program Files\MetaTrader 5
+HD	0	12:39:56.784	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
+ID	0	12:39:56.790	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:35:06
+QE	0	12:39:58.117	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+CF	0	12:39:58.117	Network	'11797849': trading has been enabled - hedging mode
 
 EA Log:
-NO log for today. Available:
-total 2824
-drwxr-xr-x  2 root root    4096 Mar  5 12:14 .
-drwxr-xr-x 14 root root    4096 Mar  5 10:59 ..
--rw-r--r--  1 root root 2127586 Feb 27 21:59 20260227.log
+NO EA LOG TODAY
 -rw-r--r--  1 root root   39122 Feb 28 18:34 20260228.log
 -rw-r--r--  1 root root    7826 Mar  1 15:37 20260301.log
 -rw-r--r--  1 root root  193416 Mar  3 23:53 20260303.log
 -rw-r--r--  1 root root  372652 Mar  4 23:49 20260304.log
+-rw-r--r--  1 root root  111980 Mar  5 11:17 20260305.log.old
 
-Relay: 1 processes
+Relay: running=1
 
-=== DONE - Thu Mar  5 12:36:13 UTC 2026 ===
+=== DONE - Thu Mar  5 12:42:27 UTC 2026 ===
 EXIT_CODE=0
