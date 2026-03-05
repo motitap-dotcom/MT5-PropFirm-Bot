@@ -1,98 +1,79 @@
-=== FIX DEPLOY Thu Mar  5 10:35:30 UTC 2026 ===
-=== STOPPING MT5 ===
-=== FIXING GIT ===
-From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
- * branch            claude/bot-server-connection-qmvC0 -> FETCH_HEAD
-HEAD is now at bab6807 Fix git pull on VPS + redeploy with XAUUSD code fix
-Git HEAD: bab6807 Fix git pull on VPS + redeploy with XAUUSD code fix
+=== DEBUG MT5 Thu Mar  5 10:38:47 UTC 2026 ===
+=== PROCESS ===
+2222588 start.exe /exec terminal64.exe
+2222645 C:\Program Files\MetaTrader 5\terminal64.exe /portable
 
-=== VERIFY CODE FIX ===
-74:input double   InpMaxSpreadXAU    = 7.0;        // Max Spread XAUUSD (pips)
-101:input bool     InpTradeXAUUSD     = true;       // Trade XAUUSD
-856:   // Always try to add all symbols (ignore input params - MT5 may persist old values)
-872:   if(SymbolSelect("XAUUSD", true))
-873:   { g_symbols[g_symbol_count] = "XAUUSD"; g_symbol_count++; }
-875:   { PrintFormat("[INIT] WARNING: XAUUSD not available - trying XAUUSDm...");
-876:     if(SymbolSelect("XAUUSDm", true))
-877:     { g_symbols[g_symbol_count] = "XAUUSDm"; g_symbol_count++; }
-879:     { PrintFormat("[INIT] WARNING: Neither XAUUSD nor XAUUSDm available on this broker"); }
+=== ALL LOG FILES ===
+2026-03-05+10:18:04.3319551220 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260305.log
+2026-03-04+23:49:33.3013177200 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260304.log
+2026-03-03+23:53:47.2862489950 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260303.log
+2026-03-01+15:37:14.0682232440 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260301.log
+2026-02-28+18:34:06.8960997000 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260228.log
 
-=== DEPLOYING ===
+=== NEWEST MT5 LOG ===
 
-=== COMPILING ===
-OK: PropFirmBot.ex5 = 164640 bytes
+=== NEWEST EA LOG ===
+stat: cannot statx '/root/.wine/drive_c/Program': No such file or directory
+File: /root/.wine/drive_c/Program ( bytes)
 
-=== CHART FILE ===
+=== CHART DIR CONTENTS ===
 total 16
 drwxr-xr-x 2 root root 4096 Mar  5 10:33 .
 drwxr-xr-x 6 root root 4096 Feb 22 18:29 ..
 -rw-r--r-- 1 root root  764 Mar  5 10:33 chart01.chr
 -rw-r--r-- 1 root root   61 Mar  5 10:33 order.wnd
+
+=== OUR CHART FILE ===
+<chart>
+id=0
+symbol=EURUSD
+period_type=0
+period_size=15
+digits=5
+<expert>
 name=PropFirmBot\PropFirmBot
+flags=343
+window_num=0
+<inputs>
+InpTradeEURUSD=true
+InpTradeGBPUSD=true
+InpTradeUSDJPY=true
 InpTradeXAUUSD=true
+InpRiskPercent=0.5
+InpMaxRiskPercent=0.75
+InpMinRiskPercent=0.25
+InpMaxPositions=3
+InpMaxDailyTrades=8
+InpMaxConsecutiveLosses=5
+InpMinRR=1.5
+InpMaxSpreadMajor=3.5
+InpMaxSpreadXAU=7.0
+InpNewsBefore=15
+InpNewsAfter=15
+InpTrailingActivation=15.0
+InpTrailingDistance=10.0
+InpBEActivation=10.0
+InpBEOffset=2.0
+InpAccountPhase=PHASE_FUNDED
+InpAccountSize=2000
+InpMaxDailyDD=0
+InpMaxTotalDD=6.0
+InpTelegramToken=8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g
+InpTelegramChatID=7013213983
+InpOBLookback=30
+InpFVGMinPoints=30.0
+</inputs>
+</expert>
+</chart>
 
-=== STARTING MT5 ===
-Started MT5 (PID: 2222588)
-Waiting 60 seconds...
+=== ANY NEW CHR FILES? ===
 
-=== EA LOGS (ALL entries) ===
-File: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260305.log (102898 bytes)
-PG	0	10:15:52.445	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-FO	0	10:15:52.445	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-FF	0	10:15:52.445	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-JN	0	10:15:52.445	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-EN	0	10:15:52.445	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
-GN	0	10:15:52.446	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.05 12:15 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
-DL	0	10:17:57.805	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=0.70
-DQ	0	10:17:57.807	PropFirmBot (EURUSD,M15)	==============================================
-KH	0	10:17:57.807	PropFirmBot (EURUSD,M15)	  PropFirmBot v3.0 - FULL TRADING SYSTEM
-HO	0	10:17:57.807	PropFirmBot (EURUSD,M15)	  ALL MODULES ACTIVE
-FG	0	10:17:57.807	PropFirmBot (EURUSD,M15)	==============================================
-OK	0	10:17:57.807	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
-IP	0	10:17:57.807	PropFirmBot (EURUSD,M15)	[INIT] Symbols (3): EURUSD, GBPUSD, USDJPY
-QM	0	10:17:57.807	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-JQ	0	10:17:57.807	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-OH	0	10:17:57.809	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-OE	0	10:17:57.809	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-RH	0	10:17:57.809	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-GM	0	10:17:57.809	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-MD	0	10:17:57.809	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-KO	0	10:17:57.809	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
-QF	0	10:17:57.809	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
-QO	0	10:17:57.809	PropFirmBot (EURUSD,M15)	Target: NO TARGET
-EK	0	10:17:57.809	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
-JN	0	10:17:57.895	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.05 12:17:57] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-NE	0	10:17:57.900	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260305.csv | Initial balance: $1981.41
-KG	0	10:17:57.901	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
-ND	0	10:17:57.901	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
-HI	0	10:17:57.901	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-FH	0	10:17:57.901	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-MR	0	10:17:57.901	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
-OM	0	10:17:58.153	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-QR	0	10:17:58.153	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY
-GD	0	10:17:58.153	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-KJ	0	10:17:58.154	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-MJ	0	10:17:58.154	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-PE	0	10:17:58.154	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-FM	0	10:17:58.154	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
-NH	0	10:17:58.154	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
-DI	0	10:17:58.154	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-RO	0	10:17:58.155	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-GD	0	10:17:58.155	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-JL	0	10:17:58.155	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-JI	0	10:17:58.155	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-JK	0	10:17:58.155	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-DR	0	10:17:58.155	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-LJ	0	10:17:58.155	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-DR	0	10:17:58.155	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-CJ	0	10:17:58.155	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
-KR	0	10:17:58.172	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.05 12:15 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
+=== WINE ERRORS ===
+[801063.154594] [1676245]     0 1676245   130010     1440      744      696         0   286720        0             0 winedevice.exe
+[801063.154607] [1676277]     0 1676277   186138     1894     1034      860         0   348160        0             0 winedevice.exe
+[801063.155935] [1758417]     0 1758417     4565     3745     3361      384         0    86016        0             0 wineserver
+[801063.155945] [1758427]     0 1758427   130010     1518      740      778         0   290816        0             0 winedevice.exe
+[801063.155967] [1758471]     0 1758471   186138     1937     1065      872         0   352256        0             0 winedevice.exe
 
-=== MT5 MAIN LOG ===
-
-=== PROCESS CHECK ===
-2222588 start.exe /exec terminal64.exe
-2222645 C:\Program Files\MetaTrader 5\terminal64.exe /portable
-
-=== DONE Thu Mar  5 10:37:01 UTC 2026 ===
+=== DONE ===
 EXIT_CODE=0
