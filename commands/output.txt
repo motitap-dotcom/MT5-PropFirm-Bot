@@ -1,45 +1,72 @@
-=== FIX ENCODING Thu Mar  5 10:44:59 UTC 2026 ===
-=== STOPPING MT5 ===
-=== CREATING PROPER CHART FILE ===
-Read template: 2216 chars
-Written chart file: 2936 chars
-File size: 5874 bytes
-PropFirmBot found in chart file!
+=== DEEP DEBUG Thu Mar  5 10:48:47 UTC 2026 ===
+=== DISPLAY ===
+346800 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
+346808 /usr/bin/x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -xkb
+DISPLAY=
 
-=== CHART FILE CHECK ===
--rw-r--r-- 1 root root 5874 Mar  5 10:45 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr
-symbol=EURUSD
-period_size=15
-name=PropFirmBot\PropFirmBot
-path=PropFirmBot\PropFirmBot.ex5
-InpTradeXAUUSD=true
+=== WINE TEST ===
+Wine works
 
-=== STARTING MT5 ===
-Started (PID: 2224968)
-Waiting 90 seconds...
+=== MT5 PROCESS DETAILS ===
+2224957 start.exe /exec terminal64.exe /login:11797849 /password:gazDE62##
+2225033 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
 
-=== EA LOG ===
-File: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260305.log (102898 bytes)
-FG	0	10:17:57.807	PropFirmBot (EURUSD,M15)	==============================================
-OK	0	10:17:57.807	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
-IP	0	10:17:57.807	PropFirmBot (EURUSD,M15)	[INIT] Symbols (3): EURUSD, GBPUSD, USDJPY
-QM	0	10:17:57.807	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-JQ	0	10:17:57.807	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-OH	0	10:17:57.809	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-OE	0	10:17:57.809	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-RH	0	10:17:57.809	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-GM	0	10:17:57.809	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-MD	0	10:17:57.809	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-KO	0	10:17:57.809	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
-QF	0	10:17:57.809	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
-QO	0	10:17:57.809	PropFirmBot (EURUSD,M15)	Target: NO TARGET
-EK	0	10:17:57.809	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (70%)
-JN	0	10:17:57.895	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.05 12:17:57] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-NE	0	10:17:57.900	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260305.csv | Initial balance: $1981.41
-KG	0	10:17:57.901	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
-ND	0	10:17:57.901	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 3
-HI	0	10:17:57.901	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-FH	0	10:17:57.901	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+=== ALL LOG LOCATIONS ===
+--- MT5/Logs/ ---
+--- MT5/MQL5/Logs/ ---
+-rw-r--r--  1 root root   39122 Feb 28 18:34 20260228.log
+-rw-r--r--  1 root root    7826 Mar  1 15:37 20260301.log
+-rw-r--r--  1 root root  193416 Mar  3 23:53 20260303.log
+-rw-r--r--  1 root root  372652 Mar  4 23:49 20260304.log
+-rw-r--r--  1 root root  102898 Mar  5 10:18 20260305.log
+--- Wine user Logs ---
+/root/.wine/drive_c/Program Files/MetaTrader 5/logs/metaeditor.log
+/root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260305.log
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.log
+
+=== WINE OUTPUT ===
+Mar 05 10:44:20 vmi3096165 x11vnc[346808]: 05/03/2026 10:44:20 webSocketsHandshake: unknown connection error
+Mar 05 10:44:22 vmi3096165 python3[1365193]: 2026-03-05 10:44:22,387 [WARNING] agent: Git pull failed: error: Pulling is not possible because you have unmerged files.
+Mar 05 10:45:01 vmi3096165 python3[1365193]: 2026-03-05 10:45:01,541 [WARNING] agent: Git pull failed: error: Pulling is not possible because you have unmerged files.
+Mar 05 10:45:01 vmi3096165 CRON[2224889]: (root) CMD (/root/MT5-PropFirm-Bot/scripts/watchdog.sh >> /var/log/watchdog.log 2>&1)
+Mar 05 10:45:31 vmi3096165 python3[1365193]: 2026-03-05 10:45:31,755 [WARNING] agent: Git pull failed: error: Pulling is not possible because you have unmerged files.
+Mar 05 10:46:09 vmi3096165 python3[1365193]: 2026-03-05 10:46:09,851 [WARNING] agent: Git pull failed: error: Pulling is not possible because you have unmerged files.
+Mar 05 10:46:39 vmi3096165 python3[1365193]: 2026-03-05 10:46:39,941 [WARNING] agent: Git pull failed: error: Pulling is not possible because you have unmerged files.
+Mar 05 10:47:18 vmi3096165 python3[1365193]: 2026-03-05 10:47:18,315 [WARNING] agent: Git pull failed: error: Pulling is not possible because you have unmerged files.
+Mar 05 10:47:48 vmi3096165 python3[1365193]: 2026-03-05 10:47:48,488 [WARNING] agent: Git pull failed: error: Pulling is not possible because you have unmerged files.
+Mar 05 10:48:27 vmi3096165 python3[1365193]: 2026-03-05 10:48:27,036 [WARNING] agent: Git pull failed: error: Pulling is not possible because you have unmerged files.
+
+=== FIXING DISPLAY ===
+
+=== RESTARTING MT5 WITH OUTPUT ===
+Started MT5 PID: 2225927
+
+=== MT5 WINE OUTPUT (first 30s) ===
+01c0:fixme:uxtheme:SetPreferredAppMode 0: stub
+01c0:fixme:ntdll:NtQuerySystemInformation info_class SYSTEM_PERFORMANCE_INFORMATION
+01dc:fixme:kernelbase:AppPolicyGetThreadInitializationType FFFFFFFFFFFFFFFA, 0000000001A9FF50
+01dc:fixme:iphlpapi:SendARP (DestIP 0x01e8ed4d, SrcIP 0x00000000, pMacAddr 0000000001A99D08, PhyAddrLen 0000000001A99D00): stub
+01c0:fixme:uxtheme:SetPreferredAppMode 0: stub
+01c0:fixme:msg:ChangeWindowMessageFilter 323 00000001
+01c0:fixme:msg:ChangeWindowMessageFilter 326 00000001
+01f8:fixme:uxtheme:SetPreferredAppMode 0: stub
+0204:fixme:kernelbase:AppPolicyGetThreadInitializationType FFFFFFFFFFFFFFFA, 0000000009C7FF50
+01c0:fixme:dwmapi:DwmSetWindowAttribute (00000000000203A6, 14, 000000000031C450, 4) stub
+01c0:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31b640
+01c0:err:toolbar:ToolbarWindowProc unknown msg 0466, wp 0, lp 31b640
+01c0:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31b090
+01c0:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31b090
+01c0:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31b090
+01c0:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31b090
+01c0:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31b090
+01c0:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31b090
+01c0:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31b090
+01c0:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31b090
+MT5 still running (PID: 2225927)
+
+=== EA LOG AFTER 90s ===
+Log: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260305.log (102898 bytes)
+NO new entries (still 102898 bytes)
 MR	0	10:17:57.901	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
 OM	0	10:17:58.153	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
 QR	0	10:17:58.153	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY
@@ -61,5 +88,8 @@ DR	0	10:17:58.155	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DO
 CJ	0	10:17:58.155	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
 KR	0	10:17:58.172	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.05 12:15 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
 
-=== DONE Thu Mar  5 10:46:35 UTC 2026 ===
+=== MT5 MAIN LOG ===
+NO main log files found!
+
+=== DONE Thu Mar  5 10:50:23 UTC 2026 ===
 EXIT_CODE=0
