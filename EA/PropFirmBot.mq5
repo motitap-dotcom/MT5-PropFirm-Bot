@@ -58,25 +58,25 @@ input int      InpEMAFast         = 9;          // EMA Fast Period
 input int      InpEMASlow         = 21;         // EMA Slow Period
 input int      InpRSIPeriod       = 14;         // RSI Period
 input int      InpATRPeriod       = 14;         // ATR Period
-input int      InpOBLookback      = 20;         // Order Block Lookback
-input double   InpFVGMinPoints    = 50.0;       // Min FVG Size (points)
+input int      InpOBLookback      = 30;         // Order Block Lookback
+input double   InpFVGMinPoints    = 20.0;       // Min FVG Size (points)
 
 // --- Risk Management ---
-input double   InpRiskPercent     = 0.5;        // Risk Per Trade (%)
-input double   InpMaxRiskPercent  = 0.75;       // Max Risk Per Trade (%)
-input int      InpMaxPositions    = 2;          // Max Open Positions
-input double   InpMinRR           = 2.0;        // Min Risk:Reward
-input int      InpMaxDailyTrades  = 8;          // Max Trades Per Day
+input double   InpRiskPercent     = 0.75;       // Risk Per Trade (%)
+input double   InpMaxRiskPercent  = 1.0;        // Max Risk Per Trade (%)
+input int      InpMaxPositions    = 3;          // Max Open Positions
+input double   InpMinRR           = 1.5;        // Min Risk:Reward
+input int      InpMaxDailyTrades  = 12;         // Max Trades Per Day
 input int      InpMaxConsecLosses = 5;          // Max Consecutive Losses
 
 // --- Spread Filter ---
-input double   InpMaxSpreadMajor  = 2.5;        // Max Spread Major (pips)
-input double   InpMaxSpreadXAU    = 4.0;        // Max Spread XAUUSD (pips)
+input double   InpMaxSpreadMajor  = 3.5;        // Max Spread Major (pips)
+input double   InpMaxSpreadXAU    = 5.0;        // Max Spread XAUUSD (pips)
 
 // --- News Filter ---
 input bool     InpNewsFilterOn    = true;        // News Filter Enabled
-input int      InpNewsBefore      = 30;          // News: Minutes Before
-input int      InpNewsAfter       = 30;          // News: Minutes After
+input int      InpNewsBefore      = 15;          // News: Minutes Before
+input int      InpNewsAfter       = 15;          // News: Minutes After
 input bool     InpNewsHighImpact  = true;        // News: Filter High Impact
 input bool     InpNewsMedImpact   = false;       // News: Filter Medium Impact
 
@@ -91,7 +91,7 @@ input double   InpTrailingActivation = 30.0;    // Trailing Activation (pips)
 input double   InpTrailingDistance   = 20.0;     // Trailing Distance (pips)
 input double   InpBEActivation      = 20.0;     // Breakeven Activation (pips)
 input double   InpBEOffset          = 2.0;       // Breakeven Offset (pips)
-input int      InpMinBarGap         = 2;         // Min Bars Between Trades
+input int      InpMinBarGap         = 1;         // Min Bars Between Trades
 input int      InpSlippage          = 20;        // Max Slippage (points)
 
 // --- Symbols ---
@@ -552,8 +552,8 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
       if(lot < min_lot) lot = min_lot;
    }
 
-   // ACCOUNT PHASE: Apply phase risk multiplier
-   lot = lot * g_account.GetRiskMultiplier();
+   // NOTE: Phase risk multiplier already applied during g_risk.Init()
+   // Do NOT apply again here to avoid double-penalty
    {
       double min_lot = SymbolInfoDouble(symbol, SYMBOL_VOLUME_MIN);
       double lot_step = SymbolInfoDouble(symbol, SYMBOL_VOLUME_STEP);

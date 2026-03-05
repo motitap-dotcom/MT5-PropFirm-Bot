@@ -235,12 +235,20 @@ int CSignalEngine::GetHTFBias()
    ArraySetAsSeries(close_h4, true);
    if(CopyClose(m_symbol, m_tf_htf, 0, 3, close_h4) < 3) return 0;
 
-   // Bullish: price above EMA50, EMA50 above EMA200
+   // Strong Bullish: price above EMA50, EMA50 above EMA200
    if(close_h4[0] > m_ema_h4_50[0] && m_ema_h4_50[0] > m_ema_h4_200[0])
       return 1;
 
-   // Bearish: price below EMA50, EMA50 below EMA200
+   // Strong Bearish: price below EMA50, EMA50 below EMA200
    if(close_h4[0] < m_ema_h4_50[0] && m_ema_h4_50[0] < m_ema_h4_200[0])
+      return -1;
+
+   // Weak Bullish: price above both EMAs (even if EMA50 < EMA200, early trend)
+   if(close_h4[0] > m_ema_h4_50[0] && close_h4[0] > m_ema_h4_200[0])
+      return 1;
+
+   // Weak Bearish: price below both EMAs
+   if(close_h4[0] < m_ema_h4_50[0] && close_h4[0] < m_ema_h4_200[0])
       return -1;
 
    return 0;
@@ -274,16 +282,16 @@ bool CSignalEngine::DetectBullishOrderBlock(int shift, double &ob_high, double &
       double atr_val = m_atr[i];
       if(atr_val <= 0) continue;
 
-      // Strong move = at least 1.5x ATR
-      if(bullish_move < atr_val * 1.5) continue;
+      // Strong move = at least 1.0x ATR
+      if(bullish_move < atr_val * 1.0) continue;
 
       // The OB zone is the body of the bearish candle
       ob_high = MathMax(rates[i].open, rates[i].close);
       ob_low  = MathMin(rates[i].open, rates[i].close);
 
-      // Check if current price is near the OB zone (within or just above)
+      // Check if current price is near the OB zone (within or approaching)
       double ask = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
-      if(ask >= ob_low && ask <= ob_high + (atr_val * 0.3))
+      if(ask >= ob_low - (atr_val * 0.3) && ask <= ob_high + (atr_val * 0.8))
          return true;
    }
 
@@ -316,13 +324,13 @@ bool CSignalEngine::DetectBearishOrderBlock(int shift, double &ob_high, double &
       double atr_val = m_atr[i];
       if(atr_val <= 0) continue;
 
-      if(bearish_move < atr_val * 1.5) continue;
+      if(bearish_move < atr_val * 1.0) continue;
 
       ob_high = MathMax(rates[i].open, rates[i].close);
       ob_low  = MathMin(rates[i].open, rates[i].close);
 
       double bid = SymbolInfoDouble(m_symbol, SYMBOL_BID);
-      if(bid <= ob_high && bid >= ob_low - (atr_val * 0.3))
+      if(bid <= ob_high + (atr_val * 0.3) && bid >= ob_low - (atr_val * 0.8))
          return true;
    }
 
@@ -566,8 +574,8 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
    // EMA 9 crossed below EMA 21
    bool cross_down = (m_ema_fast[1] >= m_ema_slow[1]) && (m_ema_fast[0] < m_ema_slow[0]);
 
-   // BUY: EMA cross up + RSI not overbought + bullish or neutral HTF
-   if(cross_up && m_rsi[0] < m_rsi_overbought && m_rsi[0] > m_rsi_oversold && htf_bias >= 0)
+   // BUY: EMA cross up + RSI not overbought (HTF bias is optional for fallback)
+   if(cross_up && m_rsi[0] < m_rsi_overbought && m_rsi[0] > m_rsi_oversold && htf_bias >= -1)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
       sl_price = entry - (atr * 1.5);
@@ -579,8 +587,8 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
       return SIGNAL_BUY;
    }
 
-   // SELL: EMA cross down + RSI not oversold + bearish or neutral HTF
-   if(cross_down && m_rsi[0] > m_rsi_oversold && m_rsi[0] < m_rsi_overbought && htf_bias <= 0)
+   // SELL: EMA cross down + RSI not oversold (HTF bias is optional for fallback)
+   if(cross_down && m_rsi[0] > m_rsi_oversold && m_rsi[0] < m_rsi_overbought && htf_bias <= 1)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_BID);
       sl_price = entry + (atr * 1.5);
