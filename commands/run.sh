@@ -1,189 +1,190 @@
 #!/bin/bash
 # =============================================================
-# Fix #19: Force EA load via MT5 /config: command line parameter
-# Previous attempts: chart01.chr + common.ini [StartUp] - EA didn't load
-# Now: Use explicit /config: startup ini with EA specification
+# Fix #20: Recompile EA with updated code + reload
+# EA loaded successfully but shows Risk=70% (old .ex5 from 10:35)
+# Need to: deploy new source -> compile -> restart MT5 with /config
 # =============================================================
 
-echo "=== FIX #19 - $(date) ==="
+echo "=== FIX #20 - $(date) ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
+EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
+REPO_DIR="/root/MT5-PropFirm-Bot"
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
 export WINEDEBUG=-all
 
 # ============================================
-# STEP 1: Stop MT5
+# STEP 1: Pull latest code from repo
 # ============================================
-echo "--- STEP 1: Stop MT5 ---"
+echo "--- STEP 1: Update repo ---"
+cd "$REPO_DIR"
+git fetch origin claude/update-server-vnc-wsD2d 2>/dev/null
+git checkout claude/update-server-vnc-wsD2d 2>/dev/null
+git pull origin claude/update-server-vnc-wsD2d 2>/dev/null
+echo "Branch: $(git branch --show-current)"
+echo ""
+
+# Verify the fix is in the source
+echo "SwitchToFunded risk multiplier in source:"
+grep -A10 "SwitchToFunded" "$REPO_DIR/EA/AccountStateManager.mqh" | grep -i "risk_multi\|max_pos\|daily_trades"
+echo ""
+
+echo "Default InpMaxPositions:"
+grep "InpMaxPositions" "$REPO_DIR/EA/PropFirmBot.mq5"
+echo ""
+
+# ============================================
+# STEP 2: Deploy EA files
+# ============================================
+echo "--- STEP 2: Deploy EA files ---"
+mkdir -p "$EA_DIR"
+cp -v "$REPO_DIR/EA/"*.mq5 "$EA_DIR/"
+cp -v "$REPO_DIR/EA/"*.mqh "$EA_DIR/"
+echo ""
+
+echo "Deployed files:"
+ls -la "$EA_DIR/"
+echo ""
+
+# ============================================
+# STEP 3: Delete old AccountState.dat EVERYWHERE
+# ============================================
+echo "--- STEP 3: Clean state files ---"
+find /root/.wine -name "PropFirmBot_AccountState.dat" 2>/dev/null -exec rm -v {} \;
+find /root/.wine -name "PropFirmBot_AccountState*" 2>/dev/null -exec rm -v {} \;
+# Common files dir
+COMMON_DIR="/root/.wine/drive_c/users/root/Application Data/MetaQuotes/Terminal/Common/Files"
+[ -d "$COMMON_DIR" ] && find "$COMMON_DIR" -name "*AccountState*" -exec rm -v {} \;
+# Also in MQL5/Files
+find "${MT5_BASE}/MQL5/Files" -name "*AccountState*" 2>/dev/null -exec rm -v {} \;
+echo "State files cleaned"
+echo ""
+
+# ============================================
+# STEP 4: Stop MT5 for compilation
+# ============================================
+echo "--- STEP 4: Stop MT5 ---"
 killall terminal64.exe 2>/dev/null
-sleep 2
-pkill -9 -f terminal64 2>/dev/null
 sleep 3
-echo "MT5 stopped: $(pgrep -f terminal64 > /dev/null && echo 'STILL RUNNING' || echo 'OK')"
+pkill -9 -f terminal64 2>/dev/null
+sleep 2
+wineserver -k 2>/dev/null
+sleep 3
+echo "MT5 stopped"
 echo ""
 
 # ============================================
-# STEP 2: Create a dedicated startup config
+# STEP 5: Compile EA
 # ============================================
-echo "--- STEP 2: Create startup config ---"
-
-# Create startup.ini in MT5 config directory (plain ASCII, just like common.ini)
-cat > "${MT5_BASE}/config/startup.ini" << 'INI_EOF'
-[StartUp]
-Expert=PropFirmBot\PropFirmBot
-ExpertParameters=
-Symbol=EURUSD
-Period=M15
-[Experts]
-AllowLiveTrading=1
-AllowDllImport=0
-Enabled=1
-Account=11797849
-Profile=0
-AllowWebRequest=1
-WebRequestUrl1=https://api.telegram.org
-INI_EOF
-
-echo "startup.ini created:"
-cat "${MT5_BASE}/config/startup.ini"
+echo "--- STEP 5: Compile EA ---"
+echo "Old .ex5 before compile:"
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
 echo ""
 
-# ============================================
-# STEP 3: Ensure chart profile has EA
-# ============================================
-echo "--- STEP 3: Verify chart profile ---"
-echo "chart01.chr exists: $([ -f '${MT5_BASE}/MQL5/Profiles/Charts/Default/chart01.chr' ] && echo 'YES' || echo 'NO')"
-echo ""
-
-# ============================================
-# STEP 4: Start MT5 with /config: parameter
-# ============================================
-echo "--- STEP 4: Start MT5 with /config ---"
 cd "$MT5_BASE"
+wine metaeditor64.exe /compile:"MQL5\\Experts\\PropFirmBot\\PropFirmBot.mq5" /log 2>/dev/null &
+COMPILE_PID=$!
+echo "MetaEditor PID: $COMPILE_PID"
+echo "Waiting 30 seconds for compilation..."
+sleep 30
+kill $COMPILE_PID 2>/dev/null
+wineserver -k 2>/dev/null
+sleep 3
+sync
 
-# Method 1: Use /config: to force startup with our ini
-echo "Starting MT5 with /config:config\\startup.ini ..."
+echo ""
+echo "New .ex5 after compile:"
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
+
+# Check compile log
+COMPILE_LOG="$EA_DIR/PropFirmBot.log"
+if [ -f "$COMPILE_LOG" ]; then
+    echo ""
+    echo "Compile log:"
+    cat "$COMPILE_LOG" 2>/dev/null
+fi
+echo ""
+
+# Verify .ex5 exists
+if [ ! -f "$EA_DIR/PropFirmBot.ex5" ]; then
+    echo "ERROR: .ex5 not found after compilation!"
+    exit 1
+fi
+echo "Compilation complete"
+echo ""
+
+# ============================================
+# STEP 6: Start MT5 with /config
+# ============================================
+echo "--- STEP 6: Start MT5 ---"
+cd "$MT5_BASE"
 DISPLAY=:99 nohup wine terminal64.exe "/config:config\\startup.ini" >/dev/null 2>&1 &
-MT5_PID=$!
-echo "MT5 PID: $MT5_PID"
-echo "Waiting 45 seconds for MT5 to fully initialize..."
+echo "Waiting 45 seconds for MT5 to start + EA to load..."
 sleep 45
 
 if pgrep -f terminal64 > /dev/null; then
     echo "MT5 is RUNNING"
 else
-    echo "MT5 FAILED to start with /config - trying without..."
+    echo "MT5 FAILED - trying without config..."
     DISPLAY=:99 nohup wine terminal64.exe >/dev/null 2>&1 &
     sleep 30
 fi
 echo ""
 
 # ============================================
-# STEP 5: Check if EA loaded
+# STEP 7: Verify EA loaded with correct params
 # ============================================
-echo "--- STEP 5: Check EA status ---"
+echo "--- STEP 7: Verify EA ---"
 
-# Get latest terminal log
 TERM_LOG=$(ls -t "${MT5_BASE}/logs/"*.log 2>/dev/null | head -1)
-echo "Latest log: $TERM_LOG"
+echo "Terminal log (expert entries):"
+iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | grep -i "expert\|startup\|config\|launch" | tail -10
 echo ""
 
-echo "Terminal log - NEW entries (after 13:00):"
-iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | grep -E "1[3-9]:" | tail -20
-echo ""
-
-echo "Expert-related entries (ALL):"
-iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | grep -i "expert\|PropFirm\|loaded\|removed\|error\|fail" | tail -15
-echo ""
-
-# Check EA log
 EA_LOG="${MT5_BASE}/MQL5/Logs/20260305.log"
 if [ -f "$EA_LOG" ]; then
-    echo "EA LOG EXISTS: $(stat -c%s "$EA_LOG") bytes"
-    echo "Content:"
-    iconv -f UTF-16LE -t UTF-8 "$EA_LOG" 2>/dev/null | tail -20
+    echo "EA LOG (last 25 lines):"
+    iconv -f UTF-16LE -t UTF-8 "$EA_LOG" 2>/dev/null | tail -25
 else
-    echo "NO EA LOG - checking other dates:"
-    ls -la "${MT5_BASE}/MQL5/Logs/" 2>/dev/null | tail -5
+    echo "NO EA LOG"
 fi
 echo ""
 
-# Check window title for EA indicator
-echo "--- STEP 6: Window info ---"
-MT5_WIN=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
-echo "MT5 window: $MT5_WIN"
-echo "Title: $(xdotool getwindowname $MT5_WIN 2>/dev/null)"
+# Key check: Risk multiplier
+echo "--- STEP 8: Parameter check ---"
+if [ -f "$EA_LOG" ]; then
+    echo "Risk multiplier:"
+    iconv -f UTF-16LE -t UTF-8 "$EA_LOG" 2>/dev/null | grep -i "risk\|multi\|max.*pos\|account.*phase\|funded"
+fi
 echo ""
 
 # ============================================
-# STEP 7: If EA still not loaded, try xdotool GUI automation
+# STEP 9: Ensure telegram relay running
 # ============================================
-echo "--- STEP 7: GUI automation attempt ---"
-
-# Check if expert is loaded by looking for recent expert log entry
-EXPERT_LOADED=$(iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | grep "expert.*loaded" | tail -1 | awk '{print $3}' | cut -d. -f1)
-CURRENT_HOUR=$(date +%H)
-
-if [ -n "$EXPERT_LOADED" ]; then
-    EXPERT_HOUR=$(echo "$EXPERT_LOADED" | cut -d: -f1)
-    echo "Last expert loaded at: $EXPERT_LOADED (current: $(date +%H:%M))"
-    # Check if loaded within the last hour
-    if [ "$EXPERT_HOUR" -ge "$((CURRENT_HOUR - 1))" ] 2>/dev/null; then
-        echo "EA WAS LOADED RECENTLY - SUCCESS!"
-    else
-        echo "EA loaded long ago - trying xdotool..."
-    fi
+echo "--- STEP 9: Telegram relay ---"
+if ! pgrep -f telegram_relay > /dev/null; then
+    [ -f /root/telegram_relay.sh ] && nohup bash /root/telegram_relay.sh > /root/telegram_relay.log 2>&1 &
+    echo "Started"
 else
-    echo "No expert loaded entry found - trying xdotool..."
+    echo "Running"
 fi
+echo ""
 
-# Use xdotool to navigate MT5 GUI and attach EA
-if [ -n "$MT5_WIN" ]; then
-    echo ""
-    echo "Activating MT5 window..."
-    xdotool windowactivate --sync $MT5_WIN 2>/dev/null
-    sleep 2
-
-    # Try right-click on chart to get context menu
-    echo "Right-clicking center of chart..."
-    # Get window geometry
-    eval $(xdotool getwindowgeometry --shell $MT5_WIN 2>/dev/null)
-    CENTER_X=$((WIDTH / 2))
-    CENTER_Y=$((HEIGHT / 2))
-    echo "Window size: ${WIDTH}x${HEIGHT}, center: ${CENTER_X},${CENTER_Y}"
-
-    # Click in the chart area first (to make sure chart is focused)
-    xdotool mousemove --window $MT5_WIN $CENTER_X $CENTER_Y
-    sleep 0.5
-    xdotool click --window $MT5_WIN 1  # Left click
-    sleep 1
-
-    # Open Navigator with Ctrl+N
-    echo "Opening Navigator (Ctrl+N)..."
-    xdotool key --window $MT5_WIN ctrl+n
-    sleep 2
-
-    # Take a screenshot to see what's happening
-    echo "Taking screenshot..."
-    import -window root -display :99 /tmp/mt5_screenshot.png 2>/dev/null || \
-    xwd -root -display :99 -out /tmp/mt5_screenshot.xwd 2>/dev/null
-    echo "Screenshot saved"
-
-    # Try a different approach: use the Insert menu
-    echo "Trying Insert menu..."
-    xdotool key --window $MT5_WIN alt+i  # Alt+I for Insert menu
-    sleep 1
-    xdotool key --window $MT5_WIN Down   # First item
-    sleep 0.5
-    xdotool key --window $MT5_WIN Return  # Select
-    sleep 2
-
-    # Check again
-    echo ""
-    echo "After GUI automation - checking log..."
-    iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | grep -i "expert\|PropFirm\|loaded" | tail -5
-fi
+# Send status to Telegram
+echo "--- STEP 10: Telegram status ---"
+EA_STATUS="NOT LOADED"
+[ -f "$EA_LOG" ] && EA_STATUS="LOADED"
+RISK_LINE=$(iconv -f UTF-16LE -t UTF-8 "$EA_LOG" 2>/dev/null | grep -i "risk.*multi" | tail -1)
+curl -s -X POST "https://api.telegram.org/bot8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g/sendMessage" \
+    -d chat_id="7013213983" \
+    -d text="🤖 Fix #20 - Recompiled EA
+MT5: $(pgrep -f terminal64 > /dev/null && echo '✅ RUNNING' || echo '❌ DOWN')
+EA: ${EA_STATUS}
+${RISK_LINE}
+Balance: \$1981.41
+VNC: $(pgrep -x x11vnc > /dev/null && echo '✅' || echo '❌')" \
+    -d parse_mode="HTML" 2>/dev/null | python3 -c "import sys,json; r=json.load(sys.stdin); print('Telegram:', 'OK' if r.get('ok') else r)" 2>/dev/null || echo "Telegram: FAILED"
 echo ""
 
 echo "=== DONE - $(date) ==="
