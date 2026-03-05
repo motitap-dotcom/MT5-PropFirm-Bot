@@ -1,6 +1,6 @@
 #!/bin/bash
-# Create proper chart from existing template + add EA
-echo "=== FIX CHART $(date) ==="
+# Fix chart file encoding (UTF-16LE) + restart MT5
+echo "=== FIX ENCODING $(date) ==="
 
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 export DISPLAY=:99
@@ -13,33 +13,31 @@ sleep 3
 pkill -9 -f terminal64 2>/dev/null
 sleep 2
 
-# 2. Show a real chart file from another profile for reference
-echo "=== SAMPLE CHART FILE (Euro/chart01.chr) ==="
-cat "$MT5/MQL5/Profiles/Charts/Euro/chart01.chr" 2>/dev/null | head -60
-
-# 3. Copy Euro chart01 as our template
-echo ""
-echo "=== COPYING TEMPLATE CHART ==="
+# 2. Create proper UTF-16LE chart file using Python
+echo "=== CREATING PROPER CHART FILE ==="
 CHART_DIR="$MT5/MQL5/Profiles/Charts/Default"
-cp "$MT5/MQL5/Profiles/Charts/Euro/chart01.chr" "$CHART_DIR/chart01.chr"
 
-# 4. Change symbol to EURUSD (if needed) and add EA section
-# First check what symbol the Euro chart uses
-echo "Symbol in template:"
-grep "^symbol=" "$CHART_DIR/chart01.chr" | head -1
-
-# 5. Now inject the EA expert section into the chart
-# The EA expert section needs to go inside the <chart> block
-# Find a good insertion point - after the main chart properties, before <window>
 python3 << 'PYEOF'
-import sys
+import codecs
 
-chart_path = "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr"
+# Read the Euro template (it's UTF-16LE with BOM)
+template_path = "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart01.chr"
 
-with open(chart_path, 'r', encoding='utf-8', errors='ignore') as f:
-    content = f.read()
+try:
+    with open(template_path, 'rb') as f:
+        raw = f.read()
+    # Detect BOM
+    if raw[:2] == b'\xff\xfe':
+        content = raw[2:].decode('utf-16-le')
+    else:
+        content = raw.decode('utf-16-le')
+    print(f"Read template: {len(content)} chars")
+except Exception as e:
+    print(f"Error reading template: {e}")
+    # Fallback: create from scratch
+    content = ""
 
-# EA section to inject
+# Build EA section
 ea_section = """<expert>
 name=PropFirmBot\\PropFirmBot
 path=PropFirmBot\\PropFirmBot.ex5
@@ -77,49 +75,116 @@ InpFVGMinPoints=30.0
 </expert>
 """
 
-# Remove any existing expert section
-import re
-content = re.sub(r'<expert>.*?</expert>\n?', '', content, flags=re.DOTALL)
-
-# Change symbol to EURUSD and period to M15
-content = re.sub(r'^symbol=.*$', 'symbol=EURUSD', content, flags=re.MULTILINE)
-content = re.sub(r'^period_type=.*$', 'period_type=0', content, flags=re.MULTILINE)
-content = re.sub(r'^period_size=.*$', 'period_size=15', content, flags=re.MULTILINE)
-
-# Insert EA section before first <window> tag
-if '<window>' in content:
+if content:
+    # Modify the template
+    import re
+    # Remove existing expert section if any
+    content = re.sub(r'<expert>.*?</expert>\r?\n?', '', content, flags=re.DOTALL)
+    # Change symbol to EURUSD
+    content = re.sub(r'^symbol=.*$', 'symbol=EURUSD', content, flags=re.MULTILINE)
+    # Change period to M15
+    content = re.sub(r'^period_type=.*$', 'period_type=0', content, flags=re.MULTILINE)
+    content = re.sub(r'^period_size=.*$', 'period_size=15', content, flags=re.MULTILINE)
+    # Insert EA before first <window>
     content = content.replace('<window>', ea_section + '<window>', 1)
 else:
-    # If no window tag, append before </chart>
-    content = content.replace('</chart>', ea_section + '</chart>')
+    # Create minimal chart from scratch
+    content = """<chart>
+id=0
+symbol=EURUSD
+period_type=0
+period_size=15
+digits=5
+tick_size=0.000000
+position_time=0
+scale_fix=0
+scale=4
+mode=1
+fore=0
+grid=1
+volume=0
+scroll=1
+shift=1
+shift_size=20.000000
+fixed_pos=0.000000
+ohlc=0
+bidline=1
+askline=0
+lastline=0
+days=0
+descriptions=0
+window_type=1
+background_color=0
+foreground_color=16777215
+barup_color=65280
+bardown_color=65280
+bullcandle_color=0
+bearcandle_color=16777215
+chartline_color=65280
+volumes_color=3329330
+grid_color=10061943
+bidline_color=10061943
+askline_color=255
+lastline_color=49152
+stops_color=255
+""" + ea_section + """<window>
+height=100
 
-with open(chart_path, 'w', encoding='utf-8') as f:
-    f.write(content)
+<indicator>
+name=Main
+path=
+apply=1
+show_data=1
+scale_inherit=0
+scale_line=0
+scale_line_percent=50
+scale_line_value=0.000000
+scale_fix_min=0
+scale_fix_min_val=0.000000
+scale_fix_max=0
+scale_fix_max_val=0.000000
+expertmode=0
+fixed_height=-1
 
-print("Chart file updated successfully")
-print(f"File size: {len(content)} bytes")
+</indicator>
+</window>
+</chart>
+"""
+
+# Write as UTF-16LE with BOM
+output_path = "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr"
+with open(output_path, 'wb') as f:
+    f.write(b'\xff\xfe')  # UTF-16LE BOM
+    f.write(content.encode('utf-16-le'))
+
+print(f"Written chart file: {len(content)} chars")
+# Verify
+with open(output_path, 'rb') as f:
+    data = f.read()
+print(f"File size: {len(data)} bytes")
+# Check if PropFirmBot is in the file
+if b'P\x00r\x00o\x00p\x00F\x00i\x00r\x00m\x00' in data:
+    print("PropFirmBot found in chart file!")
+else:
+    print("WARNING: PropFirmBot NOT found in chart file!")
 PYEOF
 
 echo ""
-echo "=== VERIFY CHART ==="
-grep -n "expert\|PropFirmBot\|EURUSD\|symbol=\|period\|XAUUSD\|window" "$CHART_DIR/chart01.chr" 2>/dev/null | head -20
+echo "=== CHART FILE CHECK ==="
+ls -la "$CHART_DIR/chart01.chr"
+# Verify by reading back as UTF-16
+python3 -c "
+f=open('/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr','rb')
+data=f.read()
+text=data[2:].decode('utf-16-le')
+for line in text.split('\n'):
+    line=line.strip()
+    if 'PropFirmBot' in line or 'XAUUSD' in line or 'symbol=' in line or 'period_size=' in line:
+        print(line)
+f.close()
+"
 
-# 6. Also create order.wnd if missing
-if [ ! -f "$CHART_DIR/order.wnd" ]; then
-    cat > "$CHART_DIR/order.wnd" << 'EOF'
-<window>
-<maximized>1
-<rect>
-0
-0
-1280
-1024
-</rect>
-</window>
-EOF
-fi
-
-# 7. Start MT5
+# 3. Start MT5
 echo ""
 echo "=== STARTING MT5 ==="
 cd "$MT5"
@@ -128,24 +193,16 @@ echo "Started (PID: $!)"
 echo "Waiting 90 seconds..."
 sleep 90
 
-# 8. Check logs
+# 4. Check EA logs for NEW entries
 echo ""
-echo "=== EA LOG (last entries) ==="
+echo "=== EA LOG ==="
 EALOGDIR="$MT5/MQL5/Logs"
 LATEST=$(ls -t "$EALOGDIR/"*.log 2>/dev/null | head -1)
 if [ -n "$LATEST" ]; then
     SIZE=$(stat -c%s "$LATEST" 2>/dev/null)
     echo "File: $LATEST ($SIZE bytes)"
-    iconv -f UTF-16LE -t UTF-8 "$LATEST" 2>/dev/null | tail -30
-fi
-
-echo ""
-echo "=== MT5 MAIN LOG ==="
-LOGDIR="$MT5/Logs"
-ls -la "$LOGDIR/" 2>/dev/null | tail -5
-LATEST=$(ls -t "$LOGDIR/"*.log 2>/dev/null | head -1)
-if [ -n "$LATEST" ]; then
-    iconv -f UTF-16LE -t UTF-8 "$LATEST" 2>/dev/null | tail -20
+    # Show last 40 lines - look for new timestamps
+    iconv -f UTF-16LE -t UTF-8 "$LATEST" 2>/dev/null | tail -40
 fi
 
 echo ""
