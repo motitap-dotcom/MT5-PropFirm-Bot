@@ -1,185 +1,88 @@
-=== FIX #17 - Thu Mar  5 12:59:55 UTC 2026 ===
---- STEP 1: Read existing chart profile ---
-Sample chart file: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart01.chr
-File info:
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart01.chr: Unicode text, UTF-16, little-endian text, with CRLF line terminators
+=== FIX #18 - Thu Mar  5 13:02:22 UTC 2026 ===
+--- STEP 1: Stop MT5 ---
+MT5 stopped: OK
 
-Hex first bytes:
-00000000: fffe 3c00 6300 6800 6100 7200 7400 3e00  ..<.c.h.a.r.t.>.
-00000010: 0d00 0a00 6900 6400 3d00 3100 3200 3800  ....i.d.=.1.2.8.
-00000020: 3900 3600 3800 3100 3700 3100 3200 3800  9.6.8.1.7.1.2.8.
-00000030: 3100 3000 3100 3500 3600 3200 3500 0d00  1.0.1.5.6.2.5...
-00000040: 0a00 7300 7900 6d00 6200 6f00 6c00 3d00  ..s.y.m.b.o.l.=.
+--- STEP 2: Create chart01.chr ---
+chart01.chr created successfully
+Size: 1064 chars
+Verify chart01.chr:
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr: Unicode text, UTF-16, little-endian text
+-rw-r--r-- 1 root root 2130 Mar  5 13:02 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr
 
-Content (trying different encodings):
---- UTF-16LE ---
-﻿<chart>
-id=128968171281015625
-symbol=EURUSD
-period_type=1
-period_size=24
-digits=4
-tick_size=0.000000
-position_time=1240876800
-scale_fix=0
-scale_fixed_min=1.439000
-scale_fixed_max=1.717000
-scale_fix11=0
-scale_bar=0
-scale_bar_val=0.000000
-scale=4
-mode=1
-fore=0
-grid=1
-volume=0
-scroll=1
-shift=1
-shift_size=20.000000
-fixed_pos=0.000000
-ohlc=0
-bidline=1
-askline=0
-lastline=0
-days=0
-descriptions=0
-window_type=1
-background_color=0
-foreground_color=16777215
-barup_color=65280
-bardown_color=65280
-bullcandle_color=0
-bearcandle_color=16777215
-chartline_color=65280
-volumes_color=3329330
-grid_color=10061943
-bidline_color=10061943
-askline_color=255
-lastline_color=49152
-stops_color=255
+Expert section check:
+<expert>
+name=PropFirmBot\PropFirmBot
+path=Experts\PropFirmBot\PropFirmBot.ex5
+flags=343
+window_num=0
+<inputs>
+--
+</expert>
 
 <window>
 height=100
 
 <indicator>
-name=Main
-path=
-apply=1
-show_data=1
-scale_inherit=0
-scale_line=0
-scale_line_percent=50
-scale_line_value=0.000000
-scale_fix_min=0
-scale_fix_min_val=0.000000
-scale_fix_max=0
-scale_fix_max_val=0.000000
---- ASCII ---
 
---- common.ini (hex dump of StartUp section) ---
-[Common]
-Login=11797849
-ProxyEnable=0
-CertInstall=0
-NewsEnable=0
-Environment=F008C7293503CED0045B07842FC57A638AA2FD5F10DEE8EA7AD19815A339B9A21E36157778467577E33A229F2FC5240D
-Server=FundedNext-Server
-ProxyType=0
-ProxyAddress=
-EnableOpenCL=7
-ProxyAuth=
-Services=4294967295
-NewsLanguages=
-Source=download.mql5.com
+--- STEP 3: Verify common.ini ---
 [StartUp]
 Expert=PropFirmBot\PropFirmBot
 ExpertParameters=
 Symbol=EURUSD
 Period=M15
 [Experts]
-AllowLiveTrading=1
-AllowDllImport=0
-Enabled=1
-Account=11797849
-Profile=0
-AllowWebRequest=1
-WebRequestUrl1=https://api.telegram.org
-[Charts]
-ProfileLast=Default
-MaxBars=100000
-PrintColor=0
-SaveDeleted=0
-TradeHistory=1
-TradeLevels=1
-TradeLevelsDrag=0
-ObsoleteLasttime=1772635517
-PreloadCharts=1
 
---- common.ini raw bytes ---
-00000000: 5b43 6f6d 6d6f 6e5d 0a4c 6f67 696e 3d31  [Common].Login=1
-00000010: 3137 3937 3834 390a 5072 6f78 7945 6e61  1797849.ProxyEna
-00000020: 626c 653d 300a 4365 7274 496e 7374 616c  ble=0.CertInstal
-00000030: 6c3d 300a 4e65 7773 456e 6162 6c65 3d30  l=0.NewsEnable=0
-00000040: 0a45 6e76 6972 6f6e 6d65 6e74 3d46 3030  .Environment=F00
-00000050: 3843 3732 3933 3530 3343 4544 3030 3435  8C7293503CED0045
-00000060: 4230 3738 3432 4643 3537 4136 3338 4141  B07842FC57A638AA
-00000070: 3246 4435 4631 3044 4545 3845 4137 4144  2FD5F10DEE8EA7AD
-00000080: 3139 3831 3541 3333 3942 3941 3231 4533  19815A339B9A21E3
-00000090: 3631 3537 3737 3834 3637 3537 3745 3333  6157778467577E33
-000000a0: 4132 3239 4632 4643 3532 3430 440a 5365  A229F2FC5240D.Se
-000000b0: 7276 6572 3d46 756e 6465 644e 6578 742d  rver=FundedNext-
-000000c0: 5365 7276 6572 0a50 726f 7879 5479 7065  Server.ProxyType
-000000d0: 3d30 0a50 726f 7879 4164 6472 6573 733d  =0.ProxyAddress=
-000000e0: 0a45 6e61 626c 654f 7065 6e43 4c3d 370a  .EnableOpenCL=7.
-000000f0: 5072 6f78 7941 7574 683d 0a53 6572 7669  ProxyAuth=.Servi
-00000100: 6365 733d 3432 3934 3936 3732 3935 0a4e  ces=4294967295.N
-00000110: 6577 734c 616e 6775 6167 6573 3d0a 536f  ewsLanguages=.So
-00000120: 7572 6365 3d64 6f77 6e6c 6f61 642e 6d71  urce=download.mq
-00000130: 6c35 2e63 6f6d 0a5b 5374 6172 7455 705d  l5.com.[StartUp]
-00000140: 0a45 7870 6572 743d 5072 6f70 4669 726d  .Expert=PropFirm
-00000150: 426f 745c 5072 6f70 4669 726d 426f 740a  Bot\PropFirmBot.
-00000160: 4578 7065 7274 5061 7261 6d65 7465 7273  ExpertParameters
-00000170: 3d0a 5379 6d62 6f6c 3d45 5552 5553 440a  =.Symbol=EURUSD.
-00000180: 5065 7269 6f64 3d4d 3135 0a5b 4578 7065  Period=M15.[Expe
-00000190: 7274 735d 0a41 6c6c 6f77 4c69 7665 5472  rts].AllowLiveTr
-000001a0: 6164 696e 673d 310a 416c 6c6f 7744 6c6c  ading=1.AllowDll
-000001b0: 496d 706f 7274 3d30 0a45 6e61 626c 6564  Import=0.Enabled
-000001c0: 3d31 0a41 6363 6f75 6e74 3d31 3137 3937  =1.Account=11797
-000001d0: 3834 390a 5072 6f66 696c 653d 300a 416c  849.Profile=0.Al
-000001e0: 6c6f 7757 6562 5265 7175 6573 743d 310a  lowWebRequest=1.
-000001f0: 5765 6252 6571 7565 7374 5572 6c31 3d68  WebRequestUrl1=h
-00000200: 7474 7073 3a2f 2f61 7069 2e74 656c 6567  ttps://api.teleg
-00000210: 7261 6d2e 6f72 670a 5b43 6861 7274 735d  ram.org.[Charts]
-00000220: 0a50 726f 6669 6c65 4c61 7374 3d44 6566  .ProfileLast=Def
-00000230: 6175 6c74 0a4d 6178 4261 7273 3d31 3030  ault.MaxBars=100
-00000240: 3030 300a 5072 696e 7443 6f6c 6f72 3d30  000.PrintColor=0
-00000250: 0a53 6176 6544 656c 6574 6564 3d30 0a54  .SaveDeleted=0.T
-00000260: 7261 6465 4869 7374 6f72 793d 310a 5472  radeHistory=1.Tr
-00000270: 6164 654c 6576 656c 733d 310a 5472 6164  adeLevels=1.Trad
-00000280: 654c 6576 656c 7344 7261 673d 300a 4f62  eLevelsDrag=0.Ob
-00000290: 736f 6c65 7465 4c61 7374 7469 6d65 3d31  soleteLasttime=1
-000002a0: 3737 3236 3335 3531 370a 5072 656c 6f61  772635517.Preloa
-000002b0: 6443 6861 7274 733d 310a                 dCharts=1.
+--- STEP 4: Verify .ex5 ---
+-rw-r--r-- 1 root root 164640 Mar  5 10:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
 
---- STEP 2: Active profile directories ---
-total 24
-drwxr-xr-x 6 root root 4096 Mar  5 12:46 .
-drwxr-xr-x 8 root root 4096 Mar  4 14:59 ..
-drwxr-xr-x 2 root root 4096 Feb 22 18:29 British Pound
-drwxr-xr-x 2 root root 4096 Mar  5 12:46 Default
-drwxr-xr-x 2 root root 4096 Feb 22 18:29 Euro
-drwxr-xr-x 2 root root 4096 Feb 22 18:29 Market Overview
+--- STEP 5: VNC check ---
+Xvfb: 346800
+x11vnc: 346808
 
-Default dir contents:
-total 8
-drwxr-xr-x 2 root root 4096 Mar  5 12:46 .
-drwxr-xr-x 6 root root 4096 Mar  5 12:46 ..
+--- STEP 6: Clean old state file ---
+Old state files deleted
 
-Profile info from terminal config:
-Profile=0
-[Charts]
-ProfileLast=Default
-ObsoleteLasttime=1772635517
-PreloadCharts=1
+--- STEP 7: Start MT5 ---
+Waiting 25 seconds for MT5 to start and load EA...
+MT5 is RUNNING
 
-=== DONE - Thu Mar  5 12:59:55 UTC 2026 ===
+--- STEP 8: Check EA status ---
+Terminal log (last 15 lines):
+DG	0	12:35:07.958	Network	'11797849': trading has been enabled - hedging mode
+EL	0	12:39:39.349	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+PG	0	12:39:39.355	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 5 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+FM	0	12:39:39.355	Terminal	C:\Program Files\MetaTrader 5
+HD	0	12:39:56.784	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
+ID	0	12:39:56.790	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:35:06
+QE	0	12:39:58.117	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+CF	0	12:39:58.117	Network	'11797849': trading has been enabled - hedging mode
+NM	0	12:46:03.648	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+KG	0	12:46:03.648	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 4 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+JN	0	12:46:03.648	Terminal	C:\Program Files\MetaTrader 5
+RE	0	12:46:19.341	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
+KE	0	12:46:19.341	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:39:56
+LE	0	12:46:20.865	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+JF	0	12:46:20.865	Network	'11797849': trading has been enabled - hedging mode
+
+Expert-related log entries:
+DM	0	09:53:34.537	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+GD	0	09:58:22.842	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+NE	0	10:06:23.708	Experts	expert PropFirmBot (EURUSD,M15) removed
+JQ	0	10:06:40.620	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+OS	0	10:15:35.346	Experts	expert PropFirmBot (EURUSD,M15) removed
+IG	0	10:15:39.287	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+QQ	0	10:15:49.851	Experts	expert PropFirmBot (EURUSD,M15) removed
+DD	0	10:15:49.881	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+KD	0	10:17:53.023	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+KH	0	11:07:47.385	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+
+No EA log file - EA may not have loaded
+
+--- STEP 9: Telegram relay ---
+Telegram relay RUNNING
+
+--- STEP 10: Test Telegram ---
+Telegram: OK
+
+=== DONE - Thu Mar  5 13:02:54 UTC 2026 ===
 EXIT_CODE=0
