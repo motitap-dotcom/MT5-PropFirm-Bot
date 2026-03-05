@@ -1,106 +1,47 @@
-=== FIX #21 - Thu Mar  5 13:11:06 UTC 2026 ===
---- STEP 1: Kill everything ---
-All wine processes killed
+=== FIX #22 - Thu Mar  5 13:14:02 UTC 2026 ===
+--- STEP 1: Redeploy EA source files ---
+'/root/MT5-PropFirm-Bot/EA/AccountStateManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh'
+'/root/MT5-PropFirm-Bot/EA/Dashboard.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Dashboard.mqh'
+'/root/MT5-PropFirm-Bot/EA/Guardian.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Guardian.mqh'
+'/root/MT5-PropFirm-Bot/EA/NewsFilter.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/NewsFilter.mqh'
+'/root/MT5-PropFirm-Bot/EA/Notifications.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Notifications.mqh'
+'/root/MT5-PropFirm-Bot/EA/RiskManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/RiskManager.mqh'
+'/root/MT5-PropFirm-Bot/EA/SignalEngine.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/SignalEngine.mqh'
+'/root/MT5-PropFirm-Bot/EA/StatusWriter.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/StatusWriter.mqh'
+'/root/MT5-PropFirm-Bot/EA/TradeAnalyzer.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeAnalyzer.mqh'
+'/root/MT5-PropFirm-Bot/EA/TradeJournal.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeJournal.mqh'
+'/root/MT5-PropFirm-Bot/EA/TradeManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeManager.mqh'
+'/root/MT5-PropFirm-Bot/EA/PropFirmBot.mq5' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5'
 
---- STEP 2: Delete state files ---
-Finding all AccountState files...
-removed '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/AccountStateManager.mqh'
-removed '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh'
-removed '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Include/PropFirmBot/AccountStateManager.mqh'
-removed '/root/.wine/drive_c/users/root/AppData/Roaming/MetaQuotes/Terminal/Common/Files/PropFirmBot_AccountState.dat'
-removed '/root/.wine/drive_c/users/root/AppData/Roaming/MetaQuotes/Terminal/D0E8209F77C8CF37AD8BF550E51FF075/MQL5/Experts/PropFirmBot/AccountStateManager.mqh'
-Done
+Verify AccountStateManager.mqh restored:
+-rw-r--r-- 1 root root 15380 Mar  5 13:14 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh
 
---- STEP 3: Verify .ex5 ---
--rw-r--r-- 1 root root 163452 Mar  5 13:08 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+--- STEP 2: Full status ---
+MT5: RUNNING
+VNC: RUNNING
+Xvfb: RUNNING
+Telegram relay: RUNNING
 
-Source code verification:
-grep: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh: No such file or directory
-NOT FOUND in deployed source!
-grep: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh: No such file or directory
-NOT FOUND in deployed source!
+--- STEP 3: EA parameters ---
+Latest EA init parameters:
+NJ	0	13:12:13.650	PropFirmBot (EURUSD,M15)	[AccountState] Loaded state: Phase=FUNDED TradingDays=0 RiskMult=1.00
+ED	0	13:12:13.665	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
+KJ	0	13:12:13.666	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 100% | MaxPos=3 | MaxTrades=8
+CL	0	13:12:13.666	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+RI	0	13:12:13.666	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
+MN	0	13:12:13.668	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+DO	0	13:12:13.668	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.50% | MaxPos=3 | DailyDD=-2.0% | TotalDD=3.0%
+GH	0	13:12:13.670	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+QQ	0	13:12:13.670	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+KD	0	13:12:13.670	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 100%
 
---- STEP 4: VNC ---
-Xvfb: 346800
-x11vnc: 346808
+Latest heartbeat:
+NP	0	13:05:50.165	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
+IG	0	13:09:21.339	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
+GM	0	13:12:03.577	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
 
---- STEP 5: Start MT5 ---
-Waiting 50 seconds for full initialization...
-MT5 is RUNNING
+--- STEP 4: Telegram notification ---
+Telegram: OK
 
---- STEP 6: Results ---
-Terminal log (recent):
-QN	0	13:09:18.167	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
-KO	0	13:09:18.167	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 15:05:37
-KO	0	13:09:19.196	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-IL	0	13:09:19.196	Network	'11797849': trading has been enabled - hedging mode
-JK	0	13:09:32.261	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-NN	0	13:11:27.509	Startup	successfully initialized from start config "C:\Program Files\MetaTrader 5\config\startup.ini"
-GR	0	13:11:29.732	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
-CE	0	13:11:29.734	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 5 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
-QS	0	13:11:29.734	Terminal	C:\Program Files\MetaTrader 5
-NG	0	13:11:29.734	Terminal	launched with C:\Program Files\MetaTrader 5\config\startup.ini
-
-Expert entries:
-KK	0	13:04:56.296	Startup	successfully initialized from start config "C:\Program Files\MetaTrader 5\config\startup.ini"
-KL	0	13:04:57.086	Terminal	launched with C:\Program Files\MetaTrader 5\config\startup.ini
-ID	0	13:05:37.757	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-OI	0	13:05:49.530	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-GH	0	13:08:35.123	Startup	successfully initialized from start config "C:\Program Files\MetaTrader 5\config\startup.ini"
-NI	0	13:08:36.068	Terminal	launched with C:\Program Files\MetaTrader 5\config\startup.ini
-DF	0	13:09:17.721	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-JK	0	13:09:32.261	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
-NN	0	13:11:27.509	Startup	successfully initialized from start config "C:\Program Files\MetaTrader 5\config\startup.ini"
-NG	0	13:11:29.734	Terminal	launched with C:\Program Files\MetaTrader 5\config\startup.ini
-
-=== EA LOG ===
-NL	0	13:09:20.845	PropFirmBot (EURUSD,M15)	==============================================
-EM	0	13:09:20.845	PropFirmBot (EURUSD,M15)	  PropFirmBot v3.0 - FULL TRADING SYSTEM
-RJ	0	13:09:20.845	PropFirmBot (EURUSD,M15)	  ALL MODULES ACTIVE
-LR	0	13:09:20.845	PropFirmBot (EURUSD,M15)	==============================================
-IF	0	13:09:20.845	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
-LE	0	13:09:20.845	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
-GQ	0	13:09:20.845	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-PM	0	13:09:20.845	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-NL	0	13:09:20.846	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-ER	0	13:09:20.846	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 100% | MaxPos=3 | MaxTrades=8
-MD	0	13:09:20.846	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-PP	0	13:09:20.846	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-RH	0	13:09:20.846	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-LK	0	13:09:20.846	PropFirmBot (EURUSD,M15)	Max Daily DD: 0.0% ($0)
-RR	0	13:09:20.846	PropFirmBot (EURUSD,M15)	Max Total DD: 6.0% ($120)
-JK	0	13:09:20.846	PropFirmBot (EURUSD,M15)	Target: NO TARGET
-HL	0	13:09:20.846	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (100%)
-CJ	0	13:09:20.928	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.05 15:09:20] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-GP	0	13:09:20.978	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260305.csv | Initial balance: $1981.41
-IR	0	13:09:20.978	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
-MH	0	13:09:20.978	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
-DE	0	13:09:20.978	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.50% | MaxPos=3 | DailyDD=-2.0% | TotalDD=3.0%
-PD	0	13:09:20.978	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
-OF	0	13:09:20.978	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
-QI	0	13:09:21.201	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
-OR	0	13:09:21.201	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
-FQ	0	13:09:21.202	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-LQ	0	13:09:21.212	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-LG	0	13:09:21.232	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-NG	0	13:09:21.332	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-
-=== KEY PARAMETERS ===
-PP	0	13:09:32.407	PropFirmBot (EURUSD,M15)	[AccountState] Challenge configured: $2000 | Target 0.0% | DD 0.0%/6.0% | MinDays 0
-GL	0	13:09:32.407	PropFirmBot (EURUSD,M15)	[AccountState] Funded rules: $2000 | DD 0.0%/6.0% | Split 70%
-QS	0	13:09:32.408	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-JS	0	13:09:32.408	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 100% | MaxPos=3 | MaxTrades=8
-RG	0	13:09:32.408	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-KG	0	13:09:32.408	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-MO	0	13:09:32.408	PropFirmBot (EURUSD,M15)	Account: $2000 | Profit Split: 70%
-CM	0	13:09:32.408	PropFirmBot (EURUSD,M15)	Risk Level: CONSERVATIVE (100%)
-RE	0	13:09:32.408	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.05 15:09:32] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-NH	0	13:09:32.408	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
-CD	0	13:09:32.408	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.50% | MaxPos=3 | DailyDD=-2.0% | TotalDD=3.0%
-JR	0	13:09:32.412	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-KH	0	13:09:32.412	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-PG	0	13:09:32.412	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-FN	0	13:09:32.412	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 100%
-
-=== DONE - Thu Mar  5 13:12:04 UTC 2026 ===
+=== DONE - Thu Mar  5 13:14:03 UTC 2026 ===
 EXIT_CODE=0
