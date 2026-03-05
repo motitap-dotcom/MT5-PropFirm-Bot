@@ -1,47 +1,18 @@
 #!/bin/bash
 # =============================================================
-# Fix #9: Find correct chart profile location + restore EA
+# Fix #10: Use existing chart format + add EA section
 # =============================================================
 
-echo "=== FIX #9 - $(date) ==="
+echo "=== FIX #10 - $(date) ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
+DEFAULT_CHART="$MT5_BASE/MQL5/Profiles/Charts/Default/chart01.chr"
+EURO_CHART="$MT5_BASE/MQL5/Profiles/Charts/Euro/chart01.chr"
 
 # ============================================
-# STEP 1: Find ALL chart/profile related files
+# STEP 1: Kill MT5
 # ============================================
-echo "--- STEP 1: Search for chart/profile files ---"
-echo "Looking for .chr files:"
-find "$MT5_BASE" -name "*.chr" 2>/dev/null
-echo ""
-
-echo "Looking for chart-related dirs:"
-find "$MT5_BASE" -type d -iname "*chart*" 2>/dev/null
-find "$MT5_BASE" -type d -iname "*profile*" 2>/dev/null
-find "$MT5_BASE" -type d -iname "*default*" 2>/dev/null
-echo ""
-
-echo "Looking for chart data files:"
-find "$MT5_BASE" -name "*.chr" -o -name "*.chart" -o -name "chartwindow*" 2>/dev/null
-echo ""
-
-echo "MQL5/Profiles directory:"
-ls -laR "$MT5_BASE/MQL5/Profiles/" 2>/dev/null || echo "Not found"
-echo ""
-
-echo "profiles/ directory:"
-ls -laR "$MT5_BASE/profiles/" 2>/dev/null || echo "Not found"
-echo ""
-
-# Check if there's a history/charts path
-echo "All directories in MT5_BASE:"
-find "$MT5_BASE" -maxdepth 2 -type d 2>/dev/null | sort
-echo ""
-
-# ============================================
-# STEP 2: Kill MT5 and set up proper profile
-# ============================================
-echo "--- STEP 2: Kill MT5 ---"
+echo "--- STEP 1: Kill MT5 ---"
 pkill -9 wineserver 2>/dev/null || true
 pkill -9 -f "wine" 2>/dev/null || true
 sleep 5
@@ -49,10 +20,40 @@ sleep 5
 # Delete state
 find /root/.wine -name "PropFirmBot_AccountState.dat" -delete 2>/dev/null
 
-echo "--- STEP 3: Create chart profiles in ALL possible locations ---"
+echo ""
 
-# Chart profile content
-CHART_CONTENT='<chart>
+# ============================================
+# STEP 2: Read existing stock chart for format
+# ============================================
+echo "--- STEP 2: Read Euro chart for format ---"
+if [ -f "$EURO_CHART" ]; then
+    echo "Euro/chart01.chr:"
+    cat "$EURO_CHART"
+else
+    echo "Euro chart not found!"
+fi
+echo ""
+
+# ============================================
+# STEP 3: Create Default chart from stock + EA
+# ============================================
+echo "--- STEP 3: Create Default chart with EA ---"
+
+# Copy the Euro chart as base
+if [ -f "$EURO_CHART" ]; then
+    cp "$EURO_CHART" "$DEFAULT_CHART"
+    echo "Copied Euro chart as base"
+else
+    echo "No Euro chart to copy"
+fi
+
+# Now modify it: change symbol to EURUSD and add EA
+# Read current content
+CURRENT=$(cat "$DEFAULT_CHART" 2>/dev/null)
+
+# Create proper chart with EURUSD and EA
+cat > "$DEFAULT_CHART" << 'CHREOF'
+<chart>
 id=1
 symbol=EURUSD
 period_type=0
@@ -72,6 +73,7 @@ askline=0
 days=0
 descriptions=0
 shift_size=20
+fixed_pos=0
 window_left=0
 window_top=0
 window_right=1280
@@ -88,6 +90,7 @@ volumes_color=3329330
 grid_color=10061943
 askline_color=255
 stops_color=255
+
 <expert>
 name=PropFirmBot\PropFirmBot
 path=PropFirmBot\PropFirmBot.ex5
@@ -95,40 +98,101 @@ expertmode=33
 <inputs>
 </inputs>
 </expert>
+
+<window>
+height=100
+objects=0
+
+<indicator>
+name=Main
+path=
+apply=1
+show_data=1
+scale_inherit=0
+scale_line=0
+scale_line_percent=50
+scale_line_value=0.000000
+scale_fix_min=0
+scale_fix_min_val=0.000000
+scale_fix_max=0
+scale_fix_max_val=0.000000
+expertmode=0
+fixed_height=-1
+
+</indicator>
+</window>
+
 </chart>
-'
+CHREOF
 
-# Create in all possible locations
-for dir in \
-    "$MT5_BASE/profiles/default" \
-    "$MT5_BASE/profiles/charts/default" \
-    "$MT5_BASE/MQL5/Profiles/Charts/Default" \
-    "$MT5_BASE/config/charts"; do
-    mkdir -p "$dir"
-    echo "$CHART_CONTENT" > "$dir/chart01.chr"
-    echo "Created: $dir/chart01.chr"
-done
+echo "Created chart with EA config"
+echo "Chart content:"
+cat "$DEFAULT_CHART"
+echo ""
+
+# Also write the order.wnd file
+cat > "$MT5_BASE/MQL5/Profiles/Charts/Default/order.wnd" << 'WNDEOF'
+<chart>
+id=1
+</chart>
+WNDEOF
 echo ""
 
 # ============================================
-# STEP 4: Ensure common.ini has correct StartUp
+# STEP 4: Ensure common.ini is correct
 # ============================================
-echo "--- STEP 4: Verify common.ini ---"
-grep "\[StartUp\]" "$MT5_BASE/config/common.ini" && echo "StartUp section present" || echo "StartUp MISSING!"
-grep "Expert=" "$MT5_BASE/config/common.ini" || echo "Expert not set!"
+echo "--- STEP 4: common.ini ---"
+cat > "$MT5_BASE/config/common.ini" << 'INIEOF'
+[Common]
+Login=11797849
+ProxyEnable=0
+CertInstall=0
+NewsEnable=0
+Server=FundedNext-Server
+ProxyType=0
+ProxyAddress=
+EnableOpenCL=7
+ProxyAuth=
+Services=4294967295
+NewsLanguages=
+Source=download.mql5.com
+[StartUp]
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+Symbol=EURUSD
+Period=M15
+[Experts]
+AllowLiveTrading=1
+AllowDllImport=0
+Enabled=1
+Account=11797849
+Profile=0
+AllowWebRequest=1
+WebRequestUrl1=https://api.telegram.org
+[Charts]
+ProfileLast=Default
+MaxBars=100000
+PrintColor=0
+SaveDeleted=0
+TradeHistory=1
+TradeLevels=1
+TradeLevelsDrag=0
+PreloadCharts=1
+INIEOF
+echo "common.ini written"
 echo ""
 
 # ============================================
-# STEP 5: Start MT5 and wait LONGER
+# STEP 5: Start MT5 and wait
 # ============================================
-echo "--- STEP 5: Start MT5 (waiting 90 sec) ---"
+echo "--- STEP 5: Start MT5 ---"
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
 
 cd "$MT5_BASE"
 nohup wine "$MT5_BASE/terminal64.exe" /portable > /tmp/mt5_stdout.log 2>&1 &
-echo "MT5 started, waiting 90 seconds..."
-sleep 90
+echo "MT5 starting... waiting 120 sec"
+sleep 120
 
 # ============================================
 # STEP 6: Check results
@@ -139,32 +203,24 @@ echo "Network:"
 ss -tnp | grep "wineserver" | head -3
 echo ""
 
-echo "Terminal log (expert loading):"
+echo "Terminal log (last 20 lines):"
 TERM_LOG=$(ls -t "${MT5_BASE}/logs/"*.log 2>/dev/null | head -1)
-if [ -f "$TERM_LOG" ]; then
-    iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | tail -20
-fi
+[ -f "$TERM_LOG" ] && iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | tail -20
 echo ""
 
 echo "EA Log:"
 EA_LOG=$(ls -t "${MT5_BASE}/MQL5/Logs/"*.log 2>/dev/null | grep -v ".old" | head -1)
 if [ -f "$EA_LOG" ]; then
     SIZE=$(stat -c%s "$EA_LOG")
-    echo "EA Log: $EA_LOG ($SIZE bytes)"
-    iconv -f UTF-16LE -t UTF-8 "$EA_LOG" 2>/dev/null | grep -i "RiskMgr\|AccountState\|INIT\|MaxPos\|Risk.*mult\|Notify\|HEARTBEAT\|ALL SYSTEMS\|SWITCHED\|loaded" | head -20
+    echo "Found: $EA_LOG ($SIZE bytes)"
+    iconv -f UTF-16LE -t UTF-8 "$EA_LOG" 2>/dev/null | head -30
 else
-    echo "NO EA LOG!"
+    echo "NO EA LOG FILE"
 fi
 echo ""
 
 echo "Relay:"
-pgrep -f "telegram_relay" > /dev/null && echo "Running" || echo "NOT running"
-# Restart relay if needed
-if ! pgrep -f "telegram_relay" > /dev/null; then
-    nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &
-    sleep 2
-    echo "Relay restarted"
-fi
+pgrep -f "telegram_relay" > /dev/null && echo "Running" || { nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &; sleep 2; echo "Restarted"; }
 echo ""
 
 echo "=== DONE - $(date) ==="
