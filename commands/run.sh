@@ -1,111 +1,196 @@
 #!/bin/bash
 # =============================================================
-# VPS Full Status Check - Verify EA Parameters & Trading Status
+# Fix ALL issues: Update EA, Fix Telegram WebRequest, Restart MT5
 # =============================================================
 
-echo "=== VPS Full Status Check - $(date) ==="
+echo "=== FULL FIX SCRIPT - $(date) ==="
 echo ""
 
-# 1. MT5 Process
-echo "--- MT5 Process ---"
-pgrep -a terminal64 || echo "MT5 NOT running!"
-pgrep -a metatrader || echo ""
-echo ""
+MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
+EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
+CONFIG_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
 
-# 2. VNC Status
-echo "--- VNC Status ---"
-pgrep -a x11vnc || echo "x11vnc NOT running!"
-pgrep -a Xvfb || echo "Xvfb NOT running!"
-echo ""
+# ============================================
+# STEP 1: Fix Telegram WebRequest in MT5 config
+# ============================================
+echo "--- STEP 1: Fix Telegram WebRequest ---"
 
-# 3. EA Files - check compiled .ex5 exists
-echo "--- EA Files (Compiled) ---"
-EA_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"
-if [ -d "$EA_DIR" ]; then
-    ls -la "$EA_DIR"/*.ex5 2>/dev/null || echo "No compiled .ex5 files found!"
-    echo ""
-    echo "All EA files:"
-    ls -la "$EA_DIR"/ 2>/dev/null
-else
-    echo "EA directory not found!"
+# Find MT5 terminal config
+TERMINAL_INI="${MT5_BASE}/config/common.ini"
+if [ ! -f "$TERMINAL_INI" ]; then
+    # Try alternate locations
+    TERMINAL_INI=$(find "$MT5_BASE" -name "common.ini" 2>/dev/null | head -1)
 fi
-echo ""
 
-# 4. Config files
-echo "--- Config Files ---"
-CONFIG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot"
-if [ -d "$CONFIG_DIR" ]; then
-    ls -la "$CONFIG_DIR"/ 2>/dev/null
+if [ -f "$TERMINAL_INI" ]; then
+    echo "Found config: $TERMINAL_INI"
+    cat "$TERMINAL_INI"
     echo ""
-    echo "--- Account Config Content ---"
-    cat "$CONFIG_DIR/account_config.json" 2>/dev/null || echo "No account_config.json"
-    echo ""
-    echo "--- Risk Config Content ---"
-    cat "$CONFIG_DIR/risk_config.json" 2>/dev/null || echo "No risk_config.json"
-else
-    echo "Config directory not found!"
-fi
-echo ""
 
-# 5. MT5 Logs - last entries to see EA activity
-echo "--- MT5 Terminal Logs (last 30 lines) ---"
-MT5_LOG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs"
-if [ -d "$MT5_LOG_DIR" ]; then
-    LATEST_LOG=$(ls -t "$MT5_LOG_DIR"/*.log 2>/dev/null | head -1)
-    if [ -f "$LATEST_LOG" ]; then
-        echo "Log file: $LATEST_LOG"
-        tail -30 "$LATEST_LOG"
+    # Check if WebRequest URL already exists
+    if grep -q "api.telegram.org" "$TERMINAL_INI" 2>/dev/null; then
+        echo "Telegram WebRequest already configured!"
     else
-        echo "No log files found"
+        echo "Adding Telegram WebRequest URL..."
+        # Add WebRequest settings
+        if grep -q "\[Experts\]" "$TERMINAL_INI" 2>/dev/null; then
+            # Section exists, add URL
+            sed -i '/\[Experts\]/a AllowWebRequest=1\nWebRequestUrl1=https://api.telegram.org' "$TERMINAL_INI"
+        else
+            # Add section
+            echo -e "\n[Experts]\nAllowWebRequest=1\nWebRequestUrl1=https://api.telegram.org" >> "$TERMINAL_INI"
+        fi
+        echo "WebRequest URL added!"
     fi
 else
-    echo "MQL5 Log directory not found"
+    echo "common.ini not found, searching for all config files..."
+    find "$MT5_BASE" -name "*.ini" -type f 2>/dev/null
 fi
-echo ""
 
-# 6. MT5 main logs
-echo "--- MT5 Main Logs (last 30 lines) ---"
-MT5_MAIN_LOG="/root/.wine/drive_c/Program Files/MetaTrader 5/Logs"
-if [ -d "$MT5_MAIN_LOG" ]; then
-    LATEST_MAIN=$(ls -t "$MT5_MAIN_LOG"/*.log 2>/dev/null | head -1)
-    if [ -f "$LATEST_MAIN" ]; then
-        echo "Log file: $LATEST_MAIN"
-        tail -30 "$LATEST_MAIN"
+# Also check terminal64.ini
+TERM64_INI=$(find "$MT5_BASE" -name "terminal64.ini" 2>/dev/null | head -1)
+if [ -f "$TERM64_INI" ]; then
+    echo ""
+    echo "Found terminal64.ini: $TERM64_INI"
+    if ! grep -q "api.telegram.org" "$TERM64_INI" 2>/dev/null; then
+        if grep -q "\[Experts\]" "$TERM64_INI" 2>/dev/null; then
+            sed -i '/\[Experts\]/a AllowWebRequest=1\nWebRequestUrl1=https://api.telegram.org' "$TERM64_INI"
+        else
+            echo -e "\n[Experts]\nAllowWebRequest=1\nWebRequestUrl1=https://api.telegram.org" >> "$TERM64_INI"
+        fi
+        echo "WebRequest added to terminal64.ini!"
     else
-        echo "No main log files found"
+        echo "Already configured in terminal64.ini"
     fi
+fi
+
+echo ""
+
+# ============================================
+# STEP 2: Backup current EA
+# ============================================
+echo "--- STEP 2: Backup current EA ---"
+if [ -f "$EA_DIR/PropFirmBot.ex5" ]; then
+    cp "$EA_DIR/PropFirmBot.ex5" "$EA_DIR/PropFirmBot.ex5.bak_before_param_fix"
+    echo "Backup created"
 else
-    echo "Main log directory not found"
+    echo "No .ex5 to backup"
 fi
 echo ""
 
-# 7. Check for XAUUSD chart
-echo "--- Looking for XAUUSD references in logs ---"
+# ============================================
+# STEP 3: Kill MT5, Recompile, Restart
+# ============================================
+echo "--- STEP 3: Kill MT5 ---"
+# Kill any running MT5
+pkill -f terminal64 2>/dev/null || true
+pkill -f metatrader 2>/dev/null || true
+# Kill wine MT5 processes
+pkill -f "MetaTrader" 2>/dev/null || true
+sleep 2
+
+# Verify killed
+if pgrep -f "terminal64\|metatrader\|MetaTrader" > /dev/null 2>&1; then
+    echo "Force killing MT5..."
+    pkill -9 -f "terminal64\|metatrader\|MetaTrader" 2>/dev/null || true
+    sleep 2
+fi
+echo "MT5 stopped"
+echo ""
+
+echo "--- STEP 4: Recompile EA ---"
+cd "$EA_DIR"
+WINEPREFIX=/root/.wine wine "$MT5_BASE/metaeditor64.exe" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
+sleep 5
+
+# Check compilation result
+if [ -f "$EA_DIR/PropFirmBot.ex5" ]; then
+    NEW_SIZE=$(stat -c%s "$EA_DIR/PropFirmBot.ex5" 2>/dev/null)
+    echo "Compilation OK! New .ex5 size: $NEW_SIZE bytes"
+    echo "File date: $(ls -la "$EA_DIR/PropFirmBot.ex5")"
+else
+    echo "ERROR: Compilation failed! No .ex5 file found"
+fi
+
+# Check compile log
+if [ -f "$EA_DIR/PropFirmBot.log" ]; then
+    echo "Compile log:"
+    cat "$EA_DIR/PropFirmBot.log"
+fi
+echo ""
+
+echo "--- STEP 5: Restart MT5 ---"
+export DISPLAY=:99
+export WINEPREFIX=/root/.wine
+
+# Start MT5
+cd "$MT5_BASE"
+nohup wine "$MT5_BASE/terminal64.exe" /portable > /dev/null 2>&1 &
+MT5_PID=$!
+echo "MT5 started with PID: $MT5_PID"
+
+# Wait for MT5 to load
+echo "Waiting for MT5 to start..."
+sleep 15
+
+# Check if MT5 is running
+if pgrep -f "terminal64" > /dev/null 2>&1; then
+    echo "MT5 is RUNNING!"
+else
+    # Check wine processes
+    WINE_PROCS=$(pgrep -a -f "wine\|MT5\|MetaTrader" 2>/dev/null)
+    if [ -n "$WINE_PROCS" ]; then
+        echo "MT5 running as wine process:"
+        echo "$WINE_PROCS"
+    else
+        echo "WARNING: MT5 may not have started"
+    fi
+fi
+echo ""
+
+# ============================================
+# STEP 6: Verify everything
+# ============================================
+echo "--- STEP 6: Full Verification ---"
+
+echo "Processes:"
+pgrep -a -f "terminal64\|metatrader\|MetaTrader\|wine.*exe" 2>/dev/null | head -10
+echo ""
+
+echo "VNC status:"
+pgrep -a x11vnc 2>/dev/null || echo "x11vnc NOT running!"
+echo ""
+
+echo "EA files:"
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
+echo ""
+
+echo "Config files:"
+ls -la "$CONFIG_DIR/" 2>/dev/null
+echo ""
+
+echo "Network connections (MT5):"
+sleep 10
+ss -tnp | grep -i "wine\|terminal\|metatrader\|main" | head -10
+echo ""
+
+# Wait a bit more for EA to initialize then check logs
+echo "Waiting for EA to initialize..."
+sleep 20
+
+echo "--- EA Logs (after restart) ---"
+MT5_LOG_DIR="${MT5_BASE}/MQL5/Logs"
+LATEST_LOG=$(ls -t "$MT5_LOG_DIR"/*.log 2>/dev/null | head -1)
 if [ -f "$LATEST_LOG" ]; then
-    grep -i "xauusd\|gold\|xau" "$LATEST_LOG" | tail -10 || echo "No XAUUSD references in EA logs"
-fi
-if [ -f "$LATEST_MAIN" ]; then
-    grep -i "xauusd\|gold\|xau" "$LATEST_MAIN" | tail -10 || echo "No XAUUSD references in main logs"
-fi
-echo ""
-
-# 8. Check EA initialization/parameters in logs
-echo "--- EA Initialization & Parameters in Logs ---"
-if [ -f "$LATEST_LOG" ]; then
-    grep -i "init\|param\|input\|risk\|trail\|spread\|propfirmbot\|loaded\|start" "$LATEST_LOG" | tail -20 || echo "No init references found"
+    echo "Log file: $LATEST_LOG"
+    tail -40 "$LATEST_LOG"
+else
+    echo "No EA logs found yet"
 fi
 echo ""
 
-# 9. System resources
-echo "--- System ---"
-echo "Uptime: $(uptime)"
-echo "Memory: $(free -h | grep Mem)"
-echo "Disk: $(df -h / | tail -1)"
+echo "--- Status JSON ---"
+cat "$CONFIG_DIR/status.json" 2>/dev/null || echo "No status.json"
 echo ""
 
-# 10. Network / MT5 connection
-echo "--- Network Connections (MT5) ---"
-ss -tnp | grep -i "terminal\|wine\|metatrader" | head -10 || echo "No MT5 network connections found"
-echo ""
-
-echo "=== Done ==="
+echo "=== DONE - $(date) ==="
