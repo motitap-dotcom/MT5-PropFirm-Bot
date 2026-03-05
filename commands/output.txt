@@ -1,6 +1,6 @@
 ============================================
   Restart mt5-status-daemon
-  2026-03-05 16:24:22 UTC
+  2026-03-05 17:22:25 UTC
 ============================================
 
 === [1] Pull latest code ===
@@ -13,12 +13,30 @@ bash: /root/MT5-PropFirm-Bot/scripts/install_status_daemon.sh: No such file or d
 
 === [3] Current /var/bots/mt5_status.json ===
 {
-    "bot_name": "MT5 Bot",
-    "active": true,
-    "balance": null,
-    "last_trade": "2026-03-05T14:40:33Z",
-    "updated_at": "2026-03-05T16:24:20Z"
+    "updated_at": "2026-03-05 17:22:23",
+    "ea_connected": true,
+    "account": {
+        "balance": 1981.41,
+        "equity": 1981.41,
+        "floating_pnl": 0.0,
+        "margin": 0.0,
+        "free_margin": 1981.41
+    },
+    "guardian_state": "ACTIVE",
+    "daily_dd": 0.0,
+    "total_dd": 0.0,
+    "today": {
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "net": 0.0
+    },
+    "open_positions": {
+        "count": 0,
+        "trades": []
+    },
+    "last_closed": []
 }
 
-=== DONE 2026-03-05 16:24:23 UTC ===
+=== DONE 2026-03-05 17:22:27 UTC ===
 EXIT_CODE=0
