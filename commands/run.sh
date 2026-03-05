@@ -1,159 +1,162 @@
 #!/bin/bash
 # =============================================================
-# VPS Full Status Report - 2026-03-05
+# Deep Trade Analysis - Pull ALL trading data
 # =============================================================
 
 echo "=============================================="
-echo "  FULL VPS STATUS REPORT - $(date)"
+echo "  DEEP TRADE ANALYSIS - $(date)"
 echo "=============================================="
-echo ""
 
-# 1. System Info
-echo "=== 1. SYSTEM INFO ==="
-echo "Uptime: $(uptime)"
-echo "Memory:"
-free -h
-echo ""
-echo "Disk:"
-df -h /
-echo ""
+MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
+EA_DIR="$MT5_DIR/MQL5/Experts/PropFirmBot"
+FILES_DIR="$MT5_DIR/MQL5/Files/PropFirmBot"
+LOG_DIR="$MT5_DIR/MQL5/Logs"
 
-# 2. MT5 Process
-echo "=== 2. MT5 PROCESS ==="
-if pgrep -a terminal64; then
-    echo "STATUS: MT5 IS RUNNING"
-else
-    echo "STATUS: MT5 IS NOT RUNNING!"
-fi
-if pgrep -a metatrader; then
-    echo "(metatrader process found)"
-fi
+# 1. ALL EA Logs - full content from all dates
 echo ""
-
-# 3. Wine processes
-echo "=== 3. WINE PROCESSES ==="
-pgrep -a wine 2>/dev/null || echo "No wine processes"
-pgrep -a wineserver 2>/dev/null || echo "No wineserver"
-echo ""
-
-# 4. VNC / Display
-echo "=== 4. DISPLAY & VNC ==="
-pgrep -a Xvfb 2>/dev/null || echo "No Xvfb"
-pgrep -a x11vnc 2>/dev/null || echo "No x11vnc"
-echo "DISPLAY=$DISPLAY"
-echo ""
-
-# 5. EA Files
-echo "=== 5. EA FILES ==="
-EA_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"
-if [ -d "$EA_DIR" ]; then
-    ls -la "$EA_DIR/"
-    echo ""
-    echo "EX5 file details:"
-    ls -la "$EA_DIR/"*.ex5 2>/dev/null || echo "NO .ex5 compiled files!"
-else
-    echo "EA directory NOT FOUND!"
-fi
-echo ""
-
-# 6. Config Files
-echo "=== 6. CONFIG FILES ==="
-CONFIG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot"
-if [ -d "$CONFIG_DIR" ]; then
-    ls -la "$CONFIG_DIR/"
-else
-    echo "Config directory NOT FOUND!"
-fi
-echo ""
-
-# 7. MT5 Logs - Last entries
-echo "=== 7. MT5 LOGS (Last 30 lines) ==="
-MT5_LOG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs"
-if [ -d "$MT5_LOG_DIR" ]; then
-    LATEST_LOG=$(ls -t "$MT5_LOG_DIR"/*.log 2>/dev/null | head -1)
-    if [ -f "$LATEST_LOG" ]; then
-        echo "Log file: $LATEST_LOG"
-        echo "Last modified: $(stat -c '%y' "$LATEST_LOG")"
-        echo "---"
-        tail -30 "$LATEST_LOG"
-    else
-        echo "No log files found"
-    fi
+echo "=== 1. ALL EA LOG FILES ==="
+if [ -d "$LOG_DIR" ]; then
+    for logfile in "$LOG_DIR"/*.log; do
+        if [ -f "$logfile" ]; then
+            echo "--- FILE: $(basename "$logfile") ($(wc -l < "$logfile") lines) ---"
+            # Show all trade-related lines (TRADE, ORDER, SIGNAL, PROFIT, LOSS, CLOSE, OPEN, POSITION, DEAL)
+            grep -i "TRADE\|ORDER\|SIGNAL\|PROFIT\|LOSS\|CLOSE\|OPEN\|POSITION\|DEAL\|BUY\|SELL\|SL\|TP\|STOP\|TAKE\|EXECUTE\|FILLED\|ENTRY\|EXIT" "$logfile" 2>/dev/null | head -200
+            echo ""
+        fi
+    done
 else
     echo "Log directory not found"
 fi
-echo ""
 
-# 8. MT5 Terminal Logs
-echo "=== 8. MT5 TERMINAL LOGS (Last 20 lines) ==="
-TERM_LOG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/Logs"
-if [ -d "$TERM_LOG_DIR" ]; then
-    LATEST_TLOG=$(ls -t "$TERM_LOG_DIR"/*.log 2>/dev/null | head -1)
-    if [ -f "$LATEST_TLOG" ]; then
-        echo "Log file: $LATEST_TLOG"
-        echo "Last modified: $(stat -c '%y' "$LATEST_TLOG")"
-        echo "---"
-        tail -20 "$LATEST_TLOG"
-    else
-        echo "No terminal log files"
+# 2. ALL Heartbeat lines (account status over time)
+echo ""
+echo "=== 2. HEARTBEAT HISTORY (Balance/Equity over time) ==="
+for logfile in "$LOG_DIR"/*.log; do
+    if [ -f "$logfile" ]; then
+        echo "--- $(basename "$logfile") ---"
+        grep -i "HEARTBEAT" "$logfile" 2>/dev/null | head -50
+        echo ""
     fi
-else
-    echo "Terminal log directory not found"
-fi
-echo ""
+done
 
-# 9. Account Status (from EA status file if exists)
-echo "=== 9. EA STATUS FILE ==="
-STATUS_FILE="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/bot_status.json"
-if [ -f "$STATUS_FILE" ]; then
-    cat "$STATUS_FILE"
+# 3. ALL BLOCKED/REJECTED trades
+echo ""
+echo "=== 3. BLOCKED & REJECTED TRADES ==="
+for logfile in "$LOG_DIR"/*.log; do
+    if [ -f "$logfile" ]; then
+        BLOCKED=$(grep -ic "BLOCK\|REJECT\|SKIP\|FILTER\|OUTSIDE\|SPREAD\|RISK\|GUARDIAN\|PREVENT\|DENY\|LIMIT\|RESTRICT" "$logfile" 2>/dev/null)
+        if [ "$BLOCKED" -gt 0 ]; then
+            echo "--- $(basename "$logfile") ($BLOCKED blocked entries) ---"
+            grep -i "BLOCK\|REJECT\|SKIP\|FILTER\|OUTSIDE\|SPREAD\|RISK.*block\|PREVENT\|DENY" "$logfile" 2>/dev/null | head -100
+            echo ""
+        fi
+    fi
+done
+
+# 4. Signal Analysis - what signals were generated
+echo ""
+echo "=== 4. SIGNAL GENERATION HISTORY ==="
+for logfile in "$LOG_DIR"/*.log; do
+    if [ -f "$logfile" ]; then
+        grep -i "SIGNAL\|signal_score\|SCORE\|TREND\|MOMENTUM\|BREAKOUT\|REVERSAL\|RANGE" "$logfile" 2>/dev/null | head -100
+        echo ""
+    fi
+done
+
+# 5. Guardian actions
+echo ""
+echo "=== 5. GUARDIAN ACTIONS ==="
+for logfile in "$LOG_DIR"/*.log; do
+    if [ -f "$logfile" ]; then
+        grep -i "GUARDIAN\|DRAWDOWN\|DD_CHECK\|EQUITY.*HIGH\|WATER.*MARK\|TRAIL\|SAFETY\|EMERGENCY\|CRITICAL\|SOFT\|HARD" "$logfile" 2>/dev/null | head -50
+        echo ""
+    fi
+done
+
+# 6. Config files - FULL content
+echo ""
+echo "=== 6. CONFIGURATION FILES ==="
+for cfg in "$FILES_DIR"/*.json; do
+    if [ -f "$cfg" ]; then
+        echo "--- $(basename "$cfg") ---"
+        cat "$cfg"
+        echo ""
+        echo ""
+    fi
+done
+
+# 7. PropFirmBot.log (EA's own log)
+echo ""
+echo "=== 7. PROPFIRMBOT.LOG (EA Internal Log) ==="
+if [ -f "$EA_DIR/PropFirmBot.log" ]; then
+    echo "Size: $(wc -l < "$EA_DIR/PropFirmBot.log") lines"
+    cat "$EA_DIR/PropFirmBot.log"
 else
-    echo "No bot_status.json found"
-    # Try other status files
-    find "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/" -name "*.json" -o -name "*.txt" -o -name "*.csv" 2>/dev/null | while read f; do
-        echo "Found: $f ($(stat -c '%y' "$f" 2>/dev/null))"
+    echo "No PropFirmBot.log found"
+fi
+
+# 8. MT5 Terminal journal
+echo ""
+echo "=== 8. MT5 TERMINAL JOURNAL ==="
+JOURNAL_DIR="$MT5_DIR/Logs"
+if [ -d "$JOURNAL_DIR" ]; then
+    for jfile in "$JOURNAL_DIR"/*.log; do
+        if [ -f "$jfile" ]; then
+            echo "--- $(basename "$jfile") ---"
+            grep -i "order\|deal\|trade\|profit\|loss\|buy\|sell\|position\|close\|open\|modify\|delete\|error\|fail" "$jfile" 2>/dev/null | head -100
+            echo ""
+        fi
+    done
+else
+    echo "No terminal journal directory"
+    # Try alternative locations
+    find "$MT5_DIR" -name "*.log" -not -path "*/MQL5/*" 2>/dev/null | while read f; do
+        echo "Found log: $f"
+        tail -20 "$f" 2>/dev/null
+        echo ""
     done
 fi
-echo ""
 
-# 10. Trade Journal
-echo "=== 10. TRADE JOURNAL ==="
-JOURNAL_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot"
-find "$JOURNAL_DIR" -name "*journal*" -o -name "*trade*" -o -name "*log*" 2>/dev/null | while read f; do
-    echo "--- $f ---"
-    tail -10 "$f" 2>/dev/null
-    echo ""
+# 9. Trade history from MT5 account (history files)
+echo ""
+echo "=== 9. TRADE HISTORY FILES ==="
+find "$MT5_DIR" -name "*history*" -o -name "*deal*" -o -name "*trade*" -o -name "*order*" -o -name "*journal*" 2>/dev/null | while read f; do
+    if [ -f "$f" ]; then
+        echo "Found: $f ($(stat -c '%s' "$f") bytes, modified: $(stat -c '%y' "$f"))"
+        head -30 "$f" 2>/dev/null
+        echo ""
+    fi
 done
-echo ""
 
-# 11. Network - Can MT5 reach broker?
-echo "=== 11. NETWORK ==="
-echo "Internet:"
-ping -c 1 -W 3 google.com > /dev/null 2>&1 && echo "Internet: OK" || echo "Internet: FAILED"
+# 10. CSV/report files
 echo ""
+echo "=== 10. REPORT/CSV FILES ==="
+find "$FILES_DIR" -name "*.csv" -o -name "*report*" -o -name "*journal*" -o -name "*history*" 2>/dev/null | while read f; do
+    if [ -f "$f" ]; then
+        echo "Found: $f"
+        cat "$f" 2>/dev/null | head -50
+        echo ""
+    fi
+done
 
-# 12. Cron jobs
-echo "=== 12. SCHEDULED TASKS ==="
-crontab -l 2>/dev/null || echo "No crontab"
+# 11. Full log for LAST 3 days (raw, for complete analysis)
 echo ""
+echo "=== 11. RAW LOGS LAST 3 DAYS (first 300 lines each) ==="
+for logfile in "$LOG_DIR"/202603{03,04,05}.log; do
+    if [ -f "$logfile" ]; then
+        echo "--- $(basename "$logfile") ($(wc -l < "$logfile") total lines) ---"
+        head -300 "$logfile"
+        echo "..."
+        echo ""
+    fi
+done
 
-# 13. Last reboot / crashes
-echo "=== 13. RECENT EVENTS ==="
-last reboot | head -5
+# 12. EA Input parameters (from the .mq5 source)
 echo ""
+echo "=== 12. EA INPUT PARAMETERS ==="
+grep -A2 "input " "$EA_DIR/PropFirmBot.mq5" 2>/dev/null | head -80
 
-# 14. Repo status on VPS
-echo "=== 14. REPO ON VPS ==="
-if [ -d /root/MT5-PropFirm-Bot ]; then
-    cd /root/MT5-PropFirm-Bot
-    echo "Branch: $(git branch --show-current 2>/dev/null)"
-    echo "Last commit: $(git log --oneline -1 2>/dev/null)"
-    echo "Status: $(git status --short 2>/dev/null | head -5)"
-else
-    echo "Repo not found on VPS"
-fi
 echo ""
-
 echo "=============================================="
-echo "  END OF REPORT - $(date)"
+echo "  END OF ANALYSIS - $(date)"
 echo "=============================================="
