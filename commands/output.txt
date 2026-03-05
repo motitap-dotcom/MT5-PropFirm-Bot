@@ -1,56 +1,131 @@
-=== FIX #6 - Thu Mar  5 12:12:06 UTC 2026 ===
---- STEP 1: Create telegram relay ---
-Relay RUNNING
-[TelegramRelay] Started at Thu Mar  5 12:12:06 UTC 2026
+=== FIX #7 - Thu Mar  5 12:14:43 UTC 2026 ===
+--- STEP 1: Kill MT5 ---
+Killed
 
---- STEP 2: Check current EA log ---
-Log file size: 111980 bytes
+--- STEP 2: Fix common.ini ---
+Current common.ini:
+[Common]
+Login=11797849
+ProxyEnable=0
+CertInstall=0
+NewsEnable=0
+Environment=F008C7293503CED0045B07842FC57A638AA2FD5F10DEE8EA7AD19815A339B9A21E36157778467577E33A229F2FC5240D
+Server=FundedNext-Server
+ProxyType=0
+ProxyAddress=
+EnableOpenCL=7
+ProxyAuth=
+Services=4294967295
+NewsLanguages=
+Source=download.mql5.com
 
-All INIT entries (looking for new session):
-OH	0	10:17:57.809	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-HI	0	10:17:57.901	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-RO	0	10:17:58.155	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-LJ	0	10:17:58.155	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-CJ	0	10:17:58.155	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
-LK	0	11:17:03.288	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-RM	0	11:17:03.338	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-PR	0	11:17:04.470	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-NM	0	11:17:04.470	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-EF	0	11:17:04.470	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
+[StartUp]
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+Symbol=EURUSD
+Period=M15
 
-Last 20 lines of EA log:
-PJ	0	11:17:03.537	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
-DI	0	11:17:03.537	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-OI	0	11:17:03.618	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-PH	0	11:17:04.416	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-QO	0	11:17:04.469	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-IQ	0	11:17:04.469	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-KQ	0	11:17:04.469	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
-CM	0	11:17:04.469	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
-ME	0	11:17:04.469	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-PR	0	11:17:04.470	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-IH	0	11:17:04.470	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-HP	0	11:17:04.470	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-HE	0	11:17:04.470	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-HN	0	11:17:04.470	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-FG	0	11:17:04.470	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-NM	0	11:17:04.470	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
-FF	0	11:17:04.470	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-EF	0	11:17:04.470	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
-KF	0	11:17:04.471	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.05 13:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-JF	0	11:17:04.471	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+[Experts]
+AllowLiveTrading=1
+AllowDllImport=0
+Enabled=1
+Account=11797849
+Profile=0
+AllowWebRequest=1
+WebRequestUrl1=https://api.telegram.org
 
---- STEP 3: MT5 status ---
-Processes:
-2243286 /opt/wine-staging/lib/wine/../../bin/wineserver
+[Charts]
+ProfileLast=Default
+MaxBars=100000
+PrintColor=0
+SaveDeleted=0
+TradeHistory=1
+TradeLevels=1
+TradeLevelsDrag=0
+ObsoleteLasttime=1772635517
+PreloadCharts=1
 
-Network:
-ESTAB      0      0       77.237.234.2:46299   18.168.91.222:443   users:(("main",pid=2243352,fd=19),("wineserver",pid=2243286,fd=174))
 
-EA .ex5 file info:
--rw-r--r-- 1 root root 164640 Mar  5 10:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+---
+Written clean common.ini
+[Common]
+Login=11797849
+ProxyEnable=0
+CertInstall=0
+NewsEnable=0
+Server=FundedNext-Server
+ProxyType=0
+ProxyAddress=
+EnableOpenCL=7
+ProxyAuth=
+Services=4294967295
+NewsLanguages=
+Source=download.mql5.com
+[StartUp]
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+Symbol=EURUSD
+Period=M15
+[Experts]
+AllowLiveTrading=1
+AllowDllImport=0
+Enabled=1
+Account=11797849
+Profile=0
+AllowWebRequest=1
+WebRequestUrl1=https://api.telegram.org
+[Charts]
+ProfileLast=Default
+MaxBars=100000
+PrintColor=0
+SaveDeleted=0
+TradeHistory=1
+TradeLevels=1
+TradeLevelsDrag=0
+PreloadCharts=1
 
-Status JSON:
+--- STEP 3: Clean up ---
+State deleted
+Old log renamed
+
+--- STEP 4: Start MT5 ---
+MT5 PID: 2244702
+Waiting 45 seconds for full initialization...
+
+========== FULL VERIFICATION ==========
+Wine processes:
+2244705 /opt/wine-staging/lib/wine/../../bin/wineserver
+
+MT5 stdout (if any errors):
+00e8:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31ccb0
+00e8:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31ccb0
+00e8:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31ccb0
+00e8:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31ccb0
+00e8:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31ccb0
+
+Network (FundedNext connected?):
+ESTAB      0      0       77.237.234.2:48768  78.140.180.54:443   users:(("main",pid=2244773,fd=79),("wineserver",pid=2244705,fd=408))
+ESTAB      0      0       77.237.234.2:39345  18.168.91.222:443   users:(("main",pid=2244773,fd=20),("wineserver",pid=2244705,fd=177))
+ESTAB      25549  0       77.237.234.2:46299  18.168.91.222:443   users:(("main",pid=2243352,fd=19))                                  
+ESTAB      0      0       77.237.234.2:34390  78.140.180.43:443   users:(("main",pid=2244773,fd=58),("wineserver",pid=2244705,fd=384))
+
+Relay daemon:
+2244125 bash /root/telegram_relay.sh
+
+--- NEW EA Log ---
+No new log file yet!
+Available logs:
+total 2824
+drwxr-xr-x  2 root root    4096 Mar  5 12:14 .
+drwxr-xr-x 14 root root    4096 Mar  5 10:59 ..
+-rw-r--r--  1 root root 2127586 Feb 27 21:59 20260227.log
+-rw-r--r--  1 root root   39122 Feb 28 18:34 20260228.log
+-rw-r--r--  1 root root    7826 Mar  1 15:37 20260301.log
+-rw-r--r--  1 root root  193416 Mar  3 23:53 20260303.log
+-rw-r--r--  1 root root  372652 Mar  4 23:49 20260304.log
+-rw-r--r--  1 root root  111980 Mar  5 11:17 20260305.log.old
+
+--- Status JSON ---
 {
   "timestamp": "2026.03.05 13:25:13",
   "server_time": "2026.03.05 13:25:13",
@@ -61,39 +136,11 @@ Status JSON:
     "server": "FundedNext-Server",
     "currency": "USD",
     "leverage": 30,
-    "balance": 1981.41,
-    "equity": 1981.41,
-    "margin": 0.00,
-    "free_margin": 1981.41,
-    "floating_pnl": 0.00,
-    "initial_balance": 1981.41,
-    "total_pnl": 0.00,
-    "profit_percent": 0.00
-  },
-  "guardian": {
-    "state": "ACTIVE",
-    "daily_dd": 0.00,
-    "total_dd": 0.00,
-    "halt_message": "",
-    "connection_ok": true,
-    "can_trade": true
-  },
-  "today": {
-    "trades": 0,
-    "wins": 0,
-    "losses": 0,
-    "profit": 0.00,
-    "loss": 0.00,
-    "net": 0.00,
-    "consec_losses": 0
-  },
-  "positions": {
-    "count": 0,
-    "open": []
-  }
-}
-Telegram queue file:
-No queue file
 
-=== DONE - Thu Mar  5 12:12:10 UTC 2026 ===
+--- Telegram queue ---
+
+--- Relay log ---
+[TelegramRelay] Started at Thu Mar  5 12:12:06 UTC 2026
+
+=== DONE - Thu Mar  5 12:15:33 UTC 2026 ===
 EXIT_CODE=0
