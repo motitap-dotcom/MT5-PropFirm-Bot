@@ -81,10 +81,10 @@ input bool     InpNewsHighImpact  = true;        // News: Filter High Impact
 input bool     InpNewsMedImpact   = false;       // News: Filter Medium Impact
 
 // --- Session Filter (UTC) ---
-input int      InpLondonStart     = 7;          // London Start
-input int      InpLondonEnd       = 16;         // London End (covers overlap with NY)
+input int      InpLondonStart     = 6;          // London Start
+input int      InpLondonEnd       = 17;         // London End (covers overlap with NY)
 input int      InpNYStart         = 12;         // NY Start
-input int      InpNYEnd           = 21;         // NY End (extended to 23:00 Israel)
+input int      InpNYEnd           = 22;         // NY End (extended to 23:00 Israel)
 
 // --- Trade Management ---
 input double   InpTrailingActivation = 30.0;    // Trailing Activation (pips)
@@ -98,7 +98,7 @@ input int      InpSlippage          = 20;        // Max Slippage (points)
 input bool     InpTradeEURUSD     = true;       // Trade EURUSD
 input bool     InpTradeGBPUSD     = true;       // Trade GBPUSD
 input bool     InpTradeUSDJPY     = true;       // Trade USDJPY
-input bool     InpTradeXAUUSD     = false;      // Trade XAUUSD
+input bool     InpTradeXAUUSD     = true;       // Trade XAUUSD
 
 // --- Notifications ---
 input string   InpTelegramToken   = "8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g";  // Telegram Bot Token

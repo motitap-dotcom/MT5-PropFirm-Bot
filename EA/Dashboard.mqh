@@ -56,11 +56,11 @@ CDashboard::CDashboard()
 {
    m_prefix = "PFB_";
    m_x = 10;
-   m_y = 30;
-   m_width = 350;
-   m_line_height = 18;
+   m_y = 25;
+   m_width = 260;
+   m_line_height = 15;
    m_font = "Consolas";
-   m_font_size = 9;
+   m_font_size = 8;
    m_hard_daily_dd = 0;
    m_hard_total_dd = 6.0;
    m_profit_target = 0;
@@ -87,7 +87,7 @@ void CDashboard::Init(int x, int y, double hard_daily_dd, double hard_total_dd, 
    ObjectSetInteger(0, bg_name, OBJPROP_XDISTANCE, m_x - 5);
    ObjectSetInteger(0, bg_name, OBJPROP_YDISTANCE, m_y - 5);
    ObjectSetInteger(0, bg_name, OBJPROP_XSIZE, m_width);
-   ObjectSetInteger(0, bg_name, OBJPROP_YSIZE, m_line_height * 18 + 10);
+   ObjectSetInteger(0, bg_name, OBJPROP_YSIZE, m_line_height * 11 + 10);
    ObjectSetInteger(0, bg_name, OBJPROP_BGCOLOR, CLR_BG);
    ObjectSetInteger(0, bg_name, OBJPROP_BORDER_COLOR, CLR_BORDER);
    ObjectSetInteger(0, bg_name, OBJPROP_BORDER_TYPE, BORDER_FLAT);
@@ -97,83 +97,59 @@ void CDashboard::Init(int x, int y, double hard_daily_dd, double hard_total_dd, 
 
    int row = 0;
 
-   // Title
+   // Title + State on same concept
    CreateLabel("TITLE", m_x + 5, m_y + row * m_line_height,
-               "PROPFIRMBOT v2.0 - LIVE", CLR_TITLE, 11, "Consolas Bold");
+               "PropFirmBot v2.0", CLR_TITLE, 9, "Consolas Bold");
+   CreateLabel("STATE_V", m_x + 155, m_y + row * m_line_height, "---", CLR_VALUE);
    row += 2;
 
-   // State
-   CreateLabel("STATE_L", m_x + 5,   m_y + row * m_line_height, "STATE:", CLR_LABEL);
-   CreateLabel("STATE_V", m_x + 120, m_y + row * m_line_height, "---", CLR_VALUE);
+   // Balance / Equity on two lines
+   CreateLabel("BAL_L", m_x + 5,   m_y + row * m_line_height, "Bal:", CLR_LABEL);
+   CreateLabel("BAL_V", m_x + 70,  m_y + row * m_line_height, "---", CLR_VALUE);
    row++;
 
-   // Separator
-   CreateLabel("SEP1", m_x + 5, m_y + row * m_line_height, "--- ACCOUNT ---", CLR_BORDER);
+   CreateLabel("EQ_L",  m_x + 5,   m_y + row * m_line_height, "Eq:", CLR_LABEL);
+   CreateLabel("EQ_V",  m_x + 70,  m_y + row * m_line_height, "---", CLR_VALUE);
    row++;
 
-   // Balance / Equity
-   CreateLabel("BAL_L", m_x + 5,   m_y + row * m_line_height, "Balance:", CLR_LABEL);
-   CreateLabel("BAL_V", m_x + 120, m_y + row * m_line_height, "---", CLR_VALUE);
-   row++;
-
-   CreateLabel("EQ_L",  m_x + 5,   m_y + row * m_line_height, "Equity:", CLR_LABEL);
-   CreateLabel("EQ_V",  m_x + 120, m_y + row * m_line_height, "---", CLR_VALUE);
-   row++;
-
-   CreateLabel("PNL_L", m_x + 5,   m_y + row * m_line_height, "Profit:", CLR_LABEL);
-   CreateLabel("PNL_V", m_x + 120, m_y + row * m_line_height, "---", CLR_VALUE);
-   row++;
-
-   // Separator
-   CreateLabel("SEP2", m_x + 5, m_y + row * m_line_height, "--- DRAWDOWN ---", CLR_BORDER);
+   // Profit
+   CreateLabel("PNL_L", m_x + 5,   m_y + row * m_line_height, "P/L:", CLR_LABEL);
+   CreateLabel("PNL_V", m_x + 70,  m_y + row * m_line_height, "---", CLR_VALUE);
    row++;
 
    // Daily DD
-   CreateLabel("DDD_L", m_x + 5,   m_y + row * m_line_height, "Daily DD:", CLR_LABEL);
-   CreateLabel("DDD_V", m_x + 120, m_y + row * m_line_height, "---", CLR_VALUE);
-   row++;
-
-   CreateLabel("DDD_BAR", m_x + 5, m_y + row * m_line_height, "", CLR_LABEL);
+   CreateLabel("DDD_L", m_x + 5,   m_y + row * m_line_height, "DayDD:", CLR_LABEL);
+   CreateLabel("DDD_V", m_x + 70,  m_y + row * m_line_height, "---", CLR_VALUE);
    row++;
 
    // Total DD
-   CreateLabel("TDD_L", m_x + 5,   m_y + row * m_line_height, "Total DD:", CLR_LABEL);
-   CreateLabel("TDD_V", m_x + 120, m_y + row * m_line_height, "---", CLR_VALUE);
+   CreateLabel("TDD_L", m_x + 5,   m_y + row * m_line_height, "TotDD:", CLR_LABEL);
+   CreateLabel("TDD_V", m_x + 70,  m_y + row * m_line_height, "---", CLR_VALUE);
    row++;
 
-   CreateLabel("TDD_BAR", m_x + 5, m_y + row * m_line_height, "", CLR_LABEL);
+   // Positions + Today combined
+   CreateLabel("POS_L", m_x + 5,   m_y + row * m_line_height, "Pos:", CLR_LABEL);
+   CreateLabel("POS_V", m_x + 70,  m_y + row * m_line_height, "---", CLR_VALUE);
    row++;
 
-   // Separator
-   CreateLabel("SEP3", m_x + 5, m_y + row * m_line_height, "--- TRADING ---", CLR_BORDER);
-   row++;
-
-   // Positions
-   CreateLabel("POS_L", m_x + 5,   m_y + row * m_line_height, "Positions:", CLR_LABEL);
-   CreateLabel("POS_V", m_x + 120, m_y + row * m_line_height, "---", CLR_VALUE);
-   row++;
-
-   // Today stats
    CreateLabel("TODAY_L", m_x + 5,   m_y + row * m_line_height, "Today:", CLR_LABEL);
-   CreateLabel("TODAY_V", m_x + 120, m_y + row * m_line_height, "---", CLR_VALUE);
+   CreateLabel("TODAY_V", m_x + 70,  m_y + row * m_line_height, "---", CLR_VALUE);
    row++;
 
-   // Consecutive losses
-   CreateLabel("CL_L", m_x + 5,   m_y + row * m_line_height, "Consec Loss:", CLR_LABEL);
-   CreateLabel("CL_V", m_x + 120, m_y + row * m_line_height, "---", CLR_VALUE);
+   // Connection + ConsecLoss combined
+   CreateLabel("CONN_L", m_x + 5,   m_y + row * m_line_height, "Conn:", CLR_LABEL);
+   CreateLabel("CONN_V", m_x + 70,  m_y + row * m_line_height, "---", CLR_VALUE);
+   CreateLabel("CL_L",   m_x + 130, m_y + row * m_line_height, "CL:", CLR_LABEL);
+   CreateLabel("CL_V",   m_x + 165, m_y + row * m_line_height, "---", CLR_VALUE);
    row++;
 
-   // Connection
-   CreateLabel("CONN_L", m_x + 5,   m_y + row * m_line_height, "Connection:", CLR_LABEL);
-   CreateLabel("CONN_V", m_x + 120, m_y + row * m_line_height, "---", CLR_VALUE);
-   row++;
-
-   // Halt message
+   // Halt message (only shown when needed)
    CreateLabel("HALT_L", m_x + 5, m_y + row * m_line_height, "", CLR_DANGER);
-   row++;
 
-   // Time
-   CreateLabel("TIME_V", m_x + 5, m_y + row * m_line_height, "", CLR_BORDER);
+   // Hidden labels for removed elements (keep Update() compatible)
+   CreateLabel("DDD_BAR", -100, -100, "", CLR_LABEL);
+   CreateLabel("TDD_BAR", -100, -100, "", CLR_LABEL);
+   CreateLabel("TIME_V",  -100, -100, "", CLR_BORDER);
 
    ChartRedraw();
 }
