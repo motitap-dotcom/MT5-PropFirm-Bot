@@ -1,104 +1,5 @@
-=== FIX #14 - Thu Mar  5 12:50:49 UTC 2026 ===
---- STEP 1: Check MT5 ---
-MT5 is running
-
---- STEP 2: Install xdotool ---
-xdotool: /usr/bin/xdotool
-
---- STEP 3: Find MT5 window ---
-All windows:
-  14680067: Default IME
-  20971523: Default IME
-  27262979: Default IME
-  33554434: Default IME
-  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  37748739: Default IME
-  44040194: Default IME
-  44040193: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  48234499: Default IME
-  54525954: Default IME
-  54525953: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  58720259: Default IME
-  65011714: Default IME
-  65011713: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  69206019: Default IME
-  75497474: Default IME
-  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
-  79691779: Default IME
-  85983234: Default IME
-  85983233: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
-
-MT5 Window ID: 33554433
-Window name: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-
---- STEP 4: Attach EA via GUI ---
-Opening Navigator (Ctrl+N)...
-XGetInputFocus returned the focused window of 1. This is likely a bug in the X server.
-XGetInputFocus returned the focused window of 1. This is likely a bug in the X server.
-XGetInputFocus returned the focused window of 1. This is likely a bug in the X server.
-XGetInputFocus returned the focused window of 1. This is likely a bug in the X server.
-Trying Insert menu > Expert Advisor...
-Sending Alt+I (Insert menu)...
-Trying right-click approach...
-Window: 1280x998
-Right-clicking at 640, 499
-
-Taking screenshot...
-
---- STEP 5: Check existing VPS scripts ---
-relay/daemon.sh:
-#!/bin/bash
-# ============================================================
-# PropFirmBot Relay Daemon
-# GitHub-based remote command execution system
-#
-# How it works:
-#   1. Claude pushes a command to relay/command.json
-#   2. This daemon polls GitHub every 15 seconds
-#   3. When a new command is detected, it executes it
-#   4. Results are written to relay/result.json and pushed back
-#   5. Claude reads the result via git pull
-# ============================================================
-
-REPO_DIR="/root/MT5-PropFirm-Bot"
-COMMAND_FILE="$REPO_DIR/relay/command.json"
-RESULT_FILE="$REPO_DIR/relay/result.json"
-LOCK_FILE="/tmp/relay_daemon.lock"
-LOG_FILE="/var/log/relay_daemon.log"
-POLL_INTERVAL=15
-
-# Prevent multiple instances
-if [ -f "$LOCK_FILE" ]; then
-    PID=$(cat "$LOCK_FILE")
-    if kill -0 "$PID" 2>/dev/null; then
-        echo "Daemon already running (PID $PID)"
-        exit 1
-    fi
-fi
-echo $$ > "$LOCK_FILE"
-
-log() {
-    echo "[$(date -u '+%Y-%m-%d %H:%M:%S UTC')] $1" | tee -a "$LOG_FILE"
-}
-
-cleanup() {
-    rm -f "$LOCK_FILE"
-    log "Daemon stopped"
-    exit 0
-}
-trap cleanup SIGTERM SIGINT
-
-# Write initial status
-write_result() {
-    local status="$1"
-    local output="$2"
-    local cmd_id="$3"
-    cat > "$RESULT_FILE" << JSONEOF
-{
-  "id": "$cmd_id",
-  "status": "$status",
-
-scripts/fix_and_start.sh:
+=== FIX #15 - Thu Mar  5 12:53:44 UTC 2026 ===
+--- STEP 1: Read fix_and_start.sh (full) ---
 #!/bin/bash
 ###############################################
 # FIX & START MT5 - Full automated script
@@ -149,31 +50,67 @@ echo "EA files copied"
 echo ""
 echo "=== STEP 5: Compile EA ==="
 cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
+wine metaeditor64.exe /compile:MQL5/Experts/PropFirmBot/PropFirmBot.mq5 /log 2>/dev/null
+sleep 5
 
-management/server.py (first 30 lines):
-#!/usr/bin/env python3
-"""
-PropFirmBot VPS Management API
-===============================
-Lightweight HTTP API for remote VPS management.
-No external dependencies - uses Python standard library only.
+# Check compilation result
+if grep -q "0 errors" MQL5/Experts/PropFirmBot/PropFirmBot.log 2>/dev/null; then
+    echo "Compilation SUCCESS - 0 errors"
+else
+    echo "Compilation RESULT:"
+    tail -3 MQL5/Experts/PropFirmBot/PropFirmBot.log 2>/dev/null
+fi
 
-Run: python3 /root/MT5-PropFirm-Bot/management/server.py
-Or install as systemd service via install.sh
+# Verify .ex5 exists
+if [ -f "MQL5/Experts/PropFirmBot/PropFirmBot.ex5" ]; then
+    echo "PropFirmBot.ex5 exists ($(stat -c%s "MQL5/Experts/PropFirmBot/PropFirmBot.ex5") bytes)"
+else
+    echo "ERROR: PropFirmBot.ex5 NOT FOUND"
+    exit 1
+fi
 
-Endpoints (all require ?token=AUTH_TOKEN):
-  GET /api/status          - Full system status (MT5, EA, VNC, account)
-  GET /api/health          - Quick health check
-  GET /api/positions       - Open trading positions
-  GET /api/logs            - Recent EA/MT5 logs
-  GET /api/logs?source=terminal&lines=100
-  GET /api/account         - Account balance, equity, drawdown
-  GET /api/processes       - Running processes (MT5, VNC, Wine)
-  GET /api/system          - VPS system info (CPU, RAM, disk)
-  GET /api/ea-status       - EA status from status.json
-  GET /api/config          - Current risk/trading config
-  GET /api/journal         - Recent trade journal entries
+echo ""
+echo "=== STEP 6: Start MT5 ==="
+wineserver -k 2>/dev/null
+sleep 2
+DISPLAY=:99 nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" >/dev/null 2>&1 &
+echo "Waiting 15 seconds for MT5 to start..."
+sleep 15
 
+if pgrep -a terminal64 > /dev/null; then
+    echo ""
+    echo "==========================================="
+    echo "  MT5 IS RUNNING"
+    echo "==========================================="
+    echo ""
+    echo "Now connect with VNC to 77.237.234.2:5900"
+    echo "Then:"
+    echo "  1. Login to FundedNext account if needed"
+    echo "  2. Open EURUSD M15 chart"
+    echo "  3. Drag PropFirmBot EA onto chart"
+    echo "  4. Enable AutoTrading (green button)"
+    echo ""
+else
+    echo ""
+    echo "MT5 did not start. Trying alternative method..."
+    # Try with explicit wineprefix
+    WINEPREFIX=/root/.wine DISPLAY=:99 nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" >/dev/null 2>&1 &
+    sleep 15
+    if pgrep -a terminal64 > /dev/null; then
+        echo "==========================================="
+        echo "  MT5 IS RUNNING (alternative method)"
+        echo "==========================================="
+    else
+        echo "==========================================="
+        echo "  MT5 FAILED TO START"
+        echo "  Check VNC - there may be a dialog box"
+        echo "==========================================="
+    fi
+fi
+
+==========
+
+--- STEP 2: Management server restart logic ---
   POST /api/restart-mt5    - Restart MetaTrader 5
   POST /api/restart-vnc    - Restart VNC server
   POST /api/deploy         - Git pull + deploy EA files to MT5
@@ -181,10 +118,127 @@ Endpoints (all require ?token=AUTH_TOKEN):
   POST /api/stop-mt5       - Stop MT5
   POST /api/telegram-test  - Send test message via Telegram
   POST /api/exec           - Execute whitelisted command
+"""
 
---- STEP 6: Current state ---
-EA Log:
--rw-r--r-- 1 root root 111980 Mar  5 11:17 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260305.log.old
+import os
+import sys
+import json
+import time
+import subprocess
+import threading
+import hashlib
+import secrets
+import signal
+import logging
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from urllib.parse import urlparse, parse_qs
+from datetime import datetime, timezone
+from pathlib import Path
+
+# ─── Configuration ───────────────────────────────────────────────────────────
+
+PORT = 8888
+AUTH_TOKEN = "pfbot_mgmt_7x9Kp2mW4vQr8sNj"  # Change on first install
+BIND_ADDRESS = "0.0.0.0"
+
+MT5_DIR = "/root/.wine/drive_c/Program Files/MetaTrader 5"
+--
+def handle_restart_mt5():
+    """Restart MetaTrader 5."""
+    log.info("Restarting MT5...")
+    send_telegram("🔄 <b>MT5 Restart</b>\nRestarting MT5 via management API...")
+
+    # Kill MT5
+    run_cmd("pkill -f terminal64", timeout=10)
+    time.sleep(3)
+
+--- STEP 3: fix_compile_ea.sh ---
+#!/bin/bash
+# Fix EA compilation on VPS after Wine Staging upgrade
+# This script ensures PropFirmBot EA is compiled and running
+
+echo "========================================="
+echo "  PropFirmBot EA Fix & Compile Script"
+echo "  $(date -u '+%Y-%m-%d %H:%M UTC')"
+echo "========================================="
+
+export DISPLAY=:99
+export WINEPREFIX=/root/.wine
+export WINEDEBUG=-all
+export STAGING_WRITECOPY=1
+
+MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
+EA_DIR="$MT5_DIR/MQL5/Experts/PropFirmBot"
+EA_ROOT="$MT5_DIR/MQL5/Experts"
+FILES_DIR="$MT5_DIR/MQL5/Files/PropFirmBot"
+REPO_DIR="/root/MT5-PropFirm-Bot"
+
+echo ""
+echo "=== Step 1: Check Wine version ==="
+wine --version
+
+echo ""
+echo "=== Step 2: Stop MT5 ==="
+killall -9 terminal64.exe metaeditor64.exe 2>/dev/null
+sleep 2
+wineserver -k 2>/dev/null
+sleep 3
+
+echo ""
+echo "=== Step 3: Ensure VNC is running ==="
+if ! pgrep -x Xvfb > /dev/null; then
+    echo "Starting Xvfb..."
+    rm -f /tmp/.X99-lock /tmp/.X11-unix/X99 2>/dev/null
+    Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset &
+    sleep 3
+fi
+if ! pgrep -x x11vnc > /dev/null; then
+    echo "Starting x11vnc..."
+    x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw -xkb 2>/dev/null
+    sleep 2
+fi
+echo "Xvfb PID: $(pgrep -x Xvfb)"
+echo "x11vnc PID: $(pgrep -x x11vnc)"
+
+echo ""
+echo "=== Step 4: Update repo ==="
+cd "$REPO_DIR"
+git pull origin || true
+
+echo ""
+echo "=== Step 5: Deploy EA files ==="
+mkdir -p "$EA_DIR"
+mkdir -p "$FILES_DIR"
+cp -v "$REPO_DIR/EA/"* "$EA_DIR/"
+cp -v "$REPO_DIR/configs/"* "$FILES_DIR/"
+
+echo ""
+echo "=== Step 6: Check existing .ex5 ==="
+find "$MT5_DIR" -name "PropFirmBot.ex5" 2>/dev/null
+echo "(end of search)"
+
+echo ""
+echo "=== Step 7: Compile EA - Method 1 (MetaEditor CLI) ==="
+cd "$MT5_DIR"
+wine metaeditor64.exe /compile:"MQL5\Experts\PropFirmBot\PropFirmBot.mq5" /log 2>/dev/null &
+METAED_PID=$!
+sleep 25
+kill $METAED_PID 2>/dev/null
+wineserver -k 2>/dev/null
+sleep 3
+sync
+
+echo ""
+echo "=== Step 7b: Check compilation result ==="
+find "$MT5_DIR" -name "PropFirmBot.ex5" 2>/dev/null
+EX5_FOUND=$(find "$MT5_DIR" -name "PropFirmBot.ex5" 2>/dev/null | head -1)
+
+
+--- STEP 4: Management API ---
+Management server port: 
+
+--- STEP 5: EA Status ---
+No EA log for today
 
 Terminal log (last 5):
 JN	0	12:46:03.648	Terminal	C:\Program Files\MetaTrader 5
@@ -193,5 +247,5 @@ KE	0	12:46:19.341	Network	'11797849': previous successful authorization performe
 LE	0	12:46:20.865	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
 JF	0	12:46:20.865	Network	'11797849': trading has been enabled - hedging mode
 
-=== DONE - Thu Mar  5 12:51:00 UTC 2026 ===
+=== DONE - Thu Mar  5 12:53:44 UTC 2026 ===
 EXIT_CODE=0
