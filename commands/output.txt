@@ -1,57 +1,197 @@
-=== FIX #13 - Thu Mar  5 12:45:44 UTC 2026 ===
---- STEP 1: Kill MT5 ---
-Done
+=== FIX #14 - Thu Mar  5 12:50:49 UTC 2026 ===
+--- STEP 1: Check MT5 ---
+MT5 is running
 
---- STEP 2: Delete Default profile ---
-All Default profiles deleted
-Remaining chart profiles:
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart03.chr
+--- STEP 2: Install xdotool ---
+xdotool: /usr/bin/xdotool
 
---- STEP 3: common.ini ---
-Written
+--- STEP 3: Find MT5 window ---
+All windows:
+  14680067: Default IME
+  20971523: Default IME
+  27262979: Default IME
+  33554434: Default IME
+  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  37748739: Default IME
+  44040194: Default IME
+  44040193: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  48234499: Default IME
+  54525954: Default IME
+  54525953: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  58720259: Default IME
+  65011714: Default IME
+  65011713: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  69206019: Default IME
+  75497474: Default IME
+  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
+  79691779: Default IME
+  85983234: Default IME
+  85983233: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
 
---- STEP 4: Start MT5 ---
-MT5 starting... waiting 120 sec
---- STEP 5: Results ---
-Terminal log (expert refs + last entries):
-DG	0	12:35:07.958	Network	'11797849': trading has been enabled - hedging mode
-EL	0	12:39:39.349	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
-PG	0	12:39:39.355	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 5 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
-FM	0	12:39:39.355	Terminal	C:\Program Files\MetaTrader 5
-HD	0	12:39:56.784	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
-ID	0	12:39:56.790	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:35:06
-QE	0	12:39:58.117	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-CF	0	12:39:58.117	Network	'11797849': trading has been enabled - hedging mode
-NM	0	12:46:03.648	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
-KG	0	12:46:03.648	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 4 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+MT5 Window ID: 33554433
+Window name: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+
+--- STEP 4: Attach EA via GUI ---
+Opening Navigator (Ctrl+N)...
+XGetInputFocus returned the focused window of 1. This is likely a bug in the X server.
+XGetInputFocus returned the focused window of 1. This is likely a bug in the X server.
+XGetInputFocus returned the focused window of 1. This is likely a bug in the X server.
+XGetInputFocus returned the focused window of 1. This is likely a bug in the X server.
+Trying Insert menu > Expert Advisor...
+Sending Alt+I (Insert menu)...
+Trying right-click approach...
+Window: 1280x998
+Right-clicking at 640, 499
+
+Taking screenshot...
+
+--- STEP 5: Check existing VPS scripts ---
+relay/daemon.sh:
+#!/bin/bash
+# ============================================================
+# PropFirmBot Relay Daemon
+# GitHub-based remote command execution system
+#
+# How it works:
+#   1. Claude pushes a command to relay/command.json
+#   2. This daemon polls GitHub every 15 seconds
+#   3. When a new command is detected, it executes it
+#   4. Results are written to relay/result.json and pushed back
+#   5. Claude reads the result via git pull
+# ============================================================
+
+REPO_DIR="/root/MT5-PropFirm-Bot"
+COMMAND_FILE="$REPO_DIR/relay/command.json"
+RESULT_FILE="$REPO_DIR/relay/result.json"
+LOCK_FILE="/tmp/relay_daemon.lock"
+LOG_FILE="/var/log/relay_daemon.log"
+POLL_INTERVAL=15
+
+# Prevent multiple instances
+if [ -f "$LOCK_FILE" ]; then
+    PID=$(cat "$LOCK_FILE")
+    if kill -0 "$PID" 2>/dev/null; then
+        echo "Daemon already running (PID $PID)"
+        exit 1
+    fi
+fi
+echo $$ > "$LOCK_FILE"
+
+log() {
+    echo "[$(date -u '+%Y-%m-%d %H:%M:%S UTC')] $1" | tee -a "$LOG_FILE"
+}
+
+cleanup() {
+    rm -f "$LOCK_FILE"
+    log "Daemon stopped"
+    exit 0
+}
+trap cleanup SIGTERM SIGINT
+
+# Write initial status
+write_result() {
+    local status="$1"
+    local output="$2"
+    local cmd_id="$3"
+    cat > "$RESULT_FILE" << JSONEOF
+{
+  "id": "$cmd_id",
+  "status": "$status",
+
+scripts/fix_and_start.sh:
+#!/bin/bash
+###############################################
+# FIX & START MT5 - Full automated script
+# Run on VPS: bash /root/MT5-PropFirm-Bot/scripts/fix_and_start.sh
+###############################################
+
+echo "=== STEP 1: Kill all Wine processes ==="
+wineserver -k 2>/dev/null
+pkill -f wine 2>/dev/null
+pkill -f terminal64 2>/dev/null
+sleep 3
+echo "Done - all Wine processes killed"
+
+echo ""
+echo "=== STEP 2: Ensure VNC is running ==="
+if pgrep Xvfb > /dev/null; then
+    echo "Xvfb already running"
+else
+    Xvfb :99 -screen 0 1280x1024x24 &
+    sleep 2
+    echo "Xvfb started"
+fi
+
+if pgrep x11vnc > /dev/null; then
+    echo "x11vnc already running"
+else
+    x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw 2>/dev/null
+    sleep 1
+    echo "x11vnc started"
+fi
+export DISPLAY=:99
+
+echo ""
+echo "=== STEP 3: Disable Wine Mono dialog ==="
+wine reg add "HKCU\\Software\\Wine\\DllOverrides" /v mscoree /d "" /f 2>/dev/null
+sleep 2
+echo "Done - Mono dialog disabled"
+
+echo ""
+echo "=== STEP 4: Update EA files from repo ==="
+cd /root/MT5-PropFirm-Bot
+git pull origin claude/build-cfd-trading-bot-fl0ld 2>/dev/null
+EA_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"
+mkdir -p "$EA_DIR"
+cp EA/*.mq5 EA/*.mqh "$EA_DIR/"
+echo "EA files copied"
+
+echo ""
+echo "=== STEP 5: Compile EA ==="
+cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
+
+management/server.py (first 30 lines):
+#!/usr/bin/env python3
+"""
+PropFirmBot VPS Management API
+===============================
+Lightweight HTTP API for remote VPS management.
+No external dependencies - uses Python standard library only.
+
+Run: python3 /root/MT5-PropFirm-Bot/management/server.py
+Or install as systemd service via install.sh
+
+Endpoints (all require ?token=AUTH_TOKEN):
+  GET /api/status          - Full system status (MT5, EA, VNC, account)
+  GET /api/health          - Quick health check
+  GET /api/positions       - Open trading positions
+  GET /api/logs            - Recent EA/MT5 logs
+  GET /api/logs?source=terminal&lines=100
+  GET /api/account         - Account balance, equity, drawdown
+  GET /api/processes       - Running processes (MT5, VNC, Wine)
+  GET /api/system          - VPS system info (CPU, RAM, disk)
+  GET /api/ea-status       - EA status from status.json
+  GET /api/config          - Current risk/trading config
+  GET /api/journal         - Recent trade journal entries
+
+  POST /api/restart-mt5    - Restart MetaTrader 5
+  POST /api/restart-vnc    - Restart VNC server
+  POST /api/deploy         - Git pull + deploy EA files to MT5
+  POST /api/start-mt5      - Start MT5 (if not running)
+  POST /api/stop-mt5       - Stop MT5
+  POST /api/telegram-test  - Send test message via Telegram
+  POST /api/exec           - Execute whitelisted command
+
+--- STEP 6: Current state ---
+EA Log:
+-rw-r--r-- 1 root root 111980 Mar  5 11:17 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260305.log.old
+
+Terminal log (last 5):
 JN	0	12:46:03.648	Terminal	C:\Program Files\MetaTrader 5
 RE	0	12:46:19.341	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
 KE	0	12:46:19.341	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:39:56
 LE	0	12:46:20.865	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
 JF	0	12:46:20.865	Network	'11797849': trading has been enabled - hedging mode
 
-EA Log:
-NO EA LOG - checking all:
--rw-r--r--  1 root root   39122 Feb 28 18:34 20260228.log
--rw-r--r--  1 root root    7826 Mar  1 15:37 20260301.log
--rw-r--r--  1 root root  193416 Mar  3 23:53 20260303.log
--rw-r--r--  1 root root  372652 Mar  4 23:49 20260304.log
--rw-r--r--  1 root root  111980 Mar  5 11:17 20260305.log.old
-
-Default profile (recreated by MT5?):
-total 8
-drwxr-xr-x 2 root root 4096 Mar  5 12:46 .
-drwxr-xr-x 6 root root 4096 Mar  5 12:46 ..
-
-Relay: 2
-=== DONE - Thu Mar  5 12:47:50 UTC 2026 ===
+=== DONE - Thu Mar  5 12:51:00 UTC 2026 ===
 EXIT_CODE=0
