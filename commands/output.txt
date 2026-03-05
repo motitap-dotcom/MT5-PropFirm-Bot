@@ -1,28 +1,26 @@
 ============================================
-  Install MT5 Status Daemon
-  2026-03-05 15:49:08 UTC
+  Check & Install MT5 Status Daemon
+  2026-03-05 15:52:25 UTC
 ============================================
 
 === [1] Pulling latest code ===
 fatal: couldn't find remote ref master
 fatal: 'origin/master' is not a commit and a branch 'master' cannot be created from it
-fatal: couldn't find remote ref master
 
-=== [2] Installing status daemon ===
+=== [2] Daemon status ===
+fatal: couldn't find remote ref master
+Daemon not running - installing now...
 chmod: cannot access 'scripts/install_status_daemon.sh': No such file or directory
 bash: scripts/install_status_daemon.sh: No such file or directory
 
-=== [3] Verification ===
-Unit mt5-status-daemon.service could not be found.
-
---- /var/bots/mt5_status.json ---
+=== [3] /var/bots/mt5_status.json ===
 {
-  "bot_name": "MT5 Bot",
-  "active": true,
-  "balance": null,
-  "last_trade": "2026-03-05T14:40:33Z",
-  "updated_at": "2026-03-05T15:49:08Z"
+    "bot_name": "MT5 Bot",
+    "active": true,
+    "balance": null,
+    "last_trade": "2026-03-05T14:40:33Z",
+    "updated_at": "2026-03-05T15:52:09Z"
 }
 
-=== DONE 2026-03-05 15:49:12 UTC ===
+=== DONE 2026-03-05 15:52:26 UTC ===
 EXIT_CODE=0
