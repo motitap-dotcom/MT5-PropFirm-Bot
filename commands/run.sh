@@ -1,126 +1,96 @@
 #!/bin/bash
 # =============================================================
-# Setup mt5_status.json daemon on VPS
-# Creates /var/bots/mt5_status.json with live MT5 status
+# Update mt5_status.json daemon - fix JSON format for dashboard
 # =============================================================
 
 echo "============================================"
-echo "  Setup: mt5_status.json daemon"
+echo "  Update: mt5_status.json format"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
-# === Step 1: Check if daemon already exists ===
-echo "=== [1] Checking existing daemon ==="
-if systemctl is-active --quiet mt5-status-json.service 2>/dev/null; then
-    echo "Daemon mt5-status-json is ALREADY RUNNING"
-    systemctl status mt5-status-json.service --no-pager 2>/dev/null
-    echo ""
-    echo "Checking output file:"
-    cat /var/bots/mt5_status.json 2>/dev/null || echo "(file not found)"
-    echo ""
-else
-    echo "Daemon not running. Will create and start it."
-fi
+# === Step 1: Stop current daemon ===
+echo "=== [1] Stopping current daemon ==="
+systemctl stop mt5-status-json.service 2>/dev/null || true
+echo "Stopped."
 echo ""
 
-# === Step 2: Create directory ===
-echo "=== [2] Creating /var/bots/ directory ==="
-mkdir -p /var/bots
-chmod 755 /var/bots
-echo "Done."
-echo ""
+# === Step 2: Update the writer script with correct format ===
+echo "=== [2] Updating writer script ==="
+mkdir -p /root/PropFirmBot/scripts /var/bots
 
-# === Step 3: Create the status writer script ===
-echo "=== [3] Creating status writer script ==="
 cat > /root/PropFirmBot/scripts/mt5_status_writer.sh << 'SCRIPT_EOF'
 #!/bin/bash
-# mt5_status_writer.sh - writes MT5 status to /var/bots/mt5_status.json every 30 seconds
+# mt5_status_writer.sh - writes /var/bots/mt5_status.json every 30 seconds
+# Format expected by dashboard:
+# { bot_name, active, balance, last_trade, updated_at }
 
 STATUS_FILE="/var/bots/mt5_status.json"
 MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
+BALANCE_CACHE="/root/PropFirmBot/state/last_balance"
+LAST_TRADE_CACHE="/root/PropFirmBot/state/last_trade"
+
+mkdir -p /root/PropFirmBot/state
 
 while true; do
     TIMESTAMP=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 
-    # Check MT5 process
-    MT5_PID=$(pgrep -f "terminal64.exe" 2>/dev/null || true)
+    # --- Check if MT5 is running ---
+    MT5_PID=$(pgrep -of "terminal64.exe" 2>/dev/null || true)
     if [ -n "$MT5_PID" ]; then
-        MT5_RUNNING=true
-        MT5_STATUS="running"
+        ACTIVE=true
     else
-        MT5_RUNNING=false
-        MT5_STATUS="stopped"
-        MT5_PID="null"
+        ACTIVE=false
     fi
 
-    # Check VNC
-    VNC_PID=$(pgrep -f "x11vnc" 2>/dev/null || true)
-    if [ -n "$VNC_PID" ]; then
-        VNC_RUNNING=true
-    else
-        VNC_RUNNING=false
-    fi
-
-    # System info
-    CPU=$(top -bn1 | grep "Cpu(s)" | awk '{printf "%.1f", $2}' 2>/dev/null || echo "0")
-    RAM_TOTAL=$(free -m | awk '/Mem/{print $2}' 2>/dev/null || echo "0")
-    RAM_USED=$(free -m | awk '/Mem/{print $3}' 2>/dev/null || echo "0")
-    RAM_PCT=$(free | awk '/Mem/{printf "%.1f", $3/$2*100}' 2>/dev/null || echo "0")
-    DISK=$(df -h / | awk 'NR==2{print $5}' 2>/dev/null || echo "0%")
-    UPTIME_SEC=$(cat /proc/uptime | awk '{printf "%d", $1}' 2>/dev/null || echo "0")
-
-    # MT5 connections (broker)
-    CONN_COUNT=$(ss -tn state established | grep -v ':22 \|:5900 \|:53 \|:8080' | wc -l 2>/dev/null || echo "0")
-    CONN_COUNT=$((CONN_COUNT - 1))  # remove header
-    [ "$CONN_COUNT" -lt 0 ] && CONN_COUNT=0
-
-    # EA status from log
-    EA_STATUS="unknown"
+    # --- Get balance from EA logs ---
+    BALANCE="null"
     LATEST_LOG=$(ls -t "$MT5_DIR/MQL5/Logs/"*.log 2>/dev/null | head -1)
     if [ -n "$LATEST_LOG" ]; then
-        LOG_CONTENT=$(cat "$LATEST_LOG" 2>/dev/null | tr -d '\0' | tail -50)
-        if echo "$LOG_CONTENT" | grep -q "ALL SYSTEMS GO\|INIT"; then
-            EA_STATUS="initialized"
-        fi
-        if echo "$LOG_CONTENT" | grep -q "error\|ERROR\|FATAL"; then
-            EA_STATUS="error"
+        # Look for balance in log lines (EA logs balance as "Balance: XXXX.XX" or "Bal:XXXX.XX")
+        BAL_LINE=$(cat "$LATEST_LOG" 2>/dev/null | tr -d '\0' | grep -ioE 'balance[: ]+[0-9]+\.[0-9]+' | tail -1)
+        if [ -n "$BAL_LINE" ]; then
+            BAL_VAL=$(echo "$BAL_LINE" | grep -oE '[0-9]+\.[0-9]+' | tail -1)
+            if [ -n "$BAL_VAL" ]; then
+                BALANCE="$BAL_VAL"
+                echo "$BAL_VAL" > "$BALANCE_CACHE"
+            fi
         fi
     fi
+    # Fallback to cached balance
+    if [ "$BALANCE" = "null" ] && [ -f "$BALANCE_CACHE" ]; then
+        CACHED=$(cat "$BALANCE_CACHE" 2>/dev/null)
+        [ -n "$CACHED" ] && BALANCE="$CACHED"
+    fi
 
-    # Watchdog restart count
-    RESTART_COUNT=0
-    [ -f "/root/PropFirmBot/state/restart_count" ] && RESTART_COUNT=$(cat /root/PropFirmBot/state/restart_count 2>/dev/null || echo "0")
+    # --- Get last trade from EA logs ---
+    LAST_TRADE="null"
+    if [ -n "$LATEST_LOG" ]; then
+        TRADE_LINE=$(cat "$LATEST_LOG" 2>/dev/null | tr -d '\0' | grep -iE 'BUY|SELL|CLOSE|ORDER' | tail -1)
+        if [ -n "$TRADE_LINE" ]; then
+            # Extract timestamp from log line (format: HH:MM:SS or YYYY.MM.DD HH:MM:SS)
+            TRADE_TIME=$(echo "$TRADE_LINE" | grep -oE '[0-9]{2}:[0-9]{2}:[0-9]{2}' | head -1)
+            if [ -n "$TRADE_TIME" ]; then
+                TRADE_DATE=$(date -u '+%Y-%m-%dT')
+                LAST_TRADE="\"${TRADE_DATE}${TRADE_TIME}Z\""
+                echo "$LAST_TRADE" > "$LAST_TRADE_CACHE"
+            fi
+        fi
+    fi
+    # Fallback to cached last trade
+    if [ "$LAST_TRADE" = "null" ] && [ -f "$LAST_TRADE_CACHE" ]; then
+        CACHED=$(cat "$LAST_TRADE_CACHE" 2>/dev/null)
+        [ -n "$CACHED" ] && LAST_TRADE="$CACHED"
+    fi
 
-    # Write JSON
+    # --- Write JSON in dashboard format ---
     cat > "$STATUS_FILE" << JSONEOF
 {
-  "timestamp": "$TIMESTAMP",
-  "mt5": {
-    "running": $MT5_RUNNING,
-    "status": "$MT5_STATUS",
-    "pid": $MT5_PID
-  },
-  "vnc": {
-    "running": $VNC_RUNNING
-  },
-  "ea": {
-    "status": "$EA_STATUS"
-  },
-  "system": {
-    "cpu_percent": $CPU,
-    "ram_used_mb": $RAM_USED,
-    "ram_total_mb": $RAM_TOTAL,
-    "ram_percent": $RAM_PCT,
-    "disk_usage": "$DISK",
-    "uptime_seconds": $UPTIME_SEC
-  },
-  "broker": {
-    "connections": $CONN_COUNT
-  },
-  "watchdog": {
-    "restarts_today": $RESTART_COUNT
-  }
+  "bot_name": "MT5 Bot",
+  "active": $ACTIVE,
+  "balance": $BALANCE,
+  "last_trade": $LAST_TRADE,
+  "updated_at": "$TIMESTAMP"
 }
 JSONEOF
 
@@ -129,51 +99,23 @@ done
 SCRIPT_EOF
 
 chmod +x /root/PropFirmBot/scripts/mt5_status_writer.sh
-echo "Script created at /root/PropFirmBot/scripts/mt5_status_writer.sh"
+echo "Script updated."
 echo ""
 
-# === Step 4: Create systemd service ===
-echo "=== [4] Creating systemd service ==="
-cat > /etc/systemd/system/mt5-status-json.service << 'SERVICE_EOF'
-[Unit]
-Description=MT5 Status JSON Writer
-After=network.target
-
-[Service]
-Type=simple
-ExecStart=/bin/bash /root/PropFirmBot/scripts/mt5_status_writer.sh
-Restart=always
-RestartSec=10
-
-[Install]
-WantedBy=multi-user.target
-SERVICE_EOF
-
-echo "Service file created."
-echo ""
-
-# === Step 5: Enable and start ===
-echo "=== [5] Starting daemon ==="
+# === Step 3: Restart daemon ===
+echo "=== [3] Restarting daemon ==="
 systemctl daemon-reload
-systemctl enable mt5-status-json.service
 systemctl restart mt5-status-json.service
 sleep 5
 
 echo "--- Service status ---"
 systemctl is-active mt5-status-json.service
-systemctl status mt5-status-json.service --no-pager 2>/dev/null | head -15
 echo ""
 
-# === Step 6: Verify output ===
-echo "=== [6] Verifying /var/bots/mt5_status.json ==="
+# === Step 4: Verify output ===
+echo "=== [4] Verifying /var/bots/mt5_status.json ==="
 sleep 3
-if [ -f /var/bots/mt5_status.json ]; then
-    echo "FILE EXISTS!"
-    cat /var/bots/mt5_status.json
-else
-    echo "WARNING: File not created yet. Checking logs..."
-    journalctl -u mt5-status-json.service --no-pager -n 20
-fi
+cat /var/bots/mt5_status.json 2>/dev/null || echo "ERROR: file not found"
 echo ""
 
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
