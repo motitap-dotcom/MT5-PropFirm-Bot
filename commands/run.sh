@@ -1,29 +1,12 @@
 #!/bin/bash
-# Restart MT5 with new EA
-echo "=== RESTART MT5 $(date) ==="
-
-export DISPLAY=:99
-export WINEPREFIX=/root/.wine
-
-# Kill MT5
-pkill -f terminal64 2>/dev/null
-sleep 4
-
-# Start MT5
-cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
-wine64 terminal64.exe /portable &
-sleep 12
-
-# Check
-echo "Wine processes:"
+# Quick check - is MT5 running with new EA?
+echo "=== QUICK CHECK $(date) ==="
 pgrep -a wine 2>/dev/null | head -5
 echo ""
-
-# Check latest log
-LOG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs"
-LATEST=$(ls -t "$LOG_DIR"/*.log 2>/dev/null | head -1)
-echo "Latest log: $(basename "$LATEST" 2>/dev/null)"
-tail -10 "$LATEST" 2>/dev/null
-
+LOG="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs"
+LATEST=$(ls -t "$LOG"/*.log 2>/dev/null | head -1)
+echo "Log: $(basename "$LATEST")"
+tail -15 "$LATEST" 2>/dev/null
 echo ""
-echo "=== DONE $(date) ==="
+echo "EX5: $(ls -la "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5" 2>/dev/null)"
+echo "=== DONE ==="
