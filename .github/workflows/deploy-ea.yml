@@ -31,6 +31,9 @@ jobs:
           EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
           CONFIG_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
 
+          echo "=== Creating directories on VPS ==="
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} "mkdir -p \"${EA_DIR}\" \"${CONFIG_DIR}\""
+
           echo "=== Deploying EA files ==="
           for f in EA/*.mq5 EA/*.mqh; do
             [ -f "$f" ] && sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_IP}:\"${EA_DIR}/\""

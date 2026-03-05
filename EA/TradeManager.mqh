@@ -23,12 +23,15 @@ private:
    int               m_max_retries;       // Order send retries
    string            m_comment_prefix;    // Trade comment prefix
 
-   // Trade tracking
-   datetime          m_last_trade_time;   // Prevent overtrading
-   int               m_min_bar_gap;       // Min bars between trades on same symbol
+   // Trade tracking (per-symbol cooldown)
+   datetime          m_last_trade_time[];    // Per-symbol last trade time
+   string            m_tracked_symbols[];    // Symbols being tracked
+   int               m_tracked_count;        // Number of tracked symbols
+   int               m_min_bar_gap;          // Min bars between trades on same symbol
 
    // Normalize price to symbol tick size
    double            NormalizePrice(string symbol, double price);
+   void              RecordTradeTime(string symbol);
 
 public:
                      CTradeManager();
@@ -67,8 +70,8 @@ CTradeManager::CTradeManager()
    m_slippage       = 30;
    m_max_retries    = 3;
    m_comment_prefix = "PFBot";
-   m_last_trade_time= 0;
-   m_min_bar_gap    = 2;
+   m_tracked_count  = 0;
+   m_min_bar_gap    = 1;
 }
 
 //+------------------------------------------------------------------+
@@ -140,7 +143,7 @@ ulong CTradeManager::OpenBuy(string symbol, double lot, double sl, double tp, st
       if(m_trade.Buy(lot, symbol, ask, sl, tp, full_comment))
       {
          ulong ticket = m_trade.ResultOrder();
-         m_last_trade_time = TimeCurrent();
+         RecordTradeTime(symbol);
 
          PrintFormat("[TradeMgr] BUY opened: %s Lot=%.2f Entry=%.5f SL=%.5f TP=%.5f Ticket=%d",
                      symbol, lot, ask, sl, tp, ticket);
@@ -203,7 +206,7 @@ ulong CTradeManager::OpenSell(string symbol, double lot, double sl, double tp, s
       if(m_trade.Sell(lot, symbol, bid, sl, tp, full_comment))
       {
          ulong ticket = m_trade.ResultOrder();
-         m_last_trade_time = TimeCurrent();
+         RecordTradeTime(symbol);
 
          PrintFormat("[TradeMgr] SELL opened: %s Lot=%.2f Entry=%.5f SL=%.5f TP=%.5f Ticket=%d",
                      symbol, lot, bid, sl, tp, ticket);
@@ -406,20 +409,44 @@ bool CTradeManager::HasOpenPosition(string symbol, ENUM_POSITION_TYPE type)
 }
 
 //+------------------------------------------------------------------+
-//| Anti-overtrading: check if enough time/bars passed                |
+//| Record trade time for a symbol (per-symbol cooldown)             |
+//+------------------------------------------------------------------+
+void CTradeManager::RecordTradeTime(string symbol)
+{
+   // Find existing entry
+   for(int i = 0; i < m_tracked_count; i++)
+   {
+      if(m_tracked_symbols[i] == symbol)
+      {
+         m_last_trade_time[i] = TimeCurrent();
+         return;
+      }
+   }
+   // Add new entry
+   m_tracked_count++;
+   ArrayResize(m_tracked_symbols, m_tracked_count);
+   ArrayResize(m_last_trade_time, m_tracked_count);
+   m_tracked_symbols[m_tracked_count - 1] = symbol;
+   m_last_trade_time[m_tracked_count - 1] = TimeCurrent();
+}
+
+//+------------------------------------------------------------------+
+//| Anti-overtrading: per-symbol cooldown check                       |
 //+------------------------------------------------------------------+
 bool CTradeManager::CanTradeNow(string symbol)
 {
-   // Ensure minimum time between trades (at least 2 bars on M15 = 30 minutes)
-   if(m_last_trade_time > 0)
+   // Per-symbol cooldown: min bars between trades on SAME symbol
+   for(int i = 0; i < m_tracked_count; i++)
    {
-      int seconds_gap = m_min_bar_gap * PeriodSeconds(PERIOD_M15);
-      if(TimeCurrent() - m_last_trade_time < seconds_gap)
-         return false;
+      if(m_tracked_symbols[i] == symbol)
+      {
+         int seconds_gap = m_min_bar_gap * PeriodSeconds(PERIOD_M15);
+         if(TimeCurrent() - m_last_trade_time[i] < seconds_gap)
+            return false;
+         break;
+      }
    }
 
-   // Don't open duplicate direction positions on same symbol
-   // (already handled by max positions, but extra safety)
    return true;
 }
 //+------------------------------------------------------------------+
