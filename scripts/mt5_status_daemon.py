@@ -120,19 +120,31 @@ def get_last_closed_trades(n=5):
 
 
 def build_status():
-    """Build the combined status JSON."""
+    """Build the combined status JSON with dashboard-required fields."""
     ea_status = read_ea_status()
     open_positions, open_count = parse_open_positions(ea_status)
     last_closed = get_last_closed_trades(5)
 
+    is_connected = ea_status is not None and not ea_status.get('_is_stale', True)
+
     result = {
+        # --- Dashboard required top-level fields ---
+        'bot_name': 'PropFirmBot',
+        'active': is_connected,
+        'balance': 0,
+        'last_trade': None,
         'updated_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        'ea_connected': ea_status is not None and not ea_status.get('_is_stale', True),
+        'open_positions': [],
+        'recent_closed_trades': [],
+
+        # --- Extended info ---
+        'ea_connected': is_connected,
     }
 
     # Account info from EA
     if ea_status:
         account = ea_status.get('account', {})
+        result['balance'] = account.get('balance', 0)
         result['account'] = {
             'balance': account.get('balance', 0),
             'equity': account.get('equity', 0),
@@ -153,14 +165,16 @@ def build_status():
             'net': today.get('net', 0),
         }
 
-    # Open positions
-    result['open_positions'] = {
-        'count': open_count,
-        'trades': open_positions,
-    }
+    # Open positions - flat list for dashboard
+    result['open_positions'] = open_positions
+    result['_open_positions_count'] = open_count
 
-    # Last 5 closed trades
-    result['last_closed'] = last_closed
+    # Last trade (most recent closed trade)
+    if last_closed:
+        result['last_trade'] = last_closed[0]
+
+    # Recent closed trades for dashboard
+    result['recent_closed_trades'] = last_closed
 
     return result
 
