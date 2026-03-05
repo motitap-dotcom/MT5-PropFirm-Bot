@@ -1,137 +1,179 @@
 #!/bin/bash
 # =============================================================
-# FIX: Enable AutoTrading in common.ini + terminal.ini
+# Setup mt5_status.json daemon on VPS
+# Creates /var/bots/mt5_status.json with live MT5 status
 # =============================================================
 
 echo "============================================"
-echo "  FIX: AutoTrading in common.ini"
+echo "  Setup: mt5_status.json daemon"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
-MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
-
-# ============ STEP 0: Show terminal.ini ============
-echo "=== [0] terminal.ini content ==="
-cat "$MT5/config/terminal.ini" 2>/dev/null || echo "(not found)"
-echo ""
-echo "--- settings.ini content ---"
-cat "$MT5/config/settings.ini" 2>/dev/null || echo "(not found)"
-echo ""
-
-# ============ STEP 1: Stop MT5 to modify configs safely ============
-echo "=== [1] Stopping MT5 ==="
-systemctl stop mt5.service
-sleep 3
-pkill -9 -f terminal64.exe 2>/dev/null
-pkill -9 -f wineserver 2>/dev/null
-sleep 2
-echo "MT5 stopped."
-echo ""
-
-# ============ STEP 2: Fix common.ini - add AutoTrading to [Common] section ============
-echo "=== [2] Fixing common.ini ==="
-COMMON_INI="$MT5/config/common.ini"
-
-# Add AutoTrading=1 to existing [Common] section
-if grep -q '^AutoTrading=' "$COMMON_INI" 2>/dev/null; then
-    sed -i 's/^AutoTrading=.*/AutoTrading=1/' "$COMMON_INI"
-    echo "Updated existing AutoTrading setting"
+# === Step 1: Check if daemon already exists ===
+echo "=== [1] Checking existing daemon ==="
+if systemctl is-active --quiet mt5-status-json.service 2>/dev/null; then
+    echo "Daemon mt5-status-json is ALREADY RUNNING"
+    systemctl status mt5-status-json.service --no-pager 2>/dev/null
+    echo ""
+    echo "Checking output file:"
+    cat /var/bots/mt5_status.json 2>/dev/null || echo "(file not found)"
+    echo ""
 else
-    # Add after the [Common] section header
-    sed -i '/^\[Common\]/a AutoTrading=1' "$COMMON_INI"
-    echo "Added AutoTrading=1 to [Common] section"
-fi
-
-# Also make sure Experts section has proper settings
-if ! grep -q '^ExpertsEnabled=' "$COMMON_INI" 2>/dev/null; then
-    sed -i '/^\[Experts\]/a ExpertsEnabled=1' "$COMMON_INI"
-fi
-
-echo "--- Updated common.ini ---"
-cat "$COMMON_INI"
-echo ""
-
-# ============ STEP 3: Fix terminal.ini if it exists ============
-echo "=== [3] Fixing terminal.ini ==="
-TERMINAL_INI="$MT5/config/terminal.ini"
-
-if [ -f "$TERMINAL_INI" ]; then
-    # Add or update AutoTrading
-    if grep -q 'AutoTrading=' "$TERMINAL_INI"; then
-        sed -i 's/AutoTrading=.*/AutoTrading=1/g' "$TERMINAL_INI"
-    else
-        # Add to the file
-        echo "AutoTrading=1" >> "$TERMINAL_INI"
-    fi
-
-    if grep -q 'ExpertsEnabled=' "$TERMINAL_INI"; then
-        sed -i 's/ExpertsEnabled=.*/ExpertsEnabled=1/g' "$TERMINAL_INI"
-    else
-        echo "ExpertsEnabled=1" >> "$TERMINAL_INI"
-    fi
-
-    echo "--- Updated terminal.ini ---"
-    cat "$TERMINAL_INI"
-else
-    echo "terminal.ini not found, creating..."
-    cat > "$TERMINAL_INI" << 'TINIEOF'
-[Experts]
-AutoTrading=1
-ExpertsEnabled=1
-AllowLiveTrading=1
-TINIEOF
-    cat "$TERMINAL_INI"
+    echo "Daemon not running. Will create and start it."
 fi
 echo ""
 
-# Also check/fix the Capital-case Config folder (MT5 sometimes uses both)
-COMMON_INI2="$MT5/Config/common.ini"
-if [ -f "$COMMON_INI2" ] && [ "$COMMON_INI" != "$COMMON_INI2" ]; then
-    echo "=== [3b] Also fixing Config/common.ini ==="
-    if grep -q '^AutoTrading=' "$COMMON_INI2" 2>/dev/null; then
-        sed -i 's/^AutoTrading=.*/AutoTrading=1/' "$COMMON_INI2"
-    else
-        sed -i '/^\[Common\]/a AutoTrading=1' "$COMMON_INI2"
-    fi
-    echo "Updated Config/common.ini too"
-fi
+# === Step 2: Create directory ===
+echo "=== [2] Creating /var/bots/ directory ==="
+mkdir -p /var/bots
+chmod 755 /var/bots
+echo "Done."
 echo ""
 
-# ============ STEP 4: Start MT5 ============
-echo "=== [4] Starting MT5 ==="
+# === Step 3: Create the status writer script ===
+echo "=== [3] Creating status writer script ==="
+cat > /root/PropFirmBot/scripts/mt5_status_writer.sh << 'SCRIPT_EOF'
+#!/bin/bash
+# mt5_status_writer.sh - writes MT5 status to /var/bots/mt5_status.json every 30 seconds
+
+STATUS_FILE="/var/bots/mt5_status.json"
+MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
+
+while true; do
+    TIMESTAMP=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+
+    # Check MT5 process
+    MT5_PID=$(pgrep -f "terminal64.exe" 2>/dev/null || true)
+    if [ -n "$MT5_PID" ]; then
+        MT5_RUNNING=true
+        MT5_STATUS="running"
+    else
+        MT5_RUNNING=false
+        MT5_STATUS="stopped"
+        MT5_PID="null"
+    fi
+
+    # Check VNC
+    VNC_PID=$(pgrep -f "x11vnc" 2>/dev/null || true)
+    if [ -n "$VNC_PID" ]; then
+        VNC_RUNNING=true
+    else
+        VNC_RUNNING=false
+    fi
+
+    # System info
+    CPU=$(top -bn1 | grep "Cpu(s)" | awk '{printf "%.1f", $2}' 2>/dev/null || echo "0")
+    RAM_TOTAL=$(free -m | awk '/Mem/{print $2}' 2>/dev/null || echo "0")
+    RAM_USED=$(free -m | awk '/Mem/{print $3}' 2>/dev/null || echo "0")
+    RAM_PCT=$(free | awk '/Mem/{printf "%.1f", $3/$2*100}' 2>/dev/null || echo "0")
+    DISK=$(df -h / | awk 'NR==2{print $5}' 2>/dev/null || echo "0%")
+    UPTIME_SEC=$(cat /proc/uptime | awk '{printf "%d", $1}' 2>/dev/null || echo "0")
+
+    # MT5 connections (broker)
+    CONN_COUNT=$(ss -tn state established | grep -v ':22 \|:5900 \|:53 \|:8080' | wc -l 2>/dev/null || echo "0")
+    CONN_COUNT=$((CONN_COUNT - 1))  # remove header
+    [ "$CONN_COUNT" -lt 0 ] && CONN_COUNT=0
+
+    # EA status from log
+    EA_STATUS="unknown"
+    LATEST_LOG=$(ls -t "$MT5_DIR/MQL5/Logs/"*.log 2>/dev/null | head -1)
+    if [ -n "$LATEST_LOG" ]; then
+        LOG_CONTENT=$(cat "$LATEST_LOG" 2>/dev/null | tr -d '\0' | tail -50)
+        if echo "$LOG_CONTENT" | grep -q "ALL SYSTEMS GO\|INIT"; then
+            EA_STATUS="initialized"
+        fi
+        if echo "$LOG_CONTENT" | grep -q "error\|ERROR\|FATAL"; then
+            EA_STATUS="error"
+        fi
+    fi
+
+    # Watchdog restart count
+    RESTART_COUNT=0
+    [ -f "/root/PropFirmBot/state/restart_count" ] && RESTART_COUNT=$(cat /root/PropFirmBot/state/restart_count 2>/dev/null || echo "0")
+
+    # Write JSON
+    cat > "$STATUS_FILE" << JSONEOF
+{
+  "timestamp": "$TIMESTAMP",
+  "mt5": {
+    "running": $MT5_RUNNING,
+    "status": "$MT5_STATUS",
+    "pid": $MT5_PID
+  },
+  "vnc": {
+    "running": $VNC_RUNNING
+  },
+  "ea": {
+    "status": "$EA_STATUS"
+  },
+  "system": {
+    "cpu_percent": $CPU,
+    "ram_used_mb": $RAM_USED,
+    "ram_total_mb": $RAM_TOTAL,
+    "ram_percent": $RAM_PCT,
+    "disk_usage": "$DISK",
+    "uptime_seconds": $UPTIME_SEC
+  },
+  "broker": {
+    "connections": $CONN_COUNT
+  },
+  "watchdog": {
+    "restarts_today": $RESTART_COUNT
+  }
+}
+JSONEOF
+
+    sleep 30
+done
+SCRIPT_EOF
+
+chmod +x /root/PropFirmBot/scripts/mt5_status_writer.sh
+echo "Script created at /root/PropFirmBot/scripts/mt5_status_writer.sh"
+echo ""
+
+# === Step 4: Create systemd service ===
+echo "=== [4] Creating systemd service ==="
+cat > /etc/systemd/system/mt5-status-json.service << 'SERVICE_EOF'
+[Unit]
+Description=MT5 Status JSON Writer
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /root/PropFirmBot/scripts/mt5_status_writer.sh
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+SERVICE_EOF
+
+echo "Service file created."
+echo ""
+
+# === Step 5: Enable and start ===
+echo "=== [5] Starting daemon ==="
 systemctl daemon-reload
-systemctl start mt5.service
-sleep 20
+systemctl enable mt5-status-json.service
+systemctl restart mt5-status-json.service
+sleep 5
 
-echo "--- mt5.service status ---"
-systemctl is-active mt5.service
+echo "--- Service status ---"
+systemctl is-active mt5-status-json.service
+systemctl status mt5-status-json.service --no-pager 2>/dev/null | head -15
 echo ""
 
-echo "--- MT5 Process ---"
-ps aux | grep terminal64 | grep -v grep
-echo ""
-
-# ============ STEP 5: Verify - check logs ============
-echo "=== [5] VERIFICATION ==="
-sleep 15
-
-echo "--- Latest EA log (last 25 lines) ---"
-LATEST_LOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-if [ -n "$LATEST_LOG" ]; then
-    cat "$LATEST_LOG" 2>/dev/null | tr -d '\0' | tail -25
+# === Step 6: Verify output ===
+echo "=== [6] Verifying /var/bots/mt5_status.json ==="
+sleep 3
+if [ -f /var/bots/mt5_status.json ]; then
+    echo "FILE EXISTS!"
+    cat /var/bots/mt5_status.json
 else
-    echo "No EA logs yet"
+    echo "WARNING: File not created yet. Checking logs..."
+    journalctl -u mt5-status-json.service --no-pager -n 20
 fi
 echo ""
 
-echo "--- Latest Terminal log (last 10 lines) ---"
-TERM_LOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
-if [ -n "$TERM_LOG" ]; then
-    cat "$TERM_LOG" 2>/dev/null | tr -d '\0' | tail -10
-else
-    echo "No terminal logs yet"
-fi
-echo ""
-
-echo "=== FIX DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
