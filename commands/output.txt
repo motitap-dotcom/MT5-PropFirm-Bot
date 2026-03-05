@@ -1,120 +1,70 @@
-=== FIX #7 - Thu Mar  5 12:14:43 UTC 2026 ===
---- STEP 1: Kill MT5 ---
-Killed
+=== FIX #8 - Thu Mar  5 12:18:30 UTC 2026 ===
+--- STEP 1: Terminal logs ---
+Terminal log dir:
+-rw-r--r--  1 root root 434566 Feb 24 22:13 20260224.log
+-rw-r--r--  1 root root   8658 Feb 25 18:21 20260225.log
+-rw-r--r--  1 root root  27796 Feb 26 23:03 20260226.log
+-rw-r--r--  1 root root  14842 Feb 27 22:32 20260227.log
+-rw-r--r--  1 root root   5000 Feb 28 18:33 20260228.log
+-rw-r--r--  1 root root   1244 Mar  1 15:36 20260301.log
+-rw-r--r--  1 root root  26996 Mar  3 21:53 20260303.log
+-rw-r--r--  1 root root  54872 Mar  4 20:35 20260304.log
+-rw-r--r--  1 root root  28518 Mar  5 12:15 20260305.log
+-rw-r--r--  1 root root  76738 Mar  5 10:35 metaeditor.log
 
---- STEP 2: Fix common.ini ---
-Current common.ini:
-[Common]
-Login=11797849
-ProxyEnable=0
-CertInstall=0
-NewsEnable=0
-Environment=F008C7293503CED0045B07842FC57A638AA2FD5F10DEE8EA7AD19815A339B9A21E36157778467577E33A229F2FC5240D
-Server=FundedNext-Server
-ProxyType=0
-ProxyAddress=
-EnableOpenCL=7
-ProxyAuth=
-Services=4294967295
-NewsLanguages=
-Source=download.mql5.com
+Latest terminal log: /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260305.log
+PN	0	10:52:42.282	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+KF	0	10:52:42.286	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+RO	0	10:52:42.288	Terminal	C:\Program Files\MetaTrader 5
+IR	0	10:53:01.002	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
+MR	0	10:53:01.018	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 12:49:17
+NR	0	10:53:02.786	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+CQ	0	10:53:02.787	Network	'11797849': trading has been enabled - hedging mode
+DN	0	10:57:29.451	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+CI	0	10:57:29.462	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+DH	0	10:57:29.462	Terminal	C:\Program Files\MetaTrader 5
+JR	0	10:57:46.800	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
+PR	0	10:57:46.800	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 12:53:00
+IS	0	10:57:48.064	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+GP	0	10:57:48.064	Network	'11797849': trading has been enabled - hedging mode
+FO	0	10:59:32.507	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+EH	0	10:59:32.516	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+NH	0	10:59:32.516	Terminal	C:\Program Files\MetaTrader 5
+FS	0	10:59:49.018	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
+QS	0	10:59:49.019	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 12:57:46
+CP	0	10:59:50.052	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+MS	0	10:59:50.052	Network	'11797849': trading has been enabled - hedging mode
+KH	0	11:07:47.385	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+RF	0	11:25:40.773	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+LQ	0	11:25:40.774	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+GG	0	11:25:40.774	Terminal	C:\Program Files\MetaTrader 5
+MJ	0	11:25:57.874	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
+MJ	0	11:25:57.874	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 12:59:48
+DK	0	11:25:59.061	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+RH	0	11:25:59.061	Network	'11797849': trading has been enabled - hedging mode
+DG	0	12:04:12.035	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+CQ	0	12:04:12.042	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+PP	0	12:04:12.042	Terminal	C:\Program Files\MetaTrader 5
+MK	0	12:04:27.945	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
+HK	0	12:04:27.946	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 13:25:57
+PK	0	12:04:29.123	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+FH	0	12:04:29.123	Network	'11797849': trading has been enabled - hedging mode
+CP	0	12:08:35.820	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+HP	0	12:08:35.824	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+KQ	0	12:08:35.824	Terminal	C:\Program Files\MetaTrader 5
+MK	0	12:08:49.660	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
+OH	0	12:08:49.660	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:04:26
+PH	0	12:08:51.160	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+FK	0	12:08:51.160	Network	'11797849': trading has been enabled - hedging mode
+OP	0	12:14:59.195	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+HS	0	12:14:59.207	Terminal	Windows 10 build 19043 on Wine 11.3 Linux 6.8.0-100-generic, 4 x AMD EPYC (with IBPB), AVX2, 6 / 7 Gb memory, 127 / 144 Gb disk, GMT+0
+KQ	0	12:14:59.207	Terminal	C:\Program Files\MetaTrader 5
+OH	0	12:15:15.373	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
+JH	0	12:15:15.373	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:08:49
+KI	0	12:15:16.652	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+EJ	0	12:15:16.656	Network	'11797849': trading has been enabled - hedging mode
 
-[StartUp]
-Expert=PropFirmBot\PropFirmBot
-ExpertParameters=
-Symbol=EURUSD
-Period=M15
-
-[Experts]
-AllowLiveTrading=1
-AllowDllImport=0
-Enabled=1
-Account=11797849
-Profile=0
-AllowWebRequest=1
-WebRequestUrl1=https://api.telegram.org
-
-[Charts]
-ProfileLast=Default
-MaxBars=100000
-PrintColor=0
-SaveDeleted=0
-TradeHistory=1
-TradeLevels=1
-TradeLevelsDrag=0
-ObsoleteLasttime=1772635517
-PreloadCharts=1
-
-
----
-Written clean common.ini
-[Common]
-Login=11797849
-ProxyEnable=0
-CertInstall=0
-NewsEnable=0
-Server=FundedNext-Server
-ProxyType=0
-ProxyAddress=
-EnableOpenCL=7
-ProxyAuth=
-Services=4294967295
-NewsLanguages=
-Source=download.mql5.com
-[StartUp]
-Expert=PropFirmBot\PropFirmBot
-ExpertParameters=
-Symbol=EURUSD
-Period=M15
-[Experts]
-AllowLiveTrading=1
-AllowDllImport=0
-Enabled=1
-Account=11797849
-Profile=0
-AllowWebRequest=1
-WebRequestUrl1=https://api.telegram.org
-[Charts]
-ProfileLast=Default
-MaxBars=100000
-PrintColor=0
-SaveDeleted=0
-TradeHistory=1
-TradeLevels=1
-TradeLevelsDrag=0
-PreloadCharts=1
-
---- STEP 3: Clean up ---
-State deleted
-Old log renamed
-
---- STEP 4: Start MT5 ---
-MT5 PID: 2244702
-Waiting 45 seconds for full initialization...
-
-========== FULL VERIFICATION ==========
-Wine processes:
-2244705 /opt/wine-staging/lib/wine/../../bin/wineserver
-
-MT5 stdout (if any errors):
-00e8:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31ccb0
-00e8:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31ccb0
-00e8:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31ccb0
-00e8:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31ccb0
-00e8:err:toolbar:ToolbarWindowProc unknown msg 0465, wp 0, lp 31ccb0
-
-Network (FundedNext connected?):
-ESTAB      0      0       77.237.234.2:48768  78.140.180.54:443   users:(("main",pid=2244773,fd=79),("wineserver",pid=2244705,fd=408))
-ESTAB      0      0       77.237.234.2:39345  18.168.91.222:443   users:(("main",pid=2244773,fd=20),("wineserver",pid=2244705,fd=177))
-ESTAB      25549  0       77.237.234.2:46299  18.168.91.222:443   users:(("main",pid=2243352,fd=19))                                  
-ESTAB      0      0       77.237.234.2:34390  78.140.180.43:443   users:(("main",pid=2244773,fd=58),("wineserver",pid=2244705,fd=384))
-
-Relay daemon:
-2244125 bash /root/telegram_relay.sh
-
---- NEW EA Log ---
-No new log file yet!
-Available logs:
+Journal dir:
 total 2824
 drwxr-xr-x  2 root root    4096 Mar  5 12:14 .
 drwxr-xr-x 14 root root    4096 Mar  5 10:59 ..
@@ -125,22 +75,116 @@ drwxr-xr-x 14 root root    4096 Mar  5 10:59 ..
 -rw-r--r--  1 root root  372652 Mar  4 23:49 20260304.log
 -rw-r--r--  1 root root  111980 Mar  5 11:17 20260305.log.old
 
---- Status JSON ---
-{
-  "timestamp": "2026.03.05 13:25:13",
-  "server_time": "2026.03.05 13:25:13",
-  "gmt_time": "2026.03.05 11:25:13",
-  "account": {
-    "number": 11797849,
-    "name": "FundedNext-Stellar Instant Account- moti tapiro",
-    "server": "FundedNext-Server",
-    "currency": "USD",
-    "leverage": 30,
+--- STEP 2: Chart profiles ---
+Profiles dir:
 
---- Telegram queue ---
+Default profile charts:
 
---- Relay log ---
-[TelegramRelay] Started at Thu Mar  5 12:12:06 UTC 2026
+--- STEP 3: EA file check ---
+total 1380
+drwxr-xr-x 2 root root   4096 Mar  5 11:25 .
+drwxr-xr-x 6 root root   4096 Feb 26 21:55 ..
+-rw-r--r-- 1 root root  15409 Mar  5 12:08 AccountStateManager.mqh
+-rw-r--r-- 1 root root  12411 Mar  5 12:08 Dashboard.mqh
+-rw-r--r-- 1 root root  22365 Mar  5 12:08 Guardian.mqh
+-rw-r--r-- 1 root root  10622 Mar  5 12:08 NewsFilter.mqh
+-rw-r--r-- 1 root root  12829 Mar  5 12:08 Notifications.mqh
+-rw-r--r-- 1 root root 164640 Mar  5 10:35 PropFirmBot.ex5
+-rw-r--r-- 1 root root 163578 Mar  4 08:45 PropFirmBot.ex5.bak
+-rw-r--r-- 1 root root 163174 Mar  3 19:39 PropFirmBot.ex5.bak2
+-rw-r--r-- 1 root root 163340 Mar  5 09:47 PropFirmBot.ex5.bak_20260305_0947
+-rw-r--r-- 1 root root 164640 Mar  5 11:25 PropFirmBot.ex5.bak_before_param_fix
+-rw-r--r-- 1 root root 162634 Mar  4 14:15 PropFirmBot.ex5.bak_before_recompile
+-rw-r--r-- 1 root root 163578 Mar  4 12:33 PropFirmBot.ex5.before_update
 
-=== DONE - Thu Mar  5 12:15:33 UTC 2026 ===
+.ex5 file:
+-rw-r--r-- 1 root root 164640 Mar  5 10:35 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5: data
+
+--- STEP 4: Kill MT5 ---
+
+--- STEP 5: Ensure EA in chart profile ---
+No chart profile found!
+Creating default profile with EA...
+Created chart with EA
+
+--- STEP 6: Restart MT5 ---
+MT5 starting... (waiting 50 sec)
+--- STEP 7: Results ---
+Wine processes:
+2245723 /opt/wine-staging/lib/wine/../../bin/wineserver
+
+Network:
+ESTAB      0      0       77.237.234.2:42769  18.168.91.222:443   users:(("main",pid=2245773,fd=19),("wineserver",pid=2245723,fd=342))
+ESTAB      0      0       77.237.234.2:53386  78.140.180.54:443   users:(("main",pid=2245773,fd=71),("wineserver",pid=2245723,fd=404))
+
+NEW EA Log:
+Log: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260304.log (372652 bytes)
+﻿HR	0	00:00:00.115	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.04 02:00 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
+GF	0	00:00:00.127	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 5 relevant events from calendar
+CG	0	00:00:00.127	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+IR	0	00:00:00.127	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+GM	0	00:00:00.127	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+MD	0	00:08:17.929	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=6303 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+OD	0	00:15:01.348	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.04 02:15 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
+KI	0	00:15:01.348	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+MD	0	00:15:01.348	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+GN	0	00:15:01.348	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+EJ	0	00:23:17.161	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=8678 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+EE	0	00:30:00.385	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.04 02:30 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
+PK	0	00:30:00.385	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+FE	0	00:30:00.385	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+DP	0	00:30:00.385	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+KK	0	00:38:17.122	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=10919 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+JS	0	00:45:00.803	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.04 02:45 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
+MM	0	00:45:00.803	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+GG	0	00:45:00.803	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+IR	0	00:45:00.803	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+EM	0	00:53:18.159	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=12698 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+JQ	0	01:00:00.128	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.04 03:00 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
+GR	0	01:00:00.133	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 5 relevant events from calendar
+CK	0	01:00:00.133	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+QE	0	01:00:00.133	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+OP	0	01:00:00.133	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+HK	0	01:08:18.378	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=14923 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+FS	0	01:15:00.197	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.04 03:15 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
+MM	0	01:15:00.197	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+GG	0	01:15:00.197	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+IR	0	01:15:00.197	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+NM	0	01:23:18.313	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=17427 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+JQ	0	01:30:00.139	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.04 03:30 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
+LO	0	01:30:00.139	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+JI	0	01:30:00.139	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+ND	0	01:30:00.140	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+JO	0	01:38:18.118	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=20479 | State=GUARDIAN_ACTIVE | Bal=$1998.90 | Eq=$1998.90 | DD=0.00% | Positions=0
+PO	0	01:45:00.405	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.04 03:45 | Guardian=GUARDIAN_ACTIVE | Scanning 3 symbols...
+DQ	0	01:45:00.405	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+RK	0	01:45:00.405	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Outside trading session
+
+Terminal log (new entries):
+IE	0	10:45:34.916	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+EM	0	10:48:59.460	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+JE	0	10:49:19.330	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+PN	0	10:52:42.282	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+NR	0	10:53:02.786	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+DN	0	10:57:29.451	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+IS	0	10:57:48.064	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+FO	0	10:59:32.507	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+CP	0	10:59:50.052	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+KH	0	11:07:47.385	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+RF	0	11:25:40.773	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+DK	0	11:25:59.061	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+DG	0	12:04:12.035	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+PK	0	12:04:29.123	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+CP	0	12:08:35.820	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+PH	0	12:08:51.160	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+OP	0	12:14:59.195	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+KI	0	12:15:16.652	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+HQ	0	12:18:50.894	Terminal	MetaTrader 5 x64 build 5663 started for MetaQuotes Ltd.
+MF	0	12:19:09.050	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+
+Relay:
+Running
+
+=== DONE - Thu Mar  5 12:19:26 UTC 2026 ===
 EXIT_CODE=0
