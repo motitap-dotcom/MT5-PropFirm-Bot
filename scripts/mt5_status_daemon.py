@@ -120,63 +120,25 @@ def get_last_closed_trades(n=5):
 
 
 def build_status():
-    """Build the combined status JSON with dashboard-required fields."""
+    """Build the combined status JSON for dashboard."""
     ea_status = read_ea_status()
-    open_positions, open_count = parse_open_positions(ea_status)
+    open_positions, _ = parse_open_positions(ea_status)
     last_closed = get_last_closed_trades(5)
 
     is_connected = ea_status is not None and not ea_status.get('_is_stale', True)
-
-    result = {
-        # --- Dashboard required top-level fields ---
-        'bot_name': 'PropFirmBot',
-        'active': is_connected,
-        'balance': 0,
-        'last_trade': None,
-        'updated_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        'open_positions': [],
-        'recent_closed_trades': [],
-
-        # --- Extended info ---
-        'ea_connected': is_connected,
-    }
-
-    # Account info from EA
+    balance = 0
     if ea_status:
-        account = ea_status.get('account', {})
-        result['balance'] = account.get('balance', 0)
-        result['account'] = {
-            'balance': account.get('balance', 0),
-            'equity': account.get('equity', 0),
-            'floating_pnl': account.get('floating_pnl', 0),
-            'margin': account.get('margin', 0),
-            'free_margin': account.get('free_margin', 0),
-        }
-        guardian = ea_status.get('guardian', {})
-        result['guardian_state'] = guardian.get('state', 'UNKNOWN')
-        result['daily_dd'] = guardian.get('daily_dd', 0)
-        result['total_dd'] = guardian.get('total_dd', 0)
+        balance = ea_status.get('account', {}).get('balance', 0)
 
-        today = ea_status.get('today', {})
-        result['today'] = {
-            'trades': today.get('trades', 0),
-            'wins': today.get('wins', 0),
-            'losses': today.get('losses', 0),
-            'net': today.get('net', 0),
-        }
-
-    # Open positions - flat list for dashboard
-    result['open_positions'] = open_positions
-    result['_open_positions_count'] = open_count
-
-    # Last trade (most recent closed trade)
-    if last_closed:
-        result['last_trade'] = last_closed[0]
-
-    # Recent closed trades for dashboard
-    result['recent_closed_trades'] = last_closed
-
-    return result
+    return {
+        'bot_name': 'MT5 Bot',
+        'active': is_connected,
+        'balance': balance,
+        'last_trade': last_closed[0] if last_closed else None,
+        'updated_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'open_positions': open_positions,
+        'recent_closed_trades': last_closed,
+    }
 
 
 def write_status(data):
