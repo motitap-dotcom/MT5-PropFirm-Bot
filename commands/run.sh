@@ -1,56 +1,44 @@
 #!/bin/bash
-# Force reload EA with new params by killing MT5 and restarting fresh
-echo "=== FORCE RELOAD EA $(date) ==="
-
-export DISPLAY=:99
-export WINEPREFIX=/root/.wine
+# Find and fix the XAUUSD param in MT5 chart settings
+echo "=== FIND XAUUSD SETTING $(date) ==="
 
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
-EA_DIR="$MT5/MQL5/Experts/PropFirmBot"
 
-# 1. Check current chart settings for XAUUSD param
-echo "=== CURRENT EA SETTINGS IN CHART ==="
-CHART_DIR="$MT5/MQL5/Profiles/Charts/Default"
-for chr in "$CHART_DIR"/chart*.chr; do
-    if grep -l "PropFirmBot" "$chr" 2>/dev/null; then
-        echo "Found EA in: $(basename $chr)"
-        # Show the XAUUSD param
-        grep -A1 -i "xauusd\|TradeXAUUSD\|InpTradeXAUUSD" "$chr" 2>/dev/null
-        echo "---"
-        # Show all expert params
-        grep -A200 "expert_" "$chr" 2>/dev/null | head -60
+# Search ALL .chr files for PropFirmBot
+echo "=== ALL CHART FILES WITH PROPFIRMBOT ==="
+find "$MT5" -name "*.chr" 2>/dev/null | while read f; do
+    if grep -q "PropFirmBot" "$f" 2>/dev/null; then
+        echo ""
+        echo "=== FOUND: $f ==="
+        # Show params related to symbols/XAUUSD
+        grep -n "XAUUSD\|xauusd\|InpTrade\|Inp.*XAUUSD" "$f" 2>/dev/null
+        echo "--- All input params: ---"
+        # Show lines between <inputs> and </inputs> or expert params section
+        sed -n '/^<inputs>/,/<\/inputs>/p' "$f" 2>/dev/null | head -40
+        # Also try alternative format
+        grep -A100 "^<expert>" "$f" 2>/dev/null | grep -B1 -A1 "XAUUSD\|inputs" | head -20
     fi
 done
 
-# 2. Try to find and fix the chart file
+# Also check .set files (preset files)
 echo ""
-echo "=== FIXING CHART PARAMS ==="
-for chr in "$CHART_DIR"/chart*.chr; do
-    if grep -q "PropFirmBot" "$chr" 2>/dev/null; then
-        echo "Patching: $(basename $chr)"
-        # Replace InpTradeXAUUSD=false with true
-        sed -i 's/InpTradeXAUUSD=false/InpTradeXAUUSD=true/g' "$chr" 2>/dev/null
-        sed -i 's/InpTradeXAUUSD=0/InpTradeXAUUSD=1/g' "$chr" 2>/dev/null
-        echo "After patch:"
-        grep -i "xauusd\|TradeXAUUSD" "$chr" 2>/dev/null
+echo "=== PRESET FILES ==="
+find "$MT5" -name "*.set" 2>/dev/null | while read f; do
+    if grep -q "PropFirmBot\|XAUUSD" "$f" 2>/dev/null; then
+        echo "Found: $f"
+        grep -i "XAUUSD\|InpTrade" "$f" 2>/dev/null
     fi
 done
 
-# 3. Kill and restart MT5
+# Check tester directory too
 echo ""
-echo "=== RESTARTING MT5 ==="
-pkill -f terminal64 2>/dev/null
-sleep 5
-
-cd "$MT5"
-nohup wine64 terminal64.exe /portable > /dev/null 2>&1 &
-sleep 15
-
-# 4. Check log
-echo ""
-echo "=== EA LOG ==="
-LATEST=$(ls -t "$MT5/MQL5/Logs"/*.log 2>/dev/null | head -1)
-tail -20 "$LATEST" 2>/dev/null
+echo "=== LAST USED INPUTS ==="
+find "$MT5" -path "*/Tester/*" -name "*.set" 2>/dev/null | while read f; do
+    if grep -q "PropFirmBot\|InpTrade" "$f" 2>/dev/null; then
+        echo "Found: $f"
+        grep -i "XAUUSD\|InpTrade" "$f" 2>/dev/null
+    fi
+done
 
 echo ""
-echo "=== DONE $(date) ==="
+echo "=== DONE ==="
