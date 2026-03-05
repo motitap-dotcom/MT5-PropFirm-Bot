@@ -1,251 +1,347 @@
-=== FIX #15 - Thu Mar  5 12:53:44 UTC 2026 ===
---- STEP 1: Read fix_and_start.sh (full) ---
-#!/bin/bash
-###############################################
-# FIX & START MT5 - Full automated script
-# Run on VPS: bash /root/MT5-PropFirm-Bot/scripts/fix_and_start.sh
-###############################################
+=== FIX #16 - Thu Mar  5 12:58:04 UTC 2026 ===
+--- STEP 0: Check xdotool ---
+/usr/bin/xdotool
 
-echo "=== STEP 1: Kill all Wine processes ==="
-wineserver -k 2>/dev/null
-pkill -f wine 2>/dev/null
-pkill -f terminal64 2>/dev/null
-sleep 3
-echo "Done - all Wine processes killed"
+--- STEP 1: Current MT5 state ---
+MT5 is RUNNING
+No EA log for today - EA NOT loaded
 
-echo ""
-echo "=== STEP 2: Ensure VNC is running ==="
-if pgrep Xvfb > /dev/null; then
-    echo "Xvfb already running"
-else
-    Xvfb :99 -screen 0 1280x1024x24 &
-    sleep 2
-    echo "Xvfb started"
-fi
+--- STEP 2: MT5 windows ---
+75497473
+85983233
+All windows:
+  543: 
+  2097235: 
+  14680065: 
+  14680067: Default IME
+  14680066: 
+  14680068: 
+  14680069: 
+  14680070: 
+  16777217: 
+  14680071: 
+  20971521: 
+  20971523: Default IME
+  20971522: 
+  20971524: 
+  20971525: 
+  20971526: 
+  20971527: 
+  23068673: 
+  27262977: 
+  27262979: Default IME
+  27262978: 
+  27262980: 
+  27262981: 
+  27262982: 
+  27262983: 
+  29360129: 
+  33554434: Default IME
+  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  33554435: 
+  33554436: 
+  33554437: 
+  33554438: 
+  33554439: 
+  33554440: 
+  33554441: 
+  33554442: 
+  33554443: 
+  33554444: 
+  33554445: 
+  33554446: 
+  33554447: 
+  33554448: 
+  33554455: 
+  33554456: 
+  33554457: 
+  37748737: 
+  37748739: Default IME
+  37748738: 
+  37748740: 
+  37748741: 
+  37748742: 
+  37748743: 
+  39845889: 
+  44040194: Default IME
+  44040193: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  44040195: 
+  44040196: 
+  44040197: 
+  44040198: 
+  44040199: 
+  44040200: 
+  44040201: 
+  44040202: 
+  44040203: 
+  44040204: 
+  44040205: 
+  44040206: 
+  44040207: 
+  44040208: 
+  44040215: 
+  44040216: 
+  44040217: 
+  48234497: 
+  48234499: Default IME
+  48234498: 
+  48234500: 
+  48234501: 
+  48234502: 
+  48234503: 
+  50331649: 
+  54525954: Default IME
+  54525953: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  54525955: 
+  54525956: 
+  54525957: 
+  54525958: 
+  54525959: 
+  54525960: 
+  54525961: 
+  54525962: 
+  54525963: 
+  54525964: 
+  54525965: 
+  54525966: 
+  54525967: 
+  54525968: 
+  54525975: 
+  54525976: 
+  54525977: 
+  58720257: 
+  58720259: Default IME
+  58720258: 
+  60817409: 
+  58720260: 
+  58720261: 
+  58720262: 
+  58720263: 
+  65011714: Default IME
+  65011713: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  65011715: 
+  65011716: 
+  65011717: 
+  65011718: 
+  65011719: 
+  65011720: 
+  65011721: 
+  65011722: 
+  65011723: 
+  65011724: 
+  65011725: 
+  65011726: 
+  65011727: 
+  65011728: 
+  65011735: 
+  65011736: 
+  65011737: 
+  69206017: 
+  69206019: Default IME
+  69206018: 
+  69206020: 
+  69206021: 
+  69206022: 
+  69206023: 
+  71303169: 
+  75497474: Default IME
+  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
+  75497475: 
+  75497476: 
+  75497477: 
+  75497478: 
+  75497479: 
+  75497480: 
+  75497481: 
+  75497482: 
+  75497483: 
+  75497484: 
+  75497485: 
+  75497486: 
+  75497487: 
+  75497488: 
+  75497495: 
+  75497496: 
+  75497497: 
+  79691777: 
+  79691779: Default IME
+  79691778: 
+  79691780: 
+  79691781: 
+  79691782: 
+  79691783: 
+  81788929: 
+  85983234: Default IME
+  85983233: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
+  85983235: 
+  85983236: 
+  85983237: 
+  85983238: 
+  85983239: 
+  85983240: 
+  85983241: 
+  85983242: 
+  85983243: 
+  85983244: 
+  85983245: 
+  85983246: 
+  85983247: 
+  85983248: 
+  85983255: 
+  85983256: 
+  85983257: 
+  90177537: 
+  90177539: Default IME
+  90177538: 
+  90177540: 
+  92274689: 
+  90177541: 
+  90177542: 
+  90177543: 
+  96468994: Default IME
+  96468993: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  96468995: 
+  96468996: 
+  96468997: 
+  96468998: 
+  96468999: 
+  96469000: 
+  96469001: 
+  96469002: 
+  96469003: 
+  96469004: 
+  96469005: 
+  96469006: 
+  96469007: 
+  96469008: 
+  96469015: 
+  96469016: 
+  96469017: 
+  100663297: 
+  100663299: Default IME
+  100663298: 
+  100663300: 
+  100663301: 
+  100663302: 
+  100663303: 
+  102760449: 
+  106954754: Default IME
+  106954753: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  106954755: 
+  106954756: 
+  106954757: 
+  106954758: 
+  106954759: 
+  106954760: 
+  106954761: 
+  106954762: 
+  106954763: 
+  106954764: 
+  106954765: 
+  106954766: 
+  106954767: 
+  106954768: 
+  106954775: 
+  106954776: 
+  106954777: 
+  111149057: 
+  111149059: Default IME
+  111149058: 
+  111149060: 
+  111149061: 
+  113246209: 
+  111149062: 
+  111149063: 
+  117440514: Default IME
+  117440513: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  117440515: 
+  117440516: 
+  117440517: 
+  117440518: 
+  117440519: 
+  117440520: 
+  117440521: 
+  117440522: 
+  117440523: 
+  117440524: 
+  117440525: 
+  117440526: 
+  117440527: 
+  117440528: 
+  117440535: 
 
-if pgrep x11vnc > /dev/null; then
-    echo "x11vnc already running"
-else
-    x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw 2>/dev/null
-    sleep 1
-    echo "x11vnc started"
-fi
-export DISPLAY=:99
+--- STEP 3: Find MT5 window ---
+MT5 window ID: 75497473
+Window name: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
 
-echo ""
-echo "=== STEP 3: Disable Wine Mono dialog ==="
-wine reg add "HKCU\\Software\\Wine\\DllOverrides" /v mscoree /d "" /f 2>/dev/null
-sleep 2
-echo "Done - Mono dialog disabled"
+--- STEP 4: Attach EA via keyboard automation ---
+Step 4a: Open Navigator panel (Ctrl+N)
+Step 4b: Try Insert key to open EA insertion dialog
+Step 4c: Try menu Insert -> Expert Advisors
 
-echo ""
-echo "=== STEP 4: Update EA files from repo ==="
-cd /root/MT5-PropFirm-Bot
-git pull origin claude/build-cfd-trading-bot-fl0ld 2>/dev/null
-EA_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"
-mkdir -p "$EA_DIR"
-cp EA/*.mq5 EA/*.mqh "$EA_DIR/"
-echo "EA files copied"
+--- STEP 4d: Trying chart profile approach ---
+Current chart01.chr:
+total 8
+drwxr-xr-x 2 root root 4096 Mar  5 12:46 .
+drwxr-xr-x 6 root root 4096 Mar  5 12:46 ..
 
-echo ""
-echo "=== STEP 5: Compile EA ==="
-cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
-wine metaeditor64.exe /compile:MQL5/Experts/PropFirmBot/PropFirmBot.mq5 /log 2>/dev/null
-sleep 5
+Expert section in chart profile:
+(none found - binary/UTF-16)
+(no expert section)
 
-# Check compilation result
-if grep -q "0 errors" MQL5/Experts/PropFirmBot/PropFirmBot.log 2>/dev/null; then
-    echo "Compilation SUCCESS - 0 errors"
-else
-    echo "Compilation RESULT:"
-    tail -3 MQL5/Experts/PropFirmBot/PropFirmBot.log 2>/dev/null
-fi
+--- STEP 5: Create chart template with EA ---
+File type of chart01.chr:
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr: cannot open `/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr' (No such file or directory)
 
-# Verify .ex5 exists
-if [ -f "MQL5/Experts/PropFirmBot/PropFirmBot.ex5" ]; then
-    echo "PropFirmBot.ex5 exists ($(stat -c%s "MQL5/Experts/PropFirmBot/PropFirmBot.ex5") bytes)"
-else
-    echo "ERROR: PropFirmBot.ex5 NOT FOUND"
-    exit 1
-fi
+Hex dump first 20 bytes:
 
-echo ""
-echo "=== STEP 6: Start MT5 ==="
-wineserver -k 2>/dev/null
-sleep 2
-DISPLAY=:99 nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" >/dev/null 2>&1 &
-echo "Waiting 15 seconds for MT5 to start..."
-sleep 15
+Full chart01.chr content (converted):
 
-if pgrep -a terminal64 > /dev/null; then
-    echo ""
-    echo "==========================================="
-    echo "  MT5 IS RUNNING"
-    echo "==========================================="
-    echo ""
-    echo "Now connect with VNC to 77.237.234.2:5900"
-    echo "Then:"
-    echo "  1. Login to FundedNext account if needed"
-    echo "  2. Open EURUSD M15 chart"
-    echo "  3. Drag PropFirmBot EA onto chart"
-    echo "  4. Enable AutoTrading (green button)"
-    echo ""
-else
-    echo ""
-    echo "MT5 did not start. Trying alternative method..."
-    # Try with explicit wineprefix
-    WINEPREFIX=/root/.wine DISPLAY=:99 nohup wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" >/dev/null 2>&1 &
-    sleep 15
-    if pgrep -a terminal64 > /dev/null; then
-        echo "==========================================="
-        echo "  MT5 IS RUNNING (alternative method)"
-        echo "==========================================="
-    else
-        echo "==========================================="
-        echo "  MT5 FAILED TO START"
-        echo "  Check VNC - there may be a dialog box"
-        echo "==========================================="
-    fi
-fi
+=== END chart01.chr ===
 
-==========
+All chart profile files:
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview/chart01.chr
 
---- STEP 2: Management server restart logic ---
-  POST /api/restart-mt5    - Restart MetaTrader 5
-  POST /api/restart-vnc    - Restart VNC server
-  POST /api/deploy         - Git pull + deploy EA files to MT5
-  POST /api/start-mt5      - Start MT5 (if not running)
-  POST /api/stop-mt5       - Stop MT5
-  POST /api/telegram-test  - Send test message via Telegram
-  POST /api/exec           - Execute whitelisted command
-"""
+Templates:
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates/BollingerBands.tpl
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates/Momentum.tpl
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates/ADX.tpl
 
-import os
-import sys
-import json
-import time
-import subprocess
-import threading
-import hashlib
-import secrets
-import signal
-import logging
-from http.server import HTTPServer, BaseHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs
-from datetime import datetime, timezone
-from pathlib import Path
-
-# ─── Configuration ───────────────────────────────────────────────────────────
-
-PORT = 8888
-AUTH_TOKEN = "pfbot_mgmt_7x9Kp2mW4vQr8sNj"  # Change on first install
-BIND_ADDRESS = "0.0.0.0"
-
-MT5_DIR = "/root/.wine/drive_c/Program Files/MetaTrader 5"
---
-def handle_restart_mt5():
-    """Restart MetaTrader 5."""
-    log.info("Restarting MT5...")
-    send_telegram("🔄 <b>MT5 Restart</b>\nRestarting MT5 via management API...")
-
-    # Kill MT5
-    run_cmd("pkill -f terminal64", timeout=10)
-    time.sleep(3)
-
---- STEP 3: fix_compile_ea.sh ---
-#!/bin/bash
-# Fix EA compilation on VPS after Wine Staging upgrade
-# This script ensures PropFirmBot EA is compiled and running
-
-echo "========================================="
-echo "  PropFirmBot EA Fix & Compile Script"
-echo "  $(date -u '+%Y-%m-%d %H:%M UTC')"
-echo "========================================="
-
-export DISPLAY=:99
-export WINEPREFIX=/root/.wine
-export WINEDEBUG=-all
-export STAGING_WRITECOPY=1
-
-MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
-EA_DIR="$MT5_DIR/MQL5/Experts/PropFirmBot"
-EA_ROOT="$MT5_DIR/MQL5/Experts"
-FILES_DIR="$MT5_DIR/MQL5/Files/PropFirmBot"
-REPO_DIR="/root/MT5-PropFirm-Bot"
-
-echo ""
-echo "=== Step 1: Check Wine version ==="
-wine --version
-
-echo ""
-echo "=== Step 2: Stop MT5 ==="
-killall -9 terminal64.exe metaeditor64.exe 2>/dev/null
-sleep 2
-wineserver -k 2>/dev/null
-sleep 3
-
-echo ""
-echo "=== Step 3: Ensure VNC is running ==="
-if ! pgrep -x Xvfb > /dev/null; then
-    echo "Starting Xvfb..."
-    rm -f /tmp/.X99-lock /tmp/.X11-unix/X99 2>/dev/null
-    Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset &
-    sleep 3
-fi
-if ! pgrep -x x11vnc > /dev/null; then
-    echo "Starting x11vnc..."
-    x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw -xkb 2>/dev/null
-    sleep 2
-fi
-echo "Xvfb PID: $(pgrep -x Xvfb)"
-echo "x11vnc PID: $(pgrep -x x11vnc)"
-
-echo ""
-echo "=== Step 4: Update repo ==="
-cd "$REPO_DIR"
-git pull origin || true
-
-echo ""
-echo "=== Step 5: Deploy EA files ==="
-mkdir -p "$EA_DIR"
-mkdir -p "$FILES_DIR"
-cp -v "$REPO_DIR/EA/"* "$EA_DIR/"
-cp -v "$REPO_DIR/configs/"* "$FILES_DIR/"
-
-echo ""
-echo "=== Step 6: Check existing .ex5 ==="
-find "$MT5_DIR" -name "PropFirmBot.ex5" 2>/dev/null
-echo "(end of search)"
-
-echo ""
-echo "=== Step 7: Compile EA - Method 1 (MetaEditor CLI) ==="
-cd "$MT5_DIR"
-wine metaeditor64.exe /compile:"MQL5\Experts\PropFirmBot\PropFirmBot.mq5" /log 2>/dev/null &
-METAED_PID=$!
-sleep 25
-kill $METAED_PID 2>/dev/null
-wineserver -k 2>/dev/null
-sleep 3
-sync
-
-echo ""
-echo "=== Step 7b: Check compilation result ==="
-find "$MT5_DIR" -name "PropFirmBot.ex5" 2>/dev/null
-EX5_FOUND=$(find "$MT5_DIR" -name "PropFirmBot.ex5" 2>/dev/null | head -1)
-
-
---- STEP 4: Management API ---
-Management server port: 
-
---- STEP 5: EA Status ---
-No EA log for today
-
-Terminal log (last 5):
-JN	0	12:46:03.648	Terminal	C:\Program Files\MetaTrader 5
-RE	0	12:46:19.341	Network	'11797849': authorized on FundedNext-Server through Access Server UK 3 (ping: 90.08 ms, build 5660)
-KE	0	12:46:19.341	Network	'11797849': previous successful authorization performed from 77.237.234.2 on 2026.03.05 14:39:56
+--- STEP 6: Terminal log (expert-related) ---
+Log file: /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260305.log
+RO	0	10:33:29.293	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+NO	0	10:36:25.867	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+IL	0	10:41:37.535	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+ND	2	10:45:13.828	Terminal	terminal process already started
+IE	0	10:45:34.916	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+JE	0	10:49:19.330	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+NR	0	10:53:02.786	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+IS	0	10:57:48.064	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+CP	0	10:59:50.052	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+KH	0	11:07:47.385	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+DK	0	11:25:59.061	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+PK	0	12:04:29.123	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+PH	0	12:08:51.160	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+KI	0	12:15:16.652	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+MF	0	12:19:09.050	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+HF	0	12:25:27.270	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+LG	0	12:30:13.439	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+RD	0	12:35:07.958	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
+QE	0	12:39:58.117	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
 LE	0	12:46:20.865	Network	'11797849': terminal synchronized with FundedNext Ltd: 0 positions, 0 orders, 76 symbols, 0 spreads
-JF	0	12:46:20.865	Network	'11797849': trading has been enabled - hedging mode
 
-=== DONE - Thu Mar  5 12:53:44 UTC 2026 ===
+--- STEP 7: common.ini StartUp section ---
+䍛浯潭嵮䰊杯湩ㄽ㜱㜹㐸ਹ牐硯䕹慮汢㵥ਰ敃瑲湉瑳污㵬ਰ敎獷湅扡敬〽䔊癮物湯敭瑮䘽〰䌸㈷㌹〵䌳䑅〰㔴あ㠷㈴䍆㜵㙁㠳䅁䘲㕄ㅆ䐰䕅䔸㝁䑁㤱ㄸ䄵㌳䈹䄹ㄲ㍅ㄶ㜵㜷㐸㜶㜵䔷㌳㉁㤲㉆䍆㈵〴੄敓癲牥䘽湵敤乤硥⵴敓癲牥倊潲祸祔数〽倊潲祸摁牤獥㵳䔊慮汢佥数䍮㵌਷牐硯䅹瑵㵨匊牥楶散㵳㈴㐹㘹㈷㔹上睥䱳湡畧条獥਽潓牵散搽睯汮慯⹤煭㕬挮浯嬊瑓牡啴嵰䔊灸牥㵴牐灯楆浲潂屴牐灯楆浲潂ੴ硅数瑲慐慲敭整獲਽祓扭汯䔽剕单੄敐楲摯䴽㔱嬊硅数瑲嵳䄊汬睯楌敶牔摡湩㵧਱汁潬䑷汬浉潰瑲〽䔊慮汢摥ㄽ䄊捣畯瑮ㄽ㜱㜹㐸ਹ牐景汩㵥ਰ汁潬坷扥敒畱獥㵴਱敗剢煥敵瑳牕ㅬ栽瑴獰⼺愯楰琮汥来慲⹭牯੧䍛慨瑲嵳倊潲楦敬慌瑳䐽晥畡瑬䴊硡慂獲ㄽ〰〰ਰ牐湩䍴汯牯〽匊癡䑥汥瑥摥〽吊慲敤楈瑳牯㵹਱牔摡䱥癥汥㵳਱牔摡䱥癥汥䑳慲㵧ਰ扏潳敬整慌瑳楴敭ㄽ㜷㘲㔳ㄵ਷牐汥慯䍤慨瑲㵳਱
+=== DONE - Thu Mar  5 12:58:17 UTC 2026 ===
 EXIT_CODE=0
