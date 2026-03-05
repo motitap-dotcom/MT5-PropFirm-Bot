@@ -1,112 +1,62 @@
 #!/bin/bash
 # =============================================================
-# Fix #8: Check terminal log + fix profile + force EA load
+# Fix #9: Find correct chart profile location + restore EA
 # =============================================================
 
-echo "=== FIX #8 - $(date) ==="
+echo "=== FIX #9 - $(date) ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
-EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
-FILES_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
 
 # ============================================
-# STEP 1: Check terminal log (NOT EA log)
+# STEP 1: Find ALL chart/profile related files
 # ============================================
-echo "--- STEP 1: Terminal logs ---"
-echo "Terminal log dir:"
-ls -la "${MT5_BASE}/logs/" 2>/dev/null | tail -10
+echo "--- STEP 1: Search for chart/profile files ---"
+echo "Looking for .chr files:"
+find "$MT5_BASE" -name "*.chr" 2>/dev/null
 echo ""
 
-TERM_LOG=$(ls -t "${MT5_BASE}/logs/"*.log 2>/dev/null | head -1)
-if [ -f "$TERM_LOG" ]; then
-    echo "Latest terminal log: $TERM_LOG"
-    iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | tail -50
-fi
+echo "Looking for chart-related dirs:"
+find "$MT5_BASE" -type d -iname "*chart*" 2>/dev/null
+find "$MT5_BASE" -type d -iname "*profile*" 2>/dev/null
+find "$MT5_BASE" -type d -iname "*default*" 2>/dev/null
 echo ""
 
-# Check journal logs too
-echo "Journal dir:"
-ls -la "${MT5_BASE}/MQL5/Logs/" 2>/dev/null
+echo "Looking for chart data files:"
+find "$MT5_BASE" -name "*.chr" -o -name "*.chart" -o -name "chartwindow*" 2>/dev/null
 echo ""
 
-# ============================================
-# STEP 2: Check profile/chart config
-# ============================================
-echo "--- STEP 2: Chart profiles ---"
-echo "Profiles dir:"
-ls -laR "${MT5_BASE}/profiles/" 2>/dev/null | head -20
+echo "MQL5/Profiles directory:"
+ls -laR "$MT5_BASE/MQL5/Profiles/" 2>/dev/null || echo "Not found"
 echo ""
 
-# Check the default chart template
-echo "Default profile charts:"
-find "${MT5_BASE}/profiles" -name "*.chr" 2>/dev/null | head -10
-for chr in $(find "${MT5_BASE}/profiles" -name "*.chr" 2>/dev/null | head -5); do
-    echo ""
-    echo "=== $chr ==="
-    grep -i "expert\|EA\|PropFirmBot\|autotrading" "$chr" 2>/dev/null | head -10
-done
+echo "profiles/ directory:"
+ls -laR "$MT5_BASE/profiles/" 2>/dev/null || echo "Not found"
+echo ""
+
+# Check if there's a history/charts path
+echo "All directories in MT5_BASE:"
+find "$MT5_BASE" -maxdepth 2 -type d 2>/dev/null | sort
 echo ""
 
 # ============================================
-# STEP 3: Check .ex5 exists and is valid
+# STEP 2: Kill MT5 and set up proper profile
 # ============================================
-echo "--- STEP 3: EA file check ---"
-ls -la "$EA_DIR/" 2>/dev/null | head -15
-echo ""
-echo ".ex5 file:"
-ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
-file "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
-echo ""
-
-# ============================================
-# STEP 4: Kill MT5 and fix
-# ============================================
-echo "--- STEP 4: Kill MT5 ---"
+echo "--- STEP 2: Kill MT5 ---"
 pkill -9 wineserver 2>/dev/null || true
 pkill -9 -f "wine" 2>/dev/null || true
 sleep 5
 
-# Force delete saved state
+# Delete state
 find /root/.wine -name "PropFirmBot_AccountState.dat" -delete 2>/dev/null
 
-# Remove old journal entry for today
-echo ""
+echo "--- STEP 3: Create chart profiles in ALL possible locations ---"
 
-# ============================================
-# STEP 5: Check if chart profile has EA, if not add it
-# ============================================
-echo "--- STEP 5: Ensure EA in chart profile ---"
-DEFAULT_CHART=$(find "${MT5_BASE}/profiles" -name "chart01.chr" 2>/dev/null | head -1)
-if [ -f "$DEFAULT_CHART" ]; then
-    echo "Found chart: $DEFAULT_CHART"
-    if grep -q "PropFirmBot" "$DEFAULT_CHART" 2>/dev/null; then
-        echo "EA already in chart profile"
-    else
-        echo "EA NOT in chart - adding..."
-        # Add EA configuration to chart
-        cat >> "$DEFAULT_CHART" << 'CHREOF'
-<expert>
-name=PropFirmBot\PropFirmBot
-path=PropFirmBot\PropFirmBot.ex5
-expertmode=1
-<inputs>
-</inputs>
-</expert>
-CHREOF
-        echo "EA added to chart"
-    fi
-    echo "Chart content:"
-    cat "$DEFAULT_CHART"
-else
-    echo "No chart profile found!"
-    echo "Creating default profile with EA..."
-    mkdir -p "${MT5_BASE}/profiles/default"
-    cat > "${MT5_BASE}/profiles/default/chart01.chr" << 'CHREOF'
-<chart>
+# Chart profile content
+CHART_CONTENT='<chart>
 id=1
 symbol=EURUSD
-period=15
-leftpos=0
+period_type=0
+period_size=15
 digits=5
 scale=4
 graph=1
@@ -116,11 +66,12 @@ volume=0
 scroll=1
 shift=1
 ohlc=1
+one_click=0
+one_click_btn=1
 askline=0
 days=0
 descriptions=0
 shift_size=20
-fixed_pos=0
 window_left=0
 window_top=0
 window_right=1280
@@ -140,61 +91,80 @@ stops_color=255
 <expert>
 name=PropFirmBot\PropFirmBot
 path=PropFirmBot\PropFirmBot.ex5
-expertmode=1
+expertmode=33
 <inputs>
 </inputs>
 </expert>
 </chart>
-CHREOF
-    echo "Created chart with EA"
-fi
+'
+
+# Create in all possible locations
+for dir in \
+    "$MT5_BASE/profiles/default" \
+    "$MT5_BASE/profiles/charts/default" \
+    "$MT5_BASE/MQL5/Profiles/Charts/Default" \
+    "$MT5_BASE/config/charts"; do
+    mkdir -p "$dir"
+    echo "$CHART_CONTENT" > "$dir/chart01.chr"
+    echo "Created: $dir/chart01.chr"
+done
 echo ""
 
 # ============================================
-# STEP 6: Restart MT5
+# STEP 4: Ensure common.ini has correct StartUp
 # ============================================
-echo "--- STEP 6: Restart MT5 ---"
+echo "--- STEP 4: Verify common.ini ---"
+grep "\[StartUp\]" "$MT5_BASE/config/common.ini" && echo "StartUp section present" || echo "StartUp MISSING!"
+grep "Expert=" "$MT5_BASE/config/common.ini" || echo "Expert not set!"
+echo ""
+
+# ============================================
+# STEP 5: Start MT5 and wait LONGER
+# ============================================
+echo "--- STEP 5: Start MT5 (waiting 90 sec) ---"
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
 
 cd "$MT5_BASE"
 nohup wine "$MT5_BASE/terminal64.exe" /portable > /tmp/mt5_stdout.log 2>&1 &
-echo "MT5 starting... (waiting 50 sec)"
-sleep 50
+echo "MT5 started, waiting 90 seconds..."
+sleep 90
 
 # ============================================
-# STEP 7: Check results
+# STEP 6: Check results
 # ============================================
-echo "--- STEP 7: Results ---"
-
-echo "Wine processes:"
-pgrep -a wineserver 2>/dev/null
-echo ""
+echo "--- STEP 6: Results ---"
 
 echo "Network:"
 ss -tnp | grep "wineserver" | head -3
 echo ""
 
-echo "NEW EA Log:"
-NEW_LOG=$(ls -t "${MT5_BASE}/MQL5/Logs/"*.log 2>/dev/null | grep -v ".old" | head -1)
-if [ -f "$NEW_LOG" ]; then
-    SIZE=$(stat -c%s "$NEW_LOG")
-    echo "Log: $NEW_LOG ($SIZE bytes)"
-    iconv -f UTF-16LE -t UTF-8 "$NEW_LOG" 2>/dev/null | head -40
-else
-    echo "STILL no EA log!"
+echo "Terminal log (expert loading):"
+TERM_LOG=$(ls -t "${MT5_BASE}/logs/"*.log 2>/dev/null | head -1)
+if [ -f "$TERM_LOG" ]; then
+    iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | tail -20
 fi
 echo ""
 
-echo "Terminal log (new entries):"
-TERM_LOG=$(ls -t "${MT5_BASE}/logs/"*.log 2>/dev/null | head -1)
-if [ -f "$TERM_LOG" ]; then
-    iconv -f UTF-16LE -t UTF-8 "$TERM_LOG" 2>/dev/null | grep -i "expert\|EA\|error\|failed\|PropFirmBot\|chart\|started" | tail -20
+echo "EA Log:"
+EA_LOG=$(ls -t "${MT5_BASE}/MQL5/Logs/"*.log 2>/dev/null | grep -v ".old" | head -1)
+if [ -f "$EA_LOG" ]; then
+    SIZE=$(stat -c%s "$EA_LOG")
+    echo "EA Log: $EA_LOG ($SIZE bytes)"
+    iconv -f UTF-16LE -t UTF-8 "$EA_LOG" 2>/dev/null | grep -i "RiskMgr\|AccountState\|INIT\|MaxPos\|Risk.*mult\|Notify\|HEARTBEAT\|ALL SYSTEMS\|SWITCHED\|loaded" | head -20
+else
+    echo "NO EA LOG!"
 fi
 echo ""
 
 echo "Relay:"
 pgrep -f "telegram_relay" > /dev/null && echo "Running" || echo "NOT running"
+# Restart relay if needed
+if ! pgrep -f "telegram_relay" > /dev/null; then
+    nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &
+    sleep 2
+    echo "Relay restarted"
+fi
 echo ""
 
 echo "=== DONE - $(date) ==="
