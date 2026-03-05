@@ -1,20 +1,147 @@
 #!/bin/bash
 # =============================================================
-# STATUS CHECK ONLY - No changes made!
+# FIX: Enable AutoTrading + Fix mt5.service
 # =============================================================
 
 echo "============================================"
-echo "  VPS STATUS CHECK (READ ONLY)"
+echo "  FIX: AutoTrading + mt5.service"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+STARTUP_INI="$MT5/config/startup.ini"
 
-# ============ 1: PROCESSES ============
-echo "=== [1] RUNNING PROCESSES ==="
+# ============ STEP 1: Enable AutoTrading in startup.ini ============
+echo "=== [1] FIXING AutoTrading ==="
 
-echo "--- MT5 ---"
+# Show current startup.ini
+echo "--- Current startup.ini ---"
+if [ -f "$STARTUP_INI" ]; then
+    cat "$STARTUP_INI"
+else
+    echo "(file does not exist, will create)"
+fi
+echo ""
+
+# Create/update startup.ini with AutoTrading enabled
+mkdir -p "$MT5/config"
+
+# Check if startup.ini exists and has content
+if [ -f "$STARTUP_INI" ]; then
+    # Remove any existing AutoTrading line
+    sed -i '/^AutoTrading=/d' "$STARTUP_INI"
+    # Remove any existing EnableAutoTrading line
+    sed -i '/^EnableAutoTrading=/d' "$STARTUP_INI"
+
+    # Add AutoTrading=1 to [Common] section if it exists
+    if grep -q '^\[Common\]' "$STARTUP_INI"; then
+        sed -i '/^\[Common\]/a AutoTrading=1' "$STARTUP_INI"
+    else
+        # Add [Common] section with AutoTrading
+        echo "" >> "$STARTUP_INI"
+        echo "[Common]" >> "$STARTUP_INI"
+        echo "AutoTrading=1" >> "$STARTUP_INI"
+    fi
+else
+    # Create new startup.ini
+    cat > "$STARTUP_INI" << 'INIEOF'
+[Common]
+AutoTrading=1
+
+[Experts]
+AllowLiveTrading=1
+AllowDllImport=0
+Enabled=1
+INIEOF
+fi
+
+echo "--- Updated startup.ini ---"
+cat "$STARTUP_INI"
+echo ""
+
+# Also check terminal64.ini for AutoTrading setting
+TERMINAL_INI="$MT5/terminal64.ini"
+if [ -f "$TERMINAL_INI" ]; then
+    echo "--- Current terminal64.ini (AutoTrading related) ---"
+    grep -i "auto\|expert\|trading" "$TERMINAL_INI" 2>/dev/null || echo "(no matching lines)"
+
+    # Enable AutoTrading in terminal64.ini
+    if grep -q 'AutoTrading=' "$TERMINAL_INI"; then
+        sed -i 's/AutoTrading=0/AutoTrading=1/g' "$TERMINAL_INI"
+    fi
+    if grep -q 'ExpertsEnable=' "$TERMINAL_INI"; then
+        sed -i 's/ExpertsEnable=0/ExpertsEnable=1/g' "$TERMINAL_INI"
+    fi
+
+    echo "--- Updated terminal64.ini (AutoTrading related) ---"
+    grep -i "auto\|expert\|trading" "$TERMINAL_INI" 2>/dev/null || echo "(no matching lines)"
+else
+    echo "terminal64.ini not found at $TERMINAL_INI"
+fi
+echo ""
+
+# ============ STEP 2: Fix mt5.service ============
+echo "=== [2] FIXING mt5.service ==="
+
+# Stop any running MT5 first
+echo "Stopping current MT5 process..."
+pkill -f terminal64.exe 2>/dev/null
+sleep 3
+
+# Check if MT5 stopped
+if pgrep -f terminal64.exe > /dev/null 2>&1; then
+    echo "MT5 still running, force killing..."
+    pkill -9 -f terminal64.exe 2>/dev/null
+    sleep 2
+fi
+echo "MT5 stopped."
+echo ""
+
+# Update mt5.service with proper parameters (login + autotrading)
+echo "Updating mt5.service..."
+cat > /etc/systemd/system/mt5.service << 'SVCEOF'
+[Unit]
+Description=MetaTrader 5 Trading Terminal
+After=network.target xvfb.service
+Requires=xvfb.service
+
+[Service]
+Type=simple
+User=root
+Environment=DISPLAY=:99
+Environment=WINEPREFIX=/root/.wine
+ExecStartPre=/bin/sleep 5
+ExecStart=/usr/bin/wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" /portable /login:11797849 /server:FundedNext-Server
+Restart=always
+RestartSec=30
+StartLimitIntervalSec=600
+StartLimitBurst=10
+
+[Install]
+WantedBy=multi-user.target
+SVCEOF
+
+echo "--- New mt5.service ---"
+cat /etc/systemd/system/mt5.service
+echo ""
+
+# Reload systemd and start the service
+echo "Reloading systemd..."
+systemctl daemon-reload
+
+echo "Starting mt5.service..."
+systemctl start mt5.service
+sleep 10
+
+echo "--- mt5.service status ---"
+systemctl status mt5.service --no-pager 2>&1 | head -20
+echo ""
+
+# ============ STEP 3: VERIFY ============
+echo "=== [3] VERIFICATION ==="
+
+echo "--- MT5 Process ---"
 if pgrep -f terminal64.exe > /dev/null 2>&1; then
     echo "MT5: RUNNING"
     ps aux | grep terminal64 | grep -v grep
@@ -23,128 +150,31 @@ else
 fi
 echo ""
 
-echo "--- Xvfb ---"
-if pgrep -x Xvfb > /dev/null 2>&1; then
-    echo "Xvfb: RUNNING"
-    ps aux | grep Xvfb | grep -v grep
-else
-    echo "Xvfb: NOT RUNNING!"
-fi
+echo "--- mt5.service ---"
+echo "  Enabled: $(systemctl is-enabled mt5.service 2>/dev/null)"
+echo "  Active: $(systemctl is-active mt5.service 2>/dev/null)"
 echo ""
 
-echo "--- x11vnc ---"
-if pgrep -f x11vnc > /dev/null 2>&1; then
-    echo "VNC: RUNNING"
-else
-    echo "VNC: NOT RUNNING!"
-fi
-echo ""
+# Wait for MT5 to fully start and check logs
+echo "Waiting 20 more seconds for MT5 to initialize..."
+sleep 20
 
-echo "--- Wine ---"
-wine --version 2>/dev/null || echo "Wine: NOT FOUND!"
-echo ""
-
-# ============ 2: SYSTEMD SERVICES ============
-echo "=== [2] SYSTEMD SERVICES ==="
-
-for svc in xvfb mt5 x11vnc; do
-    echo "--- ${svc}.service ---"
-    if [ -f /etc/systemd/system/${svc}.service ]; then
-        echo "  File: EXISTS"
-        echo "  Enabled: $(systemctl is-enabled ${svc}.service 2>/dev/null || echo 'NO')"
-        echo "  Active: $(systemctl is-active ${svc}.service 2>/dev/null || echo 'NO')"
-    else
-        echo "  File: MISSING!"
-    fi
-done
-echo ""
-
-echo "--- mt5.service content ---"
-if [ -f /etc/systemd/system/mt5.service ]; then
-    cat /etc/systemd/system/mt5.service
-else
-    echo "(does not exist)"
-fi
-echo ""
-
-echo "--- xvfb.service content ---"
-if [ -f /etc/systemd/system/xvfb.service ]; then
-    cat /etc/systemd/system/xvfb.service
-else
-    echo "(does not exist)"
-fi
-echo ""
-
-# ============ 3: CRON & WATCHDOG ============
-echo "=== [3] CRON & WATCHDOG ==="
-
-echo "--- Crontab ---"
-crontab -l 2>/dev/null || echo "No crontab"
-echo ""
-
-echo "--- Watchdog script ---"
-for dir in /root/PropFirmBot/scripts /home/ubuntu/PropFirmBot/scripts; do
-    if [ -f "$dir/watchdog.sh" ]; then
-        echo "EXISTS at $dir/watchdog.sh"
-    fi
-done
-echo ""
-
-echo "--- Watchdog log (last 15 lines) ---"
-for dir in /root/PropFirmBot/logs /home/ubuntu/PropFirmBot/logs; do
-    if [ -f "$dir/watchdog.log" ]; then
-        echo "From $dir/watchdog.log:"
-        tail -15 "$dir/watchdog.log"
-    fi
-done
-echo ""
-
-# ============ 4: MT5 LOGS ============
-echo "=== [4] MT5 LOGS ==="
-
-echo "--- EA Logs ---"
+echo "--- Latest EA log (last 15 lines) ---"
 LATEST_LOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
 if [ -n "$LATEST_LOG" ]; then
-    echo "File: $(basename "$LATEST_LOG") ($(stat -c%s "$LATEST_LOG" 2>/dev/null) bytes)"
-    echo "Last 30 lines:"
-    cat "$LATEST_LOG" 2>/dev/null | tr -d '\0' | tail -30
+    cat "$LATEST_LOG" 2>/dev/null | tr -d '\0' | tail -15
 else
-    echo "No EA logs found"
+    echo "No EA logs yet"
 fi
 echo ""
 
-echo "--- Terminal Logs ---"
+echo "--- Latest Terminal log (last 10 lines) ---"
 TERM_LOG=$(ls -t "$MT5/logs/"*.log 2>/dev/null | head -1)
 if [ -n "$TERM_LOG" ]; then
-    echo "File: $(basename "$TERM_LOG") ($(stat -c%s "$TERM_LOG" 2>/dev/null) bytes)"
-    echo "Last 20 lines:"
-    cat "$TERM_LOG" 2>/dev/null | tr -d '\0' | tail -20
+    cat "$TERM_LOG" 2>/dev/null | tr -d '\0' | tail -10
 else
-    echo "No terminal logs found"
+    echo "No terminal logs yet"
 fi
 echo ""
 
-# ============ 5: EA FILES ============
-echo "=== [5] EA FILES ==="
-echo "--- Experts dir ---"
-ls -la "$MT5/MQL5/Experts/PropFirmBot/" 2>/dev/null || echo "EA directory not found!"
-echo ""
-echo "--- Config files ---"
-ls -la "$MT5/MQL5/Files/PropFirmBot/" 2>/dev/null || echo "Config directory not found!"
-echo ""
-
-# ============ 6: NETWORK ============
-echo "=== [6] NETWORK ==="
-echo "--- Outbound connections ---"
-ss -tn state established 2>/dev/null | head -10 || netstat -tn 2>/dev/null | head -10
-echo ""
-
-# ============ 7: SYSTEM ============
-echo "=== [7] SYSTEM ==="
-echo "Uptime: $(uptime -p 2>/dev/null)"
-echo "Memory: $(free -h | grep Mem)"
-echo "Disk:   $(df -h / | tail -1)"
-echo "Kernel: $(uname -r)"
-echo ""
-
-echo "=== CHECK DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+echo "=== FIX DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
