@@ -1,57 +1,59 @@
 #!/bin/bash
-# Check if EA was recompiled and reloaded after deploy
+# Deploy updated EA + recompile + restart MT5 + verify
+# Triggered: 2026-03-06 v2
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
 
 echo "=== TIME: $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
-# Pull latest code
+MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
+EA_DIR="$MT5_BASE/MQL5/Experts/PropFirmBot"
+
+# Step 1: Pull latest code
+echo ""
+echo "=== Step 1: Pull latest code ==="
 cd /root/MT5-PropFirm-Bot
+git fetch origin claude/debug-bot-trading-HN2Tc 2>&1
+git checkout claude/debug-bot-trading-HN2Tc 2>&1
 git pull origin claude/debug-bot-trading-HN2Tc 2>&1
 
+# Step 2: Copy EA files
 echo ""
-echo "=== Recompile EA ==="
-EA_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
-MQL_DIR="$EA_DIR/MQL5/Experts/PropFirmBot"
+echo "=== Step 2: Copy EA files ==="
+cp -v /root/MT5-PropFirm-Bot/EA/*.mq5 "$EA_DIR/" 2>&1
+cp -v /root/MT5-PropFirm-Bot/EA/*.mqh "$EA_DIR/" 2>&1
 
-# Copy updated EA files
-cp -v /root/MT5-PropFirm-Bot/EA/*.mq5 "$MQL_DIR/" 2>&1
-cp -v /root/MT5-PropFirm-Bot/EA/*.mqh "$MQL_DIR/" 2>&1
-
+# Step 3: Compile
 echo ""
-echo "=== Compile ==="
-cd "$EA_DIR"
-wine metaeditor64.exe /compile:"MQL5/Experts/PropFirmBot/PropFirmBot.mq5" /log 2>&1
+echo "=== Step 3: Compile EA ==="
+cd "$MT5_BASE"
+timeout 30 wine metaeditor64.exe /compile:"MQL5/Experts/PropFirmBot/PropFirmBot.mq5" /log 2>&1 || true
 sleep 5
 
 echo ""
-echo "=== Compile log ==="
-cat "$MQL_DIR/PropFirmBot.log" 2>/dev/null || echo "No compile log found"
+echo "=== Compile result ==="
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>&1
+cat "$EA_DIR/PropFirmBot.log" 2>/dev/null | tail -20
+
+# Step 4: Restart MT5
+echo ""
+echo "=== Step 4: Restart MT5 ==="
+pkill -f terminal64.exe 2>/dev/null || true
+sleep 5
+echo "MT5 killed, starting fresh..."
+cd "$MT5_BASE"
+nohup wine terminal64.exe /autotrading > /dev/null 2>&1 &
+sleep 15
 
 echo ""
-echo "=== Check .ex5 file ==="
-ls -la "$MQL_DIR/PropFirmBot.ex5" 2>&1
-
-echo ""
-echo "=== Restart MT5 to load new EA ==="
-# Kill MT5
-pkill -f terminal64.exe 2>/dev/null
-sleep 3
-
-# Start MT5
-cd "$EA_DIR"
-wine terminal64.exe /autotrading &
-sleep 10
-
-echo ""
-echo "=== MT5 Process check ==="
+echo "=== MT5 Process ==="
 ps aux | grep terminal64 | grep -v grep
 
+# Step 5: Check EA log
 echo ""
-echo "=== Latest EA log (after restart) ==="
-sleep 5
-LOG_FILE="$EA_DIR/MQL5/Logs/$(date -u +%Y%m%d).log"
-tail -20 "$LOG_FILE" 2>/dev/null || echo "No log yet"
+echo "=== Step 5: New EA log ==="
+LOG_FILE="$MT5_BASE/MQL5/Logs/$(date -u +%Y%m%d).log"
+tail -30 "$LOG_FILE" 2>/dev/null || echo "No log yet"
 
 echo ""
 echo "DONE $(date)"
