@@ -1,39 +1,12 @@
-=== CHECK + SCREENSHOT Fri Mar  6 12:46:42 UTC 2026 ===
-[1] Screenshot...
-cp: cannot create regular file '/root/MT5-PropFirm-Bot/commands/mt5_screenshot.png': No such file or directory
-ls: cannot access '/root/MT5-PropFirm-Bot/commands/mt5_screenshot.png': No such file or directory
-Screenshot copied to repo
-
-[2] AutoTrading state history:
-QR	0	11:32:46.318	Experts	automated trading is disabled
-GQ	0	11:36:38.699	Experts	automated trading is enabled
+=== RESTART + CTRL+E Fri Mar  6 12:48:48 UTC 2026 ===
+346800
+MT5 starting...
+Window: 33554433
+Ctrl+E sent
 KK	0	12:15:55.446	Experts	automated trading is disabled
 NS	0	12:18:18.512	Experts	automated trading is enabled
 OE	0	12:20:28.297	Experts	automated trading is disabled
 
-[3] Current EA state:
-EP	0	12:45:02.773	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
-PO	0	12:45:03.285	PropFirmBot (EURUSD,M15)	[SMC] BUY signal: Entry=157.87900 SL=157.76954 TP=158.09793 | LiqSweep=N OB=Y FVG=N
-DL	0	12:45:03.285	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.1 Lot=0.10
-HR	0	12:45:03.285	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.770 tp: 158.098 [auto trading disabled by client]
-PL	0	12:45:03.285	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
-DP	0	12:45:03.791	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.770 tp: 158.098 [auto trading disabled by client]
-MJ	0	12:45:03.791	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
-EE	0	12:45:04.351	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.770 tp: 158.098 [auto trading disabled by client]
-KG	0	12:45:04.351	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
-KI	0	12:45:04.878	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-
-[4] Status:
-{
-    "bot_name": "PropFirmBot",
-    "active": true,
-    "balance": 1981.41,
-    "last_trade": null,
-    "updated_at": "2026-03-06 12:46:39",
-    "open_positions": [],
-    "recent_closed_trades": [],
-    "ea_connected": true,
-    "account": {
-
-=== DONE Fri Mar  6 12:46:43 UTC 2026 ===
+Persistent fix installed
+=== DONE Fri Mar  6 12:49:22 UTC 2026 ===
 EXIT_CODE=0
