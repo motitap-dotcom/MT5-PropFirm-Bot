@@ -1,105 +1,89 @@
 ============================================
-  Full Status Check
-  2026-03-06 07:36:14 UTC
+  DEEP DIAGNOSTIC CHECK
+  2026-03-06 08:32:20 UTC
 ============================================
 
 === [1] MT5 Process ===
 MT5 is RUNNING (PID: 2358661)
+Uptime:    12:48:43
 
-=== [2] Terminal Log (today) ===
-DH	0	01:48:36.491	Terminal	shutdownwith0
-EI	2	01:49:13.089	Terminal	terminalprocessalreadystarted
-PO	0	01:49:13.089	Terminal	exitwithcode0
-RE	0	01:49:13.089	Terminal	stoppedwith0
-HP	0	01:49:13.194	Terminal	shutdownwith0
-HQ	2	01:49:49.931	Terminal	terminalprocessalreadystarted
-ID	0	01:49:49.931	Terminal	exitwithcode0
-NM	0	01:49:49.932	Terminal	stoppedwith0
-NI	0	01:49:50.038	Terminal	shutdownwith0
-QI	2	01:50:26.609	Terminal	terminalprocessalreadystarted
-DL	0	01:50:26.609	Terminal	exitwithcode0
-NE	0	01:50:26.609	Terminal	stoppedwith0
-LQ	0	01:50:26.714	Terminal	shutdownwith0
-NQ	2	01:51:03.349	Terminal	terminalprocessalreadystarted
-CD	0	01:51:03.349	Terminal	exitwithcode0
-QM	0	01:51:03.349	Terminal	stoppedwith0
-RI	0	01:51:03.455	Terminal	shutdownwith0
-KK	0	01:51:17.135	Network	'11797849':scanningnetworkforaccesspoints
-GJ	0	01:51:21.671	Network	'11797849':scanningnetworkfinished
+=== [2] Wine & Display ===
+DISPLAY=
+root      346800  2.3  0.8 247436 65436 ?        Ss   Feb26 254:47 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
+root      346808  0.6  0.3  44664 24576 ?        Ss   Feb26  67:31 /usr/bin/x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -xkb
 
-=== [3] EA Log (today) ===
-Log file: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260306.log
---- Last 50 lines ---
-GR	0	05:15:00.256	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-EM	0	05:16:00.239	PropFirmBot(EURUSD,M15)	[HEARTBEAT]Ticks=42354|State=GUARDIAN_ACTIVE|Bal=$1981.41|Eq=$1981.41|DD=0.00%|Positions=0
-CQ	0	05:30:00.735	PropFirmBot(EURUSD,M15)	[NEWBAR]2026.03.0607:30|Guardian=GUARDIAN_ACTIVE|Scanning4symbols...
-NN	0	05:30:00.757	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-HI	0	05:30:00.757	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-JD	0	05:30:00.757	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-DO	0	05:30:00.757	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-EJ	0	05:31:01.749	PropFirmBot(EURUSD,M15)	[HEARTBEAT]Ticks=43214|State=GUARDIAN_ACTIVE|Bal=$1981.41|Eq=$1981.41|DD=0.00%|Positions=0
-NR	0	05:45:00.495	PropFirmBot(EURUSD,M15)	[NEWBAR]2026.03.0607:45|Guardian=GUARDIAN_ACTIVE|Scanning4symbols...
-MK	0	05:45:00.495	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-KF	0	05:45:00.495	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-QQ	0	05:45:00.495	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-OL	0	05:45:00.495	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-JF	0	05:46:01.271	PropFirmBot(EURUSD,M15)	[HEARTBEAT]Ticks=44140|State=GUARDIAN_ACTIVE|Bal=$1981.41|Eq=$1981.41|DD=0.00%|Positions=0
-OG	0	06:00:00.207	PropFirmBot(EURUSD,M15)	[NEWBAR]2026.03.0608:00|Guardian=GUARDIAN_ACTIVE|Scanning4symbols...
-RE	0	06:00:00.208	PropFirmBot(EURUSD,M15)	[NewsFilter]Loaded6relevanteventsfromcalendar
-LD	0	06:00:00.209	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-RO	0	06:00:00.209	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-PJ	0	06:00:00.209	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-FD	0	06:00:00.209	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-QO	0	06:01:01.633	PropFirmBot(EURUSD,M15)	[HEARTBEAT]Ticks=45782|State=GUARDIAN_ACTIVE|Bal=$1981.41|Eq=$1981.41|DD=0.00%|Positions=0
-PL	0	06:15:01.142	PropFirmBot(EURUSD,M15)	[NEWBAR]2026.03.0608:15|Guardian=GUARDIAN_ACTIVE|Scanning4symbols...
-IQ	0	06:15:01.142	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-GL	0	06:15:01.142	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-MF	0	06:15:01.142	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-KQ	0	06:15:01.142	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-PL	0	06:16:01.153	PropFirmBot(EURUSD,M15)	[HEARTBEAT]Ticks=47148|State=GUARDIAN_ACTIVE|Bal=$1981.41|Eq=$1981.41|DD=0.00%|Positions=0
-GP	0	06:30:00.188	PropFirmBot(EURUSD,M15)	[NEWBAR]2026.03.0608:30|Guardian=GUARDIAN_ACTIVE|Scanning4symbols...
-GN	0	06:30:00.188	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-MH	0	06:30:00.188	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-KS	0	06:30:00.188	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-QN	0	06:30:00.188	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-HI	0	06:31:01.259	PropFirmBot(EURUSD,M15)	[HEARTBEAT]Ticks=48400|State=GUARDIAN_ACTIVE|Bal=$1981.41|Eq=$1981.41|DD=0.00%|Positions=0
-KE	0	06:45:00.359	PropFirmBot(EURUSD,M15)	[NEWBAR]2026.03.0608:45|Guardian=GUARDIAN_ACTIVE|Scanning4symbols...
-LJ	0	06:45:00.365	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-NE	0	06:45:00.365	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-PP	0	06:45:00.365	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-RK	0	06:45:00.365	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:Outsidetradingsession
-KF	0	06:46:01.196	PropFirmBot(EURUSD,M15)	[HEARTBEAT]Ticks=49611|State=GUARDIAN_ACTIVE|Bal=$1981.41|Eq=$1981.41|DD=0.00%|Positions=0
-GF	0	07:00:00.432	PropFirmBot(EURUSD,M15)	[NEWBAR]2026.03.0609:00|Guardian=GUARDIAN_ACTIVE|Scanning4symbols...
-RJ	0	07:00:00.434	PropFirmBot(EURUSD,M15)	[NewsFilter]Loaded6relevanteventsfromcalendar
-IR	0	07:00:00.437	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:SpreadtoowideonXAUUSD
-FN	0	07:01:01.124	PropFirmBot(EURUSD,M15)	[HEARTBEAT]Ticks=50879|State=GUARDIAN_ACTIVE|Bal=$1981.41|Eq=$1981.41|DD=0.00%|Positions=0
-KO	0	07:15:00.188	PropFirmBot(EURUSD,M15)	[NEWBAR]2026.03.0609:15|Guardian=GUARDIAN_ACTIVE|Scanning4symbols...
-NQ	0	07:15:00.188	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:SpreadtoowideonXAUUSD
-EK	0	07:16:02.186	PropFirmBot(EURUSD,M15)	[HEARTBEAT]Ticks=52275|State=GUARDIAN_ACTIVE|Bal=$1981.41|Eq=$1981.41|DD=0.00%|Positions=0
-ES	0	07:30:00.146	PropFirmBot(EURUSD,M15)	[NEWBAR]2026.03.0609:30|Guardian=GUARDIAN_ACTIVE|Scanning4symbols...
-IM	0	07:30:00.146	PropFirmBot(EURUSD,M15)	[RiskMgr]BLOCKED:SpreadtoowideonXAUUSD
-CG	0	07:31:02.922	PropFirmBot(EURUSD,M15)	[HEARTBEAT]Ticks=53811|State=GUARDIAN_ACTIVE|Bal=$1981.41|Eq=$1981.41|DD=0.00%|Positions=0
+=== [3] Network (broker connectivity) ===
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 7.049/8.228/9.407/1.179 ms
 
-=== [4] EA Files ===
-total 1368
-drwxr-xr-x 2 root root   4096 Mar  5 13:14 .
-drwxr-xr-x 6 root root   4096 Mar  5 13:11 ..
--rw-r--r-- 1 root root  15380 Mar  5 19:23 AccountStateManager.mqh
--rw-r--r-- 1 root root  11919 Mar  5 19:23 Dashboard.mqh
--rw-r--r-- 1 root root  22358 Mar  5 19:23 Guardian.mqh
--rw-r--r-- 1 root root  10622 Mar  5 19:23 NewsFilter.mqh
--rw-r--r-- 1 root root  11971 Mar  5 19:23 Notifications.mqh
--rw-r--r-- 1 root root 163452 Mar  5 13:08 PropFirmBot.ex5
--rw-r--r-- 1 root root 163578 Mar  4 08:45 PropFirmBot.ex5.bak
--rw-r--r-- 1 root root 163174 Mar  3 19:39 PropFirmBot.ex5.bak2
--rw-r--r-- 1 root root 163340 Mar  5 09:47 PropFirmBot.ex5.bak_20260305_0947
--rw-r--r-- 1 root root 164640 Mar  5 11:25 PropFirmBot.ex5.bak_before_param_fix
--rw-r--r-- 1 root root 162634 Mar  4 14:15 PropFirmBot.ex5.bak_before_recompile
--rw-r--r-- 1 root root 163578 Mar  4 12:33 PropFirmBot.ex5.before_update
+=== [4] Terminal Log (today + yesterday) ===
+Today's log (/root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260306.log):
 
-=== [5] Last Balance/Equity Info ===
+=== [5] EA Logs ===
+Today's EA log (247 lines):
 
-=== [6] Trade History (recent) ===
+Yesterday's EA log (last 50 lines):
 
-=== DONE 2026-03-06 07:36:15 UTC ===
+=== [6] EA Init/Load Messages ===
+---
+Latest EA log: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260306.log
+
+=== [7] BLOCKED / Rejected Trades ===
+
+=== [8] Signal Generation ===
+
+=== [9] HEARTBEAT Messages ===
+
+=== [10] EA Compiled Files ===
+Source files (.mqh/.mq5):
+-rw-r--r-- 1 root root 15380 Mar  5 19:23 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh
+-rw-r--r-- 1 root root 11919 Mar  5 19:23 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Dashboard.mqh
+-rw-r--r-- 1 root root 22358 Mar  5 19:23 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Guardian.mqh
+-rw-r--r-- 1 root root 10622 Mar  5 19:23 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/NewsFilter.mqh
+-rw-r--r-- 1 root root 11971 Mar  5 19:23 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Notifications.mqh
+-rw-r--r-- 1 root root 34498 Mar  5 19:23 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
+-rw-r--r-- 1 root root 25420 Mar  5 19:43 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/RiskManager.mqh
+-rw-r--r-- 1 root root 23510 Mar  5 19:23 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/SignalEngine.mqh
+-rw-r--r-- 1 root root  8535 Mar  5 19:23 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/StatusWriter.mqh
+-rw-r--r-- 1 root root 22240 Mar  5 19:23 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeAnalyzer.mqh
+-rw-r--r-- 1 root root  9141 Mar  5 19:23 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeJournal.mqh
+-rw-r--r-- 1 root root 15338 Mar  5 19:23 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeManager.mqh
+
+Compiled file (.ex5):
+-rw-r--r-- 1 root root 163452 Mar  5 13:08 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+
+=== [11] Config Files ===
+total 48
+drwxr-xr-x 2 root root  4096 Mar  5 13:09 .
+drwxr-xr-x 3 root root  4096 Feb 22 21:00 ..
+-rw-r--r-- 1 root root  1620 Mar  5 19:23 account_state.json
+-rw-r--r-- 1 root root  1469 Mar  5 19:23 challenge_rules.json
+-rw-r--r-- 1 root root  1336 Mar  5 19:23 funded_rules.json
+-rw-r--r-- 1 root root  1159 Mar  5 19:23 notifications.json
+-rw-r--r-- 1 root root  1805 Mar  5 19:23 risk_params.json
+-rw-r--r-- 1 root root   904 Mar  6 08:32 status.json
+-rw-r--r-- 1 root root  1244 Mar  5 19:23 symbols.json
+-rw-r--r-- 1 root root 10156 Mar  6 08:30 telegram_queue.txt
+
+=== [12] AutoTrading Config ===
+
+=== [13] Account Info from Logs ===
+--- Program ---
+--- MetaTrader ---
+--- 20260306.log ---
+--- Program ---
+--- MetaTrader ---
+--- 20260305.log ---
+--- Program ---
+--- MetaTrader ---
+--- 20260304.log ---
+
+=== [14] System Resources ===
+/dev/sda1       145G   18G  127G  13% /
+               total        used        free      shared  buff/cache   available
+Mem:            7941        2353        5033          46         908        5588
+
+============================================
+  DONE 2026-03-06 08:32:23 UTC
+============================================
 EXIT_CODE=0
