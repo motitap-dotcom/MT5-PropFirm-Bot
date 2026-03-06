@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================
-# FIX: Kill all MT5 instances and restart with AutoTrading ON
+# FIX: Kill all MT5 instances and restart with AutoTrading ON (retry)
 # =============================================================
 
 echo "============================================"
