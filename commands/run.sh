@@ -1,38 +1,51 @@
 #!/bin/bash
-# Get screenshot + check AutoTrading state properly (handle UTF-16 log)
-echo "=== CHECK + SCREENSHOT $(date -u) ==="
+# Restart MT5 + immediate Ctrl+E (works only right after start)
+echo "=== RESTART + CTRL+E $(date -u) ==="
 export DISPLAY=:99
+export WINEPREFIX=/root/.wine
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
-# 1. Copy screenshot to repo
-echo "[1] Screenshot..."
-if [ -f /tmp/mt5_screenshot.png ]; then
-    cp /tmp/mt5_screenshot.png /root/MT5-PropFirm-Bot/commands/mt5_screenshot.png
-    ls -la /root/MT5-PropFirm-Bot/commands/mt5_screenshot.png
-    echo "Screenshot copied to repo"
-else
-    echo "No screenshot found, taking new one..."
-    scrot /root/MT5-PropFirm-Bot/commands/mt5_screenshot.png 2>/dev/null || echo "scrot failed"
-fi
-echo ""
+# Kill MT5
+pkill -f terminal64 2>/dev/null
+sleep 3
+pkill -9 -f terminal64 2>/dev/null
+sleep 2
 
-# 2. Check AutoTrading state properly - convert log from UTF-16 to UTF-8
-echo "[2] AutoTrading state history:"
+# Start MT5
+pgrep Xvfb || (Xvfb :99 -screen 0 1280x1024x24 & sleep 2)
+nohup wine "$MT5/terminal64.exe" /portable /login:11797849 /server:FundedNext-Server /autotrading > /dev/null 2>&1 &
+echo "MT5 starting..."
+sleep 20
+
+# Find window and send SINGLE Ctrl+E to FIRST window ONLY
+WIN=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
+echo "Window: $WIN"
+xdotool windowfocus --sync "$WIN" 2>/dev/null
+sleep 1
+xdotool windowactivate --sync "$WIN" 2>/dev/null
+sleep 1
+xdotool key --window "$WIN" --clearmodifiers ctrl+e 2>/dev/null
+echo "Ctrl+E sent"
+sleep 5
+
+# Check
 EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-# The log might be UTF-16LE with null bytes
-iconv -f UTF-16LE -t UTF-8 "$EALOG" 2>/dev/null | grep -i "automated trading" || \
-  cat "$EALOG" 2>/dev/null | tr -d '\0' | grep -i "automated trading" || \
-  echo "Could not find autotrading messages"
+cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -3
 echo ""
 
-# 3. Last state
-echo "[3] Current EA state:"
-cat "$EALOG" 2>/dev/null | tr -d '\0' | tail -10
-echo ""
+# Save state and update persistent fix
+cat > /root/fix_autotrading.sh << 'FIXEOF'
+#!/bin/bash
+export DISPLAY=:99
+sleep 25
+WIN=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
+[ -n "$WIN" ] && xdotool windowfocus --sync "$WIN" 2>/dev/null && sleep 1 && xdotool windowactivate --sync "$WIN" 2>/dev/null && sleep 1 && xdotool key --window "$WIN" --clearmodifiers ctrl+e 2>/dev/null
+echo "$(date): Toggled AutoTrading on $WIN" >> /var/log/autotrading_fix.log
+FIXEOF
+chmod +x /root/fix_autotrading.sh
 
-# 4. mt5_status.json
-echo "[4] Status:"
-cat /var/bots/mt5_status.json 2>/dev/null | python3 -m json.tool 2>/dev/null | head -10
+# Add to crontab for reboot
+(crontab -l 2>/dev/null | grep -v fix_autotrading; echo "@reboot /root/fix_autotrading.sh") | crontab -
+echo "Persistent fix installed"
 
-echo ""
 echo "=== DONE $(date -u) ==="
