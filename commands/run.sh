@@ -1,152 +1,106 @@
 #!/bin/bash
-# Fix AutoTrading via proper startup config + wine registry
-echo "=== FIX AUTOTRADING $(date -u) ==="
+# Enable AutoTrading via Windows-native SendKeys (VBScript under Wine)
+echo "=== SENDKEYS FIX $(date -u) ==="
 export DISPLAY=:99
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
-# Kill MT5
-screen -X -S mt5 quit 2>/dev/null
-pkill -9 -f terminal64.exe 2>/dev/null
-pkill -9 -f "start.exe" 2>/dev/null
-sleep 3
-
-# Step 1: Fix startup.ini with AutoTrading=1 in [StartUp] section
-echo "[1] Fixing startup.ini..."
-cat > "$MT5/config/startup.ini" << 'STARTUP'
-[StartUp]
-Login=11797849
-Server=FundedNext-Server
-AutoTrading=1
-AllowLiveTrading=1
-AllowWebRequest=1
-WebRequestUrl1=https://api.telegram.org
-
-[Experts]
-AllowLiveTrading=1
-AllowDllImport=0
-ExpertsEnabled=1
-AutoTrading=1
-
-[Expert]
-Expert=PropFirmBot\PropFirmBot
-ExpertParameters=
-STARTUP
-echo "  Done"
-cat "$MT5/config/startup.ini"
-
-# Step 2: Fix terminal.ini - read the real one and add AutoTrading
-echo ""
-echo "[2] Fixing terminal.ini..."
-# Check if terminal.ini exists and its encoding
-if [ -f "$MT5/config/terminal.ini" ]; then
-    ENCODING=$(file "$MT5/config/terminal.ini")
-    echo "  Encoding: $ENCODING"
-
-    if echo "$ENCODING" | grep -q "UTF-16"; then
-        # Convert to UTF-8, add AutoTrading, convert back
-        iconv -f UTF-16LE -t UTF-8 "$MT5/config/terminal.ini" 2>/dev/null > /tmp/terminal_utf8.ini
-
-        # Check if [Common] section exists
-        if grep -q "\[Common\]" /tmp/terminal_utf8.ini; then
-            # Add AutoTrading after [Common]
-            sed -i '/\[Common\]/a AutoTrading=1' /tmp/terminal_utf8.ini 2>/dev/null
-        else
-            # Add [Common] section at the beginning
-            sed -i '1i [Common]\nAutoTrading=1\n' /tmp/terminal_utf8.ini 2>/dev/null
-        fi
-
-        # Convert back to UTF-16
-        iconv -f UTF-8 -t UTF-16LE /tmp/terminal_utf8.ini > "$MT5/config/terminal.ini"
-        echo "  terminal.ini updated (UTF-16)"
-    else
-        # Plain text
-        if ! grep -q "AutoTrading" "$MT5/config/terminal.ini"; then
-            echo -e "\n[Common]\nAutoTrading=1" >> "$MT5/config/terminal.ini"
-        fi
-        sed -i 's/AutoTrading=0/AutoTrading=1/g' "$MT5/config/terminal.ini"
-        echo "  terminal.ini updated (UTF-8)"
-    fi
-fi
-
-# Step 3: Also check/fix common.ini
-echo ""
-echo "[3] Fixing common.ini..."
-if ! grep -q "\[Common\]" "$MT5/config/common.ini" 2>/dev/null; then
-    echo -e "\n[Common]\nAutoTrading=1" >> "$MT5/config/common.ini"
-fi
-sed -i 's/AutoTrading=0/AutoTrading=1/g' "$MT5/config/common.ini"
-grep -i "AutoTrading\|AutoTr\|expert\|trading" "$MT5/config/common.ini" | head -5
-
-# Step 4: Check Wine registry for MT5 settings
-echo ""
-echo "[4] Wine registry check:"
-grep -i "autotrading\|metatrader\|mt5\|terminal64" /root/.wine/user.reg 2>/dev/null | head -10
-grep -i "autotrading\|metatrader\|mt5\|terminal64" /root/.wine/system.reg 2>/dev/null | head -5
-
-# Step 5: Start MT5 with explicit config
-echo ""
-echo "[5] Starting MT5 with config..."
-cd "$MT5"
-# Use the config parameter to force startup settings
-screen -dmS mt5 bash -c "export DISPLAY=:99 && export WINEPREFIX=/root/.wine && cd \"$MT5\" && wine terminal64.exe /portable /config:\"C:\\\\Program Files\\\\MetaTrader 5\\\\config\\\\startup.ini\" 2>&1"
-echo "  MT5 started with /config parameter"
-sleep 20
-
-# Step 6: Check if AutoTrading is now enabled
-echo ""
-echo "[6] Status check:"
+echo "[1] Pre-check AutoTrading state:"
 EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-echo "  AutoTrading log entries:"
-cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -5
-echo "  Last EA entries:"
-cat "$EALOG" 2>/dev/null | tr -d '\0' | tail -5
+cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -3
 
-# Step 7: Also try sending WM_COMMAND via wine tool
-echo ""
-echo "[7] Try WM_COMMAND via Python/ctypes under Wine:"
-cat > /tmp/enable_at.py << 'PYEOF'
-import ctypes
-import ctypes.wintypes
-
-user32 = ctypes.windll.user32
-
-def find_mt5_window():
-    result = []
-    def callback(hwnd, _):
-        length = user32.GetWindowTextLengthW(hwnd)
-        if length > 0:
-            buf = ctypes.create_unicode_buffer(length + 1)
-            user32.GetWindowTextW(hwnd, buf, length + 1)
-            if 'FundedNext' in buf.value or 'MetaTrader' in buf.value:
-                result.append((hwnd, buf.value))
-        return True
-    WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.wintypes.HWND, ctypes.wintypes.LPARAM)
-    user32.EnumWindows(WNDENUMPROC(callback), 0)
-    return result
-
-windows = find_mt5_window()
-for hwnd, name in windows:
-    print(f"Found: {hwnd} = {name}")
-
-if windows:
-    hwnd = windows[0][0]
-    # WM_COMMAND = 0x0111, AutoTrading toggle ID = 32842
-    WM_COMMAND = 0x0111
-    user32.PostMessageW(hwnd, WM_COMMAND, 32842, 0)
-    print(f"Sent WM_COMMAND(32842) to {hwnd}")
-PYEOF
-wine python.exe /tmp/enable_at.py 2>/dev/null || echo "  Wine Python not available"
-
-# Try with wine's built-in rundll32
-echo ""
-echo "[8] Alt: use xdotool with wmctrl focus:"
+echo "[2] MT5 running:"
+pgrep -a "start.exe\|terminal64" 2>/dev/null | head -3 || echo "Not running"
 W=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
-if [ -n "$W" ]; then
-    wmctrl -i -a "$W" 2>/dev/null
-    sleep 1
-    xdotool key ctrl+e
-    sleep 2
-    cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -1
+echo "  Window: $W"
+
+# If MT5 not running, start it
+if ! pgrep -f "terminal64\|start.exe" >/dev/null 2>&1; then
+    echo "  Starting MT5..."
+    cd "$MT5"
+    screen -dmS mt5 bash -c "export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1"
+    sleep 15
 fi
+
+echo "[3] Method 1: VBScript SendKeys (Windows-native)"
+cat > /tmp/enable_autotrading.vbs << 'VBSEOF'
+Set WshShell = WScript.CreateObject("WScript.Shell")
+WScript.Sleep 500
+result = WshShell.AppActivate("FundedNext")
+WScript.Echo "AppActivate FundedNext: " & result
+If Not result Then
+    result = WshShell.AppActivate("MetaTrader")
+    WScript.Echo "AppActivate MetaTrader: " & result
+End If
+If Not result Then
+    result = WshShell.AppActivate("11797849")
+    WScript.Echo "AppActivate 11797849: " & result
+End If
+WScript.Sleep 1000
+WshShell.SendKeys "^e"
+WScript.Echo "SendKeys ^e sent!"
+WScript.Sleep 500
+VBSEOF
+wine cscript.exe //nologo "Z:\\tmp\\enable_autotrading.vbs" 2>&1
+echo "  VBScript exit code: $?"
+
+sleep 3
+echo "[4] Post-VBScript check:"
+cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -3
+
+echo "[5] Method 2: Compile and run C program via MinGW"
+# Check if MinGW/gcc is available under Wine
+if [ -f "/root/.wine/drive_c/windows/system32/cmd.exe" ]; then
+    # Create a small C program that sends WM_COMMAND
+    cat > /tmp/enable_at.c << 'CEOF'
+#include <windows.h>
+#include <stdio.h>
+
+BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
+    char title[256];
+    GetWindowTextA(hwnd, title, sizeof(title));
+    if (strstr(title, "FundedNext") || strstr(title, "MetaTrader")) {
+        printf("Found: %p = %s\n", hwnd, title);
+        // WM_COMMAND with AutoTrading toggle ID
+        PostMessage(hwnd, WM_COMMAND, 32842, 0);
+        printf("Sent WM_COMMAND(32842) to %p\n", hwnd);
+        *(HWND*)lParam = hwnd;
+        return FALSE;  // Stop enumeration
+    }
+    return TRUE;
+}
+
+int main() {
+    HWND found = NULL;
+    EnumWindows(EnumWindowsProc, (LPARAM)&found);
+    if (!found) {
+        printf("No MT5 window found!\n");
+        return 1;
+    }
+    Sleep(2000);
+    return 0;
+}
+CEOF
+    # Try to compile with MinGW if available
+    which x86_64-w64-mingw32-gcc >/dev/null 2>&1 && {
+        echo "  Compiling with MinGW..."
+        x86_64-w64-mingw32-gcc -o /tmp/enable_at.exe /tmp/enable_at.c -luser32 2>&1
+        if [ -f /tmp/enable_at.exe ]; then
+            echo "  Running enable_at.exe..."
+            wine /tmp/enable_at.exe 2>&1
+            echo "  Exit code: $?"
+        fi
+    } || echo "  MinGW not available"
+fi
+
+# Check if apt can install mingw
+echo ""
+echo "[6] MinGW availability:"
+which x86_64-w64-mingw32-gcc 2>/dev/null || dpkg -l | grep mingw 2>/dev/null | head -2 || echo "  Not installed"
+
+sleep 3
+echo "[7] Final check:"
+cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -3
+echo "  Last 3 EA entries:"
+cat "$EALOG" 2>/dev/null | tr -d '\0' | tail -3
 
 echo "=== DONE $(date -u) ==="
