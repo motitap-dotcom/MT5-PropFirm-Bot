@@ -12,6 +12,12 @@
 #property description "  Self-learning risk adaptation"
 #property strict
 
+// Windows API import for enabling AutoTrading programmatically
+#import "user32.dll"
+int PostMessageW(int hWnd, int Msg, int wParam, int lParam);
+int GetAncestor(int hWnd, uint gaFlags);
+#import
+
 // Include all modules
 #include "SignalEngine.mqh"
 #include "RiskManager.mqh"
@@ -167,6 +173,34 @@ int OnInit()
    Print("  PropFirmBot v3.0 - FULL TRADING SYSTEM");
    Print("  ALL MODULES ACTIVE");
    Print("==============================================");
+
+   // Auto-enable AutoTrading if disabled (critical for Wine/Linux)
+   if(!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED))
+   {
+      Print("[AUTOFIX] AutoTrading is DISABLED - enabling via Windows API...");
+      int chart_hwnd = (int)ChartGetInteger(0, CHART_WINDOW_HANDLE);
+      if(chart_hwnd != 0)
+      {
+         int terminal_hwnd = GetAncestor(chart_hwnd, 2); // GA_ROOT = 2
+         if(terminal_hwnd != 0)
+         {
+            // Send WM_COMMAND (0x0111) with AutoTrading command ID (32842)
+            PostMessageW(terminal_hwnd, 0x0111, 32842, 0);
+            Print("[AUTOFIX] Sent AutoTrading enable command to terminal window");
+            Sleep(2000); // Wait for toggle
+            if(TerminalInfoInteger(TERMINAL_TRADE_ALLOWED))
+               Print("[AUTOFIX] AutoTrading is now ENABLED!");
+            else
+               Print("[AUTOFIX] AutoTrading still disabled - may need manual toggle");
+         }
+         else
+            Print("[AUTOFIX] Could not find terminal window handle");
+      }
+      else
+         Print("[AUTOFIX] Could not get chart window handle");
+   }
+   else
+      Print("[INIT] AutoTrading is ENABLED - OK");
 
    // Wait for account data to load (common issue with Wine/MT5)
    int wait_attempts = 0;
