@@ -1,98 +1,51 @@
-=== CHART FIX Fri Mar  6 14:33:02 UTC 2026 ===
-[1] Find all chart files with expert settings:
-  --- /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart02.chr ---
-expertmode=0
-  --- /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart03.chr ---
-expertmode=0
-  --- /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr ---
-<expert>
-path=Experts\PropFirmBot\PropFirmBot.ex5
-expertmode=0
-</expert>
-expertmode=0
-  --- /root/.wine/drive_c/Program Files/MetaTrader 5/profiles/charts/default/chart01.chr ---
-<expert>
-expertmode=35
-</expert>
-  --- /root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr ---
-<expert>
-expertmode=1
-</expert>
-expertmode=0
+=== FIX EXPERTMODE Fri Mar  6 14:35:03 UTC 2026 ===
+[1] Stopping MT5...
+[2] Fixing expertmode in all chart files...
+  Fixed: /root/.wine/drive_c/Program Files/MetaTrader 5/profiles/charts/default/chart01.chr
+  Fixed: /root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr
 
-[2] Find the active chart profile:
-Expert=PropFirmBot\PropFirmBot
-ExpertParameters=
-[Experts]
-ExpertEnabled=1
-ExpertsEnabled=1
-Profile=0
-Chart=0
-[Charts]
-ProfileLast=Default
-PreloadCharts=1
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart03.chr
-
-[3] Default profile charts:
-  --- chart01.chr ---
+[3] Verify active chart (Default/chart01.chr):
 symbol=EURUSD
-period_type=0
-period_size=15
 <expert>
 path=Experts\PropFirmBot\PropFirmBot.ex5
 expertmode=0
-InpRSIPeriod=14
-InpATRPeriod=14
 InpAutoBlockSymbol=true
 </expert>
 expertmode=0
-  --- chart02.chr ---
-symbol=EURUSD
-period_type=0
-period_size=15
-expertmode=0
-  --- chart03.chr ---
-symbol=EURUSD
-period_type=0
-period_size=15
-expertmode=0
-  --- chart04.chr ---
-symbol=EURUSD
-period_type=0
-period_size=15
-  --- chart01.chr ---
-symbol=EURUSD
-period_type=0
-period_size=15
-<expert>
-expertmode=35
-</expert>
 
-[4] All profiles:
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Community
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/deleted
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Tester
-/root/.wine/drive_c/Program Files/MetaTrader 5/profiles
-/root/.wine/drive_c/Program Files/MetaTrader 5/profiles/charts
-/root/.wine/drive_c/Program Files/MetaTrader 5/profiles/charts/default
+[4] Starting MT5...
+[5] Enabling AutoTrading...
+Found: 00000000000503d6 = MetaTrader 5
+Sending Ctrl+E via keybd_event...
+Done! Single Ctrl+E sent.
 
-[5] Terminal log for chart/profile info:
-  Terminal log: 
-=== DONE Fri Mar  6 14:33:04 UTC 2026 ===
+[6] AutoTrading state:
+JD	0	14:08:21.199	Experts	automated trading is enabled
+NR	0	14:10:54.980	Experts	automated trading is disabled
+KF	0	14:15:59.108	Experts	automated trading is enabled
+[7] Last 10 EA entries:
+CE	0	14:30:01.631	PropFirmBot (EURUSD,M15)	[SIGNAL] USDJPY >>> BUY signal found! SL=157.77489 TP=158.48621
+EI	0	14:30:01.631	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.2 Lot=0.04
+PG	0	14:30:01.631	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.02 USDJPY sl: 157.775 tp: 158.486 [auto trading disabled by client]
+KI	0	14:30:01.631	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+QE	0	14:30:02.145	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.02 USDJPY sl: 157.775 tp: 158.486 [auto trading disabled by client]
+KG	0	14:30:02.145	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+DK	0	14:30:02.650	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.02 USDJPY sl: 157.775 tp: 158.486 [auto trading disabled by client]
+IE	0	14:30:02.650	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+HK	0	14:30:03.155	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+PF	0	14:30:53.368	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=4073 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
+[8] Status:
+{
+    "bot_name": "PropFirmBot",
+    "active": true,
+    "balance": 1981.41,
+    "last_trade": null,
+    "updated_at": "2026-03-06 14:36:04",
+    "open_positions": [],
+    "recent_closed_trades": [],
+    "ea_connected": true,
+    "account": {
+        "balance": 1981.41,
+        "equity": 1981.41,
+=== DONE Fri Mar  6 14:36:09 UTC 2026 ===
 EXIT_CODE=0
