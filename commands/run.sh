@@ -1,53 +1,57 @@
 #!/bin/bash
-# Deep debug - why no trades at all?
+# Check if EA was recompiled and reloaded after deploy
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
 
-EA_LOG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs"
-TERM_LOG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/Logs"
-
 echo "=== TIME: $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
-echo ""
-echo "=== FULL EA Log today ==="
-cat "$EA_LOG_DIR/20260306.log" 2>/dev/null
+# Pull latest code
+cd /root/MT5-PropFirm-Bot
+git pull origin claude/debug-bot-trading-HN2Tc 2>&1
 
 echo ""
-echo "=== EA Logs from yesterday ==="
-cat "$EA_LOG_DIR/20260305.log" 2>/dev/null | tail -100
+echo "=== Recompile EA ==="
+EA_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
+MQL_DIR="$EA_DIR/MQL5/Experts/PropFirmBot"
+
+# Copy updated EA files
+cp -v /root/MT5-PropFirm-Bot/EA/*.mq5 "$MQL_DIR/" 2>&1
+cp -v /root/MT5-PropFirm-Bot/EA/*.mqh "$MQL_DIR/" 2>&1
 
 echo ""
-echo "=== Terminal Log (last 50 lines) ==="
-TERM_LOG=$(ls -t "$TERM_LOG_DIR/"*.log 2>/dev/null | head -1)
-if [ -n "$TERM_LOG" ]; then
-    echo "File: $TERM_LOG"
-    tail -50 "$TERM_LOG"
-fi
+echo "=== Compile ==="
+cd "$EA_DIR"
+wine metaeditor64.exe /compile:"MQL5/Experts/PropFirmBot/PropFirmBot.mq5" /log 2>&1
+sleep 5
 
 echo ""
-echo "=== Check if EA is actually attached to chart ==="
-# Look for chart config
-find "/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles" -name "*.chr" 2>/dev/null | while read f; do
-    echo "--- Chart file: $f ---"
-    grep -A5 -i "expert\|propfirm" "$f" 2>/dev/null
-done
+echo "=== Compile log ==="
+cat "$MQL_DIR/PropFirmBot.log" 2>/dev/null || echo "No compile log found"
 
 echo ""
-echo "=== Check EA .ex5 exists ==="
-ls -la "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/" 2>/dev/null
+echo "=== Check .ex5 file ==="
+ls -la "$MQL_DIR/PropFirmBot.ex5" 2>&1
 
 echo ""
-echo "=== Account info from terminal log ==="
-grep -i "account\|balance\|equity\|login\|authorized" "$TERM_LOG" 2>/dev/null | tail -20
+echo "=== Restart MT5 to load new EA ==="
+# Kill MT5
+pkill -f terminal64.exe 2>/dev/null
+sleep 3
+
+# Start MT5
+cd "$EA_DIR"
+wine terminal64.exe /autotrading &
+sleep 10
 
 echo ""
-echo "=== Any errors at all? ==="
-grep -i "error\|fail\|cannot\|denied\|invalid\|wrong" "$EA_LOG_DIR/20260306.log" 2>/dev/null
-grep -i "error\|fail\|cannot\|denied\|invalid\|wrong" "$TERM_LOG" 2>/dev/null | tail -20
+echo "=== MT5 Process check ==="
+ps aux | grep terminal64 | grep -v grep
 
 echo ""
-echo "=== Signal-related logs ==="
-grep -i "signal\|scan\|smc\|liq\|sweep\|order.block\|fvg\|setup\|entry\|skip\|reject\|no.*valid" "$EA_LOG_DIR/20260306.log" 2>/dev/null
+echo "=== Latest EA log (after restart) ==="
+sleep 5
+LOG_FILE="$EA_DIR/MQL5/Logs/$(date -u +%Y%m%d).log"
+tail -20 "$LOG_FILE" 2>/dev/null || echo "No log yet"
 
 echo ""
 echo "DONE $(date)"
