@@ -1,30 +1,41 @@
-=== FIX MT5 SERVICE Fri Mar  6 13:39:53 UTC 2026 ===
-[1] Creating MT5 start script...
-[2] Creating AutoTrading fix script...
-[3] Fixing systemd service...
-[4] Stopping MT5...
-[5] Starting MT5 service...
-[6] Process check:
-terminal64 not found
-2623805 C:\windows\system32\winedevice.exe
-root     2623805 11.9  0.2 744552 23480 ?        S<sl 13:36   0:24 C:\windows\system32\winedevice.exe
-[7] Service status:
-● mt5.service - MetaTrader 5 Trading Terminal
-     Loaded: loaded (/etc/systemd/system/mt5.service; enabled; preset: enabled)
-     Active: deactivating (final-sigterm) since Fri 2026-03-06 13:39:54 UTC; 27s ago
-   Main PID: 2623752 (code=killed, signal=TERM)
-      Tasks: 10 (limit: 9483)
-     Memory: 32.4M (peak: 430.3M)
-        CPU: 4min 3.623s
-     CGroup: /system.slice/mt5.service
-[8] AutoTrading toggle...
-  Window: 33554433
+=== FULL RESET Fri Mar  6 13:42:55 UTC 2026 ===
+[1] Stopping everything...
+  All MT5 processes killed
+  Confirmed: no terminal64 running
+[2] Starting MT5 in screen...
+  Screen session 'mt5' created
+There is a screen on:
+	2625879.mt5	(03/06/26 13:44:07)	(Detached)
+1 Socket in /run/screen/S-root.
+[3] Waiting 20s for MT5 to load...
+[4] Windows:
+  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
+  62914561: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+[5] Enabling AutoTrading...
+  Activating window 33554433...
   Ctrl+E sent!
-[9] Latest EA log:
-CS	0	13:37:26.514	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 USDJPY sl: 157.561 tp: 157.877 [auto trading disabled by client]
-JM	0	13:37:26.515	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
-QP	0	13:37:27.030	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 USDJPY sl: 157.561 tp: 157.877 [auto trading disabled by client]
-LJ	0	13:37:27.030	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
-OD	0	13:37:27.530	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-=== DONE Fri Mar  6 13:40:25 UTC 2026 ===
+[6] New EA log entries:
+DP	0	13:41:57.312	PropFirmBot (EURUSD,M15)	[EMA] BUY signal: Entry=157.62200 SL=157.43171 TP=158.00257 RSI=38.8 HTF=1
+ML	0	13:41:57.312	PropFirmBot (EURUSD,M15)	[SIGNAL] USDJPY >>> BUY signal found! SL=157.43171 TP=158.00257
+HP	0	13:41:57.312	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.2 Lot=0.05
+FN	0	13:41:57.312	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.03 USDJPY sl: 157.432 tp: 158.003 [auto trading disabled by client]
+QP	0	13:41:57.312	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+OL	0	13:41:57.812	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.03 USDJPY sl: 157.432 tp: 158.003 [auto trading disabled by client]
+EN	0	13:41:57.812	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+ER	0	13:41:58.314	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.03 USDJPY sl: 157.432 tp: 158.003 [auto trading disabled by client]
+PL	0	13:41:58.314	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+DR	0	13:41:58.813	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+[7] Setting up reboot persistence...
+[8] Status:
+{
+    "bot_name": "MT5 Bot",
+    "active": true,
+    "balance": 1981.41,
+    "last_trade": null,
+    "updated_at": "2026-03-06T13:44:28Z",
+    "open_positions": [],
+    "recent_closed_trades": []
+}
+=== DONE Fri Mar  6 13:44:32 UTC 2026 ===
 EXIT_CODE=0
