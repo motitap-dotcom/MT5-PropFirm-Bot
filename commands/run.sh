@@ -1,75 +1,42 @@
 #!/bin/bash
-# Quick fix: Enable AutoTrading and restart MT5
-echo "=== FIX AutoTrading $(date -u) ==="
+# Verify AutoTrading is working after fix
+echo "=== VERIFY AutoTrading FIX $(date -u) ==="
 
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
-# Stop MT5
-echo "[1] Stopping MT5..."
-pkill -f terminal64 2>/dev/null
-sleep 5
+# 1. Is MT5 running?
+echo "[1] MT5 process:"
+pgrep -fa terminal64 || echo "NOT RUNNING!"
+echo ""
 
-# Fix terminal.ini
-echo "[2] Fixing configs..."
-INI="$MT5/terminal.ini"
-if [ -f "$INI" ]; then
-    # Show current state
-    echo "Current terminal.ini AutoTrading lines:"
-    grep -in "autotrad\|ExpertEnable" "$INI" || echo "(none found)"
-
-    # Ensure AutoTrading=1 exists
-    if grep -q "AutoTrading=" "$INI"; then
-        sed -i 's/AutoTrading=0/AutoTrading=1/g' "$INI"
-    else
-        # Add to end
-        echo "AutoTrading=1" >> "$INI"
-    fi
-
-    if grep -q "ExpertEnabled=" "$INI"; then
-        sed -i 's/ExpertEnabled=0/ExpertEnabled=1/g' "$INI"
-    fi
-
-    echo "After fix:"
-    grep -in "autotrad\|ExpertEnable" "$INI" || echo "(none)"
-fi
-
-# Fix common.ini
-CINI="$MT5/config/common.ini"
-if [ -f "$CINI" ]; then
-    echo "Fixing common.ini..."
-    if grep -q "AutoTrading=" "$CINI"; then
-        sed -i 's/AutoTrading=0/AutoTrading=1/g' "$CINI"
-    else
-        echo "AutoTrading=1" >> "$CINI"
-    fi
-fi
-
-# Fix chart files - enable EA auto trading per chart
-echo "[3] Fixing chart configs..."
-find "$MT5/profiles" -name "*.chr" 2>/dev/null | while read f; do
-    sed -i 's/ExpertAutoTrading=0/ExpertAutoTrading=1/g' "$f" 2>/dev/null
-    echo "Fixed: $(basename $f)"
-done
-
-# Restart MT5
-echo "[4] Starting MT5..."
-export DISPLAY=:99
-export WINEPREFIX=/root/.wine
-nohup wine "$MT5/terminal64.exe" /portable /login:11797849 /server:FundedNext-Server /autotrading > /dev/null 2>&1 &
-sleep 8
-
-# Check
-echo "[5] Verify..."
-if pgrep -f terminal64 > /dev/null; then
-    echo "MT5 RUNNING OK"
+# 2. Check EA log for errors or successful trades
+echo "[2] Last 40 lines of EA log:"
+LATEST_LOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+if [ -n "$LATEST_LOG" ]; then
+    echo "File: $LATEST_LOG"
+    tail -40 "$LATEST_LOG" 2>&1
 else
-    echo "MT5 NOT RUNNING - trying again"
-    # Make sure Xvfb is running
-    pgrep Xvfb || Xvfb :99 -screen 0 1280x1024x24 &
-    sleep 2
-    nohup wine "$MT5/terminal64.exe" /portable /login:11797849 /server:FundedNext-Server /autotrading > /dev/null 2>&1 &
-    sleep 8
-    pgrep -f terminal64 && echo "MT5 RUNNING (2nd try)" || echo "MT5 FAILED"
+    echo "No logs found"
 fi
+echo ""
+
+# 3. Check terminal log
+echo "[3] Terminal log (last 20 lines):"
+TLOG=$(ls -t "$MT5/Logs/"*.log 2>/dev/null | head -1)
+if [ -n "$TLOG" ]; then
+    echo "File: $TLOG"
+    tail -20 "$TLOG" 2>&1
+fi
+echo ""
+
+# 4. Account status
+echo "[4] mt5_status.json:"
+cat /var/bots/mt5_status.json 2>/dev/null | python3 -m json.tool 2>/dev/null || cat /var/bots/mt5_status.json 2>/dev/null || echo "NOT FOUND"
+echo ""
+
+# 5. Check config values
+echo "[5] AutoTrading in terminal.ini:"
+grep -i "autotrad\|ExpertEnable" "$MT5/terminal.ini" 2>/dev/null || echo "(none)"
+echo ""
 
 echo "=== DONE $(date -u) ==="
