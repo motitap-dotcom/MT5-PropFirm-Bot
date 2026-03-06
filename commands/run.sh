@@ -1,11 +1,10 @@
 #!/bin/bash
-# Send WM_COMMAND(32842) ONCE to enable AutoTrading
-echo "=== SINGLE TOGGLE $(date -u) ==="
+# Enable AutoTrading via keybd_event ONLY (single toggle)
+echo "=== KEYBD_EVENT FIX $(date -u) ==="
 export DISPLAY=:99
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
-# Create minimal C program - SINGLE WM_COMMAND only
-cat > /tmp/toggle_at.c << 'CEOF'
+cat > /tmp/at_keybd.c << 'CEOF'
 #include <windows.h>
 #include <stdio.h>
 
@@ -29,32 +28,49 @@ int main() {
         printf("No MT5 window found!\n");
         return 1;
     }
-    // Send EXACTLY ONE WM_COMMAND(32842) toggle
-    SendMessage(g_found, WM_COMMAND, MAKEWPARAM(32842, 0), 0);
-    printf("WM_COMMAND(32842) sent ONCE to %p\n", (void*)g_found);
+
+    // Focus the window
+    SetForegroundWindow(g_found);
+    Sleep(500);
+    BringWindowToTop(g_found);
+    Sleep(500);
+
+    // Send Ctrl+E via keybd_event ONCE
+    printf("Sending Ctrl+E via keybd_event...\n");
+    keybd_event(VK_CONTROL, 0x1D, 0, 0);
+    Sleep(50);
+    keybd_event('E', 0x12, 0, 0);
+    Sleep(50);
+    keybd_event('E', 0x12, KEYEVENTF_KEYUP, 0);
+    Sleep(50);
+    keybd_event(VK_CONTROL, 0x1D, KEYEVENTF_KEYUP, 0);
+
+    printf("Done! Single Ctrl+E sent.\n");
+    Sleep(500);
     return 0;
 }
 CEOF
 
-x86_64-w64-mingw32-gcc -o /tmp/toggle_at.exe /tmp/toggle_at.c -luser32 2>&1
-cp /tmp/toggle_at.exe "/root/.wine/drive_c/toggle_at.exe"
-cp /tmp/toggle_at.exe /root/toggle_at.exe
+x86_64-w64-mingw32-gcc -o /tmp/at_keybd.exe /tmp/at_keybd.c -luser32 2>&1
+cp /tmp/at_keybd.exe "/root/.wine/drive_c/at_keybd.exe"
+cp /tmp/at_keybd.exe /root/at_keybd.exe
 
 echo "[1] Pre-state:"
 EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
 cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -3
 
-echo "[2] Sending single toggle..."
-wine "C:\\toggle_at.exe" 2>&1
+echo "[2] Running keybd_event..."
+wine "C:\\at_keybd.exe" 2>&1
 
-sleep 3
+sleep 5
 
 echo "[3] Post-state:"
-cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -3
-echo "[4] Last EA entries:"
-cat "$EALOG" 2>/dev/null | tr -d '\0' | tail -8
+cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -5
+echo ""
+echo "[4] Last 5 EA entries:"
+cat "$EALOG" 2>/dev/null | tr -d '\0' | tail -5
 
-echo "[5] Bot status:"
+echo "[5] Status:"
 cat /var/bots/mt5_status.json 2>/dev/null | python3 -m json.tool 2>/dev/null | head -12
 
 echo "=== DONE $(date -u) ==="
