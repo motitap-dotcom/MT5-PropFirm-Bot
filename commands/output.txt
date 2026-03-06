@@ -1,37 +1,24 @@
-=== KEYBD_EVENT FIX Fri Mar  6 14:08:17 UTC 2026 ===
+=== EXACT SEQUENCE Fri Mar  6 14:10:46 UTC 2026 ===
 [1] Pre-state:
-OE	0	12:20:28.297	Experts	automated trading is disabled
 GF	0	14:03:36.313	Experts	automated trading is enabled
 FR	0	14:03:38.863	Experts	automated trading is disabled
-[2] Running keybd_event...
+JD	0	14:08:21.199	Experts	automated trading is enabled
+[2] Running exact sequence...
 Found: 00000000000303d0 = 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - EURUSD,M15
-Sending Ctrl+E via keybd_event...
-Done! Single Ctrl+E sent.
+Step 1: WM_COMMAND(32842) priming...
+Step 2: Focus + keybd_event Ctrl+E...
+Done! Waiting for toggle...
 [3] Post-state:
-KK	0	12:15:55.446	Experts	automated trading is disabled
 NS	0	12:18:18.512	Experts	automated trading is enabled
 OE	0	12:20:28.297	Experts	automated trading is disabled
 GF	0	14:03:36.313	Experts	automated trading is enabled
 FR	0	14:03:38.863	Experts	automated trading is disabled
-
+JD	0	14:08:21.199	Experts	automated trading is enabled
 [4] Last 5 EA entries:
-GN	0	14:00:04.365	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.803 tp: 158.037 [auto trading disabled by client]
-KP	0	14:00:04.365	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
 QN	0	14:00:04.868	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 GF	0	14:03:36.313	Experts	automated trading is enabled
 FR	0	14:03:38.863	Experts	automated trading is disabled
-[5] Status:
-{
-    "bot_name": "PropFirmBot",
-    "active": true,
-    "balance": 1981.41,
-    "last_trade": null,
-    "updated_at": "2026-03-06 14:08:25",
-    "open_positions": [],
-    "recent_closed_trades": [],
-    "ea_connected": true,
-    "account": {
-        "balance": 1981.41,
-        "equity": 1981.41,
-=== DONE Fri Mar  6 14:08:26 UTC 2026 ===
+JD	0	14:08:21.199	Experts	automated trading is enabled
+EL	0	14:09:24.069	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=6263 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
+=== DONE Fri Mar  6 14:10:58 UTC 2026 ===
 EXIT_CODE=0
