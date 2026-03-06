@@ -1,29 +1,14 @@
-=== CHECK+FIX Fri Mar  6 14:18:00 UTC 2026 ===
-[1] Processes:
-root     2625885 28.1  0.2  19248 16456 ?        Rs   13:44   9:32 /opt/wine-staging/lib/wine/../../bin/wineserver
-root     2625905  0.2  0.2 520040 17680 ?        S<sl 13:44   0:05 C:\windows\system32\winedevice.exe
-root     2625930 11.9  0.2 744552 23304 ?        S<sl 13:44   4:01 C:\windows\system32\winedevice.exe
-root     2635045  0.0  0.0   7500  2452 ?        Ss   14:15   0:00 SCREEN -dmS mt5 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
-root     2635046  0.0  0.0   7740  3404 pts/3    Ss+  14:15   0:00 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
-[2] Screen:
-There is a screen on:
-	2635045.mt5	(03/06/26 14:15:28)	(Detached)
-1 Socket in /run/screen/S-root.
-[3] Windows:
-  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
-  62914561: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  96468993: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-[4] EA log:
-PO	0	14:15:53.122	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-CO	0	14:15:53.153	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-IM	0	14:15:53.300	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-EM	0	14:15:53.334	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
-MS	0	14:15:53.334	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-DQ	0	14:15:53.334	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-RD	0	14:15:53.334	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+=== STATUS Fri Mar  6 14:20:17 UTC 2026 ===
+[1] AutoTrading:
+JD	0	14:08:21.199	Experts	automated trading is enabled
+NR	0	14:10:54.980	Experts	automated trading is disabled
 KF	0	14:15:59.108	Experts	automated trading is enabled
-[5] Latest entries:
+[2] Recent EA activity:
+QE	0	14:15:53.855	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33474 tp: 1.33129 [auto trading disabled by client]
+HI	0	14:15:53.855	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+QF	0	14:15:54.351	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33474 tp: 1.33129 [auto trading disabled by client]
+GN	0	14:15:54.351	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+OQ	0	14:15:54.852	PropFirmBot (EURUSD,M15)	[SMC] BUY signal: Entry=157.88800 SL=157.79825 TP=158.06750 | LiqSweep=N OB=Y FVG=N
 FP	0	14:15:54.852	PropFirmBot (EURUSD,M15)	[SIGNAL] USDJPY >>> BUY signal found! SL=157.79825 TP=158.06750
 OD	0	14:15:54.852	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.1 Lot=0.12
 PK	0	14:15:54.852	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 USDJPY sl: 157.798 tp: 158.067 [auto trading disabled by client]
@@ -34,7 +19,33 @@ EN	0	14:15:55.854	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 US
 JP	0	14:15:55.854	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
 IN	0	14:15:56.355	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 KF	0	14:15:59.108	Experts	automated trading is enabled
-[6] Is AutoTrading enabled?
-  KF	0	14:15:59.108	Experts	automated trading is enabled
-=== DONE Fri Mar  6 14:18:00 UTC 2026 ===
+[3] Status:
+{
+    "bot_name": "PropFirmBot",
+    "active": true,
+    "balance": 1981.41,
+    "last_trade": null,
+    "updated_at": "2026-03-06 14:20:16",
+    "open_positions": [],
+    "recent_closed_trades": [],
+    "ea_connected": true,
+    "account": {
+        "balance": 1981.41,
+        "equity": 1981.41,
+        "floating_pnl": 0.0,
+        "margin": 0.0,
+        "free_margin": 1981.41
+    },
+    "guardian_state": "ACTIVE",
+    "daily_dd": 0.0,
+    "total_dd": 0.0,
+    "today": {
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "net": 0.0
+    },
+    "_open_positions_count": 0
+}
+=== DONE Fri Mar  6 14:20:17 UTC 2026 ===
 EXIT_CODE=0
