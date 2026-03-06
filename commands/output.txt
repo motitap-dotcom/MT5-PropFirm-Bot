@@ -1,19 +1,40 @@
-=== RESTART+ENABLE Fri Mar  6 14:15:25 UTC 2026 ===
-MT5 started in screen
-[1] Process:
-[2] Enabling AutoTrading (at_keybd.exe)...
-Found: 00000000000c03d2 = 11797849 - FundedNext-Server - Netting - FundedNext Ltd
-Sending Ctrl+E via keybd_event...
-Done! Single Ctrl+E sent.
-[3] AutoTrading log:
-FR	0	14:03:38.863	Experts	automated trading is disabled
-JD	0	14:08:21.199	Experts	automated trading is enabled
-NR	0	14:10:54.980	Experts	automated trading is disabled
-[4] Last entries:
-GF	0	14:03:36.313	Experts	automated trading is enabled
-FR	0	14:03:38.863	Experts	automated trading is disabled
-JD	0	14:08:21.199	Experts	automated trading is enabled
-EL	0	14:09:24.069	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=6263 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
-NR	0	14:10:54.980	Experts	automated trading is disabled
-=== DONE Fri Mar  6 14:15:58 UTC 2026 ===
+=== CHECK+FIX Fri Mar  6 14:18:00 UTC 2026 ===
+[1] Processes:
+root     2625885 28.1  0.2  19248 16456 ?        Rs   13:44   9:32 /opt/wine-staging/lib/wine/../../bin/wineserver
+root     2625905  0.2  0.2 520040 17680 ?        S<sl 13:44   0:05 C:\windows\system32\winedevice.exe
+root     2625930 11.9  0.2 744552 23304 ?        S<sl 13:44   4:01 C:\windows\system32\winedevice.exe
+root     2635045  0.0  0.0   7500  2452 ?        Ss   14:15   0:00 SCREEN -dmS mt5 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
+root     2635046  0.0  0.0   7740  3404 pts/3    Ss+  14:15   0:00 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
+[2] Screen:
+There is a screen on:
+	2635045.mt5	(03/06/26 14:15:28)	(Detached)
+1 Socket in /run/screen/S-root.
+[3] Windows:
+  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
+  62914561: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  96468993: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+[4] EA log:
+PO	0	14:15:53.122	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+CO	0	14:15:53.153	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+IM	0	14:15:53.300	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+EM	0	14:15:53.334	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+MS	0	14:15:53.334	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+DQ	0	14:15:53.334	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+RD	0	14:15:53.334	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+KF	0	14:15:59.108	Experts	automated trading is enabled
+[5] Latest entries:
+FP	0	14:15:54.852	PropFirmBot (EURUSD,M15)	[SIGNAL] USDJPY >>> BUY signal found! SL=157.79825 TP=158.06750
+OD	0	14:15:54.852	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.1 Lot=0.12
+PK	0	14:15:54.852	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 USDJPY sl: 157.798 tp: 158.067 [auto trading disabled by client]
+ME	0	14:15:54.852	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+MH	0	14:15:55.353	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 USDJPY sl: 157.798 tp: 158.067 [auto trading disabled by client]
+QR	0	14:15:55.353	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+EN	0	14:15:55.854	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 USDJPY sl: 157.798 tp: 158.067 [auto trading disabled by client]
+JP	0	14:15:55.854	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+IN	0	14:15:56.355	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+KF	0	14:15:59.108	Experts	automated trading is enabled
+[6] Is AutoTrading enabled?
+  KF	0	14:15:59.108	Experts	automated trading is enabled
+=== DONE Fri Mar  6 14:18:00 UTC 2026 ===
 EXIT_CODE=0
