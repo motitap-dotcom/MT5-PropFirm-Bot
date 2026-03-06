@@ -1,22 +1,108 @@
-=== RESTART MT5 Fri Mar  6 13:32:11 UTC 2026 ===
-[1] MT5 service:
+=== CHECK Fri Mar  6 13:34:09 UTC 2026 ===
+[1] MT5 process:
+NOT RUNNING
+[2] AutoTrading fix log:
+=== Windows at Fri Mar  6 13:32:30 UTC 2026 ===
+  14680067: Default IME
+  20971523: Default IME
+  27262979: Default IME
+  33554434: Default IME
+  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  37748739: Default IME
+  48234499: Default IME
+  58720259: Default IME
+  69206019: Default IME
+  75497474: Default IME
+  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
+  79691779: Default IME
+  90177539: Default IME
+  100663299: Default IME
+  44040195: Default IME
+  62914562: Default IME
+  62914561: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  83886083: Default IME
+  96468994: Default IME
+  96468993: 11797849 - FundedNext-Server - Netting - FundedNext Ltd - EURUSD,M15
+Ctrl+E sent to 33554433 (FundedNext)
+[3] All named X windows:
+  14680067: Default IME
+  20971523: Default IME
+  27262979: Default IME
+  33554434: Default IME
+  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  37748739: Default IME
+  48234499: Default IME
+  58720259: Default IME
+  69206019: Default IME
+  75497474: Default IME
+  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
+  79691779: Default IME
+  90177539: Default IME
+  100663299: Default IME
+  44040195: Default IME
+  62914562: Default IME
+  62914561: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  83886083: Default IME
+  96468994: Default IME
+  96468993: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+[4] EA log (recent):
+CE	0	13:32:36.815	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+OJ	0	13:32:37.349	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.02 GBPUSD sl: 1.33822 tp: 1.33258 [auto trading disabled by client]
+MJ	0	13:32:37.349	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+RD	0	13:32:37.801	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY rejected: HTF=Bullish LiqSweep=Y OB=N FVG=N
+QJ	0	13:32:37.801	PropFirmBot (EURUSD,M15)	[SIGNAL] USDJPY SMC=NONE, trying EMA fallback...
+HP	0	13:32:37.801	PropFirmBot (EURUSD,M15)	[EMA] BUY signal: Entry=157.58500 SL=157.39471 TP=157.96557 RSI=37.1 HTF=1
+IL	0	13:32:37.801	PropFirmBot (EURUSD,M15)	[SIGNAL] USDJPY >>> BUY signal found! SL=157.39471 TP=157.96557
+IQ	0	13:32:37.801	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.2 Lot=0.05
+RO	0	13:32:37.801	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.03 USDJPY sl: 157.395 tp: 157.966 [auto trading disabled by client]
+PQ	0	13:32:37.801	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+LM	0	13:32:38.325	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.03 USDJPY sl: 157.395 tp: 157.966 [auto trading disabled by client]
+KO	0	13:32:38.325	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+RR	0	13:32:38.824	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.03 USDJPY sl: 157.395 tp: 157.966 [auto trading disabled by client]
+RL	0	13:32:38.824	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+CR	0	13:32:39.330	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+[5] Bot status:
+{
+    "bot_name": "PropFirmBot",
+    "active": true,
+    "balance": 1981.41,
+    "last_trade": null,
+    "updated_at": "2026-03-06 13:34:10",
+    "open_positions": [],
+    "recent_closed_trades": [],
+    "ea_connected": true,
+    "account": {
+        "balance": 1981.41,
+        "equity": 1981.41,
+[6] MT5 service:
 ● mt5.service - MetaTrader 5 Trading Terminal
      Loaded: loaded (/etc/systemd/system/mt5.service; enabled; preset: enabled)
-     Active: activating (auto-restart) since Fri 2026-03-06 13:32:03 UTC; 10s ago
-    Process: 2621255 ExecStartPre=/bin/sleep 5 (code=exited, status=0/SUCCESS)
-    Process: 2621260 ExecStart=/usr/bin/wine /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe /portable /login:11797849 /server:FundedNext-Server /autotrading (code=exited, status=0/SUCCESS)
-[2] Startup scripts:
-[3] Crontab:
+     Active: activating (auto-restart) since Fri 2026-03-06 13:33:59 UTC; 15s ago
+    Process: 2622275 ExecStartPre=/bin/sleep 5 (code=exited, status=0/SUCCESS)
+    Process: 2622292 ExecStart=/usr/bin/wine /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe /portable /login:11797849 /server:FundedNext-Server /autotrading (code=exited, status=0/SUCCESS)
+    Process: 2622293 ExecStartPost=/bin/bash -c /root/fix_autotrading.sh & (code=exited, status=0/SUCCESS)
+   Main PID: 2622292 (code=exited, status=0/SUCCESS)
+        CPU: 2.860s
+[7] MT5 service file:
+[Unit]
+Description=MetaTrader 5 Trading Terminal
+After=network.target xvfb.service
+Requires=xvfb.service
 
-*/5 * * * * cd /root/Tradovate-Bot && bash /root/tradovate-bot/server_cron.sh >> /var/log/tradovate-cron.log 2>&1
-*/2 * * * * /opt/hyrotrader-bot/scripts/auto_deploy.sh
-@reboot nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &
-*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
-[4] Display:
-346800 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
-[5] Starting MT5...
-MT5 launched (detached)
-AutoTrading fix scheduled in background
-=== DONE Fri Mar  6 13:32:15 UTC 2026 ===
-Check /tmp/at_log.txt on next run for AutoTrading result
+[Service]
+Type=simple
+User=root
+Environment=DISPLAY=:99
+Environment=WINEPREFIX=/root/.wine
+ExecStartPre=/bin/sleep 5
+ExecStart=/usr/bin/wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" /portable /login:11797849 /server:FundedNext-Server /autotrading
+ExecStartPost=/bin/bash -c "/root/fix_autotrading.sh &"
+Restart=always
+RestartSec=30
+StartLimitIntervalSec=600
+StartLimitBurst=10
+
+[Install]
+WantedBy=multi-user.target
+=== DONE Fri Mar  6 13:34:15 UTC 2026 ===
 EXIT_CODE=0
