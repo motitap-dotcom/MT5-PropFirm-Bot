@@ -1,28 +1,37 @@
-=== FIX EXPERTMODE v2 Fri Mar  6 14:38:16 UTC 2026 ===
-[1] Chart file encoding:
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr: Unicode text, UTF-16, little-endian text, with CRLF line terminators
-[2] Current expertmode:
-expertmode=0
-expertmode=0
-[3] Fixing...
+=== UTF16 FIX Fri Mar  6 14:41:28 UTC 2026 ===
+[1] Current state:
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr: Unicode text, UTF-16, little-endian text, with very long lines (3277), with no line terminators
 expertmode=3
 expertmode=3
-[4] Verify:
-expertmode=3
-expertmode=3
-[5] Starting MT5...
-[6] Enabling AutoTrading...
-Found: 000000000001028a = MetaTrader 5
+[2] Proper UTF-16 fix...
+  After sed:
+  File type:
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr: Unicode text, UTF-16, little-endian text, with very long lines (3278), with no line terminators
+iconv: illegal input sequence at position 0
+  Also fixed: chart02.chr
+iconv: illegal input sequence at position 0
+  Also fixed: chart03.chr
+[3] Starting MT5...
+  Waiting 30s for full load...
+[4] Windows check:
+  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
+  62914561: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  96468993: 11797849 - FundedNext-Server - Netting - FundedNext Ltd - EURUSD,H1
+  96469009: Standard
+  96469011: Line Studies
+  96469013: Timeframes
+[5] Enable AutoTrading...
+Found: 00000000000205ce = 11797849 - FundedNext-Server - Netting - FundedNext Ltd - EURUSD,H1
 Sending Ctrl+E via keybd_event...
 Done! Single Ctrl+E sent.
-[7] Result:
+[6] Result:
+JD	0	14:08:21.199	Experts	automated trading is enabled
 NR	0	14:10:54.980	Experts	automated trading is disabled
 KF	0	14:15:59.108	Experts	automated trading is enabled
 DR	0	14:36:26.781	Experts	automated trading is disabled
-
-DI	0	14:36:05.797	PropFirmBot (EURUSD,M15)	[SIGNAL] USDJPY >>> BUY signal found! SL=157.78754 TP=158.34693
-OM	0	14:36:05.797	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.2 Lot=0.05
-NS	0	14:36:05.797	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.03 USDJPY sl: 157.788 tp: 158.347 [auto trading disabled by client]
+QE	0	14:39:37.005	Experts	automated trading is enabled
+  Last 8 lines:
 JM	0	14:36:05.797	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
 IQ	0	14:36:06.300	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.03 USDJPY sl: 157.788 tp: 158.347 [auto trading disabled by client]
 LK	0	14:36:06.300	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
@@ -30,18 +39,6 @@ CG	0	14:36:06.797	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.03 US
 QI	0	14:36:06.797	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
 NG	0	14:36:07.287	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 DR	0	14:36:26.781	Experts	automated trading is disabled
-[8] Status:
-{
-    "bot_name": "PropFirmBot",
-    "active": false,
-    "balance": 1981.41,
-    "last_trade": null,
-    "updated_at": "2026-03-06 14:39:24",
-    "open_positions": [],
-    "recent_closed_trades": [],
-    "ea_connected": false,
-    "account": {
-        "balance": 1981.41,
-        "equity": 1981.41,
-=== DONE Fri Mar  6 14:39:27 UTC 2026 ===
+QE	0	14:39:37.005	Experts	automated trading is enabled
+=== DONE Fri Mar  6 14:42:21 UTC 2026 ===
 EXIT_CODE=0
