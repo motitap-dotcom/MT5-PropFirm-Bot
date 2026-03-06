@@ -1,9 +1,66 @@
-=== STATUS Fri Mar  6 14:20:17 UTC 2026 ===
-[1] AutoTrading:
+=== TRADE CHECK Fri Mar  6 14:26:31 UTC 2026 ===
+[1] AutoTrading state:
 JD	0	14:08:21.199	Experts	automated trading is enabled
 NR	0	14:10:54.980	Experts	automated trading is disabled
 KF	0	14:15:59.108	Experts	automated trading is enabled
-[2] Recent EA activity:
+[2] Trade attempts & results (OrderSend, filled, deal):
+IM	0	13:54:24.301	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.02 GBPUSD sl: 1.33733 tp: 1.33051 [auto trading disabled by client]
+FO	0	13:54:24.807	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.02 GBPUSD sl: 1.33733 tp: 1.33051 [auto trading disabled by client]
+JH	0	13:54:25.310	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.02 GBPUSD sl: 1.33733 tp: 1.33051 [auto trading disabled by client]
+DH	0	14:00:00.111	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 EURUSD sl: 1.15683 tp: 1.15284 [auto trading disabled by client]
+MJ	0	14:00:00.615	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 EURUSD sl: 1.15683 tp: 1.15284 [auto trading disabled by client]
+DE	0	14:00:01.110	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 EURUSD sl: 1.15683 tp: 1.15284 [auto trading disabled by client]
+DH	0	14:00:01.744	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33472 tp: 1.33180 [auto trading disabled by client]
+JE	0	14:00:02.280	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33472 tp: 1.33180 [auto trading disabled by client]
+PG	0	14:00:02.787	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33472 tp: 1.33180 [auto trading disabled by client]
+LK	0	14:00:03.389	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.803 tp: 158.037 [auto trading disabled by client]
+QI	0	14:00:03.919	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.803 tp: 158.037 [auto trading disabled by client]
+GN	0	14:00:04.365	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.803 tp: 158.037 [auto trading disabled by client]
+EL	0	14:09:24.069	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=6263 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
+MD	0	14:15:53.334	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
+NK	0	14:15:53.335	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33474 tp: 1.33129 [auto trading disabled by client]
+QE	0	14:15:53.855	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33474 tp: 1.33129 [auto trading disabled by client]
+QF	0	14:15:54.351	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33474 tp: 1.33129 [auto trading disabled by client]
+PK	0	14:15:54.852	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 USDJPY sl: 157.798 tp: 158.067 [auto trading disabled by client]
+MH	0	14:15:55.353	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 USDJPY sl: 157.798 tp: 158.067 [auto trading disabled by client]
+EN	0	14:15:55.854	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 USDJPY sl: 157.798 tp: 158.067 [auto trading disabled by client]
+[3] All signal+trade entries:
+EM	0	14:15:53.334	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+MD	0	14:15:53.334	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
+CD	0	14:15:53.335	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL rejected: HTF=Bearish LiqSweep=N OB=N FVG=N
+JN	0	14:15:53.335	PropFirmBot (EURUSD,M15)	[SIGNAL] EURUSD SMC=NONE, trying EMA fallback...
+RJ	0	14:15:53.335	PropFirmBot (EURUSD,M15)	[SMC] SELL signal: Entry=1.33359 SL=1.33474 TP=1.33129 | LiqSweep=N OB=N FVG=Y
+LJ	0	14:15:53.335	PropFirmBot (EURUSD,M15)	[SIGNAL] GBPUSD >>> SELL signal found! SL=1.33474 TP=1.33129
+NK	0	14:15:53.335	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33474 tp: 1.33129 [auto trading disabled by client]
+FK	0	14:15:53.335	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+QE	0	14:15:53.855	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33474 tp: 1.33129 [auto trading disabled by client]
+HI	0	14:15:53.855	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+QF	0	14:15:54.351	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33474 tp: 1.33129 [auto trading disabled by client]
+GN	0	14:15:54.351	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+OQ	0	14:15:54.852	PropFirmBot (EURUSD,M15)	[SMC] BUY signal: Entry=157.88800 SL=157.79825 TP=158.06750 | LiqSweep=N OB=Y FVG=N
+FP	0	14:15:54.852	PropFirmBot (EURUSD,M15)	[SIGNAL] USDJPY >>> BUY signal found! SL=157.79825 TP=158.06750
+PK	0	14:15:54.852	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 USDJPY sl: 157.798 tp: 158.067 [auto trading disabled by client]
+ME	0	14:15:54.852	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+MH	0	14:15:55.353	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 USDJPY sl: 157.798 tp: 158.067 [auto trading disabled by client]
+QR	0	14:15:55.353	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+EN	0	14:15:55.854	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 USDJPY sl: 157.798 tp: 158.067 [auto trading disabled by client]
+JP	0	14:15:55.854	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+[4] Full last 30 lines:
+LG	0	14:15:53.334	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+PQ	0	14:15:53.334	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+NH	0	14:15:53.334	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+FP	0	14:15:53.334	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+RD	0	14:15:53.334	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+MD	0	14:15:53.334	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
+IH	0	14:15:53.335	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.06 16:15 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+CD	0	14:15:53.335	PropFirmBot (EURUSD,M15)	[SMC] EURUSD SELL rejected: HTF=Bearish LiqSweep=N OB=N FVG=N
+JN	0	14:15:53.335	PropFirmBot (EURUSD,M15)	[SIGNAL] EURUSD SMC=NONE, trying EMA fallback...
+RR	0	14:15:53.335	PropFirmBot (EURUSD,M15)	[EMA] EURUSD no cross in 3-bar window | Fast=1.15631 Slow=1.15715
+RJ	0	14:15:53.335	PropFirmBot (EURUSD,M15)	[SMC] SELL signal: Entry=1.33359 SL=1.33474 TP=1.33129 | LiqSweep=N OB=N FVG=Y
+LJ	0	14:15:53.335	PropFirmBot (EURUSD,M15)	[SIGNAL] GBPUSD >>> SELL signal found! SL=1.33474 TP=1.33129
+DG	0	14:15:53.335	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.0 Lot=0.06
+NK	0	14:15:53.335	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33474 tp: 1.33129 [auto trading disabled by client]
+FK	0	14:15:53.335	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
 QE	0	14:15:53.855	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33474 tp: 1.33129 [auto trading disabled by client]
 HI	0	14:15:53.855	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
 QF	0	14:15:54.351	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33474 tp: 1.33129 [auto trading disabled by client]
@@ -19,13 +76,13 @@ EN	0	14:15:55.854	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.08 US
 JP	0	14:15:55.854	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
 IN	0	14:15:56.355	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 KF	0	14:15:59.108	Experts	automated trading is enabled
-[3] Status:
+[5] Status JSON:
 {
     "bot_name": "PropFirmBot",
     "active": true,
     "balance": 1981.41,
     "last_trade": null,
-    "updated_at": "2026-03-06 14:20:16",
+    "updated_at": "2026-03-06 14:26:28",
     "open_positions": [],
     "recent_closed_trades": [],
     "ea_connected": true,
@@ -47,5 +104,6 @@ KF	0	14:15:59.108	Experts	automated trading is enabled
     },
     "_open_positions_count": 0
 }
-=== DONE Fri Mar  6 14:20:17 UTC 2026 ===
+[6] MT5 process alive:
+=== DONE Fri Mar  6 14:26:31 UTC 2026 ===
 EXIT_CODE=0
