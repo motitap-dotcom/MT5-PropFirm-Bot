@@ -1,55 +1,98 @@
-=== DIAGNOSE Fri Mar  6 14:30:17 UTC 2026 ===
-[1] All wine/MT5 processes:
-root      334849  0.0  0.0   8500  4032 ?        Ss   Feb26   6:04 /bin/bash /root/MT5-PropFirm-Bot/relay/daemon.sh
-root      979278  0.0  0.0   7872  3240 ?        Ss   Mar01   0:23 /bin/bash /root/MT5-PropFirm-Bot/scripts/git_bridge.sh
-root     2322142  0.0  0.0   7740  3740 ?        Ss   Mar05   0:16 /bin/bash /root/PropFirmBot/scripts/mt5_status_writer.sh
-root     2353095  0.0  0.1  20072 12404 ?        Ss   Mar05   1:02 /usr/bin/python3 /root/MT5-PropFirm-Bot/scripts/mt5_status_daemon.py
-root     2625885 27.3  0.2  20188 16928 ?        Ss   13:44  12:38 /opt/wine-staging/lib/wine/../../bin/wineserver
-root     2625905  0.2  0.2 520040 17680 ?        S<sl 13:44   0:07 C:\windows\system32\winedevice.exe
-root     2625930 11.9  0.2 744552 23304 ?        S<sl 13:44   5:30 C:\windows\system32\winedevice.exe
-root     2627970  0.1  0.3  33504 25404 ?        Ss   13:51   0:02 /usr/bin/python3 /root/MT5-PropFirm-Bot/management/server.py
-root     2635045  0.0  0.0   7500  2452 ?        Ss   14:15   0:00 SCREEN -dmS mt5 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
-root     2635046  0.0  0.0   7740  3404 pts/3    Ss+  14:15   0:00 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
-root     2635048  0.0  0.1 2686340 14008 pts/3   S<+  14:15   0:00 start.exe /exec terminal64.exe /portable /login:11797849
-root     2635054 63.0  2.6 1955332 219188 pts/3  S<l+ 14:15   9:19 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /server:FundedNext-Server
-root     2638871  0.0  0.0  10892  3812 ?        S    14:30   0:00 /usr/lib/git-core/git remote-https origin https://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@github.com/motitap-dotcom/MT5-PropFirm-Bot.git
-root     2638874 27.7  0.2 106808 18136 ?        S    14:30   0:00 /usr/lib/git-core/git-remote-https origin https://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@github.com/motitap-dotcom/MT5-PropFirm-Bot.git
-[2] Screen sessions:
-There is a screen on:
-	2635045.mt5	(03/06/26 14:15:28)	(Detached)
-1 Socket in /run/screen/S-root.
-[3] X windows:
-  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
-  62914561: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  96468993: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-[4] Xvfb + x11vnc:
-346800 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
-346808 /usr/bin/x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -xkb
-[5] EA log last 5:
-QE	0	14:30:02.145	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.02 USDJPY sl: 157.775 tp: 158.486 [auto trading disabled by client]
-KG	0	14:30:02.145	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
-DK	0	14:30:02.650	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.02 USDJPY sl: 157.775 tp: 158.486 [auto trading disabled by client]
-IE	0	14:30:02.650	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
-HK	0	14:30:03.155	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-[6] AutoTrading state:
-JD	0	14:08:21.199	Experts	automated trading is enabled
-NR	0	14:10:54.980	Experts	automated trading is disabled
-KF	0	14:15:59.108	Experts	automated trading is enabled
+=== CHART FIX Fri Mar  6 14:33:02 UTC 2026 ===
+[1] Find all chart files with expert settings:
+  --- /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart02.chr ---
+expertmode=0
+  --- /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart03.chr ---
+expertmode=0
+  --- /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart01.chr ---
+<expert>
+path=Experts\PropFirmBot\PropFirmBot.ex5
+expertmode=0
+</expert>
+expertmode=0
+  --- /root/.wine/drive_c/Program Files/MetaTrader 5/profiles/charts/default/chart01.chr ---
+<expert>
+expertmode=35
+</expert>
+  --- /root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr ---
+<expert>
+expertmode=1
+</expert>
+expertmode=0
 
->>> MT5 IS RUNNING
-[7] Final status:
-{
-    "bot_name": "PropFirmBot",
-    "active": true,
-    "balance": 1981.41,
-    "last_trade": null,
-    "updated_at": "2026-03-06 14:30:23",
-    "open_positions": [],
-    "recent_closed_trades": [],
-    "ea_connected": true,
-    "account": {
-        "balance": 1981.41,
-        "equity": 1981.41,
-=== DONE Fri Mar  6 14:30:25 UTC 2026 ===
+[2] Find the active chart profile:
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+[Experts]
+ExpertEnabled=1
+ExpertsEnabled=1
+Profile=0
+Chart=0
+[Charts]
+ProfileLast=Default
+PreloadCharts=1
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default/chart03.chr
+
+[3] Default profile charts:
+  --- chart01.chr ---
+symbol=EURUSD
+period_type=0
+period_size=15
+<expert>
+path=Experts\PropFirmBot\PropFirmBot.ex5
+expertmode=0
+InpRSIPeriod=14
+InpATRPeriod=14
+InpAutoBlockSymbol=true
+</expert>
+expertmode=0
+  --- chart02.chr ---
+symbol=EURUSD
+period_type=0
+period_size=15
+expertmode=0
+  --- chart03.chr ---
+symbol=EURUSD
+period_type=0
+period_size=15
+expertmode=0
+  --- chart04.chr ---
+symbol=EURUSD
+period_type=0
+period_size=15
+  --- chart01.chr ---
+symbol=EURUSD
+period_type=0
+period_size=15
+<expert>
+expertmode=35
+</expert>
+
+[4] All profiles:
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/British Pound
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Euro
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Default
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Charts/Market Overview
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Community
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/deleted
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Tester
+/root/.wine/drive_c/Program Files/MetaTrader 5/profiles
+/root/.wine/drive_c/Program Files/MetaTrader 5/profiles/charts
+/root/.wine/drive_c/Program Files/MetaTrader 5/profiles/charts/default
+
+[5] Terminal log for chart/profile info:
+  Terminal log: 
+=== DONE Fri Mar  6 14:33:04 UTC 2026 ===
 EXIT_CODE=0
