@@ -550,17 +550,19 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
 }
 
 //+------------------------------------------------------------------+
-//| FALLBACK: EMA Crossover Signal                                    |
+//| FALLBACK: EMA Trend + RSI Momentum Signal                        |
+//| Generates signals based on EMA trend direction + RSI pullbacks   |
+//| Much more frequent than exact crossover requirement              |
 //+------------------------------------------------------------------+
 ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_price)
 {
    sl_price = 0;
    tp_price = 0;
 
-   // Copy indicator data
-   if(CopyBuffer(m_handle_ema_fast, 0, 0, 3, m_ema_fast) < 3) return SIGNAL_NONE;
-   if(CopyBuffer(m_handle_ema_slow, 0, 0, 3, m_ema_slow) < 3) return SIGNAL_NONE;
-   if(CopyBuffer(m_handle_rsi, 0, 0, 3, m_rsi) < 3)           return SIGNAL_NONE;
+   // Copy indicator data (need more bars for trend analysis)
+   if(CopyBuffer(m_handle_ema_fast, 0, 0, 5, m_ema_fast) < 5) return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_ema_slow, 0, 0, 5, m_ema_slow) < 5) return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_rsi, 0, 0, 5, m_rsi) < 5)           return SIGNAL_NONE;
    if(CopyBuffer(m_handle_atr, 0, 0, 3, m_atr) < 3)           return SIGNAL_NONE;
 
    double atr = m_atr[0];
@@ -569,34 +571,97 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
    // Get H4 bias for confirmation
    int htf_bias = GetHTFBias();
 
-   // EMA 9 crossed above EMA 21
+   // --- Method 1: Classic EMA Crossover (original) ---
    bool cross_up = (m_ema_fast[1] <= m_ema_slow[1]) && (m_ema_fast[0] > m_ema_slow[0]);
-   // EMA 9 crossed below EMA 21
    bool cross_down = (m_ema_fast[1] >= m_ema_slow[1]) && (m_ema_fast[0] < m_ema_slow[0]);
 
-   // BUY: EMA cross up + RSI not overbought (HTF bias is optional for fallback)
-   if(cross_up && m_rsi[0] < m_rsi_overbought && m_rsi[0] > m_rsi_oversold && htf_bias >= -1)
+   // --- Method 2: EMA Trend + RSI Pullback (new - more frequent) ---
+   // Bullish trend: EMA fast > slow for at least 2 bars
+   bool ema_bullish = (m_ema_fast[0] > m_ema_slow[0]) && (m_ema_fast[1] > m_ema_slow[1]);
+   // Bearish trend: EMA fast < slow for at least 2 bars
+   bool ema_bearish = (m_ema_fast[0] < m_ema_slow[0]) && (m_ema_fast[1] < m_ema_slow[1]);
+
+   // RSI pullback: RSI dipped then bounced (coming from near oversold in uptrend)
+   bool rsi_pullback_buy = (m_rsi[1] < 45.0 && m_rsi[0] > m_rsi[1]) ||  // RSI bouncing from below 45
+                           (m_rsi[2] < 40.0 && m_rsi[0] > 45.0);         // RSI recovered from below 40
+   bool rsi_pullback_sell = (m_rsi[1] > 55.0 && m_rsi[0] < m_rsi[1]) ||  // RSI dropping from above 55
+                            (m_rsi[2] > 60.0 && m_rsi[0] < 55.0);        // RSI dropped from above 60
+
+   // --- Method 3: Strong momentum (RSI breakout in trend direction) ---
+   bool momentum_buy = ema_bullish && m_rsi[0] > 55.0 && m_rsi[0] < 75.0 && m_rsi[0] > m_rsi[1];
+   bool momentum_sell = ema_bearish && m_rsi[0] < 45.0 && m_rsi[0] > 25.0 && m_rsi[0] < m_rsi[1];
+
+   // ========== BUY SIGNALS ==========
+   // Priority 1: Classic cross (strongest)
+   if(cross_up && m_rsi[0] < m_rsi_overbought && m_rsi[0] > m_rsi_oversold)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
       sl_price = entry - (atr * 1.5);
-      double sl_distance = entry - sl_price;
-      tp_price = entry + (sl_distance * 2.0);
+      tp_price = entry + (atr * 3.0);
 
-      PrintFormat("[EMA] BUY signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
-                  entry, sl_price, tp_price, m_rsi[0]);
+      PrintFormat("[EMA-CROSS] BUY %s: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f HTF=%d",
+                  m_symbol, entry, sl_price, tp_price, m_rsi[0], htf_bias);
       return SIGNAL_BUY;
    }
 
-   // SELL: EMA cross down + RSI not oversold (HTF bias is optional for fallback)
-   if(cross_down && m_rsi[0] > m_rsi_oversold && m_rsi[0] < m_rsi_overbought && htf_bias <= 1)
+   // Priority 2: Trend pullback (need HTF confirmation)
+   if(ema_bullish && rsi_pullback_buy && htf_bias >= 0 && m_rsi[0] < 65.0)
+   {
+      double entry = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
+      sl_price = entry - (atr * 1.5);
+      tp_price = entry + (atr * 2.5);
+
+      PrintFormat("[EMA-PULLBACK] BUY %s: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f HTF=%d",
+                  m_symbol, entry, sl_price, tp_price, m_rsi[0], htf_bias);
+      return SIGNAL_BUY;
+   }
+
+   // Priority 3: Strong momentum (need HTF confirmation)
+   if(momentum_buy && htf_bias == 1)
+   {
+      double entry = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
+      sl_price = entry - (atr * 1.2);
+      tp_price = entry + (atr * 2.0);
+
+      PrintFormat("[EMA-MOMENTUM] BUY %s: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f HTF=%d",
+                  m_symbol, entry, sl_price, tp_price, m_rsi[0], htf_bias);
+      return SIGNAL_BUY;
+   }
+
+   // ========== SELL SIGNALS ==========
+   // Priority 1: Classic cross
+   if(cross_down && m_rsi[0] > m_rsi_oversold && m_rsi[0] < m_rsi_overbought)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_BID);
       sl_price = entry + (atr * 1.5);
-      double sl_distance = sl_price - entry;
-      tp_price = entry - (sl_distance * 2.0);
+      tp_price = entry - (atr * 3.0);
 
-      PrintFormat("[EMA] SELL signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
-                  entry, sl_price, tp_price, m_rsi[0]);
+      PrintFormat("[EMA-CROSS] SELL %s: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f HTF=%d",
+                  m_symbol, entry, sl_price, tp_price, m_rsi[0], htf_bias);
+      return SIGNAL_SELL;
+   }
+
+   // Priority 2: Trend pullback
+   if(ema_bearish && rsi_pullback_sell && htf_bias <= 0 && m_rsi[0] > 35.0)
+   {
+      double entry = SymbolInfoDouble(m_symbol, SYMBOL_BID);
+      sl_price = entry + (atr * 1.5);
+      tp_price = entry - (atr * 2.5);
+
+      PrintFormat("[EMA-PULLBACK] SELL %s: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f HTF=%d",
+                  m_symbol, entry, sl_price, tp_price, m_rsi[0], htf_bias);
+      return SIGNAL_SELL;
+   }
+
+   // Priority 3: Strong momentum
+   if(momentum_sell && htf_bias == -1)
+   {
+      double entry = SymbolInfoDouble(m_symbol, SYMBOL_BID);
+      sl_price = entry + (atr * 1.2);
+      tp_price = entry - (atr * 2.0);
+
+      PrintFormat("[EMA-MOMENTUM] SELL %s: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f HTF=%d",
+                  m_symbol, entry, sl_price, tp_price, m_rsi[0], htf_bias);
       return SIGNAL_SELL;
    }
 
