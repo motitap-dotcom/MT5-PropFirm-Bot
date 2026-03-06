@@ -1,84 +1,106 @@
 #!/bin/bash
 # =============================================================
-# Deep diagnostic #2 - Read logs properly + status.json
+# Manual deploy + recompile + restart EA
 # =============================================================
 
 echo "============================================"
-echo "  DIAGNOSTIC #2 - Logs & Status"
+echo "  MANUAL DEPLOY + RECOMPILE"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
+EA_DIR="$MT5_BASE/MQL5/Experts/PropFirmBot"
+REPO_DIR="/root/MT5-PropFirm-Bot"
 
-# 1. Read status.json (EA writes this)
-echo "=== [1] status.json (EA live status) ==="
-cat "$MT5_BASE/MQL5/Files/PropFirmBot/status.json" 2>/dev/null
-echo ""
-echo ""
-
-# 2. Read telegram queue (shows EA activity)
-echo "=== [2] Telegram Queue (last 30 lines) ==="
-tail -30 "$MT5_BASE/MQL5/Files/PropFirmBot/telegram_queue.txt" 2>/dev/null
+# 1. Update repo
+echo "=== [1] Updating repo ==="
+cd "$REPO_DIR"
+git fetch origin
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+echo "Current branch: $BRANCH"
+git pull origin claude/debug-bot-transactions-g9Mpr 2>&1 || git pull 2>&1
 echo ""
 
-# 3. EA log - read with tr to remove null bytes instead of strings
-echo "=== [3] EA Log Today (last 100 lines) ==="
+# 2. Copy EA files
+echo "=== [2] Copying EA files ==="
+cp -v EA/*.mq5 "$EA_DIR/" 2>&1
+cp -v EA/*.mqh "$EA_DIR/" 2>&1
+echo ""
+
+# 3. Copy config files
+echo "=== [3] Copying config files ==="
+cp -v configs/*.json "$MT5_BASE/MQL5/Files/PropFirmBot/" 2>&1
+echo ""
+
+# 4. Check timestamps before compile
+echo "=== [4] Before compile ==="
+echo "Source:"
+ls -la "$EA_DIR/PropFirmBot.mq5" 2>/dev/null
+echo "Compiled:"
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
+echo ""
+
+# 5. Compile EA
+echo "=== [5] Compiling EA ==="
+export DISPLAY=:99
+cd "$EA_DIR"
+WINEPREFIX=/root/.wine wine "$MT5_BASE/metaeditor64.exe" /compile:PropFirmBot.mq5 /log 2>&1 || true
+sleep 5
+echo ""
+
+# 6. Check compilation result
+echo "=== [6] After compile ==="
+echo "Compiled:"
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
+echo ""
+# Check compile log
+if [ -f "$EA_DIR/PropFirmBot.log" ]; then
+    echo "Compile log:"
+    cat "$EA_DIR/PropFirmBot.log" | tr -d '\0'
+fi
+echo ""
+
+# 7. Restart MT5 to load new EA
+echo "=== [7] Restarting MT5 ==="
+# Kill MT5
+pkill -f terminal64.exe 2>/dev/null
+sleep 3
+
+# Verify killed
+if pgrep -f terminal64.exe > /dev/null; then
+    echo "MT5 still running, force killing..."
+    kill -9 $(pgrep -f terminal64.exe) 2>/dev/null
+    sleep 2
+fi
+echo "MT5 stopped"
+
+# Start MT5
+cd "$MT5_BASE"
+DISPLAY=:99 WINEPREFIX=/root/.wine wine terminal64.exe &
+sleep 10
+
+# Check if running
+if pgrep -f terminal64.exe > /dev/null; then
+    echo "MT5 RESTARTED successfully (PID: $(pgrep -f terminal64.exe | head -1))"
+else
+    echo "ERROR: MT5 failed to start!"
+fi
+echo ""
+
+# 8. Wait for EA to init and check log
+echo "=== [8] Waiting for EA init (15 sec)... ==="
+sleep 15
 TODAY=$(date '+%Y%m%d')
 EA_LOG="$MT5_BASE/MQL5/Logs/${TODAY}.log"
 if [ -f "$EA_LOG" ]; then
-    echo "File: $EA_LOG ($(wc -l < "$EA_LOG") lines)"
-    tail -100 "$EA_LOG" | tr -d '\0'
+    echo "EA Log (last 30 lines):"
+    tail -30 "$EA_LOG" | tr -d '\0'
 else
-    echo "No EA log for today"
-    LATEST=$(ls -t "$MT5_BASE/MQL5/Logs/"*.log 2>/dev/null | head -1)
-    echo "Latest: $LATEST"
-    tail -100 "$LATEST" 2>/dev/null | tr -d '\0'
+    echo "No EA log yet"
 fi
 echo ""
 
-# 4. Terminal log - same fix
-echo "=== [4] Terminal Log Today (last 50 lines) ==="
-TERM_LOG="$MT5_BASE/logs/${TODAY}.log"
-if [ -f "$TERM_LOG" ]; then
-    echo "File: $TERM_LOG ($(wc -l < "$TERM_LOG") lines)"
-    tail -50 "$TERM_LOG" | tr -d '\0'
-else
-    echo "No terminal log for today"
-fi
-echo ""
-
-# 5. Check .ex5 vs .mq5 timestamps
-echo "=== [5] Compiled vs Source Timestamps ==="
-echo "Source (.mq5):"
-ls -la "$MT5_BASE/MQL5/Experts/PropFirmBot/PropFirmBot.mq5" 2>/dev/null
-echo "Compiled (.ex5):"
-ls -la "$MT5_BASE/MQL5/Experts/PropFirmBot/PropFirmBot.ex5" 2>/dev/null
-echo ""
-echo "⚠️  If .ex5 is OLDER than .mq5, the EA is running OLD code!"
-echo ""
-
-# 6. Check if AutoTrading is enabled
-echo "=== [6] AutoTrading in common.ini ==="
-find "$MT5_BASE" -name "*.ini" -exec grep -l -i "expert\|auto" {} \; 2>/dev/null
-echo "---"
-for INI in "$MT5_BASE/config/common.ini" "$MT5_BASE/config/terminal.ini" "$MT5_BASE/terminal64.ini"; do
-    if [ -f "$INI" ]; then
-        echo "Found: $INI"
-        cat "$INI" | tr -d '\0' | head -30
-        echo "---"
-    fi
-done
-echo ""
-
-# 7. Check what chart the EA is on
-echo "=== [7] Chart profiles ==="
-find "$MT5_BASE/Profiles" -name "*.chr" 2>/dev/null | head -10
-CHART=$(find "$MT5_BASE/Profiles" -name "*.chr" 2>/dev/null | head -1)
-if [ -n "$CHART" ]; then
-    echo "First chart file content:"
-    cat "$CHART" 2>/dev/null | tr -d '\0' | grep -i "expert\|symbol\|period\|autotrading" | head -20
-fi
-echo ""
-
-echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+echo "============================================"
+echo "  DONE $(date '+%Y-%m-%d %H:%M:%S UTC')"
+echo "============================================"
