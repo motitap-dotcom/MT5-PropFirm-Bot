@@ -1,55 +1,19 @@
-=== FINAL STATUS Fri Mar  6 14:13:15 UTC 2026 ===
-[1] AutoTrading state:
+=== RESTART+ENABLE Fri Mar  6 14:15:25 UTC 2026 ===
+MT5 started in screen
+[1] Process:
+[2] Enabling AutoTrading (at_keybd.exe)...
+Found: 00000000000c03d2 = 11797849 - FundedNext-Server - Netting - FundedNext Ltd
+Sending Ctrl+E via keybd_event...
+Done! Single Ctrl+E sent.
+[3] AutoTrading log:
 FR	0	14:03:38.863	Experts	automated trading is disabled
 JD	0	14:08:21.199	Experts	automated trading is enabled
 NR	0	14:10:54.980	Experts	automated trading is disabled
-[2] MT5 process:
-[3] Last 15 EA entries:
-HQ	0	14:00:03.359	PropFirmBot (EURUSD,M15)	[SMC] BUY signal: Entry=157.88100 SL=157.80314 TP=158.03671 | LiqSweep=N OB=Y FVG=N
-FP	0	14:00:03.359	PropFirmBot (EURUSD,M15)	[SIGNAL] USDJPY >>> BUY signal found! SL=157.80314 TP=158.03671
-EE	0	14:00:03.359	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.1 Lot=0.14
-LK	0	14:00:03.389	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.803 tp: 158.037 [auto trading disabled by client]
-JE	0	14:00:03.389	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
-QI	0	14:00:03.919	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.803 tp: 158.037 [auto trading disabled by client]
-FS	0	14:00:03.919	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
-GN	0	14:00:04.365	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.803 tp: 158.037 [auto trading disabled by client]
-KP	0	14:00:04.365	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
-QN	0	14:00:04.868	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+[4] Last entries:
 GF	0	14:03:36.313	Experts	automated trading is enabled
 FR	0	14:03:38.863	Experts	automated trading is disabled
 JD	0	14:08:21.199	Experts	automated trading is enabled
 EL	0	14:09:24.069	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=6263 | State=GUARDIAN_ACTIVE | Bal=$1981.41 | Eq=$1981.41 | DD=0.00% | Positions=0
 NR	0	14:10:54.980	Experts	automated trading is disabled
-[4] Bot status:
-{
-    "bot_name": "PropFirmBot",
-    "active": true,
-    "balance": 1981.41,
-    "last_trade": null,
-    "updated_at": "2026-03-06 14:13:10",
-    "open_positions": [],
-    "recent_closed_trades": [],
-    "ea_connected": true,
-    "account": {
-        "balance": 1981.41,
-        "equity": 1981.41,
-        "floating_pnl": 0.0,
-        "margin": 0.0,
-        "free_margin": 1981.41
-    },
-    "guardian_state": "ACTIVE",
-    "daily_dd": 0.0,
-    "total_dd": 0.0,
-    "today": {
-        "trades": 0,
-        "wins": 0,
-        "losses": 0,
-        "net": 0.0
-    },
-    "_open_positions_count": 0
-}
-[5] Setup persistence...
-  Crontab updated:
-@reboot /root/start_mt5_screen.sh
-=== DONE Fri Mar  6 14:13:15 UTC 2026 ===
+=== DONE Fri Mar  6 14:15:58 UTC 2026 ===
 EXIT_CODE=0
