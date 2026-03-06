@@ -1,42 +1,31 @@
-=== COMPILE EA Fri Mar  6 12:59:28 UTC 2026 ===
-[1] Finding MetaEditor...
-/root/.wine/drive_c/Program Files/MetaTrader 5/config/metaeditor.ini
-/root/.wine/drive_c/Program Files/MetaTrader 5/logs/metaeditor.log
-/root/.wine/drive_c/Program Files/MetaTrader 5/Config/metaeditor.ini
-/root/.wine/drive_c/Program Files/FundedNext MT5 Terminal/MetaEditor64.exe
-/root/.wine/drive_c/Program Files/MetaTrader 5/config/metaeditor.ini
-/root/.wine/drive_c/Program Files/MetaTrader 5/logs/metaeditor.log
-/root/.wine/drive_c/Program Files/MetaTrader 5/Config/metaeditor.ini
-/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe
-/root/.wine/drive_c/users/Public/Desktop/MetaEditor 5.lnk
-/root/.wine/drive_c/users/root/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/FundedNext MT5 Terminal/MetaEditor.lnk
-/root/.wine/drive_c/users/root/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/MetaTrader 5/MetaEditor.lnk
-/root/.wine/drive_c/users/root/Desktop/MetaEditor 5.desktop
+=== VERIFY AUTOFIX Fri Mar  6 13:02:06 UTC 2026 ===
+[1] EA log (grep AUTOFIX, AutoTrading, INIT, enabled):
+GQ	0	11:36:32.468	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+GQ	0	11:36:38.699	Experts	automated trading is enabled
+DS	0	11:52:35.655	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+FG	0	12:01:18.181	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+CO	0	12:05:42.071	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+EN	0	12:07:43.229	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+KI	0	12:10:10.247	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+FH	0	12:15:47.290	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+KK	0	12:15:55.446	Experts	automated trading is disabled
+NS	0	12:18:18.512	Experts	automated trading is enabled
+OE	0	12:20:28.297	Experts	automated trading is disabled
+QO	0	12:29:10.832	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+GJ	0	12:49:28.796	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+FQ	0	12:55:39.219	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+IM	2	13:00:03.410	PropFirmBot	DLL loading is not allowed
 
-[2] MT5 directory contents:
-/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe
-/root/.wine/drive_c/Program Files/MetaTrader 5/metatester64.exe
-/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
-/root/.wine/drive_c/Program Files/MetaTrader 5/uninstall.exe
-
-[3] Touching .mq5 to force recompile...
-Before:
--rw-r--r-- 1 root root 164872 Mar  6 11:22 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
-.mq5:
--rw-r--r-- 1 root root 35848 Mar  6 12:59 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
-
-[4] Removing old .ex5 to force recompile...
-Removed old .ex5
-
-[5] Starting MT5 (should auto-compile)...
-346800
-Waiting 30 seconds for MT5 to compile and load EA...
-[6] Checking compilation:
--rw-r--r-- 1 root root 211522 Mar  6 12:59 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
-
-[7] EA log:
-
-Last 10 lines:
+[2] Last 20 lines:
+NK	0	12:55:40.267	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15725 tp: 1.15410 [auto trading disabled by client]
+JK	0	12:55:40.268	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): EURUSD Error=10027 auto trading disabled by client
+IK	0	12:55:40.765	PropFirmBot (EURUSD,M15)	[SMC] SELL signal: Entry=1.33372 SL=1.33454 TP=1.33207 | LiqSweep=N OB=N FVG=Y
+CF	0	12:55:40.765	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.0 Lot=0.08
+PJ	0	12:55:40.765	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.08 GBPUSD sl: 1.33454 tp: 1.33207 [auto trading disabled by client]
+CJ	0	12:55:40.765	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+KD	0	12:55:41.282	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.08 GBPUSD sl: 1.33454 tp: 1.33207 [auto trading disabled by client]
+IH	0	12:55:41.282	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+FQ	0	12:55:41.784	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.08 GBPUSD sl: 1.33454 tp: 1.33207 [auto trading disabled by client]
 OM	0	12:55:41.784	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
 GO	0	12:55:42.287	PropFirmBot (EURUSD,M15)	[EMA-MOMENTUM] BUY USDJPY: Entry=157.95300 SL=157.84311 TP=158.13614 RSI=60.2 HTF=1
 RQ	0	12:55:42.287	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.1 Lot=0.09
@@ -47,6 +36,23 @@ OO	0	12:55:42.805	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): US
 LR	0	12:55:43.286	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.843 tp: 158.136 [auto trading disabled by client]
 CL	0	12:55:43.287	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
 IR	0	12:55:43.784	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+IM	2	13:00:03.410	PropFirmBot	DLL loading is not allowed
 
-=== DONE Fri Mar  6 13:00:03 UTC 2026 ===
+[3] Status:
+{
+    "bot_name": "PropFirmBot",
+    "active": false,
+    "balance": 1981.41,
+    "last_trade": null,
+    "updated_at": "2026-03-06 13:02:01",
+    "open_positions": [],
+    "recent_closed_trades": [],
+    "ea_connected": false,
+    "account": {
+        "balance": 1981.41,
+        "equity": 1981.41,
+        "floating_pnl": 0.0,
+        "margin": 0.0,
+        "free_margin": 1981.41
+=== DONE Fri Mar  6 13:02:06 UTC 2026 ===
 EXIT_CODE=0
