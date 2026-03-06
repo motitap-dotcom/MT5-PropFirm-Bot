@@ -1,94 +1,145 @@
 #!/bin/bash
-# Install MinGW, compile WM_COMMAND sender, enable AutoTrading
-echo "=== MINGW APPROACH $(date -u) ==="
+# Improved AutoTrading enabler: try all windows + SendInput + multiple command IDs
+echo "=== IMPROVED FIX $(date -u) ==="
 export DISPLAY=:99
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
-# Step 1: Install MinGW cross-compiler
-echo "[1] Installing MinGW..."
-apt-get install -y -qq gcc-mingw-w64-x86-64 2>/dev/null | tail -3
-which x86_64-w64-mingw32-gcc && echo "  MinGW installed!" || echo "  FAILED"
-
-# Step 2: Create the C program
-echo "[2] Creating WM_COMMAND sender..."
-cat > /tmp/enable_autotrading.c << 'CEOF'
+# Create improved C program
+cat > /tmp/enable_at2.c << 'CEOF'
 #include <windows.h>
 #include <stdio.h>
 
+typedef struct {
+    HWND windows[20];
+    int count;
+} WindowList;
+
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
+    WindowList* list = (WindowList*)lParam;
     char title[512];
     GetWindowTextA(hwnd, title, sizeof(title));
-    if (strlen(title) > 0) {
+    if (strlen(title) > 5) {
         if (strstr(title, "FundedNext") != NULL ||
-            strstr(title, "MetaTrader") != NULL ||
-            strstr(title, "11797849") != NULL) {
-            printf("Found window: %p = %s\n", (void*)hwnd, title);
-
-            // Send WM_COMMAND with AutoTrading toggle command ID (32842)
-            // This is the same as clicking the AutoTrading button
-            LRESULT result = SendMessage(hwnd, WM_COMMAND, MAKEWPARAM(32842, 0), 0);
-            printf("SendMessage WM_COMMAND(32842) result: %ld\n", (long)result);
-
-            // Also try PostMessage
-            PostMessage(hwnd, WM_COMMAND, MAKEWPARAM(32842, 0), 0);
-            printf("PostMessage WM_COMMAND(32842) sent\n");
-
-            *(int*)lParam = 1;
-            return FALSE; // Found it, stop
+            strstr(title, "MetaTrader") != NULL) {
+            if (list->count < 20) {
+                list->windows[list->count] = hwnd;
+                list->count++;
+                printf("Window %d: %p = %s\n", list->count, (void*)hwnd, title);
+            }
         }
     }
     return TRUE;
 }
 
 int main() {
-    printf("Searching for MT5 window...\n");
-    int found = 0;
-    EnumWindows(EnumWindowsProc, (LPARAM)&found);
+    printf("=== AutoTrading Enabler v2 ===\n");
 
-    if (!found) {
+    WindowList list = {0};
+    EnumWindows(EnumWindowsProc, (LPARAM)&list);
+    printf("Found %d MT5 windows\n\n", list.count);
+
+    if (list.count == 0) {
         printf("ERROR: No MT5 window found!\n");
         return 1;
     }
 
-    printf("Done! AutoTrading toggle command sent.\n");
+    // Method 1: Try WM_COMMAND with different IDs on ALL windows
+    printf("--- Method 1: WM_COMMAND on all windows ---\n");
+    int cmd_ids[] = {32842, 32843, 32844, 32910, 32909, 32908, 32911, 32912, 32906, 32905};
+    int i, j;
+    for (i = 0; i < list.count; i++) {
+        // Try the most likely ID (32842) on each window
+        printf("Sending WM_COMMAND(32842) to window %d (%p)...\n", i+1, (void*)list.windows[i]);
+        SendMessage(list.windows[i], WM_COMMAND, MAKEWPARAM(32842, 0), 0);
+        Sleep(500);
+    }
+
+    Sleep(2000);
+
+    // Method 2: SetForegroundWindow + keybd_event (Ctrl+E)
+    printf("\n--- Method 2: SetForegroundWindow + keybd_event ---\n");
+    // Use the first (top-level) window
+    HWND target = list.windows[0];
+    printf("Targeting window: %p\n", (void*)target);
+
+    // Try to set foreground
+    SetForegroundWindow(target);
+    Sleep(500);
+    BringWindowToTop(target);
+    Sleep(500);
+    SetFocus(target);
+    Sleep(500);
+
+    // Send Ctrl+E via keybd_event
+    printf("Sending Ctrl+E via keybd_event...\n");
+    keybd_event(VK_CONTROL, 0x1D, 0, 0);
+    Sleep(50);
+    keybd_event('E', 0x12, 0, 0);
+    Sleep(50);
+    keybd_event('E', 0x12, KEYEVENTF_KEYUP, 0);
+    Sleep(50);
+    keybd_event(VK_CONTROL, 0x1D, KEYEVENTF_KEYUP, 0);
+
+    Sleep(2000);
+
+    // Method 3: SendInput (more modern API)
+    printf("\n--- Method 3: SendInput ---\n");
+    SetForegroundWindow(target);
+    Sleep(500);
+
+    INPUT inputs[4] = {0};
+    // Ctrl down
+    inputs[0].type = INPUT_KEYBOARD;
+    inputs[0].ki.wVk = VK_CONTROL;
+    // E down
+    inputs[1].type = INPUT_KEYBOARD;
+    inputs[1].ki.wVk = 'E';
+    // E up
+    inputs[2].type = INPUT_KEYBOARD;
+    inputs[2].ki.wVk = 'E';
+    inputs[2].ki.dwFlags = KEYEVENTF_KEYUP;
+    // Ctrl up
+    inputs[3].type = INPUT_KEYBOARD;
+    inputs[3].ki.wVk = VK_CONTROL;
+    inputs[3].ki.dwFlags = KEYEVENTF_KEYUP;
+
+    UINT sent = SendInput(4, inputs, sizeof(INPUT));
+    printf("SendInput sent %u events\n", sent);
+
+    Sleep(2000);
+
+    // Method 4: WM_KEYDOWN/WM_KEYUP directly to window
+    printf("\n--- Method 4: WM_KEYDOWN/WM_KEYUP ---\n");
+    for (i = 0; i < list.count; i++) {
+        printf("Sending WM_KEYDOWN Ctrl+E to window %d...\n", i+1);
+        PostMessage(list.windows[i], WM_KEYDOWN, VK_CONTROL, 0x001D0001);
+        PostMessage(list.windows[i], WM_KEYDOWN, 'E', 0x00120001);
+        Sleep(50);
+        PostMessage(list.windows[i], WM_KEYUP, 'E', 0xC0120001);
+        PostMessage(list.windows[i], WM_KEYUP, VK_CONTROL, 0xC01D0001);
+        Sleep(1000);
+    }
+
+    printf("\nAll methods tried!\n");
     Sleep(1000);
     return 0;
 }
 CEOF
 
-# Step 3: Compile
-echo "[3] Compiling..."
-x86_64-w64-mingw32-gcc -o /tmp/enable_autotrading.exe /tmp/enable_autotrading.c -luser32 2>&1
-[ -f /tmp/enable_autotrading.exe ] && echo "  Compiled OK!" || { echo "  COMPILE FAILED"; exit 1; }
+echo "[1] Compiling..."
+x86_64-w64-mingw32-gcc -o /tmp/enable_at2.exe /tmp/enable_at2.c -luser32 2>&1
+cp /tmp/enable_at2.exe "/root/.wine/drive_c/enable_at2.exe"
+echo "  Done"
 
-# Copy to wine-accessible path
-cp /tmp/enable_autotrading.exe "/root/.wine/drive_c/enable_autotrading.exe"
+echo "[2] Running..."
+wine "C:\\enable_at2.exe" 2>&1
 
-# Step 4: Make sure MT5 is running
-echo "[4] MT5 check:"
-if ! pgrep -f "terminal64\|start.exe" >/dev/null 2>&1; then
-    echo "  Starting MT5..."
-    cd "$MT5"
-    screen -dmS mt5 bash -c "export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1"
-    sleep 15
-fi
-pgrep -a "start.exe\|terminal64" 2>/dev/null | head -2
-
-# Step 5: Run the AutoTrading enabler
-echo "[5] Running AutoTrading enabler..."
-wine "C:\\enable_autotrading.exe" 2>&1
-
-sleep 3
-
-# Step 6: Check result
-echo "[6] Result:"
+echo "[3] Check result:"
+sleep 2
 EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-echo "  AutoTrading log:"
+echo "  AutoTrading entries:"
 cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -5
 echo "  Last 5 EA entries:"
 cat "$EALOG" 2>/dev/null | tr -d '\0' | tail -5
-
-# Save the exe for future use
-cp /tmp/enable_autotrading.exe /root/enable_autotrading.exe 2>/dev/null
 
 echo "=== DONE $(date -u) ==="
