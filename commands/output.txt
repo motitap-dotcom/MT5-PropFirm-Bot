@@ -1,32 +1,33 @@
-=== SENDKEYS FIX Fri Mar  6 13:57:14 UTC 2026 ===
-[1] Pre-check AutoTrading state:
-KK	0	12:15:55.446	Experts	automated trading is disabled
-NS	0	12:18:18.512	Experts	automated trading is enabled
-OE	0	12:20:28.297	Experts	automated trading is disabled
-[2] MT5 running:
-  Window: 75497473
+=== MINGW APPROACH Fri Mar  6 13:59:44 UTC 2026 ===
+[1] Installing MinGW...
+Processing triggers for libwine:i386 (9.0~repack-4build3) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for libwine:amd64 (9.0~repack-4build3) ...
+/usr/bin/x86_64-w64-mingw32-gcc
+  MinGW installed!
+[2] Creating WM_COMMAND sender...
+[3] Compiling...
+  Compiled OK!
+[4] MT5 check:
   Starting MT5...
-[3] Method 1: VBScript SendKeys (Windows-native)
-0338:fixme:wscript:set_host_properties ignored L"nologo" switch
-0338:fixme:wshom:WshShell3_AppActivate (0000000000B259E8 {VT_BSTR: L"FundedNext"} 0000000000B25A00 {VT_ERROR: 80020004} 000000000031F620): stub
-0338:fixme:wscript:ActiveScriptSite_OnScriptError ()
-  VBScript exit code: 0
-[4] Post-VBScript check:
+[5] Running AutoTrading enabler...
+Searching for MT5 window...
+Found window: 00000000000303d0 = 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - EURUSD,M15
+SendMessage WM_COMMAND(32842) result: 0
+PostMessage WM_COMMAND(32842) sent
+Done! AutoTrading toggle command sent.
+[6] Result:
+  AutoTrading log:
+QR	0	11:32:46.318	Experts	automated trading is disabled
+GQ	0	11:36:38.699	Experts	automated trading is enabled
 KK	0	12:15:55.446	Experts	automated trading is disabled
 NS	0	12:18:18.512	Experts	automated trading is enabled
 OE	0	12:20:28.297	Experts	automated trading is disabled
-[5] Method 2: Compile and run C program via MinGW
-  MinGW not available
-
-[6] MinGW availability:
-ii  libz-mingw-w64                       1.3.1+dfsg-1                            all          compression library - Windows runtime
-[7] Final check:
-KK	0	12:15:55.446	Experts	automated trading is disabled
-NS	0	12:18:18.512	Experts	automated trading is enabled
-OE	0	12:20:28.297	Experts	automated trading is disabled
-  Last 3 EA entries:
-MH	0	13:54:25.806	PropFirmBot (EURUSD,M15)	[SIGNAL] USDJPY SMC=NONE, trying EMA fallback...
-IN	0	13:54:25.806	PropFirmBot (EURUSD,M15)	[EMA] USDJPY cross found but filtered | RSI=48.0 HTF=1 | CrossUp=N CrossDn=Y
-RN	0	13:54:25.806	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-=== DONE Fri Mar  6 13:57:38 UTC 2026 ===
+  Last 5 EA entries:
+QI	0	14:00:03.919	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.803 tp: 158.037 [auto trading disabled by client]
+FS	0	14:00:03.919	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+GN	0	14:00:04.365	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.803 tp: 158.037 [auto trading disabled by client]
+KP	0	14:00:04.365	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+QN	0	14:00:04.868	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+=== DONE Fri Mar  6 14:01:01 UTC 2026 ===
 EXIT_CODE=0
