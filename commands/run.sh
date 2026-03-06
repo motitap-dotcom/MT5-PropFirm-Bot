@@ -1,151 +1,116 @@
 #!/bin/bash
 # =============================================================
-# Full diagnostic: Why is the bot NOT trading?
+# FIX: Enable AutoTrading in MT5 (Ctrl+E shortcut)
 # =============================================================
 
 echo "============================================"
-echo "  BOT NOT TRADING - FULL DIAGNOSTIC"
+echo "  FIX: Enable AutoTrading"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
-# 1. Is MT5 process running?
+export DISPLAY=:99
+export WINEPREFIX=/root/.wine
+
+# 1. Check current MT5 process
 echo "=== [1] MT5 Process ==="
-ps aux | grep -i "terminal64\|metatrader\|terminal.exe" | grep -v grep
-if [ $? -ne 0 ]; then
-    echo "*** MT5 IS NOT RUNNING! ***"
+MT5_PID=$(pgrep -f "terminal64.exe" | head -1)
+if [ -z "$MT5_PID" ]; then
+    echo "*** MT5 is NOT running! Starting it... ***"
+    cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
+    wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server /autotrading &
+    sleep 10
+    MT5_PID=$(pgrep -f "terminal64.exe" | head -1)
 fi
+echo "MT5 PID: $MT5_PID"
 echo ""
 
-# 2. MT5 logs - last 100 lines
-echo "=== [2] MT5 Terminal Logs (last 100 lines) ==="
-MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
-LOG_DIR="$MT5_DIR/MQL5/Logs"
-LATEST_LOG=$(ls -t "$LOG_DIR"/*.log 2>/dev/null | head -1)
-if [ -n "$LATEST_LOG" ]; then
-    echo "Log file: $LATEST_LOG"
-    tail -100 "$LATEST_LOG"
+# 2. Install xdotool if not present
+echo "=== [2] Install xdotool ==="
+which xdotool > /dev/null 2>&1 || apt-get install -y xdotool 2>&1
+echo ""
+
+# 3. Find MT5 window
+echo "=== [3] Find MT5 Window ==="
+MT5_WINDOW=$(xdotool search --name "MetaTrader" 2>/dev/null | head -1)
+if [ -z "$MT5_WINDOW" ]; then
+    MT5_WINDOW=$(xdotool search --name "terminal64" 2>/dev/null | head -1)
+fi
+if [ -z "$MT5_WINDOW" ]; then
+    MT5_WINDOW=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
+fi
+if [ -z "$MT5_WINDOW" ]; then
+    echo "Trying to find any Wine window..."
+    MT5_WINDOW=$(xdotool search --class "Wine" 2>/dev/null | head -1)
+fi
+echo "MT5 Window ID: $MT5_WINDOW"
+echo ""
+
+# 4. Send Ctrl+E to toggle AutoTrading ON
+echo "=== [4] Send Ctrl+E (AutoTrading toggle) ==="
+if [ -n "$MT5_WINDOW" ]; then
+    # Focus the window first
+    xdotool windowactivate --sync "$MT5_WINDOW" 2>&1
+    sleep 1
+
+    # Send Ctrl+E to enable AutoTrading
+    xdotool key --window "$MT5_WINDOW" ctrl+e 2>&1
+    echo "Sent Ctrl+E to window $MT5_WINDOW"
+    sleep 2
+
+    # Send it again just in case (toggle) - but we need to check state
+    # Actually let's just send once and check the logs
+    echo "AutoTrading toggle sent!"
 else
-    echo "No log files found in $LOG_DIR"
-    ls -la "$LOG_DIR" 2>/dev/null
+    echo "*** Could not find MT5 window! ***"
+    echo "All windows on display :99:"
+    xdotool search --name "" 2>/dev/null | while read wid; do
+        echo "  Window $wid: $(xdotool getwindowname $wid 2>/dev/null)"
+    done
 fi
 echo ""
 
-# 3. EA Expert logs
-echo "=== [3] EA Expert Logs (last 100 lines) ==="
-EA_LOG_DIR="$MT5_DIR/MQL5/Logs"
-EXPERT_LOG=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | grep -i expert | head -1)
-if [ -n "$EXPERT_LOG" ]; then
-    echo "Expert log: $EXPERT_LOG"
-    tail -100 "$EXPERT_LOG"
-fi
-# Also check Experts subfolder
-EXPERT_LOG_DIR2="$MT5_DIR/Logs"
-if [ -d "$EXPERT_LOG_DIR2" ]; then
-    echo "--- Logs from $EXPERT_LOG_DIR2 ---"
-    LATEST_EXPERT=$(ls -t "$EXPERT_LOG_DIR2"/*.log 2>/dev/null | head -1)
-    if [ -n "$LATEST_EXPERT" ]; then
-        echo "Log: $LATEST_EXPERT"
-        tail -100 "$LATEST_EXPERT"
+# 5. Also try to enable via Wine registry (alternative method)
+echo "=== [5] Wine Registry AutoTrading ==="
+# MT5 stores AutoTrading state - let's check
+COMMON_INI="/root/.wine/drive_c/Program Files/MetaTrader 5/config/common.ini"
+if [ -f "$COMMON_INI" ]; then
+    echo "Current common.ini:"
+    cat "$COMMON_INI"
+    # Enable AutoTrading in ini
+    if grep -q "AutoTrading" "$COMMON_INI"; then
+        sed -i 's/AutoTrading=0/AutoTrading=1/g' "$COMMON_INI"
+        echo "Updated AutoTrading=1 in common.ini"
     fi
-fi
-echo ""
-
-# 4. Check EA files exist and compiled
-echo "=== [4] EA Files Check ==="
-EA_DIR="$MT5_DIR/MQL5/Experts/PropFirmBot"
-echo "EA source files:"
-ls -la "$EA_DIR"/*.mq5 "$EA_DIR"/*.mqh 2>/dev/null
-echo ""
-echo "Compiled EA (.ex5):"
-ls -la "$EA_DIR"/*.ex5 2>/dev/null
-if [ $? -ne 0 ]; then
-    echo "*** NO COMPILED .ex5 FILE FOUND! ***"
-fi
-echo ""
-
-# 5. Config files
-echo "=== [5] Config Files ==="
-CONFIG_DIR="$MT5_DIR/MQL5/Files/PropFirmBot"
-ls -la "$CONFIG_DIR"/ 2>/dev/null
-echo ""
-
-# 6. Check if AutoTrading is enabled (via Wine registry or ini)
-echo "=== [6] MT5 Configuration ==="
-INI_FILE="$MT5_DIR/terminal64.ini"
-if [ -f "$INI_FILE" ]; then
-    echo "--- terminal64.ini ---"
-    cat "$INI_FILE" 2>/dev/null
 else
-    echo "No terminal64.ini found"
-    # Try other ini files
-    ls -la "$MT5_DIR"/*.ini 2>/dev/null
+    echo "No common.ini found at expected path"
+    # Search for it
+    find "/root/.wine/drive_c/Program Files/MetaTrader 5/" -name "common.ini" -o -name "*.ini" 2>/dev/null | head -10
 fi
 echo ""
 
-# 7. Check charts config for EA attachment
-echo "=== [7] Chart Profiles (checking EA attached) ==="
-PROFILE_DIR="$MT5_DIR/MQL5/Profiles"
-if [ -d "$PROFILE_DIR" ]; then
-    find "$PROFILE_DIR" -name "*.chr" -exec echo "--- {} ---" \; -exec grep -i "Expert\|PropFirm\|AutoTrading" {} \; 2>/dev/null
-fi
-# Also check default profile
-DEFAULT_PROFILE="$MT5_DIR/Profiles"
-if [ -d "$DEFAULT_PROFILE" ]; then
-    find "$DEFAULT_PROFILE" -name "*.chr" -exec echo "--- {} ---" \; -exec grep -i "Expert\|PropFirm\|AutoTrading" {} \; 2>/dev/null
-fi
+# 6. Check all .ini files for AutoTrading setting
+echo "=== [6] Search for AutoTrading in all config files ==="
+find "/root/.wine/drive_c/Program Files/MetaTrader 5/" -name "*.ini" -exec grep -l -i "autotrad" {} \; 2>/dev/null
+find "/root/.wine/drive_c/Program Files/MetaTrader 5/" -name "*.ini" -exec echo "--- {} ---" \; -exec grep -i "autotrad\|ExpertEnabled\|expert" {} \; 2>/dev/null
 echo ""
 
-# 8. Network/Connection check
-echo "=== [8] Network Check ==="
-ping -c 2 -W 3 8.8.8.8 2>&1 | tail -3
-echo ""
-
-# 9. Wine errors
-echo "=== [9] Wine Errors (last 50 lines from syslog/journal) ==="
-journalctl -u mt5* --no-pager -n 50 2>/dev/null || echo "No mt5 service logs"
-echo ""
-grep -i "wine\|mt5\|metatrader" /var/log/syslog 2>/dev/null | tail -30
-echo ""
-
-# 10. Disk & Memory
-echo "=== [10] System Resources ==="
-echo "Disk:"
-df -h / | tail -1
-echo "Memory:"
-free -h | head -2
-echo "Uptime:"
-uptime
-echo ""
-
-# 11. VNC / Display check
-echo "=== [11] Display & VNC ==="
-echo "DISPLAY=$DISPLAY"
-ps aux | grep -i "xvfb\|x11vnc\|vnc" | grep -v grep
-echo ""
-
-# 12. Account journal (last trades)
-echo "=== [12] Trade Journal / Account History ==="
-JOURNAL_DIR="$MT5_DIR/MQL5/Files/PropFirmBot"
-if [ -f "$JOURNAL_DIR/trade_journal.json" ]; then
-    echo "--- trade_journal.json (last 50 lines) ---"
-    tail -50 "$JOURNAL_DIR/trade_journal.json"
-elif [ -f "$JOURNAL_DIR/trade_journal.csv" ]; then
-    echo "--- trade_journal.csv (last 20 lines) ---"
-    tail -20 "$JOURNAL_DIR/trade_journal.csv"
-else
-    echo "No trade journal found"
-    ls -la "$JOURNAL_DIR"/ 2>/dev/null
-fi
-echo ""
-
-# 13. Check MT5 trade history in terminal logs
-echo "=== [13] Recent order/trade mentions in logs ==="
-if [ -n "$LATEST_LOG" ]; then
-    grep -i "order\|trade\|position\|signal\|error\|failed\|denied\|disabled" "$LATEST_LOG" 2>/dev/null | tail -50
-fi
+# 7. Wait and check logs for new activity
+echo "=== [7] Wait for next bar and check ==="
+sleep 5
+LOG_FILE="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260306.log"
+echo "Last 20 log lines:"
+tail -20 "$LOG_FILE" 2>/dev/null
 echo ""
 
 echo "============================================"
-echo "  DIAGNOSTIC COMPLETE $(date '+%Y-%m-%d %H:%M:%S UTC')"
+echo "  FIX COMPLETE $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
+echo ""
+echo "NOTE: If AutoTrading is still disabled, Noa needs to:"
+echo "1. Connect via VNC (RealVNC to 77.237.234.2:5900)"
+echo "2. Click the 'AutoTrading' button in MT5 toolbar (or press Ctrl+E)"
+echo "3. Also go to Tools > Options > Expert Advisors:"
+echo "   - Check 'Allow Algorithmic Trading'"
+echo "   - Check 'Allow WebRequest for listed URL'"
+echo "   - Add: https://api.telegram.org"
