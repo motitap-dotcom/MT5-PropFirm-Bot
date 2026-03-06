@@ -1,69 +1,76 @@
-=== AUTOTRADING METHODS Fri Mar  6 13:49:17 UTC 2026 ===
-Selecting previously unselected package wmctrl.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 147505 files and directories currently installed.)
-Preparing to unpack .../wmctrl_1.07-7ubuntu3_amd64.deb ...
-Unpacking wmctrl (1.07-7ubuntu3) ...
-Setting up wmctrl (1.07-7ubuntu3) ...
-Processing triggers for man-db (2.12.0-4build2) ...
-[1] Current AutoTrading log entries:
+=== FIX AUTOTRADING Fri Mar  6 13:53:56 UTC 2026 ===
+[1] Fixing startup.ini...
+  Done
+[StartUp]
+Login=11797849
+Server=FundedNext-Server
+AutoTrading=1
+AllowLiveTrading=1
+AllowWebRequest=1
+WebRequestUrl1=https://api.telegram.org
+
+[Experts]
+AllowLiveTrading=1
+AllowDllImport=0
+ExpertsEnabled=1
+AutoTrading=1
+
+[Expert]
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+
+[2] Fixing terminal.ini...
+  Encoding: /root/.wine/drive_c/Program Files/MetaTrader 5/config/terminal.ini: Generic INItialization configuration [Network]
+  terminal.ini updated (UTF-8)
+
+[3] Fixing common.ini...
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+[Experts]
+AutoTrading=1
+ExpertEnabled=1
+
+[4] Wine registry check:
+[Software\\MetaQuotes Software\\MetaTrader 5] 1772302872
+"PackagePath"="Z:\\tmp\\mt5setup.exe"
+[Software\\MetaQuotes Software\\MetaTrader 5\\Settings] 1771784975
+"AppName"="MetaTrader 5 Client Terminal"
+"OpenWithIcon"="1967_terminal64.0"
+[Software\\Wine\\FileOpenAssociations\\.mt5] 1771833062
+"AppName"="MetaTrader 5 Client Terminal"
+"DesktopFile"="\\\\?\\Z:\\root\\.local\\share\\applications\\wine-extension-mt5.desktop"
+"MimeType"="application/x-wine-extension-mt5"
+"OpenWithIcon"="1967_terminal64.0"
+[Software\\Classes\\.mt5] 1771784528
+@="MetaTrader 5 Export File"
+@="C:\\Program Files\\MetaTrader 5\\terminal64.exe,2"
+@="C:\\Program Files\\MetaTrader 5\\terminal64.exe /ex5:\"%1\""
+@="C:\\Program Files\\MetaTrader 5\\metaeditor64.exe,1"
+
+[5] Starting MT5 with config...
+  MT5 started with /config parameter
+
+[6] Status check:
+  AutoTrading log entries:
 QR	0	11:32:46.318	Experts	automated trading is disabled
 GQ	0	11:36:38.699	Experts	automated trading is enabled
 KK	0	12:15:55.446	Experts	automated trading is disabled
 NS	0	12:18:18.512	Experts	automated trading is enabled
 OE	0	12:20:28.297	Experts	automated trading is disabled
-[2] Windows:
-  Main: 33554433 = 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  Chart: 75497473 = 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
-[3] Method A: xdotool windowactivate + windowfocus + key --clearmodifiers
+  Last EA entries:
+DL	0	13:51:52.364	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+RR	0	13:51:52.867	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY rejected: HTF=Bullish LiqSweep=Y OB=N FVG=N
+MP	0	13:51:52.867	PropFirmBot (EURUSD,M15)	[SIGNAL] USDJPY SMC=NONE, trying EMA fallback...
+PF	0	13:51:52.867	PropFirmBot (EURUSD,M15)	[EMA] USDJPY cross found but filtered | RSI=48.7 HTF=1 | CrossUp=N CrossDn=Y
+RF	0	13:51:52.867	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+
+[7] Try WM_COMMAND via Python/ctypes under Wine:
+Application could not be started, or no application associated with the specified file.
+ShellExecuteEx failed: File not found.
+
+  Wine Python not available
+
+[8] Alt: use xdotool with wmctrl focus:
 OE	0	12:20:28.297	Experts	automated trading is disabled
-[4] Method B: xdotool keydown/keyup
-OE	0	12:20:28.297	Experts	automated trading is disabled
-[5] Method C: xte (xautomation)
-OE	0	12:20:28.297	Experts	automated trading is disabled
-[6] Method D: xdotool to chart window
-OE	0	12:20:28.297	Experts	automated trading is disabled
-[7] Method E: restart MT5 and modify terminal.ini while stopped
-  Current terminal.ini:
-ÿþ[Window]
-Fullscreen=0
-Type=3
-Left=0
-Top=0
-Right=1280
-Bottom=1024
-LSave=0
-TSave=0
-RSave=1288
-BSave=1032
-Sheet_289_left=344
-Sheet_289_top=382
-Sheet_545_left=348
-Sheet_545_top=418
-Sheet_545_width=621
-Sheet_545_height=315
-Dlg_133_left=439
-Dlg_133_top=378
-Sheet_360_left=244
-Sheet_360_top=262
-Dlg_539_left=393
-Dlg_539_top=353
-Dlg_539_width=502
-Dlg_539_height=327
-[Toolbars]
-Arrange=1
-Toolbar_248=32910,32909,32908,-1,32911,32912,-1,32906,32905,
-Toolbar_346=52600,52601,-1,52602,52603,52604,52607,52612,52626,52625,52627,
-Toolbar_347=52600,52601,-1,52602,52603,52604,52607,52612,52625,52627,
-  Starting MT5...
-[8] After restart check:
-KK	0	12:15:55.446	Experts	automated trading is disabled
-NS	0	12:18:18.512	Experts	automated trading is enabled
-OE	0	12:20:28.297	Experts	automated trading is disabled
-  Last 5 lines:
-ME	0	13:45:01.906	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD cross found but filtered | RSI=63.5 HTF=-1 | CrossUp=Y CrossDn=N
-KJ	0	13:45:01.906	PropFirmBot (EURUSD,M15)	[SMC] USDJPY BUY rejected: HTF=Bullish LiqSweep=Y OB=N FVG=N
-DI	0	13:45:01.906	PropFirmBot (EURUSD,M15)	[SIGNAL] USDJPY SMC=NONE, trying EMA fallback...
-FN	0	13:45:01.906	PropFirmBot (EURUSD,M15)	[EMA] USDJPY cross found but filtered | RSI=36.7 HTF=1 | CrossUp=N CrossDn=Y
-ON	0	13:45:01.906	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-=== DONE Fri Mar  6 13:51:49 UTC 2026 ===
+=== DONE Fri Mar  6 13:54:23 UTC 2026 ===
 EXIT_CODE=0
