@@ -1,12 +1,59 @@
-=== RESTART + CTRL+E Fri Mar  6 12:48:48 UTC 2026 ===
-346800
-MT5 starting...
-Window: 33554433
-Ctrl+E sent
+=== STATE CHECK Fri Mar  6 12:51:07 UTC 2026 ===
+[1] MT5 running:
+2609513 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe /portable /login:11797849 /server:FundedNext-Server
+2609614 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /server:FundedNext-Server /autotrading
+
+[2] AutoTrading history (all messages):
+QR	0	11:32:46.318	Experts	automated trading is disabled
+GQ	0	11:36:38.699	Experts	automated trading is enabled
 KK	0	12:15:55.446	Experts	automated trading is disabled
 NS	0	12:18:18.512	Experts	automated trading is enabled
 OE	0	12:20:28.297	Experts	automated trading is disabled
 
-Persistent fix installed
-=== DONE Fri Mar  6 12:49:22 UTC 2026 ===
+[3] Last 15 lines of EA log:
+ML	0	12:49:30.314	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.07 GBPUSD sl: 1.33453 tp: 1.33183 [auto trading disabled by client]
+CP	0	12:49:30.314	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+LI	0	12:49:30.805	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.07 GBPUSD sl: 1.33453 tp: 1.33183 [auto trading disabled by client]
+CE	0	12:49:30.805	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+LK	0	12:49:31.316	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.07 GBPUSD sl: 1.33453 tp: 1.33183 [auto trading disabled by client]
+CK	0	12:49:31.317	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+LH	0	12:49:31.822	PropFirmBot (EURUSD,M15)	[EMA-MOMENTUM] BUY USDJPY: Entry=157.94800 SL=157.83940 TP=158.12900 RSI=59.9 HTF=1
+FF	0	12:49:31.822	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.1 Lot=0.10
+QD	0	12:49:31.822	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.839 tp: 158.129 [auto trading disabled by client]
+RF	0	12:49:31.822	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+JJ	0	12:49:32.327	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.839 tp: 158.129 [auto trading disabled by client]
+HD	0	12:49:32.327	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+CH	0	12:49:32.850	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.839 tp: 158.129 [auto trading disabled by client]
+FR	0	12:49:32.850	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+NL	0	12:49:33.352	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+
+[4] Did bot trade today?
+{
+    "bot_name": "PropFirmBot",
+    "active": true,
+    "balance": 1981.41,
+    "last_trade": null,
+    "updated_at": "2026-03-06 12:51:05",
+    "open_positions": [],
+    "recent_closed_trades": [],
+    "ea_connected": true,
+    "account": {
+        "balance": 1981.41,
+        "equity": 1981.41,
+        "floating_pnl": 0.0,
+        "margin": 0.0,
+        "free_margin": 1981.41
+    },
+    "guardian_state": "ACTIVE",
+    "daily_dd": 0.0,
+    "total_dd": 0.0,
+    "today": {
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "net": 0.0
+    },
+    "_open_positions_count": 0
+}
+=== DONE Fri Mar  6 12:51:08 UTC 2026 ===
 EXIT_CODE=0
