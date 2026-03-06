@@ -1,84 +1,45 @@
 #!/bin/bash
-# Fix: Send Ctrl+E to the correct MT5 window to enable AutoTrading
-echo "=== FIX AutoTrading - correct window $(date -u) ==="
+# Verify: is AutoTrading ON and are trades executing?
+echo "=== VERIFY TRADES $(date -u) ==="
 
-export DISPLAY=:99
-export WINEPREFIX=/root/.wine
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+export DISPLAY=:99
 
-# 1. Find the correct MT5 main window by name
-echo "[1] Finding MT5 window by name 'FundedNext'..."
-WIN_ID=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
-echo "FundedNext window: $WIN_ID"
-
-if [ -z "$WIN_ID" ]; then
-    echo "Trying '11797849'..."
-    WIN_ID=$(xdotool search --name "11797849" 2>/dev/null | head -1)
-fi
-
-if [ -z "$WIN_ID" ]; then
-    echo "Trying 'MetaTrader'..."
-    WIN_ID=$(xdotool search --name "MetaTrader" 2>/dev/null | head -1)
-fi
-
-echo "Target window: $WIN_ID"
-if [ -n "$WIN_ID" ]; then
-    echo "Name: $(xdotool getwindowname "$WIN_ID" 2>/dev/null)"
-    xdotool getwindowgeometry "$WIN_ID" 2>/dev/null
-fi
+# 1. Check if AutoTrading was toggled off again by the extra Ctrl+E
+echo "[1] EA log - checking for enabled/disabled messages:"
+EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+grep -i "automated trading" "$EALOG" 2>/dev/null
 echo ""
 
-# 2. Focus and send Ctrl+E
-echo "[2] Sending Ctrl+E to toggle AutoTrading..."
-if [ -n "$WIN_ID" ]; then
-    # Focus the window
-    xdotool windowfocus --sync "$WIN_ID" 2>/dev/null
-    sleep 1
-    xdotool windowactivate --sync "$WIN_ID" 2>/dev/null
-    sleep 1
-
-    # Send Ctrl+E
-    xdotool key --window "$WIN_ID" --clearmodifiers ctrl+e 2>/dev/null
-    echo "Sent Ctrl+E to window $WIN_ID"
-    sleep 3
-
-    # Check log immediately for "automated trading" message
-    EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-    echo "Log after Ctrl+E:"
-    tail -5 "$EALOG" 2>&1
-    echo ""
-
-    # If still disabled, try sending it again
-    if tail -3 "$EALOG" 2>&1 | grep -q "disabled"; then
-        echo "Still disabled, trying again..."
+# 2. If it was toggled off again (odd number of Ctrl+E), toggle it back on
+LAST_STATE=$(grep -i "automated trading" "$EALOG" 2>/dev/null | tail -1)
+echo "Last state: $LAST_STATE"
+if echo "$LAST_STATE" | grep -q "disabled"; then
+    echo "AutoTrading is OFF! Sending single Ctrl+E to first window only..."
+    WIN_ID=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
+    if [ -n "$WIN_ID" ]; then
+        xdotool windowfocus --sync "$WIN_ID" 2>/dev/null
+        sleep 1
         xdotool key --window "$WIN_ID" --clearmodifiers ctrl+e 2>/dev/null
-        sleep 2
-        tail -3 "$EALOG" 2>&1
+        echo "Sent Ctrl+E to $WIN_ID"
+        sleep 3
+        # Verify
+        grep -i "automated trading" "$EALOG" 2>/dev/null | tail -3
     fi
-else
-    echo "NO MT5 WINDOW FOUND!"
 fi
 echo ""
 
-# 3. Also try: find ALL windows named FundedNext and send Ctrl+E to each
-echo "[3] Sending Ctrl+E to ALL FundedNext windows..."
-for wid in $(xdotool search --name "FundedNext" 2>/dev/null); do
-    wname=$(xdotool getwindowname "$wid" 2>/dev/null)
-    echo "  Window $wid: $wname"
-    xdotool windowfocus --sync "$wid" 2>/dev/null
-    sleep 0.5
-    xdotool key --window "$wid" --clearmodifiers ctrl+e 2>/dev/null
-    sleep 1
-done
-echo ""
-
-# 4. Wait for next bar and check
-echo "[4] Waiting 30 seconds for next trade attempt..."
+# 3. Wait for next 15-minute bar and check for trades
+echo "[2] Waiting for activity (30 seconds)..."
 sleep 30
 
-EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-echo "EA log (last 15 lines):"
-tail -15 "$EALOG" 2>&1
+echo "[3] Latest EA log:"
+tail -20 "$EALOG" 2>&1
+echo ""
+
+# 4. Account status
+echo "[4] mt5_status.json:"
+cat /var/bots/mt5_status.json 2>/dev/null | python3 -m json.tool 2>/dev/null || echo "N/A"
 
 echo ""
 echo "=== DONE $(date -u) ==="
