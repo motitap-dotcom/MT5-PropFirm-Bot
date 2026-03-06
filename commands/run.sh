@@ -1,100 +1,79 @@
 #!/bin/bash
-# Fix MT5 startup: create proper start script and fix systemd service
-echo "=== FIX MT5 SERVICE $(date -u) ==="
+# Full reset: disable systemd, start MT5 via screen, enable AutoTrading
+echo "=== FULL RESET $(date -u) ==="
 export DISPLAY=:99
+MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
-# Step 1: Create start script that systemd will use
-echo "[1] Creating MT5 start script..."
-cat > /root/start_mt5.sh << 'STARTEOF'
-#!/bin/bash
-export DISPLAY=:99
-export WINEPREFIX=/root/.wine
-cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
-exec wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server
-STARTEOF
-chmod +x /root/start_mt5.sh
-
-# Step 2: Create proper autotrading fix script
-echo "[2] Creating AutoTrading fix script..."
-cat > /root/fix_autotrading.sh << 'FIXEOF'
-#!/bin/bash
-export DISPLAY=:99
-sleep 25
-W=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
-if [ -n "$W" ]; then
-    xdotool windowactivate --sync "$W" 2>/dev/null
-    sleep 1
-    xdotool key ctrl+e
-    echo "$(date): Ctrl+E sent to $W" >> /var/log/autotrading_fix.log
-else
-    echo "$(date): No window found" >> /var/log/autotrading_fix.log
-fi
-FIXEOF
-chmod +x /root/fix_autotrading.sh
-
-# Step 3: Fix systemd service - use script instead of inline command
-echo "[3] Fixing systemd service..."
-cat > /etc/systemd/system/mt5.service << 'SVCEOF'
-[Unit]
-Description=MetaTrader 5 Trading Terminal
-After=network.target xvfb.service
-Requires=xvfb.service
-
-[Service]
-Type=simple
-User=root
-Environment=DISPLAY=:99
-Environment=WINEPREFIX=/root/.wine
-ExecStartPre=/bin/sleep 5
-ExecStart=/root/start_mt5.sh
-Restart=on-failure
-RestartSec=30
-StartLimitIntervalSec=600
-StartLimitBurst=10
-
-[Install]
-WantedBy=multi-user.target
-SVCEOF
-systemctl daemon-reload
-
-# Step 4: Stop everything and restart
-echo "[4] Stopping MT5..."
+# Step 1: Kill everything and disable systemd service
+echo "[1] Stopping everything..."
 systemctl stop mt5 2>/dev/null
-pkill -f terminal64.exe 2>/dev/null
+systemctl disable mt5 2>/dev/null
+pkill -9 -f terminal64.exe 2>/dev/null
 pkill -9 -f "wine.*terminal" 2>/dev/null
-sleep 3
+sleep 5
+echo "  All MT5 processes killed"
+pgrep -a terminal64 2>/dev/null && echo "  WARNING: Still running!" || echo "  Confirmed: no terminal64 running"
 
-echo "[5] Starting MT5 service..."
-systemctl start mt5 &
-sleep 15
+# Step 2: Install screen if needed
+which screen >/dev/null 2>&1 || apt-get install -y -qq screen >/dev/null 2>&1
 
-# Check if running
-echo "[6] Process check:"
-pgrep -a terminal64 2>/dev/null || echo "terminal64 not found"
-pgrep -a wine 2>/dev/null | head -3 || echo "wine not found"
-ps aux | grep -i "terminal\|wine" | grep -v grep | head -5
+# Step 3: Start MT5 in detached screen session
+echo "[2] Starting MT5 in screen..."
+cd "$MT5"
+screen -dmS mt5 bash -c 'export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1'
+echo "  Screen session 'mt5' created"
+screen -ls
 
-echo "[7] Service status:"
-systemctl status mt5 --no-pager 2>/dev/null | head -8
+# Step 4: Wait for MT5 to fully initialize
+echo "[3] Waiting 20s for MT5 to load..."
+sleep 20
 
-# Step 5: Try AutoTrading toggle
-echo "[8] AutoTrading toggle..."
+# Step 5: Check windows
+echo "[4] Windows:"
+xdotool search --name "FundedNext" 2>/dev/null | while read w; do
+    echo "  $w: $(xdotool getwindowname "$w" 2>/dev/null)"
+done
+
+# Step 6: Enable AutoTrading
+echo "[5] Enabling AutoTrading..."
 W=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
-echo "  Window: $W"
 if [ -n "$W" ]; then
+    echo "  Activating window $W..."
     xdotool windowactivate --sync "$W" 2>/dev/null
     sleep 1
     xdotool key ctrl+e
     echo "  Ctrl+E sent!"
+    sleep 3
+    # Check if it worked by looking at new EA log entries
+    EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+    echo "[6] New EA log entries:"
+    cat "$EALOG" 2>/dev/null | tr -d '\0' | tail -10
 else
-    echo "  No FundedNext window yet - scheduling background fix..."
-    nohup /root/fix_autotrading.sh </dev/null >/dev/null 2>&1 &
-    disown $!
+    echo "  ERROR: No FundedNext window found!"
+    echo "  All windows:"
+    xdotool search --name "" 2>/dev/null | while read w; do
+        NAME=$(xdotool getwindowname "$w" 2>/dev/null)
+        [ -n "$NAME" ] && echo "    $w: $NAME"
+    done
 fi
 
-sleep 3
-echo "[9] Latest EA log:"
-EALOG=$(ls -t "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-cat "$EALOG" 2>/dev/null | tr -d '\0' | tail -5
+# Step 7: Setup reboot persistence with screen
+echo "[7] Setting up reboot persistence..."
+cat > /root/start_mt5_screen.sh << 'EOF'
+#!/bin/bash
+export DISPLAY=:99
+export WINEPREFIX=/root/.wine
+sleep 10
+cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
+screen -dmS mt5 bash -c 'export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1'
+sleep 25
+W=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
+[ -n "$W" ] && xdotool windowactivate --sync "$W" 2>/dev/null && sleep 1 && xdotool key ctrl+e
+EOF
+chmod +x /root/start_mt5_screen.sh
+(crontab -l 2>/dev/null | grep -v "fix_autotrading\|start_mt5"; echo "@reboot /root/start_mt5_screen.sh") | crontab -
+
+echo "[8] Status:"
+cat /var/bots/mt5_status.json 2>/dev/null | python3 -m json.tool 2>/dev/null | head -10
 
 echo "=== DONE $(date -u) ==="
