@@ -1,58 +1,22 @@
-=== STATUS CHECK Fri Mar  6 13:29:35 UTC 2026 ===
-[1] MT5 Process:
-NOT RUNNING
-[2] EA file:
--rw-r--r-- 1 root root 164578 Mar  6 13:27 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
-[3] DLL import check in .mq5:
-0
-OK: No DLL import
-[4] EA Log (last entries):
-OR	0	13:28:05.445	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-EG	0	13:28:05.445	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-EH	0	13:28:05.549	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
-RN	0	13:28:06.049	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
-FS	0	13:28:06.549	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
-PR	0	13:28:07.050	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
-EO	0	13:28:07.555	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
-QM	0	13:28:08.065	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+=== RESTART MT5 Fri Mar  6 13:32:11 UTC 2026 ===
+[1] MT5 service:
+● mt5.service - MetaTrader 5 Trading Terminal
+     Loaded: loaded (/etc/systemd/system/mt5.service; enabled; preset: enabled)
+     Active: activating (auto-restart) since Fri 2026-03-06 13:32:03 UTC; 10s ago
+    Process: 2621255 ExecStartPre=/bin/sleep 5 (code=exited, status=0/SUCCESS)
+    Process: 2621260 ExecStart=/usr/bin/wine /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe /portable /login:11797849 /server:FundedNext-Server /autotrading (code=exited, status=0/SUCCESS)
+[2] Startup scripts:
+[3] Crontab:
 
-[5] Last 10 lines:
-HL	0	13:28:07.050	PropFirmBot (EURUSD,M15)	[SMC] BUY signal: Entry=157.92100 SL=157.82154 TP=158.11993 | LiqSweep=N OB=Y FVG=N
-KM	0	13:28:07.050	PropFirmBot (EURUSD,M15)	[SIGNAL] USDJPY >>> BUY signal found! SL=157.82154 TP=158.11993
-KQ	0	13:28:07.050	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.1 Lot=0.11
-LH	0	13:28:07.050	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.07 USDJPY sl: 157.822 tp: 158.120 [auto trading disabled by client]
-PR	0	13:28:07.050	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
-HM	0	13:28:07.555	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.07 USDJPY sl: 157.822 tp: 158.120 [auto trading disabled by client]
-EO	0	13:28:07.555	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
-KS	0	13:28:08.065	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.07 USDJPY sl: 157.822 tp: 158.120 [auto trading disabled by client]
-QM	0	13:28:08.065	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
-ES	0	13:28:08.564	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-[6] Bot Status:
-{
-    "bot_name": "PropFirmBot",
-    "active": true,
-    "balance": 1981.41,
-    "last_trade": null,
-    "updated_at": "2026-03-06 13:29:35",
-    "open_positions": [],
-    "recent_closed_trades": [],
-    "ea_connected": true,
-    "account": {
-        "balance": 1981.41,
-        "equity": 1981.41,
-        "floating_pnl": 0.0,
-        "margin": 0.0,
-        "free_margin": 1981.41
-[7] Windows:
-543: 
-2097235: 
-14680065: 
-14680067: Default IME
-14680066: 
-14680068: 
-14680069: 
-14680070: 
-16777217: 
-14680071: 
-=== DONE Fri Mar  6 13:29:37 UTC 2026 ===
+*/5 * * * * cd /root/Tradovate-Bot && bash /root/tradovate-bot/server_cron.sh >> /var/log/tradovate-cron.log 2>&1
+*/2 * * * * /opt/hyrotrader-bot/scripts/auto_deploy.sh
+@reboot nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &
+*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
+[4] Display:
+346800 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
+[5] Starting MT5...
+MT5 launched (detached)
+AutoTrading fix scheduled in background
+=== DONE Fri Mar  6 13:32:15 UTC 2026 ===
+Check /tmp/at_log.txt on next run for AutoTrading result
 EXIT_CODE=0
