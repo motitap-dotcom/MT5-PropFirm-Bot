@@ -1,80 +1,109 @@
 #!/bin/bash
-# Check current state and try multiple methods to enable AutoTrading
-echo "=== AUTOTRADING DEBUG $(date -u) ==="
+# Try multiple methods to enable AutoTrading
+echo "=== AUTOTRADING METHODS $(date -u) ==="
 export DISPLAY=:99
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
-echo "[1] MT5 process:"
-pgrep -a terminal64 2>/dev/null || echo "NOT FOUND via pgrep"
-ps aux | grep -i "terminal64\|wine.*terminal" | grep -v grep | head -3
+# Install xdotool extras
+apt-get install -y -qq xautomation xdotool wmctrl 2>/dev/null
 
-echo "[2] Screen sessions:"
-screen -ls 2>/dev/null
-
-echo "[3] Latest EA log (last 10 lines):"
+echo "[1] Current AutoTrading log entries:"
 EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-echo "  File: $EALOG"
-cat "$EALOG" 2>/dev/null | tr -d '\0' | tail -10
+cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -5
 
-echo "[4] MT5 config files with AutoTrading:"
-for f in "$MT5/config/"*.ini "$MT5/"*.ini; do
-    if [ -f "$f" ]; then
-        echo "  --- $(basename "$f") ---"
-        cat "$f" 2>/dev/null | tr -d '\0' | grep -i "auto\|trading\|dll\|expert" | head -5
-    fi
-done
-
-echo "[5] Chart profile expertmode:"
-find "$MT5" -name "*.chr" 2>/dev/null | head -3 | while read f; do
-    echo "  --- $f ---"
-    cat "$f" 2>/dev/null | tr -d '\0' | grep -i "expert" | head -3
-done
-
-echo "[6] Terminal data path:"
-# Check the MQL5 terminal log for data path
-TERMLOG=$(ls -t "$MT5/Logs/"*.log 2>/dev/null | head -1)
-echo "  Terminal log: $TERMLOG"
-cat "$TERMLOG" 2>/dev/null | tr -d '\0' | grep -i "data\|path\|auto\|trading" | head -5
-
-echo "[7] Try to fix AutoTrading via ini file:"
-# Find and modify the correct ini file
-for f in "$MT5/config/common.ini" "$MT5/terminal64.ini" "$MT5/config/terminal.ini"; do
-    if [ -f "$f" ]; then
-        echo "  Modifying $f..."
-        # Check encoding
-        file "$f"
-        # Add/update AutoTrading setting
-        if file "$f" | grep -q "UTF-16\|BOM"; then
-            # UTF-16 file - handle specially
-            iconv -f UTF-16LE -t UTF-8 "$f" 2>/dev/null | sed 's/AutoTrading=0/AutoTrading=1/' | iconv -f UTF-8 -t UTF-16LE > "/tmp/fixed_ini.tmp" && cp "/tmp/fixed_ini.tmp" "$f"
-            echo "  Fixed (UTF-16)"
-        else
-            sed -i 's/AutoTrading=0/AutoTrading=1/' "$f"
-            if ! grep -q "AutoTrading" "$f" 2>/dev/null; then
-                echo -e "\n[Common]\nAutoTrading=1" >> "$f"
-            fi
-            echo "  Fixed (UTF-8)"
-        fi
-    fi
-done
-
-echo "[8] Try keyboard shortcut with different methods:"
+echo "[2] Windows:"
 W=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
-echo "  Window: $W"
+CHART_W=$(xdotool search --name "EURUSD" 2>/dev/null | head -1)
+echo "  Main: $W = $(xdotool getwindowname "$W" 2>/dev/null)"
+echo "  Chart: $CHART_W = $(xdotool getwindowname "$CHART_W" 2>/dev/null)"
+
+echo "[3] Method A: xdotool windowactivate + windowfocus + key --clearmodifiers"
 if [ -n "$W" ]; then
-    # Method 1: windowfocus + key
-    echo "  Method 1: windowfocus + key"
+    xdotool windowactivate --sync "$W" 2>/dev/null
     xdotool windowfocus --sync "$W" 2>/dev/null
     sleep 1
-    xdotool key ctrl+e
+    xdotool key --clearmodifiers ctrl+e
     sleep 2
-
-    # Check if autotrading changed
-    EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-    cat "$EALOG" 2>/dev/null | tr -d '\0' | grep -i "automated trading" | tail -3
+    cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -1
 fi
 
-echo "[9] Current EA status:"
+echo "[4] Method B: xdotool keydown/keyup"
+if [ -n "$W" ]; then
+    xdotool windowactivate --sync "$W" 2>/dev/null
+    sleep 1
+    xdotool keydown ctrl
+    xdotool key e
+    xdotool keyup ctrl
+    sleep 2
+    cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -1
+fi
+
+echo "[5] Method C: xte (xautomation)"
+if which xte >/dev/null 2>&1 && [ -n "$W" ]; then
+    xdotool windowactivate --sync "$W" 2>/dev/null
+    sleep 1
+    xte 'keydown Control_L' 'key e' 'keyup Control_L'
+    sleep 2
+    cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -1
+else
+    echo "  xte not available"
+fi
+
+echo "[6] Method D: xdotool to chart window"
+if [ -n "$CHART_W" ]; then
+    xdotool windowactivate --sync "$CHART_W" 2>/dev/null
+    xdotool windowfocus --sync "$CHART_W" 2>/dev/null
+    sleep 1
+    xdotool key --clearmodifiers ctrl+e
+    sleep 2
+    cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -1
+fi
+
+echo "[7] Method E: restart MT5 and modify terminal.ini while stopped"
+# Kill MT5
+screen -X -S mt5 quit 2>/dev/null
+pkill -9 -f terminal64.exe 2>/dev/null
+sleep 3
+
+# Read full terminal.ini content
+echo "  Current terminal.ini:"
+cat "$MT5/config/terminal.ini" 2>/dev/null | tr -d '\0' | head -30
+
+# Create a clean terminal.ini with all AutoTrading settings
+cat > "$MT5/config/terminal.ini" << 'INIEOF'
+[Common]
+AutoTrading=1
+ExpertsEnabled=1
+
+[Network]
+Enable=1
+
+[Experts]
+AutoTrading=1
+AllowLiveTrading=1
+AllowDLL=0
+Enabled=1
+Account=0
+Profile=0
+INIEOF
+
+# Also ensure common.ini has AutoTrading
+if ! grep -q "\[Common\]" "$MT5/config/common.ini" 2>/dev/null; then
+    echo -e "\n[Common]\nAutoTrading=1" >> "$MT5/config/common.ini"
+fi
+sed -i 's/AutoTrading=0/AutoTrading=1/g' "$MT5/config/common.ini" 2>/dev/null
+
+# Start MT5 fresh
+echo "  Starting MT5..."
+cd "$MT5"
+screen -dmS mt5 bash -c 'export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1'
+sleep 20
+
+# Check if AutoTrading is now ON
+echo "[8] After restart check:"
+EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -3
+echo "  Last 5 lines:"
 cat "$EALOG" 2>/dev/null | tr -d '\0' | tail -5
 
 echo "=== DONE $(date -u) ==="
