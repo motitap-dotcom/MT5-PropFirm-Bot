@@ -1,53 +1,35 @@
 #!/bin/bash
-# Fix bot: deploy clean EA, compile, then restart MT5 fully detached
-echo "=== FIX $(date -u) ==="
+# Check if MT5 is running and EA loaded after fix
+echo "=== STATUS CHECK $(date -u) ==="
 export DISPLAY=:99
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
-EA_DIR="$MT5/MQL5/Experts/PropFirmBot"
-REPO="/root/MT5-PropFirm-Bot"
 
-# Pull & deploy
-cd "$REPO" && git pull origin claude/check-bot-update-status-KDu5H 2>&1 | tail -2
-cp "$REPO/EA/"*.mq5 "$EA_DIR/" && cp "$REPO/EA/"*.mqh "$EA_DIR/" && echo "Files copied"
+# Is MT5 running?
+echo "[1] MT5 Process:"
+pgrep -a terminal64 2>/dev/null || echo "NOT RUNNING"
 
-# Compile
-rm -f "$EA_DIR/PropFirmBot.ex5"
-cd "$MT5"
-timeout 15 wine MetaEditor64.exe /compile:"MQL5/Experts/PropFirmBot/PropFirmBot.mq5" /log 2>/dev/null
-sleep 3
-[ -f "$EA_DIR/PropFirmBot.ex5" ] && echo "COMPILED: $(stat -c%s "$EA_DIR/PropFirmBot.ex5") bytes" || echo "COMPILE FAILED"
+# Check EA file
+echo "[2] EA file:"
+ls -la "$MT5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5" 2>/dev/null
 
-# Kill MT5
-pkill -f terminal64.exe 2>/dev/null
-sleep 2
+# Check if the EA source has DLL import (should NOT have it)
+echo "[3] DLL import check in .mq5:"
+grep -c "user32.dll" "$MT5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5" 2>/dev/null && echo "BAD: Still has DLL import!" || echo "OK: No DLL import"
 
-# Create restart+autotrading script and run it fully detached via at/setsid
-cat > /tmp/restart_mt5.sh << 'SCRIPT'
-#!/bin/bash
-export DISPLAY=:99
-cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
-wine terminal64.exe /portable &
-sleep 15
-W=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
-[ -z "$W" ] && W=$(xdotool search --name "MetaTrader" 2>/dev/null | head -1)
-[ -n "$W" ] && xdotool key --window "$W" ctrl+e && echo "$(date): AutoTrading enabled" >> /var/log/autotrading_fix.log
-SCRIPT
-chmod +x /tmp/restart_mt5.sh
+# EA log
+EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+echo "[4] EA Log (last entries):"
+cat "$EALOG" 2>/dev/null | tr -d '\0' | grep -i "INIT\|ALL SYSTEMS\|automated\|DLL\|error\|AUTOFIX" | tail -8
+echo ""
+echo "[5] Last 10 lines:"
+cat "$EALOG" 2>/dev/null | tr -d '\0' | tail -10
 
-# Launch fully detached - setsid + redirect all FDs + disown
-setsid /tmp/restart_mt5.sh </dev/null >/dev/null 2>&1 &
-echo "MT5 restart launched in background (PID: $!)"
+# Status JSON
+echo "[6] Bot Status:"
+cat /var/bots/mt5_status.json 2>/dev/null | python3 -m json.tool 2>/dev/null | head -15
 
-# Setup reboot fix
-cat > /root/fix_autotrading.sh << 'EOF'
-#!/bin/bash
-sleep 30; export DISPLAY=:99
-W=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
-[ -z "$W" ] && W=$(xdotool search --name "MetaTrader" 2>/dev/null | head -1)
-[ -n "$W" ] && xdotool key --window "$W" ctrl+e
-EOF
-chmod +x /root/fix_autotrading.sh
-(crontab -l 2>/dev/null | grep -v fix_autotrading; echo "@reboot /root/fix_autotrading.sh") | crontab -
+# Check xdotool windows
+echo "[7] Windows:"
+xdotool search --name "" 2>/dev/null | while read w; do echo "$w: $(xdotool getwindowname "$w" 2>/dev/null)"; done | head -10
 
-echo "MT5 will start in background. Check status in ~20 seconds."
 echo "=== DONE $(date -u) ==="
