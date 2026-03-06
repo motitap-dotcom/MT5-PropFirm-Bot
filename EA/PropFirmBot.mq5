@@ -71,7 +71,7 @@ input int      InpMaxConsecLosses = 5;          // Max Consecutive Losses
 
 // --- Spread Filter ---
 input double   InpMaxSpreadMajor  = 3.5;        // Max Spread Major (pips)
-input double   InpMaxSpreadXAU    = 5.0;        // Max Spread XAUUSD (pips)
+input double   InpMaxSpreadXAU    = 8.0;        // Max Spread XAUUSD (pips)
 
 // --- News Filter ---
 input bool     InpNewsFilterOn    = true;        // News Filter Enabled
