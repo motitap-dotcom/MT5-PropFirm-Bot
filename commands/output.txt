@@ -1,72 +1,545 @@
-=== DEPLOY EA UPDATE Fri Mar  6 12:54:52 UTC 2026 ===
-[1] Pulling latest code...
-From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
- * branch            claude/check-bot-update-status-KDu5H -> FETCH_HEAD
-Switched to a new branch 'claude/check-bot-update-status-KDu5H'
-branch 'claude/check-bot-update-status-KDu5H' set up to track 'origin/claude/check-bot-update-status-KDu5H'.
-From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
- * branch            claude/check-bot-update-status-KDu5H -> FETCH_HEAD
-Already up to date.
+=== CHECK NEW EA Fri Mar  6 12:57:27 UTC 2026 ===
+[1] MT5 running:
+3
 
-[2] Copying EA files...
-'EA/PropFirmBot.mq5' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5'
-'EA/AccountStateManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh'
-'EA/Dashboard.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Dashboard.mqh'
-'EA/Guardian.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Guardian.mqh'
-'EA/NewsFilter.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/NewsFilter.mqh'
-'EA/Notifications.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Notifications.mqh'
-'EA/RiskManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/RiskManager.mqh'
-'EA/SignalEngine.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/SignalEngine.mqh'
-'EA/StatusWriter.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/StatusWriter.mqh'
-'EA/TradeAnalyzer.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeAnalyzer.mqh'
-'EA/TradeJournal.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeJournal.mqh'
-'EA/TradeManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeManager.mqh'
+[2] EA .ex5 file:
+-rw-r--r-- 1 root root 164872 Mar  6 11:22 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+.mq5 file:
+-rw-r--r-- 1 root root 35848 Mar  6 12:54 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
 
-[3] Enabling DLL imports...
-startup.ini updated
-[StartUp]
-Expert=PropFirmBot\PropFirmBot
-ExpertParameters=
-Symbol=EURUSD
-Period=M15
-[Experts]
-AllowLiveTrading=1
-AllowDllImport=1
-Enabled=1
-Account=11797849
-Profile=0
-AllowWebRequest=1
-WebRequestUrl1=https://api.telegram.org
-[Common]
-AutoTrading=1
-
-common.ini updated
-Chart file: DLL imports enabled
-
-[6] Stopping MT5...
-[7] Compiling EA...
-MetaEditor not found at /root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe
-/root/.wine/drive_c/Program Files/MetaTrader 5/metatester64.exe
-
-[8] Starting MT5...
-346800
-MT5 RUNNING
-[9] EA log:
+[3] Full EA log from latest session:
+LL	0	08:30:05.812	PropFirmBot (EURUSD,M15)	[DEINIT] PropFirmBot stopped. Reason: 1
+DH	0	08:30:11.503	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+NR	0	08:30:11.503	PropFirmBot (EURUSD,M15)	[INIT] Symbols (3): EURUSD, GBPUSD, USDJPY
+KN	0	08:30:11.507	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+FL	0	08:30:11.507	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 10:30:11] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+JK	0	08:30:11.516	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+II	0	08:30:11.516	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+MJ	0	08:30:11.517	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+CJ	0	08:30:11.517	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+HQ	0	08:30:11.517	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+FJ	0	08:30:11.520	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+DH	0	08:30:11.521	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+NH	0	08:30:11.521	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+GP	0	08:30:11.521	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+OD	0	08:30:11.521	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+FM	0	08:30:11.525	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+PG	0	08:30:11.525	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+HL	0	08:43:47.416	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+MN	0	08:43:47.416	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+QM	0	08:43:47.421	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+HS	0	08:43:47.503	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 10:43:47] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+CN	0	08:43:47.514	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+DL	0	08:43:47.514	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+QO	0	08:43:47.514	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.50% | MaxPos=3 | DailyDD=-2.0% | TotalDD=3.0%
+MN	0	08:43:47.514	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+FL	0	08:43:47.514	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+KO	0	08:43:47.704	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+MO	0	08:43:47.839	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+MN	0	08:43:47.932	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+MM	0	08:43:47.939	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+ES	0	08:43:47.939	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+IJ	0	08:43:47.942	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+NK	0	08:43:47.944	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+JM	0	08:43:47.944	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+LO	0	09:00:00.138	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.07 GBPUSD sl: 1.33781 tp: 1.33373 [auto trading disabled by client]
+QG	0	09:00:00.138	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+LI	0	09:00:00.640	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.07 GBPUSD sl: 1.33781 tp: 1.33373 [auto trading disabled by client]
+QD	0	09:00:00.643	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+QJ	0	09:00:01.149	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.07 GBPUSD sl: 1.33781 tp: 1.33373 [auto trading disabled by client]
+NJ	0	09:00:01.149	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+DM	0	09:56:06.946	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+QN	0	09:56:06.946	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+NM	0	09:56:06.952	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+NS	0	09:56:07.036	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 11:56:06] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+FI	0	09:56:07.042	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+FK	0	09:56:07.043	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+GL	0	09:56:07.043	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.50% | MaxPos=3 | DailyDD=-2.0% | TotalDD=3.0%
+KM	0	09:56:07.043	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+LO	0	09:56:07.043	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+MH	0	09:56:07.491	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+JN	0	09:56:07.875	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+GN	0	09:56:08.040	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+KN	0	09:56:08.128	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+KR	0	09:56:08.128	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+RM	0	09:56:08.501	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+GK	0	09:56:08.501	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+KN	0	09:56:08.501	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+CG	0	10:27:42.707	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+RD	0	10:27:42.707	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+CG	0	10:27:42.708	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+GE	0	10:27:42.756	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 12:27:42] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+RP	0	10:27:42.768	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+QR	0	10:27:42.768	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+DR	0	10:27:42.768	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.50% | MaxPos=3 | DailyDD=-2.0% | TotalDD=3.0%
+HS	0	10:27:42.768	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+OI	0	10:27:42.768	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+DR	0	10:27:43.508	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+MP	0	10:27:43.720	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+LP	0	10:27:43.927	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+IG	0	10:27:43.967	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+QH	0	10:27:43.967	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+IG	0	10:27:43.976	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+OM	0	10:27:43.977	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+CP	0	10:27:43.977	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+NE	0	10:32:11.494	PropFirmBot (EURUSD,M15)	[DEINIT] PropFirmBot stopped. Reason: 1
+MQ	0	10:32:14.746	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+CI	0	10:32:14.746	PropFirmBot (EURUSD,M15)	[INIT] Symbols (3): EURUSD, GBPUSD, USDJPY
+JQ	0	10:32:14.757	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+DD	0	10:32:14.757	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 12:32:14] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+LR	0	10:32:14.765	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+KP	0	10:32:14.765	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+PS	0	10:32:14.765	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+FR	0	10:32:14.765	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+EH	0	10:32:14.765	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=30min High=Y Medium=N
+GR	0	10:32:14.765	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+JP	0	10:32:14.765	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+PQ	0	10:32:14.765	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+EO	0	10:32:14.765	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+IO	0	10:32:14.765	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+DE	0	10:32:14.765	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+RH	0	10:32:14.765	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+LG	0	11:15:02.667	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+IK	0	11:15:02.667	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+GF	0	11:15:02.711	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+FE	0	11:15:02.764	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 13:15:02] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 3.5% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+QS	0	11:15:02.772	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+RQ	0	11:15:02.772	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+MR	0	11:15:02.772	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+CS	0	11:15:02.772	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+HI	0	11:15:02.772	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+RR	0	11:15:05.465	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+FP	0	11:15:05.606	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+IP	0	11:15:05.667	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+LP	0	11:15:05.685	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+LH	0	11:15:05.685	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+PL	0	11:15:05.685	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+LJ	0	11:15:05.686	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+JO	0	11:15:05.686	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+PS	0	11:15:05.808	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.05 USDJPY sl: 157.730 tp: 158.116 [auto trading disabled by client]
+EM	0	11:15:05.808	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+QQ	0	11:15:06.307	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.05 USDJPY sl: 157.730 tp: 158.116 [auto trading disabled by client]
+EK	0	11:15:06.307	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+IF	0	11:15:06.808	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.05 USDJPY sl: 157.730 tp: 158.116 [auto trading disabled by client]
+NH	0	11:15:06.808	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+NF	0	11:23:08.662	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+GE	0	11:23:08.662	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+PD	0	11:23:08.669	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+OJ	0	11:23:08.736	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 13:23:08] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+JQ	0	11:23:08.738	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+IS	0	11:23:08.738	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+FD	0	11:23:08.738	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+GD	0	11:23:08.742	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+DG	0	11:23:08.742	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+MP	0	11:23:09.311	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+FQ	0	11:23:09.607	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+LG	0	11:23:09.669	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+RF	0	11:23:10.004	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+RJ	0	11:23:10.004	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+NM	0	11:23:10.004	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+PK	0	11:23:10.005	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+FM	0	11:23:10.005	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+RP	0	11:23:10.009	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15919 tp: 1.15599 [auto trading disabled by client]
+RL	0	11:23:10.009	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): EURUSD Error=10027 auto trading disabled by client
+NR	0	11:23:10.511	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15919 tp: 1.15599 [auto trading disabled by client]
+KR	0	11:23:10.511	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): EURUSD Error=10027 auto trading disabled by client
+HM	0	11:23:11.013	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15919 tp: 1.15599 [auto trading disabled by client]
+JQ	0	11:23:11.013	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): EURUSD Error=10027 auto trading disabled by client
+QM	0	11:23:11.550	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33567 tp: 1.33113 [auto trading disabled by client]
+GP	0	11:23:11.550	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+HN	0	11:23:11.993	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33567 tp: 1.33113 [auto trading disabled by client]
+OF	0	11:23:11.993	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+CH	0	11:23:12.519	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33567 tp: 1.33113 [auto trading disabled by client]
+KK	0	11:23:12.519	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+NE	0	11:23:13.028	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.768 tp: 158.083 [auto trading disabled by client]
+CG	0	11:23:13.028	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+NK	0	11:23:13.529	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.768 tp: 158.083 [auto trading disabled by client]
+FE	0	11:23:13.529	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+RI	0	11:23:14.032	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.768 tp: 158.083 [auto trading disabled by client]
+IS	0	11:23:14.032	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+QS	0	11:26:35.516	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+DO	0	11:26:35.516	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+JR	0	11:26:35.521	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+OP	0	11:26:35.523	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 13:26:35] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+PO	0	11:26:35.524	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+OM	0	11:26:35.524	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+DN	0	11:26:35.524	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+JO	0	11:26:35.524	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+QM	0	11:26:35.524	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+LN	0	11:26:35.693	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+KL	0	11:26:35.806	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+CM	0	11:26:35.851	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+RL	0	11:26:35.888	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+JL	0	11:26:35.888	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+RP	0	11:26:35.888	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+RQ	0	11:26:35.892	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+DK	0	11:26:35.892	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+JM	0	11:26:35.915	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15915 tp: 1.15595 [auto trading disabled by client]
+FQ	0	11:26:35.915	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): EURUSD Error=10027 auto trading disabled by client
+HH	0	11:26:36.411	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15915 tp: 1.15595 [auto trading disabled by client]
+ED	0	11:26:36.411	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): EURUSD Error=10027 auto trading disabled by client
+DJ	0	11:26:36.910	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15915 tp: 1.15595 [auto trading disabled by client]
+JJ	0	11:26:36.910	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): EURUSD Error=10027 auto trading disabled by client
+EK	0	11:26:37.425	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33569 tp: 1.33115 [auto trading disabled by client]
+OK	0	11:26:37.425	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+CD	0	11:26:37.922	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33569 tp: 1.33115 [auto trading disabled by client]
+PH	0	11:26:37.922	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+QF	0	11:26:38.426	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33569 tp: 1.33115 [auto trading disabled by client]
+EN	0	11:26:38.426	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+PH	0	11:26:38.933	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.768 tp: 158.095 [auto trading disabled by client]
+DR	0	11:26:38.933	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+PM	0	11:26:39.433	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.768 tp: 158.095 [auto trading disabled by client]
+EO	0	11:26:39.433	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+QS	0	11:26:39.939	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.768 tp: 158.095 [auto trading disabled by client]
+CM	0	11:26:39.939	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+NF	0	11:30:00.176	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.06 EURUSD sl: 1.15891 tp: 1.15597 [auto trading disabled by client]
+FN	0	11:30:00.176	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): EURUSD Error=10027 auto trading disabled by client
+NP	0	11:30:00.679	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.06 EURUSD sl: 1.15891 tp: 1.15597 [auto trading disabled by client]
+CL	0	11:30:00.679	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): EURUSD Error=10027 auto trading disabled by client
+LS	0	11:30:01.175	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.06 EURUSD sl: 1.15891 tp: 1.15597 [auto trading disabled by client]
+CS	0	11:30:01.176	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): EURUSD Error=10027 auto trading disabled by client
+EL	0	11:30:01.654	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.787 tp: 158.108 [auto trading disabled by client]
+MN	0	11:30:01.654	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+PR	0	11:30:02.160	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.787 tp: 158.108 [auto trading disabled by client]
+IL	0	11:30:02.160	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+NP	0	11:30:02.665	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.787 tp: 158.108 [auto trading disabled by client]
+DJ	0	11:30:02.665	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+QR	0	11:32:46.318	Experts	automated trading is disabled
+DL	0	11:36:32.160	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+QO	0	11:36:32.160	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+NR	0	11:36:32.167	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+KP	0	11:36:32.172	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 13:36:32] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+DO	0	11:36:32.173	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+JM	0	11:36:32.174	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+EN	0	11:36:32.174	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+ON	0	11:36:32.174	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+PM	0	11:36:32.174	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+DN	0	11:36:32.341	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+GO	0	11:36:32.383	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+PM	0	11:36:32.416	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+JL	0	11:36:32.468	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+JL	0	11:36:32.468	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+RP	0	11:36:32.468	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+GQ	0	11:36:32.468	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+MK	0	11:36:32.468	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+HN	0	11:36:33.129	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15844 tp: 1.15534 [auto trading disabled by client]
+RF	0	11:36:33.129	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): EURUSD Error=10027 auto trading disabled by client
+EH	0	11:36:33.630	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15844 tp: 1.15534 [auto trading disabled by client]
+ND	0	11:36:33.630	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): EURUSD Error=10027 auto trading disabled by client
+PK	0	11:36:34.126	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15844 tp: 1.15534 [auto trading disabled by client]
+HK	0	11:36:34.126	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): EURUSD Error=10027 auto trading disabled by client
+HK	0	11:36:34.649	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 GBPUSD sl: 1.33453 tp: 1.33102 [auto trading disabled by client]
+CK	0	11:36:34.649	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+ND	0	11:36:35.149	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 GBPUSD sl: 1.33453 tp: 1.33102 [auto trading disabled by client]
+HH	0	11:36:35.150	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+GF	0	11:36:35.649	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 GBPUSD sl: 1.33453 tp: 1.33102 [auto trading disabled by client]
+FN	0	11:36:35.649	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+LH	0	11:36:36.159	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.834 tp: 158.117 [auto trading disabled by client]
+KR	0	11:36:36.159	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+PM	0	11:36:36.674	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.834 tp: 158.117 [auto trading disabled by client]
+RO	0	11:36:36.674	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+QS	0	11:36:37.175	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.834 tp: 158.117 [auto trading disabled by client]
+PM	0	11:36:37.175	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+GQ	0	11:36:38.699	Experts	automated trading is enabled
+FM	0	11:45:00.205	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15788 tp: 1.15398 [auto trading disabled by client]
+IQ	0	11:45:00.205	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): EURUSD Error=10027 auto trading disabled by client
+OO	0	11:45:00.707	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15788 tp: 1.15398 [auto trading disabled by client]
+MG	0	11:45:00.707	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): EURUSD Error=10027 auto trading disabled by client
+QJ	0	11:45:01.218	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15788 tp: 1.15398 [auto trading disabled by client]
+LJ	0	11:45:01.218	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): EURUSD Error=10027 auto trading disabled by client
+JH	0	11:45:01.733	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 GBPUSD sl: 1.33414 tp: 1.32951 [auto trading disabled by client]
+OD	0	11:45:01.733	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+EE	0	11:45:02.229	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 GBPUSD sl: 1.33414 tp: 1.32951 [auto trading disabled by client]
+EI	0	11:45:02.230	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+CG	0	11:45:02.737	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 GBPUSD sl: 1.33414 tp: 1.32951 [auto trading disabled by client]
+LO	0	11:45:02.737	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+DN	0	11:52:35.251	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+QM	0	11:52:35.251	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+HL	0	11:52:35.258	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+ER	0	11:52:35.266	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 13:52:35] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+DI	0	11:52:35.271	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+CK	0	11:52:35.271	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+PM	0	11:52:35.271	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+NL	0	11:52:35.271	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+EN	0	11:52:35.271	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+NI	0	11:52:35.588	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+FI	0	11:52:35.608	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+GO	0	11:52:35.636	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+NN	0	11:52:35.654	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+FQ	0	11:52:35.654	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+NE	0	11:52:35.654	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+DS	0	11:52:35.655	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+RF	0	11:52:35.655	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+OH	0	11:52:35.656	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15769 tp: 1.15455 [auto trading disabled by client]
+CD	0	11:52:35.656	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): EURUSD Error=10027 auto trading disabled by client
+CJ	0	11:52:36.156	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15769 tp: 1.15455 [auto trading disabled by client]
+RJ	0	11:52:36.156	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): EURUSD Error=10027 auto trading disabled by client
+QE	0	11:52:36.657	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15769 tp: 1.15455 [auto trading disabled by client]
+CI	0	11:52:36.657	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): EURUSD Error=10027 auto trading disabled by client
+FR	0	12:01:17.539	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+OH	0	12:01:17.539	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+KS	0	12:01:17.559	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+EF	0	12:01:17.572	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 14:01:17] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+LL	0	12:01:17.575	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+KN	0	12:01:17.575	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+PQ	0	12:01:17.575	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+JP	0	12:01:17.575	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+EJ	0	12:01:17.575	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+JM	0	12:01:18.027	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+LM	0	12:01:18.055	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+MS	0	12:01:18.111	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+DS	0	12:01:18.180	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+DM	0	12:01:18.180	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+HQ	0	12:01:18.180	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+FG	0	12:01:18.181	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+PJ	0	12:01:18.181	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+EJ	0	12:05:41.263	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+PQ	0	12:05:41.263	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+KH	0	12:05:41.264	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+HN	0	12:05:41.274	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 14:05:41] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+JE	0	12:05:41.275	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+IG	0	12:05:41.275	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+NI	0	12:05:41.275	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+PH	0	12:05:41.275	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+GR	0	12:05:41.275	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+HE	0	12:05:41.559	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+PE	0	12:05:41.651	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+EK	0	12:05:41.733	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+MJ	0	12:05:42.061	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+DE	0	12:05:42.062	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+LI	0	12:05:42.062	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+CO	0	12:05:42.071	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+QR	0	12:05:42.071	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+EE	0	12:05:42.385	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 GBPUSD sl: 1.33341 tp: 1.32871 [auto trading disabled by client]
+PI	0	12:05:42.385	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+FG	0	12:05:42.887	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 GBPUSD sl: 1.33341 tp: 1.32871 [auto trading disabled by client]
+RO	0	12:05:42.887	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+JP	0	12:05:43.390	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 GBPUSD sl: 1.33341 tp: 1.32871 [auto trading disabled by client]
+ML	0	12:05:43.390	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+EN	0	12:05:43.891	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.865 tp: 158.147 [auto trading disabled by client]
+EP	0	12:05:43.891	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+KL	0	12:05:44.393	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.865 tp: 158.147 [auto trading disabled by client]
+NN	0	12:05:44.393	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+MQ	0	12:05:44.896	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.865 tp: 158.147 [auto trading disabled by client]
+KK	0	12:05:44.896	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+MK	0	12:07:42.976	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+HP	0	12:07:42.976	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+IK	0	12:07:42.977	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+QI	0	12:07:42.985	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 14:07:42] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+JD	0	12:07:42.986	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+IF	0	12:07:42.986	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+FI	0	12:07:42.986	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+LG	0	12:07:42.986	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+OR	0	12:07:42.986	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+OE	0	12:07:43.196	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+QD	0	12:07:43.205	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+RD	0	12:07:43.217	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+CK	0	12:07:43.228	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+CE	0	12:07:43.228	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+HH	0	12:07:43.229	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+EN	0	12:07:43.229	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+GR	0	12:07:43.230	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+PD	0	12:07:43.336	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 GBPUSD sl: 1.33342 tp: 1.32870 [auto trading disabled by client]
+GH	0	12:07:43.336	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+QF	0	12:07:43.836	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 GBPUSD sl: 1.33342 tp: 1.32870 [auto trading disabled by client]
+GN	0	12:07:43.836	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+HS	0	12:07:44.339	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 GBPUSD sl: 1.33342 tp: 1.32870 [auto trading disabled by client]
+QS	0	12:07:44.339	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+CM	0	12:07:44.867	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.875 tp: 158.157 [auto trading disabled by client]
+CO	0	12:07:44.867	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+FS	0	12:07:45.351	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.875 tp: 158.157 [auto trading disabled by client]
+CM	0	12:07:45.351	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+KQ	0	12:07:45.855	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.875 tp: 158.157 [auto trading disabled by client]
+MK	0	12:07:45.855	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+FD	0	12:10:09.028	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+OG	0	12:10:09.028	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+HJ	0	12:10:09.032	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+LH	0	12:10:09.044	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 14:10:08] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+QG	0	12:10:09.050	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+QE	0	12:10:09.051	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+NF	0	12:10:09.051	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+HF	0	12:10:09.051	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+GE	0	12:10:09.051	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+FF	0	12:10:09.821	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+RG	0	12:10:10.015	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+NE	0	12:10:10.174	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+ND	0	12:10:10.247	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+ND	0	12:10:10.247	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+FH	0	12:10:10.247	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+KI	0	12:10:10.247	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+IS	0	12:10:10.247	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+JG	0	12:10:10.251	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 GBPUSD sl: 1.33312 tp: 1.32839 [auto trading disabled by client]
+EO	0	12:10:10.251	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+QQ	0	12:10:10.755	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 GBPUSD sl: 1.33312 tp: 1.32839 [auto trading disabled by client]
+KM	0	12:10:10.755	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+FR	0	12:10:11.276	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.03 GBPUSD sl: 1.33312 tp: 1.32839 [auto trading disabled by client]
+GR	0	12:10:11.276	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+ML	0	12:10:11.784	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.881 tp: 158.163 [auto trading disabled by client]
+IN	0	12:10:11.784	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+NR	0	12:10:12.306	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.881 tp: 158.163 [auto trading disabled by client]
+GL	0	12:10:12.306	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+IP	0	12:10:12.804	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.881 tp: 158.163 [auto trading disabled by client]
+KJ	0	12:10:12.804	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+RD	0	12:15:46.754	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+CF	0	12:15:46.754	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+HE	0	12:15:46.760	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+EK	0	12:15:46.783	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 14:15:46] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+FF	0	12:15:46.787	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+ED	0	12:15:46.787	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+RG	0	12:15:46.787	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+HE	0	12:15:46.787	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+CD	0	12:15:46.787	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+GG	0	12:15:47.036	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+JG	0	12:15:47.063	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+PF	0	12:15:47.234	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+KE	0	12:15:47.290	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+CK	0	12:15:47.290	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+OK	0	12:15:47.290	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+FH	0	12:15:47.290	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+PL	0	12:15:47.290	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+KK	0	12:15:55.446	Experts	automated trading is disabled
+NS	0	12:18:18.512	Experts	automated trading is enabled
+OE	0	12:20:28.297	Experts	automated trading is disabled
+PI	0	12:29:10.381	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+EQ	0	12:29:10.381	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+FH	0	12:29:10.382	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+ON	0	12:29:10.404	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 14:29:10] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+GE	0	12:29:10.405	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+HG	0	12:29:10.405	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+KH	0	12:29:10.405	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+QI	0	12:29:10.405	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+JS	0	12:29:10.405	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+DD	0	12:29:10.690	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+LJ	0	12:29:10.721	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+CK	0	12:29:10.766	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+IJ	0	12:29:10.831	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+QF	0	12:29:10.831	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+IF	0	12:29:10.831	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+QO	0	12:29:10.832	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+CQ	0	12:29:10.832	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+DK	0	12:29:11.066	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.898 tp: 158.196 [auto trading disabled by client]
+JE	0	12:29:11.066	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+KI	0	12:29:11.577	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.898 tp: 158.196 [auto trading disabled by client]
+PS	0	12:29:11.577	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+NO	0	12:29:12.076	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.898 tp: 158.196 [auto trading disabled by client]
+RQ	0	12:29:12.076	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+KK	0	12:30:00.185	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33370 tp: 1.32935 [auto trading disabled by client]
+FK	0	12:30:00.185	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+ND	0	12:30:00.698	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33370 tp: 1.32935 [auto trading disabled by client]
+FH	0	12:30:00.698	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+JF	0	12:30:01.211	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.04 GBPUSD sl: 1.33370 tp: 1.32935 [auto trading disabled by client]
+QN	0	12:30:01.211	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+CK	0	12:45:00.168	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.06 EURUSD sl: 1.15755 tp: 1.15461 [auto trading disabled by client]
+FK	0	12:45:00.168	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): EURUSD Error=10027 auto trading disabled by client
+IF	0	12:45:00.742	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.06 EURUSD sl: 1.15755 tp: 1.15461 [auto trading disabled by client]
+IN	0	12:45:00.742	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): EURUSD Error=10027 auto trading disabled by client
+MP	0	12:45:01.253	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.06 EURUSD sl: 1.15755 tp: 1.15461 [auto trading disabled by client]
+NL	0	12:45:01.253	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): EURUSD Error=10027 auto trading disabled by client
+GQ	0	12:45:01.751	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.07 GBPUSD sl: 1.33451 tp: 1.33162 [auto trading disabled by client]
+FM	0	12:45:01.751	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+QS	0	12:45:02.255	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.07 GBPUSD sl: 1.33451 tp: 1.33162 [auto trading disabled by client]
+MS	0	12:45:02.255	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+JL	0	12:45:02.773	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.07 GBPUSD sl: 1.33451 tp: 1.33162 [auto trading disabled by client]
+EP	0	12:45:02.773	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+HR	0	12:45:03.285	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.770 tp: 158.098 [auto trading disabled by client]
+PL	0	12:45:03.285	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+DP	0	12:45:03.791	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.770 tp: 158.098 [auto trading disabled by client]
+MJ	0	12:45:03.791	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+EE	0	12:45:04.351	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.770 tp: 158.098 [auto trading disabled by client]
+KG	0	12:45:04.351	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+FG	0	12:49:27.998	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+OD	0	12:49:27.998	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+RG	0	12:49:27.999	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+GE	0	12:49:28.001	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 14:49:27] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+RP	0	12:49:28.009	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+QR	0	12:49:28.009	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+FE	0	12:49:28.010	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+LS	0	12:49:28.010	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+OF	0	12:49:28.010	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+LQ	0	12:49:28.387	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+PP	0	12:49:28.416	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+LP	0	12:49:28.566	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+JG	0	12:49:28.796	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+JI	0	12:49:28.796	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+FL	0	12:49:28.796	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+GJ	0	12:49:28.796	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+MN	0	12:49:28.796	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+QQ	0	12:49:28.799	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15703 tp: 1.15391 [auto trading disabled by client]
+HM	0	12:49:28.799	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): EURUSD Error=10027 auto trading disabled by client
+ES	0	12:49:29.332	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15703 tp: 1.15391 [auto trading disabled by client]
+MS	0	12:49:29.332	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): EURUSD Error=10027 auto trading disabled by client
+HN	0	12:49:29.814	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15703 tp: 1.15391 [auto trading disabled by client]
+OF	0	12:49:29.814	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): EURUSD Error=10027 auto trading disabled by client
 ML	0	12:49:30.314	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.07 GBPUSD sl: 1.33453 tp: 1.33183 [auto trading disabled by client]
 CP	0	12:49:30.314	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
 LI	0	12:49:30.805	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.07 GBPUSD sl: 1.33453 tp: 1.33183 [auto trading disabled by client]
 CE	0	12:49:30.805	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
 LK	0	12:49:31.316	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.07 GBPUSD sl: 1.33453 tp: 1.33183 [auto trading disabled by client]
 CK	0	12:49:31.317	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
-LH	0	12:49:31.822	PropFirmBot (EURUSD,M15)	[EMA-MOMENTUM] BUY USDJPY: Entry=157.94800 SL=157.83940 TP=158.12900 RSI=59.9 HTF=1
-FF	0	12:49:31.822	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.1 Lot=0.10
 QD	0	12:49:31.822	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.839 tp: 158.129 [auto trading disabled by client]
 RF	0	12:49:31.822	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
 JJ	0	12:49:32.327	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.839 tp: 158.129 [auto trading disabled by client]
 HD	0	12:49:32.327	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
 CH	0	12:49:32.850	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.10 USDJPY sl: 157.839 tp: 158.129 [auto trading disabled by client]
 FR	0	12:49:32.850	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
-NL	0	12:49:33.352	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+HL	0	12:55:38.746	PropFirmBot (EURUSD,M15)	[INIT] Account balance loaded: $1981.41 (after 0 waits)
+MN	0	12:55:38.746	PropFirmBot (EURUSD,M15)	[INIT] Symbols (4): EURUSD, GBPUSD, USDJPY, XAUUSD
+RM	0	12:55:38.750	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
+FP	0	12:55:38.753	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.06 14:55:38] INIT | Bal=$1981.41 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
+LN	0	12:55:38.759	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260306.csv | Initial balance: $1981.41
+KL	0	12:55:38.759	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1981.41 Magic=202502
+PO	0	12:55:38.759	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1981.41 | Risk=0.35% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+JN	0	12:55:38.759	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+EL	0	12:55:38.759	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=15min After=15min High=Y Medium=N
+JO	0	12:55:39.007	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+PO	0	12:55:39.060	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+QM	0	12:55:39.106	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+DM	0	12:55:39.209	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_M15 | HTF: PERIOD_H4
+DS	0	12:55:39.209	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+HS	0	12:55:39.209	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+FQ	0	12:55:39.219	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+PD	0	12:55:39.219	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+HN	0	12:55:39.267	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15725 tp: 1.15410 [auto trading disabled by client]
+GF	0	12:55:39.267	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): EURUSD Error=10027 auto trading disabled by client
+MI	0	12:55:39.765	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15725 tp: 1.15410 [auto trading disabled by client]
+KE	0	12:55:39.765	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): EURUSD Error=10027 auto trading disabled by client
+NK	0	12:55:40.267	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15725 tp: 1.15410 [auto trading disabled by client]
+JK	0	12:55:40.268	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): EURUSD Error=10027 auto trading disabled by client
+PJ	0	12:55:40.765	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.08 GBPUSD sl: 1.33454 tp: 1.33207 [auto trading disabled by client]
+CJ	0	12:55:40.765	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+KD	0	12:55:41.282	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.08 GBPUSD sl: 1.33454 tp: 1.33207 [auto trading disabled by client]
+IH	0	12:55:41.282	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+FQ	0	12:55:41.784	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.08 GBPUSD sl: 1.33454 tp: 1.33207 [auto trading disabled by client]
+OM	0	12:55:41.784	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+DO	0	12:55:42.287	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.843 tp: 158.136 [auto trading disabled by client]
+NQ	0	12:55:42.287	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+HM	0	12:55:42.805	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.843 tp: 158.136 [auto trading disabled by client]
+OO	0	12:55:42.805	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+LR	0	12:55:43.286	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.843 tp: 158.136 [auto trading disabled by client]
+CL	0	12:55:43.287	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
 
-=== DONE Fri Mar  6 12:55:14 UTC 2026 ===
+[4] Last 20 lines:
+KE	0	12:55:39.765	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): EURUSD Error=10027 auto trading disabled by client
+NK	0	12:55:40.267	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.05 EURUSD sl: 1.15725 tp: 1.15410 [auto trading disabled by client]
+JK	0	12:55:40.268	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): EURUSD Error=10027 auto trading disabled by client
+IK	0	12:55:40.765	PropFirmBot (EURUSD,M15)	[SMC] SELL signal: Entry=1.33372 SL=1.33454 TP=1.33207 | LiqSweep=N OB=N FVG=Y
+CF	0	12:55:40.765	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.0 Lot=0.08
+PJ	0	12:55:40.765	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.08 GBPUSD sl: 1.33454 tp: 1.33207 [auto trading disabled by client]
+CJ	0	12:55:40.765	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 1): GBPUSD Error=10027 auto trading disabled by client
+KD	0	12:55:41.282	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.08 GBPUSD sl: 1.33454 tp: 1.33207 [auto trading disabled by client]
+IH	0	12:55:41.282	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 2): GBPUSD Error=10027 auto trading disabled by client
+FQ	0	12:55:41.784	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market sell 0.08 GBPUSD sl: 1.33454 tp: 1.33207 [auto trading disabled by client]
+OM	0	12:55:41.784	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL failed (attempt 3): GBPUSD Error=10027 auto trading disabled by client
+GO	0	12:55:42.287	PropFirmBot (EURUSD,M15)	[EMA-MOMENTUM] BUY USDJPY: Entry=157.95300 SL=157.84311 TP=158.13614 RSI=60.2 HTF=1
+RQ	0	12:55:42.287	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1981.41 Risk$=6.93 SL_pts=0.1 Lot=0.09
+DO	0	12:55:42.287	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.843 tp: 158.136 [auto trading disabled by client]
+NQ	0	12:55:42.287	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 1): USDJPY Error=10027 auto trading disabled by client
+HM	0	12:55:42.805	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.843 tp: 158.136 [auto trading disabled by client]
+OO	0	12:55:42.805	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 2): USDJPY Error=10027 auto trading disabled by client
+LR	0	12:55:43.286	PropFirmBot (EURUSD,M15)	CTrade::OrderSend: market buy 0.09 USDJPY sl: 157.843 tp: 158.136 [auto trading disabled by client]
+CL	0	12:55:43.287	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY failed (attempt 3): USDJPY Error=10027 auto trading disabled by client
+IR	0	12:55:43.784	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+
+[5] Terminal log (errors):
+=== DONE Fri Mar  6 12:57:27 UTC 2026 ===
 EXIT_CODE=0
