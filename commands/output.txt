@@ -1,47 +1,56 @@
-=== FIX & DEPLOY Sat Mar  7 17:35:20 UTC 2026 ===
+=== UPDATE WATCHDOG Sat Mar  7 17:38:34 UTC 2026 ===
 From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
  * branch            claude/check-bot-update-status-KDu5H -> FETCH_HEAD
-Switched to branch 'claude/check-bot-update-status-KDu5H'
-Your branch is behind 'origin/claude/check-bot-update-status-KDu5H' by 71 commits, and can be fast-forwarded.
-  (use "git pull" to update your local branch)
-HEAD is now at 674f203 Fix VPS repo branch before watchdog install
-[1] Branch:
-claude/check-bot-update-status-KDu5H
-[2] Files exist?
--rw-r--r-- 1 root root 2698 Mar  7 17:35 scripts/install_watchdog.sh
--rw-r--r-- 1 root root 7928 Mar  7 17:35 scripts/mt5_watchdog.sh
-=== INSTALLING MT5 WATCHDOG ===
-[1] Installing watchdog script...
-[2] Creating MT5 systemd service...
-Created symlink /etc/systemd/system/multi-user.target.wants/mt5.service â†’ /etc/systemd/system/mt5.service.
-  MT5 service enabled (auto-start on boot)
-[3] Setting up watchdog cron job...
-  Cron job installed (every 2 minutes)
-[4] Running watchdog now...
+fatal: It seems that there is already a rebase-merge directory, and
+I wonder if you are in the middle of another rebase.  If that is the
+case, please try
+	git rebase (--continue | --abort | --skip)
+If that is not the case, please
+	rm -fr ".git/rebase-merge"
+and run me again.  I am stopping in case you still have something
+valuable there.
 
-[5] Verification:
-  Cron jobs:
-@reboot /root/start_mt5_screen.sh
-*/2 * * * * /usr/local/bin/mt5_watchdog.sh >> /var/log/mt5_watchdog.log 2>&1
-  Systemd service:
-enabled
-  Watchdog log:
+cp: cannot stat '/root/MT5-PropFirm-Bot/scripts/mt5_watchdog.sh': No such file or directory
+[1] Killing old MT5...
+[2] Running watchdog (should detect MT5 down and restart)...
+No screen session found.
+Found: 000000000001028a = MetaTrader 5
+Sending Ctrl+E via keybd_event...
+Done! Single Ctrl+E sent.
+[3] Watchdog log:
 [2026-03-07 17:35:22 UTC] Watchdog installed
-
-=== WATCHDOG INSTALLED SUCCESSFULLY ===
-  - MT5 will auto-start on boot (systemd)
-  - Watchdog checks every 2 minutes (cron)
-  - Auto-fixes: MT5 crash, AutoTrading off, EA detached
-  - Log: /var/log/mt5_watchdog.log
-
-=== Wait 30s ===
-[FINAL] Watchdog log:
-[2026-03-07 17:35:22 UTC] Watchdog installed
-[FINAL] MT5:
-root     2643000  0.0  0.0   7500  2460 ?        Ss   Mar06   0:00 SCREEN -dmS mt5 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
-root     2643001  0.0  0.0   7740  3400 pts/3    Ss+  Mar06   0:00 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
-[FINAL] Cron:
-@reboot /root/start_mt5_screen.sh
-*/2 * * * * /usr/local/bin/mt5_watchdog.sh >> /var/log/mt5_watchdog.log 2>&1
-=== DONE Sat Mar  7 17:35:53 UTC 2026 ===
+[2026-03-07 17:38:38 UTC] MT5 DOWN - Restarting...
+[2026-03-07 17:38:38 UTC] Starting MT5...
+[2026-03-07 17:38:41 UTC] Fixing chart file...
+[2026-03-07 17:38:41 UTC] Chart file fixed.
+[2026-03-07 17:38:41 UTC] MT5 started. Waiting 35s for login...
+[2026-03-07 17:39:34 UTC] AutoTrading toggle sent (at_keybd.exe)
+[2026-03-07 17:39:36 UTC] MT5 start complete.
+[4] Waiting 40s...
+[5] MT5 processes:
+root     2996874  1.2  0.1 2685956 14444 pts/1   S<+  17:38   0:01 start.exe /exec terminal64.exe /portable /login:11797849
+root     2996994 45.6  2.4 1761496 198732 pts/1  R<l+ 17:38   0:40 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /server:FundedNext-Server
+[6] Windows:
+  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
+  62914561: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  96468993: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+[7] AutoTrading:
+grep: (standard input): binary file matches
+[8] EA status:
+ÿþEO	0	17:39:41.491	Experts	automated trading is disabled
+[9] Status:
+{
+    "bot_name": "PropFirmBot",
+    "active": false,
+    "balance": 1981.41,
+    "last_trade": null,
+    "updated_at": "2026-03-07 17:40:20",
+    "open_positions": [],
+    "recent_closed_trades": [],
+    "ea_connected": false,
+    "account": {
+        "balance": 1981.41,
+        "equity": 1981.41,
+=== DONE Sat Mar  7 17:40:23 UTC 2026 ===
 EXIT_CODE=0
