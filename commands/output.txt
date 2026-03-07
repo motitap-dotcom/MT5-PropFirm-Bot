@@ -1,56 +1,32 @@
-=== UPDATE WATCHDOG Sat Mar  7 17:38:34 UTC 2026 ===
+=== FIX ALL Sat Mar  7 17:42:16 UTC 2026 ===
+Your branch is behind 'origin/claude/check-bot-update-status-KDu5H' by 4 commits, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+HEAD is now at a2ef26e Fix enable_autotrading: check state before toggling, fix VPS repo
 From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
  * branch            claude/check-bot-update-status-KDu5H -> FETCH_HEAD
-fatal: It seems that there is already a rebase-merge directory, and
-I wonder if you are in the middle of another rebase.  If that is the
-case, please try
-	git rebase (--continue | --abort | --skip)
-If that is not the case, please
-	rm -fr ".git/rebase-merge"
-and run me again.  I am stopping in case you still have something
-valuable there.
-
-cp: cannot stat '/root/MT5-PropFirm-Bot/scripts/mt5_watchdog.sh': No such file or directory
-[1] Killing old MT5...
-[2] Running watchdog (should detect MT5 down and restart)...
-No screen session found.
-Found: 000000000001028a = MetaTrader 5
-Sending Ctrl+E via keybd_event...
-Done! Single Ctrl+E sent.
-[3] Watchdog log:
-[2026-03-07 17:35:22 UTC] Watchdog installed
-[2026-03-07 17:38:38 UTC] MT5 DOWN - Restarting...
-[2026-03-07 17:38:38 UTC] Starting MT5...
-[2026-03-07 17:38:41 UTC] Fixing chart file...
-[2026-03-07 17:38:41 UTC] Chart file fixed.
-[2026-03-07 17:38:41 UTC] MT5 started. Waiting 35s for login...
-[2026-03-07 17:39:34 UTC] AutoTrading toggle sent (at_keybd.exe)
-[2026-03-07 17:39:36 UTC] MT5 start complete.
-[4] Waiting 40s...
-[5] MT5 processes:
-root     2996874  1.2  0.1 2685956 14444 pts/1   S<+  17:38   0:01 start.exe /exec terminal64.exe /portable /login:11797849
-root     2996994 45.6  2.4 1761496 198732 pts/1  R<l+ 17:38   0:40 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /server:FundedNext-Server
-[6] Windows:
-  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
-  62914561: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-  96468993: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-[7] AutoTrading:
+Already up to date.
+[1] Repo status:
+a2ef26e Fix enable_autotrading: check state before toggling, fix VPS repo
+6808f49 VPS command output 2026-03-07 17:40 UTC
+e8117da Fix watchdog MT5 process check: exclude screen/bash wrappers
+[2] Watchdog updated
+[3] Fixing AutoTrading...
 grep: (standard input): binary file matches
-[8] EA status:
+  Current: 
+[4] EA log last 5:
 ÿþEO	0	17:39:41.491	Experts	automated trading is disabled
-[9] Status:
+[5] Status:
 {
     "bot_name": "PropFirmBot",
     "active": false,
     "balance": 1981.41,
     "last_trade": null,
-    "updated_at": "2026-03-07 17:40:20",
+    "updated_at": "2026-03-07 17:42:15",
     "open_positions": [],
     "recent_closed_trades": [],
     "ea_connected": false,
     "account": {
         "balance": 1981.41,
         "equity": 1981.41,
-=== DONE Sat Mar  7 17:40:23 UTC 2026 ===
+=== DONE Sat Mar  7 17:42:16 UTC 2026 ===
 EXIT_CODE=0
