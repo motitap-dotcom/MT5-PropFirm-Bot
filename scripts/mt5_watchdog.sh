@@ -102,9 +102,21 @@ CHREOF
 }
 
 enable_autotrading() {
+    # First check current state - don't toggle blindly!
+    sleep 5  # Give MT5 time to write log
+    EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+    LAST_AT=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -1)
+
+    if echo "$LAST_AT" | grep -q "enabled"; then
+        log "AutoTrading already ENABLED - no toggle needed"
+        return
+    fi
+
+    # AutoTrading is disabled or unknown - send Ctrl+E
+    log "AutoTrading is disabled/unknown - sending Ctrl+E..."
     if [ -f "/root/.wine/drive_c/at_keybd.exe" ]; then
         wine "C:\\at_keybd.exe" 2>/dev/null
-        sleep 3
+        sleep 5
         log "AutoTrading toggle sent (at_keybd.exe)"
     else
         MT5_WIN=$(xdotool search --name "MetaTrader\|FundedNext" 2>/dev/null | head -1)
@@ -112,26 +124,28 @@ enable_autotrading() {
             xdotool windowactivate "$MT5_WIN" 2>/dev/null
             sleep 1
             xdotool key ctrl+e 2>/dev/null
-            sleep 2
+            sleep 3
             log "AutoTrading toggle sent (xdotool)"
         else
-            log "WARNING: Cannot find MT5 window to enable AutoTrading"
+            log "WARNING: Cannot find MT5 window"
             return
         fi
     fi
 
     # Verify
-    sleep 2
+    sleep 3
     EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
     LAST_AT=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -1)
-    if echo "$LAST_AT" | grep -q "disabled"; then
-        log "Still DISABLED after first toggle - sending second toggle..."
+    if echo "$LAST_AT" | grep -q "enabled"; then
+        log "AutoTrading confirmed ENABLED"
+    elif echo "$LAST_AT" | grep -q "disabled"; then
+        log "Still DISABLED - sending second toggle..."
         if [ -f "/root/.wine/drive_c/at_keybd.exe" ]; then
             wine "C:\\at_keybd.exe" 2>/dev/null
         else
             xdotool key ctrl+e 2>/dev/null
         fi
-        sleep 3
+        sleep 5
     fi
 }
 
