@@ -1,36 +1,36 @@
 #!/bin/bash
-# Deploy and install MT5 watchdog system
-echo "=== DEPLOY WATCHDOG $(date -u) ==="
+# Fix VPS repo branch, install watchdog, restart MT5
+echo "=== FIX & DEPLOY $(date -u) ==="
 
 REPO="/root/MT5-PropFirm-Bot"
-
-# Pull latest code
 cd "$REPO"
-git pull origin claude/check-bot-update-status-KDu5H 2>&1
 
-# Make scripts executable
-chmod +x "$REPO/scripts/mt5_watchdog.sh"
-chmod +x "$REPO/scripts/install_watchdog.sh"
+# Fix git config and switch to correct branch
+git config pull.rebase false
+git fetch origin claude/check-bot-update-status-KDu5H
+git checkout -f claude/check-bot-update-status-KDu5H 2>&1 || git checkout -b claude/check-bot-update-status-KDu5H origin/claude/check-bot-update-status-KDu5H
+git reset --hard origin/claude/check-bot-update-status-KDu5H
 
-# Run installer
-bash "$REPO/scripts/install_watchdog.sh"
+echo "[1] Branch:"
+git branch --show-current
+echo "[2] Files exist?"
+ls -la scripts/mt5_watchdog.sh scripts/install_watchdog.sh 2>&1
+
+# Make executable and install
+chmod +x scripts/mt5_watchdog.sh scripts/install_watchdog.sh
+bash scripts/install_watchdog.sh
 
 echo ""
-echo "=== Waiting 30s for watchdog first run ==="
+echo "=== Wait 30s ==="
 sleep 30
 
 echo "[FINAL] Watchdog log:"
 tail -15 /var/log/mt5_watchdog.log
 
-echo "[FINAL] MT5 processes:"
-ps aux | grep -i "terminal64\|wine" | grep -v grep | head -3
+echo "[FINAL] MT5:"
+ps aux | grep -i "terminal64" | grep -v grep | head -2
 
-echo "[FINAL] AutoTrading:"
-MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
-EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -3
-
-echo "[FINAL] Status:"
-cat /var/bots/mt5_status.json 2>/dev/null | python3 -m json.tool 2>/dev/null | head -12
+echo "[FINAL] Cron:"
+crontab -l 2>/dev/null | grep mt5
 
 echo "=== DONE $(date -u) ==="
