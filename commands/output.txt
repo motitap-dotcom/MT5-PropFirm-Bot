@@ -1,46 +1,47 @@
-=== DEPLOY WATCHDOG Sat Mar  7 17:32:35 UTC 2026 ===
+=== FIX & DEPLOY Sat Mar  7 17:35:20 UTC 2026 ===
 From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
  * branch            claude/check-bot-update-status-KDu5H -> FETCH_HEAD
-hint: You have divergent branches and need to specify how to reconcile them.
-hint: You can do so by running one of the following commands sometime before
-hint: your next pull:
-hint: 
-hint:   git config pull.rebase false  # merge
-hint:   git config pull.rebase true   # rebase
-hint:   git config pull.ff only       # fast-forward only
-hint: 
-hint: You can replace "git config" with "git config --global" to set a default
-hint: preference for all repositories. You can also pass --rebase, --no-rebase,
-hint: or --ff-only on the command line to override the configured default per
-hint: invocation.
-fatal: Need to specify how to reconcile divergent branches.
-chmod: cannot access '/root/MT5-PropFirm-Bot/scripts/mt5_watchdog.sh': No such file or directory
-chmod: cannot access '/root/MT5-PropFirm-Bot/scripts/install_watchdog.sh': No such file or directory
-bash: /root/MT5-PropFirm-Bot/scripts/install_watchdog.sh: No such file or directory
+Switched to branch 'claude/check-bot-update-status-KDu5H'
+Your branch is behind 'origin/claude/check-bot-update-status-KDu5H' by 71 commits, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+HEAD is now at 674f203 Fix VPS repo branch before watchdog install
+[1] Branch:
+claude/check-bot-update-status-KDu5H
+[2] Files exist?
+-rw-r--r-- 1 root root 2698 Mar  7 17:35 scripts/install_watchdog.sh
+-rw-r--r-- 1 root root 7928 Mar  7 17:35 scripts/mt5_watchdog.sh
+=== INSTALLING MT5 WATCHDOG ===
+[1] Installing watchdog script...
+[2] Creating MT5 systemd service...
+Created symlink /etc/systemd/system/multi-user.target.wants/mt5.service → /etc/systemd/system/mt5.service.
+  MT5 service enabled (auto-start on boot)
+[3] Setting up watchdog cron job...
+  Cron job installed (every 2 minutes)
+[4] Running watchdog now...
 
-=== Waiting 30s for watchdog first run ===
+[5] Verification:
+  Cron jobs:
+@reboot /root/start_mt5_screen.sh
+*/2 * * * * /usr/local/bin/mt5_watchdog.sh >> /var/log/mt5_watchdog.log 2>&1
+  Systemd service:
+enabled
+  Watchdog log:
+[2026-03-07 17:35:22 UTC] Watchdog installed
+
+=== WATCHDOG INSTALLED SUCCESSFULLY ===
+  - MT5 will auto-start on boot (systemd)
+  - Watchdog checks every 2 minutes (cron)
+  - Auto-fixes: MT5 crash, AutoTrading off, EA detached
+  - Log: /var/log/mt5_watchdog.log
+
+=== Wait 30s ===
 [FINAL] Watchdog log:
-tail: cannot open '/var/log/mt5_watchdog.log' for reading: No such file or directory
-[FINAL] MT5 processes:
-root     2642061 10.1  0.2  19804 16584 ?        Ss   Mar06 164:07 /opt/wine-staging/lib/wine/../../bin/wineserver
-root     2642084  0.1  0.2 520040 17732 ?        S<sl Mar06   2:58 C:\windows\system32\winedevice.exe
-root     2642106  9.9  0.2 744552 23248 ?        S<sl Mar06 160:12 C:\windows\system32\winedevice.exe
-[FINAL] AutoTrading:
-QE	0	14:39:37.005	Experts	automated trading is enabled
-ES	0	14:42:23.173	Experts	automated trading is disabled
-MK	0	14:48:19.180	Experts	automated trading is enabled
-[FINAL] Status:
-{
-    "bot_name": "PropFirmBot",
-    "active": false,
-    "balance": 1981.41,
-    "last_trade": null,
-    "updated_at": "2026-03-07 17:33:05",
-    "open_positions": [],
-    "recent_closed_trades": [],
-    "ea_connected": false,
-    "account": {
-        "balance": 1981.41,
-        "equity": 1981.41,
-=== DONE Sat Mar  7 17:33:06 UTC 2026 ===
+[2026-03-07 17:35:22 UTC] Watchdog installed
+[FINAL] MT5:
+root     2643000  0.0  0.0   7500  2460 ?        Ss   Mar06   0:00 SCREEN -dmS mt5 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
+root     2643001  0.0  0.0   7740  3400 pts/3    Ss+  Mar06   0:00 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
+[FINAL] Cron:
+@reboot /root/start_mt5_screen.sh
+*/2 * * * * /usr/local/bin/mt5_watchdog.sh >> /var/log/mt5_watchdog.log 2>&1
+=== DONE Sat Mar  7 17:35:53 UTC 2026 ===
 EXIT_CODE=0
