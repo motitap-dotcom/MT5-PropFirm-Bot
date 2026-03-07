@@ -1,36 +1,49 @@
 #!/bin/bash
-# Fix VPS repo branch, install watchdog, restart MT5
-echo "=== FIX & DEPLOY $(date -u) ==="
+# Update watchdog and force MT5 restart
+echo "=== UPDATE WATCHDOG $(date -u) ==="
 
 REPO="/root/MT5-PropFirm-Bot"
 cd "$REPO"
+git pull --rebase origin claude/check-bot-update-status-KDu5H 2>&1
 
-# Fix git config and switch to correct branch
-git config pull.rebase false
-git fetch origin claude/check-bot-update-status-KDu5H
-git checkout -f claude/check-bot-update-status-KDu5H 2>&1 || git checkout -b claude/check-bot-update-status-KDu5H origin/claude/check-bot-update-status-KDu5H
-git reset --hard origin/claude/check-bot-update-status-KDu5H
+# Update watchdog script
+cp "$REPO/scripts/mt5_watchdog.sh" /usr/local/bin/mt5_watchdog.sh
+chmod +x /usr/local/bin/mt5_watchdog.sh
 
-echo "[1] Branch:"
-git branch --show-current
-echo "[2] Files exist?"
-ls -la scripts/mt5_watchdog.sh scripts/install_watchdog.sh 2>&1
+# Kill stale screen session and start fresh
+echo "[1] Killing old MT5..."
+screen -X -S mt5 quit 2>/dev/null
+pkill -9 -f "terminal64\|start.exe" 2>/dev/null
+sleep 3
 
-# Make executable and install
-chmod +x scripts/mt5_watchdog.sh scripts/install_watchdog.sh
-bash scripts/install_watchdog.sh
+echo "[2] Running watchdog (should detect MT5 down and restart)..."
+/usr/local/bin/mt5_watchdog.sh
 
-echo ""
-echo "=== Wait 30s ==="
-sleep 30
+echo "[3] Watchdog log:"
+tail -20 /var/log/mt5_watchdog.log
 
-echo "[FINAL] Watchdog log:"
-tail -15 /var/log/mt5_watchdog.log
+echo "[4] Waiting 40s..."
+sleep 40
 
-echo "[FINAL] MT5:"
-ps aux | grep -i "terminal64" | grep -v grep | head -2
+echo "[5] MT5 processes:"
+ps aux | grep -i "terminal64\|start.exe" | grep -v grep | grep -v "bash -c" | grep -v SCREEN | head -3
 
-echo "[FINAL] Cron:"
-crontab -l 2>/dev/null | grep mt5
+echo "[6] Windows:"
+export DISPLAY=:99
+xdotool search --name "" 2>/dev/null | while read w; do
+    NAME=$(xdotool getwindowname "$w" 2>/dev/null)
+    [ -n "$NAME" ] && [ "$NAME" != "Default IME" ] && echo "  $w: $NAME"
+done
+
+echo "[7] AutoTrading:"
+MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -3
+
+echo "[8] EA status:"
+cat "$EALOG" 2>/dev/null | tr -d '\0' | tail -5
+
+echo "[9] Status:"
+cat /var/bots/mt5_status.json 2>/dev/null | python3 -m json.tool 2>/dev/null | head -12
 
 echo "=== DONE $(date -u) ==="

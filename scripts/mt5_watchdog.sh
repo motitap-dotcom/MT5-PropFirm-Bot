@@ -180,9 +180,11 @@ if ! pgrep -x x11vnc > /dev/null 2>&1; then
     sleep 1
 fi
 
-# Check 3: MT5 process
+# Check 3: MT5 process (check for actual wine process, not screen/bash wrappers)
 MT5_RUNNING=false
-if ps aux | grep -v grep | grep -qi "terminal64.exe"; then
+if pgrep -f "start.exe.*terminal64" > /dev/null 2>&1 || \
+   pgrep -f "\\\\terminal64.exe" > /dev/null 2>&1 || \
+   (ps aux | grep -v grep | grep -v "bash -c" | grep -v SCREEN | grep -qi "terminal64.exe"); then
     MT5_RUNNING=true
 fi
 
