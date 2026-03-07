@@ -35,6 +35,14 @@ log() {
     echo "[$(date -u '+%Y-%m-%d %H:%M:%S UTC')] $1" >> "$LOG"
 }
 
+# Helper: read EA log safely (handles UTF-16/binary)
+read_ealog() {
+    EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
+    if [ -n "$EALOG" ]; then
+        cat "$EALOG" 2>/dev/null | tr -d '\0'
+    fi
+}
+
 # Trim log if too long
 if [ -f "$LOG" ] && [ "$(wc -l < "$LOG" 2>/dev/null)" -gt 1000 ]; then
     tail -500 "$LOG" > /tmp/watchdog_trim.log
@@ -42,7 +50,7 @@ if [ -f "$LOG" ] && [ "$(wc -l < "$LOG" 2>/dev/null)" -gt 1000 ]; then
 fi
 
 ###############################################################################
-# Functions (defined before use)
+# Functions
 ###############################################################################
 
 fix_chart_file() {
@@ -102,49 +110,45 @@ CHREOF
 }
 
 enable_autotrading() {
-    # First check current state - don't toggle blindly!
-    sleep 5  # Give MT5 time to write log
-    EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-    LAST_AT=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep -aautomated trading" | tail -1)
+    # Wait for MT5 to settle and write log
+    sleep 5
+    LAST_AT=$(read_ealog | grep -a "automated trading" | tail -1)
 
-    if echo "$LAST_AT" | grep -q "enabled"; then
+    if echo "$LAST_AT" | grep -aq "enabled"; then
         log "AutoTrading already ENABLED - no toggle needed"
         return
     fi
 
-    # AutoTrading is disabled or unknown - send Ctrl+E
-    log "AutoTrading is disabled/unknown - sending Ctrl+E..."
-    if [ -f "/root/.wine/drive_c/at_keybd.exe" ]; then
-        wine "C:\\at_keybd.exe" 2>/dev/null
+    # AutoTrading is disabled or unknown - use xdotool (most reliable)
+    log "AutoTrading is disabled/unknown - sending Ctrl+E via xdotool..."
+    CHART_WIN=$(xdotool search --name "EURUSD" 2>/dev/null | head -1)
+    if [ -z "$CHART_WIN" ]; then
+        CHART_WIN=$(xdotool search --name "FundedNext" 2>/dev/null | head -1)
+    fi
+    if [ -z "$CHART_WIN" ]; then
+        CHART_WIN=$(xdotool search --name "MetaTrader" 2>/dev/null | head -1)
+    fi
+
+    if [ -n "$CHART_WIN" ]; then
+        xdotool windowfocus "$CHART_WIN" 2>/dev/null
+        sleep 1
+        xdotool key ctrl+e 2>/dev/null
         sleep 5
-        log "AutoTrading toggle sent (at_keybd.exe)"
+        log "AutoTrading toggle sent (xdotool window $CHART_WIN)"
     else
-        MT5_WIN=$(xdotool search --name "MetaTrader\|FundedNext" 2>/dev/null | head -1)
-        if [ -n "$MT5_WIN" ]; then
-            xdotool windowactivate "$MT5_WIN" 2>/dev/null
-            sleep 1
-            xdotool key ctrl+e 2>/dev/null
-            sleep 3
-            log "AutoTrading toggle sent (xdotool)"
-        else
-            log "WARNING: Cannot find MT5 window"
-            return
-        fi
+        log "WARNING: Cannot find MT5 window for toggle"
+        return
     fi
 
     # Verify
-    sleep 3
-    EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-    LAST_AT=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep -aautomated trading" | tail -1)
-    if echo "$LAST_AT" | grep -q "enabled"; then
+    LAST_AT=$(read_ealog | grep -a "automated trading" | tail -1)
+    if echo "$LAST_AT" | grep -aq "enabled"; then
         log "AutoTrading confirmed ENABLED"
-    elif echo "$LAST_AT" | grep -q "disabled"; then
-        log "Still DISABLED - sending second toggle..."
-        if [ -f "/root/.wine/drive_c/at_keybd.exe" ]; then
-            wine "C:\\at_keybd.exe" 2>/dev/null
-        else
-            xdotool key ctrl+e 2>/dev/null
-        fi
+    elif echo "$LAST_AT" | grep -aq "disabled"; then
+        log "Still DISABLED after first toggle - trying again..."
+        xdotool windowfocus "$CHART_WIN" 2>/dev/null
+        sleep 1
+        xdotool key ctrl+e 2>/dev/null
         sleep 5
     fi
 }
@@ -231,18 +235,15 @@ if [ "$ACCOUNT_CONNECTED" = false ]; then
 fi
 
 # Check 5: AutoTrading enabled
-EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-if [ -n "$EALOG" ]; then
-    LAST_AT=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep -aautomated trading" | tail -1)
-    if echo "$LAST_AT" | grep -q "disabled"; then
-        log "AUTOTRADING DISABLED - Enabling..."
-        enable_autotrading
-    fi
+LAST_AT=$(read_ealog | grep -a "automated trading" | tail -1)
+if echo "$LAST_AT" | grep -aq "disabled"; then
+    log "AUTOTRADING DISABLED - Enabling..."
+    enable_autotrading
 fi
 
 # Check 6: EA heartbeat (only when market is open)
-if [ "$(is_market_open)" = "yes" ] && [ -n "$EALOG" ]; then
-    LAST_HB=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep -aHEARTBEAT" | tail -1)
+if [ "$(is_market_open)" = "yes" ]; then
+    LAST_HB=$(read_ealog | grep -a "HEARTBEAT" | tail -1)
     if [ -n "$LAST_HB" ]; then
         HB_TIME=$(echo "$LAST_HB" | grep -oP '\d{2}:\d{2}:\d{2}' | head -1)
         NOW_TIME=$(date -u '+%H:%M:%S')
@@ -267,8 +268,7 @@ fi
 # All good - log only every 10 minutes (to keep log clean)
 MINUTE=$(date -u +%M)
 if [ "$((MINUTE % 10))" -eq 0 ]; then
-    EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-    LAST_HB=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep -aHEARTBEAT" | tail -1)
+    LAST_HB=$(read_ealog | grep -a "HEARTBEAT" | tail -1)
     BAL=$(echo "$LAST_HB" | grep -oP 'Bal=\$[\d.]+' || echo "?")
     POS=$(echo "$LAST_HB" | grep -oP 'Positions=\d+' || echo "?")
     log "OK - MT5 running | Account connected | $BAL | $POS"
