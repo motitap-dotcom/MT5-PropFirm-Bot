@@ -105,7 +105,7 @@ enable_autotrading() {
     # First check current state - don't toggle blindly!
     sleep 5  # Give MT5 time to write log
     EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-    LAST_AT=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -1)
+    LAST_AT=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep -aautomated trading" | tail -1)
 
     if echo "$LAST_AT" | grep -q "enabled"; then
         log "AutoTrading already ENABLED - no toggle needed"
@@ -135,7 +135,7 @@ enable_autotrading() {
     # Verify
     sleep 3
     EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-    LAST_AT=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -1)
+    LAST_AT=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep -aautomated trading" | tail -1)
     if echo "$LAST_AT" | grep -q "enabled"; then
         log "AutoTrading confirmed ENABLED"
     elif echo "$LAST_AT" | grep -q "disabled"; then
@@ -233,7 +233,7 @@ fi
 # Check 5: AutoTrading enabled
 EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
 if [ -n "$EALOG" ]; then
-    LAST_AT=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "automated trading" | tail -1)
+    LAST_AT=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep -aautomated trading" | tail -1)
     if echo "$LAST_AT" | grep -q "disabled"; then
         log "AUTOTRADING DISABLED - Enabling..."
         enable_autotrading
@@ -242,7 +242,7 @@ fi
 
 # Check 6: EA heartbeat (only when market is open)
 if [ "$(is_market_open)" = "yes" ] && [ -n "$EALOG" ]; then
-    LAST_HB=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "HEARTBEAT" | tail -1)
+    LAST_HB=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep -aHEARTBEAT" | tail -1)
     if [ -n "$LAST_HB" ]; then
         HB_TIME=$(echo "$LAST_HB" | grep -oP '\d{2}:\d{2}:\d{2}' | head -1)
         NOW_TIME=$(date -u '+%H:%M:%S')
@@ -268,7 +268,7 @@ fi
 MINUTE=$(date -u +%M)
 if [ "$((MINUTE % 10))" -eq 0 ]; then
     EALOG=$(ls -t "$MT5/MQL5/Logs/"*.log 2>/dev/null | head -1)
-    LAST_HB=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep "HEARTBEAT" | tail -1)
+    LAST_HB=$(cat "$EALOG" 2>/dev/null | tr -d '\0' | grep -aHEARTBEAT" | tail -1)
     BAL=$(echo "$LAST_HB" | grep -oP 'Bal=\$[\d.]+' || echo "?")
     POS=$(echo "$LAST_HB" | grep -oP 'Positions=\d+' || echo "?")
     log "OK - MT5 running | Account connected | $BAL | $POS"
