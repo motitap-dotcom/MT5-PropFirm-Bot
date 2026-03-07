@@ -1,19 +1,16 @@
-=== FIX ALL Sat Mar  7 17:42:16 UTC 2026 ===
-Your branch is behind 'origin/claude/check-bot-update-status-KDu5H' by 4 commits, and can be fast-forwarded.
-  (use "git pull" to update your local branch)
-HEAD is now at a2ef26e Fix enable_autotrading: check state before toggling, fix VPS repo
+=== FIX AT Sat Mar  7 17:44:35 UTC 2026 ===
+HEAD is now at eddc88a Fix grep -a for binary MT5 logs, enable AutoTrading
 From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
  * branch            claude/check-bot-update-status-KDu5H -> FETCH_HEAD
 Already up to date.
-[1] Repo status:
-a2ef26e Fix enable_autotrading: check state before toggling, fix VPS repo
-6808f49 VPS command output 2026-03-07 17:40 UTC
-e8117da Fix watchdog MT5 process check: exclude screen/bash wrappers
-[2] Watchdog updated
-[3] Fixing AutoTrading...
-grep: (standard input): binary file matches
-  Current: 
-[4] EA log last 5:
+[1] Watchdog updated with grep -a fix
+[2] Last AT state:
+ÿþEO	0	17:39:41.491	Experts	automated trading is disabled
+[3] AutoTrading DISABLED - enabling...
+Found: 000000000001028a = 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+Sending Ctrl+E via keybd_event...
+Done! Single Ctrl+E sent.
+[4] After toggle:
 ÿþEO	0	17:39:41.491	Experts	automated trading is disabled
 [5] Status:
 {
@@ -21,12 +18,13 @@ grep: (standard input): binary file matches
     "active": false,
     "balance": 1981.41,
     "last_trade": null,
-    "updated_at": "2026-03-07 17:42:15",
+    "updated_at": "2026-03-07 17:44:41",
     "open_positions": [],
     "recent_closed_trades": [],
     "ea_connected": false,
     "account": {
         "balance": 1981.41,
         "equity": 1981.41,
-=== DONE Sat Mar  7 17:42:16 UTC 2026 ===
+[6] Note: It's weekend - no ticks/heartbeats expected until Sunday 22:00 UTC
+=== DONE Sat Mar  7 17:44:43 UTC 2026 ===
 EXIT_CODE=0
