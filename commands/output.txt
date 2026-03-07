@@ -1,30 +1,92 @@
-=== FIX AT Sat Mar  7 17:44:35 UTC 2026 ===
-HEAD is now at eddc88a Fix grep -a for binary MT5 logs, enable AutoTrading
-From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
- * branch            claude/check-bot-update-status-KDu5H -> FETCH_HEAD
-Already up to date.
-[1] Watchdog updated with grep -a fix
-[2] Last AT state:
+=== FIND AT SETTING Sat Mar  7 17:46:50 UTC 2026 ===
+[1] All .ini files with Expert/Auto/Trading settings:
+  --- /root/.wine/drive_c/Program Files/MetaTrader 5/terminal.ini ---
+AutoTrading=1
+[Experts]
+  --- /root/.wine/drive_c/Program Files/MetaTrader 5/config/terminal.ini ---
+AutoTrading=1
+ExpertsEnabled=1
+[Experts]
+AutoTrading=1
+  --- /root/.wine/drive_c/Program Files/MetaTrader 5/config/metaeditor.ini ---
+OpenDir=C:\Program Files\MetaTrader 5\MQL5\Experts\PropFirmBot
+  --- /root/.wine/drive_c/Program Files/MetaTrader 5/config/common.ini ---
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+[Experts]
+AutoTrading=1
+ExpertEnabled=1
+ExpertsEnabled=1
+  --- /root/.wine/drive_c/Program Files/MetaTrader 5/config/startup.ini ---
+AutoTrading=1
+[Experts]
+ExpertsEnabled=1
+AutoTrading=1
+[Expert]
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+  --- /root/.wine/drive_c/Program Files/MetaTrader 5/Config/common.ini ---
+[Experts]
+
+[2] common.ini full content:
+[Common]
+Login=11797849
+ProxyEnable=0
+CertInstall=0
+NewsEnable=0
+Environment=F008C7293503CED0045B07842FC57A638AA2FD5F10DEE8EA7AD19815A339B9A21E36157778467577E33A229F2FC5240D
+Server=FundedNext-Server
+ProxyType=0
+ProxyAddress=
+EnableOpenCL=7
+ProxyAuth=
+Services=4294967295
+NewsLanguages=
+Source=download.mql5.com
+[StartUp]
+Expert=PropFirmBot\PropFirmBot
+ExpertParameters=
+Symbol=EURUSD
+Period=M15
+[Experts]
+AllowedURLs=https://api.telegram.org
+AutoTrading=1
+ExpertEnabled=1
+ExpertsEnabled=1
+AllowLiveTrading=1
+AllowDllImport=1
+Enabled=1
+Account=89
+Profile=0
+Chart=0
+Api=0
+DisableOpenCL=
+WebRequest=1
+WebRequestUrl=
+[Charts]
+ProfileLast=Default
+MaxBars=100000
+PrintColor=0
+SaveDeleted=0
+TradeHistory=1
+TradeLevels=1
+TradeLevelsDrag=0
+ObsoleteLasttime=1772720812
+PreloadCharts=1
+
+[3] Try xdotool approach:
+  Chart window: 75497473
+  Title: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
+  xdotool Ctrl+E sent to chart window
+
+[4] AT state after xdotool:
 ÿþEO	0	17:39:41.491	Experts	automated trading is disabled
-[3] AutoTrading DISABLED - enabling...
-Found: 000000000001028a = 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
-Sending Ctrl+E via keybd_event...
-Done! Single Ctrl+E sent.
-[4] After toggle:
-ÿþEO	0	17:39:41.491	Experts	automated trading is disabled
-[5] Status:
-{
-    "bot_name": "PropFirmBot",
-    "active": false,
-    "balance": 1981.41,
-    "last_trade": null,
-    "updated_at": "2026-03-07 17:44:41",
-    "open_positions": [],
-    "recent_closed_trades": [],
-    "ea_connected": false,
-    "account": {
-        "balance": 1981.41,
-        "equity": 1981.41,
-[6] Note: It's weekend - no ticks/heartbeats expected until Sunday 22:00 UTC
-=== DONE Sat Mar  7 17:44:43 UTC 2026 ===
+QO	0	17:44:38.326	Experts	automated trading is enabled
+
+[5] All MT5 windows:
+  75497473: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd - [EURUSD,M15]
+  62914561: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  33554433: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+  96468993: 11797849 - FundedNext-Server - Hedge - FundedNext Ltd
+=== DONE Sat Mar  7 17:47:05 UTC 2026 ===
 EXIT_CODE=0
