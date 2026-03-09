@@ -1,86 +1,65 @@
 #!/bin/bash
 # =============================================================
-# Deploy latest code - pull from correct branch
+# Verify bot is running and trading after deploy
 # =============================================================
 
 echo "============================================"
-echo "  Deploy Latest Code (Fixed Branch)"
+echo "  Post-Deploy Verification"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
-MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
-EA_DIR="$MT5_DIR/MQL5/Experts/PropFirmBot"
-CONFIG_DIR="$MT5_DIR/MQL5/Files/PropFirmBot"
-REPO_DIR="/root/MT5-PropFirm-Bot"
-BRANCH="claude/build-cfd-trading-bot-fl0ld"
-
-# 1. Update repo
-echo "=== [1] Update repo ==="
-cd "$REPO_DIR"
-echo "Before: $(git log --oneline -1)"
-git fetch origin "$BRANCH" 2>&1
-git checkout "$BRANCH" 2>&1
-git reset --hard "origin/$BRANCH" 2>&1
-echo "After: $(git log --oneline -1)"
-echo ""
-
-# 2. Copy EA files
-echo "=== [2] Copy EA files ==="
-mkdir -p "$EA_DIR"
-cp -v "$REPO_DIR"/EA/*.mq5 "$EA_DIR/" 2>&1
-cp -v "$REPO_DIR"/EA/*.mqh "$EA_DIR/" 2>&1
-echo ""
-
-# 3. Copy config files
-echo "=== [3] Copy config files ==="
-mkdir -p "$CONFIG_DIR"
-cp -v "$REPO_DIR"/configs/*.json "$CONFIG_DIR/" 2>&1
-echo ""
-
-# 4. Try to compile EA
-echo "=== [4] Compile EA ==="
-export DISPLAY=:99
-export WINEPREFIX=/root/.wine
-# Try multiple possible MetaEditor locations
-for ME_PATH in \
-    "$MT5_DIR/metaeditor64.exe" \
-    "$MT5_DIR/MetaEditor64.exe" \
-    "/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe"; do
-    if [ -f "$ME_PATH" ]; then
-        echo "Found MetaEditor at: $ME_PATH"
-        wine "$ME_PATH" /compile:"$EA_DIR/PropFirmBot.mq5" /log 2>&1
-        sleep 8
-        break
-    fi
-done
-# Check for MetaEditor in MT5 dir
-echo "Files in MT5 root:"
-ls "$MT5_DIR"/meta* "$MT5_DIR"/Meta* 2>/dev/null || echo "No metaeditor found"
-echo ""
-echo "EA .ex5 status:"
-ls -la "$EA_DIR"/*.ex5 2>/dev/null || echo "No .ex5 found"
-echo ""
-
-# 5. Restart MT5 to pick up new files
-echo "=== [5] Restart MT5 ==="
-pkill -f terminal64.exe 2>/dev/null
-sleep 5
-screen -dmS mt5 bash -c "export DISPLAY=:99 && export WINEPREFIX=/root/.wine && cd '$MT5_DIR' && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1"
-sleep 15
-
+# 1. MT5 process
+echo "=== [1] MT5 Running? ==="
 if pgrep -f terminal64.exe > /dev/null; then
-    echo "MT5 RESTARTED SUCCESSFULLY"
+    echo "YES - MT5 is running"
+    ps aux | grep terminal64.exe | grep -v grep | head -1
 else
-    echo "WARNING: MT5 may not have started"
+    echo "NO - MT5 is NOT running!"
 fi
 echo ""
 
-# 6. Verify
-echo "=== [6] Verification ==="
-echo "Repo: $(git log --oneline -1)"
-echo "Branch: $(git rev-parse --abbrev-ref HEAD)"
-ps aux | grep terminal64 | grep -v grep | head -2
+# 2. Bot status
+echo "=== [2] Bot Status ==="
+if [ -f /var/bots/mt5_status.json ]; then
+    python3 -m json.tool /var/bots/mt5_status.json 2>/dev/null
+else
+    echo "Status file not found"
+fi
+echo ""
+
+# 3. EA log - last 50 lines to see activity after restart
+echo "=== [3] EA Log (last 50 lines) ==="
+EA_LOG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs"
+LATEST_LOG=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
+if [ -n "$LATEST_LOG" ]; then
+    echo "File: $LATEST_LOG"
+    tail -50 "$LATEST_LOG" | strings
+else
+    echo "No EA log found"
+fi
+echo ""
+
+# 4. Check .ex5 compile date
+echo "=== [4] EA Compiled File ==="
+EA_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"
+ls -la "$EA_DIR"/PropFirmBot.ex5 2>/dev/null
+echo ""
+echo "Source files (for comparison):"
+ls -la "$EA_DIR"/PropFirmBot.mq5 2>/dev/null
+ls -la "$EA_DIR"/SignalEngine.mqh 2>/dev/null
+echo ""
+
+# 5. Trade history today
+echo "=== [5] Account Journal (last 30 lines) ==="
+JOURNAL_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/Logs"
+LATEST_JLOG=$(ls -t "$JOURNAL_DIR"/*.log 2>/dev/null | head -1)
+if [ -n "$LATEST_JLOG" ]; then
+    echo "File: $LATEST_JLOG"
+    tail -30 "$LATEST_JLOG" | strings
+else
+    echo "No journal log found"
+fi
 echo ""
 
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
