@@ -1,15 +1,16 @@
 ============================================
-  Deploy Latest Code to VPS
-  2026-03-09 11:07:01 UTC
+  Deploy Latest Code (Fixed Branch)
+  2026-03-09 11:09:01 UTC
 ============================================
 
 === [1] Update repo ===
-Current branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
-Current commit: 921737f relay: result 2026-03-01 09:57 UTC
-fatal: couldn't find remote ref master
-error: pathspec 'master' did not match any file(s) known to git
-fatal: couldn't find remote ref master
-Updated to: 921737f relay: result 2026-03-01 09:57 UTC
+Before: 921737f relay: result 2026-03-01 09:57 UTC
+From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
+ * branch            claude/build-cfd-trading-bot-fl0ld -> FETCH_HEAD
+Switched to branch 'claude/build-cfd-trading-bot-fl0ld'
+Your branch is up to date with 'origin/claude/build-cfd-trading-bot-fl0ld'.
+HEAD is now at d0a40ec Merge pull request #7 from motitap-dotcom/claude/debug-bot-transactions-g9Mpr
+After: d0a40ec Merge pull request #7 from motitap-dotcom/claude/debug-bot-transactions-g9Mpr
 
 === [2] Copy EA files ===
 '/root/MT5-PropFirm-Bot/EA/PropFirmBot.mq5' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5'
@@ -34,24 +35,31 @@ Updated to: 921737f relay: result 2026-03-01 09:57 UTC
 '/root/MT5-PropFirm-Bot/configs/symbols.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/symbols.json'
 
 === [4] Compile EA ===
-MetaEditor not found at /root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe
-Checking for .ex5:
+Found MetaEditor at: /root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe
+002c:fixme:winediag:loader_init wine-staging 11.3 is a testing version containing experimental patches.
+002c:fixme:winediag:loader_init Please mention your exact version when filing bug reports on winehq.org.
+00b4:fixme:wineusb:query_id Unhandled ID query type 0x5.
+0024:fixme:winediag:loader_init wine-staging 11.3 is a testing version containing experimental patches.
+0024:fixme:winediag:loader_init Please mention your exact version when filing bug reports on winehq.org.
+libEGL warning: DRI3 error: Could not get DRI3 device
+libEGL warning: Ensure your X server supports DRI3 to get accelerated rendering
+00e8:fixme:uxtheme:SetPreferredAppMode 0: stub
+00e8:fixme:kernelbase:AppPolicyGetProcessTerminationMethod FFFFFFFFFFFFFFFA, 000000000051FEE0
+Files in MT5 root:
+/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe
+/root/.wine/drive_c/Program Files/MetaTrader 5/metatester64.exe
+
+EA .ex5 status:
 -rw-r--r-- 1 root root 164578 Mar  6 13:27 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
 
 === [5] Restart MT5 ===
-MT5 killed, waiting...
 MT5 RESTARTED SUCCESSFULLY
 
-=== [6] Final status ===
-root     3595361  0.0  0.0   7500  2460 ?        Ss   11:07   0:00 SCREEN -dmS mt5 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
+=== [6] Verification ===
+Repo: 921737f relay: result 2026-03-01 09:57 UTC
+Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
+root     3596288  0.0  0.0   7500  2456 ?        Ss   11:09   0:00 SCREEN -dmS mt5 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && cd '/root/.wine/drive_c/Program Files/MetaTrader 5' && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
+root     3596289  0.0  0.0   7740  3404 pts/3    Ss+  11:09   0:00 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && cd '/root/.wine/drive_c/Program Files/MetaTrader 5' && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
 
-EA files:
--rw-r--r-- 1 root root 164578 Mar  6 13:27 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
-
-Repo state:
-921737f relay: result 2026-03-01 09:57 UTC
-ef0d7f3 relay: result 2026-02-26 22:54 UTC
-c507b41 relay: fix mt5.service ExecStart path quoting
-
-=== DONE 2026-03-09 11:07:19 UTC ===
+=== DONE 2026-03-09 11:09:45 UTC ===
 EXIT_CODE=0
