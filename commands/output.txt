@@ -1,39 +1,65 @@
 ============================================
-  Post-Deploy Verification
-  2026-03-09 11:12:29 UTC
+  Force Recompile & Verify EA
+  2026-03-09 11:14:08 UTC
 ============================================
 
-=== [1] MT5 Running? ===
-YES - MT5 is running
-root     3597266  0.2  0.0   7500  2456 ?        Ss   11:12   0:00 SCREEN -dmS mt5 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
+=== [1] Current .ex5 ===
+-rw-r--r-- 1 root root 164578 Mar  6 13:27 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
 
-=== [2] Bot Status ===
+=== [2] Stop MT5 ===
+MT5 stopped
+
+=== [3] Compile EA ===
+Deleted old .ex5
+02f0:fixme:uxtheme:SetPreferredAppMode 0: stub
+02f0:fixme:kernelbase:AppPolicyGetProcessTerminationMethod FFFFFFFFFFFFFFFA, 000000000051FEE0
+MetaEditor launched, waiting 15 seconds...
+02fc:err:clipboard:convert_selection Timed out waiting for SelectionNotify event
+
+Compile result:
+FAILED - .ex5 NOT created
+
+
+MetaEditor logs:
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260309.log
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260308.log
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260307.log
+---  ---
+basename: extra operand ‘5/MQL5/Logs/20260309.log’
+Try 'basename --help' for more information.
+
+=== [4] Restart MT5 ===
+MT5 starting...
+MT5 NOT RUNNING - trying again...
+MT5 FAILED TO START
+
+=== [5] EA Status After Restart ===
 {
     "bot_name": "PropFirmBot",
     "active": false,
     "balance": 1983.45,
     "last_trade": null,
-    "updated_at": "2026-03-09 11:12:25",
+    "updated_at": "2026-03-09 11:15:15",
     "open_positions": [
         {
             "symbol": "EURUSD",
             "direction": "SELL",
-            "profit": -0.55,
+            "profit": -0.58,
             "volume": 0.01,
             "open_price": 1.15605,
-            "current_price": 1.1566,
-            "pips": -5.5,
+            "current_price": 1.15663,
+            "pips": -5.8,
             "ticket": 161731242,
             "open_time": "2026.03.09 14:00"
         },
         {
             "symbol": "GBPUSD",
             "direction": "SELL",
-            "profit": -0.56,
+            "profit": -0.84,
             "volume": 0.01,
             "open_price": 1.33471,
-            "current_price": 1.33527,
-            "pips": -5.6,
+            "current_price": 1.33555,
+            "pips": -8.4,
             "ticket": 161710637,
             "open_time": "2026.03.09 12:38"
         }
@@ -42,16 +68,16 @@ root     3597266  0.2  0.0   7500  2456 ?        Ss   11:12   0:00 SCREEN -dmS m
     "ea_connected": false,
     "account": {
         "balance": 1983.45,
-        "equity": 1982.34,
-        "floating_pnl": -1.11,
+        "equity": 1982.03,
+        "floating_pnl": -1.42,
         "margin": 83.03,
-        "free_margin": 1899.31
+        "free_margin": 1899.0
     },
     "guardian_state": "ACTIVE",
-    "daily_dd": 0.06,
-    "total_dd": 0.16,
+    "daily_dd": 0.07,
+    "total_dd": 0.01,
     "today": {
-        "trades": 1,
+        "trades": 0,
         "wins": 0,
         "losses": 0,
         "net": 0.0
@@ -59,18 +85,7 @@ root     3597266  0.2  0.0   7500  2456 ?        Ss   11:12   0:00 SCREEN -dmS m
     "_open_positions_count": 2
 }
 
-=== [3] EA Log (last 50 lines) ===
-File: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260309.log
+=== [6] EA Log After Restart ===
 
-=== [4] EA Compiled File ===
--rw-r--r-- 1 root root 164578 Mar  6 13:27 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
-
-Source files (for comparison):
--rw-r--r-- 1 root root 34498 Mar  9 11:09 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
--rw-r--r-- 1 root root 23510 Mar  9 11:09 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/SignalEngine.mqh
-
-=== [5] Account Journal (last 30 lines) ===
-No journal log found
-
-=== DONE 2026-03-09 11:12:29 UTC ===
+=== DONE 2026-03-09 11:15:17 UTC ===
 EXIT_CODE=0
