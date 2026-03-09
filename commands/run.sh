@@ -1,10 +1,10 @@
 #!/bin/bash
 # =============================================================
-# Auto-attach EA to chart and restart MT5
+# Read chart files and inject EA, then restart MT5
 # =============================================================
 
 echo "============================================"
-echo "  Auto-attach EA to EURUSD chart"
+echo "  Inject EA into chart profile"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
@@ -13,59 +13,45 @@ MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
 
-# 1. Stop MT5 first
-echo "=== [1] Stop MT5 ==="
-pkill -f terminal64.exe 2>/dev/null
-sleep 5
-echo "MT5 stopped"
+# 1. Read the Default chart01.chr
+echo "=== [1] Default chart01.chr ==="
+cat "$MT5_DIR/Profiles/Charts/Default/chart01.chr" 2>/dev/null | strings | head -80
+echo ""
+echo "---END---"
 echo ""
 
-# 2. Find chart profile files
-echo "=== [2] Find chart profiles ==="
-find "$MT5_DIR/Profiles" -name "*.chr" 2>/dev/null
+# 2. Read Euro chart01.chr (likely the EURUSD chart)
+echo "=== [2] Euro chart01.chr ==="
+cat "$MT5_DIR/Profiles/Charts/Euro/chart01.chr" 2>/dev/null | strings | head -80
 echo ""
-echo "Default profile:"
-ls -la "$MT5_DIR/Profiles/default/" 2>/dev/null
-echo ""
-echo "All profiles:"
-find "$MT5_DIR/Profiles" -type f 2>/dev/null
+echo "---END---"
 echo ""
 
-# 3. Find any existing .chr files and show content
-echo "=== [3] Chart file contents ==="
-CHR_FILES=$(find "$MT5_DIR/Profiles" -name "*.chr" 2>/dev/null)
-if [ -n "$CHR_FILES" ]; then
-    for f in $CHR_FILES; do
-        echo "--- $f ---"
-        strings "$f" 2>/dev/null | head -40
+# 3. Check which profile is active
+echo "=== [3] Active profile ==="
+grep -i "profile\|chart\|last" "$MT5_DIR/config/terminal.ini" 2>/dev/null
+echo ""
+
+# 4. Search for any .chr that mentions PropFirmBot
+echo "=== [4] Charts with PropFirmBot ==="
+grep -rl "PropFirmBot" "$MT5_DIR/Profiles/" 2>/dev/null
+echo ""
+
+# 5. Find the chart that has EURUSD
+echo "=== [5] Charts with EURUSD ==="
+grep -rl "EURUSD" "$MT5_DIR/Profiles/" 2>/dev/null
+echo ""
+
+# 6. Read that specific chart
+echo "=== [6] EURUSD chart content ==="
+for f in "$MT5_DIR/Profiles/Charts/Default/chart01.chr" "$MT5_DIR/Profiles/Charts/Euro/chart01.chr"; do
+    if grep -q "EURUSD" "$f" 2>/dev/null; then
+        echo "FOUND EURUSD in: $f"
+        cat "$f" 2>/dev/null | strings
         echo ""
-    done
-else
-    echo "No .chr files found"
-    echo ""
-    echo "Looking for chart configs elsewhere:"
-    find "$MT5_DIR" -name "*.chr" -o -name "chart*" -o -name "*.tpl" 2>/dev/null | head -20
-fi
-echo ""
-
-# 4. Check terminal.ini for chart settings
-echo "=== [4] terminal.ini ==="
-if [ -f "$MT5_DIR/config/terminal.ini" ]; then
-    strings "$MT5_DIR/config/terminal.ini" 2>/dev/null | head -50
-else
-    echo "No terminal.ini"
-    find "$MT5_DIR/config" -type f 2>/dev/null
-fi
-echo ""
-
-# 5. Check for saved chart templates
-echo "=== [5] Templates ==="
-find "$MT5_DIR" -name "*.tpl" 2>/dev/null | head -10
-echo ""
-
-# 6. Check tester/charts directories
-echo "=== [6] Other chart locations ==="
-ls -la "$MT5_DIR/Profiles/" 2>/dev/null
+        break
+    fi
+done
 echo ""
 
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
