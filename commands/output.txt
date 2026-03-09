@@ -1,36 +1,30 @@
 ============================================
-  URGENT FIX - Restore MT5 & EA
-  2026-03-09 11:16:25 UTC
+  Compile EA (Wine-compatible paths)
+  2026-03-09 11:18:49 UTC
 ============================================
 
-=== [1] Cleanup ===
-No Sockets found in /run/screen/S-root.
+=== [1] Compile with Windows path ===
+01c4:fixme:uxtheme:SetPreferredAppMode 0: stub
+01c4:fixme:kernelbase:AppPolicyGetProcessTerminationMethod FFFFFFFFFFFFFFFA, 000000000051FEE0
+Waiting 20s for compile...
 
-Cleaned up
+Check .ex5:
+.ex5 NOT found
 
-=== [2] Display check ===
-Xvfb running OK
+=== [2] Alternative compile ===
+01d4:fixme:uxtheme:SetPreferredAppMode 0: stub
+01d8:fixme:kernelbase:AppPolicyGetThreadInitializationType FFFFFFFFFFFFFFFA, 000000000A01FF50
+01d4:fixme:kernelbase:AppPolicyGetProcessTerminationMethod FFFFFFFFFFFFFFFA, 000000000051FEE0
+Waiting 20s...
 
-=== [3] EA status ===
-.ex5 MISSING - trying to compile via MT5...
-Source files present:
--rw-r--r-- 1 root root 34498 Mar  9 11:09 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
+-rw-r--r-- 1 root root 162914 Mar  9 11:19 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
 
-=== [4] Start MT5 ===
-Waiting 30s for MT5 to start and auto-compile...
-MT5 IS RUNNING!
-root     3599052  0.1  0.0   7500  2460 ?        Ss   11:16   0:00 SCREEN -dmS mt5 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && cd '/root/.wine/drive_c/Program Files/MetaTrader 5' && wine ./terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
+=== [4] Compile error logs ===
 
-=== [5] .ex5 after MT5 start ===
-.ex5 still missing
+MetaEditor log:
 
-=== [6] Final Status ===
-Active: False
-EA Connected: False
-Balance: 1983.45
-Equity: 1982.03
-Open positions: 2
-Updated: 2026-03-09 11:16:55
+=== [5] MT5 status ===
+MT5: RUNNING
 
-=== DONE 2026-03-09 11:17:00 UTC ===
+=== DONE 2026-03-09 11:19:44 UTC ===
 EXIT_CODE=0
