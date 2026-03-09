@@ -1,42 +1,82 @@
 ============================================
-  Restart mt5-status-daemon
-  2026-03-05 17:22:25 UTC
+  Bot Transaction History
+  2026-03-09 13:51:45 UTC
 ============================================
 
-=== [1] Pull latest code ===
-From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
- * branch            claude/claude-md-mm3qa8i9848jcovk-X3DTU -> FETCH_HEAD
-Already up to date.
+=== [1] Trade Journal Logs ===
+Files in PropFirmBot directory:
+total 52
+drwxr-xr-x 2 root root  4096 Mar  5 13:09 .
+drwxr-xr-x 3 root root  4096 Feb 22 21:00 ..
+-rw-r--r-- 1 root root  1620 Mar  9 11:09 account_state.json
+-rw-r--r-- 1 root root  1469 Mar  9 11:09 challenge_rules.json
+-rw-r--r-- 1 root root  1336 Mar  9 11:09 funded_rules.json
+-rw-r--r-- 1 root root  1159 Mar  9 11:09 notifications.json
+-rw-r--r-- 1 root root  1805 Mar  9 11:09 risk_params.json
+-rw-r--r-- 1 root root  1345 Mar  9 13:51 status.json
+-rw-r--r-- 1 root root  1244 Mar  9 11:09 symbols.json
+-rw-r--r-- 1 root root 12378 Mar  6 10:32 telegram_queue.txt
 
-=== [2] Restart daemon ===
-bash: /root/MT5-PropFirm-Bot/scripts/install_status_daemon.sh: No such file or directory
 
-=== [3] Current /var/bots/mt5_status.json ===
+=== [2] MT5 Terminal Logs (recent) ===
+Logs directory not found
+
+=== [3] EA Expert Logs ===
+
+=== [4] Account Status JSON ===
 {
-    "updated_at": "2026-03-05 17:22:23",
+    "bot_name": "PropFirmBot",
+    "active": true,
+    "balance": 1983.45,
+    "last_trade": null,
+    "updated_at": "2026-03-09 13:51:42",
+    "open_positions": [
+        {
+            "symbol": "EURUSD",
+            "direction": "SELL",
+            "profit": -1.49,
+            "volume": 0.01,
+            "open_price": 1.15605,
+            "current_price": 1.15754,
+            "pips": -14.9,
+            "ticket": 161731242,
+            "open_time": "2026.03.09 14:00"
+        },
+        {
+            "symbol": "GBPUSD",
+            "direction": "SELL",
+            "profit": -2.19,
+            "volume": 0.01,
+            "open_price": 1.33471,
+            "current_price": 1.3369,
+            "pips": -21.9,
+            "ticket": 161710637,
+            "open_time": "2026.03.09 12:38"
+        }
+    ],
+    "recent_closed_trades": [],
     "ea_connected": true,
     "account": {
-        "balance": 1981.41,
-        "equity": 1981.41,
-        "floating_pnl": 0.0,
-        "margin": 0.0,
-        "free_margin": 1981.41
+        "balance": 1983.45,
+        "equity": 1979.77,
+        "floating_pnl": -3.68,
+        "margin": 83.03,
+        "free_margin": 1896.74
     },
     "guardian_state": "ACTIVE",
-    "daily_dd": 0.0,
-    "total_dd": 0.0,
+    "daily_dd": 0.19,
+    "total_dd": 0.23,
     "today": {
         "trades": 0,
         "wins": 0,
         "losses": 0,
         "net": 0.0
     },
-    "open_positions": {
-        "count": 0,
-        "trades": []
-    },
-    "last_closed": []
+    "_open_positions_count": 2
 }
 
-=== DONE 2026-03-05 17:22:27 UTC ===
+=== [5] MT5 Process Status ===
+MT5 not running
+
+=== DONE 2026-03-09 13:51:45 UTC ===
 EXIT_CODE=0
