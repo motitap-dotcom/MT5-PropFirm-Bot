@@ -1,10 +1,10 @@
 #!/bin/bash
 # =============================================================
-# Restart MT5 to load new EA and verify trading
+# Auto-attach EA to chart and restart MT5
 # =============================================================
 
 echo "============================================"
-echo "  Restart MT5 with new EA"
+echo "  Auto-attach EA to EURUSD chart"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
@@ -13,46 +13,59 @@ MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
 
-# 1. Confirm .ex5 is fresh
-echo "=== [1] EA file ==="
-ls -la "$MT5_DIR/MQL5/Experts/PropFirmBot/PropFirmBot.ex5"
-echo ""
-
-# 2. Restart MT5
-echo "=== [2] Restart MT5 ==="
+# 1. Stop MT5 first
+echo "=== [1] Stop MT5 ==="
 pkill -f terminal64.exe 2>/dev/null
 sleep 5
-cd "$MT5_DIR"
-screen -dmS mt5 bash -c "export DISPLAY=:99 && export WINEPREFIX=/root/.wine && cd '$MT5_DIR' && wine ./terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1"
-echo "Waiting 30s for MT5 to start..."
-sleep 30
+echo "MT5 stopped"
+echo ""
 
-if pgrep -f terminal64.exe > /dev/null; then
-    echo "MT5 RUNNING"
+# 2. Find chart profile files
+echo "=== [2] Find chart profiles ==="
+find "$MT5_DIR/Profiles" -name "*.chr" 2>/dev/null
+echo ""
+echo "Default profile:"
+ls -la "$MT5_DIR/Profiles/default/" 2>/dev/null
+echo ""
+echo "All profiles:"
+find "$MT5_DIR/Profiles" -type f 2>/dev/null
+echo ""
+
+# 3. Find any existing .chr files and show content
+echo "=== [3] Chart file contents ==="
+CHR_FILES=$(find "$MT5_DIR/Profiles" -name "*.chr" 2>/dev/null)
+if [ -n "$CHR_FILES" ]; then
+    for f in $CHR_FILES; do
+        echo "--- $f ---"
+        strings "$f" 2>/dev/null | head -40
+        echo ""
+    done
 else
-    echo "MT5 NOT running - trying nohup"
-    nohup bash -c "export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine '$MT5_DIR/terminal64.exe' /portable /login:11797849 /server:FundedNext-Server" > /dev/null 2>&1 &
-    sleep 30
+    echo "No .chr files found"
+    echo ""
+    echo "Looking for chart configs elsewhere:"
+    find "$MT5_DIR" -name "*.chr" -o -name "chart*" -o -name "*.tpl" 2>/dev/null | head -20
 fi
 echo ""
 
-# 3. Wait for EA to connect and check
-echo "=== [3] Bot Status ==="
-sleep 10
-if [ -f /var/bots/mt5_status.json ]; then
-    python3 -m json.tool /var/bots/mt5_status.json 2>/dev/null
+# 4. Check terminal.ini for chart settings
+echo "=== [4] terminal.ini ==="
+if [ -f "$MT5_DIR/config/terminal.ini" ]; then
+    strings "$MT5_DIR/config/terminal.ini" 2>/dev/null | head -50
 else
-    echo "Status file not found"
+    echo "No terminal.ini"
+    find "$MT5_DIR/config" -type f 2>/dev/null
 fi
 echo ""
 
-# 4. EA log
-echo "=== [4] EA Log (last 30 lines) ==="
-EA_LOG_DIR="$MT5_DIR/MQL5/Logs"
-LATEST_LOG=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
-if [ -n "$LATEST_LOG" ]; then
-    tail -30 "$LATEST_LOG" | strings
-fi
+# 5. Check for saved chart templates
+echo "=== [5] Templates ==="
+find "$MT5_DIR" -name "*.tpl" 2>/dev/null | head -10
+echo ""
+
+# 6. Check tester/charts directories
+echo "=== [6] Other chart locations ==="
+ls -la "$MT5_DIR/Profiles/" 2>/dev/null
 echo ""
 
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
