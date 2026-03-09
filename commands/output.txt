@@ -1,215 +1,173 @@
 ============================================
-  Auto-attach EA to EURUSD chart
-  2026-03-09 12:37:50 UTC
+  Inject EA into chart profile
+  2026-03-09 12:39:27 UTC
 ============================================
 
-=== [1] Stop MT5 ===
-MT5 stopped
+=== [1] Default chart01.chr ===
+<chart>
+id=131000000000000001
+symbol=EURUSD
+period_type=0
+period_size=15
+digits=5
+tick_size=0.000000
+position_time=0
+scale_fix=0
+scale_fix11=0
+scale_bar=0
+scale_bar_val=0.000000
+scale=4
+mode=1
+fore=0
+grid=1
+volume=0
+scroll=1
+shift=1
+shift_size=20.000000
+fixed_pos=0.000000
+ohlc=0
+bidline=1
+askline=0
+lastline=0
+days=0
+descriptions=0
+window_type=3
+background_color=0
+foreground_color=16777215
+barup_color=65280
+bardown_color=255
+bullcandle_color=65280
+bearcandle_color=255
+chartline_color=65280
+volumes_color=32768
+grid_color=10061943
+bidline_color=10061943
+askline_color=255
+lastline_color=49152
+stops_color=255
+tradeline_color=11186720
+tradehistory_color=9498256
+<expert>
+name=PropFirmBot\PropFirmBot
+path=PropFirmBot\PropFirmBot.ex5
+expertmode=3
+<inputs>
+</inputs>
+</expert>
+<window>
+height=100
+objects=0
+<indicator>
+name=Main
+path=
+apply=1
+show=1
+scale_inherit=0
+scale_line=0
+scale_line_percent=50
+scale_line_value=0.000000
+scale_fix_min=0
+scale_fix_min_val=0.000000
+scale_fix_max=0
+scale_fix_max_val=0.000000
+expertmode=3
+fixed_height=-1
+</indicator>
+</window>
+</chart>
 
-=== [2] Find chart profiles ===
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart01.chr
+---END---
 
-Default profile:
+=== [2] Euro chart01.chr ===
 
-All profiles:
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/order.wnd
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/order.wnd
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart02.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart03.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart04.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart01.chr
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/order.wnd
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Templates/BollingerBands.tpl
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Templates/Momentum.tpl
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Templates/ADX.tpl
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/SymbolSets/forex.crosses.set
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/SymbolSets/forex.all.set
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/SymbolSets/forex.major.set
+---END---
 
-=== [3] Chart file contents ===
---- /root/.wine/drive_c/Program ---
-
---- Files/MetaTrader ---
-
---- 5/Profiles/Charts/British ---
-
---- Pound/chart02.chr ---
-
---- /root/.wine/drive_c/Program ---
-
---- Files/MetaTrader ---
-
---- 5/Profiles/Charts/British ---
-
---- Pound/chart03.chr ---
-
---- /root/.wine/drive_c/Program ---
-
---- Files/MetaTrader ---
-
---- 5/Profiles/Charts/British ---
-
---- Pound/chart04.chr ---
-
---- /root/.wine/drive_c/Program ---
-
---- Files/MetaTrader ---
-
---- 5/Profiles/Charts/British ---
-
---- Pound/chart01.chr ---
-
---- /root/.wine/drive_c/Program ---
-
---- Files/MetaTrader ---
-
---- 5/Profiles/Charts/Euro/chart02.chr ---
-
---- /root/.wine/drive_c/Program ---
-
---- Files/MetaTrader ---
-
---- 5/Profiles/Charts/Euro/chart03.chr ---
-
---- /root/.wine/drive_c/Program ---
-
---- Files/MetaTrader ---
-
---- 5/Profiles/Charts/Euro/chart04.chr ---
-
---- /root/.wine/drive_c/Program ---
-
---- Files/MetaTrader ---
-
---- 5/Profiles/Charts/Euro/chart01.chr ---
-
---- /root/.wine/drive_c/Program ---
-
---- Files/MetaTrader ---
-
---- 5/Profiles/Charts/Default/chart01.chr ---
-
---- /root/.wine/drive_c/Program ---
-
---- Files/MetaTrader ---
-
---- 5/Profiles/Charts/Market ---
-
---- Overview/chart02.chr ---
-
---- /root/.wine/drive_c/Program ---
-
---- Files/MetaTrader ---
-
---- 5/Profiles/Charts/Market ---
-
---- Overview/chart03.chr ---
-
---- /root/.wine/drive_c/Program ---
-
---- Files/MetaTrader ---
-
---- 5/Profiles/Charts/Market ---
-
---- Overview/chart04.chr ---
-
---- /root/.wine/drive_c/Program ---
-
---- Files/MetaTrader ---
-
---- 5/Profiles/Charts/Market ---
-
---- Overview/chart01.chr ---
-
-
-=== [4] terminal.ini ===
-[Common]
-AutoTrading=1
-ExpertsEnabled=1
-[Network]
-Enable=1
-[Experts]
-AutoTrading=1
-AllowLiveTrading=1
-AllowDLL=0
-Enabled=1
-Account=0
+=== [3] Active profile ===
 Profile=0
-[LiveUpdate]
 LastBuildDataPath=5663
-[Settings]
-InstallationDate=1771784526
-TesterRefreshDate=1772805096
-RecompiledAll=1773058939
-TradeHistoryFrom=0
-TradeHistoryTo=2147483647
 LastStartTime=1772977955
-[PaneState-Summary]
-PaneStateVersion=500
-[CodeBasesList]
 MQL5AddChart=0
-[IndicatorPropertyPage]
-PropFirmBot 3.00 (EURUSD,M15)=1
-[Window]
-Sheet_545_left=348
-Sheet_545_top=418
-Sheet_545_width=621
-Sheet_545_height=315
-[NewsList-FundedNext-Server]
-SelectedCount=0
-[Pane-59393]
-ID=59393
-FloatLeft=10
-FloatTop=10
-FloatRight=110
-FloatBottom=110
-DockedLeft=0
-DockedTop=947
-DockedRight=1272
-DockedBottom=969
-Alignment=4096
-RowIndex=0
-IsFloating=0
-IsVisible=0
-MRUWidth=32767
-PinState=0
 
-=== [5] Templates ===
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates/BollingerBands.tpl
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates/Momentum.tpl
-/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates/ADX.tpl
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Templates/BollingerBands.tpl
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Templates/Momentum.tpl
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Templates/ADX.tpl
+=== [4] Charts with PropFirmBot ===
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr
 
-=== [6] Other chart locations ===
-total 20
-drwxr-xr-x  5 root root 4096 Feb 22 18:22 .
-drwxr-xr-x 11 root root 4096 Mar  9 11:19 ..
-drwxr-xr-x  6 root root 4096 Mar  6 11:36 Charts
-drwxr-xr-x  2 root root 4096 Feb 22 18:22 SymbolSets
-drwxr-xr-x  2 root root 4096 Feb 22 18:22 Templates
+=== [5] Charts with EURUSD ===
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr
 
-=== DONE 2026-03-09 12:37:55 UTC ===
+=== [6] EURUSD chart content ===
+FOUND EURUSD in: /root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr
+<chart>
+id=131000000000000001
+symbol=EURUSD
+period_type=0
+period_size=15
+digits=5
+tick_size=0.000000
+position_time=0
+scale_fix=0
+scale_fix11=0
+scale_bar=0
+scale_bar_val=0.000000
+scale=4
+mode=1
+fore=0
+grid=1
+volume=0
+scroll=1
+shift=1
+shift_size=20.000000
+fixed_pos=0.000000
+ohlc=0
+bidline=1
+askline=0
+lastline=0
+days=0
+descriptions=0
+window_type=3
+background_color=0
+foreground_color=16777215
+barup_color=65280
+bardown_color=255
+bullcandle_color=65280
+bearcandle_color=255
+chartline_color=65280
+volumes_color=32768
+grid_color=10061943
+bidline_color=10061943
+askline_color=255
+lastline_color=49152
+stops_color=255
+tradeline_color=11186720
+tradehistory_color=9498256
+<expert>
+name=PropFirmBot\PropFirmBot
+path=PropFirmBot\PropFirmBot.ex5
+expertmode=3
+<inputs>
+</inputs>
+</expert>
+<window>
+height=100
+objects=0
+<indicator>
+name=Main
+path=
+apply=1
+show=1
+scale_inherit=0
+scale_line=0
+scale_line_percent=50
+scale_line_value=0.000000
+scale_fix_min=0
+scale_fix_min_val=0.000000
+scale_fix_max=0
+scale_fix_max_val=0.000000
+expertmode=3
+fixed_height=-1
+</indicator>
+</window>
+</chart>
+
+
+=== DONE 2026-03-09 12:39:27 UTC ===
 EXIT_CODE=0
