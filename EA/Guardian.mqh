@@ -159,9 +159,9 @@ CGuardian::CGuardian()
    m_crit_daily_dd_pct = 0;
    m_soft_total_dd_pct = 4.2;
    m_crit_total_dd_pct = 5.0;
-   m_max_consec_losses = 5;
+   m_max_consec_losses = 6;
    m_consec_losses = 0;
-   m_max_daily_trades = 15;
+   m_max_daily_trades = 20;
    m_daily_trade_count = 0;
    m_max_equity_drop_pct = 2.0;
    m_last_tick_time = 0;
@@ -212,9 +212,9 @@ bool CGuardian::Init(double balance, double hard_daily, double hard_total,
 
    if(m_trailing_dd)
    {
-      // Trailing DD: allow more room to trade while staying safe
-      m_soft_total_dd_pct  = hard_total * 0.70;  // ~4.2% for 6%
-      m_crit_total_dd_pct  = hard_total * 0.83;  // ~5.0% for 6%
+      // Trailing DD: give room to trade aggressively while staying safe
+      m_soft_total_dd_pct  = hard_total * 0.80;  // ~4.8% for 6% (halt new trades)
+      m_crit_total_dd_pct  = hard_total * 0.88;  // ~5.3% for 6% (emergency close)
    }
    else
    {

@@ -282,8 +282,8 @@ bool CSignalEngine::DetectBullishOrderBlock(int shift, double &ob_high, double &
       double atr_val = m_atr[i];
       if(atr_val <= 0) continue;
 
-      // Strong move = at least 1.0x ATR
-      if(bullish_move < atr_val * 1.0) continue;
+      // Strong move = at least 0.7x ATR (relaxed for more signals)
+      if(bullish_move < atr_val * 0.7) continue;
 
       // The OB zone is the body of the bearish candle
       ob_high = MathMax(rates[i].open, rates[i].close);
@@ -324,7 +324,7 @@ bool CSignalEngine::DetectBearishOrderBlock(int shift, double &ob_high, double &
       double atr_val = m_atr[i];
       if(atr_val <= 0) continue;
 
-      if(bearish_move < atr_val * 1.0) continue;
+      if(bearish_move < atr_val * 0.7) continue;
 
       ob_high = MathMax(rates[i].open, rates[i].close);
       ob_low  = MathMin(rates[i].open, rates[i].close);
@@ -469,9 +469,8 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
    sl_price = 0;
    tp_price = 0;
 
-   // Step 1: Get H4 bias
+   // Step 1: Get HTF bias (neutral is OK - OB/FVG are strong enough alone)
    int htf_bias = GetHTFBias();
-   if(htf_bias == 0) return SIGNAL_NONE; // No clear trend
 
    // Step 2: Get ATR for SL/TP calculation
    if(CopyBuffer(m_handle_atr, 0, 0, 3, m_atr) < 3) return SIGNAL_NONE;
@@ -480,8 +479,8 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
 
    double ob_high, ob_low, fvg_high, fvg_low;
 
-   // Step 3: Look for BUY setup (bullish HTF bias)
-   if(htf_bias == 1)
+   // Step 3: Look for BUY setup (bullish or neutral HTF bias)
+   if(htf_bias >= 0)
    {
       bool has_liquidity_sweep = DetectLiquiditySweep(true, 30);
       bool has_bullish_ob = DetectBullishOrderBlock(0, ob_high, ob_low);
@@ -514,8 +513,8 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
       }
    }
 
-   // Step 4: Look for SELL setup (bearish HTF bias)
-   if(htf_bias == -1)
+   // Step 4: Look for SELL setup (bearish or neutral HTF bias)
+   if(htf_bias <= 0)
    {
       bool has_liquidity_sweep = DetectLiquiditySweep(false, 30);
       bool has_bearish_ob = DetectBearishOrderBlock(0, ob_high, ob_low);
@@ -569,34 +568,54 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
    // Get H4 bias for confirmation
    int htf_bias = GetHTFBias();
 
-   // EMA 9 crossed above EMA 21
-   bool cross_up = (m_ema_fast[1] <= m_ema_slow[1]) && (m_ema_fast[0] > m_ema_slow[0]);
-   // EMA 9 crossed below EMA 21
-   bool cross_down = (m_ema_fast[1] >= m_ema_slow[1]) && (m_ema_fast[0] < m_ema_slow[0]);
+   // EMA crossover detection with 3-bar window for more signals
+   bool cross_up = false;
+   bool cross_down = false;
 
-   // BUY: EMA cross up + RSI not overbought (HTF bias is optional for fallback)
-   if(cross_up && m_rsi[0] < m_rsi_overbought && m_rsi[0] > m_rsi_oversold && htf_bias >= -1)
+   // Check crossover in last 3 bars (not just last 1)
+   if(CopyBuffer(m_handle_ema_fast, 0, 0, 5, m_ema_fast) >= 5 &&
+      CopyBuffer(m_handle_ema_slow, 0, 0, 5, m_ema_slow) >= 5)
+   {
+      for(int b = 1; b <= 3; b++)
+      {
+         if(m_ema_fast[b] <= m_ema_slow[b] && m_ema_fast[b-1] > m_ema_slow[b-1])
+            cross_up = true;
+         if(m_ema_fast[b] >= m_ema_slow[b] && m_ema_fast[b-1] < m_ema_slow[b-1])
+            cross_down = true;
+      }
+   }
+
+   // Also trigger on strong EMA momentum (fast pulling away from slow)
+   double ema_gap = m_ema_fast[0] - m_ema_slow[0];
+   double ema_gap_prev = m_ema_fast[2] - m_ema_slow[2];
+   bool momentum_up = (ema_gap > 0 && ema_gap > ema_gap_prev * 1.5 && ema_gap_prev > 0);
+   bool momentum_down = (ema_gap < 0 && ema_gap < ema_gap_prev * 1.5 && ema_gap_prev < 0);
+
+   // BUY: EMA cross up OR strong momentum + RSI filter (relaxed)
+   if((cross_up || momentum_up) && m_rsi[0] < 75.0 && m_rsi[0] > 25.0 && htf_bias >= 0)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
-      sl_price = entry - (atr * 1.5);
+      sl_price = entry - (atr * 1.2);
       double sl_distance = entry - sl_price;
-      tp_price = entry + (sl_distance * 2.0);
+      tp_price = entry + (sl_distance * 1.8);
 
-      PrintFormat("[EMA] BUY signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
-                  entry, sl_price, tp_price, m_rsi[0]);
+      PrintFormat("[EMA] BUY signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f Cross=%s Mom=%s",
+                  entry, sl_price, tp_price, m_rsi[0],
+                  cross_up ? "Y" : "N", momentum_up ? "Y" : "N");
       return SIGNAL_BUY;
    }
 
-   // SELL: EMA cross down + RSI not oversold (HTF bias is optional for fallback)
-   if(cross_down && m_rsi[0] > m_rsi_oversold && m_rsi[0] < m_rsi_overbought && htf_bias <= 1)
+   // SELL: EMA cross down OR strong momentum + RSI filter (relaxed)
+   if((cross_down || momentum_down) && m_rsi[0] > 25.0 && m_rsi[0] < 75.0 && htf_bias <= 0)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_BID);
-      sl_price = entry + (atr * 1.5);
+      sl_price = entry + (atr * 1.2);
       double sl_distance = sl_price - entry;
-      tp_price = entry - (sl_distance * 2.0);
+      tp_price = entry - (sl_distance * 1.8);
 
-      PrintFormat("[EMA] SELL signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
-                  entry, sl_price, tp_price, m_rsi[0]);
+      PrintFormat("[EMA] SELL signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f Cross=%s Mom=%s",
+                  entry, sl_price, tp_price, m_rsi[0],
+                  cross_down ? "Y" : "N", momentum_down ? "Y" : "N");
       return SIGNAL_SELL;
    }
 

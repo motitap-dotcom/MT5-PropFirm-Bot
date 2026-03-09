@@ -189,10 +189,10 @@ void CAccountStateManager::SwitchToFunded(double funded_balance)
    m_phase_start_balance  = funded_balance;
    m_trading_days         = 0;
 
-   // Funded mode: more conservative
-   m_risk_multiplier  = 0.7;    // Reduce risk to 70%
-   m_max_positions    = 2;
-   m_max_daily_trades = 6;      // Fewer trades, more selective
+   // Funded mode: active trading with safety
+   m_risk_multiplier  = 1.0;    // Full risk (Guardian protects DD)
+   m_max_positions    = 4;
+   m_max_daily_trades = 15;     // More opportunities
 
    SaveState();
 

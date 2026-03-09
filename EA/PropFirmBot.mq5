@@ -51,7 +51,7 @@ input double   InpFundedProfitSplit = 70.0;    // Funded: Profit Split (%)
 input ENUM_STRATEGY_TYPE InpStrategy = STRATEGY_SMC; // Primary Strategy
 input bool     InpUseFallback     = true;       // Use EMA fallback
 input ENUM_TIMEFRAMES InpEntryTF  = PERIOD_M15; // Entry Timeframe
-input ENUM_TIMEFRAMES InpHTF      = PERIOD_H4;  // Higher Timeframe
+input ENUM_TIMEFRAMES InpHTF      = PERIOD_H1;  // Higher Timeframe (H1 for faster signals)
 
 // --- Signal Parameters ---
 input int      InpEMAFast         = 9;          // EMA Fast Period
@@ -62,21 +62,21 @@ input int      InpOBLookback      = 30;         // Order Block Lookback
 input double   InpFVGMinPoints    = 20.0;       // Min FVG Size (points)
 
 // --- Risk Management ---
-input double   InpRiskPercent     = 0.75;       // Risk Per Trade (%)
-input double   InpMaxRiskPercent  = 1.0;        // Max Risk Per Trade (%)
-input int      InpMaxPositions    = 3;          // Max Open Positions
-input double   InpMinRR           = 1.5;        // Min Risk:Reward
-input int      InpMaxDailyTrades  = 12;         // Max Trades Per Day
-input int      InpMaxConsecLosses = 5;          // Max Consecutive Losses
+input double   InpRiskPercent     = 1.0;        // Risk Per Trade (%)
+input double   InpMaxRiskPercent  = 1.5;        // Max Risk Per Trade (%)
+input int      InpMaxPositions    = 4;          // Max Open Positions
+input double   InpMinRR           = 1.2;        // Min Risk:Reward
+input int      InpMaxDailyTrades  = 15;         // Max Trades Per Day
+input int      InpMaxConsecLosses = 6;          // Max Consecutive Losses
 
 // --- Spread Filter ---
-input double   InpMaxSpreadMajor  = 3.5;        // Max Spread Major (pips)
-input double   InpMaxSpreadXAU    = 5.0;        // Max Spread XAUUSD (pips)
+input double   InpMaxSpreadMajor  = 4.0;        // Max Spread Major (pips)
+input double   InpMaxSpreadXAU    = 7.0;        // Max Spread XAUUSD (pips)
 
 // --- News Filter ---
 input bool     InpNewsFilterOn    = true;        // News Filter Enabled
-input int      InpNewsBefore      = 15;          // News: Minutes Before
-input int      InpNewsAfter       = 15;          // News: Minutes After
+input int      InpNewsBefore      = 10;          // News: Minutes Before
+input int      InpNewsAfter       = 10;          // News: Minutes After
 input bool     InpNewsHighImpact  = true;        // News: Filter High Impact
 input bool     InpNewsMedImpact   = false;       // News: Filter Medium Impact
 
@@ -84,12 +84,12 @@ input bool     InpNewsMedImpact   = false;       // News: Filter Medium Impact
 input int      InpLondonStart     = 6;          // London Start
 input int      InpLondonEnd       = 17;         // London End (covers overlap with NY)
 input int      InpNYStart         = 12;         // NY Start
-input int      InpNYEnd           = 22;         // NY End (extended to 23:00 Israel)
+input int      InpNYEnd           = 23;         // NY End (extended session)
 
 // --- Trade Management ---
-input double   InpTrailingActivation = 30.0;    // Trailing Activation (pips)
-input double   InpTrailingDistance   = 20.0;     // Trailing Distance (pips)
-input double   InpBEActivation      = 20.0;     // Breakeven Activation (pips)
+input double   InpTrailingActivation = 20.0;    // Trailing Activation (pips)
+input double   InpTrailingDistance   = 12.0;     // Trailing Distance (pips)
+input double   InpBEActivation      = 15.0;     // Breakeven Activation (pips)
 input double   InpBEOffset          = 2.0;       // Breakeven Offset (pips)
 input int      InpMinBarGap         = 1;         // Min Bars Between Trades
 input int      InpSlippage          = 20;        // Max Slippage (points)
