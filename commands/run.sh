@@ -1,74 +1,94 @@
 #!/bin/bash
 # =============================================================
-# Full VPS & Bot Status Check
+# Deploy latest code to VPS - pull master and update EA files
 # =============================================================
 
 echo "============================================"
-echo "  Full VPS Status Check"
+echo "  Deploy Latest Code to VPS"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
-# 1. Is MT5 running?
-echo "=== [1] MT5 Process ==="
-ps aux | grep -i "terminal64\|metatrader" | grep -v grep || echo "MT5 NOT RUNNING!"
+MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
+EA_DIR="$MT5_DIR/MQL5/Experts/PropFirmBot"
+CONFIG_DIR="$MT5_DIR/MQL5/Files/PropFirmBot"
+REPO_DIR="/root/MT5-PropFirm-Bot"
+
+# 1. Update repo to latest master
+echo "=== [1] Update repo ==="
+cd "$REPO_DIR"
+echo "Current branch: $(git rev-parse --abbrev-ref HEAD)"
+echo "Current commit: $(git log --oneline -1)"
+git fetch origin master 2>&1
+git checkout master 2>&1
+git pull origin master 2>&1
+echo "Updated to: $(git log --oneline -1)"
 echo ""
 
-# 2. Wine/display
-echo "=== [2] Display & VNC ==="
-ps aux | grep -i "xvfb\|x11vnc" | grep -v grep || echo "No display/VNC"
+# 2. Copy EA files
+echo "=== [2] Copy EA files ==="
+mkdir -p "$EA_DIR"
+cp -v "$REPO_DIR"/EA/*.mq5 "$EA_DIR/" 2>&1
+cp -v "$REPO_DIR"/EA/*.mqh "$EA_DIR/" 2>&1
 echo ""
 
-# 3. Account status from status file
-echo "=== [3] Bot Status File ==="
-if [ -f /var/bots/mt5_status.json ]; then
-    python3 -m json.tool /var/bots/mt5_status.json 2>/dev/null
-else
-    echo "Status file NOT FOUND"
-fi
+# 3. Copy config files
+echo "=== [3] Copy config files ==="
+mkdir -p "$CONFIG_DIR"
+cp -v "$REPO_DIR"/configs/*.json "$CONFIG_DIR/" 2>&1
 echo ""
 
-# 4. Latest EA log
-echo "=== [4] Latest EA Log (last 30 lines) ==="
-EA_LOG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs"
-if [ -d "$EA_LOG_DIR" ]; then
-    LATEST_LOG=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
-    if [ -n "$LATEST_LOG" ]; then
-        echo "File: $LATEST_LOG"
-        tail -30 "$LATEST_LOG"
+# 4. Compile EA
+echo "=== [4] Compile EA ==="
+export DISPLAY=:99
+export WINEPREFIX=/root/.wine
+METAEDITOR="$MT5_DIR/metaeditor64.exe"
+if [ -f "$METAEDITOR" ]; then
+    wine "$METAEDITOR" /compile:"$EA_DIR/PropFirmBot.mq5" /log 2>&1
+    sleep 5
+    # Check compilation result
+    if [ -f "$EA_DIR/PropFirmBot.ex5" ]; then
+        echo "Compilation SUCCESS - .ex5 exists"
+        ls -la "$EA_DIR/PropFirmBot.ex5"
     else
-        echo "No EA log files found"
+        echo "WARNING: .ex5 file not found after compilation"
     fi
 else
-    echo "EA log dir not found"
+    echo "MetaEditor not found at $METAEDITOR"
+    echo "Checking for .ex5:"
+    ls -la "$EA_DIR"/*.ex5 2>/dev/null || echo "No .ex5 found"
 fi
 echo ""
 
-# 5. MT5 terminal log
-echo "=== [5] MT5 Terminal Log (last 20 lines) ==="
-TERM_LOG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/Logs"
-if [ -d "$TERM_LOG_DIR" ]; then
-    LATEST_TLOG=$(ls -t "$TERM_LOG_DIR"/*.log 2>/dev/null | head -1)
-    if [ -n "$LATEST_TLOG" ]; then
-        echo "File: $LATEST_TLOG"
-        tail -20 "$LATEST_TLOG"
-    else
-        echo "No terminal log files found"
-    fi
+# 5. Restart MT5
+echo "=== [5] Restart MT5 ==="
+# Kill existing MT5
+pkill -f terminal64.exe 2>/dev/null
+sleep 3
+echo "MT5 killed, waiting..."
+sleep 2
+
+# Start MT5
+screen -dmS mt5 bash -c "export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1"
+sleep 10
+
+# Verify
+if pgrep -f terminal64.exe > /dev/null; then
+    echo "MT5 RESTARTED SUCCESSFULLY"
 else
-    echo "Terminal log dir not found"
+    echo "WARNING: MT5 may not have started"
 fi
 echo ""
 
-# 6. Current repo state on VPS
-echo "=== [6] Repo on VPS ==="
-cd /root/MT5-PropFirm-Bot 2>/dev/null && git log --oneline -3 && echo "Branch: $(git rev-parse --abbrev-ref HEAD)"
+# 6. Verify
+echo "=== [6] Final status ==="
+ps aux | grep -i "terminal64" | grep -v grep || echo "MT5 NOT RUNNING"
 echo ""
-
-# 7. EA compiled file
-echo "=== [7] EA Files ==="
-EA_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"
-ls -la "$EA_DIR"/*.ex5 2>/dev/null || echo "No compiled EA found!"
+echo "EA files:"
+ls -la "$EA_DIR"/*.ex5 2>/dev/null
+echo ""
+echo "Repo state:"
+cd "$REPO_DIR" && git log --oneline -3
 echo ""
 
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
