@@ -1,55 +1,40 @@
-============================================
-  Bot Transaction History
-  2026-03-09 13:51:45 UTC
-============================================
+=== MT5 Quick Status 2026-03-09 14:20:23 UTC ===
 
-=== [1] Trade Journal Logs ===
-Files in PropFirmBot directory:
-total 52
-drwxr-xr-x 2 root root  4096 Mar  5 13:09 .
-drwxr-xr-x 3 root root  4096 Feb 22 21:00 ..
--rw-r--r-- 1 root root  1620 Mar  9 11:09 account_state.json
--rw-r--r-- 1 root root  1469 Mar  9 11:09 challenge_rules.json
--rw-r--r-- 1 root root  1336 Mar  9 11:09 funded_rules.json
--rw-r--r-- 1 root root  1159 Mar  9 11:09 notifications.json
--rw-r--r-- 1 root root  1805 Mar  9 11:09 risk_params.json
--rw-r--r-- 1 root root  1345 Mar  9 13:51 status.json
--rw-r--r-- 1 root root  1244 Mar  9 11:09 symbols.json
--rw-r--r-- 1 root root 12378 Mar  6 10:32 telegram_queue.txt
+MT5:     RUNNING
+Xvfb:    RUNNING
+VNC:     RUNNING
+Daemon:  RUNNING
 
+Watchdog: ACTIVE
+Boot svc: enabled
 
-=== [2] MT5 Terminal Logs (recent) ===
-Logs directory not found
-
-=== [3] EA Expert Logs ===
-
-=== [4] Account Status JSON ===
+Status JSON:
 {
     "bot_name": "PropFirmBot",
     "active": true,
     "balance": 1983.45,
     "last_trade": null,
-    "updated_at": "2026-03-09 13:51:42",
+    "updated_at": "2026-03-09 14:20:20",
     "open_positions": [
         {
             "symbol": "EURUSD",
             "direction": "SELL",
-            "profit": -1.49,
+            "profit": -0.14,
             "volume": 0.01,
             "open_price": 1.15605,
-            "current_price": 1.15754,
-            "pips": -14.9,
+            "current_price": 1.15619,
+            "pips": -1.4,
             "ticket": 161731242,
             "open_time": "2026.03.09 14:00"
         },
         {
             "symbol": "GBPUSD",
             "direction": "SELL",
-            "profit": -2.19,
+            "profit": -1.29,
             "volume": 0.01,
             "open_price": 1.33471,
-            "current_price": 1.3369,
-            "pips": -21.9,
+            "current_price": 1.336,
+            "pips": -12.9,
             "ticket": 161710637,
             "open_time": "2026.03.09 12:38"
         }
@@ -58,14 +43,14 @@ Logs directory not found
     "ea_connected": true,
     "account": {
         "balance": 1983.45,
-        "equity": 1979.77,
-        "floating_pnl": -3.68,
+        "equity": 1982.02,
+        "floating_pnl": -1.43,
         "margin": 83.03,
-        "free_margin": 1896.74
+        "free_margin": 1898.99
     },
     "guardian_state": "ACTIVE",
-    "daily_dd": 0.19,
-    "total_dd": 0.23,
+    "daily_dd": 0.07,
+    "total_dd": 0.14,
     "today": {
         "trades": 0,
         "wins": 0,
@@ -75,8 +60,25 @@ Logs directory not found
     "_open_positions_count": 2
 }
 
-=== [5] MT5 Process Status ===
-MT5 not running
-
-=== DONE 2026-03-09 13:51:45 UTC ===
+Watchdog log (last 20 lines):
+[2026-03-09 12:38:52 UTC] AutoTrading toggle sent (xdotool window 75497473)
+[2026-03-09 12:38:52 UTC] MT5 start complete.
+[2026-03-09 12:40:03 UTC] NO HEARTBEAT for 1014s - EA not active. Full restart...
+[2026-03-09 12:40:03 UTC] Starting MT5...
+[2026-03-09 12:40:06 UTC] Fixing chart file...
+[2026-03-09 12:40:06 UTC] EA missing from chart - creating fresh chart file
+[2026-03-09 12:40:06 UTC] Chart file fixed.
+[2026-03-09 12:40:07 UTC] MT5 started. Waiting 35s for login...
+[2026-03-09 12:40:47 UTC] AutoTrading is disabled/unknown - sending Ctrl+E via xdotool...
+[2026-03-09 12:40:53 UTC] AutoTrading toggle sent (xdotool window 75497473)
+[2026-03-09 12:40:53 UTC] MT5 start complete.
+[2026-03-09 12:50:03 UTC] OK - MT5 running | Account connected | Bal=$1983.45 | Positions=2
+[2026-03-09 13:00:04 UTC] OK - MT5 running | Account connected | Bal=$1983.45 | Positions=2
+/usr/local/bin/mt5_watchdog.sh: line 270: 08: value too great for base (error token is "08")
+[2026-03-09 13:10:02 UTC] OK - MT5 running | Account connected | Bal=$1983.45 | Positions=2
+[2026-03-09 13:20:02 UTC] OK - MT5 running | Account connected | Bal=$1983.45 | Positions=2
+[2026-03-09 13:30:01 UTC] OK - MT5 running | Account connected | Bal=$1983.45 | Positions=2
+[2026-03-09 13:40:03 UTC] OK - MT5 running | Account connected | Bal=$1983.45 | Positions=2
+[2026-03-09 13:50:02 UTC] OK - MT5 running | Account connected | Bal=$1983.45 | Positions=2
+2026-03-09 14:00:02 - MT5 running OK
 EXIT_CODE=0
