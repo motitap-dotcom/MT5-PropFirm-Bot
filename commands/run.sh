@@ -1,28 +1,52 @@
 #!/bin/bash
 # =============================================================
-# Restart MT5 Status Daemon after code update
+# Check today's trades from MT5
 # =============================================================
 
 echo "============================================"
-echo "  Restart mt5-status-daemon"
+echo "  Check Today's Trades"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
-# Pull latest code
-echo "=== [1] Pull latest code ==="
-cd /root/MT5-PropFirm-Bot
-git pull origin "$(git rev-parse --abbrev-ref HEAD)" 2>&1
+MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
+FILES_DIR="$MT5_DIR/MQL5/Files/PropFirmBot"
+
+# Check trade journal files
+echo "=== [1] Trade Journal Files ==="
+ls -la "$FILES_DIR/"*trade*  "$FILES_DIR/"*journal* "$FILES_DIR/"*Trade* "$FILES_DIR/"*Journal* 2>/dev/null || echo "No trade journal files found"
 echo ""
 
-# Reinstall / restart daemon
-echo "=== [2] Restart daemon ==="
-bash /root/MT5-PropFirm-Bot/scripts/install_status_daemon.sh 2>&1
+# Check today's log files
+echo "=== [2] Today's MT5 Logs ==="
+TODAY=$(date '+%Y%m%d')
+find "$MT5_DIR/MQL5/Logs/" -name "*${TODAY}*" -o -name "*.log" -newer /proc/1 2>/dev/null | head -5
 echo ""
 
-# Show output
-echo "=== [3] Current /var/bots/mt5_status.json ==="
-python3 -m json.tool /var/bots/mt5_status.json 2>/dev/null || echo "(file not found or invalid)"
+# Show latest log content (last 100 lines)
+echo "=== [3] Latest EA Log Content ==="
+LATEST_LOG=$(ls -t "$MT5_DIR/MQL5/Logs/"*.log 2>/dev/null | head -1)
+if [ -n "$LATEST_LOG" ]; then
+    echo "File: $LATEST_LOG"
+    echo "--- Last 100 lines ---"
+    tail -100 "$LATEST_LOG" 2>/dev/null
+else
+    echo "No log files found"
+fi
+echo ""
+
+# Check MT5 terminal log
+echo "=== [4] MT5 Terminal Log (today) ==="
+TERM_LOG=$(ls -t "$MT5_DIR/logs/"*.log 2>/dev/null | head -1)
+if [ -n "$TERM_LOG" ]; then
+    echo "File: $TERM_LOG"
+    grep -i "order\|trade\|deal\|position\|buy\|sell" "$TERM_LOG" 2>/dev/null | tail -50
+fi
+echo ""
+
+# Check account status
+echo "=== [5] Account Status ==="
+cat /var/bots/mt5_status.json 2>/dev/null | python3 -m json.tool 2>/dev/null || echo "No status file"
 echo ""
 
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
