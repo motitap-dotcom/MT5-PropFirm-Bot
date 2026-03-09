@@ -1,65 +1,76 @@
 ============================================
-  Deploy Latest Code (Fixed Branch)
-  2026-03-09 11:09:01 UTC
+  Post-Deploy Verification
+  2026-03-09 11:12:29 UTC
 ============================================
 
-=== [1] Update repo ===
-Before: 921737f relay: result 2026-03-01 09:57 UTC
-From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
- * branch            claude/build-cfd-trading-bot-fl0ld -> FETCH_HEAD
-Switched to branch 'claude/build-cfd-trading-bot-fl0ld'
-Your branch is up to date with 'origin/claude/build-cfd-trading-bot-fl0ld'.
-HEAD is now at d0a40ec Merge pull request #7 from motitap-dotcom/claude/debug-bot-transactions-g9Mpr
-After: d0a40ec Merge pull request #7 from motitap-dotcom/claude/debug-bot-transactions-g9Mpr
+=== [1] MT5 Running? ===
+YES - MT5 is running
+root     3597266  0.2  0.0   7500  2456 ?        Ss   11:12   0:00 SCREEN -dmS mt5 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
 
-=== [2] Copy EA files ===
-'/root/MT5-PropFirm-Bot/EA/PropFirmBot.mq5' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5'
-'/root/MT5-PropFirm-Bot/EA/AccountStateManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh'
-'/root/MT5-PropFirm-Bot/EA/Dashboard.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Dashboard.mqh'
-'/root/MT5-PropFirm-Bot/EA/Guardian.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Guardian.mqh'
-'/root/MT5-PropFirm-Bot/EA/NewsFilter.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/NewsFilter.mqh'
-'/root/MT5-PropFirm-Bot/EA/Notifications.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Notifications.mqh'
-'/root/MT5-PropFirm-Bot/EA/RiskManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/RiskManager.mqh'
-'/root/MT5-PropFirm-Bot/EA/SignalEngine.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/SignalEngine.mqh'
-'/root/MT5-PropFirm-Bot/EA/StatusWriter.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/StatusWriter.mqh'
-'/root/MT5-PropFirm-Bot/EA/TradeAnalyzer.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeAnalyzer.mqh'
-'/root/MT5-PropFirm-Bot/EA/TradeJournal.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeJournal.mqh'
-'/root/MT5-PropFirm-Bot/EA/TradeManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeManager.mqh'
+=== [2] Bot Status ===
+{
+    "bot_name": "PropFirmBot",
+    "active": false,
+    "balance": 1983.45,
+    "last_trade": null,
+    "updated_at": "2026-03-09 11:12:25",
+    "open_positions": [
+        {
+            "symbol": "EURUSD",
+            "direction": "SELL",
+            "profit": -0.55,
+            "volume": 0.01,
+            "open_price": 1.15605,
+            "current_price": 1.1566,
+            "pips": -5.5,
+            "ticket": 161731242,
+            "open_time": "2026.03.09 14:00"
+        },
+        {
+            "symbol": "GBPUSD",
+            "direction": "SELL",
+            "profit": -0.56,
+            "volume": 0.01,
+            "open_price": 1.33471,
+            "current_price": 1.33527,
+            "pips": -5.6,
+            "ticket": 161710637,
+            "open_time": "2026.03.09 12:38"
+        }
+    ],
+    "recent_closed_trades": [],
+    "ea_connected": false,
+    "account": {
+        "balance": 1983.45,
+        "equity": 1982.34,
+        "floating_pnl": -1.11,
+        "margin": 83.03,
+        "free_margin": 1899.31
+    },
+    "guardian_state": "ACTIVE",
+    "daily_dd": 0.06,
+    "total_dd": 0.16,
+    "today": {
+        "trades": 1,
+        "wins": 0,
+        "losses": 0,
+        "net": 0.0
+    },
+    "_open_positions_count": 2
+}
 
-=== [3] Copy config files ===
-'/root/MT5-PropFirm-Bot/configs/account_state.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/account_state.json'
-'/root/MT5-PropFirm-Bot/configs/challenge_rules.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/challenge_rules.json'
-'/root/MT5-PropFirm-Bot/configs/funded_rules.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/funded_rules.json'
-'/root/MT5-PropFirm-Bot/configs/notifications.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/notifications.json'
-'/root/MT5-PropFirm-Bot/configs/risk_params.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/risk_params.json'
-'/root/MT5-PropFirm-Bot/configs/symbols.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/symbols.json'
+=== [3] EA Log (last 50 lines) ===
+File: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260309.log
 
-=== [4] Compile EA ===
-Found MetaEditor at: /root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe
-002c:fixme:winediag:loader_init wine-staging 11.3 is a testing version containing experimental patches.
-002c:fixme:winediag:loader_init Please mention your exact version when filing bug reports on winehq.org.
-00b4:fixme:wineusb:query_id Unhandled ID query type 0x5.
-0024:fixme:winediag:loader_init wine-staging 11.3 is a testing version containing experimental patches.
-0024:fixme:winediag:loader_init Please mention your exact version when filing bug reports on winehq.org.
-libEGL warning: DRI3 error: Could not get DRI3 device
-libEGL warning: Ensure your X server supports DRI3 to get accelerated rendering
-00e8:fixme:uxtheme:SetPreferredAppMode 0: stub
-00e8:fixme:kernelbase:AppPolicyGetProcessTerminationMethod FFFFFFFFFFFFFFFA, 000000000051FEE0
-Files in MT5 root:
-/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe
-/root/.wine/drive_c/Program Files/MetaTrader 5/metatester64.exe
-
-EA .ex5 status:
+=== [4] EA Compiled File ===
 -rw-r--r-- 1 root root 164578 Mar  6 13:27 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
 
-=== [5] Restart MT5 ===
-MT5 RESTARTED SUCCESSFULLY
+Source files (for comparison):
+-rw-r--r-- 1 root root 34498 Mar  9 11:09 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
+-rw-r--r-- 1 root root 23510 Mar  9 11:09 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/SignalEngine.mqh
 
-=== [6] Verification ===
-Repo: 921737f relay: result 2026-03-01 09:57 UTC
-Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
-root     3596288  0.0  0.0   7500  2456 ?        Ss   11:09   0:00 SCREEN -dmS mt5 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && cd '/root/.wine/drive_c/Program Files/MetaTrader 5' && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
-root     3596289  0.0  0.0   7740  3404 pts/3    Ss+  11:09   0:00 bash -c export DISPLAY=:99 && export WINEPREFIX=/root/.wine && cd '/root/.wine/drive_c/Program Files/MetaTrader 5' && wine terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1
+=== [5] Account Journal (last 30 lines) ===
+No journal log found
 
-=== DONE 2026-03-09 11:09:45 UTC ===
+=== DONE 2026-03-09 11:12:29 UTC ===
 EXIT_CODE=0
