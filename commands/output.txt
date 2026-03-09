@@ -1,173 +1,75 @@
 ============================================
-  Inject EA into chart profile
-  2026-03-09 12:39:27 UTC
+  Start MT5 & Verify EA
+  2026-03-09 12:41:11 UTC
 ============================================
 
-=== [1] Default chart01.chr ===
-<chart>
-id=131000000000000001
-symbol=EURUSD
-period_type=0
-period_size=15
-digits=5
-tick_size=0.000000
-position_time=0
-scale_fix=0
-scale_fix11=0
-scale_bar=0
-scale_bar_val=0.000000
-scale=4
-mode=1
-fore=0
-grid=1
-volume=0
-scroll=1
-shift=1
-shift_size=20.000000
-fixed_pos=0.000000
-ohlc=0
-bidline=1
-askline=0
-lastline=0
-days=0
-descriptions=0
-window_type=3
-background_color=0
-foreground_color=16777215
-barup_color=65280
-bardown_color=255
-bullcandle_color=65280
-bearcandle_color=255
-chartline_color=65280
-volumes_color=32768
-grid_color=10061943
-bidline_color=10061943
-askline_color=255
-lastline_color=49152
-stops_color=255
-tradeline_color=11186720
-tradehistory_color=9498256
-<expert>
-name=PropFirmBot\PropFirmBot
-path=PropFirmBot\PropFirmBot.ex5
-expertmode=3
-<inputs>
-</inputs>
-</expert>
-<window>
-height=100
-objects=0
-<indicator>
-name=Main
-path=
-apply=1
-show=1
-scale_inherit=0
-scale_line=0
-scale_line_percent=50
-scale_line_value=0.000000
-scale_fix_min=0
-scale_fix_min_val=0.000000
-scale_fix_max=0
-scale_fix_max_val=0.000000
-expertmode=3
-fixed_height=-1
-</indicator>
-</window>
-</chart>
+=== [1] Display ===
+Xvfb: OK
+x11vnc: OK
 
----END---
+=== [2] Start MT5 ===
+MT5 launched, waiting 45s for full startup + EA load...
+MT5: RUNNING
 
-=== [2] Euro chart01.chr ===
+=== [3] Waiting 30s more for EA to connect... ===
 
----END---
+=== [4] Bot Status ===
+{
+    "bot_name": "PropFirmBot",
+    "active": true,
+    "balance": 1983.45,
+    "last_trade": null,
+    "updated_at": "2026-03-09 12:42:26",
+    "open_positions": [
+        {
+            "symbol": "EURUSD",
+            "direction": "SELL",
+            "profit": 0.02,
+            "volume": 0.01,
+            "open_price": 1.15605,
+            "current_price": 1.15603,
+            "pips": 0.2,
+            "ticket": 161731242,
+            "open_time": "2026.03.09 14:00"
+        },
+        {
+            "symbol": "GBPUSD",
+            "direction": "SELL",
+            "profit": -0.48,
+            "volume": 0.01,
+            "open_price": 1.33471,
+            "current_price": 1.33519,
+            "pips": -4.8,
+            "ticket": 161710637,
+            "open_time": "2026.03.09 12:38"
+        }
+    ],
+    "recent_closed_trades": [],
+    "ea_connected": true,
+    "account": {
+        "balance": 1983.45,
+        "equity": 1982.99,
+        "floating_pnl": -0.46,
+        "margin": 83.03,
+        "free_margin": 1899.96
+    },
+    "guardian_state": "ACTIVE",
+    "daily_dd": 0.02,
+    "total_dd": 0.0,
+    "today": {
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "net": 0.0
+    },
+    "_open_positions_count": 2
+}
 
-=== [3] Active profile ===
-Profile=0
-LastBuildDataPath=5663
-LastStartTime=1772977955
-MQL5AddChart=0
+=== [5] EA Logs ===
+File: 20260309.log
 
-=== [4] Charts with PropFirmBot ===
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr
+=== [6] MT5 Journal ===
+No journal logs
 
-=== [5] Charts with EURUSD ===
-/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr
-
-=== [6] EURUSD chart content ===
-FOUND EURUSD in: /root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr
-<chart>
-id=131000000000000001
-symbol=EURUSD
-period_type=0
-period_size=15
-digits=5
-tick_size=0.000000
-position_time=0
-scale_fix=0
-scale_fix11=0
-scale_bar=0
-scale_bar_val=0.000000
-scale=4
-mode=1
-fore=0
-grid=1
-volume=0
-scroll=1
-shift=1
-shift_size=20.000000
-fixed_pos=0.000000
-ohlc=0
-bidline=1
-askline=0
-lastline=0
-days=0
-descriptions=0
-window_type=3
-background_color=0
-foreground_color=16777215
-barup_color=65280
-bardown_color=255
-bullcandle_color=65280
-bearcandle_color=255
-chartline_color=65280
-volumes_color=32768
-grid_color=10061943
-bidline_color=10061943
-askline_color=255
-lastline_color=49152
-stops_color=255
-tradeline_color=11186720
-tradehistory_color=9498256
-<expert>
-name=PropFirmBot\PropFirmBot
-path=PropFirmBot\PropFirmBot.ex5
-expertmode=3
-<inputs>
-</inputs>
-</expert>
-<window>
-height=100
-objects=0
-<indicator>
-name=Main
-path=
-apply=1
-show=1
-scale_inherit=0
-scale_line=0
-scale_line_percent=50
-scale_line_value=0.000000
-scale_fix_min=0
-scale_fix_min_val=0.000000
-scale_fix_max=0
-scale_fix_max_val=0.000000
-expertmode=3
-fixed_height=-1
-</indicator>
-</window>
-</chart>
-
-
-=== DONE 2026-03-09 12:39:27 UTC ===
+=== DONE 2026-03-09 12:42:30 UTC ===
 EXIT_CODE=0
