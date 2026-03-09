@@ -1,74 +1,58 @@
 #!/bin/bash
 # =============================================================
-# Compile EA using Windows-style paths for Wine
+# Restart MT5 to load new EA and verify trading
 # =============================================================
 
 echo "============================================"
-echo "  Compile EA (Wine-compatible paths)"
+echo "  Restart MT5 with new EA"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
 MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
-EA_DIR="$MT5_DIR/MQL5/Experts/PropFirmBot"
 export DISPLAY=:99
 export WINEPREFIX=/root/.wine
 
-# 1. Try compile with Windows-style path
-echo "=== [1] Compile with Windows path ==="
-wine "$MT5_DIR/MetaEditor64.exe" /compile:"C:\Program Files\MetaTrader 5\MQL5\Experts\PropFirmBot\PropFirmBot.mq5" /log:"C:\Program Files\MetaTrader 5\MQL5\Experts\PropFirmBot\compile.log" /inc:"C:\Program Files\MetaTrader 5\MQL5" 2>&1
-echo "Waiting 20s for compile..."
-sleep 20
-pkill -f MetaEditor 2>/dev/null
-sleep 2
-
-echo ""
-echo "Check .ex5:"
-ls -la "$EA_DIR"/PropFirmBot.ex5 2>/dev/null || echo ".ex5 NOT found"
+# 1. Confirm .ex5 is fresh
+echo "=== [1] EA file ==="
+ls -la "$MT5_DIR/MQL5/Experts/PropFirmBot/PropFirmBot.ex5"
 echo ""
 
-# 2. If still missing, try alternative compile method
-if [ ! -f "$EA_DIR/PropFirmBot.ex5" ]; then
-    echo "=== [2] Alternative compile ==="
-    cd "$MT5_DIR"
-    wine MetaEditor64.exe /compile:"MQL5\Experts\PropFirmBot\PropFirmBot.mq5" /log 2>&1
-    echo "Waiting 20s..."
-    sleep 20
-    pkill -f MetaEditor 2>/dev/null
-    sleep 2
-    echo ""
-    ls -la "$EA_DIR"/PropFirmBot.ex5 2>/dev/null || echo "Still no .ex5"
-    echo ""
-fi
+# 2. Restart MT5
+echo "=== [2] Restart MT5 ==="
+pkill -f terminal64.exe 2>/dev/null
+sleep 5
+cd "$MT5_DIR"
+screen -dmS mt5 bash -c "export DISPLAY=:99 && export WINEPREFIX=/root/.wine && cd '$MT5_DIR' && wine ./terminal64.exe /portable /login:11797849 /server:FundedNext-Server 2>&1"
+echo "Waiting 30s for MT5 to start..."
+sleep 30
 
-# 3. If STILL missing, check for any .ex5 in system
-if [ ! -f "$EA_DIR/PropFirmBot.ex5" ]; then
-    echo "=== [3] Search for any .ex5 backup ==="
-    find /root/.wine -name "PropFirmBot.ex5" 2>/dev/null
-    find /root -name "PropFirmBot.ex5" 2>/dev/null
-    find /tmp -name "PropFirmBot.ex5" 2>/dev/null
-    echo ""
-
-    # Check if there's a Recycle bin copy or backup
-    echo "Wine trash/recent:"
-    find /root/.wine -name "*.ex5" 2>/dev/null
-    echo ""
-fi
-
-# 4. Check compile logs for errors
-echo "=== [4] Compile error logs ==="
-if [ -f "$EA_DIR/compile.log" ]; then
-    echo "--- compile.log ---"
-    strings "$EA_DIR/compile.log" 2>/dev/null | head -30
+if pgrep -f terminal64.exe > /dev/null; then
+    echo "MT5 RUNNING"
+else
+    echo "MT5 NOT running - trying nohup"
+    nohup bash -c "export DISPLAY=:99 && export WINEPREFIX=/root/.wine && wine '$MT5_DIR/terminal64.exe' /portable /login:11797849 /server:FundedNext-Server" > /dev/null 2>&1 &
+    sleep 30
 fi
 echo ""
-echo "MetaEditor log:"
-ls -t "$MT5_DIR"/MQL5/Logs/*.log 2>/dev/null | head -1 | xargs strings 2>/dev/null | tail -30
+
+# 3. Wait for EA to connect and check
+echo "=== [3] Bot Status ==="
+sleep 10
+if [ -f /var/bots/mt5_status.json ]; then
+    python3 -m json.tool /var/bots/mt5_status.json 2>/dev/null
+else
+    echo "Status file not found"
+fi
 echo ""
 
-# 5. MT5 status
-echo "=== [5] MT5 status ==="
-pgrep -f terminal64.exe > /dev/null && echo "MT5: RUNNING" || echo "MT5: NOT RUNNING"
+# 4. EA log
+echo "=== [4] EA Log (last 30 lines) ==="
+EA_LOG_DIR="$MT5_DIR/MQL5/Logs"
+LATEST_LOG=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
+if [ -n "$LATEST_LOG" ]; then
+    tail -30 "$LATEST_LOG" | strings
+fi
 echo ""
 
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
