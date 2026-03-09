@@ -1,68 +1,215 @@
 ============================================
-  Restart MT5 with new EA
-  2026-03-09 11:20:45 UTC
+  Auto-attach EA to EURUSD chart
+  2026-03-09 12:37:50 UTC
 ============================================
 
-=== [1] EA file ===
--rw-r--r-- 1 root root 162914 Mar  9 11:19 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+=== [1] Stop MT5 ===
+MT5 stopped
 
-=== [2] Restart MT5 ===
-Waiting 30s for MT5 to start...
-MT5 RUNNING
+=== [2] Find chart profiles ===
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart01.chr
 
-=== [3] Bot Status ===
-{
-    "bot_name": "PropFirmBot",
-    "active": false,
-    "balance": 1983.45,
-    "last_trade": null,
-    "updated_at": "2026-03-09 11:21:26",
-    "open_positions": [
-        {
-            "symbol": "EURUSD",
-            "direction": "SELL",
-            "profit": -0.58,
-            "volume": 0.01,
-            "open_price": 1.15605,
-            "current_price": 1.15663,
-            "pips": -5.8,
-            "ticket": 161731242,
-            "open_time": "2026.03.09 14:00"
-        },
-        {
-            "symbol": "GBPUSD",
-            "direction": "SELL",
-            "profit": -0.84,
-            "volume": 0.01,
-            "open_price": 1.33471,
-            "current_price": 1.33555,
-            "pips": -8.4,
-            "ticket": 161710637,
-            "open_time": "2026.03.09 12:38"
-        }
-    ],
-    "recent_closed_trades": [],
-    "ea_connected": false,
-    "account": {
-        "balance": 1983.45,
-        "equity": 1982.03,
-        "floating_pnl": -1.42,
-        "margin": 83.03,
-        "free_margin": 1899.0
-    },
-    "guardian_state": "ACTIVE",
-    "daily_dd": 0.07,
-    "total_dd": 0.01,
-    "today": {
-        "trades": 0,
-        "wins": 0,
-        "losses": 0,
-        "net": 0.0
-    },
-    "_open_positions_count": 2
-}
+Default profile:
 
-=== [4] EA Log (last 30 lines) ===
+All profiles:
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/British Pound/order.wnd
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Euro/order.wnd
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Default/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart02.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart03.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart04.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/chart01.chr
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Charts/Market Overview/order.wnd
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Templates/BollingerBands.tpl
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Templates/Momentum.tpl
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Templates/ADX.tpl
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/SymbolSets/forex.crosses.set
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/SymbolSets/forex.all.set
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/SymbolSets/forex.major.set
 
-=== DONE 2026-03-09 11:21:31 UTC ===
+=== [3] Chart file contents ===
+--- /root/.wine/drive_c/Program ---
+
+--- Files/MetaTrader ---
+
+--- 5/Profiles/Charts/British ---
+
+--- Pound/chart02.chr ---
+
+--- /root/.wine/drive_c/Program ---
+
+--- Files/MetaTrader ---
+
+--- 5/Profiles/Charts/British ---
+
+--- Pound/chart03.chr ---
+
+--- /root/.wine/drive_c/Program ---
+
+--- Files/MetaTrader ---
+
+--- 5/Profiles/Charts/British ---
+
+--- Pound/chart04.chr ---
+
+--- /root/.wine/drive_c/Program ---
+
+--- Files/MetaTrader ---
+
+--- 5/Profiles/Charts/British ---
+
+--- Pound/chart01.chr ---
+
+--- /root/.wine/drive_c/Program ---
+
+--- Files/MetaTrader ---
+
+--- 5/Profiles/Charts/Euro/chart02.chr ---
+
+--- /root/.wine/drive_c/Program ---
+
+--- Files/MetaTrader ---
+
+--- 5/Profiles/Charts/Euro/chart03.chr ---
+
+--- /root/.wine/drive_c/Program ---
+
+--- Files/MetaTrader ---
+
+--- 5/Profiles/Charts/Euro/chart04.chr ---
+
+--- /root/.wine/drive_c/Program ---
+
+--- Files/MetaTrader ---
+
+--- 5/Profiles/Charts/Euro/chart01.chr ---
+
+--- /root/.wine/drive_c/Program ---
+
+--- Files/MetaTrader ---
+
+--- 5/Profiles/Charts/Default/chart01.chr ---
+
+--- /root/.wine/drive_c/Program ---
+
+--- Files/MetaTrader ---
+
+--- 5/Profiles/Charts/Market ---
+
+--- Overview/chart02.chr ---
+
+--- /root/.wine/drive_c/Program ---
+
+--- Files/MetaTrader ---
+
+--- 5/Profiles/Charts/Market ---
+
+--- Overview/chart03.chr ---
+
+--- /root/.wine/drive_c/Program ---
+
+--- Files/MetaTrader ---
+
+--- 5/Profiles/Charts/Market ---
+
+--- Overview/chart04.chr ---
+
+--- /root/.wine/drive_c/Program ---
+
+--- Files/MetaTrader ---
+
+--- 5/Profiles/Charts/Market ---
+
+--- Overview/chart01.chr ---
+
+
+=== [4] terminal.ini ===
+[Common]
+AutoTrading=1
+ExpertsEnabled=1
+[Network]
+Enable=1
+[Experts]
+AutoTrading=1
+AllowLiveTrading=1
+AllowDLL=0
+Enabled=1
+Account=0
+Profile=0
+[LiveUpdate]
+LastBuildDataPath=5663
+[Settings]
+InstallationDate=1771784526
+TesterRefreshDate=1772805096
+RecompiledAll=1773058939
+TradeHistoryFrom=0
+TradeHistoryTo=2147483647
+LastStartTime=1772977955
+[PaneState-Summary]
+PaneStateVersion=500
+[CodeBasesList]
+MQL5AddChart=0
+[IndicatorPropertyPage]
+PropFirmBot 3.00 (EURUSD,M15)=1
+[Window]
+Sheet_545_left=348
+Sheet_545_top=418
+Sheet_545_width=621
+Sheet_545_height=315
+[NewsList-FundedNext-Server]
+SelectedCount=0
+[Pane-59393]
+ID=59393
+FloatLeft=10
+FloatTop=10
+FloatRight=110
+FloatBottom=110
+DockedLeft=0
+DockedTop=947
+DockedRight=1272
+DockedBottom=969
+Alignment=4096
+RowIndex=0
+IsFloating=0
+IsVisible=0
+MRUWidth=32767
+PinState=0
+
+=== [5] Templates ===
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates/BollingerBands.tpl
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates/Momentum.tpl
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Profiles/Templates/ADX.tpl
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Templates/BollingerBands.tpl
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Templates/Momentum.tpl
+/root/.wine/drive_c/Program Files/MetaTrader 5/Profiles/Templates/ADX.tpl
+
+=== [6] Other chart locations ===
+total 20
+drwxr-xr-x  5 root root 4096 Feb 22 18:22 .
+drwxr-xr-x 11 root root 4096 Mar  9 11:19 ..
+drwxr-xr-x  6 root root 4096 Mar  6 11:36 Charts
+drwxr-xr-x  2 root root 4096 Feb 22 18:22 SymbolSets
+drwxr-xr-x  2 root root 4096 Feb 22 18:22 Templates
+
+=== DONE 2026-03-09 12:37:55 UTC ===
 EXIT_CODE=0
