@@ -1,87 +1,64 @@
 #!/bin/bash
-# =============================================================
-# VERIFY DEPLOY + RECOMPILE + RESTART MT5
-# =============================================================
-
-echo "============================================"
-echo "  VERIFY DEPLOY & RECOMPILE"
-echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
-echo "============================================"
-echo ""
+# Quick verify: was deploy applied?
+echo "=== QUICK VERIFY $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
+EA_LOG_DIR="${MT5_BASE}/MQL5/Logs"
 
-# Step 1: Pull latest code from repo
-echo "=== STEP 1: Pull latest code ==="
-cd /root/MT5-PropFirm-Bot && git pull origin claude/test-bot-server-YSFJI 2>&1 || git pull 2>&1
+# 1. Pull latest and deploy
+echo "--- Pull & Deploy ---"
+cd /root/MT5-PropFirm-Bot
+git fetch origin 2>&1 | tail -3
+git checkout claude/bot-status-command-CfoXO 2>&1 | tail -2
+git pull origin claude/bot-status-command-CfoXO 2>&1 | tail -3
+cp -f /root/MT5-PropFirm-Bot/EA/*.mq5 "$EA_DIR/" 2>&1
+cp -f /root/MT5-PropFirm-Bot/EA/*.mqh "$EA_DIR/" 2>&1
+echo "Files copied."
+
+# 2. Check key changes
 echo ""
+echo "--- Verify Changes ---"
+echo "Strategy:"
+grep "InpStrategy.*=" "$EA_DIR/PropFirmBot.mq5" | head -1
+echo "XAU Spread:"
+grep "InpMaxSpreadXAU" "$EA_DIR/PropFirmBot.mq5" | head -1
+echo "AutoBlock:"
+grep "InpAutoBlockSymbol" "$EA_DIR/PropFirmBot.mq5" | head -1
 
-# Step 2: Copy EA files
-echo "=== STEP 2: Copy EA files to MT5 ==="
-cp -v /root/MT5-PropFirm-Bot/EA/*.mq5 "$EA_DIR/" 2>&1
-cp -v /root/MT5-PropFirm-Bot/EA/*.mqh "$EA_DIR/" 2>&1
+# 3. Compile
 echo ""
-
-# Step 3: Check files were updated
-echo "=== STEP 3: Verify files ==="
-echo "Guardian.mqh CanTrade check:"
-grep -n "CanTrade" "$EA_DIR/Guardian.mqh" 2>&1
-echo ""
-echo "PropFirmBot.mq5 XAUUSD spread:"
-grep -n "MaxSpreadXAU" "$EA_DIR/PropFirmBot.mq5" 2>&1
-echo ""
-
-# Step 4: Recompile
-echo "=== STEP 4: Recompile EA ==="
-cd "$EA_DIR"
-
-# Backup current .ex5
-cp PropFirmBot.ex5 PropFirmBot.ex5.bak_$(date +%Y%m%d_%H%M) 2>/dev/null
-
-# Compile using MetaEditor
+echo "--- Compile ---"
 export DISPLAY=:99
-WINEPREFIX=/root/.wine wine "${MT5_BASE}/metaeditor64.exe" /compile:"${EA_DIR}/PropFirmBot.mq5" /log 2>&1 || true
-sleep 5
-
-echo ""
-echo "Compiled file:"
-ls -la PropFirmBot.ex5 2>&1
-echo ""
-
-# Check compilation log
-if [ -f "${EA_DIR}/PropFirmBot.log" ]; then
-    echo "Compilation log:"
-    cat "${EA_DIR}/PropFirmBot.log" 2>&1
-    echo ""
-fi
-
-# Step 5: Restart MT5 to load new EA
-echo "=== STEP 5: Restart MT5 ==="
-echo "Stopping MT5..."
 pkill -f terminal64.exe 2>/dev/null
 sleep 3
+cp "$EA_DIR/PropFirmBot.ex5" "$EA_DIR/PropFirmBot.ex5.bak" 2>/dev/null
+WINEPREFIX=/root/.wine wine "${MT5_BASE}/metaeditor64.exe" /compile:"${EA_DIR}/PropFirmBot.mq5" /log 2>&1 | tail -5
+sleep 6
+echo "Compiled:"
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>&1
 
-echo "Starting MT5..."
-export DISPLAY=:99
-WINEPREFIX=/root/.wine wine "${MT5_BASE}/terminal64.exe" /portable &
-sleep 10
-
-# Check if MT5 started
-if pgrep -f terminal64 > /dev/null 2>&1; then
-    echo "MT5: RESTARTED SUCCESSFULLY"
-    MT5_PID=$(pgrep -f "terminal64.exe" | head -1)
-    echo "PID: $MT5_PID"
-
-    # Protect from OOM
-    echo -900 > /proc/$MT5_PID/oom_score_adj 2>/dev/null
-    echo "OOM protection applied"
-else
-    echo "MT5: FAILED TO START!"
-fi
+# 4. Start MT5
 echo ""
+echo "--- Start MT5 ---"
+WINEPREFIX=/root/.wine wine "${MT5_BASE}/terminal64.exe" /portable &
+sleep 12
+if pgrep -f terminal64 > /dev/null 2>&1; then
+    MT5_PID=$(pgrep -f "terminal64.exe" | head -1)
+    echo "MT5: RUNNING PID=$MT5_PID"
+    echo -900 > /proc/$MT5_PID/oom_score_adj 2>/dev/null
+else
+    echo "MT5: FAILED!"
+fi
 
-echo "============================================"
-echo "  DEPLOY COMPLETE"
-echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
-echo "============================================"
+# 5. Wait for EA and show logs
+sleep 15
+echo ""
+echo "--- EA Log ---"
+LATEST=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
+if [ -n "$LATEST" ]; then
+    tail -25 "$LATEST" 2>&1
+fi
+
+echo ""
+echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="

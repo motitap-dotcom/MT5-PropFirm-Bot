@@ -126,7 +126,7 @@ CRiskManager::CRiskManager()
    m_daily_start_balance= 0;
    m_daily_reset_time   = 0;
    m_max_spread_major   = 3.0;
-   m_max_spread_xau     = 8.0;
+   m_max_spread_xau     = 45.0;
    m_london_start_hour  = 7;
    m_london_end_hour    = 16;
    m_ny_start_hour      = 12;

@@ -471,7 +471,11 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
 
    // Step 1: Get H4 bias
    int htf_bias = GetHTFBias();
-   if(htf_bias == 0) return SIGNAL_NONE; // No clear trend
+   if(htf_bias == 0)
+   {
+      PrintFormat("[SMC] %s - no H4 bias (EMA50/200 mixed), skip", m_symbol);
+      return SIGNAL_NONE;
+   }
 
    // Step 2: Get ATR for SL/TP calculation
    if(CopyBuffer(m_handle_atr, 0, 0, 3, m_atr) < 3) return SIGNAL_NONE;
@@ -512,6 +516,12 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
 
          return SIGNAL_BUY;
       }
+      else
+      {
+         PrintFormat("[SMC] %s bullish bias but no OB/FVG | OB=%s FVG=%s LiqSweep=%s",
+                     m_symbol, has_bullish_ob ? "Y" : "N", has_bullish_fvg ? "Y" : "N",
+                     has_liquidity_sweep ? "Y" : "N");
+      }
    }
 
    // Step 4: Look for SELL setup (bearish HTF bias)
@@ -543,6 +553,12 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
                      has_bearish_fvg ? "Y" : "N");
 
          return SIGNAL_SELL;
+      }
+      else
+      {
+         PrintFormat("[SMC] %s bearish bias but no OB/FVG | OB=%s FVG=%s LiqSweep=%s",
+                     m_symbol, has_bearish_ob ? "Y" : "N", has_bearish_fvg ? "Y" : "N",
+                     has_liquidity_sweep ? "Y" : "N");
       }
    }
 
@@ -652,6 +668,13 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
                   method, entry, sl_price, tp_price, rsi_buf[0], htf_bias);
       return SIGNAL_SELL;
    }
+
+   // Log why no signal was generated
+   PrintFormat("[EMA] %s no signal | CrossUp=%s RecentUp=%s MomBuy=%s | CrossDn=%s RecentDn=%s MomSell=%s | RSI=%.1f HTF=%d | EMAGap=%.1fbp",
+              m_symbol,
+              cross_up ? "Y" : "N", recent_cross_up ? "Y" : "N", momentum_buy ? "Y" : "N",
+              cross_down ? "Y" : "N", recent_cross_down ? "Y" : "N", momentum_sell ? "Y" : "N",
+              rsi_buf[0], htf_bias, ema_gap_pct);
 
    return SIGNAL_NONE;
 }
