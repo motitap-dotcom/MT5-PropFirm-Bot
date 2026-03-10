@@ -1,68 +1,54 @@
 #!/bin/bash
-# Deploy latest EA from repo to VPS + restart MT5
-echo "=== DEPLOY & RESTART $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+# Verify EA loaded after restart
+echo "=== POST-DEPLOY CHECK $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
 export DISPLAY=:99
 MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
-EA_DIR="$MT5_DIR/MQL5/Experts/PropFirmBot"
-CONFIG_DIR="$MT5_DIR/MQL5/Files/PropFirmBot"
-REPO_DIR="/root/MT5-PropFirm-Bot"
 
-# 1. Pull latest from repo
-echo "[1] Pulling latest code..."
-cd "$REPO_DIR"
-git fetch origin claude/update-bot-deployment-Ej25j 2>&1 || git fetch origin 2>&1
-git checkout claude/update-bot-deployment-Ej25j 2>/dev/null || true
-git pull origin claude/update-bot-deployment-Ej25j 2>&1 || git pull 2>&1
-echo "Git pull done"
+# 1. MT5 running?
+echo "[1] MT5 Process:"
+pgrep -af terminal64 2>/dev/null || echo "NOT RUNNING!"
 
-# 2. Copy EA files
+# 2. EA version in source
 echo ""
-echo "[2] Copying EA files..."
-mkdir -p "$EA_DIR" "$CONFIG_DIR"
-cp -v "$REPO_DIR"/EA/*.mq5 "$EA_DIR/" 2>&1
-cp -v "$REPO_DIR"/EA/*.mqh "$EA_DIR/" 2>&1
-echo ""
-echo "[2b] Copying configs..."
-cp -v "$REPO_DIR"/configs/*.json "$CONFIG_DIR/" 2>&1
+echo "[2] EA Version (source):"
+grep "property version" "$MT5_DIR/MQL5/Experts/PropFirmBot/PropFirmBot.mq5" 2>/dev/null
 
-# 3. Check version
+# 3. Compiled file
 echo ""
-echo "[3] EA version on VPS:"
-grep "property version" "$EA_DIR/PropFirmBot.mq5" 2>/dev/null
+echo "[3] Compiled EA (.ex5):"
+ls -la "$MT5_DIR/MQL5/Experts/PropFirmBot/PropFirmBot.ex5" 2>/dev/null
 
-# 4. Try to compile
+# 4. EA Logs - check if it loaded
 echo ""
-echo "[4] Compiling EA..."
-cd "$EA_DIR"
-if [ -f "$MT5_DIR/metaeditor64.exe" ]; then
-    WINEPREFIX=/root/.wine wine "$MT5_DIR/metaeditor64.exe" /compile:PropFirmBot.mq5 /log 2>/dev/null
-    sleep 5
-    ls -la PropFirmBot.ex5 2>/dev/null
+echo "[4] EA Log (today):"
+LOG_FILE="$MT5_DIR/MQL5/Logs/$(date '+%Y%m%d').log"
+if [ -f "$LOG_FILE" ]; then
+    echo "Size: $(stat -c %s "$LOG_FILE") bytes"
+    tail -30 "$LOG_FILE" | strings | sed 's/\x00//g'
 else
-    echo "MetaEditor not found, checking for existing .ex5..."
-    ls -la PropFirmBot.ex5 2>/dev/null || echo "No .ex5 file"
+    echo "No EA log for today"
 fi
 
-# 5. Restart MT5
+# 5. Terminal log
 echo ""
-echo "[5] Restarting MT5..."
-pkill -9 -f terminal64 2>/dev/null
-sleep 3
+echo "[5] Terminal Journal (today):"
+TERM_LOG="$MT5_DIR/logs/$(date '+%Y%m%d').log"
+if [ -f "$TERM_LOG" ]; then
+    tail -20 "$TERM_LOG" | strings | sed 's/\x00//g'
+else
+    echo "No terminal log"
+fi
 
-# Ensure display
-pgrep -x Xvfb > /dev/null || { Xvfb :99 -screen 0 1280x1024x24 & sleep 2; }
-pgrep -x x11vnc > /dev/null || { x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw 2>/dev/null; sleep 1; }
-
-cd "$MT5_DIR"
-nohup wine "$MT5_DIR/terminal64.exe" /portable > /tmp/mt5_start.log 2>&1 &
-echo "MT5 started (PID: $!)"
-sleep 15
-
-# 6. Verify
+# 6. Status JSON
 echo ""
-echo "[6] Verification:"
-pgrep -af terminal64 2>/dev/null && echo "MT5: RUNNING" || echo "MT5: NOT RUNNING!"
+echo "[6] Bot Status:"
+STATUS_FILE="$MT5_DIR/MQL5/Files/PropFirmBot/status.json"
+if [ -f "$STATUS_FILE" ]; then
+    cat "$STATUS_FILE"
+else
+    echo "No status file yet"
+fi
 
 echo ""
-echo "=== DEPLOY COMPLETE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
