@@ -60,9 +60,10 @@ echo "Files copied: OK"
 echo ""
 echo ">>> STEP 4: Compiling EA..."
 
-# Delete old compiled file to force fresh compile
+# Delete old compiled files from ALL possible locations
 rm -f "${EA_DIR}/PropFirmBot.ex5"
-echo "Old .ex5 deleted"
+rm -f "${MT5}/MQL5/Experts/PropFirmBot.ex5"
+echo "Old .ex5 deleted (both locations)"
 
 # Ensure Xvfb is running (MetaEditor needs display)
 if ! pgrep Xvfb > /dev/null; then
@@ -72,8 +73,10 @@ if ! pgrep Xvfb > /dev/null; then
 fi
 
 # Compile with MetaEditor
-cd "$EA_DIR"
-wine "${MT5}/metaeditor64.exe" /compile:PropFirmBot.mq5 /log 2>/dev/null
+# IMPORTANT: MetaEditor outputs .ex5 to MQL5/Experts/ (parent dir)
+# so we compile from MQL5/Experts/ with the subfolder path
+cd "${MT5}/MQL5/Experts"
+wine "${MT5}/metaeditor64.exe" /compile:"PropFirmBot/PropFirmBot.mq5" /log 2>/dev/null
 COMPILE_EXIT=$?
 sleep 5
 
@@ -83,27 +86,48 @@ sleep 5
 echo ""
 echo ">>> STEP 5: Verifying compilation..."
 
-if [ -f "${EA_DIR}/PropFirmBot.ex5" ]; then
-    EX5_SIZE=$(stat -c%s "${EA_DIR}/PropFirmBot.ex5" 2>/dev/null || echo "0")
-    EX5_DATE=$(stat -c%y "${EA_DIR}/PropFirmBot.ex5" 2>/dev/null)
+# MetaEditor may put .ex5 in different locations - check all
+EX5_FOUND=""
+for CHECK_PATH in \
+    "${EA_DIR}/PropFirmBot.ex5" \
+    "${MT5}/MQL5/Experts/PropFirmBot.ex5" \
+    "${MT5}/MQL5/Experts/PropFirmBot/PropFirmBot.ex5"; do
+    if [ -f "$CHECK_PATH" ]; then
+        EX5_FOUND="$CHECK_PATH"
+        break
+    fi
+done
+
+if [ -n "$EX5_FOUND" ]; then
+    EX5_SIZE=$(stat -c%s "$EX5_FOUND" 2>/dev/null || echo "0")
+    EX5_DATE=$(stat -c%y "$EX5_FOUND" 2>/dev/null)
     echo "COMPILE SUCCESS!"
-    echo "  File: PropFirmBot.ex5"
+    echo "  File: $EX5_FOUND"
     echo "  Size: ${EX5_SIZE} bytes"
     echo "  Date: ${EX5_DATE}"
+
+    # If .ex5 ended up in parent dir, copy it to EA subfolder too
+    if [ "$EX5_FOUND" != "${EA_DIR}/PropFirmBot.ex5" ]; then
+        cp "$EX5_FOUND" "${EA_DIR}/PropFirmBot.ex5"
+        echo "  Copied to: ${EA_DIR}/PropFirmBot.ex5"
+    fi
 
     if [ "$EX5_SIZE" -lt 1000 ]; then
         echo "WARNING: .ex5 file is suspiciously small!"
     fi
 else
-    echo "COMPILE FAILED - .ex5 not found!"
+    echo "COMPILE FAILED - .ex5 not found anywhere!"
     echo "Checking MetaEditor log..."
-    # MetaEditor logs are UTF-16LE
-    LOGFILE="${EA_DIR}/PropFirmBot.log"
-    if [ -f "$LOGFILE" ]; then
-        iconv -f UTF-16LE -t UTF-8 "$LOGFILE" 2>/dev/null | tail -20
-    fi
+    # MetaEditor logs are UTF-16LE - check both possible locations
+    for LOGFILE in "${EA_DIR}/PropFirmBot.log" "${MT5}/MQL5/Experts/PropFirmBot.log"; do
+        if [ -f "$LOGFILE" ]; then
+            echo "Log: $LOGFILE"
+            iconv -f UTF-16LE -t UTF-8 "$LOGFILE" 2>/dev/null | tail -20
+            break
+        fi
+    done
     echo ""
-    echo "Trying alternative: check if old .ex5 exists elsewhere..."
+    echo "Searching for .ex5 anywhere..."
     find "${MT5}" -name "PropFirmBot.ex5" -type f 2>/dev/null
 fi
 
@@ -223,11 +247,16 @@ echo "  DEPLOY SUMMARY - $(date -u)"
 echo "=========================================="
 echo "Repo branch: $BRANCH"
 echo "Commit: $(cd $REPO && git log --oneline -1)"
-echo "EA .ex5: $([ -f '${EA_DIR}/PropFirmBot.ex5' ] && echo 'EXISTS' || echo 'MISSING')"
-echo "MT5: $(pgrep -f terminal64.exe > /dev/null && echo 'RUNNING' || echo 'NOT RUNNING')"
+# Check .ex5 in both possible locations
+EX5_STATUS="MISSING"
+for p in "${EA_DIR}/PropFirmBot.ex5" "${MT5}/MQL5/Experts/PropFirmBot.ex5"; do
+    [ -f "$p" ] && EX5_STATUS="EXISTS ($(stat -c%s "$p") bytes)" && break
+done
+echo "EA .ex5: $EX5_STATUS"
+echo "MT5: $(pgrep -f terminal64.exe > /dev/null && echo 'RUNNING (PID: '$(pgrep -f terminal64.exe | head -1)')' || echo 'NOT RUNNING')"
 echo "Xvfb: $(pgrep Xvfb > /dev/null && echo 'RUNNING' || echo 'NOT RUNNING')"
 echo "VNC: $(pgrep x11vnc > /dev/null && echo 'RUNNING' || echo 'NOT RUNNING')"
-echo "Watchdog: $(crontab -l 2>/dev/null | grep -q mt5_watchdog && echo 'INSTALLED' || echo 'NOT INSTALLED')"
+echo "Watchdog: $(crontab -l 2>/dev/null | grep -q mt5_watchdog && echo 'INSTALLED (every 2 min)' || echo 'NOT INSTALLED')"
 echo "=========================================="
 echo "DEPLOY COMPLETE"
 echo "=========================================="
