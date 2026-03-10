@@ -1,16 +1,65 @@
-=== QUICK RESTART 2026-03-10 14:13:16 UTC ===
-[1] Killing old MT5...
-Xvfb: OK
-VNC: OK
-Telegram already in: /root/.wine/drive_c/Program Files/MetaTrader 5/config/common.ini
-[2] Starting MT5...
-MT5 launched (PID: 3986075)
-[3] Verification:
-MT5: RUNNING
+=== EA VERIFICATION 2026-03-10 14:14:58 UTC ===
+[1] MT5 Process:
 3986075 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
 3986078 C:\Program Files\MetaTrader 5\terminal64.exe /portable
-Log size: 108640 bytes
-Last 5 lines:
 
-=== DONE 2026-03-10 14:13:34 UTC ===
+[2] EA Log (last 20 lines):
+
+[3] MT5 Terminal Journal (last 10 lines):
+File: /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260310.log
+
+[4] Bot Status:
+{
+  "timestamp": "2026.03.10 17:14:58",
+  "server_time": "2026.03.10 17:14:58",
+  "gmt_time": "2026.03.10 14:14:58",
+  "account": {
+    "number": 11797849,
+    "name": "FundedNext-Stellar Instant Account- moti tapiro",
+    "server": "FundedNext-Server",
+    "currency": "USD",
+    "leverage": 30,
+    "balance": 1980.22,
+    "equity": 1980.22,
+    "margin": 0.00,
+    "free_margin": 1980.22,
+    "floating_pnl": 0.00,
+    "initial_balance": 1980.22,
+    "total_pnl": 0.00,
+    "profit_percent": 0.00
+  },
+  "guardian": {
+    "state": "ACTIVE",
+    "daily_dd": 0.00,
+    "total_dd": 0.00,
+    "halt_message": "",
+    "connection_ok": true,
+    "can_trade": true
+  },
+  "today": {
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "profit": 0.00,
+    "loss": 0.00,
+    "net": 0.00,
+    "consec_losses": 0
+  },
+  "positions": {
+    "count": 0,
+    "open": []
+  }
+}
+[5] Monitor Status:
+{
+    "bot_name": "MT5 Bot",
+    "active": true,
+    "balance": 1981.41,
+    "last_trade": null,
+    "updated_at": "2026-03-10T14:14:57Z",
+    "open_positions": [],
+    "recent_closed_trades": []
+}
+
+=== DONE 2026-03-10 14:14:58 UTC ===
 EXIT_CODE=0
