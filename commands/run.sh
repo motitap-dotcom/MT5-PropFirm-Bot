@@ -1,198 +1,199 @@
 #!/bin/bash
 # =============================================================
-# FIX MEMORY: Add swap + protect MT5 from OOM killer
+# FULL STATUS CHECK: MT5 + Bot + Trades
 # =============================================================
 
 echo "============================================"
-echo "  MEMORY FIX - Swap + OOM Protection"
+echo "  FULL BOT STATUS CHECK"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
 # =============================================
-# STEP 1: Check current memory situation
+# 1. MT5 Process
 # =============================================
-echo "=== STEP 1: Current Memory Status ==="
-free -h
-echo ""
-echo "Swap status:"
-swapon --show 2>/dev/null || echo "No swap configured!"
-echo ""
-
-# =============================================
-# STEP 2: Create 4GB swap file
-# =============================================
-echo "=== STEP 2: Creating 4GB Swap File ==="
-
-if [ -f /swapfile ] && swapon --show | grep -q "/swapfile"; then
-    echo "Swap already exists and is active!"
-    swapon --show
-else
-    # Remove old swap if exists but not active
-    swapoff /swapfile 2>/dev/null
-    rm -f /swapfile 2>/dev/null
-
-    # Create 4GB swap
-    echo "Creating 4GB swap file..."
-    fallocate -l 4G /swapfile
-    chmod 600 /swapfile
-    mkswap /swapfile
-    swapon /swapfile
-    echo "Swap CREATED and ACTIVATED!"
-
-    # Make permanent (survive reboot)
-    if ! grep -q "/swapfile" /etc/fstab 2>/dev/null; then
-        echo "/swapfile none swap sw 0 0" >> /etc/fstab
-        echo "Added to /etc/fstab (permanent)"
-    fi
-fi
-
-echo ""
-echo "Memory after swap:"
-free -h
-echo ""
-
-# =============================================
-# STEP 3: Optimize swap settings
-# =============================================
-echo "=== STEP 3: Optimize Swap Settings ==="
-
-# swappiness=10 means kernel will only use swap when RAM is almost full
-echo 10 > /proc/sys/vm/swappiness
-echo "vm.swappiness=10" > /etc/sysctl.d/99-swap.conf
-
-# vfs_cache_pressure - lower means keep more cache
-echo 50 > /proc/sys/vm/vfs_cache_pressure
-echo "vm.vfs_cache_pressure=50" >> /etc/sysctl.d/99-swap.conf
-
-sysctl -p /etc/sysctl.d/99-swap.conf 2>/dev/null
-echo "Swappiness: $(cat /proc/sys/vm/swappiness) (10 = use swap only when needed)"
-echo "Cache pressure: $(cat /proc/sys/vm/vfs_cache_pressure)"
-echo ""
-
-# =============================================
-# STEP 4: Protect MT5 from OOM killer
-# =============================================
-echo "=== STEP 4: Protect MT5 from OOM Killer ==="
-
-# Set OOM score adjustment for MT5 to -900 (almost never kill)
-# -1000 = never kill, 0 = normal, +1000 = kill first
-MT5_PIDS=$(pgrep -f "terminal64" 2>/dev/null)
-if [ -n "$MT5_PIDS" ]; then
-    for pid in $MT5_PIDS; do
-        echo -900 > /proc/$pid/oom_score_adj 2>/dev/null
-        echo "MT5 PID $pid: OOM score set to -900 (protected)"
-    done
-else
-    echo "MT5 not running - OOM protection will be applied by watchdog"
-fi
-
-# Update watchdog to also set OOM protection on restart
-if [ -f /root/mt5_watchdog.sh ]; then
-    # Check if OOM protection already in watchdog
-    if ! grep -q "oom_score_adj" /root/mt5_watchdog.sh 2>/dev/null; then
-        # Add OOM protection after MT5 starts in the watchdog
-        sed -i '/MT5 restarted successfully/a\    # Protect MT5 from OOM killer\n    for pid in $(pgrep -f terminal64 2>/dev/null); do\n        echo -900 > /proc/$pid/oom_score_adj 2>/dev/null\n    done' /root/mt5_watchdog.sh
-        echo "Updated watchdog with OOM protection"
-    else
-        echo "Watchdog already has OOM protection"
-    fi
-fi
-echo ""
-
-# =============================================
-# STEP 5: Set chrome-headless (Tradovate) to be killed FIRST
-# =============================================
-echo "=== STEP 5: Set Tradovate chrome-headless as OOM target ==="
-
-CHROME_PIDS=$(pgrep -f "chrome-headless\|chromium\|chrome" 2>/dev/null)
-if [ -n "$CHROME_PIDS" ]; then
-    for pid in $CHROME_PIDS; do
-        echo 500 > /proc/$pid/oom_score_adj 2>/dev/null
-        PROC_NAME=$(cat /proc/$pid/comm 2>/dev/null)
-        echo "Chrome PID $pid ($PROC_NAME): OOM score set to +500 (kill first)"
-    done
-else
-    echo "No chrome processes found right now"
-fi
-
-# Limit Tradovate bot memory via systemd if it's a service
-if systemctl is-active tradovate-bot.service > /dev/null 2>&1; then
-    echo ""
-    echo "Tradovate bot is running as systemd service"
-    echo "Setting memory limit to 2GB..."
-    mkdir -p /etc/systemd/system/tradovate-bot.service.d/
-    cat > /etc/systemd/system/tradovate-bot.service.d/memory-limit.conf << 'EOF'
-[Service]
-MemoryMax=2G
-MemoryHigh=1500M
-OOMScoreAdjust=500
-EOF
-    systemctl daemon-reload
-    echo "Tradovate memory limited to 2GB (was unlimited)"
-    echo "Current Tradovate memory usage:"
-    systemctl status tradovate-bot.service 2>/dev/null | grep -i "memory\|Memory" || true
-else
-    echo "Tradovate bot not running as systemd service"
-    # Check if it runs from cron
-    crontab -l 2>/dev/null | grep -i "tradovate" || true
-fi
-echo ""
-
-# =============================================
-# STEP 6: Show all memory-hungry processes
-# =============================================
-echo "=== STEP 6: Top Memory Consumers ==="
-ps aux --sort=-%mem | head -15
-echo ""
-
-# =============================================
-# STEP 7: Verify MT5 is still running
-# =============================================
-echo "=== STEP 7: MT5 Status ==="
+echo "=== 1. MT5 Process ==="
 if pgrep -f terminal64 > /dev/null 2>&1; then
-    echo "MT5: ✅ RUNNING"
+    echo "MT5: RUNNING"
     MT5_PID=$(pgrep -f "terminal64.exe" | head -1)
     if [ -n "$MT5_PID" ]; then
         echo "PID: $MT5_PID"
-        echo "Memory: $(ps -p $MT5_PID -o rss= 2>/dev/null | awk '{printf "%.0f MB\n", $1/1024}')"
-        echo "OOM Score: $(cat /proc/$MT5_PID/oom_score_adj 2>/dev/null)"
+        echo "Memory: $(ps -p $MT5_PID -o rss= 2>/dev/null | awk '{printf "%.0f MB", $1/1024}')"
+        echo "Uptime: $(ps -p $MT5_PID -o etime= 2>/dev/null | xargs)"
+        echo "CPU: $(ps -p $MT5_PID -o %cpu= 2>/dev/null | xargs)%"
     fi
 else
-    echo "MT5: ❌ NOT RUNNING - watchdog will restart in <2 min"
+    echo "MT5: NOT RUNNING!"
 fi
 echo ""
 
 # =============================================
-# STEP 8: Final summary
+# 2. Memory & System
+# =============================================
+echo "=== 2. System Resources ==="
+free -h | head -3
+echo ""
+echo "Disk:"
+df -h / | tail -1
+echo ""
+echo "Load average: $(uptime | awk -F'load average:' '{print $2}')"
+echo ""
+
+# =============================================
+# 3. VNC Status
+# =============================================
+echo "=== 3. VNC/Display ==="
+if pgrep -f x11vnc > /dev/null 2>&1; then
+    echo "VNC: RUNNING"
+else
+    echo "VNC: NOT RUNNING"
+fi
+if pgrep -f Xvfb > /dev/null 2>&1; then
+    echo "Xvfb: RUNNING"
+else
+    echo "Xvfb: NOT RUNNING"
+fi
+echo ""
+
+# =============================================
+# 4. MT5 Logs (last activity)
+# =============================================
+echo "=== 4. MT5 Recent Logs ==="
+MT5_LOG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/Logs"
+if [ -d "$MT5_LOG_DIR" ]; then
+    LATEST_LOG=$(ls -t "$MT5_LOG_DIR"/*.log 2>/dev/null | head -1)
+    if [ -n "$LATEST_LOG" ]; then
+        echo "Latest log: $(basename "$LATEST_LOG")"
+        echo "Last 30 lines:"
+        tail -30 "$LATEST_LOG"
+    else
+        echo "No log files found"
+    fi
+else
+    echo "Log directory not found"
+fi
+echo ""
+
+# =============================================
+# 5. EA Expert Logs
+# =============================================
+echo "=== 5. EA Expert Logs ==="
+EA_LOG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs"
+if [ -d "$EA_LOG_DIR" ]; then
+    LATEST_EA_LOG=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
+    if [ -n "$LATEST_EA_LOG" ]; then
+        echo "Latest EA log: $(basename "$LATEST_EA_LOG")"
+        echo "Last 40 lines:"
+        tail -40 "$LATEST_EA_LOG"
+    else
+        echo "No EA log files found"
+    fi
+else
+    echo "EA log directory not found"
+fi
+echo ""
+
+# =============================================
+# 6. PropFirmBot files
+# =============================================
+echo "=== 6. EA Files Status ==="
+EA_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"
+if [ -d "$EA_DIR" ]; then
+    echo "EA directory exists"
+    echo "Files:"
+    ls -la "$EA_DIR/" 2>/dev/null | head -20
+    echo ""
+    # Check if compiled
+    if [ -f "$EA_DIR/PropFirmBot.ex5" ]; then
+        echo "Compiled EA: YES (PropFirmBot.ex5 exists)"
+        echo "Last compiled: $(stat -c '%y' "$EA_DIR/PropFirmBot.ex5" 2>/dev/null | cut -d. -f1)"
+    else
+        echo "Compiled EA: NO - .ex5 not found!"
+    fi
+else
+    echo "EA directory NOT FOUND!"
+fi
+echo ""
+
+# =============================================
+# 7. Config files
+# =============================================
+echo "=== 7. Config Files ==="
+CONFIG_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot"
+if [ -d "$CONFIG_DIR" ]; then
+    ls -la "$CONFIG_DIR/" 2>/dev/null
+else
+    echo "Config directory not found"
+fi
+echo ""
+
+# =============================================
+# 8. Trade History (from journal)
+# =============================================
+echo "=== 8. Trade Journal ==="
+JOURNAL_FILE="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/trade_journal.csv"
+if [ -f "$JOURNAL_FILE" ]; then
+    echo "Trade journal exists"
+    TOTAL_TRADES=$(wc -l < "$JOURNAL_FILE" 2>/dev/null)
+    echo "Total entries: $TOTAL_TRADES"
+    echo "Last 10 trades:"
+    tail -10 "$JOURNAL_FILE"
+else
+    echo "No trade journal found (no trades executed yet?)"
+fi
+echo ""
+
+# =============================================
+# 9. Watchdog Status
+# =============================================
+echo "=== 9. Watchdog ==="
+if [ -f /root/mt5_watchdog.sh ]; then
+    echo "Watchdog script: EXISTS"
+    # Check if running via cron
+    if crontab -l 2>/dev/null | grep -q "mt5_watchdog"; then
+        echo "Watchdog cron: ACTIVE"
+        crontab -l 2>/dev/null | grep "mt5_watchdog"
+    else
+        echo "Watchdog cron: NOT FOUND"
+    fi
+else
+    echo "Watchdog: NOT INSTALLED"
+fi
+echo ""
+
+# =============================================
+# 10. Network connectivity
+# =============================================
+echo "=== 10. Network ==="
+echo -n "Internet: "
+if ping -c 1 -W 3 8.8.8.8 > /dev/null 2>&1; then
+    echo "OK"
+else
+    echo "NO CONNECTION"
+fi
+echo -n "MT5 server (FundedNext): "
+if timeout 5 bash -c 'echo > /dev/tcp/77.237.234.2/443' 2>/dev/null; then
+    echo "Port 443 open"
+else
+    echo "Cannot check directly"
+fi
+echo ""
+
+# =============================================
+# Summary
 # =============================================
 echo "============================================"
-echo "  MEMORY FIX COMPLETE!"
-echo ""
-echo "  Changes made:"
-echo "  1. ✅ 4GB Swap file created (permanent)"
-echo "  2. ✅ Swappiness=10 (use swap only when needed)"
-echo "  3. ✅ MT5 OOM score=-900 (protected)"
-echo "  4. ✅ Chrome/Tradovate OOM score=+500 (kill first)"
-echo "  5. ✅ Tradovate memory limited to 2GB"
-echo "  6. ✅ All settings survive reboot"
-echo ""
-echo "  Before: 7.8GB RAM, 0 Swap = OOM crashes"
-echo "  After:  7.8GB RAM + 4GB Swap = 11.8GB total"
-echo "  MT5 is the LAST process to be killed"
+echo "  SUMMARY"
 echo "============================================"
+MT5_OK="NO"
+pgrep -f terminal64 > /dev/null 2>&1 && MT5_OK="YES"
+VNC_OK="NO"
+pgrep -f x11vnc > /dev/null 2>&1 && VNC_OK="YES"
 
-# Telegram notification
-curl -s -4 --connect-timeout 10 "https://api.telegram.org/bot8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g/sendMessage" \
-    -d "chat_id=7013213983" \
-    -d "text=🧠 MEMORY FIX INSTALLED!
-
-💾 4GB Swap added (was 0!)
-🛡️ MT5 protected from OOM killer
-⚡ Chrome/Tradovate = kill first if low memory
-📊 Total memory: 7.8GB RAM + 4GB Swap
-
-MT5 will no longer crash from memory issues!" > /dev/null 2>&1
+echo "  MT5 Running:     $MT5_OK"
+echo "  VNC Running:     $VNC_OK"
+echo "  Date:            $(date '+%Y-%m-%d %H:%M:%S UTC')"
+echo "============================================"
 
 echo ""
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
