@@ -7,6 +7,10 @@ on:
       - 'configs/**'
   workflow_dispatch:
 
+concurrency:
+  group: deploy-ea
+  cancel-in-progress: false
+
 permissions:
   contents: write
 

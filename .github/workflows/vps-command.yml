@@ -6,13 +6,17 @@ on:
       - 'commands/run.sh'
   workflow_dispatch:
 
+concurrency:
+  group: vps-command
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
 jobs:
   run-command:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
