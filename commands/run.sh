@@ -1,10 +1,10 @@
 #!/bin/bash
 # =============================================================
-# Verify EA is running with latest compiled version
+# Restart MT5 to load newly compiled EA
 # =============================================================
 
 echo "============================================"
-echo "  Verify PropFirmBot EA is LIVE"
+echo "  Restart MT5 to load new EA version"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
@@ -12,72 +12,76 @@ echo ""
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
 
-# 1. Is MT5 process running?
-echo "=== [1] MT5 Process ==="
-if pgrep -f terminal64.exe > /dev/null 2>&1; then
-    echo "OK - MT5 is RUNNING (PID: $(pgrep -f terminal64.exe))"
-else
-    echo "PROBLEM - MT5 is NOT running!"
-fi
-echo ""
-
-# 2. Check .ex5 file timestamp - is it the new version?
-echo "=== [2] Compiled EA file (.ex5) ==="
+# 1. Show current .ex5 timestamp BEFORE restart
+echo "=== [1] Current .ex5 (BEFORE restart) ==="
 ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
-echo "Current time: $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo ""
 
-# 3. Check MT5 logs for EA activity
-echo "=== [3] MT5 Logs (last 50 lines) ==="
-MT5_LOGS="${MT5_BASE}/Logs"
-LATEST_LOG=$(ls -t "$MT5_LOGS"/*.log 2>/dev/null | head -1)
-if [ -n "$LATEST_LOG" ]; then
-    echo "Log file: $LATEST_LOG"
-    tail -50 "$LATEST_LOG" 2>/dev/null
+# 2. Kill MT5
+echo "=== [2] Stopping MT5 ==="
+pkill -f terminal64.exe 2>/dev/null
+sleep 3
+if pgrep -f terminal64.exe > /dev/null 2>&1; then
+    echo "Force killing..."
+    pkill -9 -f terminal64.exe 2>/dev/null
+    sleep 2
+fi
+echo "MT5 stopped."
+echo ""
+
+# 3. Recompile to make sure .ex5 is fresh
+echo "=== [3] Recompile EA ==="
+cd "$EA_DIR"
+WINEPREFIX=/root/.wine wine "${MT5_BASE}/metaeditor64.exe" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
+sleep 5
+echo "Recompile done."
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
+echo ""
+
+# 4. Start MT5
+echo "=== [4] Starting MT5 ==="
+export DISPLAY=:99
+export WINEPREFIX=/root/.wine
+cd "${MT5_BASE}"
+wine terminal64.exe &
+sleep 15
+echo ""
+
+# 5. Verify MT5 is running
+echo "=== [5] Verify MT5 ==="
+if pgrep -f terminal64.exe > /dev/null 2>&1; then
+    echo "OK - MT5 is RUNNING (PID: $(pgrep -f terminal64.exe | head -1))"
 else
-    echo "No log files found in $MT5_LOGS"
+    echo "ERROR - MT5 did not start!"
 fi
 echo ""
 
-# 4. Check EA-specific logs (Expert tab)
-echo "=== [4] Expert Advisor Logs ==="
+# 6. Check .ex5 timestamp AFTER
+echo "=== [6] .ex5 file (AFTER restart) ==="
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
+echo ""
+
+# 7. Wait for EA to initialize and check logs
+echo "=== [7] EA Logs (waiting for init...) ==="
+sleep 10
 EA_LOGS="${MT5_BASE}/MQL5/Logs"
 LATEST_EA_LOG=$(ls -t "$EA_LOGS"/*.log 2>/dev/null | head -1)
 if [ -n "$LATEST_EA_LOG" ]; then
-    echo "EA Log file: $LATEST_EA_LOG"
-    tail -50 "$LATEST_EA_LOG" 2>/dev/null
-else
-    echo "No EA log files found in $EA_LOGS"
+    echo "Log: $LATEST_EA_LOG"
+    tail -30 "$LATEST_EA_LOG" 2>/dev/null
 fi
 echo ""
 
-# 5. Check if there's trade activity
-echo "=== [5] Account & Trade Status ==="
+# 8. Check status.json
+echo "=== [8] Status ==="
 STATUS_FILE="${MT5_BASE}/MQL5/Files/PropFirmBot/status.json"
+sleep 5
 if [ -f "$STATUS_FILE" ]; then
-    echo "Status file found:"
     cat "$STATUS_FILE" 2>/dev/null
 else
-    echo "No status.json found"
-fi
-echo ""
-
-# 6. Check mt5_status.json from daemon
-echo "=== [6] MT5 Status Daemon ==="
-if [ -f /var/bots/mt5_status.json ]; then
-    python3 -m json.tool /var/bots/mt5_status.json 2>/dev/null || cat /var/bots/mt5_status.json
-else
-    echo "No mt5_status.json found"
-fi
-echo ""
-
-# 7. Was EA reloaded after recompile? Check if MT5 was restarted
-echo "=== [7] MT5 Process Uptime ==="
-MT5_PID=$(pgrep -f terminal64.exe | head -1)
-if [ -n "$MT5_PID" ]; then
-    echo "MT5 PID: $MT5_PID"
-    echo "Started: $(ps -o lstart= -p $MT5_PID 2>/dev/null)"
-    echo "Uptime: $(ps -o etime= -p $MT5_PID 2>/dev/null)"
+    echo "Waiting for status..."
+    sleep 10
+    cat "$STATUS_FILE" 2>/dev/null || echo "No status yet"
 fi
 echo ""
 
