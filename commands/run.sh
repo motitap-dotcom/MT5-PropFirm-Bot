@@ -1,63 +1,54 @@
 #!/bin/bash
-# Quick verify: was deploy applied?
-echo "=== QUICK VERIFY $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+# Check bot status and recent trades
+echo "=== BOT STATUS CHECK $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
-EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
 EA_LOG_DIR="${MT5_BASE}/MQL5/Logs"
 
-# 1. Pull latest and deploy
-echo "--- Pull & Deploy ---"
-cd /root/MT5-PropFirm-Bot
-git fetch origin 2>&1 | tail -3
-git checkout claude/bot-status-command-CfoXO 2>&1 | tail -2
-git pull origin claude/bot-status-command-CfoXO 2>&1 | tail -3
-cp -f /root/MT5-PropFirm-Bot/EA/*.mq5 "$EA_DIR/" 2>&1
-cp -f /root/MT5-PropFirm-Bot/EA/*.mqh "$EA_DIR/" 2>&1
-echo "Files copied."
-
-# 2. Check key changes
-echo ""
-echo "--- Verify Changes ---"
-echo "Strategy:"
-grep "InpStrategy.*=" "$EA_DIR/PropFirmBot.mq5" | head -1
-echo "XAU Spread:"
-grep "InpMaxSpreadXAU" "$EA_DIR/PropFirmBot.mq5" | head -1
-echo "AutoBlock:"
-grep "InpAutoBlockSymbol" "$EA_DIR/PropFirmBot.mq5" | head -1
-
-# 3. Compile
-echo ""
-echo "--- Compile ---"
-export DISPLAY=:99
-pkill -f terminal64.exe 2>/dev/null
-sleep 3
-cp "$EA_DIR/PropFirmBot.ex5" "$EA_DIR/PropFirmBot.ex5.bak" 2>/dev/null
-WINEPREFIX=/root/.wine wine "${MT5_BASE}/metaeditor64.exe" /compile:"${EA_DIR}/PropFirmBot.mq5" /log 2>&1 | tail -5
-sleep 6
-echo "Compiled:"
-ls -la "$EA_DIR/PropFirmBot.ex5" 2>&1
-
-# 4. Start MT5
-echo ""
-echo "--- Start MT5 ---"
-WINEPREFIX=/root/.wine wine "${MT5_BASE}/terminal64.exe" /portable &
-sleep 12
+# 1. Is MT5 running?
+echo "--- MT5 Process ---"
 if pgrep -f terminal64 > /dev/null 2>&1; then
     MT5_PID=$(pgrep -f "terminal64.exe" | head -1)
-    echo "MT5: RUNNING PID=$MT5_PID"
-    echo -900 > /proc/$MT5_PID/oom_score_adj 2>/dev/null
+    echo "MT5: RUNNING (PID=$MT5_PID)"
+    ps -p $MT5_PID -o pid,etime,rss --no-headers 2>/dev/null
 else
-    echo "MT5: FAILED!"
+    echo "MT5: NOT RUNNING!"
 fi
 
-# 5. Wait for EA and show logs
-sleep 15
+# 2. Account & trade info from logs
 echo ""
-echo "--- EA Log ---"
+echo "--- Recent EA Logs (last 50 lines) ---"
 LATEST=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
 if [ -n "$LATEST" ]; then
-    tail -25 "$LATEST" 2>&1
+    echo "Log file: $LATEST"
+    tail -50 "$LATEST" 2>&1
+else
+    echo "No log files found"
+fi
+
+# 3. Check journal for trades
+echo ""
+echo "--- Trade-related log entries ---"
+if [ -n "$LATEST" ]; then
+    grep -i -E "order|trade|buy|sell|position|deal|profit|loss|open|close" "$LATEST" 2>/dev/null | tail -30
+    echo ""
+    echo "Total trade-related entries: $(grep -i -c -E 'order|trade|buy|sell|position|deal' "$LATEST" 2>/dev/null)"
+fi
+
+# 4. Check all recent logs
+echo ""
+echo "--- All log files (last 7 days) ---"
+find "$EA_LOG_DIR" -name "*.log" -mtime -7 -ls 2>/dev/null
+
+# 5. Check terminal journal too
+JOURNAL_DIR="${MT5_BASE}/MQL5/Logs"
+TERM_LOG_DIR="${MT5_BASE}/logs"
+echo ""
+echo "--- Terminal Logs ---"
+TERM_LATEST=$(ls -t "$TERM_LOG_DIR"/*.log 2>/dev/null | head -1)
+if [ -n "$TERM_LATEST" ]; then
+    echo "Terminal log: $TERM_LATEST"
+    grep -i -E "order|trade|buy|sell|position|deal|connected|login|account" "$TERM_LATEST" 2>/dev/null | tail -20
 fi
 
 echo ""
