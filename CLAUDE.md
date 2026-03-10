@@ -123,13 +123,57 @@ Claude עושה שינוי בריפו → Push ל-GitHub → GitHub Actions מר
 - [x] GitHub Actions workflows configured (deploy, check, fix, run commands)
 - [x] **v4.0 strategy redesign** - Trend + Momentum replaces SMC (2026-03-10)
 
-## VPS Current State (Updated 2026-03-10)
-- MT5 is RUNNING on VPS with PropFirmBot EA
-- FundedNext account LOGGED IN and CONNECTED (account 11797849)
-- EA attached to EURUSD M15 chart
-- AutoTrading is ON (green)
-- Wine + VNC working
-- **EA version on VPS needs deploy of v4.0** (last deployed was v3.01)
+## VPS Current State (Updated 2026-03-10 16:28 UTC)
+- MT5: **RUNNING** with PropFirmBot EA v4.0
+- FundedNext account: **CONNECTED** (account 11797849)
+- EA: **ACTIVE** on EURUSD M15 chart, scanning EURUSD/GBPUSD/USDJPY/XAUUSD
+- Balance: **$1,980.22** | DD: 0.00%
+- Guardian: **ACTIVE** | Risk: 85%
+- Watchdog: **ACTIVE** (cron every 2 minutes, auto-restart + Telegram alert)
+- VNC: port 5900 (RealVNC, no password)
+
+## ⚠️ PROVEN DEPLOY METHOD (MUST USE!) ⚠️
+
+**MetaEditor on Wine does NOT reliably produce .ex5 files!**
+**MT5 auto-compiles .mq5 files when loading from chart profile.**
+
+### Deploy steps (tested and working 2026-03-10):
+```bash
+# 1. Pull latest code
+cd /root/MT5-PropFirm-Bot && git fetch && git reset --hard origin/<branch>
+
+# 2. Copy files to MT5
+cp EA/*.mq5 EA/*.mqh "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/"
+cp configs/*.json "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/"
+
+# 3. Stop MT5
+pkill -f terminal64.exe; sleep 3; pkill -9 -f terminal64.exe
+
+# 4. Start MT5 (auto-compiles EA from chart profile)
+export DISPLAY=:99 WINEPREFIX=/root/.wine
+nohup setsid wine "/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe" /portable >/dev/null 2>&1 &
+disown -a
+
+# 5. Wait 20s, then verify EA loaded
+sleep 20
+iconv -f UTF-16LE -t UTF-8 ".../MQL5/Logs/$(date +%Y%m%d).log" | grep PropFirmBot | tail -5
+```
+
+### Critical rules:
+- **DO NOT use MetaEditor** for compilation - it compiles but .ex5 doesn't persist on Wine
+- **DO NOT use `wineserver -w`** - it hangs forever waiting for Wine processes
+- **ALWAYS use `nohup setsid ... & disown -a`** to start MT5 (prevents SSH hang)
+- **ALWAYS use `pkill -f terminal64.exe`** before restart (release file locks)
+- **Verify by reading EA log** (not by checking .ex5 file)
+- The `commands/run.sh` file contains the working deploy script - use it as template
+
+### Watchdog (auto-restart):
+- Script: `/root/mt5_watchdog.sh`
+- Runs every 2 minutes via cron
+- Checks if MT5 is running, restarts if not
+- Sends Telegram alert on restart
+- Also ensures Xvfb and VNC are running
+- Install: `(crontab -l; echo "*/2 * * * * /root/mt5_watchdog.sh") | crontab -`
 
 ## Critical Code Changes Made
 1. **SignalEngine.mqh (v4.0)**: Complete rewrite - EMA 8/21 crossover + RSI + MACD + H1 EMA50 trend filter (replaced SMC strategy)
@@ -166,9 +210,12 @@ Claude עושה שינוי בריפו → Push ל-GitHub → GitHub Actions מר
 ## How to Resume Work
 - MT5 is running on VPS at 77.237.234.2
 - VNC for MT5 GUI: connect to 77.237.234.2:5900 (no password, via RealVNC)
-- Repo on VPS: /root/MT5-PropFirm-Bot (branch: claude/build-cfd-trading-bot-fl0ld)
+- Repo on VPS: /root/MT5-PropFirm-Bot (active branch set by deploy)
 - MT5 installed at: /root/.wine/drive_c/Program Files/MetaTrader 5/
-- EA files at: .../MQL5/Experts/PropFirmBot/ (all 11 files + .ex5 compiled)
+- EA files at: .../MQL5/Experts/PropFirmBot/ (12 source files, MT5 auto-compiles)
 - Config files at: .../MQL5/Files/PropFirmBot/ (6 JSON files)
+- EA logs at: .../MQL5/Logs/YYYYMMDD.log (UTF-16LE encoded, use iconv to read)
 - VNC server: x11vnc on display :99, port 5900
 - Start VNC: Xvfb :99 -screen 0 1280x1024x24 & x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw
+- Watchdog: /root/mt5_watchdog.sh (cron every 2 min, auto-restart + Telegram alert)
+- Watchdog log: /root/mt5_watchdog.log
