@@ -1,65 +1,61 @@
 #!/bin/bash
 # =============================================================
-# Full status check - Bot & Server - 2026-03-10
+# Check if EA needs recompilation - 2026-03-10
 # =============================================================
 
 echo "============================================"
-echo "  Full Bot & Server Status Check"
+echo "  Check EA compilation status"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
-# 1. MT5 Process
-echo "=== [1] MT5 Process ==="
-ps aux | grep -i "terminal64\|metatrader" | grep -v grep || echo "MT5 NOT RUNNING!"
+EA_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot"
+
+# 1. Compare dates
+echo "=== [1] File dates ==="
+echo "Compiled .ex5:"
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
+echo ""
+echo "Source .mq5:"
+ls -la "$EA_DIR/PropFirmBot.mq5" 2>/dev/null
+echo ""
+echo "Latest .mqh changes:"
+ls -lt "$EA_DIR"/*.mqh 2>/dev/null | head -5
 echo ""
 
-# 2. Account connection
-echo "=== [2] Network Connections (MT5) ==="
-ss -tnp | grep -i wine || echo "No MT5 network connections found"
+# 2. Check what git commit is on VPS
+echo "=== [2] VPS Git Info ==="
+cd /root/MT5-PropFirm-Bot
+echo "Branch: $(git branch --show-current)"
+echo "Last commits:"
+git log --oneline -5
+echo ""
+echo "Last deploy/pull:"
+git reflog | head -5
 echo ""
 
-# 3. Latest terminal log
-echo "=== [3] Terminal Log (last 30 lines) ==="
-TERM_LOG=$(ls -t /root/.wine/drive_c/Program\ Files/MetaTrader\ 5/Logs/*.log 2>/dev/null | head -1)
-if [ -n "$TERM_LOG" ]; then
-    echo "File: $TERM_LOG"
-    tail -30 "$TERM_LOG"
-else
-    echo "No terminal logs found"
-fi
+# 3. Check if there's a compile script or MetaEditor
+echo "=== [3] MetaEditor available? ==="
+find /root/.wine -name "metaeditor64.exe" 2>/dev/null || echo "MetaEditor not found"
 echo ""
 
-# 4. EA Log (latest)
-echo "=== [4] EA Log (last 30 lines) ==="
-EA_LOG=$(ls -t /root/.wine/drive_c/Program\ Files/MetaTrader\ 5/MQL5/Logs/*.log 2>/dev/null | head -1)
+# 4. Check recent EA log for errors/version info
+echo "=== [4] EA startup log (first 20 lines today) ==="
+EA_LOG=$(ls -t /root/.wine/drive_c/Program\ Files/MetaTrader\ 5/MQL5/Logs/20260310.log 2>/dev/null)
 if [ -n "$EA_LOG" ]; then
-    echo "File: $EA_LOG"
-    tail -30 "$EA_LOG"
+    head -20 "$EA_LOG"
 else
-    echo "No EA logs found"
+    echo "No EA log for today"
 fi
 echo ""
 
-# 5. Status JSON
-echo "=== [5] /var/bots/mt5_status.json ==="
-python3 -m json.tool /var/bots/mt5_status.json 2>/dev/null || echo "(file not found or invalid)"
+# 5. Check main repo branch EA files vs VPS
+echo "=== [5] Compare source file sizes (repo vs EA dir) ==="
+echo "--- Repo files ---"
+ls -la /root/MT5-PropFirm-Bot/EA/*.mq5 /root/MT5-PropFirm-Bot/EA/*.mqh 2>/dev/null | awk '{print $5, $9}'
 echo ""
-
-# 6. EA files on VPS
-echo "=== [6] EA Files ==="
-ls -la "/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/" 2>/dev/null || echo "EA directory not found"
-echo ""
-
-# 7. Last deploy info
-echo "=== [7] Git status on VPS ==="
-cd /root/MT5-PropFirm-Bot 2>/dev/null && git log --oneline -5 && echo "" && git branch --show-current
-echo ""
-
-# 8. Disk & uptime
-echo "=== [8] System Info ==="
-echo "Uptime: $(uptime)"
-echo "Disk: $(df -h / | tail -1)"
+echo "--- EA dir files ---"
+ls -la "$EA_DIR"/*.mq5 "$EA_DIR"/*.mqh 2>/dev/null | awk '{print $5, $9}'
 echo ""
 
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
