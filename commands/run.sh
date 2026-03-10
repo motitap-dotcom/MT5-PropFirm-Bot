@@ -1,97 +1,110 @@
 #!/bin/bash
 # =============================================================
-# DEEP DIAGNOSTIC - Why no trades?
+# DEPLOY UPDATED EA + RECOMPILE + RESTART + VERIFY
 # =============================================================
 
 echo "============================================"
-echo "  TRADE DIAGNOSTIC REPORT"
+echo "  DEPLOY & VERIFY - STRATEGY FIX"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"
 echo ""
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
-EA_LOG_DIR="${MT5_BASE}/MQL5/Logs"
-MT5_LOG_DIR="${MT5_BASE}/logs"
 EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
-FILES_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
+EA_LOG_DIR="${MT5_BASE}/MQL5/Logs"
 
-# 1. FULL EA Logs - ALL of today
-echo "=== FULL EA LOGS TODAY ==="
-for logfile in "$EA_LOG_DIR"/*.log; do
-    if [ -f "$logfile" ]; then
-        echo "--- $(basename $logfile) ---"
-        cat "$logfile" 2>&1
-        echo ""
-    fi
-done
+# Step 1: Pull latest code
+echo "=== STEP 1: Pull latest code ==="
+cd /root/MT5-PropFirm-Bot
+git fetch origin 2>&1
+# Try to pull from current branch or the new fix branch
+git pull 2>&1 || true
+# Also try to get the specific branch
+git checkout claude/bot-status-command-CfoXO 2>/dev/null && git pull origin claude/bot-status-command-CfoXO 2>&1 || true
 echo ""
 
-# 2. Check for BLOCKED/REJECT/ERROR messages
-echo "=== BLOCKED & ERROR MESSAGES ==="
-grep -i -E "BLOCK|REJECT|ERROR|FAIL|STOP|HALT|PAUSE|DISABLED|CANNOT|FORBIDDEN" "$EA_LOG_DIR"/*.log 2>/dev/null || echo "None found"
+# Step 2: Copy EA files
+echo "=== STEP 2: Copy EA files ==="
+cp -v /root/MT5-PropFirm-Bot/EA/*.mq5 "$EA_DIR/" 2>&1
+cp -v /root/MT5-PropFirm-Bot/EA/*.mqh "$EA_DIR/" 2>&1
 echo ""
 
-# 3. Check for signal messages
-echo "=== SIGNAL MESSAGES ==="
-grep -i -E "SIGNAL|BUY|SELL|ENTRY|TRIGGER|SCAN|SCORE" "$EA_LOG_DIR"/*.log 2>/dev/null || echo "None found"
+# Step 3: Verify key changes
+echo "=== STEP 3: Verify changes applied ==="
+echo "--- Strategy default (should be EMA_CROSS) ---"
+grep "InpStrategy" "$EA_DIR/PropFirmBot.mq5" | head -1
+echo ""
+echo "--- XAUUSD Spread (should be 45.0) ---"
+grep "InpMaxSpreadXAU" "$EA_DIR/PropFirmBot.mq5" | head -1
+echo ""
+echo "--- AutoBlockSymbol (should be false) ---"
+grep "InpAutoBlockSymbol" "$EA_DIR/PropFirmBot.mq5" | head -1
+echo ""
+echo "--- RiskManager default XAU spread (should be 45.0) ---"
+grep "m_max_spread_xau" "$EA_DIR/RiskManager.mqh" | head -2
+echo ""
+echo "--- Fallback logic (should try other strategy) ---"
+grep -A2 "Fallback" "$EA_DIR/PropFirmBot.mq5" | head -5
 echo ""
 
-# 4. Guardian state messages
-echo "=== GUARDIAN MESSAGES ==="
-grep -i -E "GUARDIAN|DRAWDOWN|DD|SAFE|RISK|LIMIT" "$EA_LOG_DIR"/*.log 2>/dev/null || echo "None found"
+# Step 4: Stop MT5
+echo "=== STEP 4: Stop MT5 ==="
+pkill -f terminal64.exe 2>/dev/null
+sleep 5
+echo "MT5 stopped"
 echo ""
 
-# 5. Check trading permissions in MT5
-echo "=== MT5 TRADE PERMISSIONS ==="
-grep -i -E "trade|algo|expert|autotrading|allow" "$MT5_LOG_DIR"/*.log 2>/dev/null | tail -20
+# Step 5: Recompile
+echo "=== STEP 5: Recompile EA ==="
+export DISPLAY=:99
+
+# Backup current .ex5
+cp "$EA_DIR/PropFirmBot.ex5" "$EA_DIR/PropFirmBot.ex5.bak_$(date +%Y%m%d_%H%M)" 2>/dev/null
+
+# Compile
+WINEPREFIX=/root/.wine wine "${MT5_BASE}/metaeditor64.exe" /compile:"${EA_DIR}/PropFirmBot.mq5" /log 2>&1 || true
+sleep 8
+
+echo "Compiled file:"
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>&1
 echo ""
 
-# 6. Check config files
-echo "=== CONFIG FILES ==="
-if [ -d "$FILES_DIR" ]; then
-    echo "Config files found:"
-    ls -la "$FILES_DIR/" 2>&1
+# Check compilation log
+if [ -f "${EA_DIR}/PropFirmBot.log" ]; then
+    echo "Compilation log:"
+    cat "${EA_DIR}/PropFirmBot.log" 2>&1
     echo ""
-    for f in "$FILES_DIR"/*.json; do
-        if [ -f "$f" ]; then
-            echo "--- $(basename $f) ---"
-            cat "$f" 2>&1
-            echo ""
-        fi
-    done
+fi
+
+# Step 6: Start MT5
+echo "=== STEP 6: Start MT5 ==="
+export DISPLAY=:99
+WINEPREFIX=/root/.wine wine "${MT5_BASE}/terminal64.exe" /portable &
+sleep 15
+
+if pgrep -f terminal64 > /dev/null 2>&1; then
+    MT5_PID=$(pgrep -f "terminal64.exe" | head -1)
+    echo "MT5: STARTED (PID: $MT5_PID)"
+    echo -900 > /proc/$MT5_PID/oom_score_adj 2>/dev/null
+    echo "OOM protection applied"
 else
-    echo "Config directory NOT FOUND at: $FILES_DIR"
+    echo "MT5: FAILED TO START!"
 fi
 echo ""
 
-# 7. Check trade history in MT5 journal
-echo "=== MT5 JOURNAL (last 50 lines) ==="
-LATEST_LOG=$(ls -t "$MT5_LOG_DIR"/*.log 2>/dev/null | head -1)
-if [ -n "$LATEST_LOG" ]; then
-    tail -50 "$LATEST_LOG" 2>&1
+# Step 7: Wait for EA to load and check logs
+echo "=== STEP 7: Wait for EA to load ==="
+sleep 20
+
+echo "=== EA LOG (latest entries) ==="
+LATEST_EA_LOG=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
+if [ -n "$LATEST_EA_LOG" ]; then
+    echo "Log file: $LATEST_EA_LOG"
+    tail -40 "$LATEST_EA_LOG" 2>&1
 fi
-echo ""
-
-# 8. Check EA source for minimum conditions
-echo "=== SIGNAL ENGINE - ENTRY CONDITIONS ==="
-grep -n -i "signal\|entry\|CanTrade\|IsTrading\|AllowTrade\|OpenPosition\|OrderSend" "$EA_DIR/SignalEngine.mqh" 2>/dev/null | head -30
-echo ""
-grep -n -i "CanTrade\|IsTrading\|AllowTrade\|CheckGuardian" "$EA_DIR/Guardian.mqh" 2>/dev/null | head -20
-echo ""
-grep -n -i "OnTick\|signal\|OpenBuy\|OpenSell\|CanTrade\|trade_allowed" "$EA_DIR/PropFirmBot.mq5" 2>/dev/null | head -30
-echo ""
-
-# 9. Check HEARTBEAT messages for pattern
-echo "=== HEARTBEAT PATTERN ==="
-grep -i "HEARTBEAT\|NEWBAR\|TICK" "$EA_LOG_DIR"/*.log 2>/dev/null | tail -20
-echo ""
-
-# 10. Check if AutoTrading is enabled
-echo "=== AUTOTRADING CHECK ==="
-grep -i "autotrading\|algo\|expert" "$MT5_LOG_DIR"/*.log 2>/dev/null | tail -10
 echo ""
 
 echo "============================================"
-echo "  END DIAGNOSTIC"
+echo "  DEPLOY COMPLETE"
 echo "  $(date '+%Y-%m-%d %H:%M:%S UTC')"
 echo "============================================"

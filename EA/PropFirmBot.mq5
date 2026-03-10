@@ -48,8 +48,8 @@ input double   InpFundedTotalDD   = 6.0;       // Funded: Total DD (%) [6% trail
 input double   InpFundedProfitSplit = 70.0;    // Funded: Profit Split (%)
 
 // --- Strategy ---
-input ENUM_STRATEGY_TYPE InpStrategy = STRATEGY_SMC; // Primary Strategy
-input bool     InpUseFallback     = true;       // Use EMA fallback
+input ENUM_STRATEGY_TYPE InpStrategy = STRATEGY_EMA_CROSS; // Primary Strategy
+input bool     InpUseFallback     = true;       // Use SMC as fallback
 input ENUM_TIMEFRAMES InpEntryTF  = PERIOD_M15; // Entry Timeframe
 input ENUM_TIMEFRAMES InpHTF      = PERIOD_H4;  // Higher Timeframe
 
@@ -71,7 +71,7 @@ input int      InpMaxConsecLosses = 5;          // Max Consecutive Losses
 
 // --- Spread Filter ---
 input double   InpMaxSpreadMajor  = 3.5;        // Max Spread Major (pips)
-input double   InpMaxSpreadXAU    = 8.0;        // Max Spread XAUUSD (pips)
+input double   InpMaxSpreadXAU    = 45.0;       // Max Spread XAUUSD (pips)
 
 // --- News Filter ---
 input bool     InpNewsFilterOn    = true;        // News Filter Enabled
@@ -113,7 +113,7 @@ input int      InpDashboardY      = 30;         // Dashboard Y Position
 
 // --- Self-Learning ---
 input bool     InpSelfLearning    = true;        // Enable Self-Learning
-input bool     InpAutoBlockSymbol = true;        // Auto-block losing symbols
+input bool     InpAutoBlockSymbol = false;       // Auto-block losing symbols (disabled)
 
 //+------------------------------------------------------------------+
 //| GLOBAL OBJECTS                                                    |
@@ -469,10 +469,20 @@ void OnTick()
 //+------------------------------------------------------------------+
 void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
 {
-   // Pre-flight checks
-   if(!g_risk.CanOpenTrade(symbol)) return;
-   if(!g_trade.CanTradeNow(symbol)) return;
-   if(g_trade.CountSymbolPositions(symbol) > 0) return;
+   // Pre-flight checks with logging
+   if(!g_risk.CanOpenTrade(symbol)) return;  // RiskMgr already logs BLOCKED reason
+
+   if(!g_trade.CanTradeNow(symbol))
+   {
+      PrintFormat("[SCAN] %s - cooldown active, skipping", symbol);
+      return;
+   }
+
+   if(g_trade.CountSymbolPositions(symbol) > 0)
+   {
+      PrintFormat("[SCAN] %s - already has open position, skipping", symbol);
+      return;
+   }
 
    // Spread anomaly check
    if(!g_guardian.CheckSpreadAnomaly(symbol))
@@ -499,22 +509,34 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
    ENUM_SIGNAL_TYPE signal = SIGNAL_NONE;
 
    // Primary strategy
+   string primary_name = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
    signal = g_signals[signal_index].GetSignal(InpStrategy, sl_price, tp_price);
+
+   if(signal == SIGNAL_NONE)
+      PrintFormat("[SCAN] %s - %s strategy: NO SIGNAL", symbol, primary_name);
 
    // Check if strategy is working (self-learning)
    if(signal != SIGNAL_NONE && InpSelfLearning)
    {
-      string strat_name = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
-      if(!g_analyzer.IsStrategyWorking(strat_name))
+      if(!g_analyzer.IsStrategyWorking(primary_name))
       {
-         PrintFormat("[ANALYZER] %s strategy underperforming - checking fallback", strat_name);
+         PrintFormat("[ANALYZER] %s strategy underperforming - checking fallback", primary_name);
          signal = SIGNAL_NONE; // Force fallback
       }
    }
 
-   // Fallback
-   if(signal == SIGNAL_NONE && InpUseFallback && InpStrategy == STRATEGY_SMC)
-      signal = g_signals[signal_index].GetSignal(STRATEGY_EMA_CROSS, sl_price, tp_price);
+   // Fallback: try the other strategy
+   if(signal == SIGNAL_NONE && InpUseFallback)
+   {
+      ENUM_STRATEGY_TYPE fallback = (InpStrategy == STRATEGY_SMC) ? STRATEGY_EMA_CROSS : STRATEGY_SMC;
+      string fallback_name = (fallback == STRATEGY_SMC) ? "SMC" : "EMA";
+      signal = g_signals[signal_index].GetSignal(fallback, sl_price, tp_price);
+      if(signal == SIGNAL_NONE)
+         PrintFormat("[SCAN] %s - %s fallback: NO SIGNAL", symbol, fallback_name);
+      else
+         PrintFormat("[SCAN] %s - %s fallback: GOT SIGNAL %s", symbol, fallback_name,
+                     signal == SIGNAL_BUY ? "BUY" : "SELL");
+   }
 
    if(signal == SIGNAL_NONE) return;
 
