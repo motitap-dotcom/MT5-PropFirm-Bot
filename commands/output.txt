@@ -1,33 +1,3 @@
-=== Quick EA Verify Tue Mar 10 13:52:03 UTC 2026 ===
-
-=== .ex5 file ===
--rw-r--r-- 1 root root 208720 Mar 10 13:50 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
-
-=== MT5 process ===
-NOT RUNNING
-
-=== Latest EA log entries ===
-Log file: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260310.log
-NK	0	13:50:53.870	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
-FD	0	13:50:53.871	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry: PERIOD_H1 | HTF: PERIOD_H4 | EMA 8/21 | RSI 14 | ATR 14 | MACD 12/26/9
-RI	0	13:50:53.977	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry: PERIOD_H1 | HTF: PERIOD_H4 | EMA 8/21 | RSI 14 | ATR 14 | MACD 12/26/9
-HL	0	13:50:54.035	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry: PERIOD_H1 | HTF: PERIOD_H4 | EMA 8/21 | RSI 14 | ATR 14 | MACD 12/26/9
-GQ	0	13:50:54.105	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry: PERIOD_H1 | HTF: PERIOD_H4 | EMA 8/21 | RSI 14 | ATR 14 | MACD 12/26/9
-DD	0	13:50:54.105	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
-JN	0	13:50:54.105	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
-OJ	0	13:50:54.106	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
-IH	0	13:50:54.106	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-DN	0	13:50:54.106	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-MS	0	13:50:54.106	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-LK	0	13:50:54.106	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-LN	0	13:50:54.106	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-LJ	0	13:50:54.106	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-JP	0	13:50:54.106	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-PI	0	13:50:54.106	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 85%
-RS	0	13:50:54.106	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-IK	0	13:50:54.106	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1980.22 | Eq=$1980.22 | DD=0.00% | Positions=0
-NS	0	13:50:54.158	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.10 16:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-DM	0	13:50:54.158	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-
-=== DONE ===
+=== Start MT5 Persistent Tue Mar 10 13:53:49 UTC 2026 ===
+MT5 already running: PID 3980353
 EXIT_CODE=0
