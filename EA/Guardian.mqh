@@ -115,7 +115,7 @@ public:
    ENUM_GUARDIAN_STATE GetState()      { return m_state; }
    ENUM_HALT_REASON GetHaltReason()    { return m_halt_reason; }
    string   GetHaltMessage()           { return m_halt_message; }
-   bool     CanTrade()                 { return m_state == GUARDIAN_ACTIVE; }
+   bool     CanTrade()                 { return m_state <= GUARDIAN_CAUTION; }
    bool     MustCloseAll()             { return m_state >= GUARDIAN_EMERGENCY; }
    bool     IsDead()                   { return m_state == GUARDIAN_SHUTDOWN; }
    bool     IsCaution()                { return m_state == GUARDIAN_CAUTION; }
