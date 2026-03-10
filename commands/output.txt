@@ -1,95 +1,58 @@
-==========================================
-  DEPLOY v4.0 - Tue Mar 10 16:03:30 UTC 2026
-==========================================
+=== DIAGNOSTIC DEPLOY Tue Mar 10 16:05:44 UTC 2026 ===
+--- Stopping MT5 ---
+--- Cleaning old files ---
+removed '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5'
+removed '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.log'
+Cleaned
 
->>> STEP 1: Stopping MT5...
-MT5 stopped: OK
+--- Source files in EA dir ---
+-rw-r--r-- 1 root root 15404 Mar 10 16:03 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh
+-rw-r--r-- 1 root root 11919 Mar 10 16:03 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Dashboard.mqh
+-rw-r--r-- 1 root root 22399 Mar 10 16:03 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Guardian.mqh
+-rw-r--r-- 1 root root 10622 Mar 10 16:03 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/NewsFilter.mqh
+-rw-r--r-- 1 root root 11971 Mar 10 16:03 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Notifications.mqh
+(11 .mqh files total)
 
->>> STEP 2: Pulling latest code...
-From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
- * branch            claude/update-server-version-3dUGg -> FETCH_HEAD
-Switched to branch 'claude/update-server-version-3dUGg'
-Your branch is behind 'origin/claude/update-server-version-3dUGg' by 2 commits, and can be fast-forwarded.
-  (use "git pull" to update your local branch)
-HEAD is now at 4504c8c Fix deploy: handle MetaEditor .ex5 output path + check both locations
-Current commit: 4504c8c Fix deploy: handle MetaEditor .ex5 output path + check both locations
+=== METHOD 1: cd to EA_DIR, compile PropFirmBot.mq5 ===
+Looking for .ex5...
+Method 1: no .ex5 found
+--- Compilation log ---
+--- All PropFirmBot.log files ---
 
->>> STEP 3: Copying files...
-'EA/PropFirmBot.mq5' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5'
-'EA/AccountStateManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh'
-'EA/Dashboard.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Dashboard.mqh'
-'EA/Guardian.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Guardian.mqh'
-'EA/NewsFilter.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/NewsFilter.mqh'
-'EA/Notifications.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Notifications.mqh'
-'EA/RiskManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/RiskManager.mqh'
-'EA/SignalEngine.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/SignalEngine.mqh'
-'EA/StatusWriter.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/StatusWriter.mqh'
-'EA/TradeAnalyzer.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeAnalyzer.mqh'
-'EA/TradeJournal.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeJournal.mqh'
-'EA/TradeManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeManager.mqh'
-'configs/account_state.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/account_state.json'
-'configs/challenge_rules.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/challenge_rules.json'
-'configs/funded_rules.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/funded_rules.json'
-'configs/notifications.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/notifications.json'
-'configs/risk_params.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/risk_params.json'
-'configs/symbols.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/symbols.json'
-Files copied: OK
+=== METHOD 2: Full path compile ===
+Method 2: no .ex5 found
 
->>> STEP 4: Compiling EA...
-Old .ex5 deleted (both locations)
+=== METHOD 3: cd to MQL5/Experts, compile PropFirmBot/PropFirmBot.mq5 ===
+Method 3: no .ex5 found
 
->>> STEP 5: Verifying compilation...
-COMPILE FAILED - .ex5 not found anywhere!
-Checking MetaEditor log...
-Log: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.log
- : information: generating code 48%
- : information: generating code 51%
- : information: generating code 54%
- : information: generating code 57%
- : information: generating code 60%
- : information: generating code 63%
- : information: generating code 66%
- : information: generating code 69%
- : information: generating code 72%
- : information: generating code 75%
- : information: generating code 78%
- : information: generating code 81%
- : information: generating code 84%
- : information: generating code 87%
- : information: generating code 90%
- : information: generating code 93%
- : information: generating code 95%
- : information: generating code 100%
- : information: code generated
-Result: 0 errors, 0 warnings, 4947 msec elapsed, cpu='X64 Regular'
+=== METHOD 4: Wine Z: drive path ===
+Path: Z:\root\.wine\drive_c\Program Files\MetaTrader 5\MQL5\Experts\PropFirmBot\PropFirmBot.mq5
+Method 4: no .ex5 found
 
-Searching for .ex5 anywhere...
+--- ALL logs found ---
+=== /root/.wine/drive_c/Program Files/MetaTrader 5/logs/metaeditor.log ===
+0	2026.03.10 16:01:35.652	Compile	C:\Program Files\MetaTrader 5\MQL5\Experts\PropFirmBot\PropFirmBot.mq5 - 0 errors, 0 warnings, 1873 msec elapsed without optimizations, cpu='X64 Regular'
+0	2026.03.10 16:01:35.666	Compiler	compiled PropFirmBot.mq5
 
->>> STEP 6: Display services...
-Xvfb: RUNNING
-VNC: RUNNING on :5900
+0	2026.03.10 16:03:55.733	Compile	C:\Program Files\MetaTrader 5\MQL5\Experts\PropFirmBot\PropFirmBot.mq5 - 0 errors, 0 warnings, 1806 msec elapsed without optimizations, cpu='X64 Regular'
+0	2026.03.10 16:03:55.742	Compiler	compiled PropFirmBot.mq5
+=== /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260310.log ===
+KJ	0	16:04:17.572	Network	'11797849': trading has been enabled - hedging mode
+PQ	2	16:06:08.148	Terminal	terminal process already started
+EG	0	16:06:08.148	Terminal	exit with code 0
+KM	0	16:06:08.148	Terminal	stopped with 0
+IH	0	16:06:08.286	Terminal	shutdown with 0
+=== /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260310.log ===
+CQ	0	16:04:20.021	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 85%
+IJ	0	16:04:20.021	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+FR	0	16:04:20.021	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1980.22 | Eq=$1980.22 | DD=0.00% | Positions=0
+CJ	0	16:04:20.023	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.10 19:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+DR	0	16:04:20.023	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 
->>> STEP 7: Starting MT5...
+--- ALL .ex5 files in Wine drive ---
 
->>> STEP 8: Verifying MT5...
-MT5 RUNNING - PID: 4012285
-4012379
+=== Starting MT5 ===
+MT5: RUNNING (PID: 4013184)
 
->>> STEP 9: Installing watchdog...
-Watchdog installed: runs every 2 minutes
-Cron entry: */2 * * * * /root/mt5_watchdog.sh
-
-==========================================
-  DEPLOY SUMMARY - Tue Mar 10 16:03:47 UTC 2026
-==========================================
-Repo branch: claude/update-server-version-3dUGg
-Commit: 921737f relay: result 2026-03-01 09:57 UTC
-EA .ex5: MISSING
-MT5: RUNNING (PID: 4012285)
-Xvfb: RUNNING
-VNC: RUNNING
-Watchdog: INSTALLED (every 2 min)
-==========================================
-DEPLOY COMPLETE
-==========================================
+=== DONE Tue Mar 10 16:06:35 UTC 2026 ===
 EXIT_CODE=0
