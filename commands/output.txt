@@ -1,213 +1,86 @@
 ============================================
-  FULL FIX & PERMANENT WATCHDOG INSTALL
-  2026-03-10 18:27:41 UTC
+  MEMORY FIX - Swap + OOM Protection
+  2026-03-10 18:32:28 UTC
 ============================================
 
-========== PHASE 1: DIAGNOSIS ==========
---- System uptime ---
- 18:27:41 up 16 days,  6:17, 22 users,  load average: 2.24, 2.45, 2.18
---- Last system reboot ---
-reboot   system boot  6.8.0-100-generi Sun Feb 22 12:10   still running
-reboot   system boot  6.8.0-100-generi Sun Feb 22 07:47   still running
-reboot   system boot  6.8.0-100-generi Sun Feb 22 06:55   still running
---- Memory status ---
+=== STEP 1: Current Memory Status ===
                total        used        free      shared  buff/cache   available
-Mem:           7.8Gi       2.4Gi       4.9Gi        45Mi       818Mi       5.3Gi
+Mem:           7.8Gi       2.5Gi       4.4Gi        45Mi       1.3Gi       5.3Gi
 Swap:             0B          0B          0B
---- Disk usage ---
-/dev/sda1       145G   20G  125G  14% /
---- Wine/MT5 crash logs ---
--rw-r--r-- 1 root root 29755 Mar 10 15:41 /tmp/mt5_wine.log
-0060:fixme:mountmgr:query_property Faking StorageDeviceProperty data
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
-0060:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
-0060:fixme:mountmgr:query_property Faking StorageDeviceProperty data
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
-0060:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
-0060:fixme:mountmgr:query_property Faking StorageDeviceProperty data
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
-0060:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
-0060:fixme:mountmgr:query_property Faking StorageDeviceProperty data
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
-0060:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
-0060:fixme:mountmgr:query_property Faking StorageDeviceProperty data
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
-0060:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
-0060:fixme:mountmgr:query_property Faking StorageDeviceProperty data
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
-0060:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
-0060:fixme:mountmgr:query_property Faking StorageDeviceProperty data
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
-0060:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
-0060:fixme:mountmgr:query_property Faking StorageDeviceProperty data
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
-0060:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
---- dmesg OOM killer (last 10 lines with kill) ---
-[801063.153744]  __alloc_pages_may_oom+0x10c/0x1d0
-[801063.154120] [  pid  ]   uid  tgid total_vm      rss rss_anon rss_file rss_shmem pgtables_bytes swapents oom_score_adj name
-[801063.156065] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=/,mems_allowed=0,global_oom,task_memcg=/system.slice/tradovate-bot.service,task=chrome-headless,pid=1755492,uid=0
-[801063.156155] Out of memory: Killed process 1755492 (chrome-headless) total-vm:1463037960kB, anon-rss:117152kB, file-rss:2612kB, shmem-rss:0kB, UID:0 pgtables:1568kB oom_score_adj:300
-[801065.231948] oom_reaper: reaped process 1755492 (chrome-headless), now anon-rss:0kB, file-rss:224kB, shmem-rss:0kB
-[973531.944836] workqueue: css_killed_work_fn hogged CPU for >10000us 16 times, consider switching to WQ_UNBOUND
-[1028699.469403] workqueue: css_killed_work_fn hogged CPU for >10000us 32 times, consider switching to WQ_UNBOUND
-[1083429.953310] workqueue: css_killed_work_fn hogged CPU for >10000us 64 times, consider switching to WQ_UNBOUND
-[1198024.253034] workqueue: css_killed_work_fn hogged CPU for >10000us 128 times, consider switching to WQ_UNBOUND
-[1380896.450328] workqueue: css_killed_work_fn hogged CPU for >10000us 256 times, consider switching to WQ_UNBOUND
---- MT5 Expert logs (last 30 lines) ---
-Log: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260310.log
-FN	0	16:28:35.777	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
-ND	0	16:28:35.778	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
-CN	0	16:28:35.778	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
-FF	0	16:28:35.778	PropFirmBot (EURUSD,M15)	  - News Filter: ON
-FS	0	16:28:35.778	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
-FD	0	16:28:35.778	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
-PM	0	16:28:35.778	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-JS	0	16:28:35.778	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 85%
-HH	0	16:28:35.778	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
-OQ	0	16:28:35.778	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1980.22 | Eq=$1980.22 | DD=0.00% | Positions=0
-GL	0	16:28:35.779	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.10 19:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-LP	0	16:28:35.881	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-HN	0	16:43:36.766	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2209 | State=GUARDIAN_ACTIVE | Bal=$1980.22 | Eq=$1980.22 | DD=0.00% | Positions=0
-IL	0	16:58:36.061	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=4273 | State=GUARDIAN_ACTIVE | Bal=$1980.22 | Eq=$1980.22 | DD=0.00% | Positions=0
-KM	0	17:00:00.052	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
-KG	0	17:00:00.052	PropFirmBot (EURUSD,M15)	[JOURNAL] [ANALYSIS] Trades: 0 | Risk Adj: 100%
-HO	0	17:00:00.052	PropFirmBot (EURUSD,M15)	Blocked: 0 symbols
-QI	0	17:00:00.052	PropFirmBot (EURUSD,M15)	SMC: 0 trades WR=0% PF=0.00
-MQ	0	17:00:00.052	PropFirmBot (EURUSD,M15)	EMA: 0 trades WR=0% PF=0.00
-JJ	0	17:00:00.052	PropFirmBot (EURUSD,M15)	London: WR=0% | NY: WR=0%
-DL	0	17:00:00.229	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.10 20:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-ES	0	17:00:00.229	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-LN	0	17:13:36.178	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=6927 | State=GUARDIAN_ACTIVE | Bal=$1980.22 | Eq=$1980.22 | DD=0.00% | Positions=0
-JO	0	17:28:36.795	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=10428 | State=GUARDIAN_ACTIVE | Bal=$1980.22 | Eq=$1980.22 | DD=0.00% | Positions=0
-PQ	0	17:43:36.092	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=14155 | State=GUARDIAN_ACTIVE | Bal=$1980.22 | Eq=$1980.22 | DD=0.00% | Positions=0
-LS	0	17:58:38.740	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=16942 | State=GUARDIAN_ACTIVE | Bal=$1980.22 | Eq=$1980.22 | DD=0.00% | Positions=0
-NH	0	18:00:00.210	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.10 21:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-QH	0	18:00:00.210	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 7 relevant events from calendar
-HP	0	18:00:00.210	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-CL	0	18:13:38.101	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=18641 | State=GUARDIAN_ACTIVE | Bal=$1980.22 | Eq=$1980.22 | DD=0.00% | Positions=0
---- Wine server status ---
-Wine server killed for clean restart
---- Check for existing cron watchdog ---
-*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
-@reboot /root/start_mt5_screen.sh
-@reboot sleep 30 && /bin/bash /root/mt5_startup.sh > /dev/null 2>&1
-*/2 * * * * /root/mt5_watchdog.sh
 
-========== PHASE 2: FIX & RESTART ==========
-1. DNS: FIXED
-2. Time: Tue Mar 10 18:27:42 UTC 2026
-3. Old MT5 process: KILLED
-4a. Xvfb: ALREADY RUNNING
-4b. VNC: ALREADY RUNNING
-5. MT5 config: WRITTEN
-6. Fixing WebRequest for Telegram...
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/terminal.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/config/jupyter.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/config/terminal.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/config/metaeditor.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/config/settings.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/config/common.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/config/hotkeys.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/config/startup.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/Config/jupyter.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/Config/terminal.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/Config/metaeditor.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/Config/settings.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/Config/common.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/Config/hotkeys.ini
-  Checking: /root/.wine/drive_c/Program Files/MetaTrader 5/Tester/Manager/common.ini
-  Not found: /root/.wine/drive_c/Program Files/MetaTrader 5/config/terminal64.ini
-  Not found: /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.ini
-6. WebRequest: CONFIGURED
-7. MT5: STARTING...
-8. MT5: ✅ RUNNING
-root     4046335  4.1  0.1 2686336 13768 ?       S<   18:27   0:00 start.exe /exec terminal64.exe /portable /login:11797849 /password:gazDE62##
-root     4046404 55.8  1.9 876708 160868 ?       R<l  18:27   0:07 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server
+Swap status:
 
-========== PHASE 3: PERMANENT WATCHDOG ==========
-1. Watchdog script: CREATED at /root/mt5_watchdog.sh
-2. Cron job: INSTALLED (every 2 minutes)
-3. Cron verification:
-# MT5 Watchdog - auto-restart if MT5 crashes
-*/2 * * * * /bin/bash /root/mt5_watchdog.sh
-● cron.service - Regular background program processing daemon
-     Loaded: loaded (/usr/lib/systemd/system/cron.service; enabled; preset: enabled)
-     Active: active (running) since Sun 2026-02-22 12:10:37 UTC; 2 weeks 2 days ago
-       Docs: man:cron(8)
-   Main PID: 718 (cron)
-      Tasks: 45 (limit: 9483)
-     Memory: 44.2M (peak: 993.8M)
-        CPU: 1d 8h 13min 14.134s
-     CGroup: /system.slice/cron.service
-             ├─    718 /usr/sbin/cron -f -P
-             ├─3595740 "C:\\windows\\system32\\conhost.exe" --unix --width 80 --height 24 --server 0x10
-             ├─3598799 "C:\\windows\\system32\\conhost.exe" --unix --width 80 --height 24 --server 0x10
-             ├─3622220 "C:\\windows\\system32\\services.exe"
-             ├─3622225 "C:\\windows\\system32\\winedevice.exe"
-             ├─3622243 "C:\\windows\\system32\\plugplay.exe"
-             ├─3622251 "C:\\windows\\system32\\svchost.exe" -k LocalServiceNetworkRestricted
-             ├─3622269 "C:\\windows\\system32\\winedevice.exe"
-             ├─3622307 "C:\\windows\\system32\\conhost.exe" --unix --width 80 --height 24 --server 0x10
-             └─3622361 "C:\\windows\\system32\\rpcss.exe"
+=== STEP 2: Creating 4GB Swap File ===
+Creating 4GB swap file...
+Setting up swapspace version 1, size = 4 GiB (4294963200 bytes)
+no label, UUID=ebd6294b-7cab-4380-9070-832addaa3347
+Swap CREATED and ACTIVATED!
+Added to /etc/fstab (permanent)
 
-Mar 10 18:26:02 vmi3096165 CRON[4045849]: pam_unix(cron:session): session closed for user root
-Mar 10 18:28:01 vmi3096165 CRON[4046480]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
-Mar 10 18:28:01 vmi3096165 CRON[4046481]: (root) CMD (/opt/hyrotrader-bot/scripts/auto_deploy.sh)
-Mar 10 18:28:01 vmi3096165 CRON[4046479]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
-Mar 10 18:28:01 vmi3096165 CRON[4046478]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
-Mar 10 18:28:01 vmi3096165 CRON[4046482]: (root) CMD (/root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog)
-Mar 10 18:28:01 vmi3096165 CRON[4046483]: (root) CMD (/root/mt5_watchdog.sh)
-Mar 10 18:28:01 vmi3096165 CRON[4046480]: pam_unix(cron:session): session closed for user root
-Mar 10 18:28:01 vmi3096165 CRON[4046478]: pam_unix(cron:session): session closed for user root
-Mar 10 18:28:01 vmi3096165 CRON[4046479]: pam_unix(cron:session): session closed for user root
-4. Cron service: ENSURED RUNNING
-5. Boot autostart: INSTALLED
-6. rc.local backup: INSTALLED
+Memory after swap:
+               total        used        free      shared  buff/cache   available
+Mem:           7.8Gi       2.5Gi       4.3Gi        45Mi       1.3Gi       5.3Gi
+Swap:          4.0Gi          0B       4.0Gi
 
-========== PHASE 4: FINAL STATUS ==========
---- MT5 Process ---
-MT5 still loading...
---- Cron Jobs ---
+=== STEP 3: Optimize Swap Settings ===
+vm.swappiness = 10
+vm.vfs_cache_pressure = 50
+Swappiness: 10 (10 = use swap only when needed)
+Cache pressure: 50
 
-*/5 * * * * cd /root/Tradovate-Bot && bash /root/tradovate-bot/server_cron.sh >> /var/log/tradovate-cron.log 2>&1
-*/2 * * * * /opt/hyrotrader-bot/scripts/auto_deploy.sh
-@reboot nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &
-*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
-0 6 * * * /root/PropFirmBot/scripts/daily_report.sh  # PropFirmBot daily report
-@reboot /root/start_mt5_screen.sh
-@reboot sleep 30 && /bin/bash /root/mt5_startup.sh > /dev/null 2>&1
-# MT5 Watchdog - auto-restart if MT5 crashes
-*/2 * * * * /bin/bash /root/mt5_watchdog.sh
---- Watchdog Script ---
--rwxr-xr-x 1 root root 2662 Mar 10 18:28 /root/mt5_watchdog.sh
---- Boot Script ---
--rwxr-xr-x 1 root root 1401 Mar 10 18:28 /etc/init.d/mt5-autostart
---- Wine Log (last 10 lines) ---
-0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
-0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
-0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
-0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
-0058:fixme:mountmgr:harddisk_ioctl IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS semi-stub.
-0058:fixme:mountmgr:query_property Faking StorageDeviceProperty data
-0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 74080 (device=7 access=1 func=20 method=0)
-0058:fixme:mountmgr:harddisk_ioctl Unsupported ioctl 2d0c10 (device=2d access=0 func=304 method=0)
-0138:fixme:cryptasn:CryptDecodeObjectEx Unsupported decoder for lpszStructType 1.3.6.1.4.1.311.2.1.4
-0138:fixme:cryptasn:CryptDecodeObjectEx Unsupported decoder for lpszStructType 1.3.6.1.4.1.311.2.1.4
+=== STEP 4: Protect MT5 from OOM Killer ===
+MT5 PID 4046335: OOM score set to -900 (protected)
+MT5 PID 4046404: OOM score set to -900 (protected)
+Updated watchdog with OOM protection
+
+=== STEP 5: Set Tradovate chrome-headless as OOM target ===
+No chrome processes found right now
+
+Tradovate bot is running as systemd service
+Setting memory limit to 2GB...
+Tradovate memory limited to 2GB (was unlimited)
+Current Tradovate memory usage:
+             └─memory-limit.conf
+     Memory: 36.6M (high: 1.4G max: 2.0G available: 1.4G peak: 37.5M)
+
+=== STEP 6: Top Memory Consumers ===
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root     4046404 48.2  2.7 2077764 221280 ?      S<l  18:27   2:13 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server
+root         328  0.3  2.2 247192 178916 ?       S<s  Feb22  75:25 /usr/lib/systemd/systemd-journald
+root     2244775  0.0  1.6 1388392 133848 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     2242257  0.0  1.6 1388332 133832 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     2258030  0.0  1.6 1388324 133820 ?      S<sl Mar05   0:02 C:\windows\system32\explorer.exe /desktop
+root     2247176  0.0  1.6 1388324 133596 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     2243354  0.0  1.6 1388324 133544 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     2250432  0.0  1.6 1388324 133544 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     2248217  0.0  1.6 1388388 133540 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     2245775  0.0  1.6 1388324 133532 ?      S<sl Mar05   0:02 C:\windows\system32\explorer.exe /desktop
+root     2249335  0.0  1.6 1388388 133488 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     4046409  0.6  1.6 1388392 133488 ?      S<sl 18:27   0:01 C:\windows\system32\explorer.exe /desktop
+root     2234187  0.0  1.6 1388324 132364 ?      S<sl Mar05   0:02 C:\windows\system32\explorer.exe /desktop
+root      346800  2.3  1.3 288116 106408 ?       Ss   Feb26 397:37 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
+
+=== STEP 7: MT5 Status ===
+MT5: ✅ RUNNING
+PID: 4046335
+Memory: 13 MB
+OOM Score: -900
 
 ============================================
-  DONE! Protection layers installed:
-  1. Cron watchdog (every 2 min)
-  2. Boot autostart (on reboot)
-  3. rc.local backup (failsafe)
-  4. Telegram alerts on restart
-  MT5 will auto-restart within 2 minutes!
+  MEMORY FIX COMPLETE!
+
+  Changes made:
+  1. ✅ 4GB Swap file created (permanent)
+  2. ✅ Swappiness=10 (use swap only when needed)
+  3. ✅ MT5 OOM score=-900 (protected)
+  4. ✅ Chrome/Tradovate OOM score=+500 (kill first)
+  5. ✅ Tradovate memory limited to 2GB
+  6. ✅ All settings survive reboot
+
+  Before: 7.8GB RAM, 0 Swap = OOM crashes
+  After:  7.8GB RAM + 4GB Swap = 11.8GB total
+  MT5 is the LAST process to be killed
 ============================================
 
-=== DONE 2026-03-10 18:28:22 UTC ===
+=== DONE 2026-03-10 18:32:29 UTC ===
 EXIT_CODE=0
