@@ -1,5 +1,5 @@
 #!/bin/bash
-# v4.0 Deploy - fast version
+# v4.0 Deploy - fixed background process detach
 echo "=== Deploy v4.0 $(date -u) ==="
 
 REPO="/root/MT5-PropFirm-Bot"
@@ -24,13 +24,16 @@ WINEPREFIX=/root/.wine wine "${MT5}/metaeditor64.exe" /compile:PropFirmBot.mq5 /
 sleep 3
 ls -la *.ex5 2>/dev/null && echo "COMPILE OK" || echo "COMPILE WARN"
 
-# Restart MT5
+# Stop MT5
 pkill -f terminal64.exe 2>/dev/null
 sleep 2
+
+# Start MT5 fully detached (nohup + setsid so SSH can exit)
 export DISPLAY=:99 WINEPREFIX=/root/.wine
-pgrep Xvfb >/dev/null || (Xvfb :99 -screen 0 1280x1024x24 & sleep 1)
-pgrep x11vnc >/dev/null || x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw 2>/dev/null
-wine "${MT5}/terminal64.exe" &
+pgrep Xvfb >/dev/null || (nohup Xvfb :99 -screen 0 1280x1024x24 >/dev/null 2>&1 & sleep 1)
+pgrep x11vnc >/dev/null || nohup x11vnc -display :99 -forever -shared -rfbport 5900 -nopw >/dev/null 2>&1 &
+nohup setsid wine "${MT5}/terminal64.exe" >/dev/null 2>&1 &
+disown -a
 sleep 5
 
 # Verify
