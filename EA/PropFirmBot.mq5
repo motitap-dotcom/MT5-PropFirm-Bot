@@ -1,15 +1,15 @@
 //+------------------------------------------------------------------+
 //|                                              PropFirmBot.mq5      |
-//|                     PROP FIRM CHALLENGE BOT v3.0 - FULL SYSTEM    |
-//|                     Guardian + Dashboard + Journal + Analytics     |
-//|                     News Filter + Notifications + Self-Learning   |
+//|                     PROP FIRM BOT v4.0 - TREND + MOMENTUM         |
+//|                     Complete redesign: H1 trend + M15 entry       |
+//|                     EMA 8/21 + RSI + MACD + ATR-based SL/TP      |
 //+------------------------------------------------------------------+
 #property copyright   "PropFirmBot"
-#property version     "3.00"
-#property description "Complete prop firm trading system with:"
-#property description "  Guardian watchdog | News filter | Trade analyzer"
-#property description "  Telegram alerts | Account state management"
-#property description "  Self-learning risk adaptation"
+#property version     "4.00"
+#property description "Trend-following prop firm bot with:"
+#property description "  H1 EMA50 trend filter | M15 EMA+RSI+MACD entry"
+#property description "  ATR-based dynamic SL/TP | Guardian protection"
+#property description "  Telegram alerts | Self-learning adaptation"
 #property strict
 
 // Include all modules
@@ -48,26 +48,30 @@ input double   InpFundedTotalDD   = 6.0;       // Funded: Total DD (%) [6% trail
 input double   InpFundedProfitSplit = 70.0;    // Funded: Profit Split (%)
 
 // --- Strategy ---
-input ENUM_STRATEGY_TYPE InpStrategy = STRATEGY_SMC; // Primary Strategy
-input bool     InpUseFallback     = true;       // Use EMA fallback
+input ENUM_STRATEGY_TYPE InpStrategy = STRATEGY_TREND_MOMENTUM; // Primary Strategy
+input bool     InpUseFallback     = true;       // Use EMA-only fallback
 input ENUM_TIMEFRAMES InpEntryTF  = PERIOD_M15; // Entry Timeframe
-input ENUM_TIMEFRAMES InpHTF      = PERIOD_H4;  // Higher Timeframe
+input ENUM_TIMEFRAMES InpHTF      = PERIOD_H1;  // Trend Filter Timeframe
 
 // --- Signal Parameters ---
-input int      InpEMAFast         = 9;          // EMA Fast Period
+input int      InpEMAFast         = 8;          // EMA Fast Period
 input int      InpEMASlow         = 21;         // EMA Slow Period
 input int      InpRSIPeriod       = 14;         // RSI Period
 input int      InpATRPeriod       = 14;         // ATR Period
-input int      InpOBLookback      = 30;         // Order Block Lookback
-input double   InpFVGMinPoints    = 20.0;       // Min FVG Size (points)
+input double   InpRSIBuyMin       = 35.0;       // RSI Buy Min (momentum floor)
+input double   InpRSIBuyMax       = 68.0;       // RSI Buy Max (not overbought)
+input double   InpRSISellMin      = 32.0;       // RSI Sell Min (not oversold)
+input double   InpRSISellMax      = 65.0;       // RSI Sell Max (momentum ceiling)
+input double   InpATR_SL_Mult     = 1.5;        // SL = ATR * this
+input double   InpATR_TP_Mult     = 3.0;        // TP = ATR * this (2:1 RR)
 
 // --- Risk Management ---
 input double   InpRiskPercent     = 0.75;       // Risk Per Trade (%)
 input double   InpMaxRiskPercent  = 1.0;        // Max Risk Per Trade (%)
 input int      InpMaxPositions    = 3;          // Max Open Positions
 input double   InpMinRR           = 1.5;        // Min Risk:Reward
-input int      InpMaxDailyTrades  = 12;         // Max Trades Per Day
-input int      InpMaxConsecLosses = 5;          // Max Consecutive Losses
+input int      InpMaxDailyTrades  = 10;         // Max Trades Per Day
+input int      InpMaxConsecLosses = 6;          // Max Consecutive Losses
 
 // --- Spread Filter ---
 input double   InpMaxSpreadMajor  = 3.5;        // Max Spread Major (pips)
@@ -75,24 +79,25 @@ input double   InpMaxSpreadXAU    = 5.0;        // Max Spread XAUUSD (pips)
 
 // --- News Filter ---
 input bool     InpNewsFilterOn    = true;        // News Filter Enabled
-input int      InpNewsBefore      = 15;          // News: Minutes Before
-input int      InpNewsAfter       = 15;          // News: Minutes After
+input int      InpNewsBefore      = 10;          // News: Minutes Before
+input int      InpNewsAfter       = 10;          // News: Minutes After
 input bool     InpNewsHighImpact  = true;        // News: Filter High Impact
 input bool     InpNewsMedImpact   = false;       // News: Filter Medium Impact
 
 // --- Session Filter (UTC) ---
-input int      InpLondonStart     = 6;          // London Start
-input int      InpLondonEnd       = 17;         // London End (covers overlap with NY)
-input int      InpNYStart         = 12;         // NY Start
-input int      InpNYEnd           = 22;         // NY End (extended to 23:00 Israel)
+input int      InpLondonStart     = 7;          // London Start (UTC)
+input int      InpLondonEnd       = 21;         // London+NY End (UTC, covers both sessions)
+input int      InpNYStart         = 7;          // NY Start (same as London for continuous coverage)
+input int      InpNYEnd           = 21;         // NY End (UTC)
 
-// --- Trade Management ---
-input double   InpTrailingActivation = 30.0;    // Trailing Activation (pips)
-input double   InpTrailingDistance   = 20.0;     // Trailing Distance (pips)
-input double   InpBEActivation      = 20.0;     // Breakeven Activation (pips)
-input double   InpBEOffset          = 2.0;       // Breakeven Offset (pips)
-input int      InpMinBarGap         = 1;         // Min Bars Between Trades
-input int      InpSlippage          = 20;        // Max Slippage (points)
+// --- Trade Management (ATR-based) ---
+input double   InpTrailingActivation = 1.0;     // Trailing Activation (ATR multiplier)
+input double   InpTrailingDistance   = 0.8;     // Trailing Distance (ATR multiplier)
+input double   InpBEActivation      = 0.7;     // Breakeven Activation (ATR multiplier)
+input double   InpBEOffset          = 2.0;      // Breakeven Offset (pips)
+input bool     InpUseATRTrailing    = true;     // Use ATR-based trailing (vs fixed pips)
+input int      InpMinBarGap         = 1;        // Min Bars Between Trades
+input int      InpSlippage          = 20;       // Max Slippage (points)
 
 // --- Symbols ---
 input bool     InpTradeEURUSD     = true;       // Trade EURUSD
@@ -164,8 +169,8 @@ int              g_prev_pos_count = 0;
 int OnInit()
 {
    Print("==============================================");
-   Print("  PropFirmBot v3.0 - FULL TRADING SYSTEM");
-   Print("  ALL MODULES ACTIVE");
+   Print("  PropFirmBot v4.0 - TREND + MOMENTUM");
+   Print("  H1 trend filter + M15 EMA/RSI/MACD entry");
    Print("==============================================");
 
    // Wait for account data to load (common issue with Wine/MT5)
@@ -238,8 +243,8 @@ int OnInit()
    g_risk.SetSpreadFilter(InpMaxSpreadMajor, InpMaxSpreadXAU);
    g_risk.SetSessionFilter(InpLondonStart, InpLondonEnd, InpNYStart, InpNYEnd);
    g_risk.SetWeekendGuard(5, 20);
-   g_risk.SetTrailingStop(InpTrailingActivation, InpTrailingDistance);
-   g_risk.SetBreakeven(InpBEActivation, InpBEOffset);
+   g_risk.SetTrailingStop(InpTrailingActivation, InpTrailingDistance, InpUseATRTrailing);
+   g_risk.SetBreakeven(InpBEActivation, InpBEOffset, InpUseATRTrailing);
    if(g_account.HasProfitTarget())
       g_risk.SetChallengeMode(g_account.GetProfitTarget());
 
@@ -257,12 +262,14 @@ int OnInit()
    for(int i = 0; i < g_symbol_count; i++)
    {
       if(!g_signals[i].Init(g_symbols[i], InpEntryTF, InpHTF,
-                             InpEMAFast, InpEMASlow, InpRSIPeriod, InpATRPeriod,
-                             InpOBLookback, InpFVGMinPoints))
+                             InpEMAFast, InpEMASlow, InpRSIPeriod, InpATRPeriod))
       {
          PrintFormat("[FATAL] SignalEngine init failed for %s", g_symbols[i]);
          return INIT_FAILED;
       }
+      // Configure RSI levels and ATR multipliers
+      g_signals[i].SetRSILevels(InpRSIBuyMin, InpRSIBuyMax, InpRSISellMin, InpRSISellMax);
+      g_signals[i].SetATRMultipliers(InpATR_SL_Mult, InpATR_TP_Mult);
    }
 
    // === NOTIFICATIONS ===
@@ -504,7 +511,7 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
    // Check if strategy is working (self-learning)
    if(signal != SIGNAL_NONE && InpSelfLearning)
    {
-      string strat_name = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
+      string strat_name = (InpStrategy == STRATEGY_TREND_MOMENTUM) ? "TREND" : "EMA";
       if(!g_analyzer.IsStrategyWorking(strat_name))
       {
          PrintFormat("[ANALYZER] %s strategy underperforming - checking fallback", strat_name);
@@ -512,8 +519,8 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
       }
    }
 
-   // Fallback
-   if(signal == SIGNAL_NONE && InpUseFallback && InpStrategy == STRATEGY_SMC)
+   // Fallback: use simple EMA cross when primary strategy has no signal
+   if(signal == SIGNAL_NONE && InpUseFallback && InpStrategy == STRATEGY_TREND_MOMENTUM)
       signal = g_signals[signal_index].GetSignal(STRATEGY_EMA_CROSS, sl_price, tp_price);
 
    if(signal == SIGNAL_NONE) return;
@@ -572,7 +579,7 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
    }
 
    // Execute
-   string strategy_name = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
+   string strategy_name = (InpStrategy == STRATEGY_TREND_MOMENTUM) ? "TREND" : "EMA";
    ulong ticket = 0;
 
    if(signal == SIGNAL_BUY)
@@ -736,7 +743,7 @@ void DetectClosedTrades()
          // SELF-LEARNING: Record trade in analyzer
          if(InpSelfLearning)
          {
-            string strategy_name = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
+            string strategy_name = (InpStrategy == STRATEGY_TREND_MOMENTUM) ? "TREND" : "EMA";
             int duration = (int)(TimeCurrent() - g_prev_positions[p].open_time);
             g_analyzer.RecordTrade(symbol, direction, strategy_name,
                pnl, pnl_pips, lot,

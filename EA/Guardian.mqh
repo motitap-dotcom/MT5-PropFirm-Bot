@@ -157,11 +157,11 @@ CGuardian::CGuardian()
    m_trailing_dd = true;
    m_soft_daily_dd_pct = 0;
    m_crit_daily_dd_pct = 0;
-   m_soft_total_dd_pct = 4.2;
-   m_crit_total_dd_pct = 5.0;
-   m_max_consec_losses = 5;
+   m_soft_total_dd_pct = 4.0;
+   m_crit_total_dd_pct = 5.2;
+   m_max_consec_losses = 6;
    m_consec_losses = 0;
-   m_max_daily_trades = 15;
+   m_max_daily_trades = 12;
    m_daily_trade_count = 0;
    m_max_equity_drop_pct = 2.0;
    m_last_tick_time = 0;
@@ -212,9 +212,9 @@ bool CGuardian::Init(double balance, double hard_daily, double hard_total,
 
    if(m_trailing_dd)
    {
-      // Trailing DD: allow more room to trade while staying safe
-      m_soft_total_dd_pct  = hard_total * 0.70;  // ~4.2% for 6%
-      m_crit_total_dd_pct  = hard_total * 0.83;  // ~5.0% for 6%
+      // Trailing DD: give enough room to recover while staying safe
+      m_soft_total_dd_pct  = hard_total * 0.67;  // ~4.0% for 6% - halt new trades
+      m_crit_total_dd_pct  = hard_total * 0.87;  // ~5.2% for 6% - emergency close
    }
    else
    {
@@ -430,7 +430,7 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
    }
 
    // ===== LAYER 5: CAUTION (reduce risk) =====
-   if((m_soft_daily_dd_pct > 0 && daily_dd >= m_soft_daily_dd_pct * 0.8) || total_dd >= m_soft_total_dd_pct * 0.8)
+   if((m_soft_daily_dd_pct > 0 && daily_dd >= m_soft_daily_dd_pct * 0.85) || total_dd >= m_soft_total_dd_pct * 0.85)
    {
       m_state = GUARDIAN_CAUTION;
       m_halt_message = "Approaching DD limits - reduced risk";

@@ -41,11 +41,12 @@ private:
    int               m_weekend_close_day;     // Day to close (5 = Friday)
    int               m_weekend_close_hour;    // Hour to close UTC
 
-   // Trailing / Breakeven (in pips)
-   double            m_trailing_activation;   // Activate trailing after X pips profit
-   double            m_trailing_distance;     // Trail distance in pips
-   double            m_breakeven_activation;  // Move to BE after X pips profit
+   // Trailing / Breakeven (ATR-based multipliers)
+   double            m_trailing_activation;   // Activate trailing after X * ATR profit
+   double            m_trailing_distance;     // Trail distance = X * ATR
+   double            m_breakeven_activation;  // Move to BE after X * ATR profit
    double            m_breakeven_offset;      // Offset above BE in pips
+   bool              m_use_atr_trailing;      // Use ATR-based trailing (true) or fixed pips (false)
 
    // Challenge mode
    double            m_profit_target_pct;     // Target profit %
@@ -75,8 +76,8 @@ public:
    void              SetSpreadFilter(double major_pips, double xau_pips);
    void              SetSessionFilter(int london_start, int london_end, int ny_start, int ny_end);
    void              SetWeekendGuard(int close_day, int close_hour);
-   void              SetTrailingStop(double activation_pips, double distance_pips);
-   void              SetBreakeven(double activation_pips, double offset_pips);
+   void              SetTrailingStop(double activation, double distance, bool use_atr = true);
+   void              SetBreakeven(double activation, double offset_pips, bool use_atr = true);
    void              SetChallengeMode(double profit_target_pct);
 
    // Daily reset
@@ -133,10 +134,11 @@ CRiskManager::CRiskManager()
    m_ny_end_hour        = 21;
    m_weekend_close_day  = 5;
    m_weekend_close_hour = 20;
-   m_trailing_activation= 30;
-   m_trailing_distance  = 20;
-   m_breakeven_activation=20;
-   m_breakeven_offset   = 2;
+   m_trailing_activation= 1.0;   // Activate trailing at 1.0x ATR profit
+   m_trailing_distance  = 0.8;   // Trail at 0.8x ATR behind price
+   m_breakeven_activation=0.7;   // Move to BE at 0.7x ATR profit
+   m_breakeven_offset   = 2;     // BE offset in pips
+   m_use_atr_trailing   = true;
    m_profit_target_pct  = 10.0;
    m_challenge_mode     = true;
    m_target_reached     = false;
@@ -209,19 +211,21 @@ void CRiskManager::SetWeekendGuard(int close_day, int close_hour)
 //+------------------------------------------------------------------+
 //| Configure trailing stop                                           |
 //+------------------------------------------------------------------+
-void CRiskManager::SetTrailingStop(double activation_pips, double distance_pips)
+void CRiskManager::SetTrailingStop(double activation, double distance, bool use_atr)
 {
-   m_trailing_activation = activation_pips;
-   m_trailing_distance   = distance_pips;
+   m_trailing_activation = activation;
+   m_trailing_distance   = distance;
+   m_use_atr_trailing    = use_atr;
 }
 
 //+------------------------------------------------------------------+
 //| Configure breakeven                                               |
 //+------------------------------------------------------------------+
-void CRiskManager::SetBreakeven(double activation_pips, double offset_pips)
+void CRiskManager::SetBreakeven(double activation, double offset_pips, bool use_atr)
 {
-   m_breakeven_activation = activation_pips;
+   m_breakeven_activation = activation;
    m_breakeven_offset     = offset_pips;
+   m_use_atr_trailing     = use_atr;
 }
 
 //+------------------------------------------------------------------+
@@ -508,11 +512,33 @@ void CRiskManager::ManageTrailingStop(string symbol, ulong ticket, ENUM_POSITION
    double open_price = PositionGetDouble(POSITION_PRICE_OPEN);
    double current_sl = PositionGetDouble(POSITION_SL);
    double current_tp = PositionGetDouble(POSITION_TP);
-   double pip_size   = GetPipSize(symbol);
    double point      = SymbolInfoDouble(symbol, SYMBOL_POINT);
 
-   double activation_distance = m_trailing_activation * pip_size;
-   double trail_distance      = m_trailing_distance * pip_size;
+   // Calculate activation and trail distances
+   double activation_distance, trail_distance;
+
+   if(m_use_atr_trailing)
+   {
+      // ATR-based trailing: get current ATR
+      int atr_handle = iATR(symbol, PERIOD_M15, 14);
+      if(atr_handle == INVALID_HANDLE) return;
+      double atr_buf[];
+      ArraySetAsSeries(atr_buf, true);
+      if(CopyBuffer(atr_handle, 0, 0, 2, atr_buf) < 2) { IndicatorRelease(atr_handle); return; }
+      double atr = atr_buf[1];
+      IndicatorRelease(atr_handle);
+      if(atr <= 0) return;
+
+      activation_distance = m_trailing_activation * atr;
+      trail_distance      = m_trailing_distance * atr;
+   }
+   else
+   {
+      // Fixed pip-based trailing
+      double pip_size = GetPipSize(symbol);
+      activation_distance = m_trailing_activation * pip_size;
+      trail_distance      = m_trailing_distance * pip_size;
+   }
 
    if(pos_type == POSITION_TYPE_BUY)
    {
@@ -522,7 +548,6 @@ void CRiskManager::ManageTrailingStop(string symbol, ulong ticket, ENUM_POSITION
       if(profit_distance >= activation_distance)
       {
          double new_sl = bid - trail_distance;
-         // Normalize to tick size
          double tick_size = SymbolInfoDouble(symbol, SYMBOL_TRADE_TICK_SIZE);
          if(tick_size > 0)
             new_sl = MathFloor(new_sl / tick_size) * tick_size;
@@ -532,7 +557,7 @@ void CRiskManager::ManageTrailingStop(string symbol, ulong ticket, ENUM_POSITION
             CTrade trade;
             trade.SetExpertMagicNumber(m_magic_number);
             if(trade.PositionModify(ticket, new_sl, current_tp))
-               PrintFormat("[RiskMgr] Trailing SL moved to %.5f for ticket %d", new_sl, ticket);
+               PrintFormat("[RiskMgr] Trailing SL moved to %.5f for BUY ticket %d", new_sl, ticket);
          }
       }
    }
@@ -553,7 +578,7 @@ void CRiskManager::ManageTrailingStop(string symbol, ulong ticket, ENUM_POSITION
             CTrade trade;
             trade.SetExpertMagicNumber(m_magic_number);
             if(trade.PositionModify(ticket, new_sl, current_tp))
-               PrintFormat("[RiskMgr] Trailing SL moved to %.5f for ticket %d", new_sl, ticket);
+               PrintFormat("[RiskMgr] Trailing SL moved to %.5f for SELL ticket %d", new_sl, ticket);
          }
       }
    }
@@ -571,8 +596,24 @@ void CRiskManager::ManageBreakeven(string symbol, ulong ticket, ENUM_POSITION_TY
    double pip_size   = GetPipSize(symbol);
    double point      = SymbolInfoDouble(symbol, SYMBOL_POINT);
 
-   double activation_distance = m_breakeven_activation * pip_size;
-   double be_offset           = m_breakeven_offset * pip_size;
+   double activation_distance;
+   if(m_use_atr_trailing)
+   {
+      int atr_handle = iATR(symbol, PERIOD_M15, 14);
+      if(atr_handle == INVALID_HANDLE) return;
+      double atr_buf[];
+      ArraySetAsSeries(atr_buf, true);
+      if(CopyBuffer(atr_handle, 0, 0, 2, atr_buf) < 2) { IndicatorRelease(atr_handle); return; }
+      double atr = atr_buf[1];
+      IndicatorRelease(atr_handle);
+      if(atr <= 0) return;
+      activation_distance = m_breakeven_activation * atr;
+   }
+   else
+   {
+      activation_distance = m_breakeven_activation * pip_size;
+   }
+   double be_offset = m_breakeven_offset * pip_size;
 
    if(pos_type == POSITION_TYPE_BUY)
    {

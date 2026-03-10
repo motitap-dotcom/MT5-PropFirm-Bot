@@ -1,5 +1,6 @@
 {
   "_description": "Rules for FundedNext Stellar Instant account",
+  "_strategy_version": "v4.0 Trend + Momentum",
 
   "account_size": 2000,
   "currency": "USD",
@@ -23,18 +24,18 @@
   "weekend_holding_allowed": true,
 
   "risk_adjustments": {
-    "_note": "Conservative for 6% trailing DD - protect capital",
-    "risk_multiplier": 0.7,
-    "risk_per_trade_percent": 0.5,
-    "max_risk_per_trade_percent": 0.75,
-    "max_open_positions": 2,
-    "max_daily_trades": 6,
-    "min_risk_reward_ratio": 2.0
+    "_note": "Balanced for 6% trailing DD - active but protected",
+    "risk_multiplier": 0.85,
+    "risk_per_trade_percent": 0.75,
+    "max_risk_per_trade_percent": 1.0,
+    "max_open_positions": 3,
+    "max_daily_trades": 10,
+    "min_risk_reward_ratio": 1.5
   },
 
   "drawdown_guards": {
-    "soft_total_dd_percent": 3.5,
-    "critical_total_dd_percent": 5.0,
+    "soft_total_dd_percent": 4.0,
+    "critical_total_dd_percent": 5.2,
     "hard_total_dd_percent": 6.0,
     "trailing_drawdown": true
   },

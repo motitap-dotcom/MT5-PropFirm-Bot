@@ -1,10 +1,17 @@
 //+------------------------------------------------------------------+
 //|                                              SignalEngine.mqh     |
-//|                        PropFirm Challenge Bot - Signal Generator  |
-//|                        London/NY Session Breakout + SMC Concepts  |
+//|                     PropFirm Bot v4.0 - Trend + Momentum Signals  |
+//|                     EMA Trend + RSI + MACD Confirmation            |
+//+------------------------------------------------------------------+
+//|  Strategy: Trend-Following with Momentum Confirmation             |
+//|  - H1 EMA50 determines trade direction (trend filter)             |
+//|  - M15 EMA 8/21 crossover for entry timing                       |
+//|  - RSI confirms momentum (not overbought/oversold)                |
+//|  - MACD histogram confirms momentum direction                     |
+//|  - ATR for dynamic SL/TP sizing                                   |
 //+------------------------------------------------------------------+
 #property copyright "PropFirmBot"
-#property version   "1.00"
+#property version   "4.00"
 
 #include <Trade\Trade.mqh>
 
@@ -18,8 +25,8 @@ enum ENUM_SIGNAL_TYPE
 
 enum ENUM_STRATEGY_TYPE
 {
-   STRATEGY_SMC       = 0,  // Smart Money Concepts (primary)
-   STRATEGY_EMA_CROSS = 1   // EMA Crossover (fallback)
+   STRATEGY_TREND_MOMENTUM = 0,  // Trend + Momentum (primary)
+   STRATEGY_EMA_CROSS      = 1   // EMA Crossover (simplified fallback)
 };
 
 //+------------------------------------------------------------------+
@@ -28,46 +35,46 @@ enum ENUM_STRATEGY_TYPE
 class CSignalEngine
 {
 private:
-   // Indicator handles - M15
-   int               m_handle_ema_fast;     // EMA 9
+   // Indicator handles - M15 (entry timeframe)
+   int               m_handle_ema_fast;     // EMA 8
    int               m_handle_ema_slow;     // EMA 21
    int               m_handle_rsi;          // RSI 14
    int               m_handle_atr;          // ATR 14
+   int               m_handle_macd;         // MACD 12,26,9
 
-   // Indicator handles - H4 (higher timeframe bias)
-   int               m_handle_ema_h4_50;    // EMA 50 on H4
-   int               m_handle_ema_h4_200;   // EMA 200 on H4
+   // Indicator handles - H1 (trend filter)
+   int               m_handle_ema_h1_50;    // EMA 50 on H1
 
    // Symbol and timeframes
    string            m_symbol;
    ENUM_TIMEFRAMES   m_tf_entry;            // M15
-   ENUM_TIMEFRAMES   m_tf_htf;              // H4
+   ENUM_TIMEFRAMES   m_tf_htf;              // H1
 
    // Parameters
    int               m_ema_fast_period;
    int               m_ema_slow_period;
    int               m_rsi_period;
    int               m_atr_period;
-   int               m_ob_lookback;         // Order block lookback bars
-   double            m_fvg_min_size;        // Minimum FVG size in points
-   double            m_rsi_overbought;
-   double            m_rsi_oversold;
+   double            m_rsi_buy_max;         // Max RSI for buy (not overbought)
+   double            m_rsi_buy_min;         // Min RSI for buy (has momentum)
+   double            m_rsi_sell_max;        // Max RSI for sell
+   double            m_rsi_sell_min;        // Min RSI for sell (not oversold)
+   double            m_atr_sl_multiplier;   // SL = ATR * this
+   double            m_atr_tp_multiplier;   // TP = ATR * this
+   double            m_min_atr_filter;      // Minimum ATR to trade (volatility filter)
 
    // Internal buffers
    double            m_ema_fast[];
    double            m_ema_slow[];
    double            m_rsi[];
    double            m_atr[];
-   double            m_ema_h4_50[];
-   double            m_ema_h4_200[];
+   double            m_macd_main[];
+   double            m_macd_signal[];
+   double            m_macd_hist[];
+   double            m_ema_h1_50[];
 
-   // SMC detection methods
-   bool              DetectBullishOrderBlock(int shift, double &ob_high, double &ob_low);
-   bool              DetectBearishOrderBlock(int shift, double &ob_high, double &ob_low);
-   bool              DetectBullishFVG(int shift, double &fvg_high, double &fvg_low);
-   bool              DetectBearishFVG(int shift, double &fvg_high, double &fvg_low);
-   bool              DetectLiquiditySweep(bool is_bullish, int lookback);
-   int               GetHTFBias();
+   // Trend filter
+   int               GetH1TrendBias();
 
 public:
                      CSignalEngine();
@@ -75,18 +82,21 @@ public:
 
    bool              Init(string symbol,
                           ENUM_TIMEFRAMES tf_entry = PERIOD_M15,
-                          ENUM_TIMEFRAMES tf_htf = PERIOD_H4,
-                          int ema_fast = 9,
+                          ENUM_TIMEFRAMES tf_htf = PERIOD_H1,
+                          int ema_fast = 8,
                           int ema_slow = 21,
                           int rsi_period = 14,
-                          int atr_period = 14,
-                          int ob_lookback = 20,
-                          double fvg_min_points = 50.0);
+                          int atr_period = 14);
 
    void              Deinit();
 
+   // Strategy parameters
+   void              SetRSILevels(double buy_min, double buy_max, double sell_min, double sell_max);
+   void              SetATRMultipliers(double sl_mult, double tp_mult);
+   void              SetMinATR(double min_atr);
+
    // Main signal methods
-   ENUM_SIGNAL_TYPE  GetSMCSignal(double &sl_price, double &tp_price);
+   ENUM_SIGNAL_TYPE  GetTrendMomentumSignal(double &sl_price, double &tp_price);
    ENUM_SIGNAL_TYPE  GetEMACrossSignal(double &sl_price, double &tp_price);
    ENUM_SIGNAL_TYPE  GetSignal(ENUM_STRATEGY_TYPE strategy, double &sl_price, double &tp_price);
 
@@ -105,11 +115,20 @@ CSignalEngine::CSignalEngine()
    m_handle_ema_slow  = INVALID_HANDLE;
    m_handle_rsi       = INVALID_HANDLE;
    m_handle_atr       = INVALID_HANDLE;
-   m_handle_ema_h4_50 = INVALID_HANDLE;
-   m_handle_ema_h4_200= INVALID_HANDLE;
+   m_handle_macd      = INVALID_HANDLE;
+   m_handle_ema_h1_50 = INVALID_HANDLE;
 
-   m_rsi_overbought = 70.0;
-   m_rsi_oversold   = 30.0;
+   // RSI levels: buy when 35-68, sell when 32-65
+   m_rsi_buy_min  = 35.0;
+   m_rsi_buy_max  = 68.0;
+   m_rsi_sell_min = 32.0;
+   m_rsi_sell_max = 65.0;
+
+   // ATR multipliers for SL/TP
+   m_atr_sl_multiplier = 1.5;
+   m_atr_tp_multiplier = 3.0;  // 2:1 RR minimum
+
+   m_min_atr_filter = 0.0;  // Will be set per symbol
 }
 
 //+------------------------------------------------------------------+
@@ -129,9 +148,7 @@ bool CSignalEngine::Init(string symbol,
                           int ema_fast,
                           int ema_slow,
                           int rsi_period,
-                          int atr_period,
-                          int ob_lookback,
-                          double fvg_min_points)
+                          int atr_period)
 {
    m_symbol         = symbol;
    m_tf_entry       = tf_entry;
@@ -140,50 +157,48 @@ bool CSignalEngine::Init(string symbol,
    m_ema_slow_period= ema_slow;
    m_rsi_period     = rsi_period;
    m_atr_period     = atr_period;
-   m_ob_lookback    = ob_lookback;
-   m_fvg_min_size   = fvg_min_points;
 
    // Create M15 indicator handles
    m_handle_ema_fast = iMA(m_symbol, m_tf_entry, m_ema_fast_period, 0, MODE_EMA, PRICE_CLOSE);
    if(m_handle_ema_fast == INVALID_HANDLE)
    {
-      PrintFormat("[SignalEngine] Failed to create EMA(%d) handle: %d", m_ema_fast_period, GetLastError());
+      PrintFormat("[SignalEngine] Failed to create EMA(%d) handle for %s: %d", m_ema_fast_period, m_symbol, GetLastError());
       return false;
    }
 
    m_handle_ema_slow = iMA(m_symbol, m_tf_entry, m_ema_slow_period, 0, MODE_EMA, PRICE_CLOSE);
    if(m_handle_ema_slow == INVALID_HANDLE)
    {
-      PrintFormat("[SignalEngine] Failed to create EMA(%d) handle: %d", m_ema_slow_period, GetLastError());
+      PrintFormat("[SignalEngine] Failed to create EMA(%d) handle for %s: %d", m_ema_slow_period, m_symbol, GetLastError());
       return false;
    }
 
    m_handle_rsi = iRSI(m_symbol, m_tf_entry, m_rsi_period, PRICE_CLOSE);
    if(m_handle_rsi == INVALID_HANDLE)
    {
-      PrintFormat("[SignalEngine] Failed to create RSI handle: %d", GetLastError());
+      PrintFormat("[SignalEngine] Failed to create RSI handle for %s: %d", m_symbol, GetLastError());
       return false;
    }
 
    m_handle_atr = iATR(m_symbol, m_tf_entry, m_atr_period);
    if(m_handle_atr == INVALID_HANDLE)
    {
-      PrintFormat("[SignalEngine] Failed to create ATR handle: %d", GetLastError());
+      PrintFormat("[SignalEngine] Failed to create ATR handle for %s: %d", m_symbol, GetLastError());
       return false;
    }
 
-   // Create H4 indicator handles
-   m_handle_ema_h4_50 = iMA(m_symbol, m_tf_htf, 50, 0, MODE_EMA, PRICE_CLOSE);
-   if(m_handle_ema_h4_50 == INVALID_HANDLE)
+   m_handle_macd = iMACD(m_symbol, m_tf_entry, 12, 26, 9, PRICE_CLOSE);
+   if(m_handle_macd == INVALID_HANDLE)
    {
-      PrintFormat("[SignalEngine] Failed to create H4 EMA(50) handle: %d", GetLastError());
+      PrintFormat("[SignalEngine] Failed to create MACD handle for %s: %d", m_symbol, GetLastError());
       return false;
    }
 
-   m_handle_ema_h4_200 = iMA(m_symbol, m_tf_htf, 200, 0, MODE_EMA, PRICE_CLOSE);
-   if(m_handle_ema_h4_200 == INVALID_HANDLE)
+   // Create H1 trend filter handle
+   m_handle_ema_h1_50 = iMA(m_symbol, m_tf_htf, 50, 0, MODE_EMA, PRICE_CLOSE);
+   if(m_handle_ema_h1_50 == INVALID_HANDLE)
    {
-      PrintFormat("[SignalEngine] Failed to create H4 EMA(200) handle: %d", GetLastError());
+      PrintFormat("[SignalEngine] Failed to create H1 EMA(50) handle for %s: %d", m_symbol, GetLastError());
       return false;
    }
 
@@ -192,13 +207,14 @@ bool CSignalEngine::Init(string symbol,
    ArraySetAsSeries(m_ema_slow, true);
    ArraySetAsSeries(m_rsi, true);
    ArraySetAsSeries(m_atr, true);
-   ArraySetAsSeries(m_ema_h4_50, true);
-   ArraySetAsSeries(m_ema_h4_200, true);
+   ArraySetAsSeries(m_macd_main, true);
+   ArraySetAsSeries(m_macd_signal, true);
+   ArraySetAsSeries(m_macd_hist, true);
+   ArraySetAsSeries(m_ema_h1_50, true);
 
-   PrintFormat("[SignalEngine] Initialized for %s | Entry TF: %s | HTF: %s",
-               m_symbol,
-               EnumToString(m_tf_entry),
-               EnumToString(m_tf_htf));
+   PrintFormat("[SignalEngine] Initialized for %s | Entry: %s | HTF: %s | EMA %d/%d | RSI %d | ATR %d | MACD 12/26/9",
+               m_symbol, EnumToString(m_tf_entry), EnumToString(m_tf_htf),
+               m_ema_fast_period, m_ema_slow_period, m_rsi_period, m_atr_period);
 
    return true;
 }
@@ -212,335 +228,158 @@ void CSignalEngine::Deinit()
    if(m_handle_ema_slow  != INVALID_HANDLE) IndicatorRelease(m_handle_ema_slow);
    if(m_handle_rsi       != INVALID_HANDLE) IndicatorRelease(m_handle_rsi);
    if(m_handle_atr       != INVALID_HANDLE) IndicatorRelease(m_handle_atr);
-   if(m_handle_ema_h4_50 != INVALID_HANDLE) IndicatorRelease(m_handle_ema_h4_50);
-   if(m_handle_ema_h4_200!= INVALID_HANDLE) IndicatorRelease(m_handle_ema_h4_200);
+   if(m_handle_macd      != INVALID_HANDLE) IndicatorRelease(m_handle_macd);
+   if(m_handle_ema_h1_50 != INVALID_HANDLE) IndicatorRelease(m_handle_ema_h1_50);
 
    m_handle_ema_fast  = INVALID_HANDLE;
    m_handle_ema_slow  = INVALID_HANDLE;
    m_handle_rsi       = INVALID_HANDLE;
    m_handle_atr       = INVALID_HANDLE;
-   m_handle_ema_h4_50 = INVALID_HANDLE;
-   m_handle_ema_h4_200= INVALID_HANDLE;
+   m_handle_macd      = INVALID_HANDLE;
+   m_handle_ema_h1_50 = INVALID_HANDLE;
 }
 
 //+------------------------------------------------------------------+
-//| Get Higher Timeframe Bias: +1 = bullish, -1 = bearish, 0 = none  |
+//| Set RSI levels for buy/sell filters                               |
 //+------------------------------------------------------------------+
-int CSignalEngine::GetHTFBias()
+void CSignalEngine::SetRSILevels(double buy_min, double buy_max, double sell_min, double sell_max)
 {
-   if(CopyBuffer(m_handle_ema_h4_50, 0, 0, 3, m_ema_h4_50) < 3)   return 0;
-   if(CopyBuffer(m_handle_ema_h4_200, 0, 0, 3, m_ema_h4_200) < 3) return 0;
-
-   double close_h4[];
-   ArraySetAsSeries(close_h4, true);
-   if(CopyClose(m_symbol, m_tf_htf, 0, 3, close_h4) < 3) return 0;
-
-   // Strong Bullish: price above EMA50, EMA50 above EMA200
-   if(close_h4[0] > m_ema_h4_50[0] && m_ema_h4_50[0] > m_ema_h4_200[0])
-      return 1;
-
-   // Strong Bearish: price below EMA50, EMA50 below EMA200
-   if(close_h4[0] < m_ema_h4_50[0] && m_ema_h4_50[0] < m_ema_h4_200[0])
-      return -1;
-
-   // Weak Bullish: price above both EMAs (even if EMA50 < EMA200, early trend)
-   if(close_h4[0] > m_ema_h4_50[0] && close_h4[0] > m_ema_h4_200[0])
-      return 1;
-
-   // Weak Bearish: price below both EMAs
-   if(close_h4[0] < m_ema_h4_50[0] && close_h4[0] < m_ema_h4_200[0])
-      return -1;
-
-   return 0;
+   m_rsi_buy_min  = buy_min;
+   m_rsi_buy_max  = buy_max;
+   m_rsi_sell_min = sell_min;
+   m_rsi_sell_max = sell_max;
 }
 
 //+------------------------------------------------------------------+
-//| Detect Bullish Order Block                                        |
-//| Last bearish candle before a strong bullish move                  |
+//| Set ATR multipliers for SL and TP                                 |
 //+------------------------------------------------------------------+
-bool CSignalEngine::DetectBullishOrderBlock(int shift, double &ob_high, double &ob_low)
+void CSignalEngine::SetATRMultipliers(double sl_mult, double tp_mult)
 {
-   MqlRates rates[];
-   ArraySetAsSeries(rates, true);
-
-   int bars_needed = shift + m_ob_lookback + 3;
-   if(CopyRates(m_symbol, m_tf_entry, 0, bars_needed, rates) < bars_needed)
-      return false;
-
-   if(CopyBuffer(m_handle_atr, 0, 0, bars_needed, m_atr) < bars_needed)
-      return false;
-
-   // Scan for bullish order blocks
-   for(int i = shift + 2; i < shift + m_ob_lookback; i++)
-   {
-      // Look for bearish candle followed by strong bullish move
-      bool is_bearish = rates[i].close < rates[i].open;
-      if(!is_bearish) continue;
-
-      // The next candle(s) must form a strong bullish engulfing
-      double bullish_move = rates[i-1].close - rates[i].low;
-      double atr_val = m_atr[i];
-      if(atr_val <= 0) continue;
-
-      // Strong move = at least 1.0x ATR
-      if(bullish_move < atr_val * 1.0) continue;
-
-      // The OB zone is the body of the bearish candle
-      ob_high = MathMax(rates[i].open, rates[i].close);
-      ob_low  = MathMin(rates[i].open, rates[i].close);
-
-      // Check if current price is near the OB zone (within or approaching)
-      double ask = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
-      if(ask >= ob_low - (atr_val * 0.3) && ask <= ob_high + (atr_val * 0.8))
-         return true;
-   }
-
-   return false;
+   m_atr_sl_multiplier = sl_mult;
+   m_atr_tp_multiplier = tp_mult;
 }
 
 //+------------------------------------------------------------------+
-//| Detect Bearish Order Block                                        |
-//| Last bullish candle before a strong bearish move                  |
+//| Set minimum ATR filter                                            |
 //+------------------------------------------------------------------+
-bool CSignalEngine::DetectBearishOrderBlock(int shift, double &ob_high, double &ob_low)
+void CSignalEngine::SetMinATR(double min_atr)
 {
-   MqlRates rates[];
-   ArraySetAsSeries(rates, true);
-
-   int bars_needed = shift + m_ob_lookback + 3;
-   if(CopyRates(m_symbol, m_tf_entry, 0, bars_needed, rates) < bars_needed)
-      return false;
-
-   if(CopyBuffer(m_handle_atr, 0, 0, bars_needed, m_atr) < bars_needed)
-      return false;
-
-   for(int i = shift + 2; i < shift + m_ob_lookback; i++)
-   {
-      // Look for bullish candle followed by strong bearish move
-      bool is_bullish = rates[i].close > rates[i].open;
-      if(!is_bullish) continue;
-
-      double bearish_move = rates[i].high - rates[i-1].close;
-      double atr_val = m_atr[i];
-      if(atr_val <= 0) continue;
-
-      if(bearish_move < atr_val * 1.0) continue;
-
-      ob_high = MathMax(rates[i].open, rates[i].close);
-      ob_low  = MathMin(rates[i].open, rates[i].close);
-
-      double bid = SymbolInfoDouble(m_symbol, SYMBOL_BID);
-      if(bid <= ob_high + (atr_val * 0.3) && bid >= ob_low - (atr_val * 0.8))
-         return true;
-   }
-
-   return false;
+   m_min_atr_filter = min_atr;
 }
 
 //+------------------------------------------------------------------+
-//| Detect Bullish Fair Value Gap (FVG)                               |
-//| Gap between candle[i+1].high and candle[i-1].low                 |
+//| Get H1 Trend Bias: +1 = bullish, -1 = bearish, 0 = no trend     |
 //+------------------------------------------------------------------+
-bool CSignalEngine::DetectBullishFVG(int shift, double &fvg_high, double &fvg_low)
+int CSignalEngine::GetH1TrendBias()
 {
-   MqlRates rates[];
-   ArraySetAsSeries(rates, true);
+   if(CopyBuffer(m_handle_ema_h1_50, 0, 0, 5, m_ema_h1_50) < 5) return 0;
 
-   int bars_needed = shift + m_ob_lookback + 3;
-   if(CopyRates(m_symbol, m_tf_entry, 0, bars_needed, rates) < bars_needed)
-      return false;
+   double close_h1[];
+   ArraySetAsSeries(close_h1, true);
+   if(CopyClose(m_symbol, m_tf_htf, 0, 5, close_h1) < 5) return 0;
 
-   double point = SymbolInfoDouble(m_symbol, SYMBOL_POINT);
+   // Price above EMA50 for at least 2 of last 3 bars = bullish
+   int above_count = 0;
+   for(int i = 0; i < 3; i++)
+      if(close_h1[i] > m_ema_h1_50[i]) above_count++;
 
-   for(int i = shift + 1; i < shift + m_ob_lookback - 1; i++)
-   {
-      // Bullish FVG: gap between candle[i+1].high and candle[i-1].low
-      double gap_low  = rates[i+1].high;  // Top of candle before the impulse
-      double gap_high = rates[i-1].low;   // Bottom of candle after the impulse
+   if(above_count >= 2) return 1;  // Bullish trend
 
-      if(gap_high <= gap_low) continue; // No gap
+   // Price below EMA50 for at least 2 of last 3 bars = bearish
+   int below_count = 0;
+   for(int i = 0; i < 3; i++)
+      if(close_h1[i] < m_ema_h1_50[i]) below_count++;
 
-      double gap_size = (gap_high - gap_low) / point;
-      if(gap_size < m_fvg_min_size) continue;
+   if(below_count >= 2) return -1;  // Bearish trend
 
-      // Check if price is in the FVG zone
-      double ask = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
-      if(ask >= gap_low && ask <= gap_high)
-      {
-         fvg_high = gap_high;
-         fvg_low  = gap_low;
-         return true;
-      }
-   }
-
-   return false;
+   return 0;  // No clear trend
 }
 
 //+------------------------------------------------------------------+
-//| Detect Bearish Fair Value Gap                                     |
+//| PRIMARY: Trend + Momentum Signal                                  |
+//| H1 trend filter + M15 EMA cross + RSI + MACD confirmation        |
 //+------------------------------------------------------------------+
-bool CSignalEngine::DetectBearishFVG(int shift, double &fvg_high, double &fvg_low)
-{
-   MqlRates rates[];
-   ArraySetAsSeries(rates, true);
-
-   int bars_needed = shift + m_ob_lookback + 3;
-   if(CopyRates(m_symbol, m_tf_entry, 0, bars_needed, rates) < bars_needed)
-      return false;
-
-   double point = SymbolInfoDouble(m_symbol, SYMBOL_POINT);
-
-   for(int i = shift + 1; i < shift + m_ob_lookback - 1; i++)
-   {
-      // Bearish FVG: gap between candle[i-1].high and candle[i+1].low
-      double gap_high = rates[i+1].low;   // Bottom of candle before the impulse
-      double gap_low  = rates[i-1].high;  // Top of candle after the impulse
-
-      if(gap_high <= gap_low) continue;
-
-      double gap_size = (gap_high - gap_low) / point;
-      if(gap_size < m_fvg_min_size) continue;
-
-      double bid = SymbolInfoDouble(m_symbol, SYMBOL_BID);
-      if(bid >= gap_low && bid <= gap_high)
-      {
-         fvg_high = gap_high;
-         fvg_low  = gap_low;
-         return true;
-      }
-   }
-
-   return false;
-}
-
-//+------------------------------------------------------------------+
-//| Detect Liquidity Sweep                                            |
-//| Price sweeps a recent swing high/low then reverses                |
-//+------------------------------------------------------------------+
-bool CSignalEngine::DetectLiquiditySweep(bool is_bullish, int lookback)
-{
-   MqlRates rates[];
-   ArraySetAsSeries(rates, true);
-
-   int bars_needed = lookback + 5;
-   if(CopyRates(m_symbol, m_tf_entry, 0, bars_needed, rates) < bars_needed)
-      return false;
-
-   if(is_bullish)
-   {
-      // Find recent swing low in lookback period (skip last 2 bars)
-      double swing_low = DBL_MAX;
-      for(int i = 3; i < lookback; i++)
-      {
-         if(rates[i].low < swing_low)
-            swing_low = rates[i].low;
-      }
-
-      // Check if recent bar swept below swing low then closed above
-      if(rates[1].low <= swing_low && rates[1].close > swing_low)
-         return true;
-      if(rates[0].low <= swing_low && rates[0].close > swing_low)
-         return true;
-   }
-   else
-   {
-      // Find recent swing high
-      double swing_high = 0;
-      for(int i = 3; i < lookback; i++)
-      {
-         if(rates[i].high > swing_high)
-            swing_high = rates[i].high;
-      }
-
-      if(rates[1].high >= swing_high && rates[1].close < swing_high)
-         return true;
-      if(rates[0].high >= swing_high && rates[0].close < swing_high)
-         return true;
-   }
-
-   return false;
-}
-
-//+------------------------------------------------------------------+
-//| PRIMARY: Smart Money Concepts Signal                              |
-//+------------------------------------------------------------------+
-ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
+ENUM_SIGNAL_TYPE CSignalEngine::GetTrendMomentumSignal(double &sl_price, double &tp_price)
 {
    sl_price = 0;
    tp_price = 0;
 
-   // Step 1: Get H4 bias
-   int htf_bias = GetHTFBias();
-   if(htf_bias == 0) return SIGNAL_NONE; // No clear trend
+   // Step 1: Get H1 trend direction
+   int trend = GetH1TrendBias();
+   if(trend == 0)
+   {
+      // No clear trend - skip
+      return SIGNAL_NONE;
+   }
 
-   // Step 2: Get ATR for SL/TP calculation
-   if(CopyBuffer(m_handle_atr, 0, 0, 3, m_atr) < 3) return SIGNAL_NONE;
-   double atr = m_atr[0];
+   // Step 2: Copy M15 indicator data (need 3 bars for crossover detection)
+   if(CopyBuffer(m_handle_ema_fast, 0, 0, 4, m_ema_fast) < 4) return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_ema_slow, 0, 0, 4, m_ema_slow) < 4) return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_rsi, 0, 0, 3, m_rsi) < 3)           return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_atr, 0, 0, 3, m_atr) < 3)           return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_macd, 2, 0, 3, m_macd_hist) < 3)    return SIGNAL_NONE;
+
+   double atr = m_atr[1];  // Use previous bar ATR (complete bar)
    if(atr <= 0) return SIGNAL_NONE;
 
-   double ob_high, ob_low, fvg_high, fvg_low;
+   // Minimum volatility filter
+   if(m_min_atr_filter > 0 && atr < m_min_atr_filter)
+      return SIGNAL_NONE;
 
-   // Step 3: Look for BUY setup (bullish HTF bias)
-   if(htf_bias == 1)
+   // Step 3: Check for EMA crossover on COMPLETED bars (bar[1] and bar[2])
+   // Cross up:  EMA_fast was below EMA_slow on bar[2], now above on bar[1]
+   bool cross_up   = (m_ema_fast[2] <= m_ema_slow[2]) && (m_ema_fast[1] > m_ema_slow[1]);
+   // Cross down: EMA_fast was above EMA_slow on bar[2], now below on bar[1]
+   bool cross_down = (m_ema_fast[2] >= m_ema_slow[2]) && (m_ema_fast[1] < m_ema_slow[1]);
+
+   // Also accept: EMA already aligned in trend direction AND momentum increasing
+   // This catches continuation entries, not just crossovers
+   bool ema_bullish_aligned = (m_ema_fast[1] > m_ema_slow[1]) &&
+                               (m_ema_fast[1] - m_ema_slow[1] > m_ema_fast[2] - m_ema_slow[2]);
+   bool ema_bearish_aligned = (m_ema_fast[1] < m_ema_slow[1]) &&
+                               (m_ema_slow[1] - m_ema_fast[1] > m_ema_slow[2] - m_ema_fast[2]);
+
+   double rsi = m_rsi[1];  // Use completed bar RSI
+   double macd_hist = m_macd_hist[1];      // MACD histogram on completed bar
+   double macd_hist_prev = m_macd_hist[2]; // Previous MACD histogram
+
+   // === BUY SIGNAL ===
+   if(trend == 1)  // H1 bullish
    {
-      bool has_liquidity_sweep = DetectLiquiditySweep(true, 30);
-      bool has_bullish_ob = DetectBullishOrderBlock(0, ob_high, ob_low);
-      bool has_bullish_fvg = DetectBullishFVG(0, fvg_high, fvg_low);
+      bool ema_ok = cross_up || ema_bullish_aligned;
+      bool rsi_ok = (rsi >= m_rsi_buy_min && rsi <= m_rsi_buy_max);
+      bool macd_ok = (macd_hist > 0) || (macd_hist > macd_hist_prev); // Positive or improving
 
-      // Need order block OR fair value gap (liquidity sweep is bonus confirmation)
-      if(has_bullish_ob || has_bullish_fvg)
+      if(ema_ok && rsi_ok && macd_ok)
       {
          double entry = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
+         sl_price = entry - (atr * m_atr_sl_multiplier);
+         tp_price = entry + (atr * m_atr_tp_multiplier);
 
-         // SL below the order block or FVG zone
-         if(has_bullish_ob)
-            sl_price = ob_low - atr * 0.5;
-         else
-            sl_price = fvg_low - atr * 0.5;
-
-         double sl_distance = entry - sl_price;
-         if(sl_distance <= 0) return SIGNAL_NONE;
-
-         // TP at 2:1 minimum RR
-         tp_price = entry + (sl_distance * 2.0);
-
-         PrintFormat("[SMC] BUY signal: Entry=%.5f SL=%.5f TP=%.5f | LiqSweep=%s OB=%s FVG=%s",
-                     entry, sl_price, tp_price,
-                     has_liquidity_sweep ? "Y" : "N",
-                     has_bullish_ob ? "Y" : "N",
-                     has_bullish_fvg ? "Y" : "N");
+         PrintFormat("[TREND] BUY %s: Entry=%.5f SL=%.5f TP=%.5f | RSI=%.1f MACD=%.6f ATR=%.5f | Cross=%s Aligned=%s",
+                     m_symbol, entry, sl_price, tp_price, rsi, macd_hist, atr,
+                     cross_up ? "Y" : "N", ema_bullish_aligned ? "Y" : "N");
 
          return SIGNAL_BUY;
       }
    }
 
-   // Step 4: Look for SELL setup (bearish HTF bias)
-   if(htf_bias == -1)
+   // === SELL SIGNAL ===
+   if(trend == -1)  // H1 bearish
    {
-      bool has_liquidity_sweep = DetectLiquiditySweep(false, 30);
-      bool has_bearish_ob = DetectBearishOrderBlock(0, ob_high, ob_low);
-      bool has_bearish_fvg = DetectBearishFVG(0, fvg_high, fvg_low);
+      bool ema_ok = cross_down || ema_bearish_aligned;
+      bool rsi_ok = (rsi >= m_rsi_sell_min && rsi <= m_rsi_sell_max);
+      bool macd_ok = (macd_hist < 0) || (macd_hist < macd_hist_prev); // Negative or declining
 
-      // Need order block OR fair value gap (liquidity sweep is bonus confirmation)
-      if(has_bearish_ob || has_bearish_fvg)
+      if(ema_ok && rsi_ok && macd_ok)
       {
          double entry = SymbolInfoDouble(m_symbol, SYMBOL_BID);
+         sl_price = entry + (atr * m_atr_sl_multiplier);
+         tp_price = entry - (atr * m_atr_tp_multiplier);
 
-         if(has_bearish_ob)
-            sl_price = ob_high + atr * 0.5;
-         else
-            sl_price = fvg_high + atr * 0.5;
-
-         double sl_distance = sl_price - entry;
-         if(sl_distance <= 0) return SIGNAL_NONE;
-
-         tp_price = entry - (sl_distance * 2.0);
-
-         PrintFormat("[SMC] SELL signal: Entry=%.5f SL=%.5f TP=%.5f | LiqSweep=%s OB=%s FVG=%s",
-                     entry, sl_price, tp_price,
-                     has_liquidity_sweep ? "Y" : "N",
-                     has_bearish_ob ? "Y" : "N",
-                     has_bearish_fvg ? "Y" : "N");
+         PrintFormat("[TREND] SELL %s: Entry=%.5f SL=%.5f TP=%.5f | RSI=%.1f MACD=%.6f ATR=%.5f | Cross=%s Aligned=%s",
+                     m_symbol, entry, sl_price, tp_price, rsi, macd_hist, atr,
+                     cross_down ? "Y" : "N", ema_bearish_aligned ? "Y" : "N");
 
          return SIGNAL_SELL;
       }
@@ -550,7 +389,7 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSMCSignal(double &sl_price, double &tp_price)
 }
 
 //+------------------------------------------------------------------+
-//| FALLBACK: EMA Crossover Signal                                    |
+//| FALLBACK: Simple EMA Crossover Signal (no MACD required)          |
 //+------------------------------------------------------------------+
 ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_price)
 {
@@ -558,45 +397,41 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
    tp_price = 0;
 
    // Copy indicator data
-   if(CopyBuffer(m_handle_ema_fast, 0, 0, 3, m_ema_fast) < 3) return SIGNAL_NONE;
-   if(CopyBuffer(m_handle_ema_slow, 0, 0, 3, m_ema_slow) < 3) return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_ema_fast, 0, 0, 4, m_ema_fast) < 4) return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_ema_slow, 0, 0, 4, m_ema_slow) < 4) return SIGNAL_NONE;
    if(CopyBuffer(m_handle_rsi, 0, 0, 3, m_rsi) < 3)           return SIGNAL_NONE;
    if(CopyBuffer(m_handle_atr, 0, 0, 3, m_atr) < 3)           return SIGNAL_NONE;
 
-   double atr = m_atr[0];
+   double atr = m_atr[1];
    if(atr <= 0) return SIGNAL_NONE;
 
-   // Get H4 bias for confirmation
-   int htf_bias = GetHTFBias();
+   double rsi = m_rsi[1];
 
-   // EMA 9 crossed above EMA 21
-   bool cross_up = (m_ema_fast[1] <= m_ema_slow[1]) && (m_ema_fast[0] > m_ema_slow[0]);
-   // EMA 9 crossed below EMA 21
-   bool cross_down = (m_ema_fast[1] >= m_ema_slow[1]) && (m_ema_fast[0] < m_ema_slow[0]);
+   // EMA crossover on completed bars
+   bool cross_up   = (m_ema_fast[2] <= m_ema_slow[2]) && (m_ema_fast[1] > m_ema_slow[1]);
+   bool cross_down = (m_ema_fast[2] >= m_ema_slow[2]) && (m_ema_fast[1] < m_ema_slow[1]);
 
-   // BUY: EMA cross up + RSI not overbought (HTF bias is optional for fallback)
-   if(cross_up && m_rsi[0] < m_rsi_overbought && m_rsi[0] > m_rsi_oversold && htf_bias >= -1)
+   // BUY: EMA cross up + RSI not overbought
+   if(cross_up && rsi < 70 && rsi > 30)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
-      sl_price = entry - (atr * 1.5);
-      double sl_distance = entry - sl_price;
-      tp_price = entry + (sl_distance * 2.0);
+      sl_price = entry - (atr * m_atr_sl_multiplier);
+      tp_price = entry + (atr * m_atr_tp_multiplier);
 
-      PrintFormat("[EMA] BUY signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
-                  entry, sl_price, tp_price, m_rsi[0]);
+      PrintFormat("[EMA] BUY %s: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
+                  m_symbol, entry, sl_price, tp_price, rsi);
       return SIGNAL_BUY;
    }
 
-   // SELL: EMA cross down + RSI not oversold (HTF bias is optional for fallback)
-   if(cross_down && m_rsi[0] > m_rsi_oversold && m_rsi[0] < m_rsi_overbought && htf_bias <= 1)
+   // SELL: EMA cross down + RSI not oversold
+   if(cross_down && rsi > 30 && rsi < 70)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_BID);
-      sl_price = entry + (atr * 1.5);
-      double sl_distance = sl_price - entry;
-      tp_price = entry - (sl_distance * 2.0);
+      sl_price = entry + (atr * m_atr_sl_multiplier);
+      tp_price = entry - (atr * m_atr_tp_multiplier);
 
-      PrintFormat("[EMA] SELL signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
-                  entry, sl_price, tp_price, m_rsi[0]);
+      PrintFormat("[EMA] SELL %s: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
+                  m_symbol, entry, sl_price, tp_price, rsi);
       return SIGNAL_SELL;
    }
 
@@ -610,8 +445,8 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSignal(ENUM_STRATEGY_TYPE strategy, double &s
 {
    switch(strategy)
    {
-      case STRATEGY_SMC:
-         return GetSMCSignal(sl_price, tp_price);
+      case STRATEGY_TREND_MOMENTUM:
+         return GetTrendMomentumSignal(sl_price, tp_price);
 
       case STRATEGY_EMA_CROSS:
          return GetEMACrossSignal(sl_price, tp_price);
@@ -626,8 +461,8 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetSignal(ENUM_STRATEGY_TYPE strategy, double &s
 //+------------------------------------------------------------------+
 double CSignalEngine::GetCurrentATR()
 {
-   if(CopyBuffer(m_handle_atr, 0, 0, 1, m_atr) < 1) return 0;
-   return m_atr[0];
+   if(CopyBuffer(m_handle_atr, 0, 0, 2, m_atr) < 2) return 0;
+   return m_atr[1];  // Completed bar
 }
 
 //+------------------------------------------------------------------+
@@ -635,8 +470,8 @@ double CSignalEngine::GetCurrentATR()
 //+------------------------------------------------------------------+
 double CSignalEngine::GetCurrentRSI()
 {
-   if(CopyBuffer(m_handle_rsi, 0, 0, 1, m_rsi) < 1) return 50;
-   return m_rsi[0];
+   if(CopyBuffer(m_handle_rsi, 0, 0, 2, m_rsi) < 2) return 50;
+   return m_rsi[1];  // Completed bar
 }
 
 //+------------------------------------------------------------------+
@@ -644,8 +479,8 @@ double CSignalEngine::GetCurrentRSI()
 //+------------------------------------------------------------------+
 bool CSignalEngine::IsEMABullish()
 {
-   if(CopyBuffer(m_handle_ema_fast, 0, 0, 1, m_ema_fast) < 1) return false;
-   if(CopyBuffer(m_handle_ema_slow, 0, 0, 1, m_ema_slow) < 1) return false;
-   return m_ema_fast[0] > m_ema_slow[0];
+   if(CopyBuffer(m_handle_ema_fast, 0, 0, 2, m_ema_fast) < 2) return false;
+   if(CopyBuffer(m_handle_ema_slow, 0, 0, 2, m_ema_slow) < 2) return false;
+   return m_ema_fast[1] > m_ema_slow[1];
 }
 //+------------------------------------------------------------------+

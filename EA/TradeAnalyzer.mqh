@@ -163,7 +163,7 @@ CTradeAnalyzer::CTradeAnalyzer()
    }
 
    // Init strategy stats
-   m_strategy_stats[0].strategy = "SMC";
+   m_strategy_stats[0].strategy = "TREND";
    m_strategy_stats[1].strategy = "EMA";
    for(int i = 0; i < 2; i++)
    {
@@ -237,8 +237,8 @@ void CTradeAnalyzer::RecordTrade(string symbol, string direction, string strateg
 //+------------------------------------------------------------------+
 int CTradeAnalyzer::GetSessionFromHour(int hour)
 {
-   if(hour >= 7 && hour < 12) return 0;   // London
-   if(hour >= 12 && hour < 17) return 1;  // NY
+   if(hour >= 7 && hour < 14) return 0;   // London
+   if(hour >= 14 && hour < 21) return 1;  // NY
    return -1;  // Off-session
 }
 
@@ -402,7 +402,7 @@ void CTradeAnalyzer::UpdateStrategyStats()
       m_strategy_stats[s].total_pnl = 0;
       double gross_win = 0, gross_loss = 0;
 
-      string strat = (s == 0) ? "SMC" : "EMA";
+      string strat = (s == 0) ? "TREND" : "EMA";
 
       for(int i = 0; i < m_history_count; i++)
       {
@@ -484,7 +484,7 @@ double CTradeAnalyzer::GetSymbolRiskMultiplier(string symbol)
 //+------------------------------------------------------------------+
 bool CTradeAnalyzer::IsStrategyWorking(string strategy)
 {
-   int idx = (strategy == "SMC") ? 0 : 1;
+   int idx = (strategy == "TREND") ? 0 : 1;
 
    if(m_strategy_stats[idx].trades < 5) return true; // Not enough data
 
