@@ -557,46 +557,99 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
    sl_price = 0;
    tp_price = 0;
 
-   // Copy indicator data
-   if(CopyBuffer(m_handle_ema_fast, 0, 0, 3, m_ema_fast) < 3) return SIGNAL_NONE;
-   if(CopyBuffer(m_handle_ema_slow, 0, 0, 3, m_ema_slow) < 3) return SIGNAL_NONE;
-   if(CopyBuffer(m_handle_rsi, 0, 0, 3, m_rsi) < 3)           return SIGNAL_NONE;
-   if(CopyBuffer(m_handle_atr, 0, 0, 3, m_atr) < 3)           return SIGNAL_NONE;
+   // Copy more bars for recent-cross detection
+   double ema_f[], ema_s[], rsi_buf[], atr_buf[];
+   ArraySetAsSeries(ema_f, true);
+   ArraySetAsSeries(ema_s, true);
+   ArraySetAsSeries(rsi_buf, true);
+   ArraySetAsSeries(atr_buf, true);
 
-   double atr = m_atr[0];
+   if(CopyBuffer(m_handle_ema_fast, 0, 0, 6, ema_f) < 6) return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_ema_slow, 0, 0, 6, ema_s) < 6) return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_rsi, 0, 0, 3, rsi_buf) < 3)    return SIGNAL_NONE;
+   if(CopyBuffer(m_handle_atr, 0, 0, 3, atr_buf) < 3)    return SIGNAL_NONE;
+
+   double atr = atr_buf[0];
    if(atr <= 0) return SIGNAL_NONE;
 
    // Get H4 bias for confirmation
    int htf_bias = GetHTFBias();
 
-   // EMA 9 crossed above EMA 21
-   bool cross_up = (m_ema_fast[1] <= m_ema_slow[1]) && (m_ema_fast[0] > m_ema_slow[0]);
-   // EMA 9 crossed below EMA 21
-   bool cross_down = (m_ema_fast[1] >= m_ema_slow[1]) && (m_ema_fast[0] < m_ema_slow[0]);
+   // === METHOD 1: Exact cross on current bar ===
+   bool cross_up   = (ema_f[1] <= ema_s[1]) && (ema_f[0] > ema_s[0]);
+   bool cross_down = (ema_f[1] >= ema_s[1]) && (ema_f[0] < ema_s[0]);
 
-   // BUY: EMA cross up + RSI not overbought (HTF bias is optional for fallback)
-   if(cross_up && m_rsi[0] < m_rsi_overbought && m_rsi[0] > m_rsi_oversold && htf_bias >= -1)
+   // === METHOD 2: Recent cross within last 4 bars + EMA still aligned ===
+   // This catches signals missed because cross happened mid-bar
+   bool recent_cross_up = false;
+   bool recent_cross_down = false;
+   if(!cross_up && !cross_down)
+   {
+      // Check if cross happened in last 4 bars and EMAs are still aligned
+      for(int i = 1; i < 5; i++)
+      {
+         if(ema_f[i] <= ema_s[i] && ema_f[i-1] > ema_s[i-1])
+         {
+            // Bullish cross at bar i -> i-1, check EMAs still bullish now
+            if(ema_f[0] > ema_s[0]) { recent_cross_up = true; break; }
+         }
+         if(ema_f[i] >= ema_s[i] && ema_f[i-1] < ema_s[i-1])
+         {
+            // Bearish cross at bar i -> i-1, check EMAs still bearish now
+            if(ema_f[0] < ema_s[0]) { recent_cross_down = true; break; }
+         }
+      }
+   }
+
+   // === METHOD 3: EMA momentum + RSI pullback ===
+   // EMA clearly aligned + RSI pulled back to neutral zone (good entry)
+   bool momentum_buy  = false;
+   bool momentum_sell = false;
+
+   double ema_gap_pct = (ema_f[0] - ema_s[0]) / ema_s[0] * 10000; // in basis points
+
+   // Bullish momentum: EMA fast > slow by meaningful amount + RSI pulled back
+   if(ema_gap_pct > 3.0 && ema_gap_pct < 30.0 && rsi_buf[0] > 40 && rsi_buf[0] < 58)
+   {
+      // Confirm RSI bounced from lower level (pullback entry)
+      if(rsi_buf[1] < rsi_buf[0] && rsi_buf[1] < 55)
+         momentum_buy = true;
+   }
+
+   // Bearish momentum: EMA fast < slow + RSI pulled back from high
+   if(ema_gap_pct < -3.0 && ema_gap_pct > -30.0 && rsi_buf[0] > 42 && rsi_buf[0] < 60)
+   {
+      if(rsi_buf[1] > rsi_buf[0] && rsi_buf[1] > 45)
+         momentum_sell = true;
+   }
+
+   // === BUY SIGNAL ===
+   bool buy_signal = (cross_up || recent_cross_up || momentum_buy);
+   if(buy_signal && rsi_buf[0] < m_rsi_overbought && rsi_buf[0] > 35 && htf_bias >= 0)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
       sl_price = entry - (atr * 1.5);
       double sl_distance = entry - sl_price;
       tp_price = entry + (sl_distance * 2.0);
 
-      PrintFormat("[EMA] BUY signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
-                  entry, sl_price, tp_price, m_rsi[0]);
+      string method = cross_up ? "CROSS" : (recent_cross_up ? "RECENT_CROSS" : "MOMENTUM");
+      PrintFormat("[EMA] BUY %s: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f HTF=%d",
+                  method, entry, sl_price, tp_price, rsi_buf[0], htf_bias);
       return SIGNAL_BUY;
    }
 
-   // SELL: EMA cross down + RSI not oversold (HTF bias is optional for fallback)
-   if(cross_down && m_rsi[0] > m_rsi_oversold && m_rsi[0] < m_rsi_overbought && htf_bias <= 1)
+   // === SELL SIGNAL ===
+   bool sell_signal = (cross_down || recent_cross_down || momentum_sell);
+   if(sell_signal && rsi_buf[0] > m_rsi_oversold && rsi_buf[0] < 65 && htf_bias <= 0)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_BID);
       sl_price = entry + (atr * 1.5);
       double sl_distance = sl_price - entry;
       tp_price = entry - (sl_distance * 2.0);
 
-      PrintFormat("[EMA] SELL signal: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f",
-                  entry, sl_price, tp_price, m_rsi[0]);
+      string method = cross_down ? "CROSS" : (recent_cross_down ? "RECENT_CROSS" : "MOMENTUM");
+      PrintFormat("[EMA] SELL %s: Entry=%.5f SL=%.5f TP=%.5f RSI=%.1f HTF=%d",
+                  method, entry, sl_price, tp_price, rsi_buf[0], htf_bias);
       return SIGNAL_SELL;
    }
 

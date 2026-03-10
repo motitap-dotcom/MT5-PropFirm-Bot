@@ -126,7 +126,7 @@ CRiskManager::CRiskManager()
    m_daily_start_balance= 0;
    m_daily_reset_time   = 0;
    m_max_spread_major   = 3.0;
-   m_max_spread_xau     = 5.0;
+   m_max_spread_xau     = 8.0;
    m_london_start_hour  = 7;
    m_london_end_hour    = 16;
    m_ny_start_hour      = 12;
@@ -332,7 +332,15 @@ bool CRiskManager::CanOpenTrade(string symbol)
 bool CRiskManager::IsSessionActive()
 {
    MqlDateTime dt;
-   TimeToStruct(TimeGMT(), dt);
+   datetime gmt_time = TimeGMT();
+   datetime srv_time = TimeCurrent();
+
+   // Use TimeGMT if available, fallback to TimeCurrent
+   // Wine sometimes returns incorrect GMT offset
+   if(gmt_time > 0 && MathAbs((long)(gmt_time - srv_time)) < 86400)
+      TimeToStruct(gmt_time, dt);
+   else
+      TimeToStruct(srv_time, dt);  // Fallback: use server time
 
    // London session
    if(dt.hour >= m_london_start_hour && dt.hour < m_london_end_hour)
