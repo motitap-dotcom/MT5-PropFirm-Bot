@@ -2,6 +2,8 @@ name: VPS Status Check
 
 on:
   push:
+    branches:
+      - '**'
     paths:
       - '.github/workflows/vps-check.yml'
       - 'trigger-check.txt'

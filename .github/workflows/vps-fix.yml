@@ -2,6 +2,8 @@ name: VPS Fix and Restart MT5
 
 on:
   push:
+    branches:
+      - '**'
     paths:
       - '.github/workflows/vps-fix.yml'
       - 'scripts/fix_and_restart.sh'

@@ -1,6 +1,6 @@
 //+------------------------------------------------------------------+
 //|                                              PropFirmBot.mq5      |
-//|                     PROP FIRM CHALLENGE BOT v3.0 - FULL SYSTEM    |
+//|                     PROP FIRM CHALLENGE BOT v3.1 - FULL SYSTEM    |
 //|                     Guardian + Dashboard + Journal + Analytics     |
 //|                     News Filter + Notifications + Self-Learning   |
 //+------------------------------------------------------------------+

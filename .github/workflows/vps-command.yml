@@ -2,6 +2,8 @@ name: Run Command on VPS
 
 on:
   push:
+    branches:
+      - '**'
     paths:
       - 'commands/run.sh'
   workflow_dispatch:
