@@ -77,6 +77,36 @@ Claude עושה שינוי בריפו → Push ל-GitHub → GitHub Actions מר
 - Connection method: SSH (not RDP!)
 - Connect: ssh root@77.237.234.2
 
+## Version History
+
+### v4.0 - Trend + Momentum (2026-03-10) ← CURRENT VERSION
+- **שינוי אסטרטגיה מלא**: עברנו מ-SMC (Smart Money Concepts) ל-Trend + Momentum
+- **אסטרטגיה חדשה**:
+  - H1 EMA50 קובע כיוון מגמה (trend filter)
+  - M15 EMA 8/21 crossover לתזמון כניסה
+  - RSI מאשר מומנטום (לא overbought/oversold)
+  - MACD histogram מאשר כיוון מומנטום
+  - ATR לגודל SL/TP דינמי
+- **Guardian מעודכן**: soft DD 4.0%, critical 5.2%, max 6 הפסדים רצופים, max 12 עסקאות ביום
+- **Risk מעודכן**: 0.5% לעסקה, max 3 פוזיציות, risk multiplier 0.85 ב-funded mode
+- **ענף מקור**: `claude/redesign-bot-strategy-woBVq`
+
+### v3.01 (2026-03-10)
+- Bump version קטן, ניסיון deploy לשרת
+- ענף: `claude/update-bot-deployment-Ej25j`
+
+### v3.1 (2026-03-10)
+- שינוי version number לטריגר deploy
+- ענף: `claude/enable-github-actions-38lPd`
+
+### v3.0 (2026-02-22) - הגרסה המקורית
+- אסטרטגיית SMC (Smart Money Concepts) - Order Blocks, Fair Value Gaps
+- Guardian עם trailing drawdown
+- 11 מודולים מלאים
+- ענף: `claude/build-cfd-trading-bot-fl0ld`
+
+---
+
 ## What's Been Done
 - [x] All EA files created (PropFirmBot.mq5 + 10 .mqh modules)
 - [x] Telegram bot configured with token and chat ID
@@ -91,19 +121,22 @@ Claude עושה שינוי בריפו → Push ל-GitHub → GitHub Actions מר
 - [x] FundedNext account connected in MT5 (account 11797849, FundedNext-Server)
 - [x] MT5 shows connected and working on VPS
 - [x] GitHub Actions workflows configured (deploy, check, fix, run commands)
+- [x] **v4.0 strategy redesign** - Trend + Momentum replaces SMC (2026-03-10)
 
-## VPS Current State (Updated 2026-02-22)
-- MT5 is RUNNING on VPS with PropFirmBot EA ACTIVE
+## VPS Current State (Updated 2026-03-10)
+- MT5 is RUNNING on VPS with PropFirmBot EA
 - FundedNext account LOGGED IN and CONNECTED (account 11797849)
 - EA attached to EURUSD M15 chart
 - AutoTrading is ON (green)
 - Wine + VNC working
-- Bot is LIVE and trading
+- **EA version on VPS needs deploy of v4.0** (last deployed was v3.01)
 
 ## Critical Code Changes Made
-1. **Guardian.mqh**: Added trailing drawdown - calculates DD from equity high water mark instead of initial balance when `m_trailing_dd=true`. Skips daily DD checks when daily DD limit is 0.
-2. **PropFirmBot.mq5**: Default inputs set for Stellar Instant (PHASE_FUNDED, 0 daily DD, 6.0 total DD, Telegram credentials)
-3. **All config JSONs**: Updated for 6% trailing DD, no daily limit, funded instant phase
+1. **SignalEngine.mqh (v4.0)**: Complete rewrite - EMA 8/21 crossover + RSI + MACD + H1 EMA50 trend filter (replaced SMC strategy)
+2. **Guardian.mqh**: Trailing drawdown from equity high water mark. v4.0: soft 4.0%, critical 5.2%, max 12 trades/day
+3. **PropFirmBot.mq5 (v4.0)**: Trend + Momentum strategy, ATR-based SL/TP, simplified inputs
+4. **RiskManager.mqh (v4.0)**: Updated risk params, 0.85 multiplier for funded, max 3 positions
+5. **All config JSONs**: Updated for v4.0 strategy parameters
 
 ## EA Modules (11 files)
 1. PropFirmBot.mq5 - Main EA
