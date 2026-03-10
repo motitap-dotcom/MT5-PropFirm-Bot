@@ -1,22 +1,54 @@
-=== FORCE RECOMPILE 2026-03-10 15:41:14 UTC ===
-[1] Stopping MT5...
-[2] Removing old .ex5...
-.ex5 deleted successfully
+=== FINAL CHECK 2026-03-10 15:43:11 UTC ===
+[1] MT5 Process:
+4006545 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
+4006641 C:\Program Files\MetaTrader 5\terminal64.exe /portable
 
-[3] Compiling with MetaEditor...
-0518:fixme:uxtheme:SetPreferredAppMode 0: stub
-0534:fixme:kernelbase:AppPolicyGetThreadInitializationType FFFFFFFFFFFFFFFA, 000000000A01FF50
-0518:fixme:kernelbase:AppPolicyGetProcessTerminationMethod FFFFFFFFFFFFFFFA, 000000000051FEE0
-
-After compile:
+[2] Compiled EA:
 -rw-r--r-- 1 root root 163486 Mar 10 15:41 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
 
-[4] Starting MT5...
-MT5 started
+[3] Bot Status:
+{
+  "timestamp": "2026.03.10 18:43:10",
+  "server_time": "2026.03.10 18:43:10",
+  "gmt_time": "2026.03.10 15:43:10",
+  "account": {
+    "number": 11797849,
+    "name": "FundedNext-Stellar Instant Account- moti tapiro",
+    "server": "FundedNext-Server",
+    "currency": "USD",
+    "leverage": 30,
+    "balance": 1980.22,
+    "equity": 1980.22,
+    "margin": 0.00,
+    "free_margin": 1980.22,
+    "floating_pnl": 0.00,
+    "initial_balance": 1980.22,
+    "total_pnl": 0.00,
+    "profit_percent": 0.00
+  },
+  "guardian": {
+    "state": "ACTIVE",
+    "daily_dd": 0.00,
+    "total_dd": 0.00,
+    "halt_message": "",
+    "connection_ok": true,
+    "can_trade": true
+  },
+  "today": {
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "profit": 0.00,
+    "loss": 0.00,
+    "net": 0.00,
+    "consec_losses": 0
+  },
+  "positions": {
+    "count": 0,
+    "open": []
+  }
+}
+[4] EA Log (last 20 lines):
 
-[5] Final check:
--rw-r--r-- 1 root root 163486 Mar 10 15:41 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
-MT5: RUNNING
-
-=== DONE 2026-03-10 15:41:58 UTC ===
+=== DONE ===
 EXIT_CODE=0
