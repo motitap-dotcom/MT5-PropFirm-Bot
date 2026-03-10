@@ -1,25 +1,25 @@
 ============================================
   MEMORY FIX - Swap + OOM Protection
-  2026-03-10 18:32:28 UTC
+  2026-03-10 20:23:32 UTC
 ============================================
 
 === STEP 1: Current Memory Status ===
                total        used        free      shared  buff/cache   available
-Mem:           7.8Gi       2.5Gi       4.4Gi        45Mi       1.3Gi       5.3Gi
-Swap:             0B          0B          0B
+Mem:           7.8Gi       2.5Gi       4.8Gi        45Mi       819Mi       5.3Gi
+Swap:          4.0Gi          0B       4.0Gi
 
 Swap status:
+NAME      TYPE SIZE USED PRIO
+/swapfile file   4G   0B   -2
 
 === STEP 2: Creating 4GB Swap File ===
-Creating 4GB swap file...
-Setting up swapspace version 1, size = 4 GiB (4294963200 bytes)
-no label, UUID=ebd6294b-7cab-4380-9070-832addaa3347
-Swap CREATED and ACTIVATED!
-Added to /etc/fstab (permanent)
+Swap already exists and is active!
+NAME      TYPE SIZE USED PRIO
+/swapfile file   4G   0B   -2
 
 Memory after swap:
                total        used        free      shared  buff/cache   available
-Mem:           7.8Gi       2.5Gi       4.3Gi        45Mi       1.3Gi       5.3Gi
+Mem:           7.8Gi       2.5Gi       4.8Gi        45Mi       819Mi       5.3Gi
 Swap:          4.0Gi          0B       4.0Gi
 
 === STEP 3: Optimize Swap Settings ===
@@ -31,7 +31,7 @@ Cache pressure: 50
 === STEP 4: Protect MT5 from OOM Killer ===
 MT5 PID 4046335: OOM score set to -900 (protected)
 MT5 PID 4046404: OOM score set to -900 (protected)
-Updated watchdog with OOM protection
+Watchdog already has OOM protection
 
 === STEP 5: Set Tradovate chrome-headless as OOM target ===
 No chrome processes found right now
@@ -41,12 +41,12 @@ Setting memory limit to 2GB...
 Tradovate memory limited to 2GB (was unlimited)
 Current Tradovate memory usage:
              └─memory-limit.conf
-     Memory: 36.6M (high: 1.4G max: 2.0G available: 1.4G peak: 37.5M)
+     Memory: 33.0M (high: 1.4G max: 2.0G available: 1.4G peak: 37.0M)
 
 === STEP 6: Top Memory Consumers ===
 USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root     4046404 48.2  2.7 2077764 221280 ?      S<l  18:27   2:13 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server
-root         328  0.3  2.2 247192 178916 ?       S<s  Feb22  75:25 /usr/lib/systemd/systemd-journald
+root     4046404 31.9  2.7 2078544 222244 ?      S<l  18:27  37:00 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server
+root         328  0.3  2.6 316472 217716 ?       S<s  Feb22  75:44 /usr/lib/systemd/systemd-journald
 root     2244775  0.0  1.6 1388392 133848 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
 root     2242257  0.0  1.6 1388332 133832 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
 root     2258030  0.0  1.6 1388324 133820 ?      S<sl Mar05   0:02 C:\windows\system32\explorer.exe /desktop
@@ -56,9 +56,9 @@ root     2250432  0.0  1.6 1388324 133544 ?      S<sl Mar05   0:01 C:\windows\sy
 root     2248217  0.0  1.6 1388388 133540 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
 root     2245775  0.0  1.6 1388324 133532 ?      S<sl Mar05   0:02 C:\windows\system32\explorer.exe /desktop
 root     2249335  0.0  1.6 1388388 133488 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
-root     4046409  0.6  1.6 1388392 133488 ?      S<sl 18:27   0:01 C:\windows\system32\explorer.exe /desktop
+root     4046409  0.0  1.6 1388392 133488 ?      S<sl 18:27   0:02 C:\windows\system32\explorer.exe /desktop
 root     2234187  0.0  1.6 1388324 132364 ?      S<sl Mar05   0:02 C:\windows\system32\explorer.exe /desktop
-root      346800  2.3  1.3 288116 106408 ?       Ss   Feb26 397:37 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
+root      346800  2.3  1.3 288516 106828 ?       Ss   Feb26 399:33 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
 
 === STEP 7: MT5 Status ===
 MT5: ✅ RUNNING
@@ -82,5 +82,5 @@ OOM Score: -900
   MT5 is the LAST process to be killed
 ============================================
 
-=== DONE 2026-03-10 18:32:29 UTC ===
+=== DONE 2026-03-10 20:23:34 UTC ===
 EXIT_CODE=0
