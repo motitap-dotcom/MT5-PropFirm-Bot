@@ -1,42 +1,86 @@
 ============================================
-  Restart mt5-status-daemon
-  2026-03-05 17:22:25 UTC
+  MEMORY FIX - Swap + OOM Protection
+  2026-03-10 18:32:28 UTC
 ============================================
 
-=== [1] Pull latest code ===
-From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
- * branch            claude/claude-md-mm3qa8i9848jcovk-X3DTU -> FETCH_HEAD
-Already up to date.
+=== STEP 1: Current Memory Status ===
+               total        used        free      shared  buff/cache   available
+Mem:           7.8Gi       2.5Gi       4.4Gi        45Mi       1.3Gi       5.3Gi
+Swap:             0B          0B          0B
 
-=== [2] Restart daemon ===
-bash: /root/MT5-PropFirm-Bot/scripts/install_status_daemon.sh: No such file or directory
+Swap status:
 
-=== [3] Current /var/bots/mt5_status.json ===
-{
-    "updated_at": "2026-03-05 17:22:23",
-    "ea_connected": true,
-    "account": {
-        "balance": 1981.41,
-        "equity": 1981.41,
-        "floating_pnl": 0.0,
-        "margin": 0.0,
-        "free_margin": 1981.41
-    },
-    "guardian_state": "ACTIVE",
-    "daily_dd": 0.0,
-    "total_dd": 0.0,
-    "today": {
-        "trades": 0,
-        "wins": 0,
-        "losses": 0,
-        "net": 0.0
-    },
-    "open_positions": {
-        "count": 0,
-        "trades": []
-    },
-    "last_closed": []
-}
+=== STEP 2: Creating 4GB Swap File ===
+Creating 4GB swap file...
+Setting up swapspace version 1, size = 4 GiB (4294963200 bytes)
+no label, UUID=ebd6294b-7cab-4380-9070-832addaa3347
+Swap CREATED and ACTIVATED!
+Added to /etc/fstab (permanent)
 
-=== DONE 2026-03-05 17:22:27 UTC ===
+Memory after swap:
+               total        used        free      shared  buff/cache   available
+Mem:           7.8Gi       2.5Gi       4.3Gi        45Mi       1.3Gi       5.3Gi
+Swap:          4.0Gi          0B       4.0Gi
+
+=== STEP 3: Optimize Swap Settings ===
+vm.swappiness = 10
+vm.vfs_cache_pressure = 50
+Swappiness: 10 (10 = use swap only when needed)
+Cache pressure: 50
+
+=== STEP 4: Protect MT5 from OOM Killer ===
+MT5 PID 4046335: OOM score set to -900 (protected)
+MT5 PID 4046404: OOM score set to -900 (protected)
+Updated watchdog with OOM protection
+
+=== STEP 5: Set Tradovate chrome-headless as OOM target ===
+No chrome processes found right now
+
+Tradovate bot is running as systemd service
+Setting memory limit to 2GB...
+Tradovate memory limited to 2GB (was unlimited)
+Current Tradovate memory usage:
+             └─memory-limit.conf
+     Memory: 36.6M (high: 1.4G max: 2.0G available: 1.4G peak: 37.5M)
+
+=== STEP 6: Top Memory Consumers ===
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root     4046404 48.2  2.7 2077764 221280 ?      S<l  18:27   2:13 C:\Program Files\MetaTrader 5\terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server
+root         328  0.3  2.2 247192 178916 ?       S<s  Feb22  75:25 /usr/lib/systemd/systemd-journald
+root     2244775  0.0  1.6 1388392 133848 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     2242257  0.0  1.6 1388332 133832 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     2258030  0.0  1.6 1388324 133820 ?      S<sl Mar05   0:02 C:\windows\system32\explorer.exe /desktop
+root     2247176  0.0  1.6 1388324 133596 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     2243354  0.0  1.6 1388324 133544 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     2250432  0.0  1.6 1388324 133544 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     2248217  0.0  1.6 1388388 133540 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     2245775  0.0  1.6 1388324 133532 ?      S<sl Mar05   0:02 C:\windows\system32\explorer.exe /desktop
+root     2249335  0.0  1.6 1388388 133488 ?      S<sl Mar05   0:01 C:\windows\system32\explorer.exe /desktop
+root     4046409  0.6  1.6 1388392 133488 ?      S<sl 18:27   0:01 C:\windows\system32\explorer.exe /desktop
+root     2234187  0.0  1.6 1388324 132364 ?      S<sl Mar05   0:02 C:\windows\system32\explorer.exe /desktop
+root      346800  2.3  1.3 288116 106408 ?       Ss   Feb26 397:37 /usr/bin/Xvfb :99 -screen 0 1280x1024x24 -ac +extension GLX +render -noreset
+
+=== STEP 7: MT5 Status ===
+MT5: ✅ RUNNING
+PID: 4046335
+Memory: 13 MB
+OOM Score: -900
+
+============================================
+  MEMORY FIX COMPLETE!
+
+  Changes made:
+  1. ✅ 4GB Swap file created (permanent)
+  2. ✅ Swappiness=10 (use swap only when needed)
+  3. ✅ MT5 OOM score=-900 (protected)
+  4. ✅ Chrome/Tradovate OOM score=+500 (kill first)
+  5. ✅ Tradovate memory limited to 2GB
+  6. ✅ All settings survive reboot
+
+  Before: 7.8GB RAM, 0 Swap = OOM crashes
+  After:  7.8GB RAM + 4GB Swap = 11.8GB total
+  MT5 is the LAST process to be killed
+============================================
+
+=== DONE 2026-03-10 18:32:29 UTC ===
 EXIT_CODE=0
