@@ -1,15 +1,18 @@
-=== VERIFY 2026-03-04 09:20:06 UTC ===
+=== VERIFY 2026-03-10 12:48:59 UTC ===
 --- MT5 Process ---
-root     1923109  0.0  0.1 2686336 14088 ?       S<   08:49   0:00 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe /login:11797849 /password:gazDE62##
-root     1923164 38.3  2.7 1747404 224032 ?      R<l  08:49  11:51 C:\Program Files\MetaTrader 5\terminal64.exe /login:11797849 /password:gazDE62## /server:FundedNext-Server
+root     3962429  0.0  0.1 2686336 13772 ?       S<   12:37   0:00 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
+root     3962519 52.0  2.6 2211440 219264 ?      R<l  12:38   5:43 C:\Program Files\MetaTrader 5\terminal64.exe /portable
 
 --- Outbound Connections ---
 Recv-Q Send-Q Local Address:Port     Peer Address:Port Process
-0      0       77.237.234.2:40736   34.117.68.229:443         
-0      0       77.237.234.2:54480   13.226.155.45:443         
-0      0       77.237.234.2:50072  13.226.155.107:443         
-0      0       77.237.234.2:44825   18.168.91.222:443         
-0      0       77.237.234.2:48396 194.164.179.244:443         
+0      0       77.237.234.2:42738   87.248.114.11:443         
+0      0       77.237.234.2:44520    3.173.161.48:443         
+0      0       77.237.234.2:43990    3.173.161.49:443         
+0      0       77.237.234.2:8080      5.29.17.228:25103       
+0      0       77.237.234.2:42364    3.173.161.95:443         
+0      0       77.237.234.2:41647   18.168.91.222:443         
+266455 0       77.237.234.2:50036 194.164.179.244:443         
+0      0       77.237.234.2:56970 194.164.179.244:443         
 
 --- Terminal Log (latest) ---
 Size: 21582 bytes
@@ -42,9 +45,9 @@ QD	0	22:46:37.424	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
 --- EA Log Today ---
 No EA log for today
 Latest EA log:
--rw-r--r-- 1 root root  125400 Mar  4 09:19 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260304.log
--rw-r--r-- 1 root root  193416 Mar  3 23:53 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260303.log
--rw-r--r-- 1 root root    7826 Mar  1 15:37 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260301.log
+-rw-r--r-- 1 root root  69898 Mar 10 12:39 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260310.log
+-rw-r--r-- 1 root root 439728 Mar  9 23:52 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260309.log
+-rw-r--r-- 1 root root  58782 Mar  8 23:45 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260308.log
 
 --- Wine Version ---
 wine-11.3 (Staging)
