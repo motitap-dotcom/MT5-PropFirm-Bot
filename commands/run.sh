@@ -1,5 +1,5 @@
 #!/bin/bash
-# Check bot status and recent trades
+# Check bot status and recent trades - triggered 2026-03-11
 echo "=== BOT STATUS CHECK $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
