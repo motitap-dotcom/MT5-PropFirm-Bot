@@ -75,10 +75,12 @@ input double   InpMaxSpreadXAU    = 45.0;       // Max Spread XAUUSD (pips)
 
 // --- News Filter ---
 input bool     InpNewsFilterOn    = true;        // News Filter Enabled
-input int      InpNewsBefore      = 15;          // News: Minutes Before
+input int      InpNewsBefore      = 30;          // News: Minutes Before (block new trades)
 input int      InpNewsAfter       = 15;          // News: Minutes After
 input bool     InpNewsHighImpact  = true;        // News: Filter High Impact
 input bool     InpNewsMedImpact   = false;       // News: Filter Medium Impact
+input bool     InpNewsClosePos    = true;        // News: Close Positions Before News
+input int      InpNewsCloseMin    = 30;          // News: Close Positions Minutes Before
 
 // --- Session Filter (UTC) ---
 input int      InpLondonStart     = 6;          // London Start
@@ -251,6 +253,7 @@ int OnInit()
    g_news.Init(InpNewsBefore, InpNewsAfter, InpNewsHighImpact, InpNewsMedImpact);
    g_news.Enable(InpNewsFilterOn);
    g_news.SetSymbols(g_symbols, g_symbol_count);
+   g_news.SetCloseBeforeNews(InpNewsClosePos, InpNewsCloseMin);
 
    // === SIGNAL ENGINES ===
    ArrayResize(g_signals, g_symbol_count);
@@ -417,6 +420,22 @@ void OnTick()
    // STEP 3: MANAGE OPEN POSITIONS (every tick)
    // ============================================
    ManageOpenPositions();
+
+   // ============================================
+   // STEP 3.5: NEWS PRE-CLOSE (close positions before news)
+   // ============================================
+   if(InpNewsFilterOn && InpNewsClosePos && g_trade.CountOpenPositions() > 0)
+   {
+      if(g_news.ShouldClosePositions())
+      {
+         string reason = g_news.GetCloseReason();
+         PrintFormat("[NEWS] %s", reason);
+         g_journal.LogEvent("NEWS_CLOSE", reason);
+         g_notify.Send("NEWS: Closing all positions before news event", NOTIFY_WARNING);
+         g_trade.CloseAllPositions();
+         TakePositionSnapshot();
+      }
+   }
 
    // ============================================
    // STEP 4: DASHBOARD UPDATE (every few seconds)
