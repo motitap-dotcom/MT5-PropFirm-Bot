@@ -15,6 +15,8 @@ class CNewsFilter
 private:
    int      m_minutes_before;        // Minutes before event to stop trading
    int      m_minutes_after;         // Minutes after event to resume
+   int      m_close_minutes_before;  // Minutes before event to close open positions
+   bool     m_close_positions;       // Close open positions before news
    bool     m_filter_high;           // Filter high impact
    bool     m_filter_medium;         // Filter medium impact
    bool     m_enabled;               // Master switch
@@ -49,10 +51,15 @@ public:
                    bool filter_high = true, bool filter_medium = false);
    void      SetSymbols(string &symbols[], int count);
    void      Enable(bool on) { m_enabled = on; }
+   void      SetCloseBeforeNews(bool enabled, int minutes = 30);
 
    // Main check: is it safe to trade right now?
    bool      IsSafeToTrade();
    bool      IsSafeToTradeSymbol(string symbol);
+
+   // Pre-news position close: should we close open positions now?
+   bool      ShouldClosePositions();
+   string    GetCloseReason();
 
    // Info
    string    GetNextEventInfo();
@@ -61,21 +68,25 @@ public:
 
 private:
    string    m_block_reason;
+   string    m_close_reason;
 };
 
 //+------------------------------------------------------------------+
 CNewsFilter::CNewsFilter()
 {
-   m_minutes_before    = 30;
-   m_minutes_after     = 30;
-   m_filter_high       = true;
-   m_filter_medium     = false;
-   m_enabled           = true;
-   m_event_count       = 0;
-   m_last_refresh      = 0;
-   m_refresh_interval  = 3600;  // Refresh every hour
-   m_currency_count    = 0;
-   m_block_reason      = "";
+   m_minutes_before       = 30;
+   m_minutes_after        = 30;
+   m_close_minutes_before = 30;
+   m_close_positions      = false;
+   m_filter_high          = true;
+   m_filter_medium        = false;
+   m_enabled              = true;
+   m_event_count          = 0;
+   m_last_refresh         = 0;
+   m_refresh_interval     = 3600;  // Refresh every hour
+   m_currency_count       = 0;
+   m_block_reason         = "";
+   m_close_reason         = "";
 }
 
 //+------------------------------------------------------------------+
@@ -298,6 +309,50 @@ bool CNewsFilter::IsSafeToTradeSymbol(string symbol)
    }
 
    return true;
+}
+
+//+------------------------------------------------------------------+
+void CNewsFilter::SetCloseBeforeNews(bool enabled, int minutes)
+{
+   m_close_positions      = enabled;
+   m_close_minutes_before = minutes;
+   PrintFormat("[NewsFilter] Close positions before news: %s (%d min)",
+               enabled ? "ON" : "OFF", minutes);
+}
+
+//+------------------------------------------------------------------+
+bool CNewsFilter::ShouldClosePositions()
+{
+   if(!m_enabled || !m_close_positions) return false;
+
+   RefreshCalendar();
+
+   datetime now = TimeCurrent();
+   m_close_reason = "";
+
+   for(int i = 0; i < m_event_count; i++)
+   {
+      if(m_events[i].impact < 3) continue;  // Only close for HIGH impact
+
+      datetime event_time = m_events[i].time;
+      datetime close_start = event_time - m_close_minutes_before * 60;
+
+      if(now >= close_start && now < event_time)
+      {
+         int mins_to_event = (int)(event_time - now) / 60;
+         m_close_reason = StringFormat("NEWS CLOSE: %s %s (HIGH) in %d min - closing positions",
+            m_events[i].currency, m_events[i].name, mins_to_event);
+         return true;
+      }
+   }
+
+   return false;
+}
+
+//+------------------------------------------------------------------+
+string CNewsFilter::GetCloseReason()
+{
+   return m_close_reason;
 }
 
 //+------------------------------------------------------------------+
