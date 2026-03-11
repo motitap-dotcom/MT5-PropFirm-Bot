@@ -1,16 +1,25 @@
-=== COMPILE EA 2026-03-11 18:28:43 UTC ===
---- Before compile ---
+=== COMPILE EA 2026-03-11 18:30:49 UTC ===
+Before:
 -rw-r--r-- 1 root root 209004 Mar 10 16:28 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
 
---- Compiling ---
-01d8:fixme:uxtheme:SetPreferredAppMode 0: stub
-01d8:fixme:kernelbase:AppPolicyGetProcessTerminationMethod FFFFFFFFFFFFFFFA, 000000000051FEE0
+Compiling with wine (not wine64)...
+wine: failed to open "/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe"
 
---- After compile ---
+After:
 -rw-r--r-- 1 root root 209004 Mar 10 16:28 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
 
---- Compile log ---
-No compile log at EA dir
+File modification times:
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5: 2026-03-11 18:27:05.595493482 +0000
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5: 2026-03-10 16:28:14.807342881 +0000
 
-=== DONE 2026-03-11 18:28:58 UTC ===
+Compile logs:
+
+First attempt failed. Trying MetaEditor64.exe (uppercase)...
+01f0:fixme:uxtheme:SetPreferredAppMode 0: stub
+01f4:fixme:kernelbase:AppPolicyGetThreadInitializationType FFFFFFFFFFFFFFFA, 000000000A01FF50
+01f0:fixme:kernelbase:AppPolicyGetProcessTerminationMethod FFFFFFFFFFFFFFFA, 000000000051FEE0
+After second attempt:
+-rw-r--r-- 1 root root 167906 Mar 11 18:31 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+
+=== DONE 2026-03-11 18:31:17 UTC ===
 EXIT_CODE=0
