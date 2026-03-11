@@ -1,33 +1,21 @@
-=== MANUAL DEPLOY 2026-03-11 18:24:59 UTC ===
---- Step 1: Pull latest code ---
+=== FIX DEPLOY 2026-03-11 18:27:04 UTC ===
+--- Step 1: Fix VPS repo ---
+fatal: There is no merge to abort (MERGE_HEAD missing).
 From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
  * branch            claude/build-cfd-trading-bot-fl0ld -> FETCH_HEAD
-Auto-merging .github/workflows/vps-check.yml
-CONFLICT (content): Merge conflict in .github/workflows/vps-check.yml
-Auto-merging .github/workflows/vps-fix.yml
-CONFLICT (content): Merge conflict in .github/workflows/vps-fix.yml
-Auto-merging CLAUDE.md
-CONFLICT (content): Merge conflict in CLAUDE.md
-Auto-merging EA/Guardian.mqh
-CONFLICT (content): Merge conflict in EA/Guardian.mqh
-Auto-merging EA/PropFirmBot.mq5
-CONFLICT (content): Merge conflict in EA/PropFirmBot.mq5
-Auto-merging EA/RiskManager.mqh
-Auto-merging EA/SignalEngine.mqh
-CONFLICT (content): Merge conflict in EA/SignalEngine.mqh
-Auto-merging vps_report.txt
-CONFLICT (content): Merge conflict in vps_report.txt
-Automatic merge failed; fix conflicts and then commit the result.
-error: Pulling is not possible because you have unmerged files.
-hint: Fix them up in the work tree, and then use 'git add/rm <file>'
-hint: as appropriate to mark resolution and make a commit.
-fatal: Exiting because of an unresolved conflict.
-Latest commits:
-921737f relay: result 2026-03-01 09:57 UTC
-ef0d7f3 relay: result 2026-02-26 22:54 UTC
-c507b41 relay: fix mt5.service ExecStart path quoting
+Switched to branch 'claude/build-cfd-trading-bot-fl0ld'
+Your branch is behind 'origin/claude/build-cfd-trading-bot-fl0ld' by 36 commits, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+HEAD is now at 327c0f4 VPS command output 2026-03-11 18:19 UTC
+Current HEAD:
+327c0f4 VPS command output 2026-03-11 18:19 UTC
+f062f48 Merge pull request #16 from motitap-dotcom/claude/hebrew-greeting-xbB6E
+4688377 Add pre-news position close to prevent FundedNext news trading flags
 
---- Step 2: Copy EA files to MT5 ---
+--- Step 2: Verify clean files ---
+OK: No conflict markers in EA files
+
+--- Step 3: Copy EA files ---
 '/root/MT5-PropFirm-Bot/EA/PropFirmBot.mq5' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5'
 '/root/MT5-PropFirm-Bot/EA/AccountStateManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh'
 '/root/MT5-PropFirm-Bot/EA/Dashboard.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Dashboard.mqh'
@@ -40,8 +28,6 @@ c507b41 relay: fix mt5.service ExecStart path quoting
 '/root/MT5-PropFirm-Bot/EA/TradeAnalyzer.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeAnalyzer.mqh'
 '/root/MT5-PropFirm-Bot/EA/TradeJournal.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeJournal.mqh'
 '/root/MT5-PropFirm-Bot/EA/TradeManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeManager.mqh'
-
---- Step 3: Copy config files ---
 '/root/MT5-PropFirm-Bot/configs/account_state.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/account_state.json'
 '/root/MT5-PropFirm-Bot/configs/challenge_rules.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/challenge_rules.json'
 '/root/MT5-PropFirm-Bot/configs/funded_rules.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/funded_rules.json'
@@ -49,20 +35,35 @@ c507b41 relay: fix mt5.service ExecStart path quoting
 '/root/MT5-PropFirm-Bot/configs/risk_params.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/risk_params.json'
 '/root/MT5-PropFirm-Bot/configs/symbols.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/symbols.json'
 
---- Step 4: Verify new code ---
-NewsFilter.mqh:
+--- Step 4: Verify new code on MT5 ---
 2
-  ShouldClosePositions: FOUND
-PropFirmBot.mq5:
+  ShouldClosePositions: OK
 3
-  InpNewsClosePos: FOUND
+  InpNewsClosePos: OK
 1
-  NEWS PRE-CLOSE: FOUND
+  NEWS PRE-CLOSE: OK
+Conflict check in deployed files:
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5:0
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh:0
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Dashboard.mqh:0
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Guardian.mqh:0
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/NewsFilter.mqh:0
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Notifications.mqh:0
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/RiskManager.mqh:0
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/SignalEngine.mqh:0
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/StatusWriter.mqh:0
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeAnalyzer.mqh:0
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeJournal.mqh:0
+/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeManager.mqh:0
+OK: No conflicts
 
---- Step 5: Compile EA ---
-MetaEditor not found at: /root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe
+--- Step 5: Find and run MetaEditor ---
+MetaEditor found: 
+MetaEditor not found anywhere!
+/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
+/root/.wine/drive_c/Program Files/MetaTrader 5/uninstall.exe
+/root/.wine/drive_c/Program Files/MetaTrader 5/metatester64.exe
+/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe
 
-=== DEPLOY COMPLETE 2026-03-11 18:25:03 UTC ===
-NOTE: MT5 needs to reload the EA for changes to take effect.
-The EA will auto-reload on next tick if the .ex5 changed.
+=== DONE 2026-03-11 18:27:06 UTC ===
 EXIT_CODE=0
