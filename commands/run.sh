@@ -1,64 +1,60 @@
 #!/bin/bash
-# Check deploy status and compilation of news filter update
-echo "=== DEPLOY VERIFICATION $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+# Manual deploy: pull latest repo code, copy EA files to MT5, recompile
+echo "=== MANUAL DEPLOY $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
 EA_FILES_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
-EA_LOG_DIR="${MT5_BASE}/MQL5/Logs"
+REPO_DIR="/root/MT5-PropFirm-Bot"
 
-# 1. Check if NewsFilter.mqh has the new ShouldClosePositions function
-echo "--- EA Files Check ---"
+# 1. Pull latest code from repo
+echo "--- Step 1: Pull latest code ---"
+cd "$REPO_DIR"
+git fetch origin 2>&1
+# Try to get the merged code from default branch
+git pull origin claude/build-cfd-trading-bot-fl0ld 2>&1 || git pull 2>&1
+echo "Latest commits:"
+git log --oneline -3
+
+# 2. Copy EA files
+echo ""
+echo "--- Step 2: Copy EA files to MT5 ---"
+cp -v "$REPO_DIR/EA/"*.mq5 "$EA_DIR/" 2>&1
+cp -v "$REPO_DIR/EA/"*.mqh "$EA_DIR/" 2>&1
+
+# 3. Copy config files
+echo ""
+echo "--- Step 3: Copy config files ---"
+cp -v "$REPO_DIR/configs/"*.json "$EA_FILES_DIR/" 2>&1
+
+# 4. Verify new code is present
+echo ""
+echo "--- Step 4: Verify new code ---"
 echo "NewsFilter.mqh:"
 grep -c "ShouldClosePositions" "$EA_DIR/NewsFilter.mqh" 2>/dev/null && echo "  ShouldClosePositions: FOUND" || echo "  ShouldClosePositions: NOT FOUND"
-grep -c "SetCloseBeforeNews" "$EA_DIR/NewsFilter.mqh" 2>/dev/null && echo "  SetCloseBeforeNews: FOUND" || echo "  SetCloseBeforeNews: NOT FOUND"
-
-echo ""
 echo "PropFirmBot.mq5:"
 grep -c "InpNewsClosePos" "$EA_DIR/PropFirmBot.mq5" 2>/dev/null && echo "  InpNewsClosePos: FOUND" || echo "  InpNewsClosePos: NOT FOUND"
-grep -c "NEWS PRE-CLOSE" "$EA_DIR/PropFirmBot.mq5" 2>/dev/null && echo "  NEWS PRE-CLOSE step: FOUND" || echo "  NEWS PRE-CLOSE step: NOT FOUND"
+grep -c "NEWS PRE-CLOSE" "$EA_DIR/PropFirmBot.mq5" 2>/dev/null && echo "  NEWS PRE-CLOSE: FOUND" || echo "  NEWS PRE-CLOSE: NOT FOUND"
 
-# 2. Check .ex5 file (compiled)
+# 5. Compile EA
 echo ""
-echo "--- Compiled EA (.ex5) ---"
-ls -la "$EA_DIR/"*.ex5 2>/dev/null || echo "No .ex5 files found"
-
-# 3. Check if MT5 is running
-echo ""
-echo "--- MT5 Process ---"
-if pgrep -f terminal64 > /dev/null 2>&1; then
-    MT5_PID=$(pgrep -f "terminal64.exe" | head -1)
-    echo "MT5: RUNNING (PID=$MT5_PID)"
-    echo "Uptime: $(ps -o etime= -p $MT5_PID 2>/dev/null)"
+echo "--- Step 5: Compile EA ---"
+METAEDITOR="${MT5_BASE}/metaeditor64.exe"
+if [ -f "$METAEDITOR" ]; then
+    cd "$EA_DIR"
+    wine64 "$METAEDITOR" /compile:"PropFirmBot.mq5" /log 2>&1
+    sleep 5
+    echo "Compile log:"
+    cat "${EA_DIR}/PropFirmBot.log" 2>/dev/null || echo "No compile log found"
+    echo ""
+    echo "Compiled file:"
+    ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
 else
-    echo "MT5: NOT RUNNING!"
+    echo "MetaEditor not found at: $METAEDITOR"
+    ls -la "${MT5_BASE}/"metaeditor* 2>/dev/null
 fi
 
-# 4. Recent EA logs - check for news filter activity
 echo ""
-echo "--- Recent EA Logs (last 20 lines) ---"
-TODAY_LOG=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
-if [ -n "$TODAY_LOG" ]; then
-    echo "Log: $TODAY_LOG"
-    tail -20 "$TODAY_LOG" 2>&1
-else
-    echo "No EA log files found"
-fi
-
-# 5. Check deploy report
-echo ""
-echo "--- Deploy Report ---"
-REPO_DIR="/root/MT5-PropFirm-Bot"
-if [ -f "$REPO_DIR/deploy_report.txt" ]; then
-    tail -30 "$REPO_DIR/deploy_report.txt"
-else
-    echo "No deploy_report.txt found"
-fi
-
-# 6. Status.json
-echo ""
-echo "--- status.json ---"
-cat "$EA_FILES_DIR/status.json" 2>/dev/null || echo "status.json not found"
-
-echo ""
-echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+echo "=== DEPLOY COMPLETE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+echo "NOTE: MT5 needs to reload the EA for changes to take effect."
+echo "The EA will auto-reload on next tick if the .ex5 changed."
