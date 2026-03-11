@@ -167,9 +167,9 @@ All workflows also send Telegram notifications on completion.
 
 - Prop firm: FundedNext
 - Account type: Stellar Instant (direct funded, NO challenge)
-- Account number: 11797849
+- Account number: stored in GitHub Secrets (`MT5_ACCOUNT`)
 - Server: FundedNext-Server
-- Password: gazDE62##
+- Password: stored in GitHub Secrets (`MT5_PASSWORD`)
 - Account size: $2,000
 - Profit split: 70% (up to 80%)
 
@@ -187,22 +187,22 @@ All workflows also send Telegram notifications on completion.
 ---
 
 ## Telegram Bot
-- Token: 8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g
-- Chat ID: 7013213983
+- Token: stored in GitHub Secrets (`TELEGRAM_TOKEN`)
+- Chat ID: stored in GitHub Secrets (`TELEGRAM_CHAT_ID`)
 - Status: Configured in EA but BLOCKED in MT5 (needs "Allow WebRequest" for api.telegram.org in MT5 Tools > Options > Expert Advisors)
 
 ## VPS Details
 - Provider: Contabo
-- IP: 77.237.234.2
+- IP: stored in GitHub Secrets (`VPS_HOST`)
 - OS: Ubuntu Linux (Wine + MT5)
-- SSH: root@77.237.234.2 (password: Moti0417!)
-- Contabo panel password: qA4P9f3ra5bw
-- VNC: port 5900, no password (RealVNC)
+- SSH: stored in GitHub Secrets (`VPS_USER`, `VPS_PASSWORD`)
+- Contabo panel password: stored securely (not in repo)
+- VNC: port 5900 (RealVNC)
 - Display: Xvfb :99, x11vnc
 
 ## Noa's Tools (for manual access)
-- VNC: RealVNC on Windows → 77.237.234.2:5900
-- SSH: PowerShell → `ssh root@77.237.234.2`
+- VNC: RealVNC on Windows → VPS_HOST:5900
+- SSH: PowerShell → `ssh root@VPS_HOST`
 - Terminal: PowerShell on Windows
 
 ---
