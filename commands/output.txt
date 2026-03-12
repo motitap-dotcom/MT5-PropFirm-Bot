@@ -1,51 +1,119 @@
-=== COMPILE AND RESTART 2026-03-12 12:16:59 UTC ===
---- Before compile ---
--rw-r--r-- 1 root root 167906 Mar 11 18:31 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+=== VERIFY FIXES 2026-03-12 12:20:58 UTC ===
+--- .ex5 status ---
+-rw-r--r-- 1 root root 216144 Mar 12 12:17 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
 -rw-r--r-- 1 root root 36873 Mar 12 12:15 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
 
---- Attempting MetaEditor compilation ---
-Method 1: metaeditor64 /compile
-wine: failed to open "/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe"
+--- MT5 process ---
+428083 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
+428154 C:\Program Files\MetaTrader 5\terminal64.exe /portable
 
---- MetaEditor log ---
+--- Today's EA log (last 60 lines) ---
+Log: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260312.log (188 lines)
 
---- After compile attempt ---
--rw-r--r-- 1 root root 167906 Mar 11 18:31 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+--- Last 60 lines ---
+LS	0	12:18:09.885	PropFirmBot (EURUSD,M15)	[Journal] Initialized: PropFirmBot_Journal_20260312.csv | Initial balance: $1966.40
+PQ	0	12:18:09.885	PropFirmBot (EURUSD,M15)	[JOURNAL] [INIT] EA started. Balance=$1966.40 Magic=202502
+HJ	0	12:18:09.885	PropFirmBot (EURUSD,M15)	[JOURNAL] [STARTUP] Phase: FUNDED | Account: $2000 | Target: 0.0% | DD: 0.0%/6.0% | Symbols: 4
+LR	0	12:18:09.885	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1966.40 | Risk=0.52% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
+MR	0	12:18:09.885	PropFirmBot (EURUSD,M15)	[TradeMgr] Initialized: Magic=202502 Slippage=20
+KI	0	12:18:09.885	PropFirmBot (EURUSD,M15)	[NewsFilter] Init: Before=30min After=15min High=Y Medium=N
+HH	0	12:18:12.452	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 0 relevant events from calendar
+JS	0	12:18:12.452	PropFirmBot (EURUSD,M15)	[NewsFilter] Monitoring currencies: EUR, USD, GBP, JPY, XAU
+FO	0	12:18:12.452	PropFirmBot (EURUSD,M15)	[NewsFilter] Close positions before news: ON (30 min)
+JD	0	12:18:12.452	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for EURUSD | Entry TF: PERIOD_H1 | HTF: PERIOD_H4
+FD	0	12:18:12.868	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for GBPUSD | Entry TF: PERIOD_H1 | HTF: PERIOD_H4
+FF	0	12:18:13.223	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for USDJPY | Entry TF: PERIOD_H1 | HTF: PERIOD_H4
+CG	0	12:18:13.364	PropFirmBot (EURUSD,M15)	[SignalEngine] Initialized for XAUUSD | Entry TF: PERIOD_H1 | HTF: PERIOD_H4
+ID	0	12:18:13.364	PropFirmBot (EURUSD,M15)	[Notify] Telegram enabled: ChatID=7013213983
+KN	0	12:18:13.364	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
+CJ	0	12:18:13.364	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
+MH	0	12:18:13.364	PropFirmBot (EURUSD,M15)	[Analyzer] Initialized: MaxHistory=500
+II	0	12:18:13.367	PropFirmBot (EURUSD,M15)	[INIT] ALL SYSTEMS GO:
+PS	0	12:18:13.367	PropFirmBot (EURUSD,M15)	  - Guardian: ACTIVE
+QK	0	12:18:13.367	PropFirmBot (EURUSD,M15)	  - News Filter: ON
+QN	0	12:18:13.367	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+QI	0	12:18:13.367	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+KP	0	12:18:13.367	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+CH	0	12:18:13.367	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+KS	0	12:18:13.367	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+LK	0	12:18:13.367	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=0.00% | Positions=0
+OR	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 15:15 (TF=PERIOD_M15) | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+KR	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[RiskMgr] Session check: ServerHour=15 GMT_Hour=12 | London=6-17 NY=12-22
+IO	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[SCAN] EURUSD - checking EMA strategy...
+QD	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[EMA] EURUSD no signal | CrossUp=N RecentUp=N MomBuy=N | CrossDn=N RecentDn=N MomSell=N | RSI=39.1 HTF=-1 | EMAGap=-6.6bp
+GL	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[SCAN] EURUSD - EMA: NO SIGNAL (details logged above)
+CI	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[SMC] SELL signal: Entry=1.15436 SL=1.15575 TP=1.15159 | LiqSweep=N OB=Y FVG=Y
+FF	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[SCAN] EURUSD - SMC fallback: GOT SIGNAL SELL
+FO	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1966.40 Risk$=10.32 SL_pts=0.0 Lot=0.07
+RO	0	12:18:13.665	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL opened: EURUSD Lot=0.07 Entry=1.15436 SL=1.15575 TP=1.15159 Ticket=162694280
+ML	0	12:18:13.665	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.12 15:18:13] Trade #1 opened | DailyDD=0.00% TotalDD=0.00%
+IN	0	12:18:13.670	PropFirmBot (EURUSD,M15)	[AccountState] Trading day 1 recorded (1/0 required)
+IM	0	12:18:13.670	PropFirmBot (EURUSD,M15)	[JOURNAL] OPEN SELL EURUSD | Lot=0.07 Entry=1.15436 SL=1.15575 TP=1.15159 | #162694280 | EMA
+GS	0	12:18:13.670	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
+KR	0	12:18:13.670	PropFirmBot (EURUSD,M15)	[TRADE] EURUSD SELL | Lot=0.07 | SL=1.15575 | TP=1.15159 | RR=2.0 | #162694280
+LR	0	12:18:13.670	PropFirmBot (EURUSD,M15)	[SCAN] GBPUSD - checking EMA strategy...
+QP	0	12:18:13.670	PropFirmBot (EURUSD,M15)	[EMA] SELL MOMENTUM: Entry=1.33784 SL=1.34061 TP=1.33231 RSI=43.2 HTF=-1
+QG	0	12:18:13.671	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1966.40 Risk$=10.32 SL_pts=0.0 Lot=0.03
+QF	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[TradeMgr] SELL opened: GBPUSD Lot=0.03 Entry=1.33784 SL=1.34061 TP=1.33231 Ticket=162694282
+PD	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.12 15:18:13] Trade #2 opened | DailyDD=0.00% TotalDD=0.00%
+DH	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[JOURNAL] OPEN SELL GBPUSD | Lot=0.03 Entry=1.33784 SL=1.34061 TP=1.33231 | #162694282 | EMA
+MF	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
+PL	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[TRADE] GBPUSD SELL | Lot=0.03 | SL=1.34061 | TP=1.33231 | RR=2.0 | #162694282
+PO	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - checking EMA strategy...
+IK	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[EMA] USDJPY no signal | CrossUp=N RecentUp=N MomBuy=N | CrossDn=N RecentDn=N MomSell=N | RSI=53.4 HTF=1 | EMAGap=1.7bp
+JL	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - EMA: NO SIGNAL (details logged above)
+LD	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[SMC] BUY signal: Entry=158.85100 SL=158.76096 TP=159.03107 | LiqSweep=N OB=Y FVG=N
+QK	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - SMC fallback: GOT SIGNAL BUY
+EO	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1966.40 Risk$=10.32 SL_pts=0.1 Lot=0.18
+ER	0	12:18:14.201	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY opened: USDJPY Lot=0.18 Entry=158.85100 SL=158.76100 TP=159.03100 Ticket=162694284
+DM	0	12:18:14.202	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.12 15:18:14] Trade #3 opened | DailyDD=0.03% TotalDD=0.03%
+DO	0	12:18:14.202	PropFirmBot (EURUSD,M15)	[JOURNAL] OPEN BUY USDJPY | Lot=0.18 Entry=158.85100 SL=158.76096 TP=159.03107 | #162694284 | EMA
+IH	0	12:18:14.202	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
+LJ	0	12:18:14.202	PropFirmBot (EURUSD,M15)	[TRADE] USDJPY BUY | Lot=0.18 | SL=158.76096 | TP=159.03107 | RR=2.0 | #162694284
+MF	0	12:18:14.202	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 
---- .ex5 is older than .mq5 - removing old .ex5 to force recompile ---
-Removed old .ex5. MT5 will recompile on next EA load.
+--- Fix markers search ---
+NEWBAR with TF= (new code):
+1
+OR	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 15:15 (TF=PERIOD_M15) | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
 
---- Restarting MT5 ---
-Stopping MT5 (PID=4092962)...
-Starting MT5...
-MT5 started successfully
-New PID: 428083
+Session check entries:
+1
+KR	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[RiskMgr] Session check: ServerHour=15 GMT_Hour=12 | London=6-17 NY=12-22
 
---- After MT5 restart ---
-No .ex5 yet - MT5 may still be loading
+SCAN entries:
+7
+IO	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[SCAN] EURUSD - checking EMA strategy...
+GL	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[SCAN] EURUSD - EMA: NO SIGNAL (details logged above)
+FF	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[SCAN] EURUSD - SMC fallback: GOT SIGNAL SELL
+LR	0	12:18:13.670	PropFirmBot (EURUSD,M15)	[SCAN] GBPUSD - checking EMA strategy...
+PO	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - checking EMA strategy...
+JL	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - EMA: NO SIGNAL (details logged above)
+QK	0	12:18:13.922	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - SMC fallback: GOT SIGNAL BUY
 
---- Latest EA log (checking for fix markers) ---
-Log: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260312.log (109 lines)
-JD	0	09:44:37.887	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=236508 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
-RJ	0	09:59:37.089	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=238117 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
+NEWBAR entries with :15 :30 :45 (M15 detection):
+OR	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 15:15 (TF=PERIOD_M15) | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+
+All NEWBAR entries:
+QR	0	04:00:00.214	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 07:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+HR	0	05:00:00.224	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 08:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+GR	0	06:00:00.432	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 09:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+OS	0	07:00:00.280	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 10:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+FR	0	08:00:00.236	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 11:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+ER	0	09:00:00.123	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 12:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
 RR	0	10:00:00.091	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 13:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-RF	0	10:00:00.092	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 2 relevant events from calendar
-DF	0	10:00:00.092	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-OQ	0	10:14:37.987	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=239665 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
-GG	0	10:29:37.092	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=241124 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
-JD	0	10:44:37.618	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=242983 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
-PJ	0	10:59:38.020	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=244592 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
 HR	0	11:00:00.099	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 14:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-DF	0	11:00:00.099	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 2 relevant events from calendar
-RF	0	11:00:00.099	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-IQ	0	11:14:37.148	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=246076 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
-HG	0	11:29:39.751	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=247650 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
-QD	0	11:44:39.591	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=249328 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
-DJ	0	11:59:40.041	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=251344 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
 NE	0	12:00:00.167	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 15:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-QG	0	12:00:00.167	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 2 relevant events from calendar
-CG	0	12:00:00.167	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-HQ	0	12:14:39.799	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=253555 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
+OR	0	12:18:13.375	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 15:15 (TF=PERIOD_M15) | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
 
-=== DONE 2026-03-12 12:17:38 UTC ===
+Spread blocked entries:
+7
+
+Any errors or warnings:
+
+--- Terminal log (compilation info) ---
+Log: /root/.wine/drive_c/Program Files/MetaTrader 5/logs/20260312.log
+KG	0	12:18:01.285	Experts	expert PropFirmBot (EURUSD,M15) loaded successfully
+
+=== DONE 2026-03-12 12:20:58 UTC ===
 EXIT_CODE=0
