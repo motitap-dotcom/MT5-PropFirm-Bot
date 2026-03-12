@@ -1,54 +1,31 @@
-=== POST-DEPLOY CHECK 2026-03-12 12:15:10 UTC ===
---- EA file timestamps ---
+=== COMPILE AND RESTART 2026-03-12 12:16:59 UTC ===
+--- Before compile ---
 -rw-r--r-- 1 root root 167906 Mar 11 18:31 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
--rw-r--r-- 1 root root  36175 Mar 11 18:27 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
--rw-r--r-- 1 root root  25744 Mar 11 18:27 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/RiskManager.mqh
+-rw-r--r-- 1 root root 36873 Mar 12 12:15 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5
 
---- Checking if manual deploy needed ---
-PropFirmBot.mq5 age: 1068 minutes
-EA files are old - deploy didn't run. Checking repo...
-From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
- * branch            claude/fix-bot-trading-config-N1uDv -> FETCH_HEAD
-Switched to a new branch 'claude/fix-bot-trading-config-N1uDv'
-branch 'claude/fix-bot-trading-config-N1uDv' set up to track 'origin/claude/fix-bot-trading-config-N1uDv'.
-From https://github.com/motitap-dotcom/MT5-PropFirm-Bot
- * branch            claude/fix-bot-trading-config-N1uDv -> FETCH_HEAD
-Already up to date.
-Copying EA files...
-'EA/PropFirmBot.mq5' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.mq5'
-'EA/AccountStateManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/AccountStateManager.mqh'
-'EA/Dashboard.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Dashboard.mqh'
-'EA/Guardian.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Guardian.mqh'
-'EA/NewsFilter.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/NewsFilter.mqh'
-'EA/Notifications.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/Notifications.mqh'
-'EA/RiskManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/RiskManager.mqh'
-'EA/SignalEngine.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/SignalEngine.mqh'
-'EA/StatusWriter.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/StatusWriter.mqh'
-'EA/TradeAnalyzer.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeAnalyzer.mqh'
-'EA/TradeJournal.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeJournal.mqh'
-'EA/TradeManager.mqh' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/TradeManager.mqh'
-'configs/account_state.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/account_state.json'
-'configs/challenge_rules.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/challenge_rules.json'
-'configs/funded_rules.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/funded_rules.json'
-'configs/notifications.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/notifications.json'
-'configs/risk_params.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/risk_params.json'
-'configs/symbols.json' -> '/root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Files/PropFirmBot/symbols.json'
-Recompiling EA...
--rw-r--r-- 1 root root 167906 Mar 11 18:31 PropFirmBot.ex5
-Deploy done manually
+--- Attempting MetaEditor compilation ---
+Method 1: metaeditor64 /compile
+wine: failed to open "/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe"
 
---- Latest EA log (last 30 lines, converted from UTF-16) ---
-File: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260312.log
-OF	0	08:00:00.236	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-RP	0	08:14:35.204	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=225866 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
-MF	0	08:29:35.145	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=227562 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
-CD	0	08:44:36.112	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=229335 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
-JI	0	08:59:36.106	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=231194 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
-ER	0	09:00:00.123	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 12:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-NF	0	09:00:00.129	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 3 relevant events from calendar
-GF	0	09:00:00.129	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-JQ	0	09:14:37.334	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=232865 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
-MF	0	09:29:37.173	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=234515 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
+--- MetaEditor log ---
+
+--- After compile attempt ---
+-rw-r--r-- 1 root root 167906 Mar 11 18:31 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
+
+--- .ex5 is older than .mq5 - removing old .ex5 to force recompile ---
+Removed old .ex5. MT5 will recompile on next EA load.
+
+--- Restarting MT5 ---
+Stopping MT5 (PID=4092962)...
+Starting MT5...
+MT5 started successfully
+New PID: 428083
+
+--- After MT5 restart ---
+No .ex5 yet - MT5 may still be loading
+
+--- Latest EA log (checking for fix markers) ---
+Log: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260312.log (109 lines)
 JD	0	09:44:37.887	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=236508 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
 RJ	0	09:59:37.089	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=238117 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
 RR	0	10:00:00.091	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.12 13:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
@@ -70,11 +47,5 @@ QG	0	12:00:00.167	PropFirmBot (EURUSD,M15)	[NewsFilter] Loaded 2 relevant events
 CG	0	12:00:00.167	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 HQ	0	12:14:39.799	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=253555 | State=GUARDIAN_ACTIVE | Bal=$1966.40 | Eq=$1966.40 | DD=1.33% | Positions=0
 
---- NEWBAR count ---
-13
---- M15 bars (non-hourly) ---
---- Session check logs ---
---- SCAN entries ---
-
-=== DONE 2026-03-12 12:15:17 UTC ===
+=== DONE 2026-03-12 12:17:38 UTC ===
 EXIT_CODE=0
