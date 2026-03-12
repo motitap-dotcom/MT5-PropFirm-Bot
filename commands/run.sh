@@ -1,76 +1,86 @@
 #!/bin/bash
-# Check today's trades and NewsFilter activity - triggered by FundedNext news event email
-echo "=== NEWS EVENT TRADE INVESTIGATION $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+# Fresh status check - why bot not trading?
+echo "=== BOT STATUS CHECK $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_LOG_DIR="${MT5_BASE}/MQL5/Logs"
 EA_FILES_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
 TERM_LOG_DIR="${MT5_BASE}/logs"
 
-# 1. MT5 status
+# 1. MT5 process
 echo "--- MT5 Process ---"
-if pgrep -f terminal64 > /dev/null 2>&1; then
-    MT5_PID=$(pgrep -f "terminal64.exe" | head -1)
-    echo "MT5: RUNNING (PID=$MT5_PID)"
-else
-    echo "MT5: NOT RUNNING!"
-fi
+ps aux | grep -i terminal64 | grep -v grep
 
-# 2. Status.json (latest snapshot)
+# 2. Status.json
 echo ""
 echo "--- status.json ---"
 if [ -f "$EA_FILES_DIR/status.json" ]; then
-    cat "$EA_FILES_DIR/status.json" 2>&1
+    cat "$EA_FILES_DIR/status.json"
 else
-    echo "status.json not found"
+    echo "status.json NOT FOUND"
 fi
 
-# 3. Today's EA logs - look for trades and NewsFilter
+# 3. Account connection
 echo ""
-echo "--- Today's EA Log (all entries) ---"
-TODAY_LOG=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
-if [ -n "$TODAY_LOG" ]; then
-    echo "Log file: $TODAY_LOG"
-    echo ""
-    echo ">> ALL log entries from today:"
-    cat "$TODAY_LOG" 2>&1
-else
-    echo "No EA log files found"
-fi
+echo "--- Connection Check ---"
+ss -tnp | grep -i terminal
 
-# 4. Look specifically for order 162361131
+# 4. Latest terminal log (last 50 lines)
 echo ""
-echo "--- Search for Order 162361131 ---"
-grep -r "162361131" "$EA_LOG_DIR"/ "$TERM_LOG_DIR"/ "$EA_FILES_DIR"/ 2>/dev/null || echo "Order 162361131 not found in logs"
-
-# 5. NewsFilter related entries
-echo ""
-echo "--- NewsFilter entries in all recent logs ---"
-grep -r -i "news" "$EA_LOG_DIR"/*.log 2>/dev/null | tail -30 || echo "No news-related entries"
-
-# 6. Trade/order entries from today
-echo ""
-echo "--- Trade entries in EA logs ---"
-grep -i -E "order|trade|buy|sell|position|deal|open|close|profit|loss" "$TODAY_LOG" 2>/dev/null | tail -50 || echo "No trade entries"
-
-# 7. Terminal logs - look for trades today
-echo ""
-echo "--- Terminal Log (today) ---"
+echo "--- Terminal Log (last 50 lines) ---"
 TERM_LATEST=$(ls -t "$TERM_LOG_DIR"/*.log 2>/dev/null | head -1)
 if [ -n "$TERM_LATEST" ]; then
-    echo "Terminal log: $TERM_LATEST"
-    grep -i -E "order|trade|buy|sell|deal|162361131|news" "$TERM_LATEST" 2>/dev/null | tail -30
+    echo "File: $TERM_LATEST"
+    tail -50 "$TERM_LATEST"
 fi
 
-# 8. Trade journal CSV for today
+# 5. Latest EA log (last 100 lines)
 echo ""
-echo "--- Trade Journal CSVs ---"
-find "$EA_FILES_DIR" -name "*Journal*" -mtime -3 -exec echo "File: {}" \; -exec cat {} \; 2>/dev/null || echo "No journal files found"
+echo "--- EA Log (last 100 lines) ---"
+EA_LATEST=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
+if [ -n "$EA_LATEST" ]; then
+    echo "File: $EA_LATEST"
+    tail -100 "$EA_LATEST"
+fi
 
-# 9. Check all log files modified today
+# 6. Check for errors in EA log
 echo ""
-echo "--- All logs modified today ---"
-find "$EA_LOG_DIR" "$TERM_LOG_DIR" -name "*.log" -mtime -1 -ls 2>/dev/null
+echo "--- Errors/Warnings in EA Log ---"
+if [ -n "$EA_LATEST" ]; then
+    grep -i -E "error|fail|invalid|block|halt|emergency|shutdown|disabled|cannot" "$EA_LATEST" | tail -30
+fi
+
+# 7. Guardian state entries
+echo ""
+echo "--- Guardian State Entries ---"
+if [ -n "$EA_LATEST" ]; then
+    grep -i -E "guardian|state|halted|caution|active|can_trade" "$EA_LATEST" | tail -20
+fi
+
+# 8. Signal entries
+echo ""
+echo "--- Signal/Trade Entries ---"
+if [ -n "$EA_LATEST" ]; then
+    grep -i -E "signal|trade|order|buy|sell|position|session|spread|risk" "$EA_LATEST" | tail -30
+fi
+
+# 9. Config files on VPS
+echo ""
+echo "--- Config Files ---"
+for f in "$EA_FILES_DIR"/*.json; do
+    if [ -f "$f" ] && [ "$(basename "$f")" != "status.json" ]; then
+        echo "=== $(basename "$f") ==="
+        cat "$f"
+        echo ""
+    fi
+done
+
+# 10. AutoTrading enabled?
+echo ""
+echo "--- AutoTrading Check ---"
+if [ -n "$TERM_LATEST" ]; then
+    grep -i "automated trading" "$TERM_LATEST" | tail -5
+fi
 
 echo ""
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
