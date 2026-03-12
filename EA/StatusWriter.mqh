@@ -202,7 +202,7 @@ void CStatusWriter::WriteStatus(CGuardian &guardian, int open_positions, double 
       "}",
       TimeToString(TimeCurrent(), TIME_DATE|TIME_SECONDS),
       TimeToString(TimeCurrent(), TIME_DATE|TIME_SECONDS),
-      TimeToString(TimeGMT(), TIME_DATE|TIME_SECONDS),
+      TimeToString(TimeCurrent() - 3*3600, TIME_DATE|TIME_SECONDS),  // GMT = server time - 3h (FundedNext GMT+3)
       account, EscapeJSON(name), EscapeJSON(server), currency, leverage,
       balance, equity, margin, free_margin, floating_pnl,
       initial_bal, equity - initial_bal, profit_pct,

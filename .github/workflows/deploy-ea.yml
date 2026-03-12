@@ -46,11 +46,52 @@ jobs:
 
           echo "=== Recompiling EA on VPS ==="
           sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} bash -c "'
-            cd \"${EA_DIR}\"
-            # Use MetaEditor to compile
-            WINEPREFIX=/root/.wine wine \"/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe\" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
+            export DISPLAY=:99
+            export WINEPREFIX=/root/.wine
+            MT5_BASE=\"/root/.wine/drive_c/Program Files/MetaTrader 5\"
+            EA_DIR=\"\${MT5_BASE}/MQL5/Experts/PropFirmBot\"
+            cd \"\${EA_DIR}\"
+
+            # Try MetaEditor first
+            echo \"Attempting MetaEditor compilation...\"
+            WINEPREFIX=/root/.wine wine \"\${MT5_BASE}/metaeditor64.exe\" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
             sleep 3
-            ls -la *.ex5 2>/dev/null && echo \"Compilation OK\" || echo \"Warning: .ex5 not updated\"
+
+            # Check if .ex5 was updated (newer than .mq5)
+            EX5_DATE=\$(stat -c %Y PropFirmBot.ex5 2>/dev/null || echo 0)
+            MQ5_DATE=\$(stat -c %Y PropFirmBot.mq5 2>/dev/null || echo 999999)
+
+            if [ \"\$EX5_DATE\" -lt \"\$MQ5_DATE\" ] 2>/dev/null; then
+              echo \"MetaEditor failed - using fallback: remove .ex5 + restart MT5\"
+              rm -f PropFirmBot.ex5
+              echo \"Removed old .ex5\"
+
+              # Restart MT5 to force auto-compile
+              MT5_PID=\$(pgrep -f terminal64.exe | head -1)
+              if [ -n \"\$MT5_PID\" ]; then
+                echo \"Stopping MT5 (PID=\$MT5_PID)...\"
+                kill \"\$MT5_PID\" 2>/dev/null
+                sleep 5
+                pgrep -f terminal64.exe > /dev/null && kill -9 \"\$MT5_PID\" 2>/dev/null
+                sleep 3
+              fi
+
+              echo \"Starting MT5...\"
+              cd \"\${MT5_BASE}\"
+              DISPLAY=:99 WINEPREFIX=/root/.wine nohup wine terminal64.exe /portable > /dev/null 2>&1 &
+              sleep 20
+
+              if pgrep -f terminal64.exe > /dev/null; then
+                echo \"MT5 restarted - will auto-compile EA on load\"
+                sleep 10
+                ls -la \"\${EA_DIR}/PropFirmBot.ex5\" 2>/dev/null || echo \"ex5 not yet created - MT5 may still be loading\"
+              else
+                echo \"ERROR: MT5 failed to start!\"
+              fi
+            else
+              echo \"Compilation OK - .ex5 is up to date\"
+              ls -la PropFirmBot.ex5 2>/dev/null
+            fi
           '" > deploy_report.txt 2>&1 || true
 
           echo "EXIT_CODE=$?" >> deploy_report.txt

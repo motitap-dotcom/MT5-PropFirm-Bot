@@ -418,10 +418,16 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
       return m_state;
    }
 
-   // Weekend
+   // Weekend - FIX: Use server time with broker GMT+3 offset instead of broken TimeGMT() on Wine
    MqlDateTime dt;
-   TimeToStruct(TimeGMT(), dt);
-   if((dt.day_of_week == 5 && dt.hour >= 20) || dt.day_of_week > 5)
+   datetime srv = TimeCurrent();
+   int broker_offset = 3;  // FundedNext-Server = GMT+3
+   TimeToStruct(srv, dt);
+   int gmt_h = dt.hour - broker_offset;
+   int gmt_dow = dt.day_of_week;
+   if(gmt_h < 0) { gmt_h += 24; gmt_dow--; }
+   if(gmt_dow < 0) gmt_dow += 7;
+   if((gmt_dow == 5 && gmt_h >= 20) || gmt_dow > 5)
    {
       m_state = GUARDIAN_HALTED;
       m_halt_reason = HALT_WEEKEND;
