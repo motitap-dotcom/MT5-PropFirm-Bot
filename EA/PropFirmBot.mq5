@@ -450,13 +450,30 @@ void OnTick()
    // ============================================
    // STEP 6: NEW BAR LOGIC (signal scanning)
    // ============================================
-   datetime current_bar = iTime(_Symbol, InpEntryTF, 0);
+   // FIX: Always use PERIOD_M15 for bar detection regardless of InpEntryTF
+   // This prevents issues where InpEntryTF might be set to H1 accidentally
+   ENUM_TIMEFRAMES scan_tf = PERIOD_M15;
+   datetime current_bar = iTime(_Symbol, scan_tf, 0);
+
+   // Fallback: if iTime returns 0 or invalid, try explicit M15 calculation
+   if(current_bar <= 0)
+   {
+      // Calculate M15 bar time manually from server time
+      datetime srv = TimeCurrent();
+      MqlDateTime dt_srv;
+      TimeToStruct(srv, dt_srv);
+      dt_srv.min = (dt_srv.min / 15) * 15;
+      dt_srv.sec = 0;
+      current_bar = StructToTime(dt_srv);
+   }
+
    if(current_bar == g_last_bar_time)
       return;  // Same bar - no new signal scan
    g_last_bar_time = current_bar;
 
-   PrintFormat("[NEWBAR] %s | Guardian=%s | Scanning %d symbols...",
+   PrintFormat("[NEWBAR] %s (TF=%s) | Guardian=%s | Scanning %d symbols...",
               TimeToString(current_bar, TIME_DATE|TIME_MINUTES),
+              EnumToString(scan_tf),
               EnumToString(g_guardian.GetState()), g_symbol_count);
 
    // Only scan for signals if Guardian says we can trade
@@ -529,10 +546,11 @@ void ProcessSymbol(string symbol, int signal_index, bool caution_mode)
 
    // Primary strategy
    string primary_name = (InpStrategy == STRATEGY_SMC) ? "SMC" : "EMA";
+   PrintFormat("[SCAN] %s - checking %s strategy...", symbol, primary_name);
    signal = g_signals[signal_index].GetSignal(InpStrategy, sl_price, tp_price);
 
    if(signal == SIGNAL_NONE)
-      PrintFormat("[SCAN] %s - %s strategy: NO SIGNAL", symbol, primary_name);
+      PrintFormat("[SCAN] %s - %s: NO SIGNAL (details logged above)", symbol, primary_name);
 
    // Check if strategy is working (self-learning)
    if(signal != SIGNAL_NONE && InpSelfLearning)

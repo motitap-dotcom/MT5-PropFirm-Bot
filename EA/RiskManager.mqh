@@ -332,22 +332,35 @@ bool CRiskManager::CanOpenTrade(string symbol)
 bool CRiskManager::IsSessionActive()
 {
    MqlDateTime dt;
-   datetime gmt_time = TimeGMT();
    datetime srv_time = TimeCurrent();
 
-   // Use TimeGMT if available, fallback to TimeCurrent
-   // Wine sometimes returns incorrect GMT offset
-   if(gmt_time > 0 && MathAbs((long)(gmt_time - srv_time)) < 86400)
-      TimeToStruct(gmt_time, dt);
-   else
-      TimeToStruct(srv_time, dt);  // Fallback: use server time
+   // FIX: Always use server time and convert to GMT using known broker offset
+   // FundedNext server time = GMT+3 (EET) in winter, GMT+3 (EEST) in summer
+   // This avoids Wine's unreliable TimeGMT()
+   int broker_gmt_offset = 3;  // FundedNext-Server is GMT+3
 
-   // London session
-   if(dt.hour >= m_london_start_hour && dt.hour < m_london_end_hour)
+   // Calculate GMT hour from server time
+   TimeToStruct(srv_time, dt);
+   int gmt_hour = dt.hour - broker_gmt_offset;
+   if(gmt_hour < 0) gmt_hour += 24;
+
+   // Log session check periodically (on new bar only - called from CanOpenTrade)
+   static datetime last_session_log = 0;
+   if(srv_time - last_session_log >= 900)  // Log every 15 min max
+   {
+      PrintFormat("[RiskMgr] Session check: ServerHour=%d GMT_Hour=%d | London=%d-%d NY=%d-%d",
+                  dt.hour, gmt_hour,
+                  m_london_start_hour, m_london_end_hour,
+                  m_ny_start_hour, m_ny_end_hour);
+      last_session_log = srv_time;
+   }
+
+   // London session (hours in GMT)
+   if(gmt_hour >= m_london_start_hour && gmt_hour < m_london_end_hour)
       return true;
 
-   // New York session
-   if(dt.hour >= m_ny_start_hour && dt.hour < m_ny_end_hour)
+   // New York session (hours in GMT)
+   if(gmt_hour >= m_ny_start_hour && gmt_hour < m_ny_end_hour)
       return true;
 
    return false;
