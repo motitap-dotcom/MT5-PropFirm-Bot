@@ -293,6 +293,35 @@ int OnInit()
    // Take initial position snapshot
    TakePositionSnapshot();
 
+   // === STARTUP VALIDATION: Detect misconfigurations early ===
+   if(InpEntryTF != PERIOD_M15)
+      PrintFormat("[INIT] WARNING: InpEntryTF=%s (expected M15) - SignalEngine will force M15",
+                  EnumToString(InpEntryTF));
+   if(InpLondonStart > 12 || InpLondonEnd < 8)
+      PrintFormat("[INIT] WARNING: London session %d-%d looks wrong (expected ~6-17 UTC)",
+                  InpLondonStart, InpLondonEnd);
+   if(InpNYStart > 18 || InpNYEnd < 15)
+      PrintFormat("[INIT] WARNING: NY session %d-%d looks wrong (expected ~12-22 UTC)",
+                  InpNYStart, InpNYEnd);
+   if(InpRiskPercent > 2.0)
+      PrintFormat("[INIT] WARNING: Risk %.2f%% seems too high for prop firm", InpRiskPercent);
+   if(InpMaxPositions > 5)
+      PrintFormat("[INIT] WARNING: MaxPositions=%d seems too high", InpMaxPositions);
+   if(InpHardTotalDD != 6.0)
+      PrintFormat("[INIT] WARNING: Total DD=%.1f%% (FundedNext Stellar should be 6%%)", InpHardTotalDD);
+
+   // Verify TimeGMT vs TimeCurrent for Wine detection
+   {
+      datetime gmt = TimeGMT();
+      datetime srv = TimeCurrent();
+      long diff = (long)(srv - gmt);
+      if(diff < 7200 || diff > 14400)  // Expect 3h offset (10800s), warn if way off
+         PrintFormat("[INIT] WARNING: TimeGMT offset=%ds (expected ~10800 for GMT+3). Using server time for all calculations.",
+                     diff);
+      else
+         PrintFormat("[INIT] TimeGMT offset=%ds (%.1fh) - looks correct", diff, diff/3600.0);
+   }
+
    Print("[INIT] ALL SYSTEMS GO:");
    Print("  - Guardian: ACTIVE");
    Print("  - News Filter: " + (InpNewsFilterOn ? "ON" : "OFF"));
@@ -300,6 +329,8 @@ int OnInit()
    Print("  - Self-Learning: " + (InpSelfLearning ? "ON" : "OFF"));
    Print("  - Account Phase: " + g_account.GetPhaseString());
    PrintFormat("  - Risk multiplier: %.0f%%", g_account.GetRiskMultiplier() * 100);
+   PrintFormat("  - Entry TF: %s (forced M15 in SignalEngine)", EnumToString(InpEntryTF));
+   PrintFormat("  - Sessions: London %d-%d UTC, NY %d-%d UTC", InpLondonStart, InpLondonEnd, InpNYStart, InpNYEnd);
    Print("[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<");
 
    // Timer for status updates (works even when market is closed / no ticks)
@@ -853,11 +884,17 @@ void CheckDailyReport()
 {
    if(!InpNotifyDaily) return;
 
+   // FIX: Use server time with known broker GMT offset instead of broken TimeGMT() on Wine
    MqlDateTime dt;
-   TimeToStruct(TimeGMT(), dt);
+   datetime srv_time = TimeCurrent();
+   int broker_gmt_offset = 3;  // FundedNext-Server is GMT+3
+   TimeToStruct(srv_time, dt);
+   int gmt_hour = dt.hour - broker_gmt_offset;
+   if(gmt_hour < 0) gmt_hour += 24;
+   int gmt_min = dt.min;
 
    // Send daily report at 17:00 UTC (after NY close)
-   if(dt.hour == 17 && dt.min == 0)
+   if(gmt_hour == 17 && gmt_min == 0)
    {
       datetime today = iTime(_Symbol, PERIOD_D1, 0);
       if(today > g_last_daily_report)

@@ -442,11 +442,19 @@ bool CRiskManager::IsMaxPositionsOK()
 //+------------------------------------------------------------------+
 bool CRiskManager::IsWeekendCloseTime()
 {
+   // FIX: Use server time with known broker GMT offset instead of broken TimeGMT() on Wine
    MqlDateTime dt;
-   TimeToStruct(TimeGMT(), dt);
+   datetime srv_time = TimeCurrent();
+   int broker_gmt_offset = 3;  // FundedNext-Server is GMT+3
+   TimeToStruct(srv_time, dt);
 
-   if(dt.day_of_week > m_weekend_close_day) return true;
-   if(dt.day_of_week == m_weekend_close_day && dt.hour >= m_weekend_close_hour) return true;
+   int gmt_hour = dt.hour - broker_gmt_offset;
+   int gmt_day = dt.day_of_week;
+   if(gmt_hour < 0) { gmt_hour += 24; gmt_day--; }
+   if(gmt_day < 0) gmt_day += 7;
+
+   if(gmt_day > m_weekend_close_day) return true;
+   if(gmt_day == m_weekend_close_day && gmt_hour >= m_weekend_close_hour) return true;
 
    return false;
 }

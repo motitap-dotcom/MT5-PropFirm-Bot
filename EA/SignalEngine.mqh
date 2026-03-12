@@ -134,6 +134,15 @@ bool CSignalEngine::Init(string symbol,
                           double fvg_min_points)
 {
    m_symbol         = symbol;
+
+   // SAFETY: Always force PERIOD_M15 for entry timeframe regardless of input parameter
+   // This prevents accidental H1 setting via MT5 GUI/presets from breaking signal generation
+   if(tf_entry != PERIOD_M15)
+   {
+      PrintFormat("[SignalEngine] WARNING: Entry TF was %s, forcing PERIOD_M15 for safety",
+                  EnumToString(tf_entry));
+      tf_entry = PERIOD_M15;
+   }
    m_tf_entry       = tf_entry;
    m_tf_htf         = tf_htf;
    m_ema_fast_period= ema_fast;
