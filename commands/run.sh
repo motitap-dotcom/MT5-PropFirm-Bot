@@ -1,67 +1,96 @@
 #!/bin/bash
-# Check if deploy happened and verify EA is running with fixes
-echo "=== POST-DEPLOY CHECK $(date '+%Y-%m-%d %H:%M:%S %Z') ==="
+# Fix compilation and restart EA
+echo "=== COMPILE AND RESTART $(date '+%Y-%m-%d %H:%M:%S %Z') ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
-EA_LOG_DIR="${MT5_BASE}/MQL5/Logs"
 
-# 1. Check EA file timestamps - were they updated?
-echo "--- EA file timestamps ---"
-ls -la "$EA_DIR/PropFirmBot.mq5" "$EA_DIR/RiskManager.mqh" "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
+# 1. Check current .ex5 timestamp
+echo "--- Before compile ---"
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
+ls -la "$EA_DIR/PropFirmBot.mq5" 2>/dev/null
 
-# 2. If EA files are old, deploy manually
+# 2. Try compilation with full error output
 echo ""
-echo "--- Checking if manual deploy needed ---"
-EA_MQ5_DATE=$(stat -c %Y "$EA_DIR/PropFirmBot.mq5" 2>/dev/null)
-CURRENT_TIME=$(date +%s)
-AGE=$(( (CURRENT_TIME - EA_MQ5_DATE) / 60 ))
-echo "PropFirmBot.mq5 age: ${AGE} minutes"
+echo "--- Attempting MetaEditor compilation ---"
+cd "$EA_DIR"
+export DISPLAY=:99
+export WINEPREFIX=/root/.wine
 
-if [ "$AGE" -gt 10 ]; then
-    echo "EA files are old - deploy didn't run. Checking repo..."
-    cd /root/MT5-PropFirm-Bot || exit 1
+# Method 1: metaeditor64
+echo "Method 1: metaeditor64 /compile"
+wine "$MT5_BASE/metaeditor64.exe" /compile:"$EA_DIR/PropFirmBot.mq5" /log 2>&1
+sleep 5
 
-    # Pull latest changes
-    git fetch origin claude/fix-bot-trading-config-N1uDv 2>&1
-    git checkout claude/fix-bot-trading-config-N1uDv 2>&1 || git checkout -b claude/fix-bot-trading-config-N1uDv origin/claude/fix-bot-trading-config-N1uDv 2>&1
-    git pull origin claude/fix-bot-trading-config-N1uDv 2>&1
+# Check for compilation log
+echo ""
+echo "--- MetaEditor log ---"
+find "$MT5_BASE" -name "*.log" -newer "$EA_DIR/PropFirmBot.mq5" -mmin -3 2>/dev/null -exec echo "Log: {}" \; -exec tail -20 {} \;
+find "$EA_DIR" -name "*.log" -mmin -3 2>/dev/null -exec echo "Log: {}" \; -exec tail -20 {} \;
 
-    # Copy EA files
-    echo "Copying EA files..."
-    cp -v EA/*.mq5 EA/*.mqh "$EA_DIR/" 2>&1
+echo ""
+echo "--- After compile attempt ---"
+ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null
 
-    # Copy config files
-    cp -v configs/*.json "${MT5_BASE}/MQL5/Files/PropFirmBot/" 2>&1
+# 3. If compilation didn't work, try removing old .ex5 and restarting MT5
+# MT5 auto-compiles when .ex5 is missing
+EX5_DATE=$(stat -c %Y "$EA_DIR/PropFirmBot.ex5" 2>/dev/null)
+MQ5_DATE=$(stat -c %Y "$EA_DIR/PropFirmBot.mq5" 2>/dev/null)
 
-    # Recompile
-    echo "Recompiling EA..."
-    cd "$EA_DIR"
-    WINEPREFIX=/root/.wine wine "/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
-    sleep 5
-    ls -la *.ex5 2>/dev/null
-    echo "Deploy done manually"
+if [ "$EX5_DATE" -lt "$MQ5_DATE" ] 2>/dev/null; then
+    echo ""
+    echo "--- .ex5 is older than .mq5 - removing old .ex5 to force recompile ---"
+    rm -f "$EA_DIR/PropFirmBot.ex5"
+    echo "Removed old .ex5. MT5 will recompile on next EA load."
+
+    # Restart MT5 to force recompile and reload
+    echo ""
+    echo "--- Restarting MT5 ---"
+    MT5_PID=$(pgrep -f "terminal64.exe" | head -1)
+    if [ -n "$MT5_PID" ]; then
+        echo "Stopping MT5 (PID=$MT5_PID)..."
+        kill "$MT5_PID" 2>/dev/null
+        sleep 5
+        # Check if stopped
+        if pgrep -f "terminal64.exe" > /dev/null; then
+            echo "Force killing MT5..."
+            kill -9 "$MT5_PID" 2>/dev/null
+            sleep 3
+        fi
+    fi
+
+    # Start MT5
+    echo "Starting MT5..."
+    cd "$MT5_BASE"
+    DISPLAY=:99 WINEPREFIX=/root/.wine nohup wine "$MT5_BASE/terminal64.exe" /portable > /dev/null 2>&1 &
+    sleep 15
+
+    # Check if MT5 started
+    if pgrep -f "terminal64.exe" > /dev/null; then
+        echo "MT5 started successfully"
+        NEW_PID=$(pgrep -f "terminal64.exe" | head -1)
+        echo "New PID: $NEW_PID"
+    else
+        echo "ERROR: MT5 failed to start!"
+    fi
+
+    # Check if new .ex5 was created
+    sleep 10
+    echo ""
+    echo "--- After MT5 restart ---"
+    ls -la "$EA_DIR/PropFirmBot.ex5" 2>/dev/null || echo "No .ex5 yet - MT5 may still be loading"
 fi
 
-# 3. Check latest EA log for new entries
+# 4. Check latest EA log for new entries with our fixes
 echo ""
-echo "--- Latest EA log (last 30 lines, converted from UTF-16) ---"
-EA_LATEST=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
+echo "--- Latest EA log (checking for fix markers) ---"
+EA_LATEST=$(ls -t "$MT5_BASE/MQL5/Logs"/*.log 2>/dev/null | head -1)
 if [ -n "$EA_LATEST" ]; then
-    echo "File: $EA_LATEST"
-    TMPLOG="/tmp/ea_check.txt"
+    TMPLOG="/tmp/ea_latest.txt"
     iconv -f UTF-16LE -t UTF-8 "$EA_LATEST" 2>/dev/null > "$TMPLOG" || \
       sed 's/\x00//g' "$EA_LATEST" > "$TMPLOG"
-    tail -30 "$TMPLOG"
-    echo ""
-    echo "--- NEWBAR count ---"
-    grep -c "NEWBAR" "$TMPLOG"
-    echo "--- M15 bars (non-hourly) ---"
-    grep "NEWBAR" "$TMPLOG" | grep -v ":00 |" | head -10
-    echo "--- Session check logs ---"
-    grep "Session check" "$TMPLOG" | tail -5
-    echo "--- SCAN entries ---"
-    grep "\[SCAN\]" "$TMPLOG" | tail -10
+    echo "Log: $EA_LATEST ($(wc -l < "$TMPLOG") lines)"
+    tail -20 "$TMPLOG"
 fi
 
 echo ""
