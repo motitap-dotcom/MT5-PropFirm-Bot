@@ -494,6 +494,9 @@ void CGuardian::OnNewDay()
    m_today_profit = 0;
    m_today_loss = 0;
 
+   // Reset consecutive losses counter on new day
+   m_consec_losses = 0;
+
    // Re-enable if was soft-halted (not emergency/shutdown)
    if(m_state == GUARDIAN_HALTED &&
       m_halt_reason != HALT_TARGET_REACHED &&
