@@ -1,51 +1,53 @@
 #!/bin/bash
-# Check trade history with UTF-16 handling - 2026-03-16c
-echo "=== TRADE HISTORY CHECK (UTF-16 fix) $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+# Reset circuit breaker by restarting MT5 EA - 2026-03-16d
+echo "=== RESET CIRCUIT BREAKER $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
-EA_LOG_DIR="${MT5_BASE}/MQL5/Logs"
+EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
+REPO_DIR="/root/MT5-PropFirm-Bot"
 
-# Convert UTF-16 to UTF-8 and search
-search_log() {
-    local logfile="$1"
-    local pattern="$2"
-    local label="$3"
-    echo "--- $label ---"
-    if [ -f "$logfile" ]; then
-        iconv -f UTF-16LE -t UTF-8 "$logfile" 2>/dev/null | grep -i -E "$pattern" | tail -30
-    else
-        echo "File not found: $logfile"
+# 1. Pull latest code from repo (get the Guardian.mqh fix)
+echo "--- Pulling latest code ---"
+cd "$REPO_DIR" && git fetch origin && git pull origin main 2>&1 || echo "Pull from main failed, trying current branch"
+git pull 2>&1 || true
+
+# 2. Copy updated EA files to MT5 directory
+echo ""
+echo "--- Copying updated EA files ---"
+for f in EA/*.mq5 EA/*.mqh; do
+    if [ -f "$f" ]; then
+        cp "$f" "$EA_DIR/" && echo "Copied: $f"
     fi
-}
+done
 
-# 1. Friday's log (March 13) - when trades likely happened
-echo "====== FRIDAY March 13 ======"
-search_log "$EA_LOG_DIR/20260313.log" "trade|buy|sell|order|open|close|profit|loss|LOSS" "Trades on Friday"
+# 3. Recompile EA with MetaEditor
 echo ""
-search_log "$EA_LOG_DIR/20260313.log" "consec|circuit|HALT|guardian.*state" "Circuit Breaker on Friday"
+echo "--- Recompiling EA ---"
+cd "$EA_DIR"
+WINEPREFIX=/root/.wine wine "${MT5_BASE}/metaeditor64.exe" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
+sleep 5
+ls -la *.ex5 2>/dev/null
 echo ""
-search_log "$EA_LOG_DIR/20260313.log" "NEW DAY|daily.reset" "Daily Reset on Friday"
 
-# 2. Sunday's log (March 15)
-echo ""
-echo "====== SUNDAY March 15 ======"
-search_log "$EA_LOG_DIR/20260315.log" "NEW DAY|daily.reset|ACTIVE|consec|circuit|HALT" "State changes on Sunday"
-echo ""
-echo "First 10 lines of Sunday log:"
-iconv -f UTF-16LE -t UTF-8 "$EA_LOG_DIR/20260315.log" 2>/dev/null | head -10
-echo ""
-echo "Last 10 lines of Sunday log:"
-iconv -f UTF-16LE -t UTF-8 "$EA_LOG_DIR/20260315.log" 2>/dev/null | tail -10
+# 4. Check if MT5 detected the new .ex5 (it auto-reloads)
+echo "--- Waiting for MT5 to detect new EA ---"
+sleep 10
 
-# 3. Today's log (March 16 Monday)
+# 5. Verify status after reload
 echo ""
-echo "====== MONDAY March 16 (TODAY) ======"
-search_log "$EA_LOG_DIR/20260316.log" "NEW DAY|daily.reset|ACTIVE" "Daily Reset on Monday"
+echo "--- Status after reset ---"
+EA_FILES_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
+if [ -f "$EA_FILES_DIR/status.json" ]; then
+    cat "$EA_FILES_DIR/status.json"
+fi
+
 echo ""
-echo "First 10 lines of today's log:"
-iconv -f UTF-16LE -t UTF-8 "$EA_LOG_DIR/20260316.log" 2>/dev/null | head -10
-echo ""
-search_log "$EA_LOG_DIR/20260316.log" "HEARTBEAT" "All Heartbeats today"
+echo "--- Latest EA Log (last 20 lines) ---"
+EA_LOG_DIR="${MT5_BASE}/MQL5/Logs"
+TODAY_LOG=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
+if [ -n "$TODAY_LOG" ]; then
+    iconv -f UTF-16LE -t UTF-8 "$TODAY_LOG" 2>/dev/null | tail -20
+fi
 
 echo ""
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
