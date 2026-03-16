@@ -33,7 +33,7 @@ CStatusWriter::CStatusWriter()
 {
    m_folder = "PropFirmBot";
    m_filename = "status.json";
-   m_update_interval = 3;
+   m_update_interval = 10;  // Write every 10 seconds (was 3 - too frequent, causes lag)
    m_last_write = 0;
    m_magic = 0;
 }

@@ -138,32 +138,21 @@ ulong CTradeManager::OpenBuy(string symbol, double lot, double sl, double tp, st
    string full_comment = m_comment_prefix;
    if(comment != "") full_comment += "_" + comment;
 
-   for(int retry = 0; retry < m_max_retries; retry++)
+   // Single attempt - no retry loop with Sleep() that freezes UI
+   if(m_trade.Buy(lot, symbol, ask, sl, tp, full_comment))
    {
-      if(m_trade.Buy(lot, symbol, ask, sl, tp, full_comment))
-      {
-         ulong ticket = m_trade.ResultOrder();
-         RecordTradeTime(symbol);
+      ulong ticket = m_trade.ResultOrder();
+      RecordTradeTime(symbol);
 
-         PrintFormat("[TradeMgr] BUY opened: %s Lot=%.2f Entry=%.5f SL=%.5f TP=%.5f Ticket=%d",
-                     symbol, lot, ask, sl, tp, ticket);
-         return ticket;
-      }
-      else
-      {
-         uint error = m_trade.ResultRetcode();
-         PrintFormat("[TradeMgr] BUY failed (attempt %d): %s Error=%d %s",
-                     retry + 1, symbol, error, m_trade.ResultRetcodeDescription());
-
-         // Don't retry on fatal errors
-         if(error == TRADE_RETCODE_INVALID_STOPS ||
-            error == TRADE_RETCODE_INVALID_VOLUME ||
-            error == TRADE_RETCODE_MARKET_CLOSED ||
-            error == TRADE_RETCODE_NO_MONEY)
-            break;
-
-         Sleep(500);
-      }
+      PrintFormat("[TradeMgr] BUY opened: %s Lot=%.2f Entry=%.5f SL=%.5f TP=%.5f Ticket=%d",
+                  symbol, lot, ask, sl, tp, ticket);
+      return ticket;
+   }
+   else
+   {
+      uint error = m_trade.ResultRetcode();
+      PrintFormat("[TradeMgr] BUY failed: %s Error=%d %s",
+                  symbol, error, m_trade.ResultRetcodeDescription());
    }
 
    return 0;
@@ -201,31 +190,21 @@ ulong CTradeManager::OpenSell(string symbol, double lot, double sl, double tp, s
    string full_comment = m_comment_prefix;
    if(comment != "") full_comment += "_" + comment;
 
-   for(int retry = 0; retry < m_max_retries; retry++)
+   // Single attempt - no retry loop with Sleep() that freezes UI
+   if(m_trade.Sell(lot, symbol, bid, sl, tp, full_comment))
    {
-      if(m_trade.Sell(lot, symbol, bid, sl, tp, full_comment))
-      {
-         ulong ticket = m_trade.ResultOrder();
-         RecordTradeTime(symbol);
+      ulong ticket = m_trade.ResultOrder();
+      RecordTradeTime(symbol);
 
-         PrintFormat("[TradeMgr] SELL opened: %s Lot=%.2f Entry=%.5f SL=%.5f TP=%.5f Ticket=%d",
-                     symbol, lot, bid, sl, tp, ticket);
-         return ticket;
-      }
-      else
-      {
-         uint error = m_trade.ResultRetcode();
-         PrintFormat("[TradeMgr] SELL failed (attempt %d): %s Error=%d %s",
-                     retry + 1, symbol, error, m_trade.ResultRetcodeDescription());
-
-         if(error == TRADE_RETCODE_INVALID_STOPS ||
-            error == TRADE_RETCODE_INVALID_VOLUME ||
-            error == TRADE_RETCODE_MARKET_CLOSED ||
-            error == TRADE_RETCODE_NO_MONEY)
-            break;
-
-         Sleep(500);
-      }
+      PrintFormat("[TradeMgr] SELL opened: %s Lot=%.2f Entry=%.5f SL=%.5f TP=%.5f Ticket=%d",
+                  symbol, lot, bid, sl, tp, ticket);
+      return ticket;
+   }
+   else
+   {
+      uint error = m_trade.ResultRetcode();
+      PrintFormat("[TradeMgr] SELL failed: %s Error=%d %s",
+                  symbol, error, m_trade.ResultRetcodeDescription());
    }
 
    return 0;

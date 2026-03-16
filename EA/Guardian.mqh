@@ -560,28 +560,23 @@ void CGuardian::ForceCloseAll(string reason)
    trade.SetExpertMagicNumber(m_magic);
    int closed = 0;
 
-   for(int attempt = 0; attempt < 3; attempt++)
+   // Single pass - no Sleep() retry loop that freezes UI.
+   // If positions remain open, next tick's RunChecks() will retry.
+   for(int i = PositionsTotal() - 1; i >= 0; i--)
    {
-      bool any_left = false;
-      for(int i = PositionsTotal() - 1; i >= 0; i--)
-      {
-         ulong ticket = PositionGetTicket(i);
-         if(ticket <= 0) continue;
-         if(PositionGetInteger(POSITION_MAGIC) != m_magic) continue;
+      ulong ticket = PositionGetTicket(i);
+      if(ticket <= 0) continue;
+      if(PositionGetInteger(POSITION_MAGIC) != m_magic) continue;
 
-         if(trade.PositionClose(ticket))
-         {
-            closed++;
-            Log(StringFormat("FORCE CLOSED #%d (%s)", ticket, reason));
-         }
-         else
-         {
-            any_left = true;
-            Log(StringFormat("FAILED close #%d - retry %d", ticket, attempt + 1));
-         }
+      if(trade.PositionClose(ticket))
+      {
+         closed++;
+         Log(StringFormat("FORCE CLOSED #%d (%s)", ticket, reason));
       }
-      if(!any_left) break;
-      Sleep(500);
+      else
+      {
+         Log(StringFormat("FAILED close #%d - will retry next tick", ticket));
+      }
    }
    Log(StringFormat("ForceClose done: %d positions closed", closed));
 }

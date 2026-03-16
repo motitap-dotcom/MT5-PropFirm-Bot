@@ -137,10 +137,11 @@ int            g_symbol_count = 0;
 
 datetime       g_last_bar_time = 0;
 datetime       g_last_dashboard_update = 0;
-int            g_dashboard_interval = 2;  // Update dashboard every 2 seconds
+int            g_dashboard_interval = 5;  // Update dashboard every 5 seconds (prevent UI freeze)
 datetime       g_last_daily_report = 0;
 datetime       g_last_heartbeat = 0;      // Heartbeat log every 15 minutes
 int            g_tick_count = 0;           // Total ticks received
+bool           g_force_close_check = false;  // Set by OnTrade() to force close detection
 
 // Guardian state tracking for notifications
 ENUM_GUARDIAN_STATE g_prev_guardian_state = GUARDIAN_ACTIVE;
@@ -170,19 +171,13 @@ int OnInit()
    Print("  ALL MODULES ACTIVE");
    Print("==============================================");
 
-   // Wait for account data to load (common issue with Wine/MT5)
-   int wait_attempts = 0;
-   while(AccountInfoDouble(ACCOUNT_BALANCE) <= 0 && wait_attempts < 20)
-   {
-      Sleep(500);
-      wait_attempts++;
-   }
+   // Check if account data is available (don't block UI with Sleep!)
    if(AccountInfoDouble(ACCOUNT_BALANCE) <= 0)
-      PrintFormat("[WARNING] Account balance still 0 after %d attempts. Using configured size: $%.0f",
-                  wait_attempts, InpAccountSize);
+      PrintFormat("[WARNING] Account balance is 0 at init. Using configured size: $%.0f. "
+                  "Balance will update on first tick.", InpAccountSize);
    else
-      PrintFormat("[INIT] Account balance loaded: $%.2f (after %d waits)",
-                  AccountInfoDouble(ACCOUNT_BALANCE), wait_attempts);
+      PrintFormat("[INIT] Account balance loaded: $%.2f",
+                  AccountInfoDouble(ACCOUNT_BALANCE));
 
    // Build symbol list
    BuildSymbolList();
@@ -303,7 +298,7 @@ int OnInit()
    Print("[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<");
 
    // Timer for status updates (works even when market is closed / no ticks)
-   EventSetTimer(5);
+   EventSetTimer(10);
 
    return INIT_SUCCEEDED;
 }
@@ -412,9 +407,13 @@ void OnTick()
    }
 
    // ============================================
-   // STEP 2: DETECT CLOSED TRADES (every tick)
+   // STEP 2: DETECT CLOSED TRADES (only when position count changes)
    // ============================================
-   DetectClosedTrades();
+   if(PositionsTotal() != g_prev_pos_count || g_force_close_check)
+   {
+      DetectClosedTrades();
+      g_force_close_check = false;
+   }
 
    // ============================================
    // STEP 3: MANAGE OPEN POSITIONS (every tick)
@@ -882,8 +881,7 @@ void UpdateDashboard()
    if(InpShowDashboard)
       g_dashboard.Update(g_guardian, open_pos, floating);
 
-   // Always write status JSON for web dashboard
-   g_status.WriteStatus(g_guardian, open_pos, floating);
+   // Status JSON is written by OnTimer() only - no double-write needed here
 }
 
 //+------------------------------------------------------------------+
@@ -920,7 +918,7 @@ void BuildSymbolList()
 void OnTrade()
 {
    // This runs when any trade event happens (open, close, modify)
-   // We use it as a backup for DetectClosedTrades
-   DetectClosedTrades();
+   // Flag for next tick to run DetectClosedTrades (don't run heavy logic here directly)
+   g_force_close_check = true;
 }
 //+------------------------------------------------------------------+
