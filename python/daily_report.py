@@ -144,7 +144,8 @@ class ReportGenerator:
             "worst_trade": round(float(pnl.min()), 2) if len(pnl) > 0 else 0,
             "profit_factor": round(
                 float(pnl[pnl > 0].sum()) / abs(float(pnl[pnl <= 0].sum()))
-                if pnl[pnl <= 0].sum() != 0 else 0, 2
+                if pnl[pnl <= 0].sum() != 0
+                else (999.0 if float(pnl[pnl > 0].sum()) > 0 else 0), 2
             ),
         })
 

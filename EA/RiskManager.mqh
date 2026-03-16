@@ -457,7 +457,9 @@ bool CRiskManager::IsWeekendCloseTime()
    MqlDateTime dt;
    TimeToStruct(TimeGMT(), dt);
 
-   if(dt.day_of_week > m_weekend_close_day) return true;
+   // MQL5: 0=Sunday, 1=Monday, ... 5=Friday, 6=Saturday
+   // m_weekend_close_day = 5 (Friday). Block Saturday(6) and Sunday(0)
+   if(dt.day_of_week == 0 || dt.day_of_week == 6) return true;
    if(dt.day_of_week == m_weekend_close_day && dt.hour >= m_weekend_close_hour) return true;
 
    return false;
@@ -630,12 +632,13 @@ void CRiskManager::ManageBreakeven(string symbol, ulong ticket, ENUM_POSITION_TY
    {
       double ask = SymbolInfoDouble(symbol, SYMBOL_ASK);
 
+      // Only apply if not already at or below breakeven (symmetric with BUY)
       if(current_sl != 0 && current_sl <= open_price) return;
 
       if(open_price - ask >= activation_distance)
       {
          double new_sl = open_price - be_offset;
-         if(new_sl < current_sl || current_sl == 0)
+         if(current_sl == 0 || new_sl < current_sl)
          {
             CTrade trade;
             trade.SetExpertMagicNumber(m_magic_number);

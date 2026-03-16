@@ -208,8 +208,8 @@ void CDashboard::Update(CGuardian &guardian, int open_positions, double floating
       UpdateLabel("DDD_BAR", "", CLR_GOOD);
    }
 
-   // Total DD (trailing for Stellar Instant)
-   double dd_display = MathMax(0, guardian.InitialBalance() - equity);
+   // Total DD (trailing from equity high water mark for Stellar Instant)
+   double dd_display = MathMax(0, guardian.EquityHighWater() - equity);
    UpdateLabel("TDD_V", StringFormat("%.2f%% ($%.2f) / %.1f%% TRAILING",
                total_dd, dd_display, m_hard_total_dd),
                DDColor(total_dd, m_hard_total_dd * 0.58, m_hard_total_dd * 0.83));

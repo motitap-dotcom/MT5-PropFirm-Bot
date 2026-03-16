@@ -185,12 +185,13 @@ void CTradeJournal::LogTradeClose(string symbol, string direction, double lot,
       m_total_profit += pnl;
       if(pnl > m_largest_win) m_largest_win = pnl;
    }
-   else
+   else if(pnl < 0)
    {
       m_total_losses++;
       m_total_loss += MathAbs(pnl);
-      if(pnl < m_largest_loss) m_largest_loss = pnl;
+      if(MathAbs(pnl) > MathAbs(m_largest_loss)) m_largest_loss = pnl;
    }
+   // pnl == 0 is breakeven, not counted as win or loss
 
    string time_str = TimeToString(TimeCurrent(), TIME_DATE|TIME_MINUTES|TIME_SECONDS);
    double equity = AccountInfoDouble(ACCOUNT_EQUITY);

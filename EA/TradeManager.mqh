@@ -367,7 +367,7 @@ double CTradeManager::GetTotalProfit()
       if(ticket <= 0) continue;
 
       if(PositionGetInteger(POSITION_MAGIC) == m_magic_number)
-         total += PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);
+         total += PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP) + PositionGetDouble(POSITION_COMMISSION);
    }
    return total;
 }
@@ -385,7 +385,7 @@ double CTradeManager::GetSymbolProfit(string symbol)
 
       if(PositionGetInteger(POSITION_MAGIC) == m_magic_number &&
          PositionGetString(POSITION_SYMBOL) == symbol)
-         total += PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);
+         total += PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP) + PositionGetDouble(POSITION_COMMISSION);
    }
    return total;
 }

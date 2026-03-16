@@ -56,9 +56,9 @@ class BacktestConfig:
     risk_per_trade: float = 0.75     # %
     max_risk_per_trade: float = 1.0  # %
     max_positions: int = 2
-    daily_dd_guard: float = 3.0      # %
-    total_dd_guard: float = 7.0      # %
-    profit_target: float = 10.0      # %
+    daily_dd_guard: float = 0.0      # % (0 = disabled, Stellar Instant)
+    total_dd_guard: float = 6.0      # % trailing from equity HWM
+    profit_target: float = 0.0      # % (0 = no target, Stellar Instant)
     min_rr: float = 2.0
     max_spread_major: float = 3.0    # pips
     max_spread_xau: float = 5.0      # pips
@@ -71,7 +71,7 @@ class BacktestConfig:
     ny_start: int = 12
     ny_end: int = 16
     strategy: str = "SMC"            # "SMC" or "EMA" or "BOTH"
-    challenge_mode: bool = True
+    challenge_mode: bool = False
     consistency_rule: bool = True
     consistency_max_day_pct: float = 40.0  # Max % of total profit from single day
 
@@ -451,9 +451,19 @@ class Backtester:
                 if self.config.challenge_mode and self.target_reached:
                     continue
                 pnl_pct = ((self.equity - self.initial_balance) / self.initial_balance) * 100
-                if self.config.challenge_mode and pnl_pct >= self.config.profit_target:
+                if self.config.challenge_mode and self.config.profit_target > 0 and pnl_pct >= self.config.profit_target:
                     self.target_reached = True
                     continue
+
+                # Consistency rule: halt if today's profit > 40% of total profit
+                if self.config.consistency_rule and self.daily_pnl_tracker:
+                    total_profit = self.equity - self.initial_balance
+                    today_key = t.strftime("%Y-%m-%d")
+                    today_pnl = self.daily_pnl_tracker.get(today_key, 0)
+                    if total_profit > 0 and today_pnl > 0:
+                        day_pct = (today_pnl / total_profit) * 100
+                        if day_pct > self.config.consistency_max_day_pct:
+                            continue  # Skip trading - consistency rule violated
 
                 # Session filter
                 if not self._is_session_active(t):

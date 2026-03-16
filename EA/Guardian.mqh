@@ -33,7 +33,8 @@ enum ENUM_HALT_REASON
    HALT_CONNECTION_LOST    = 8,
    HALT_TARGET_REACHED     = 9,
    HALT_WEEKEND            = 10,
-   HALT_MANUAL             = 11
+   HALT_MANUAL             = 11,
+   HALT_CONSISTENCY_RULE   = 12
 };
 
 //+------------------------------------------------------------------+
@@ -134,6 +135,7 @@ public:
    double   TodayProfit()              { return m_today_profit; }
    double   TodayLoss()                { return m_today_loss; }
    double   InitialBalance()           { return m_initial_balance; }
+   double   EquityHighWater()          { return m_equity_high_water; }
    double   DailyOpenBalance()         { return m_daily_open_balance; }
    bool     ConnectionOK()             { return m_conn_healthy; }
    string   FullStatus();
@@ -416,6 +418,24 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
       m_halt_reason = HALT_MAX_DAILY_TRADES;
       m_halt_message = StringFormat("%d/%d daily trades used", m_daily_trade_count, m_max_daily_trades);
       return m_state;
+   }
+
+   // Consistency rule: max 40% of total profit in a single day
+   {
+      double total_profit_amount = AccountInfoDouble(ACCOUNT_EQUITY) - m_initial_balance;
+      double today_net = m_today_profit - m_today_loss;
+      if(total_profit_amount > 0 && today_net > 0)
+      {
+         double today_pct_of_total = (today_net / total_profit_amount) * 100.0;
+         if(today_pct_of_total > 40.0)
+         {
+            m_state = GUARDIAN_HALTED;
+            m_halt_reason = HALT_CONSISTENCY_RULE;
+            m_halt_message = StringFormat("Consistency: today %.1f%% > 40%% of total profit", today_pct_of_total);
+            DoAlert(m_halt_message);
+            return m_state;
+         }
+      }
    }
 
    // Weekend

@@ -250,8 +250,7 @@ def plot_equity_curve_matplotlib(equity_df: pd.DataFrame, trades_df: pd.DataFram
     peak = equity_df["equity"].cummax()
     dd_pct = ((peak - equity_df["equity"]) / peak) * 100
     ax2.fill_between(equity_df["time"], -dd_pct, 0, color="red", alpha=0.3)
-    ax2.axhline(y=-5, color="orange", linestyle="--", alpha=0.7, label="Daily DD limit (5%)")
-    ax2.axhline(y=-10, color="red", linestyle="--", alpha=0.7, label="Total DD limit (10%)")
+    ax2.axhline(y=-6, color="red", linestyle="--", alpha=0.7, label="Trailing DD limit (6%)")
     ax2.set_ylabel("Drawdown (%)")
     ax2.legend(fontsize=8)
     ax2.grid(True, alpha=0.3)

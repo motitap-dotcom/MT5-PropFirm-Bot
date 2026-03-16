@@ -75,7 +75,8 @@ string CStatusWriter::PositionToJSON(ulong ticket)
    double sl         = PositionGetDouble(POSITION_SL);
    double tp         = PositionGetDouble(POSITION_TP);
    double profit     = PositionGetDouble(POSITION_PROFIT)
-                     + PositionGetDouble(POSITION_SWAP);
+                     + PositionGetDouble(POSITION_SWAP)
+                     + PositionGetDouble(POSITION_COMMISSION);
    double current    = PositionGetDouble(POSITION_PRICE_CURRENT);
    datetime open_time = (datetime)PositionGetInteger(POSITION_TIME);
    string comment    = PositionGetString(POSITION_COMMENT);

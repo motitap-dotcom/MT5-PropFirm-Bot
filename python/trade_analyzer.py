@@ -134,7 +134,8 @@ class TradeAnalyzer:
                 "profit_factor": round(
                     float(pnl_values[pnl_values > 0].sum()) /
                     abs(float(pnl_values[pnl_values <= 0].sum()))
-                    if pnl_values[pnl_values <= 0].sum() != 0 else 0, 2
+                    if pnl_values[pnl_values <= 0].sum() != 0
+                    else (999.0 if float(pnl_values[pnl_values > 0].sum()) > 0 else 0), 2
                 ),
                 "recommendation": ""
             }
@@ -167,9 +168,9 @@ class TradeAnalyzer:
                     continue
                 hour = dt.hour
 
-                if 7 <= hour < 12:
+                if 7 <= hour < 11:
                     session = "London"
-                elif 12 <= hour < 17:
+                elif 12 <= hour < 16:
                     session = "NewYork"
                 else:
                     session = "Other"

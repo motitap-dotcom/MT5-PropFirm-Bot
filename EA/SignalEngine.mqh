@@ -392,11 +392,12 @@ bool CSignalEngine::DetectBearishFVG(int shift, double &fvg_high, double &fvg_lo
 
    for(int i = shift + 1; i < shift + m_ob_lookback - 1; i++)
    {
-      // Bearish FVG: gap between candle[i-1].high and candle[i+1].low
-      double gap_high = rates[i+1].low;   // Bottom of candle before the impulse
-      double gap_low  = rates[i-1].high;  // Top of candle after the impulse
+      // Bearish FVG: gap between candle[i+1].low (pre-impulse) and candle[i-1].high (post-impulse)
+      // In a bearish FVG, the gap is ABOVE price: [i+1].low > [i-1].high
+      double gap_high = rates[i+1].low;   // Lower boundary of pre-impulse candle
+      double gap_low  = rates[i-1].high;  // Upper boundary of post-impulse candle
 
-      if(gap_high <= gap_low) continue;
+      if(gap_low >= gap_high) continue;   // No gap exists
 
       double gap_size = (gap_high - gap_low) / point;
       if(gap_size < m_fvg_min_size) continue;
@@ -428,9 +429,9 @@ bool CSignalEngine::DetectLiquiditySweep(bool is_bullish, int lookback)
 
    if(is_bullish)
    {
-      // Find recent swing low in lookback period (skip last 2 bars)
+      // Find recent swing low in lookback period (skip current bar)
       double swing_low = DBL_MAX;
-      for(int i = 3; i < lookback; i++)
+      for(int i = 2; i < lookback; i++)
       {
          if(rates[i].low < swing_low)
             swing_low = rates[i].low;
@@ -446,7 +447,7 @@ bool CSignalEngine::DetectLiquiditySweep(bool is_bullish, int lookback)
    {
       // Find recent swing high
       double swing_high = 0;
-      for(int i = 3; i < lookback; i++)
+      for(int i = 2; i < lookback; i++)
       {
          if(rates[i].high > swing_high)
             swing_high = rates[i].high;
@@ -641,7 +642,7 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
 
    // === BUY SIGNAL ===
    bool buy_signal = (cross_up || recent_cross_up || momentum_buy);
-   if(buy_signal && rsi_buf[0] < m_rsi_overbought && rsi_buf[0] > 35 && htf_bias >= 0)
+   if(buy_signal && rsi_buf[0] < m_rsi_overbought && rsi_buf[0] > 35 && htf_bias > 0)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_ASK);
       sl_price = entry - (atr * 1.5);
@@ -656,7 +657,7 @@ ENUM_SIGNAL_TYPE CSignalEngine::GetEMACrossSignal(double &sl_price, double &tp_p
 
    // === SELL SIGNAL ===
    bool sell_signal = (cross_down || recent_cross_down || momentum_sell);
-   if(sell_signal && rsi_buf[0] > m_rsi_oversold && rsi_buf[0] < 65 && htf_bias <= 0)
+   if(sell_signal && rsi_buf[0] > m_rsi_oversold && rsi_buf[0] < 65 && htf_bias < 0)
    {
       double entry = SymbolInfoDouble(m_symbol, SYMBOL_BID);
       sl_price = entry + (atr * 1.5);
