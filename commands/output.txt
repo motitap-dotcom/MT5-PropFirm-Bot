@@ -1,91 +1,82 @@
-=== RESET CIRCUIT BREAKER 2026-03-16 08:45:13 UTC ===
---- Pulling latest code ---
-fatal: couldn't find remote ref main
-Pull from main failed, trying current branch
-Already up to date.
-
---- Copying updated EA files ---
-Copied: EA/PropFirmBot.mq5
-Copied: EA/AccountStateManager.mqh
-Copied: EA/Dashboard.mqh
-Copied: EA/Guardian.mqh
-Copied: EA/NewsFilter.mqh
-Copied: EA/Notifications.mqh
-Copied: EA/RiskManager.mqh
-Copied: EA/SignalEngine.mqh
-Copied: EA/StatusWriter.mqh
-Copied: EA/TradeAnalyzer.mqh
-Copied: EA/TradeJournal.mqh
-Copied: EA/TradeManager.mqh
-
---- Recompiling EA ---
+=== MT5 RESTART 2026-03-16 08:48:17 UTC ===
+--- Attempting EA recompile ---
+wine: failed to open "/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe"
+MetaEditor compile returned error (may still work)
+ex5 file:
 -rw-r--r-- 1 root root 219554 Mar 12 13:05 PropFirmBot.ex5
 
---- Waiting for MT5 to detect new EA ---
+--- Stopping MT5 ---
+Killing MT5 PID=439598
+MT5 stopped
 
---- Status after reset ---
+--- Starting MT5 ---
+MT5 starting... PID=1703598
+Waiting 30 seconds for MT5 to start and load EA...
+
+--- Verification ---
+MT5: RUNNING (PID=1703598)
+
+--- Status after restart ---
 {
-  "timestamp": "2026.03.16 11:45:29",
-  "server_time": "2026.03.16 11:45:29",
-  "gmt_time": "2026.03.16 08:45:29",
+  "timestamp": "2026.03.16 11:48:55",
+  "server_time": "2026.03.16 11:48:55",
+  "gmt_time": "2026.03.16 08:48:55",
   "account": {
     "number": 11797849,
     "name": "FundedNext-Stellar Instant Account- moti tapiro",
     "server": "FundedNext-Server",
     "currency": "USD",
     "leverage": 30,
-    "balance": 1998.34,
-    "equity": 1998.34,
-    "margin": 0.00,
-    "free_margin": 1998.34,
-    "floating_pnl": 0.00,
-    "initial_balance": 1964.44,
-    "total_pnl": 33.90,
-    "profit_percent": 1.73
+    "balance": 1996.45,
+    "equity": 1994.71,
+    "margin": 1029.92,
+    "free_margin": 964.79,
+    "floating_pnl": -1.74,
+    "initial_balance": 1998.34,
+    "total_pnl": -3.63,
+    "profit_percent": -0.18
   },
   "guardian": {
-    "state": "HALTED",
-    "daily_dd": 0.00,
-    "total_dd": 3.11,
-    "halt_message": "5 consecutive losses - circuit breaker",
+    "state": "ACTIVE",
+    "daily_dd": 0.18,
+    "total_dd": 0.18,
+    "halt_message": "",
     "connection_ok": true,
-    "can_trade": false
+    "can_trade": true
   },
   "today": {
-    "trades": 0,
+    "trades": 2,
     "wins": 0,
     "losses": 0,
     "profit": 0.00,
     "loss": 0.00,
     "net": 0.00,
-    "consec_losses": 5
+    "consec_losses": 0
   },
   "positions": {
-    "count": 0,
-    "open": []
+    "count": 2,
+    "open": [{"ticket":163249104,"symbol":"USDJPY","type":"BUY","volume":0.15,"open_price":159.33600,"current_price":159.32900,"sl":159.22500,"tp":159.55800,"profit":-0.66,"pips":-0.7,"open_time":"2026.03.16 11:48","comment":"PFBot_EMA"},{"ticket":163249103,"symbol":"GBPUSD","type":"SELL","volume":0.12,"open_price":1.32480,"current_price":1.32489,"sl":1.32561,"tp":1.32318,"profit":-1.08,"pips":-0.9,"open_time":"2026.03.16 11:48","comment":"PFBot_EMA"}]
   }
 }
---- Latest EA Log (last 20 lines) ---
-CD	0	08:27:59.185	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-NG	0	08:28:59.190	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-CR	0	08:29:59.046	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-OP	0	08:30:00.117	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.16 11:30 (TF=PERIOD_M15) | Guardian=GUARDIAN_HALTED | Scanning 4 symbols...
-KR	0	08:30:00.117	PropFirmBot (EURUSD,M15)	[NEWBAR] Blocked by Guardian: 5 consecutive losses - circuit breaker
-IN	0	08:30:59.132	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-DI	0	08:31:59.556	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-GE	0	08:32:19.900	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=310757 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-MI	0	08:32:59.466	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-ED	0	08:33:59.058	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-GG	0	08:34:59.095	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-LR	0	08:35:59.066	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-HM	0	08:36:59.906	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-GH	0	08:38:01.278	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-FK	0	08:39:01.193	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-JF	0	08:40:01.616	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-EQ	0	08:41:01.216	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-NL	0	08:42:01.078	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-NO	0	08:43:01.079	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-FJ	0	08:44:01.346	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+--- Latest EA Log (last 15 lines) ---
+basename: extra operand ‘5/MQL5/Logs/20260316.log’
+Try 'basename --help' for more information.
+Log file: 
+GM	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[JOURNAL] OPEN SELL GBPUSD | Lot=0.12 Entry=1.32480 SL=1.32561 TP=1.32318 | #163249103 | EMA
+QQ	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
+QQ	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[TRADE] GBPUSD SELL | Lot=0.12 | SL=1.32561 | TP=1.32318 | RR=2.0 | #163249103
+LR	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - checking EMA strategy...
+ID	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[EMA] USDJPY no signal | CrossUp=N RecentUp=N MomBuy=N | CrossDn=N RecentDn=N MomSell=N | RSI=45.8 HTF=1 | EMAGap=-2.6bp
+HO	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - EMA: NO SIGNAL (details logged above)
+QG	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[SMC] BUY signal: Entry=159.33600 SL=159.22496 TP=159.55807 | LiqSweep=N OB=Y FVG=N
+OH	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - SMC fallback: GOT SIGNAL BUY
+JJ	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1998.34 Risk$=10.49 SL_pts=0.1 Lot=0.15
+JG	0	08:48:48.498	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY opened: USDJPY Lot=0.15 Entry=159.33600 SL=159.22500 TP=159.55800 Ticket=163249104
+OH	0	08:48:48.498	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.16 11:48:48] Trade #2 opened | DailyDD=0.00% TotalDD=0.00%
+NH	0	08:48:48.498	PropFirmBot (EURUSD,M15)	[JOURNAL] OPEN BUY USDJPY | Lot=0.15 Entry=159.33600 SL=159.22496 TP=159.55807 | #163249104 | EMA
+EK	0	08:48:48.498	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
+CG	0	08:48:48.498	PropFirmBot (EURUSD,M15)	[TRADE] USDJPY BUY | Lot=0.15 | SL=159.22496 | TP=159.55807 | RR=2.0 | #163249104
+IK	0	08:48:48.498	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 
-=== DONE 2026-03-16 08:45:29 UTC ===
+=== DONE 2026-03-16 08:49:02 UTC ===
 EXIT_CODE=0
