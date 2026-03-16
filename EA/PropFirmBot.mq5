@@ -450,7 +450,9 @@ void OnTick()
    // ============================================
    // STEP 6: NEW BAR LOGIC (signal scanning)
    // ============================================
-   datetime current_bar = iTime(_Symbol, InpEntryTF, 0);
+   // Use first traded symbol for bar timing (not _Symbol which is the chart symbol)
+   string bar_symbol = (g_symbol_count > 0) ? g_symbols[0] : _Symbol;
+   datetime current_bar = iTime(bar_symbol, InpEntryTF, 0);
    if(current_bar == g_last_bar_time)
       return;  // Same bar - no new signal scan
    g_last_bar_time = current_bar;
@@ -711,7 +713,7 @@ void DetectClosedTrades()
          string exit_reason = "Unknown";
 
          // Look in recent deals
-         HistorySelect(TimeCurrent() - 300, TimeCurrent()); // Last 5 minutes
+         HistorySelect(TimeCurrent() - 3600, TimeCurrent()); // Last hour
          int deals = HistoryDealsTotal();
          for(int d = deals - 1; d >= 0; d--)
          {
@@ -838,8 +840,8 @@ void CheckDailyReport()
    MqlDateTime dt;
    TimeToStruct(TimeGMT(), dt);
 
-   // Send daily report at 17:00 UTC (after NY close)
-   if(dt.hour == 17 && dt.min == 0)
+   // Send daily report at 17:00+ UTC (after NY close), once per day
+   if(dt.hour >= 17)
    {
       datetime today = iTime(_Symbol, PERIOD_D1, 0);
       if(today > g_last_daily_report)

@@ -354,9 +354,9 @@ bool CSignalEngine::DetectBullishFVG(int shift, double &fvg_high, double &fvg_lo
 
    for(int i = shift + 1; i < shift + m_ob_lookback - 1; i++)
    {
-      // Bullish FVG: gap between candle[i+1].high and candle[i-1].low
-      double gap_low  = rates[i+1].high;  // Top of candle before the impulse
-      double gap_high = rates[i-1].low;   // Bottom of candle after the impulse
+      // Bullish FVG: gap between candle[i+1].high (top of pre-impulse) and candle[i-1].low (bottom of post-impulse)
+      double gap_low  = rates[i+1].high;  // Top of candle before the impulse (lower boundary of gap)
+      double gap_high = rates[i-1].low;   // Bottom of candle after the impulse (upper boundary of gap)
 
       if(gap_high <= gap_low) continue; // No gap
 

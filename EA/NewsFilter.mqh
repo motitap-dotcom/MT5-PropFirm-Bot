@@ -165,6 +165,14 @@ bool CNewsFilter::IsCurrencyRelevant(string currency)
       if(m_currencies[i] == currency)
          return true;
    }
+   // XAU/GOLD: match gold-related news even though calendar uses "XAU" or "Gold"
+   if(currency == "XAU" || currency == "GOLD" || currency == "Gold")
+   {
+      for(int i = 0; i < m_currency_count; i++)
+      {
+         if(m_currencies[i] == "XAU") return true;
+      }
+   }
    return false;
 }
 

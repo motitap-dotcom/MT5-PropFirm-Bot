@@ -219,9 +219,9 @@ void CTradeAnalyzer::RecordTrade(string symbol, string direction, string strateg
    m_history[m_history_count].hour        = dt.hour;
    m_history[m_history_count].session     = GetSessionFromHour(dt.hour);
 
-   // Calculate actual R:R
+   // Calculate actual R:R (positive for wins, negative for losses)
    if(sl_distance > 0)
-      m_history[m_history_count].rr_actual = MathAbs(pnl_pips) / (sl_distance > 0 ? sl_distance : 1);
+      m_history[m_history_count].rr_actual = pnl_pips / sl_distance;
    else
       m_history[m_history_count].rr_actual = 0;
 

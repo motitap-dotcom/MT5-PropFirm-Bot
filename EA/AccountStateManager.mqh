@@ -334,6 +334,7 @@ void CAccountStateManager::RecordTradingActivity()
                   m_trading_days,
                   m_trading_days,
                   m_phase == PHASE_CHALLENGE ? m_challenge_min_days : 0);
+                  // Note: m_phase comparison is correct (enum check)
    }
 }
 
