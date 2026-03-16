@@ -71,6 +71,10 @@ private:
    int      m_daily_trade_count;
    double   m_max_equity_drop_pct;  // Flash crash guard
 
+   // Circuit breaker auto-reset
+   datetime m_circuit_breaker_time;     // When circuit breaker was triggered
+   int      m_circuit_breaker_hours;    // Auto-reset after N hours (0=disabled, use daily reset only)
+
    // Connection monitor
    datetime m_last_tick_time;
    int      m_tick_gap_limit_sec;
@@ -87,11 +91,16 @@ private:
    // Alerts
    datetime m_last_alert_time;
 
+   // Remote reset trigger
+   string   m_reset_trigger_file;
+
    void     DoAlert(string msg, bool critical = false);
    void     Log(string msg);
    void     ForceCloseAll(string reason);
    double   CalcDailyDD();
    double   CalcTotalDD();
+   void     CheckRemoteReset();
+   void     CheckCircuitBreakerTimeout();
 
 public:
             CGuardian();
@@ -164,6 +173,8 @@ CGuardian::CGuardian()
    m_max_daily_trades = 15;
    m_daily_trade_count = 0;
    m_max_equity_drop_pct = 2.0;
+   m_circuit_breaker_time = 0;
+   m_circuit_breaker_hours = 4;  // Auto-reset after 4 hours
    m_last_tick_time = 0;
    m_tick_gap_limit_sec = 120;
    m_conn_failures = 0;
@@ -174,6 +185,7 @@ CGuardian::CGuardian()
    m_today_profit = 0;
    m_today_loss = 0;
    m_last_alert_time = 0;
+   m_reset_trigger_file = "PropFirmBot/guardian_reset.txt";
 }
 
 //+------------------------------------------------------------------+
@@ -283,16 +295,21 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
 
    OnTickReceived();
 
+   // Remote reset trigger (file-based, allows reset without restart)
+   CheckRemoteReset();
+
+   // Circuit breaker auto-reset after N hours
+   CheckCircuitBreakerTimeout();
+
    // Day rollover
    datetime day = iTime(_Symbol, PERIOD_D1, 0);
    if(day > m_daily_reset_time)
    {
       OnNewDay();
-      // Verify reset worked - log state after OnNewDay
-      Log(StringFormat("POST-RESET: state=%s consec=%d halt_msg=%s conn=%s",
+      // Verify reset worked
+      Log(StringFormat("POST-RESET: state=%s consec=%d halt=%s",
           EnumToString(m_state), m_consec_losses,
-          m_halt_message != "" ? m_halt_message : "none",
-          m_conn_healthy ? "OK" : "BAD"));
+          m_halt_message != "" ? m_halt_message : "none"));
    }
 
    // Update equity tracking
@@ -414,6 +431,8 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
       m_state = GUARDIAN_HALTED;
       m_halt_reason = HALT_CONSEC_LOSSES;
       m_halt_message = StringFormat("%d consecutive losses - circuit breaker", m_consec_losses);
+      if(m_circuit_breaker_time == 0)
+         m_circuit_breaker_time = TimeCurrent();  // Record when CB triggered
       DoAlert(m_halt_message);
       return m_state;
    }
@@ -497,6 +516,7 @@ void CGuardian::OnNewDay()
    // Save previous state for logging
    string prev_state = EnumToString(m_state);
    int prev_consec = m_consec_losses;
+   string prev_reason = EnumToString(m_halt_reason);
 
    m_daily_open_balance = AccountInfoDouble(ACCOUNT_BALANCE);
    m_daily_reset_time = iTime(_Symbol, PERIOD_D1, 0);
@@ -506,12 +526,14 @@ void CGuardian::OnNewDay()
    m_today_profit = 0;
    m_today_loss = 0;
 
-   // Reset consecutive losses counter on new day
+   // ALWAYS reset consecutive losses on new day - no conditions
    m_consec_losses = 0;
+   m_circuit_breaker_time = 0;
 
-   // Re-enable if was soft-halted (not emergency/shutdown)
-   // Also re-enable CAUTION states so circuit breaker fully resets
-   if((m_state == GUARDIAN_HALTED || m_state == GUARDIAN_CAUTION) &&
+   // Re-enable if was halted/cautioned (not emergency/shutdown/manual/target)
+   if(m_state != GUARDIAN_ACTIVE &&
+      m_state != GUARDIAN_EMERGENCY &&
+      m_state != GUARDIAN_SHUTDOWN &&
       m_halt_reason != HALT_TARGET_REACHED &&
       m_halt_reason != HALT_MANUAL)
    {
@@ -520,9 +542,71 @@ void CGuardian::OnNewDay()
       m_halt_message = "";
    }
 
-   Log(StringFormat("=== NEW DAY === Bal=$%.2f PnL=$%.2f (%.2f%%) | Reset: %s(consec=%d) -> %s(consec=%d)",
+   Log(StringFormat("=== NEW DAY === Bal=$%.2f PnL=$%.2f (%.2f%%) | %s(%s,consec=%d) -> %s(consec=%d)",
        m_daily_open_balance, m_daily_open_balance - m_initial_balance, ProfitPct(),
-       prev_state, prev_consec, EnumToString(m_state), m_consec_losses));
+       prev_state, prev_reason, prev_consec, EnumToString(m_state), m_consec_losses));
+}
+
+//+------------------------------------------------------------------+
+void CGuardian::CheckCircuitBreakerTimeout()
+{
+   // Auto-reset circuit breaker after N hours (prevents permanent lockout)
+   if(m_circuit_breaker_hours <= 0) return;
+   if(m_circuit_breaker_time == 0) return;
+   if(m_halt_reason != HALT_CONSEC_LOSSES) return;
+
+   int elapsed_sec = (int)(TimeCurrent() - m_circuit_breaker_time);
+   int timeout_sec = m_circuit_breaker_hours * 3600;
+
+   if(elapsed_sec >= timeout_sec)
+   {
+      Log(StringFormat("CIRCUIT BREAKER AUTO-RESET after %d hours (was %d consec losses)",
+          m_circuit_breaker_hours, m_consec_losses));
+      m_consec_losses = 0;
+      m_circuit_breaker_time = 0;
+      m_state = GUARDIAN_ACTIVE;
+      m_halt_reason = HALT_NONE;
+      m_halt_message = "";
+      DoAlert("Circuit breaker auto-reset - trading resumed", true);
+   }
+}
+
+//+------------------------------------------------------------------+
+void CGuardian::CheckRemoteReset()
+{
+   // Check for remote reset trigger file
+   // Create file "PropFirmBot/guardian_reset.txt" on VPS to trigger reset
+   if(!FileIsExist(m_reset_trigger_file)) return;
+
+   // Read the file content (optional reason)
+   string reason = "remote trigger";
+   int handle = FileOpen(m_reset_trigger_file, FILE_READ|FILE_TXT);
+   if(handle != INVALID_HANDLE)
+   {
+      if(!FileIsEnding(handle))
+         reason = FileReadString(handle);
+      FileClose(handle);
+   }
+
+   // Delete the trigger file so it doesn't fire again
+   FileDelete(m_reset_trigger_file);
+
+   // Perform reset (same as ManualResume but with logging)
+   if(m_state == GUARDIAN_SHUTDOWN)
+   {
+      Log("REMOTE RESET rejected: state is SHUTDOWN");
+      return;
+   }
+
+   string prev_state = EnumToString(m_state);
+   m_state = GUARDIAN_ACTIVE;
+   m_halt_reason = HALT_NONE;
+   m_halt_message = "";
+   m_consec_losses = 0;
+   m_circuit_breaker_time = 0;
+
+   Log(StringFormat("REMOTE RESET: %s -> ACTIVE | Reason: %s", prev_state, reason));
+   DoAlert(StringFormat("Remote reset: %s -> ACTIVE (%s)", prev_state, reason), true);
 }
 
 //+------------------------------------------------------------------+
@@ -532,7 +616,14 @@ void CGuardian::OnTickReceived()
    if(m_last_tick_time > 0)
    {
       int gap = (int)(now - m_last_tick_time);
-      if(gap > m_tick_gap_limit_sec)
+      // Ignore gaps > 1 hour (weekend/maintenance) - not a real connection issue
+      if(gap > 3600)
+      {
+         // Weekend or long maintenance gap - reset connection state
+         m_conn_healthy = true;
+         m_conn_failures = 0;
+      }
+      else if(gap > m_tick_gap_limit_sec)
       {
          m_conn_failures++;
          m_conn_healthy = false;

@@ -48,7 +48,7 @@ jobs:
           sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} bash -c "'
             cd \"${EA_DIR}\"
             # Use MetaEditor to compile
-            WINEPREFIX=/root/.wine wine \"/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe\" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
+            WINEPREFIX=/root/.wine wine \"/root/.wine/drive_c/Program Files/MetaTrader 5/MetaEditor64.exe\" /compile:PropFirmBot.mq5 /log 2>/dev/null || true
             sleep 3
             ls -la *.ex5 2>/dev/null && echo \"Compilation OK\" || echo \"Warning: .ex5 not updated\"
           '" > deploy_report.txt 2>&1 || true
