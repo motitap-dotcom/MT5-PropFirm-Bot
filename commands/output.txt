@@ -1,82 +1,66 @@
-=== MT5 RESTART 2026-03-16 08:48:17 UTC ===
---- Attempting EA recompile ---
-wine: failed to open "/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe"
-MetaEditor compile returned error (may still work)
-ex5 file:
+=== FIND METAEDITOR 2026-03-16 08:53:12 UTC ===
+--- Searching for MetaEditor ---
+
+--- MT5 directory contents ---
+total 256940
+drwxr-xr-x 11 root root      4096 Mar 11 18:31 .
+drwxr-xr-x  8 root root      4096 Mar 10 12:49 ..
+drwxr-xr-x  6 root root      4096 Mar  4 14:59 Bases
+drwxr-xr-x  3 root root      4096 Mar  5 14:52 Config
+drwxr-xr-x 14 root root      4096 Mar  5 10:59 MQL5
+-rwxr-xr-x  1 root root 108131648 Mar 10 12:49 MetaEditor64.exe
+drwxr-xr-x  5 root root      4096 Feb 22 18:22 Profiles
+drwxr-xr-x  2 root root      4096 Feb 22 18:22 Sounds
+-rw-r--r--  1 root root    410598 Mar 10 12:49 Terminal.ico
+drwxr-xr-x  4 root root      4096 Mar  4 13:59 Tester
+-rw-r--r--  1 root root      6554 Mar  5 09:56 compile.log
+drwxr-xr-x  4 root root      4096 Mar 16 08:48 config
+drwxr-xr-x  2 root root      4096 Mar 16 02:41 logs
+-rwxr-xr-x  1 root root  21281696 Mar 10 12:49 metatester64.exe
+drwxr-xr-x  3 root root      4096 Mar  5 12:45 profiles
+-rw-r--r--  1 root root       144 Mar  6 12:04 terminal.ini
+-rwxr-xr-x  1 root root 110394528 Mar 10 12:49 terminal64.exe
+-rwxr-xr-x  1 root root  22821632 Mar 10 12:49 uninstall.exe
+
+--- Other possible MT5 locations ---
+/root/.wine/drive_c/Program Files/FundedNext MT5 Terminal/terminal64.exe
+/root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
+
+--- Running MT5 process ---
+root     1703598  0.1  0.1 2686336 13756 ?       S<   08:48   0:00 start.exe /exec /root/.wine/drive_c/Program Files/MetaTrader 5/terminal64.exe
+root     1703678 30.9  2.9 2232748 237992 ?      S<l  08:48   1:27 C:\Program Files\MetaTrader 5\terminal64.exe /portable
+
+--- EA files on VPS ---
+total 2268
+drwxr-xr-x 2 root root   4096 Mar 12 13:05 .
+drwxr-xr-x 6 root root   4096 Mar 10 16:03 ..
+-rw-r--r-- 1 root root  15380 Mar 16 08:45 AccountStateManager.mqh
+-rw-r--r-- 1 root root  12411 Mar 16 08:45 Dashboard.mqh
+-rw-r--r-- 1 root root  22396 Mar 16 08:45 Guardian.mqh
+-rw-r--r-- 1 root root  10622 Mar 16 08:45 NewsFilter.mqh
+-rw-r--r-- 1 root root  11971 Mar 16 08:45 Notifications.mqh
 -rw-r--r-- 1 root root 219554 Mar 12 13:05 PropFirmBot.ex5
+-rw-r--r-- 1 root root 209004 Mar 10 21:40 PropFirmBot.ex5.bak
+-rw-r--r-- 1 root root 163174 Mar  3 19:39 PropFirmBot.ex5.bak2
+-rw-r--r-- 1 root root 163340 Mar  5 09:47 PropFirmBot.ex5.bak_20260305_0947
+-rw-r--r-- 1 root root 164872 Mar  6 12:59 PropFirmBot.ex5.bak_20260306_1259
+-rw-r--r-- 1 root root 209004 Mar 10 20:36 PropFirmBot.ex5.bak_20260310_2036
+-rw-r--r-- 1 root root 209004 Mar 10 20:53 PropFirmBot.ex5.bak_20260310_2053
+-rw-r--r-- 1 root root 209004 Mar 10 21:10 PropFirmBot.ex5.bak_20260310_2110
+-rw-r--r-- 1 root root 164640 Mar  5 11:25 PropFirmBot.ex5.bak_before_param_fix
+-rw-r--r-- 1 root root 162634 Mar  4 14:15 PropFirmBot.ex5.bak_before_recompile
+-rw-r--r-- 1 root root 163578 Mar  4 12:33 PropFirmBot.ex5.before_update
+-rw-r--r-- 1 root root   6084 Mar 11 18:31 PropFirmBot.log
+-rw-r--r-- 1 root root  34704 Mar 16 08:45 PropFirmBot.mq5
+-rw-r--r-- 1 root root  25420 Mar 16 08:45 RiskManager.mqh
+-rw-r--r-- 1 root root  25335 Mar 16 08:45 SignalEngine.mqh
+-rw-r--r-- 1 root root   8535 Mar 16 08:45 StatusWriter.mqh
+-rw-r--r-- 1 root root  22240 Mar 16 08:45 TradeAnalyzer.mqh
+-rw-r--r-- 1 root root   9141 Mar 16 08:45 TradeJournal.mqh
+-rw-r--r-- 1 root root  14433 Mar 16 08:45 TradeManager.mqh
 
---- Stopping MT5 ---
-Killing MT5 PID=439598
-MT5 stopped
+--- Guardian.mqh fix check ---
+FIX IS PRESENT in source files
 
---- Starting MT5 ---
-MT5 starting... PID=1703598
-Waiting 30 seconds for MT5 to start and load EA...
-
---- Verification ---
-MT5: RUNNING (PID=1703598)
-
---- Status after restart ---
-{
-  "timestamp": "2026.03.16 11:48:55",
-  "server_time": "2026.03.16 11:48:55",
-  "gmt_time": "2026.03.16 08:48:55",
-  "account": {
-    "number": 11797849,
-    "name": "FundedNext-Stellar Instant Account- moti tapiro",
-    "server": "FundedNext-Server",
-    "currency": "USD",
-    "leverage": 30,
-    "balance": 1996.45,
-    "equity": 1994.71,
-    "margin": 1029.92,
-    "free_margin": 964.79,
-    "floating_pnl": -1.74,
-    "initial_balance": 1998.34,
-    "total_pnl": -3.63,
-    "profit_percent": -0.18
-  },
-  "guardian": {
-    "state": "ACTIVE",
-    "daily_dd": 0.18,
-    "total_dd": 0.18,
-    "halt_message": "",
-    "connection_ok": true,
-    "can_trade": true
-  },
-  "today": {
-    "trades": 2,
-    "wins": 0,
-    "losses": 0,
-    "profit": 0.00,
-    "loss": 0.00,
-    "net": 0.00,
-    "consec_losses": 0
-  },
-  "positions": {
-    "count": 2,
-    "open": [{"ticket":163249104,"symbol":"USDJPY","type":"BUY","volume":0.15,"open_price":159.33600,"current_price":159.32900,"sl":159.22500,"tp":159.55800,"profit":-0.66,"pips":-0.7,"open_time":"2026.03.16 11:48","comment":"PFBot_EMA"},{"ticket":163249103,"symbol":"GBPUSD","type":"SELL","volume":0.12,"open_price":1.32480,"current_price":1.32489,"sl":1.32561,"tp":1.32318,"profit":-1.08,"pips":-0.9,"open_time":"2026.03.16 11:48","comment":"PFBot_EMA"}]
-  }
-}
---- Latest EA Log (last 15 lines) ---
-basename: extra operand ‘5/MQL5/Logs/20260316.log’
-Try 'basename --help' for more information.
-Log file: 
-GM	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[JOURNAL] OPEN SELL GBPUSD | Lot=0.12 Entry=1.32480 SL=1.32561 TP=1.32318 | #163249103 | EMA
-QQ	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
-QQ	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[TRADE] GBPUSD SELL | Lot=0.12 | SL=1.32561 | TP=1.32318 | RR=2.0 | #163249103
-LR	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - checking EMA strategy...
-ID	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[EMA] USDJPY no signal | CrossUp=N RecentUp=N MomBuy=N | CrossDn=N RecentDn=N MomSell=N | RSI=45.8 HTF=1 | EMAGap=-2.6bp
-HO	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - EMA: NO SIGNAL (details logged above)
-QG	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[SMC] BUY signal: Entry=159.33600 SL=159.22496 TP=159.55807 | LiqSweep=N OB=Y FVG=N
-OH	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - SMC fallback: GOT SIGNAL BUY
-JJ	0	08:48:48.229	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1998.34 Risk$=10.49 SL_pts=0.1 Lot=0.15
-JG	0	08:48:48.498	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY opened: USDJPY Lot=0.15 Entry=159.33600 SL=159.22500 TP=159.55800 Ticket=163249104
-OH	0	08:48:48.498	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.16 11:48:48] Trade #2 opened | DailyDD=0.00% TotalDD=0.00%
-NH	0	08:48:48.498	PropFirmBot (EURUSD,M15)	[JOURNAL] OPEN BUY USDJPY | Lot=0.15 Entry=159.33600 SL=159.22496 TP=159.55807 | #163249104 | EMA
-EK	0	08:48:48.498	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
-CG	0	08:48:48.498	PropFirmBot (EURUSD,M15)	[TRADE] USDJPY BUY | Lot=0.15 | SL=159.22496 | TP=159.55807 | RR=2.0 | #163249104
-IK	0	08:48:48.498	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-
-=== DONE 2026-03-16 08:49:02 UTC ===
+=== DONE 2026-03-16 08:53:12 UTC ===
 EXIT_CODE=0
