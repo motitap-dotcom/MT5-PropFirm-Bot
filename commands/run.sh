@@ -1,75 +1,64 @@
 #!/bin/bash
-# Full status check - triggered 2026-03-16
-echo "=== BOT STATUS CHECK $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+# Check when losses happened and daily reset logic - 2026-03-16b
+echo "=== TRADE HISTORY & DAILY RESET CHECK $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_LOG_DIR="${MT5_BASE}/MQL5/Logs"
 EA_FILES_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
-TERM_LOG_DIR="${MT5_BASE}/logs"
 
-# 1. MT5 process
-echo "--- MT5 Process ---"
-if pgrep -f terminal64 > /dev/null 2>&1; then
-    MT5_PID=$(pgrep -f "terminal64.exe" | head -1)
-    UPTIME=$(ps -o etime= -p "$MT5_PID" 2>/dev/null)
-    echo "MT5: RUNNING (PID=$MT5_PID, uptime=$UPTIME)"
+# 1. List all log files (last 5 days)
+echo "--- Available Log Files ---"
+ls -lt "$EA_LOG_DIR"/*.log 2>/dev/null | head -10
+
+# 2. Yesterday's log - find trade/loss entries
+echo ""
+echo "--- Yesterday's Log (20260315) - Trades & Losses ---"
+YESTERDAY_LOG="$EA_LOG_DIR/20260315.log"
+if [ -f "$YESTERDAY_LOG" ]; then
+    echo "File size: $(wc -c < "$YESTERDAY_LOG") bytes"
+    grep -i -E "trade|buy|sell|order|close|profit|loss|LOSS|consec|circuit|NEWBAR.*Guardian" "$YESTERDAY_LOG" 2>/dev/null | tail -40
 else
-    echo "MT5: NOT RUNNING!"
+    echo "Yesterday's log not found. Checking other recent logs..."
+    ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -5
 fi
 
-# 2. Status.json
+# 3. Today's log - find DAILY RESET and trade entries
 echo ""
-echo "--- status.json ---"
-if [ -f "$EA_FILES_DIR/status.json" ]; then
-    cat "$EA_FILES_DIR/status.json" 2>&1
+echo "--- Today's Log (20260316) - Daily Reset & Trades ---"
+TODAY_LOG="$EA_LOG_DIR/20260316.log"
+if [ -f "$TODAY_LOG" ]; then
+    echo "File size: $(wc -c < "$TODAY_LOG") bytes"
+    echo ""
+    echo ">> Looking for DAILY RESET:"
+    grep -i -E "daily.?reset|new.?day|reset|m_consec|ACTIVE" "$TODAY_LOG" 2>/dev/null | head -20
+    echo ""
+    echo ">> Looking for trades/losses:"
+    grep -i -E "trade|buy|sell|order|close|profit|LOSS|consec|circuit" "$TODAY_LOG" 2>/dev/null | head -30
+    echo ""
+    echo ">> First 30 lines of today's log:"
+    head -30 "$TODAY_LOG" 2>&1
+    echo ""
+    echo ">> HEARTBEAT entries (shows state changes):"
+    grep -i "HEARTBEAT" "$TODAY_LOG" 2>/dev/null
 else
-    echo "status.json not found"
+    echo "Today's log not found!"
 fi
 
-# 3. Account state config
+# 4. Check the DailyReset function timing
 echo ""
-echo "--- account_state.json ---"
-if [ -f "$EA_FILES_DIR/account_state.json" ]; then
-    cat "$EA_FILES_DIR/account_state.json" 2>&1
-else
-    echo "account_state.json not found"
-fi
+echo "--- Server Time vs GMT ---"
+echo "Current UTC: $(date -u '+%Y-%m-%d %H:%M:%S')"
+echo "Note: MT5 server time may differ from UTC. Check status.json for both."
 
-# 4. Latest EA log (last 50 lines)
+# 5. Status.json for current state
 echo ""
-echo "--- Latest EA Log (last 50 lines) ---"
-TODAY_LOG=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
-if [ -n "$TODAY_LOG" ]; then
-    echo "Log file: $TODAY_LOG"
-    tail -50 "$TODAY_LOG" 2>&1
-else
-    echo "No EA log files found"
-fi
+echo "--- Current status.json ---"
+cat "$EA_FILES_DIR/status.json" 2>/dev/null
 
-# 5. Open positions / recent trades
+# 6. Journal files
 echo ""
-echo "--- Recent Trade Entries ---"
-if [ -n "$TODAY_LOG" ]; then
-    grep -i -E "order|trade|buy|sell|position|open|close|profit|loss" "$TODAY_LOG" 2>/dev/null | tail -20 || echo "No trade entries"
-fi
-
-# 6. Guardian state
-echo ""
-echo "--- Guardian Entries ---"
-if [ -n "$TODAY_LOG" ]; then
-    grep -i -E "guardian|drawdown|DD|safety|halt|emergency|shutdown" "$TODAY_LOG" 2>/dev/null | tail -10 || echo "No guardian entries"
-fi
-
-# 7. Trade journal
-echo ""
-echo "--- Recent Trade Journal ---"
-find "$EA_FILES_DIR" -name "*Journal*" -mtime -7 -exec echo "File: {}" \; -exec tail -10 {} \; 2>/dev/null || echo "No journal files"
-
-# 8. Disk & Wine
-echo ""
-echo "--- System ---"
-df -h / | tail -1
-echo "Wine processes: $(pgrep -c -f wine 2>/dev/null || echo 0)"
+echo "--- Trade Journal Files ---"
+find "$EA_FILES_DIR" -name "*Journal*" -exec echo "File: {}" \; -exec cat {} \; 2>/dev/null
 
 echo ""
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
