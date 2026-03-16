@@ -26,6 +26,8 @@ private:
    double            m_total_dd_guard_pct;    // Total DD guard % (7% = stop before 10% limit)
    double            m_daily_start_balance;   // Balance at start of day
    datetime          m_daily_reset_time;      // When daily tracking resets
+   bool              m_trailing_dd;           // true = DD from equity HWM (Stellar Instant)
+   double            m_equity_high_water;     // Equity high water mark for trailing DD
 
    // Spread filter
    double            m_max_spread_major;      // Max spread for major pairs (pips)
@@ -125,6 +127,8 @@ CRiskManager::CRiskManager()
    m_total_dd_guard_pct = 7.0;
    m_daily_start_balance= 0;
    m_daily_reset_time   = 0;
+   m_trailing_dd        = false;
+   m_equity_high_water  = 0;
    m_max_spread_major   = 3.0;
    m_max_spread_xau     = 45.0;
    m_london_start_hour  = 7;
@@ -172,9 +176,15 @@ void CRiskManager::Init(double account_size,
    m_daily_start_balance = m_initial_balance;
    m_daily_reset_time    = iTime(_Symbol, PERIOD_D1, 0);
 
-   PrintFormat("[RiskMgr] Init: Balance=%.2f | Risk=%.2f%% | MaxPos=%d | DailyDD=%.1f%% | TotalDD=%.1f%%",
+   // Detect trailing DD mode (Stellar Instant: daily DD guard is 0 or disabled)
+   m_trailing_dd = (daily_dd_guard <= 0);
+   m_equity_high_water = AccountInfoDouble(ACCOUNT_EQUITY);
+   if(m_equity_high_water <= 0) m_equity_high_water = m_initial_balance;
+
+   PrintFormat("[RiskMgr] Init: Balance=%.2f | Risk=%.2f%% | MaxPos=%d | DailyDD=%.1f%% | TotalDD=%.1f%% | %s DD",
                m_initial_balance, m_risk_per_trade, m_max_open_positions,
-               m_daily_dd_guard_pct, m_total_dd_guard_pct);
+               m_daily_dd_guard_pct, m_total_dd_guard_pct,
+               m_trailing_dd ? "TRAILING" : "FIXED");
 }
 
 //+------------------------------------------------------------------+
@@ -400,12 +410,27 @@ bool CRiskManager::IsDailyDrawdownOK()
 bool CRiskManager::IsTotalDrawdownOK()
 {
    double equity = AccountInfoDouble(ACCOUNT_EQUITY);
-   double total_pnl = equity - m_initial_balance;
+
+   // Update equity high water mark
+   if(equity > m_equity_high_water)
+      m_equity_high_water = equity;
+
    double total_dd_pct = 0;
 
-   if(m_initial_balance > 0)
-      total_dd_pct = (-total_pnl / m_initial_balance) * 100.0;
+   if(m_trailing_dd)
+   {
+      // TRAILING DD: measured from equity high water mark (matches Guardian.mqh)
+      if(m_equity_high_water > 0)
+         total_dd_pct = ((m_equity_high_water - equity) / m_equity_high_water) * 100.0;
+   }
+   else
+   {
+      // FIXED DD: measured from initial balance
+      if(m_initial_balance > 0)
+         total_dd_pct = ((m_initial_balance - equity) / m_initial_balance) * 100.0;
+   }
 
+   if(total_dd_pct < 0) total_dd_pct = 0;
    return total_dd_pct < m_total_dd_guard_pct;
 }
 
@@ -653,8 +678,10 @@ double CRiskManager::GetDailyDrawdownRemaining()
 //+------------------------------------------------------------------+
 double CRiskManager::GetTotalDrawdownRemaining()
 {
-   double guard_amount = m_initial_balance * (m_total_dd_guard_pct / 100.0);
-   double current_loss = m_initial_balance - AccountInfoDouble(ACCOUNT_EQUITY);
+   double equity = AccountInfoDouble(ACCOUNT_EQUITY);
+   double baseline = m_trailing_dd ? m_equity_high_water : m_initial_balance;
+   double guard_amount = baseline * (m_total_dd_guard_pct / 100.0);
+   double current_loss = baseline - equity;
    if(current_loss < 0) current_loss = 0;
    return guard_amount - current_loss;
 }

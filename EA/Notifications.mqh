@@ -257,8 +257,8 @@ string CNotifications::FormatDailyReport(double balance, double equity, double d
       "Equity: $%.2f\n"
       "Daily PnL: $%+.2f\n"
       "Trades: W%d L%d (%.0f%%)\n"
-      "Daily DD: %.2f%% / 5%%\n"
-      "Total DD: %.2f%% / 10%%",
+      "Daily DD: %.2f%% (no limit)\n"
+      "Trailing DD: %.2f%% / 6%%",
       pnl_emoji, balance, equity, daily_pnl,
       wins, losses, wr,
       daily_dd, total_dd);

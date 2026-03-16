@@ -11,12 +11,19 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from data_fetcher import (
-    add_indicators,
-    fetch_and_cache,
-    load_from_csv,
-    DEFAULT_SYMBOLS,
-)
+try:
+    from data_fetcher import (
+        add_indicators,
+        fetch_and_cache,
+        load_from_csv,
+        DEFAULT_SYMBOLS,
+    )
+except ImportError:
+    # Allow importing Backtester without MetaTrader5 installed (for testing)
+    add_indicators = None
+    fetch_and_cache = None
+    load_from_csv = None
+    DEFAULT_SYMBOLS = ["EURUSD", "GBPUSD", "USDJPY", "XAUUSD"]
 
 # --- Configuration ---
 CONFIG_DIR = Path(__file__).parent.parent / "configs"
@@ -65,6 +72,8 @@ class BacktestConfig:
     ny_end: int = 16
     strategy: str = "SMC"            # "SMC" or "EMA" or "BOTH"
     challenge_mode: bool = True
+    consistency_rule: bool = True
+    consistency_max_day_pct: float = 40.0  # Max % of total profit from single day
 
 
 class Backtester:
@@ -89,6 +98,9 @@ class Backtester:
         self.daily_dd_triggered = False
         self.total_dd_triggered = False
         self.trading_days = set()
+        self.equity_high_water = self.config.account_size
+        self.trailing_dd = self.config.daily_dd_guard <= 0  # Stellar Instant: no daily DD = trailing mode
+        self.daily_pnl_tracker: dict[str, float] = {}  # date_str -> daily profit
 
     def reset(self):
         """Reset backtester state."""
@@ -104,6 +116,9 @@ class Backtester:
         self.daily_dd_triggered = False
         self.total_dd_triggered = False
         self.trading_days = set()
+        self.equity_high_water = self.config.account_size
+        self.trailing_dd = self.config.daily_dd_guard <= 0
+        self.daily_pnl_tracker = {}
 
     def _get_pip_size(self, symbol: str) -> float:
         if "JPY" in symbol:
@@ -142,9 +157,16 @@ class Backtester:
         return dd_pct < self.config.daily_dd_guard
 
     def _is_total_dd_ok(self) -> bool:
-        if self.initial_balance <= 0:
-            return False
-        dd_pct = ((self.initial_balance - self.equity) / self.initial_balance) * 100
+        if self.trailing_dd:
+            # TRAILING DD: measured from equity high water mark (matches Guardian.mqh)
+            if self.equity_high_water <= 0:
+                return False
+            dd_pct = ((self.equity_high_water - self.equity) / self.equity_high_water) * 100
+        else:
+            # FIXED DD: measured from initial balance
+            if self.initial_balance <= 0:
+                return False
+            dd_pct = ((self.initial_balance - self.equity) / self.initial_balance) * 100
         return dd_pct < self.config.total_dd_guard
 
     def _calculate_lot(self, symbol: str, sl_distance_pips: float) -> float:
@@ -291,6 +313,10 @@ class Backtester:
             trade = self.open_positions.pop(idx)
             self.balance += trade.pnl
             self.trades.append(trade)
+            # Track daily PnL for consistency rule
+            if trade.exit_time is not None:
+                day_key = str(trade.exit_time.date()) if hasattr(trade.exit_time, 'date') else str(trade.exit_time)
+                self.daily_pnl_tracker[day_key] = self.daily_pnl_tracker.get(day_key, 0) + trade.pnl
 
     def _close_all_positions(self, row: pd.Series, reason: str):
         """Force close all open positions at current close price."""
@@ -310,6 +336,10 @@ class Backtester:
             trade.pnl = trade.pnl_pips * pip_value * trade.lot
             self.balance += trade.pnl
             self.trades.append(trade)
+            # Track daily PnL for consistency rule
+            if trade.exit_time is not None:
+                day_key = str(trade.exit_time.date()) if hasattr(trade.exit_time, 'date') else str(trade.exit_time)
+                self.daily_pnl_tracker[day_key] = self.daily_pnl_tracker.get(day_key, 0) + trade.pnl
 
         self.open_positions = []
 
@@ -375,6 +405,8 @@ class Backtester:
                         floating_pnl += ((trade.entry_price - price) / pip_size) * pip_value * trade.lot
 
             self.equity = self.balance + floating_pnl
+            if self.equity > self.equity_high_water:
+                self.equity_high_water = self.equity
 
             # Record equity curve
             self.equity_curve.append({
@@ -523,6 +555,19 @@ class Backtester:
             dd_pct = (dd / peak) * 100
             max_dd_pct = dd_pct.max()
 
+        # Consistency rule check
+        consistency_ok = True
+        consistency_worst_day_pct = 0
+        total_profit = sum(pnls)
+        if self.config.consistency_rule and total_profit > 0 and self.daily_pnl_tracker:
+            for day, day_pnl in self.daily_pnl_tracker.items():
+                if day_pnl > 0:
+                    day_pct = (day_pnl / total_profit) * 100
+                    if day_pct > consistency_worst_day_pct:
+                        consistency_worst_day_pct = day_pct
+                    if day_pct > self.config.consistency_max_day_pct:
+                        consistency_ok = False
+
         return {
             "total_trades": len(self.trades),
             "winning_trades": len(wins),
@@ -541,6 +586,8 @@ class Backtester:
             "trading_days": len(self.trading_days),
             "target_reached": self.target_reached,
             "sharpe_ratio": (np.mean(pnls) / np.std(pnls) * np.sqrt(252)) if np.std(pnls) > 0 else 0,
+            "consistency_ok": consistency_ok,
+            "consistency_worst_day_pct": round(consistency_worst_day_pct, 1),
         }
 
 
