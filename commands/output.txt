@@ -1,174 +1,91 @@
-=== TRADE HISTORY CHECK (UTF-16 fix) 2026-03-16 08:27:00 UTC ===
-====== FRIDAY March 13 ======
---- Trades on Friday ---
-QD	0	20:30:00.164	PropFirmBot (EURUSD,M15)	[NEWBAR] Blocked by Guardian: 5 consecutive losses - circuit breaker
-DD	0	20:30:15.269	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-FG	0	20:31:15.608	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-OR	0	20:32:15.983	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-NM	0	20:33:15.150	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-QH	0	20:34:15.512	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-HK	0	20:35:21.083	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-KF	0	20:36:24.707	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-CQ	0	20:37:29.073	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-HR	0	20:38:32.169	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-GM	0	20:39:32.925	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-OH	0	20:40:36.396	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-RK	0	20:41:41.934	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-OF	0	20:42:48.272	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-LQ	0	20:43:52.866	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-IL	0	20:44:54.868	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-IP	0	20:45:00.175	PropFirmBot (EURUSD,M15)	[NEWBAR] Blocked by Guardian: 5 consecutive losses - circuit breaker
-GH	0	20:45:54.203	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-OK	0	20:46:58.042	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-MF	0	20:47:58.652	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-PQ	0	20:49:00.566	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-EL	0	20:50:00.156	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-CO	0	20:51:00.230	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-IJ	0	20:52:00.206	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-QJ	0	20:53:04.632	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-DE	0	20:54:04.681	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-GP	0	20:55:05.479	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-RS	0	20:56:05.471	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-FN	0	20:57:06.048	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-LI	0	20:58:05.093	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+=== RESET CIRCUIT BREAKER 2026-03-16 08:45:13 UTC ===
+--- Pulling latest code ---
+fatal: couldn't find remote ref main
+Pull from main failed, trying current branch
+Already up to date.
 
---- Circuit Breaker on Friday ---
-OR	0	20:32:15.983	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-NM	0	20:33:15.150	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-QH	0	20:34:15.512	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-HK	0	20:35:21.083	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-KF	0	20:36:24.707	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-CQ	0	20:37:29.073	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-OM	0	20:37:44.966	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=253206 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-HR	0	20:38:32.169	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-GM	0	20:39:32.925	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-OH	0	20:40:36.396	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-RK	0	20:41:41.934	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-OF	0	20:42:48.272	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-LQ	0	20:43:52.866	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-IL	0	20:44:54.868	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-KR	0	20:45:00.175	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.13 23:45 (TF=PERIOD_M15) | Guardian=GUARDIAN_HALTED | Scanning 4 symbols...
-IP	0	20:45:00.175	PropFirmBot (EURUSD,M15)	[NEWBAR] Blocked by Guardian: 5 consecutive losses - circuit breaker
-GH	0	20:45:54.203	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-OK	0	20:46:58.042	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-MF	0	20:47:58.652	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-PQ	0	20:49:00.566	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-EL	0	20:50:00.156	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-CO	0	20:51:00.230	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-IJ	0	20:52:00.206	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-ED	0	20:52:45.019	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=254066 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-QJ	0	20:53:04.632	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-DE	0	20:54:04.681	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-GP	0	20:55:05.479	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-RS	0	20:56:05.471	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-FN	0	20:57:06.048	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-LI	0	20:58:05.093	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+--- Copying updated EA files ---
+Copied: EA/PropFirmBot.mq5
+Copied: EA/AccountStateManager.mqh
+Copied: EA/Dashboard.mqh
+Copied: EA/Guardian.mqh
+Copied: EA/NewsFilter.mqh
+Copied: EA/Notifications.mqh
+Copied: EA/RiskManager.mqh
+Copied: EA/SignalEngine.mqh
+Copied: EA/StatusWriter.mqh
+Copied: EA/TradeAnalyzer.mqh
+Copied: EA/TradeJournal.mqh
+Copied: EA/TradeManager.mqh
 
---- Daily Reset on Friday ---
+--- Recompiling EA ---
+-rw-r--r-- 1 root root 219554 Mar 12 13:05 PropFirmBot.ex5
 
-====== SUNDAY March 15 ======
---- State changes on Sunday ---
-LN	0	23:32:53.626	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-OI	0	23:33:53.215	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-KD	0	23:34:55.113	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-OG	0	23:35:55.363	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-ER	0	23:37:04.871	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-HM	0	23:38:04.305	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-RH	0	23:39:06.924	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-OK	0	23:40:07.164	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-KF	0	23:41:07.116	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-PQ	0	23:42:08.825	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-EL	0	23:43:08.111	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-EO	0	23:44:14.975	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-NG	0	23:45:00.139	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.16 02:45 (TF=PERIOD_M15) | Guardian=GUARDIAN_HALTED | Scanning 4 symbols...
-RG	0	23:45:00.139	PropFirmBot (EURUSD,M15)	[NEWBAR] Blocked by Guardian: 5 consecutive losses - circuit breaker
-OK	0	23:45:15.283	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-IF	0	23:46:15.132	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-LP	0	23:47:00.289	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=263026 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-RF	0	23:47:15.266	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-HQ	0	23:48:15.052	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-JL	0	23:49:15.141	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-PO	0	23:50:15.327	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-MJ	0	23:51:15.123	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-LE	0	23:52:15.189	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-LP	0	23:53:15.122	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-HS	0	23:54:15.129	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-QN	0	23:55:15.145	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-RI	0	23:56:15.121	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-HD	0	23:57:15.191	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-GG	0	23:58:15.135	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-QR	0	23:59:19.473	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+--- Waiting for MT5 to detect new EA ---
 
-First 10 lines of Sunday log:
-﻿PN	0	21:01:38.481	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=254494 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-CP	0	21:01:38.529	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.16 00:01:38] === NEW DAY === Bal=$1998.34 PnL=$33.90 (1.73%)
-EN	0	21:01:38.529	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-JD	0	21:01:38.533	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.16 00:00 (TF=PERIOD_M15) | Guardian=GUARDIAN_HALTED | Scanning 4 symbols...
-CQ	0	21:01:38.533	PropFirmBot (EURUSD,M15)	[NEWBAR] Blocked by Guardian: 5 consecutive losses - circuit breaker
-DI	0	21:02:52.394	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-CD	0	21:03:52.385	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-PG	0	21:05:00.705	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-IR	0	21:06:03.900	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-KM	0	21:07:11.454	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+--- Status after reset ---
+{
+  "timestamp": "2026.03.16 11:45:29",
+  "server_time": "2026.03.16 11:45:29",
+  "gmt_time": "2026.03.16 08:45:29",
+  "account": {
+    "number": 11797849,
+    "name": "FundedNext-Stellar Instant Account- moti tapiro",
+    "server": "FundedNext-Server",
+    "currency": "USD",
+    "leverage": 30,
+    "balance": 1998.34,
+    "equity": 1998.34,
+    "margin": 0.00,
+    "free_margin": 1998.34,
+    "floating_pnl": 0.00,
+    "initial_balance": 1964.44,
+    "total_pnl": 33.90,
+    "profit_percent": 1.73
+  },
+  "guardian": {
+    "state": "HALTED",
+    "daily_dd": 0.00,
+    "total_dd": 3.11,
+    "halt_message": "5 consecutive losses - circuit breaker",
+    "connection_ok": true,
+    "can_trade": false
+  },
+  "today": {
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "profit": 0.00,
+    "loss": 0.00,
+    "net": 0.00,
+    "consec_losses": 5
+  },
+  "positions": {
+    "count": 0,
+    "open": []
+  }
+}
+--- Latest EA Log (last 20 lines) ---
+CD	0	08:27:59.185	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+NG	0	08:28:59.190	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+CR	0	08:29:59.046	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+OP	0	08:30:00.117	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.16 11:30 (TF=PERIOD_M15) | Guardian=GUARDIAN_HALTED | Scanning 4 symbols...
+KR	0	08:30:00.117	PropFirmBot (EURUSD,M15)	[NEWBAR] Blocked by Guardian: 5 consecutive losses - circuit breaker
+IN	0	08:30:59.132	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+DI	0	08:31:59.556	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+GE	0	08:32:19.900	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=310757 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
+MI	0	08:32:59.466	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+ED	0	08:33:59.058	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+GG	0	08:34:59.095	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+LR	0	08:35:59.066	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+HM	0	08:36:59.906	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+GH	0	08:38:01.278	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+FK	0	08:39:01.193	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+JF	0	08:40:01.616	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+EQ	0	08:41:01.216	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+NL	0	08:42:01.078	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+NO	0	08:43:01.079	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
+FJ	0	08:44:01.346	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
 
-Last 10 lines of Sunday log:
-PO	0	23:50:15.327	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-MJ	0	23:51:15.123	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-LE	0	23:52:15.189	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-LP	0	23:53:15.122	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-HS	0	23:54:15.129	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-QN	0	23:55:15.145	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-RI	0	23:56:15.121	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-HD	0	23:57:15.191	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-GG	0	23:58:15.135	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-QR	0	23:59:19.473	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-
-====== MONDAY March 16 (TODAY) ======
---- Daily Reset on Monday ---
-
-First 10 lines of today's log:
-﻿MR	0	00:00:00.196	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.16 03:00 (TF=PERIOD_M15) | Guardian=GUARDIAN_HALTED | Scanning 4 symbols...
-QP	0	00:00:00.204	PropFirmBot (EURUSD,M15)	[NEWBAR] Blocked by Guardian: 5 consecutive losses - circuit breaker
-PH	0	00:00:20.130	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-QK	0	00:01:20.110	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-KG	0	00:02:00.108	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=264501 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-DD	0	00:02:20.125	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-PG	0	00:03:20.496	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-DR	0	00:04:20.110	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-GM	0	00:05:20.224	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-GH	0	00:06:20.632	PropFirmBot (EURUSD,M15)	[ALERT] PropFirmBot: 5 consecutive losses - circuit breaker
-
---- All Heartbeats today ---
-IE	0	01:02:00.092	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=270859 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-MM	0	01:17:00.084	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=272960 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-PF	0	01:32:00.172	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=274759 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-OJ	0	01:47:01.345	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=276425 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-OO	0	02:02:01.303	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=277866 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-HP	0	02:17:01.140	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=279282 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-JD	0	02:32:01.172	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=280415 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-GL	0	02:47:02.406	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=281568 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-GP	0	03:02:02.109	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=282855 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-FE	0	03:17:03.534	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=284022 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-HN	0	03:32:03.118	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=285055 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-MR	0	03:47:07.664	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=285821 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-CJ	0	04:02:07.096	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=286498 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-FO	0	04:17:08.131	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=287152 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-IS	0	04:32:09.025	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=287957 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-NK	0	04:47:08.136	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=288447 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-ER	0	05:02:08.133	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=289572 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-IG	0	05:17:09.109	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=290475 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-EH	0	05:32:09.117	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=291405 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-KL	0	05:47:10.125	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=292287 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-KD	0	06:02:10.392	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=293648 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-NI	0	06:17:12.243	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=294928 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-FM	0	06:32:12.434	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=296277 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-OE	0	06:47:15.198	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=297325 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-II	0	07:02:15.148	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=298644 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-KR	0	07:17:16.250	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=300245 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-HG	0	07:32:16.452	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=301710 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-IK	0	07:47:16.757	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=304028 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-ML	0	08:02:16.069	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=305810 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-HQ	0	08:17:18.915	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=308050 | State=GUARDIAN_HALTED | Bal=$1998.34 | Eq=$1998.34 | DD=3.11% | Positions=0
-
-=== DONE 2026-03-16 08:27:00 UTC ===
+=== DONE 2026-03-16 08:45:29 UTC ===
 EXIT_CODE=0
