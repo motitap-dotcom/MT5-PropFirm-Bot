@@ -285,7 +285,15 @@ ENUM_GUARDIAN_STATE CGuardian::RunChecks()
 
    // Day rollover
    datetime day = iTime(_Symbol, PERIOD_D1, 0);
-   if(day > m_daily_reset_time) OnNewDay();
+   if(day > m_daily_reset_time)
+   {
+      OnNewDay();
+      // Verify reset worked - log state after OnNewDay
+      Log(StringFormat("POST-RESET: state=%s consec=%d halt_msg=%s conn=%s",
+          EnumToString(m_state), m_consec_losses,
+          m_halt_message != "" ? m_halt_message : "none",
+          m_conn_healthy ? "OK" : "BAD"));
+   }
 
    // Update equity tracking
    double eq = AccountInfoDouble(ACCOUNT_EQUITY);
@@ -486,6 +494,10 @@ void CGuardian::OnTradeClosed(double pnl)
 //+------------------------------------------------------------------+
 void CGuardian::OnNewDay()
 {
+   // Save previous state for logging
+   string prev_state = EnumToString(m_state);
+   int prev_consec = m_consec_losses;
+
    m_daily_open_balance = AccountInfoDouble(ACCOUNT_BALANCE);
    m_daily_reset_time = iTime(_Symbol, PERIOD_D1, 0);
    m_daily_trade_count = 0;
@@ -498,7 +510,8 @@ void CGuardian::OnNewDay()
    m_consec_losses = 0;
 
    // Re-enable if was soft-halted (not emergency/shutdown)
-   if(m_state == GUARDIAN_HALTED &&
+   // Also re-enable CAUTION states so circuit breaker fully resets
+   if((m_state == GUARDIAN_HALTED || m_state == GUARDIAN_CAUTION) &&
       m_halt_reason != HALT_TARGET_REACHED &&
       m_halt_reason != HALT_MANUAL)
    {
@@ -507,8 +520,9 @@ void CGuardian::OnNewDay()
       m_halt_message = "";
    }
 
-   Log(StringFormat("=== NEW DAY === Bal=$%.2f PnL=$%.2f (%.2f%%)",
-       m_daily_open_balance, m_daily_open_balance - m_initial_balance, ProfitPct()));
+   Log(StringFormat("=== NEW DAY === Bal=$%.2f PnL=$%.2f (%.2f%%) | Reset: %s(consec=%d) -> %s(consec=%d)",
+       m_daily_open_balance, m_daily_open_balance - m_initial_balance, ProfitPct(),
+       prev_state, prev_consec, EnumToString(m_state), m_consec_losses));
 }
 
 //+------------------------------------------------------------------+
