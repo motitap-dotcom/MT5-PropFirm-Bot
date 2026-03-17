@@ -1,163 +1,72 @@
-=== COMPILE + RESTART 2026-03-17 13:42:50 UTC ===
---- 1. Stop MT5 ---
-MT5 stopped
-
---- 2. Compile EA ---
-Compile log:
-ÿþ
-
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: compiling MQL5/Experts/PropFirmBot/PropFirmBot.mq5
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\SignalEngine.mqh
-MQL5\Experts\PropFirmBot\SignalEngine.mqh : information: including C:\Program Files\MetaTrader 5\MQL5\Include\Trade\Trade.mqh
-C:\Program Files\MetaTrader 5\MQL5\Include\Trade\Trade.mqh : information: including C:\Program Files\MetaTrader 5\MQL5\Include\Object.mqh
-C:\Program Files\MetaTrader 5\MQL5\Include\Object.mqh : information: including C:\Program Files\MetaTrader 5\MQL5\Include\StdLibErr.mqh
-C:\Program Files\MetaTrader 5\MQL5\Include\Trade\Trade.mqh : information: including C:\Program Files\MetaTrader 5\MQL5\Include\Trade\OrderInfo.mqh
-C:\Program Files\MetaTrader 5\MQL5\Include\Trade\Trade.mqh : information: including C:\Program Files\MetaTrader 5\MQL5\Include\Trade\HistoryOrderInfo.mqh
-C:\Program Files\MetaTrader 5\MQL5\Include\Trade\Trade.mqh : information: including C:\Program Files\MetaTrader 5\MQL5\Include\Trade\PositionInfo.mqh
-C:\Program Files\MetaTrader 5\MQL5\Include\Trade\Trade.mqh : information: including C:\Program Files\MetaTrader 5\MQL5\Include\Trade\DealInfo.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\RiskManager.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\TradeManager.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\Guardian.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\Dashboard.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\TradeJournal.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\NewsFilter.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\AccountStateManager.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\Notifications.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\TradeAnalyzer.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\StatusWriter.mqh
- : information: generating code
- : information: generating code 3%
- : information: generating code 6%
- : information: generating code 9%
- : information: generating code 12%
- : information: generating code 15%
- : information: generating code 18%
- : information: generating code 21%
- : information: generating code 24%
- : information: generating code 27%
- : information: generating code 30%
- : information: generating code 33%
- : information: generating code 36%
- : information: generating code 39%
- : information: generating code 42%
- : information: generating code 45%
- : information: generating code 48%
- : information: generating code 51%
- : information: generating code 54%
- : information: generating code 57%
- : information: generating code 60%
- : information: generating code 63%
- : information: generating code 66%
- : information: generating code 69%
- : information: generating code 72%
- : information: generating code 75%
- : information: generating code 78%
- : information: generating code 81%
- : information: generating code 84%
- : information: generating code 87%
- : information: generating code 90%
- : information: generating code 93%
- : information: generating code 95%
- : information: generating code 100%
- : information: code generated
-Result: 0 errors, 0 warnings, 4467 msec elapsed, cpu='X64 Regular'
-ÿþ
-
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: compiling MQL5/Experts/PropFirmBot/PropFirmBot.mq5
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\SignalEngine.mqh
-MQL5\Experts\PropFirmBot\SignalEngine.mqh : information: including MQL5\Include\Trade\Trade.mqh
-MQL5\Include\Trade\Trade.mqh : information: including MQL5\Include\Object.mqh
-MQL5\Include\Object.mqh : information: including MQL5\Include\StdLibErr.mqh
-MQL5\Include\Trade\Trade.mqh : information: including MQL5\Include\Trade\OrderInfo.mqh
-MQL5\Include\Trade\Trade.mqh : information: including MQL5\Include\Trade\HistoryOrderInfo.mqh
-MQL5\Include\Trade\Trade.mqh : information: including MQL5\Include\Trade\PositionInfo.mqh
-MQL5\Include\Trade\Trade.mqh : information: including MQL5\Include\Trade\DealInfo.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\RiskManager.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\TradeManager.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\Guardian.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\Dashboard.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\TradeJournal.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\NewsFilter.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\AccountStateManager.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\Notifications.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\TradeAnalyzer.mqh
-MQL5/Experts/PropFirmBot/PropFirmBot.mq5 : information: including MQL5\Experts\PropFirmBot\StatusWriter.mqh
- : information: generating code
- : information: generating code 3%
- : information: generating code 6%
- : information: generating code 9%
- : information: generating code 12%
- : information: generating code 15%
- : information: generating code 18%
- : information: generating code 21%
- : information: generating code 24%
- : information: generating code 27%
- : information: generating code 30%
- : information: generating code 33%
- : information: generating code 36%
- : information: generating code 39%
- : information: generating code 42%
- : information: generating code 45%
- : information: generating code 48%
- : information: generating code 51%
- : information: generating code 54%
- : information: generating code 57%
- : information: generating code 60%
- : information: generating code 63%
- : information: generating code 66%
- : information: generating code 69%
- : information: generating code 72%
- : information: generating code 75%
- : information: generating code 78%
- : information: generating code 81%
- : information: generating code 84%
- : information: generating code 87%
- : information: generating code 90%
- : information: generating code 93%
- : information: generating code 95%
- : information: generating code 100%
- : information: code generated
-Result: 0 errors, 0 warnings, 4227 msec elapsed, cpu='X64 Regular'
-
-EX5 file:
--rw-r--r-- 1 root root 169036 Mar 17 13:43 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
-
-MetaEditor logs:
--rw-r--r-- 1 root root  56268 Mar 17 13:40 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260317.log
--rw-r--r-- 1 root root 267960 Mar 16 23:46 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260316.log
--rw-r--r-- 1 root root  45344 Mar 16 00:00 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260315.log
-
---- 3. Start MT5 ---
-
---- 4. Verify ---
+=== QUICK VERIFY 2026-03-17 13:45:20 UTC ===
 MT5: RUNNING
 
---- RiskMgr init line (looking for DD_Mode) ---
-FI	0	13:00:00.268	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-IM	0	13:37:30.069	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1935.85 | Risk=0.52% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-JG	0	13:37:30.362	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-PD	0	13:40:56.602	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1935.85 | Risk=0.52% | MaxPos=2 | DailyDD=-2.0% | TotalDD=3.0%
-RL	0	13:40:56.836	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+EX5 timestamp:
+-rw-r--r-- 1 root root 169036 Mar 17 13:43 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
 
---- Guardian init ---
-grep: (standard input): binary file matches
-QR	0	13:37:30.260	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1935.85 | Eq=$1935.85 | DD=0.00% | Positions=0
-PM	0	13:37:30.262	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.17 16:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
-IK	0	13:40:56.602	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.17 16:40:56] INIT | Bal=$1935.85 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-GI	0	13:40:56.718	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1935.85 | Eq=$1935.85 | DD=0.00% | Positions=0
-OD	0	13:40:56.733	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.17 16:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+--- Latest log (last 20 lines) ---
+MG	0	13:43:36.051	PropFirmBot (EURUSD,M15)	  - Notifications: TELEGRAM ON
+IQ	0	13:43:36.051	PropFirmBot (EURUSD,M15)	  - Self-Learning: ON
+KH	0	13:43:36.051	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
+KP	0	13:43:36.051	PropFirmBot (EURUSD,M15)	  - Risk multiplier: 70%
+OD	0	13:43:36.051	PropFirmBot (EURUSD,M15)	[INIT] >>> REAL MONEY MODE - EVERY DOLLAR COUNTS <<<
+LD	0	13:43:36.051	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=1 | State=GUARDIAN_ACTIVE | Bal=$1935.85 | Eq=$1935.85 | DD=0.00% | Positions=0
+KK	0	13:43:36.051	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.17 16:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+OH	0	13:43:36.051	PropFirmBot (EURUSD,M15)	[EMA] EURUSD no signal | CrossUp=N RecentUp=N MomBuy=N | CrossDn=N RecentDn=N MomSell=N | RSI=67.8 HTF=-1 | EMAGap=10.1bp
+OI	0	13:43:36.051	PropFirmBot (EURUSD,M15)	[SCAN] EURUSD - EMA strategy: NO SIGNAL
+DF	0	13:43:36.051	PropFirmBot (EURUSD,M15)	[SMC] EURUSD bearish bias but no OB/FVG | OB=N FVG=N LiqSweep=N
+RQ	0	13:43:36.051	PropFirmBot (EURUSD,M15)	[SCAN] EURUSD - SMC fallback: NO SIGNAL
+CP	0	13:43:36.053	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD no signal | CrossUp=N RecentUp=N MomBuy=N | CrossDn=N RecentDn=N MomSell=N | RSI=61.7 HTF=-1 | EMAGap=12.7bp
+EP	0	13:43:36.054	PropFirmBot (EURUSD,M15)	[SCAN] GBPUSD - EMA strategy: NO SIGNAL
+NG	0	13:43:36.054	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD - no H4 bias (EMA50/200 mixed), skip
+HF	0	13:43:36.054	PropFirmBot (EURUSD,M15)	[SCAN] GBPUSD - SMC fallback: NO SIGNAL
+OO	0	13:43:36.054	PropFirmBot (EURUSD,M15)	[EMA] USDJPY no signal | CrossUp=N RecentUp=N MomBuy=N | CrossDn=N RecentDn=N MomSell=N | RSI=44.2 HTF=1 | EMAGap=-5.6bp
+EF	0	13:43:36.054	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - EMA strategy: NO SIGNAL
+OR	0	13:43:36.054	PropFirmBot (EURUSD,M15)	[SMC] USDJPY bullish bias but no OB/FVG | OB=N FVG=N LiqSweep=N
+DN	0	13:43:36.054	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - SMC fallback: NO SIGNAL
+EI	0	13:43:36.054	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
 
---- Last 10 lines ---
-MF	0	13:40:56.734	PropFirmBot (EURUSD,M15)	[SCAN] EURUSD - SMC fallback: NO SIGNAL
-IM	0	13:40:56.735	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD no signal | CrossUp=N RecentUp=N MomBuy=N | CrossDn=N RecentDn=N MomSell=N | RSI=61.7 HTF=-1 | EMAGap=12.7bp
-ND	0	13:40:56.735	PropFirmBot (EURUSD,M15)	[SCAN] GBPUSD - EMA strategy: NO SIGNAL
-DL	0	13:40:56.736	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD - no H4 bias (EMA50/200 mixed), skip
-JM	0	13:40:56.736	PropFirmBot (EURUSD,M15)	[SCAN] GBPUSD - SMC fallback: NO SIGNAL
-DH	0	13:40:56.836	PropFirmBot (EURUSD,M15)	[EMA] USDJPY no signal | CrossUp=N RecentUp=N MomBuy=N | CrossDn=N RecentDn=N MomSell=N | RSI=44.2 HTF=1 | EMAGap=-5.6bp
-RK	0	13:40:56.836	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - EMA strategy: NO SIGNAL
-DG	0	13:40:56.836	PropFirmBot (EURUSD,M15)	[SMC] USDJPY bullish bias but no OB/FVG | OB=N FVG=N LiqSweep=N
-OS	0	13:40:56.836	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - SMC fallback: NO SIGNAL
-RL	0	13:40:56.836	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
-
-=== DONE 2026-03-17 13:43:37 UTC ===
+--- status.json ---
+{
+  "timestamp": "2026.03.17 16:45:20",
+  "server_time": "2026.03.17 16:45:20",
+  "gmt_time": "2026.03.17 13:45:20",
+  "account": {
+    "number": 11797849,
+    "name": "FundedNext-Stellar Instant Account- moti tapiro",
+    "server": "FundedNext-Server",
+    "currency": "USD",
+    "leverage": 30,
+    "balance": 1935.85,
+    "equity": 1935.85,
+    "margin": 0.00,
+    "free_margin": 1935.85,
+    "floating_pnl": 0.00,
+    "initial_balance": 1935.85,
+    "total_pnl": 0.00,
+    "profit_percent": 0.00
+  },
+  "guardian": {
+    "state": "ACTIVE",
+    "daily_dd": 0.00,
+    "total_dd": 0.00,
+    "halt_message": "",
+    "connection_ok": true,
+    "can_trade": true
+  },
+  "today": {
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "profit": 0.00,
+    "loss": 0.00,
+    "net": 0.00,
+    "consec_losses": 0
+  },
+  "positions": {
+    "count": 0,
+    "open": []
+  }
+}
+=== DONE 2026-03-17 13:45:20 UTC ===
 EXIT_CODE=0
