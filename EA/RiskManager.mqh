@@ -26,6 +26,8 @@ private:
    double            m_total_dd_guard_pct;    // Total DD guard % (7% = stop before 10% limit)
    double            m_daily_start_balance;   // Balance at start of day
    datetime          m_daily_reset_time;      // When daily tracking resets
+   bool              m_trailing_dd;           // true = DD from equity high water mark
+   double            m_equity_high_water;     // Highest equity seen
 
    // Spread filter
    double            m_max_spread_major;      // Max spread for major pairs (pips)
@@ -71,6 +73,8 @@ public:
                           double daily_dd_guard = 3.0,
                           double total_dd_guard = 7.0,
                           long magic = 123456);
+   void              SetTrailingDD(bool enabled);
+   void              UpdateEquityHWM();
 
    void              SetSpreadFilter(double major_pips, double xau_pips);
    void              SetSessionFilter(int london_start, int london_end, int ny_start, int ny_end);
@@ -125,6 +129,8 @@ CRiskManager::CRiskManager()
    m_total_dd_guard_pct = 7.0;
    m_daily_start_balance= 0;
    m_daily_reset_time   = 0;
+   m_trailing_dd        = false;
+   m_equity_high_water  = 0;
    m_max_spread_major   = 3.0;
    m_max_spread_xau     = 45.0;
    m_london_start_hour  = 7;
@@ -172,9 +178,16 @@ void CRiskManager::Init(double account_size,
    m_daily_start_balance = m_initial_balance;
    m_daily_reset_time    = iTime(_Symbol, PERIOD_D1, 0);
 
-   PrintFormat("[RiskMgr] Init: Balance=%.2f | Risk=%.2f%% | MaxPos=%d | DailyDD=%.1f%% | TotalDD=%.1f%%",
+   // Initialize equity HWM for trailing DD
+   m_equity_high_water = AccountInfoDouble(ACCOUNT_EQUITY);
+   if(m_equity_high_water <= 0) m_equity_high_water = m_initial_balance;
+   // Auto-detect trailing DD: if daily DD guard is disabled, use trailing
+   m_trailing_dd = (daily_dd_guard <= 0);
+
+   PrintFormat("[RiskMgr] Init: Balance=%.2f | Risk=%.2f%% | MaxPos=%d | DailyDD=%.1f%% | TotalDD=%.1f%% | DD_Mode=%s | HWM=%.2f",
                m_initial_balance, m_risk_per_trade, m_max_open_positions,
-               m_daily_dd_guard_pct, m_total_dd_guard_pct);
+               m_daily_dd_guard_pct, m_total_dd_guard_pct,
+               m_trailing_dd ? "TRAILING" : "FIXED", m_equity_high_water);
 }
 
 //+------------------------------------------------------------------+
@@ -395,18 +408,53 @@ bool CRiskManager::IsDailyDrawdownOK()
 }
 
 //+------------------------------------------------------------------+
-//| Check total drawdown guard                                        |
+//| Check total drawdown guard (supports trailing DD)                 |
 //+------------------------------------------------------------------+
 bool CRiskManager::IsTotalDrawdownOK()
 {
    double equity = AccountInfoDouble(ACCOUNT_EQUITY);
-   double total_pnl = equity - m_initial_balance;
+   if(equity <= 0) return true;  // Safety: bad equity = don't block
+
+   // Update equity high water mark
+   if(equity > m_equity_high_water) m_equity_high_water = equity;
+
    double total_dd_pct = 0;
 
-   if(m_initial_balance > 0)
-      total_dd_pct = (-total_pnl / m_initial_balance) * 100.0;
+   if(m_trailing_dd)
+   {
+      // TRAILING DD: measured from equity high water mark (matches Guardian)
+      if(m_equity_high_water > 0)
+         total_dd_pct = ((m_equity_high_water - equity) / m_equity_high_water) * 100.0;
+   }
+   else
+   {
+      // FIXED DD: measured from initial balance
+      double total_pnl = equity - m_initial_balance;
+      if(m_initial_balance > 0)
+         total_dd_pct = (-total_pnl / m_initial_balance) * 100.0;
+   }
+
+   if(total_dd_pct < 0) total_dd_pct = 0;
 
    return total_dd_pct < m_total_dd_guard_pct;
+}
+
+//+------------------------------------------------------------------+
+//| Enable/disable trailing DD mode                                   |
+//+------------------------------------------------------------------+
+void CRiskManager::SetTrailingDD(bool enabled)
+{
+   m_trailing_dd = enabled;
+   PrintFormat("[RiskMgr] DD mode set to %s", enabled ? "TRAILING" : "FIXED");
+}
+
+//+------------------------------------------------------------------+
+//| Update equity high water mark (call from OnTick)                  |
+//+------------------------------------------------------------------+
+void CRiskManager::UpdateEquityHWM()
+{
+   double equity = AccountInfoDouble(ACCOUNT_EQUITY);
+   if(equity > m_equity_high_water) m_equity_high_water = equity;
 }
 
 //+------------------------------------------------------------------+

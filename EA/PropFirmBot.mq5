@@ -62,16 +62,16 @@ input int      InpOBLookback      = 30;         // Order Block Lookback
 input double   InpFVGMinPoints    = 20.0;       // Min FVG Size (points)
 
 // --- Risk Management ---
-input double   InpRiskPercent     = 0.75;       // Risk Per Trade (%)
-input double   InpMaxRiskPercent  = 1.0;        // Max Risk Per Trade (%)
-input int      InpMaxPositions    = 3;          // Max Open Positions
-input double   InpMinRR           = 1.5;        // Min Risk:Reward
-input int      InpMaxDailyTrades  = 12;         // Max Trades Per Day
-input int      InpMaxConsecLosses = 5;          // Max Consecutive Losses
+input double   InpRiskPercent     = 0.5;        // Risk Per Trade (%)
+input double   InpMaxRiskPercent  = 0.75;       // Max Risk Per Trade (%)
+input int      InpMaxPositions    = 2;          // Max Open Positions
+input double   InpMinRR           = 2.0;        // Min Risk:Reward
+input int      InpMaxDailyTrades  = 6;          // Max Trades Per Day
+input int      InpMaxConsecLosses = 4;          // Max Consecutive Losses
 
 // --- Spread Filter ---
-input double   InpMaxSpreadMajor  = 3.5;        // Max Spread Major (pips)
-input double   InpMaxSpreadXAU    = 45.0;       // Max Spread XAUUSD (pips)
+input double   InpMaxSpreadMajor  = 2.5;        // Max Spread Major (pips)
+input double   InpMaxSpreadXAU    = 4.0;        // Max Spread XAUUSD (pips)
 
 // --- News Filter ---
 input bool     InpNewsFilterOn    = true;        // News Filter Enabled
@@ -83,10 +83,10 @@ input bool     InpNewsClosePos    = true;        // News: Close Positions Before
 input int      InpNewsCloseMin    = 30;          // News: Close Positions Minutes Before
 
 // --- Session Filter (UTC) ---
-input int      InpLondonStart     = 6;          // London Start
-input int      InpLondonEnd       = 17;         // London End (covers overlap with NY)
-input int      InpNYStart         = 12;         // NY Start
-input int      InpNYEnd           = 22;         // NY End (extended to 23:00 Israel)
+input int      InpLondonStart     = 7;          // London Start (UTC)
+input int      InpLondonEnd       = 11;         // London End (UTC)
+input int      InpNYStart         = 12;         // NY Start (UTC)
+input int      InpNYEnd           = 16;         // NY End (UTC)
 
 // --- Trade Management ---
 input double   InpTrailingActivation = 30.0;    // Trailing Activation (pips)
@@ -232,10 +232,13 @@ int OnInit()
    // === RISK MANAGER ===
    double risk_pct = InpRiskPercent * g_account.GetRiskMultiplier();
    double max_risk = InpMaxRiskPercent * g_account.GetRiskMultiplier();
+   // RiskManager DD guards: use soft limits from config (3.5% for 6% trailing)
+   double daily_dd_guard = g_account.GetDailyDDLimit() > 0 ? g_account.GetDailyDDLimit() - 2.0 : 0;
+   double total_dd_guard = g_account.GetTotalDDLimit() * 0.70;  // 4.2% for 6% = matches Guardian soft limit
    g_risk.Init(g_account.GetAccountSize(), risk_pct, max_risk,
                g_account.GetMaxPositions(),
-               g_account.GetDailyDDLimit() - 2.0,
-               g_account.GetTotalDDLimit() - 3.0,
+               daily_dd_guard,
+               total_dd_guard,
                InpMagicNumber);
    g_risk.SetSpreadFilter(InpMaxSpreadMajor, InpMaxSpreadXAU);
    g_risk.SetSessionFilter(InpLondonStart, InpLondonEnd, InpNYStart, InpNYEnd);
