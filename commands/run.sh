@@ -1,6 +1,6 @@
 #!/bin/bash
-# Full status check - triggered 2026-03-17
-echo "=== BOT STATUS CHECK $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+# Post-restart verification - triggered 2026-03-17 after EA code update
+echo "=== POST-RESTART CHECK $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_LOG_DIR="${MT5_BASE}/MQL5/Logs"
