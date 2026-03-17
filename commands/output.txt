@@ -1,45 +1,81 @@
-=== FULL STATUS CHECK 2026-03-17 13:55:10 UTC ===
+=== POST-DEPLOY VERIFICATION 2026-03-17 14:19:31 UTC ===
 --- 1. MT5 Process ---
-MT5: RUNNING (PID=2113170, uptime=11:52)
+MT5: RUNNING (PID=2113170, uptime=36:14)
 
---- 2. EX5 Version ---
+--- 2. EX5 File (latest compile) ---
 -rw-r--r-- 1 root root 169036 Mar 17 13:43 /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Experts/PropFirmBot/PropFirmBot.ex5
 
---- 3. status.json ---
+--- 3. EA Log (last 30 lines) ---
+Log file: /root/.wine/drive_c/Program Files/MetaTrader 5/MQL5/Logs/20260317.log
+DN	0	13:43:36.054	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - SMC fallback: NO SIGNAL
+EI	0	13:43:36.054	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+IG	0	13:58:35.204	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2894 | State=GUARDIAN_ACTIVE | Bal=$1935.85 | Eq=$1935.85 | DD=0.00% | Positions=0
+KH	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.17 17:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+LH	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[EMA] EURUSD no signal | CrossUp=N RecentUp=N MomBuy=N | CrossDn=N RecentDn=N MomSell=N | RSI=66.1 HTF=-1 | EMAGap=10.5bp
+PJ	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[SCAN] EURUSD - EMA strategy: NO SIGNAL
+CF	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[SMC] EURUSD bearish bias but no OB/FVG | OB=N FVG=N LiqSweep=N
+QR	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[SCAN] EURUSD - SMC fallback: NO SIGNAL
+IS	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[EMA] GBPUSD no signal | CrossUp=N RecentUp=N MomBuy=N | CrossDn=N RecentDn=N MomSell=N | RSI=64.3 HTF=-1 | EMAGap=8.8bp
+KP	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[SCAN] GBPUSD - EMA strategy: NO SIGNAL
+HH	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[SMC] GBPUSD bearish bias but no OB/FVG | OB=N FVG=N LiqSweep=N
+NH	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[SCAN] GBPUSD - SMC fallback: NO SIGNAL
+EM	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[EMA] USDJPY no signal | CrossUp=N RecentUp=N MomBuy=N | CrossDn=N RecentDn=N MomSell=N | RSI=36.6 HTF=1 | EMAGap=-5.7bp
+KH	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - EMA strategy: NO SIGNAL
+FO	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[SMC] BUY signal: Entry=158.88300 SL=158.84975 TP=158.94950 | LiqSweep=Y OB=Y FVG=N
+CQ	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[SCAN] USDJPY - SMC fallback: GOT SIGNAL BUY
+HQ	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[RiskMgr] LotCalc: Balance=1935.85 Risk$=10.16 SL_pts=0.0 Lot=0.48
+FH	0	14:00:00.405	PropFirmBot (EURUSD,M15)	[TradeMgr] BUY opened: USDJPY Lot=0.48 Entry=158.88300 SL=158.85000 TP=158.95000 Ticket=163645343
+PS	0	14:00:00.405	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.17 17:00:00] Trade #1 opened | DailyDD=0.00% TotalDD=0.00%
+RS	0	14:00:00.407	PropFirmBot (EURUSD,M15)	[AccountState] Trading day 1 recorded (1/0 required)
+PE	0	14:00:00.407	PropFirmBot (EURUSD,M15)	[JOURNAL] OPEN BUY USDJPY | Lot=0.48 Entry=158.88300 SL=158.84975 TP=158.94950 | #163645343 | EMA
+FF	0	14:00:00.407	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
+ES	0	14:00:00.407	PropFirmBot (EURUSD,M15)	[TRADE] USDJPY BUY | Lot=0.48 | SL=158.84975 | TP=158.94950 | RR=2.0 | #163645343
+JL	0	14:00:00.407	PropFirmBot (EURUSD,M15)	[RiskMgr] BLOCKED: Spread too wide on XAUUSD
+LG	0	14:03:45.943	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.17 17:03:45] WIN +$20.23 | W1/L0
+KD	0	14:03:45.943	PropFirmBot (EURUSD,M15)	[JOURNAL] CLOSE #163645343 BUY USDJPY | PnL=$20.23 (6.7 pips) | TP | Bal=$1952.72 | #1 W1 L0 WR=100%
+NG	0	14:03:45.943	PropFirmBot (EURUSD,M15)	[Analyzer] Trade recorded: USDJPY BUY PnL=$20.23 | History=1
+GH	0	14:03:45.943	PropFirmBot (EURUSD,M15)	[Notify] Telegram BLOCKED: Add https://api.telegram.org to Tools > Options > Expert Advisors > Allow WebRequest
+RJ	0	14:03:45.943	PropFirmBot (EURUSD,M15)	[CLOSED] #163645343 BUY USDJPY | PnL=$20.23 (6.7 pips) | TP
+GG	0	14:13:36.063	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=5407 | State=GUARDIAN_ACTIVE | Bal=$1952.72 | Eq=$1952.72 | DD=0.03% | Positions=0
+
+--- 4. Compile Errors ---
+(empty = no compile errors)
+
+--- 5. status.json ---
 {
-  "timestamp": "2026.03.17 16:55:07",
-  "server_time": "2026.03.17 16:55:07",
-  "gmt_time": "2026.03.17 13:55:07",
+  "timestamp": "2026.03.17 17:19:28",
+  "server_time": "2026.03.17 17:19:28",
+  "gmt_time": "2026.03.17 14:19:28",
   "account": {
     "number": 11797849,
     "name": "FundedNext-Stellar Instant Account- moti tapiro",
     "server": "FundedNext-Server",
     "currency": "USD",
     "leverage": 30,
-    "balance": 1935.85,
-    "equity": 1935.85,
+    "balance": 1952.72,
+    "equity": 1952.72,
     "margin": 0.00,
-    "free_margin": 1935.85,
+    "free_margin": 1952.72,
     "floating_pnl": 0.00,
     "initial_balance": 1935.85,
-    "total_pnl": 0.00,
-    "profit_percent": 0.00
+    "total_pnl": 16.87,
+    "profit_percent": 0.87
   },
   "guardian": {
     "state": "ACTIVE",
     "daily_dd": 0.00,
-    "total_dd": 0.00,
+    "total_dd": 0.03,
     "halt_message": "",
     "connection_ok": true,
     "can_trade": true
   },
   "today": {
-    "trades": 0,
-    "wins": 0,
+    "trades": 1,
+    "wins": 1,
     "losses": 0,
-    "profit": 0.00,
+    "profit": 20.23,
     "loss": 0.00,
-    "net": 0.00,
+    "net": 20.23,
     "consec_losses": 0
   },
   "positions": {
@@ -47,113 +83,16 @@ MT5: RUNNING (PID=2113170, uptime=11:52)
     "open": []
   }
 }
---- 4. RiskMgr Init (latest) ---
-MM	0	13:43:35.901	PropFirmBot (EURUSD,M15)	[RiskMgr] Init: Balance=1935.85 | Risk=0.52% | MaxPos=2 | DailyDD=0.0% | TotalDD=4.2% | DD_Mode=TRAILING | HWM=1935.85
+--- 6. Guardian State ---
+IG	0	13:58:35.204	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=2894 | State=GUARDIAN_ACTIVE | Bal=$1935.85 | Eq=$1935.85 | DD=0.00% | Positions=0
+KH	0	14:00:00.149	PropFirmBot (EURUSD,M15)	[NEWBAR] 2026.03.17 17:00 | Guardian=GUARDIAN_ACTIVE | Scanning 4 symbols...
+PS	0	14:00:00.405	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.17 17:00:00] Trade #1 opened | DailyDD=0.00% TotalDD=0.00%
+LG	0	14:03:45.943	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.17 17:03:45] WIN +$20.23 | W1/L0
+GG	0	14:13:36.063	PropFirmBot (EURUSD,M15)	[HEARTBEAT] Ticks=5407 | State=GUARDIAN_ACTIVE | Bal=$1952.72 | Eq=$1952.72 | DD=0.03% | Positions=0
 
---- 5. Guardian Init (latest) ---
-OP	0	13:43:35.901	PropFirmBot (EURUSD,M15)	[GUARDIAN 2026.03.17 16:43:35] INIT | Bal=$1935.85 | TRAILING DD: 6.0% | Soft: 4.2% | Crit: 5.0% | Daily: NONE | Target: 0.0%
-
---- 6. AccountState (latest) ---
-DE	0	13:43:35.897	PropFirmBot (EURUSD,M15)	[AccountState] >>> SWITCHED TO FUNDED <<< Balance=$2000.00
-DN	0	13:43:35.897	PropFirmBot (EURUSD,M15)	[AccountState] Risk reduced to 70% | MaxPos=2 | MaxTrades=6
-EM	0	13:43:35.897	PropFirmBot (EURUSD,M15)	[INIT] Account Phase: FUNDED
-LJ	0	13:43:35.897	PropFirmBot (EURUSD,M15)	=== FUNDED ACCOUNT ===
-KH	0	13:43:36.051	PropFirmBot (EURUSD,M15)	  - Account Phase: FUNDED
-
---- 7. Errors/Warnings ---
+--- 7. Errors Since Deploy ---
+grep: (standard input): binary file matches
 Total error lines: 0
 
---- 8. Broker Connection ---
-
---- 9. Active Configs ---
-risk_params.json:
-{
-  "_mode": "FUNDED_INSTANT",
-  "_warning": "TIGHTENED for 6% trailing drawdown - Stellar Instant. BE VERY CONSERVATIVE.",
-
-  "risk_per_trade_percent": 0.5,
-  "max_risk_per_trade_percent": 0.75,
-  "min_risk_per_trade_percent": 0.25,
-  "max_open_positions": 2,
-  "max_daily_trades": 6,
-  "max_consecutive_losses": 4,
-  "min_risk_reward_ratio": 2.0,
-
-  "drawdown_guards": {
-    "hard_total_dd_percent": 6.0,
-    "soft_total_dd_percent": 3.5,
-    "critical_total_dd_percent": 5.0,
-    "trailing_drawdown": true,
-    "_note": "6% TRAILING DD. Soft=reduce lot size | Critical=close all & halt | Hard=account blown (never reach)"
-  },
-
-  "spread_filter": {
-    "major_pairs_max_pips": 2.5,
-    "xauusd_max_pips": 4.0,
-    "spread_anomaly_multiplier": 3.0
-  },
-
-  "news_filter": {
-    "minutes_before": 30,
-    "minutes_after": 30,
-    "filter_high_impact": true,
-    "filter_medium_impact": false,
-    "_note": "FundedNext caps profit at 40% for trades within 5 min of news"
-  },
-
-  "trailing_stop": {
-    "activation_pips": 30,
-    "trail_distance_pips": 20
-  },
-
-  "breakeven": {
-    "activation_pips": 20,
-    "offset_pips": 2
-  },
-
-  "session_filter": {
-    "london_start_utc": "07:00",
-    "london_end_utc": "11:00",
-    "newyork_start_utc": "12:00",
-    "newyork_end_utc": "16:00"
-  },
-
-  "weekend_guard": {
-    "close_all_day": 5,
-    "close_all_hour_utc": 20
-  },
-
-  "flash_crash_guard": {
-    "max_equity_drop_pct_per_tick": 1.5,
-    "connection_timeout_seconds": 120
-  },
-
-  "caution_mode": {
-    "_note": "When approaching DD limits, lot size is halved automatically",
-    "trigger_at_percent_of_soft_limit": 60
-  },
-
-  "consistency_rule": {
-    "enabled": true,
-    "max_single_day_profit_percent": 40,
-    "_note": "No single day can be more than 40% of total profit for payout eligibility"
-  }
-}
-
-account_state.json (phase):
-  "current_phase": "FUNDED_INSTANT",
-    "account_size": 2000,
-    "trailing_max_drawdown_percent": 6,
-    "min_equity": 1880,
-    "_min_equity_note": "Initial: $2000 - 6% = $1880. Trails up with highest balance.",
-    "account_size": 2000,
-    "trailing_drawdown": true,
-    "[x] Confirm all drawdown limits match prop firm rules (6% trailing)",
-
---- 10. System ---
-/dev/sda1       145G   25G  121G  17% /
-Wine processes: 5
-Mem:           7.8Gi       2.6Gi       3.9Gi        45Mi       1.5Gi       5.1Gi
-
-=== DONE 2026-03-17 13:55:10 UTC ===
+=== DONE 2026-03-17 14:19:32 UTC ===
 EXIT_CODE=0
