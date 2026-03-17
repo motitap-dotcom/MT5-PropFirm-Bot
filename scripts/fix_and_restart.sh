@@ -1,7 +1,9 @@
 #!/bin/bash
-# PropFirmBot - Fix Connection & Restart MT5 (v2 - non-blocking)
+# PropFirmBot - Restart MT5 after EA deploy (v3 - code update)
+# Triggered: 2026-03-17 - RiskManager trailing DD fix + input params update
 
-echo "=== FIX START $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+echo "=== RESTART START $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+echo "Reason: EA code updated - RiskManager DD fix + conservative inputs"
 
 MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
@@ -14,7 +16,8 @@ echo "1. DNS: FIXED"
 ntpdate -u pool.ntp.org > /dev/null 2>&1 || true
 echo "2. Time: $(date)"
 
-# STEP 3: Stop MT5
+# STEP 3: Stop MT5 gracefully
+echo "3. Stopping MT5..."
 pkill -f terminal64 2>/dev/null
 sleep 3
 pkill -9 -f terminal64 2>/dev/null
