@@ -375,6 +375,7 @@ void OnTick()
    // ============================================
    // STEP 1: GUARDIAN CHECK (every single tick!)
    // ============================================
+   g_risk.UpdateEquityHWM();  // Keep RiskManager HWM in sync with Guardian
    ENUM_GUARDIAN_STATE state = g_guardian.RunChecks();
 
    // Detect state changes for notifications

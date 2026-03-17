@@ -190,7 +190,12 @@ void CNewsFilter::RefreshCalendar()
    if(total <= 0)
    {
       // Calendar might not be available - don't block trading
-      PrintFormat("[NewsFilter] Calendar returned %d events (may be unavailable)", total);
+      static bool calendar_warned = false;
+      if(!calendar_warned)
+      {
+         PrintFormat("[NewsFilter] WARNING: Calendar unavailable (returned %d) - NEWS FILTER OFFLINE", total);
+         calendar_warned = true;
+      }
       return;
    }
 

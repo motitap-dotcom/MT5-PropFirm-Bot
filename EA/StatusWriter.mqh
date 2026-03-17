@@ -218,7 +218,7 @@ void CStatusWriter::WriteStatus(CGuardian &guardian, int open_positions, double 
       pos_count, positions_json);
 
    // Write to file (overwrite) - writes to MQL5/Files/PropFirmBot/status.json
-   string filepath = m_folder + "\\" + m_filename;
+   string filepath = m_folder + "/" + m_filename;
    int handle = FileOpen(filepath, FILE_WRITE|FILE_TXT|FILE_ANSI);
    if(handle != INVALID_HANDLE)
    {

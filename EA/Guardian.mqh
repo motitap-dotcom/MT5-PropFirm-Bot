@@ -186,6 +186,7 @@ bool CGuardian::Init(double balance, double hard_daily, double hard_total,
    m_last_equity        = AccountInfoDouble(ACCOUNT_EQUITY);
    if(m_last_equity <= 0) m_last_equity = m_initial_balance;  // Fallback
    m_equity_high_water  = m_last_equity;
+   if(m_equity_high_water <= 0) m_equity_high_water = m_initial_balance;
    m_ea_start_time      = TimeCurrent();
    m_daily_reset_time   = iTime(_Symbol, PERIOD_D1, 0);
    m_magic              = magic;

@@ -436,8 +436,10 @@ double CTradeAnalyzer::CalcWinRate(int wins, int total)
 //+------------------------------------------------------------------+
 double CTradeAnalyzer::CalcProfitFactor(double gross_win, double gross_loss)
 {
-   if(gross_loss <= 0) return gross_win > 0 ? 99.0 : 0;
-   return gross_win / gross_loss;
+   if(gross_loss <= 0) return gross_win > 0 ? 10.0 : 0;
+   double pf = gross_win / gross_loss;
+   if(pf > 10.0) pf = 10.0;
+   return pf;
 }
 
 //+------------------------------------------------------------------+

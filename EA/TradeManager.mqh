@@ -143,6 +143,11 @@ ulong CTradeManager::OpenBuy(string symbol, double lot, double sl, double tp, st
       if(m_trade.Buy(lot, symbol, ask, sl, tp, full_comment))
       {
          ulong ticket = m_trade.ResultOrder();
+         if(ticket <= 0)
+         {
+            PrintFormat("[TradeMgr] BUY accepted but ticket invalid (%d) for %s", ticket, symbol);
+            return 0;
+         }
          RecordTradeTime(symbol);
 
          PrintFormat("[TradeMgr] BUY opened: %s Lot=%.2f Entry=%.5f SL=%.5f TP=%.5f Ticket=%d",
@@ -206,6 +211,11 @@ ulong CTradeManager::OpenSell(string symbol, double lot, double sl, double tp, s
       if(m_trade.Sell(lot, symbol, bid, sl, tp, full_comment))
       {
          ulong ticket = m_trade.ResultOrder();
+         if(ticket <= 0)
+         {
+            PrintFormat("[TradeMgr] SELL accepted but ticket invalid (%d) for %s", ticket, symbol);
+            return 0;
+         }
          RecordTradeTime(symbol);
 
          PrintFormat("[TradeMgr] SELL opened: %s Lot=%.2f Entry=%.5f SL=%.5f TP=%.5f Ticket=%d",
