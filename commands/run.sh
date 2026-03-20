@@ -1,11 +1,10 @@
 #!/bin/bash
-# Full status check
-echo "=== BOT STATUS CHECK $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
+# Debug failed challenge - get full logs
+echo "=== FAILED CHALLENGE DEBUG $(date '+%Y-%m-%d %H:%M:%S UTC') ==="
 
 MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
 EA_LOG_DIR="${MT5_BASE}/MQL5/Logs"
 EA_FILES_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
-TERM_LOG_DIR="${MT5_BASE}/logs"
 
 # 1. MT5 process
 echo "--- MT5 Process ---"
@@ -26,50 +25,45 @@ else
     echo "status.json not found"
 fi
 
-# 3. Account state config
+# 3. Last 200 lines of EA log (need more to see what went wrong)
 echo ""
-echo "--- account_state.json ---"
-if [ -f "$EA_FILES_DIR/account_state.json" ]; then
-    cat "$EA_FILES_DIR/account_state.json" 2>&1
-else
-    echo "account_state.json not found"
-fi
-
-# 4. Latest EA log (last 50 lines)
-echo ""
-echo "--- Latest EA Log (last 50 lines) ---"
+echo "--- Latest EA Log (last 200 lines) ---"
 TODAY_LOG=$(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -1)
 if [ -n "$TODAY_LOG" ]; then
     echo "Log file: $TODAY_LOG"
-    tail -50 "$TODAY_LOG" 2>&1
+    tail -200 "$TODAY_LOG" 2>&1
 else
     echo "No EA log files found"
 fi
 
-# 5. Open positions / recent trades
+# 4. All Guardian entries from all recent logs
 echo ""
-echo "--- Recent Trade Entries ---"
-if [ -n "$TODAY_LOG" ]; then
-    grep -i -E "order|trade|buy|sell|position|open|close|profit|loss" "$TODAY_LOG" 2>/dev/null | tail -20 || echo "No trade entries"
-fi
+echo "--- ALL Guardian & Drawdown Entries (last 3 log files) ---"
+for LOG in $(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -3); do
+    echo "=== File: $LOG ==="
+    grep -i -E "guardian|drawdown|DD|safety|halt|emergency|shutdown|HEARTBEAT|equity|high.water|HWM|trailing" "$LOG" 2>/dev/null | tail -50
+done
 
-# 6. Guardian state
+# 5. All trade entries
 echo ""
-echo "--- Guardian Entries ---"
-if [ -n "$TODAY_LOG" ]; then
-    grep -i -E "guardian|drawdown|DD|safety|halt|emergency|shutdown" "$TODAY_LOG" 2>/dev/null | tail -10 || echo "No guardian entries"
-fi
+echo "--- ALL Trade Entries (last 3 log files) ---"
+for LOG in $(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -3); do
+    echo "=== File: $LOG ==="
+    grep -i -E "TRADE|CLOSED|BUY|SELL|order|position|profit|loss|PnL" "$LOG" 2>/dev/null | tail -30
+done
 
-# 7. Trade journal
+# 6. Trade journal CSVs
 echo ""
-echo "--- Recent Trade Journal ---"
-find "$EA_FILES_DIR" -name "*Journal*" -mtime -7 -exec echo "File: {}" \; -exec tail -10 {} \; 2>/dev/null || echo "No journal files"
+echo "--- Trade Journal CSVs ---"
+find "$EA_FILES_DIR" -name "*Journal*" -mtime -30 -exec echo "File: {}" \; -exec cat {} \; 2>/dev/null || echo "No journal files"
 
-# 8. Disk & Wine
+# 7. RiskMgr entries
 echo ""
-echo "--- System ---"
-df -h / | tail -1
-echo "Wine processes: $(pgrep -c -f wine 2>/dev/null || echo 0)"
+echo "--- RiskMgr Entries ---"
+for LOG in $(ls -t "$EA_LOG_DIR"/*.log 2>/dev/null | head -3); do
+    echo "=== File: $LOG ==="
+    grep -i "RiskMgr" "$LOG" 2>/dev/null | tail -20
+done
 
 echo ""
 echo "=== DONE $(date '+%Y-%m-%d %H:%M:%S UTC') ==="

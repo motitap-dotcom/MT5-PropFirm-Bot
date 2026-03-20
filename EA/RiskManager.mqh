@@ -27,6 +27,10 @@ private:
    double            m_daily_start_balance;   // Balance at start of day
    datetime          m_daily_reset_time;      // When daily tracking resets
 
+   // Trailing DD support
+   bool              m_trailing_dd;           // true = DD measured from equity high water mark
+   double            m_equity_high_water;     // Highest equity seen (for trailing DD)
+
    // Spread filter
    double            m_max_spread_major;      // Max spread for major pairs (pips)
    double            m_max_spread_xau;        // Max spread for XAUUSD (pips)
@@ -125,6 +129,8 @@ CRiskManager::CRiskManager()
    m_total_dd_guard_pct = 7.0;
    m_daily_start_balance= 0;
    m_daily_reset_time   = 0;
+   m_trailing_dd        = false;
+   m_equity_high_water  = 0;
    m_max_spread_major   = 3.0;
    m_max_spread_xau     = 45.0;
    m_london_start_hour  = 7;
@@ -172,9 +178,15 @@ void CRiskManager::Init(double account_size,
    m_daily_start_balance = m_initial_balance;
    m_daily_reset_time    = iTime(_Symbol, PERIOD_D1, 0);
 
-   PrintFormat("[RiskMgr] Init: Balance=%.2f | Risk=%.2f%% | MaxPos=%d | DailyDD=%.1f%% | TotalDD=%.1f%%",
+   // Detect trailing DD mode (when daily DD guard is 0 or negative = no daily limit)
+   m_trailing_dd = (daily_dd_guard <= 0);
+   m_equity_high_water = AccountInfoDouble(ACCOUNT_EQUITY);
+   if(m_equity_high_water <= 0) m_equity_high_water = m_initial_balance;
+
+   PrintFormat("[RiskMgr] Init: Balance=%.2f | Risk=%.2f%% | MaxPos=%d | DailyDD=%.1f%% | TotalDD=%.1f%% | DD_Mode=%s | HWM=%.2f",
                m_initial_balance, m_risk_per_trade, m_max_open_positions,
-               m_daily_dd_guard_pct, m_total_dd_guard_pct);
+               m_daily_dd_guard_pct, m_total_dd_guard_pct,
+               m_trailing_dd ? "TRAILING" : "FIXED", m_equity_high_water);
 }
 
 //+------------------------------------------------------------------+
@@ -265,12 +277,21 @@ double CRiskManager::GetPipValue(string symbol, double lot_size)
 //+------------------------------------------------------------------+
 void CRiskManager::CheckDailyReset()
 {
+   // Update equity high water mark every check (not just daily reset)
+   if(m_trailing_dd)
+   {
+      double equity = AccountInfoDouble(ACCOUNT_EQUITY);
+      if(equity > m_equity_high_water)
+         m_equity_high_water = equity;
+   }
+
    datetime current_day = iTime(_Symbol, PERIOD_D1, 0);
    if(current_day > m_daily_reset_time)
    {
       m_daily_start_balance = AccountInfoDouble(ACCOUNT_BALANCE);
       m_daily_reset_time    = current_day;
-      PrintFormat("[RiskMgr] Daily reset: New day balance = %.2f", m_daily_start_balance);
+      PrintFormat("[RiskMgr] Daily reset: New day balance = %.2f | HWM = %.2f",
+                  m_daily_start_balance, m_equity_high_water);
    }
 }
 
@@ -396,15 +417,35 @@ bool CRiskManager::IsDailyDrawdownOK()
 
 //+------------------------------------------------------------------+
 //| Check total drawdown guard                                        |
+//| FIXED: Now supports trailing DD from equity high water mark       |
 //+------------------------------------------------------------------+
 bool CRiskManager::IsTotalDrawdownOK()
 {
    double equity = AccountInfoDouble(ACCOUNT_EQUITY);
-   double total_pnl = equity - m_initial_balance;
+   if(equity <= 0) return true;  // Safety: bad equity data = don't block
+
+   // Update equity high water mark
+   if(equity > m_equity_high_water)
+      m_equity_high_water = equity;
+
    double total_dd_pct = 0;
 
-   if(m_initial_balance > 0)
-      total_dd_pct = (-total_pnl / m_initial_balance) * 100.0;
+   if(m_trailing_dd)
+   {
+      // TRAILING DD: measured from equity high water mark (matches Guardian)
+      if(m_equity_high_water > 0)
+      {
+         double dd = m_equity_high_water - equity;
+         total_dd_pct = (dd > 0) ? (dd / m_equity_high_water) * 100.0 : 0;
+      }
+   }
+   else
+   {
+      // FIXED DD: measured from initial balance
+      double total_pnl = equity - m_initial_balance;
+      if(m_initial_balance > 0)
+         total_dd_pct = (-total_pnl / m_initial_balance) * 100.0;
+   }
 
    return total_dd_pct < m_total_dd_guard_pct;
 }
@@ -650,13 +691,28 @@ double CRiskManager::GetDailyDrawdownRemaining()
 
 //+------------------------------------------------------------------+
 //| Get remaining total drawdown allowance in $                       |
+//| FIXED: Now supports trailing DD from equity high water mark       |
 //+------------------------------------------------------------------+
 double CRiskManager::GetTotalDrawdownRemaining()
 {
-   double guard_amount = m_initial_balance * (m_total_dd_guard_pct / 100.0);
-   double current_loss = m_initial_balance - AccountInfoDouble(ACCOUNT_EQUITY);
-   if(current_loss < 0) current_loss = 0;
-   return guard_amount - current_loss;
+   double equity = AccountInfoDouble(ACCOUNT_EQUITY);
+
+   if(m_trailing_dd)
+   {
+      // Trailing: DD measured from equity high water mark
+      double guard_amount = m_equity_high_water * (m_total_dd_guard_pct / 100.0);
+      double current_loss = m_equity_high_water - equity;
+      if(current_loss < 0) current_loss = 0;
+      return guard_amount - current_loss;
+   }
+   else
+   {
+      // Fixed: DD measured from initial balance
+      double guard_amount = m_initial_balance * (m_total_dd_guard_pct / 100.0);
+      double current_loss = m_initial_balance - equity;
+      if(current_loss < 0) current_loss = 0;
+      return guard_amount - current_loss;
+   }
 }
 
 //+------------------------------------------------------------------+
@@ -668,10 +724,11 @@ string CRiskManager::GetStatusReport()
    double balance = AccountInfoDouble(ACCOUNT_BALANCE);
 
    string report = StringFormat(
-      "[RiskMgr Status] Bal=%.2f Eq=%.2f | DailyPnL=%.2f (DD rem: $%.2f) | TotalPnL=%.2f (DD rem: $%.2f) | Target: %s",
+      "[RiskMgr Status] Bal=%.2f Eq=%.2f | DailyPnL=%.2f (DD rem: $%.2f) | TotalPnL=%.2f (DD rem: $%.2f) | DD_Mode=%s HWM=%.2f | Target: %s",
       balance, equity,
       GetDailyPnL(), GetDailyDrawdownRemaining(),
       GetTotalPnL(), GetTotalDrawdownRemaining(),
+      m_trailing_dd ? "TRAILING" : "FIXED", m_equity_high_water,
       m_target_reached ? "REACHED" : "pending"
    );
 
