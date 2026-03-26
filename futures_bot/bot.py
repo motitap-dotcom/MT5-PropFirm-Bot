@@ -89,15 +89,12 @@ class FuturesBot:
         logger.info("TradeDay Futures Bot Starting")
         logger.info("=" * 60)
 
-        # Initialize Tradovate client
+        # Initialize Tradovate client (web-style auth, no API keys needed)
         self.client = TradovateClient(
             username=os.environ.get("TRADOVATE_USER", self.config.get("username", "")),
             password=os.environ.get("TRADOVATE_PASS", self.config.get("password", "")),
-            app_id=os.environ.get("TRADOVATE_APP_ID", self.config.get("app_id", "")),
-            app_version=self.config.get("app_version", "1.0"),
-            cid=int(os.environ.get("TRADOVATE_CID", self.config.get("cid", 0))),
-            sec=os.environ.get("TRADOVATE_SEC", self.config.get("sec", "")),
             live=self.config.get("live", False),
+            organization=self.config.get("organization", ""),
         )
 
         # Initialize modules

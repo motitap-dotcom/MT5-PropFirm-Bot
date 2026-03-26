@@ -186,11 +186,19 @@ All workflows send Telegram notifications on completion.
 - SSH: stored in GitHub Secrets (`VPS_USER`, `VPS_PASSWORD`)
 - VNC: port 5900 (RealVNC)
 
+## Tradovate Auth Method
+- **Web-style auth**: No API key subscription needed
+- Uses `appId="tradovate_trader(web)"`, `cid=8`, `sec=""`
+- First login from new IP requires CAPTCHA (solve once via `get_token.py`)
+- After that, token auto-renews via `/auth/renewaccesstoken`
+- Token saved to `configs/.tradovate_token.json`
+- Can also set `TRADOVATE_ACCESS_TOKEN` in `.env` as override
+
 ## GitHub Secrets Needed
 - `VPS_HOST`, `VPS_USER`, `VPS_PASSWORD` — VPS access
 - `TRADOVATE_USER`, `TRADOVATE_PASS` — Tradovate login
-- `TRADOVATE_APP_ID`, `TRADOVATE_CID`, `TRADOVATE_SEC` — Tradovate API credentials
 - `TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID` — Telegram notifications
+- `TRADOVATE_ACCESS_TOKEN` — (optional) Pre-obtained token from CAPTCHA flow
 
 ---
 

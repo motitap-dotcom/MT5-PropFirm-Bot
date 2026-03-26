@@ -1,19 +1,28 @@
 """
 Tradovate API Client
 Handles authentication, order management, and market data via REST + WebSocket.
+
+Auth method: Web-style authentication (no API keys needed).
+Uses appId="tradovate_trader(web)", cid=8, sec="" to mimic the web trader.
+First login from new IP requires solving CAPTCHA once, then token auto-renews.
 """
 
 import asyncio
 import json
 import time
+import uuid
 import logging
 from datetime import datetime, timezone
 from typing import Optional, Dict, Any, List, Callable
+from pathlib import Path
 
 import aiohttp
 import websockets
 
 logger = logging.getLogger("tradovate_client")
+
+# Token file path for persistence across restarts
+TOKEN_FILE = Path("configs/.tradovate_token.json")
 
 
 class TradovateClient:
@@ -22,32 +31,42 @@ class TradovateClient:
     # API base URLs
     DEMO_URL = "https://demo.tradovateapi.com/v1"
     LIVE_URL = "https://live.tradovateapi.com/v1"
-    MD_WS_URL = "wss://md.tradovateapi.com/v1/websocket"
+
+    # WebSocket URLs
     DEMO_WS_URL = "wss://demo.tradovateapi.com/v1/websocket"
     LIVE_WS_URL = "wss://live.tradovateapi.com/v1/websocket"
+    DEMO_MD_WS_URL = "wss://md-demo.tradovateapi.com/v1/websocket"
+    LIVE_MD_WS_URL = "wss://md.tradovateapi.com/v1/websocket"
 
-    def __init__(self, username: str, password: str, app_id: str = "",
-                 app_version: str = "1.0", cid: int = 0, sec: str = "",
-                 live: bool = False):
+    # Web-style auth constants (no API key subscription needed)
+    WEB_APP_ID = "tradovate_trader(web)"
+    WEB_APP_VERSION = "3.260220.0"
+    WEB_CID = 8
+    WEB_SEC = ""
+
+    def __init__(self, username: str, password: str, live: bool = False,
+                 organization: str = ""):
         self.username = username
         self.password = password
-        self.app_id = app_id
-        self.app_version = app_version
-        self.cid = cid
-        self.sec = sec
         self.live = live
+        self.organization = organization  # Empty for TradeDay
+        self.device_id = str(uuid.uuid4())
 
         self.base_url = self.LIVE_URL if live else self.DEMO_URL
         self.ws_url = self.LIVE_WS_URL if live else self.DEMO_WS_URL
+        self.md_ws_url = self.LIVE_MD_WS_URL if live else self.DEMO_MD_WS_URL
 
         self.access_token: Optional[str] = None
+        self.md_access_token: Optional[str] = None
         self.token_expiry: float = 0
         self.session: Optional[aiohttp.ClientSession] = None
 
         # WebSocket connections
         self._md_ws = None  # Market data
-        self._order_ws = None  # Order updates
+        self._trading_ws = None  # Trading/order updates
         self._callbacks: Dict[str, List[Callable]] = {}
+        self._ws_request_id: int = 10
+        self._heartbeat_task: Optional[asyncio.Task] = None
 
         # Account info
         self.account_id: Optional[int] = None
@@ -56,63 +75,194 @@ class TradovateClient:
     async def connect(self):
         """Initialize session and authenticate."""
         self.session = aiohttp.ClientSession()
-        await self._authenticate()
-        await self._get_account_info()
+
+        # Try to load saved token first
+        if self._load_saved_token():
+            logger.info("Loaded saved token, verifying...")
+            try:
+                await self._get_account_info()
+                logger.info("Saved token is valid")
+            except Exception:
+                logger.info("Saved token expired, re-authenticating...")
+                await self._authenticate()
+                await self._get_account_info()
+        else:
+            await self._authenticate()
+            await self._get_account_info()
+
         logger.info(f"Connected to Tradovate ({'LIVE' if self.live else 'DEMO'}) "
                      f"as {self.username}, account_id={self.account_id}")
 
     async def disconnect(self):
         """Clean up connections."""
+        if self._heartbeat_task:
+            self._heartbeat_task.cancel()
         if self._md_ws:
             await self._md_ws.close()
-        if self._order_ws:
-            await self._order_ws.close()
+        if self._trading_ws:
+            await self._trading_ws.close()
         if self.session:
             await self.session.close()
         logger.info("Disconnected from Tradovate")
 
+    # ── Authentication ──
+
     async def _authenticate(self):
-        """Get access token via REST API."""
+        """
+        Authenticate using web-style auth.
+        No API keys needed - uses same method as Tradovate web trader.
+        """
+        # First try: check if we have a pre-set access token (from CAPTCHA flow)
+        import os
+        preset_token = os.environ.get("TRADOVATE_ACCESS_TOKEN", "")
+        if preset_token:
+            self.access_token = preset_token
+            self.token_expiry = time.time() + 86400  # Assume 24h
+            logger.info("Using pre-set access token from environment")
+            self._save_token()
+            return
+
         payload = {
             "name": self.username,
             "password": self.password,
-            "appId": self.app_id,
-            "appVersion": self.app_version,
-            "cid": self.cid,
-            "sec": self.sec,
+            "appId": self.WEB_APP_ID,
+            "appVersion": self.WEB_APP_VERSION,
+            "deviceId": self.device_id,
+            "cid": self.WEB_CID,
+            "sec": self.WEB_SEC,
+            "organization": self.organization,
         }
-        async with self.session.post(f"{self.base_url}/auth/accesstokenrequest",
-                                      json=payload) as resp:
-            if resp.status != 200:
-                text = await resp.text()
-                raise ConnectionError(f"Auth failed ({resp.status}): {text}")
+
+        async with self.session.post(
+            f"{self.base_url}/auth/accesstokenrequest",
+            json=payload
+        ) as resp:
             data = await resp.json()
 
-        self.access_token = data.get("accessToken")
-        expiry_str = data.get("expirationTime", "")
+        # Handle different response scenarios
+        if "accessToken" in data:
+            # Success - got full token set
+            self.access_token = data["accessToken"]
+            self.md_access_token = data.get("mdAccessToken", self.access_token)
+            self._parse_expiry(data.get("expirationTime", ""))
+            self._save_token()
+            logger.info("Authenticated successfully (direct)")
+            return
+
+        if "p-ticket" in data:
+            # CAPTCHA or wait required
+            p_ticket = data["p-ticket"]
+            p_time = data.get("p-time", 15)
+            p_captcha = data.get("p-captcha", False)
+
+            if p_captcha:
+                # CAPTCHA required - need manual intervention
+                logger.error(
+                    "CAPTCHA required for first login!\n"
+                    "Run: python3 get_token.py\n"
+                    "Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser."
+                )
+                raise ConnectionError(
+                    "CAPTCHA required. Run get_token.py on a machine with a browser, "
+                    "then set TRADOVATE_ACCESS_TOKEN in .env"
+                )
+            else:
+                # Wait and retry (no CAPTCHA)
+                logger.info(f"Waiting {p_time}s before retry (p-ticket received)...")
+                await asyncio.sleep(p_time)
+
+                payload["p-ticket"] = p_ticket
+                async with self.session.post(
+                    f"{self.base_url}/auth/accesstokenrequest",
+                    json=payload
+                ) as resp:
+                    data = await resp.json()
+
+                if "accessToken" in data:
+                    self.access_token = data["accessToken"]
+                    self.md_access_token = data.get("mdAccessToken", self.access_token)
+                    self._parse_expiry(data.get("expirationTime", ""))
+                    self._save_token()
+                    logger.info("Authenticated successfully (after wait)")
+                    return
+
+        # Auth failed
+        error = data.get("errorText", str(data))
+        raise ConnectionError(f"Authentication failed: {error}")
+
+    async def _renew_token(self):
+        """Renew access token (no re-auth needed, no CAPTCHA)."""
+        try:
+            async with self.session.post(
+                f"{self.base_url}/auth/renewaccesstoken",
+                headers=self._headers()
+            ) as resp:
+                if resp.status == 200:
+                    data = await resp.json()
+                    self.access_token = data.get("accessToken", self.access_token)
+                    self._parse_expiry(data.get("expirationTime", ""))
+                    self._save_token()
+                    logger.info("Token renewed successfully")
+                else:
+                    logger.warning(f"Token renewal failed ({resp.status}), re-authenticating...")
+                    await self._authenticate()
+        except Exception as e:
+            logger.error(f"Token renewal error: {e}")
+            await self._authenticate()
+
+    async def _ensure_token(self):
+        """Refresh token if close to expiry (5 min buffer)."""
+        if time.time() > self.token_expiry - 300:
+            await self._renew_token()
+
+    def _parse_expiry(self, expiry_str: str):
+        """Parse token expiration time."""
         if expiry_str:
-            # Parse ISO datetime
             try:
                 dt = datetime.fromisoformat(expiry_str.replace("Z", "+00:00"))
                 self.token_expiry = dt.timestamp()
             except (ValueError, TypeError):
-                self.token_expiry = time.time() + 3600
+                self.token_expiry = time.time() + 86400  # 24h default
+        else:
+            self.token_expiry = time.time() + 86400
 
-        if not self.access_token:
-            raise ConnectionError(f"No access token received: {data}")
+    def _save_token(self):
+        """Save token to file for persistence across restarts."""
+        try:
+            TOKEN_FILE.parent.mkdir(parents=True, exist_ok=True)
+            data = {
+                "access_token": self.access_token,
+                "md_access_token": self.md_access_token,
+                "expiry": self.token_expiry,
+                "saved_at": datetime.now(timezone.utc).isoformat(),
+            }
+            TOKEN_FILE.write_text(json.dumps(data))
+        except Exception as e:
+            logger.warning(f"Could not save token: {e}")
 
-        logger.info("Authenticated successfully")
-
-    async def _ensure_token(self):
-        """Refresh token if close to expiry."""
-        if time.time() > self.token_expiry - 300:  # 5 min buffer
-            await self._authenticate()
+    def _load_saved_token(self) -> bool:
+        """Load token from file. Returns True if valid token loaded."""
+        try:
+            if not TOKEN_FILE.exists():
+                return False
+            data = json.loads(TOKEN_FILE.read_text())
+            expiry = data.get("expiry", 0)
+            if time.time() < expiry - 300:  # Still valid with 5 min buffer
+                self.access_token = data["access_token"]
+                self.md_access_token = data.get("md_access_token")
+                self.token_expiry = expiry
+                return True
+        except Exception:
+            pass
+        return False
 
     def _headers(self) -> Dict[str, str]:
         return {
             "Authorization": f"Bearer {self.access_token}",
             "Content-Type": "application/json",
         }
+
+    # ── REST Helpers ──
 
     async def _get(self, endpoint: str) -> Any:
         """GET request to REST API."""
@@ -142,7 +292,6 @@ class TradovateClient:
         accounts = await self._get("/account/list")
         if not accounts:
             raise Exception("No accounts found")
-        # Use first account
         acc = accounts[0]
         self.account_id = acc["id"]
         self.account_spec = acc.get("name", str(self.account_id))
@@ -150,7 +299,10 @@ class TradovateClient:
 
     async def get_account_balance(self) -> Dict[str, float]:
         """Get current account balance and equity."""
-        cash = await self._get(f"/cashBalance/getCashBalanceSnapshot?accountId={self.account_id}")
+        cash = await self._post(
+            "/cashBalance/getcashbalancesnapshot",
+            {"accountId": self.account_id}
+        )
         return {
             "balance": cash.get("totalCashValue", 0),
             "realized_pnl": cash.get("realizedPnl", 0),
@@ -160,9 +312,12 @@ class TradovateClient:
     # ── Contract Lookup ──
 
     async def find_contract(self, symbol: str) -> Dict:
-        """Find a contract by symbol name (e.g., 'MESM5', 'MNQM5')."""
-        result = await self._get(f"/contract/find?name={symbol}")
-        return result
+        """Find a contract by symbol name (e.g., 'MESM6', 'MNQM6')."""
+        return await self._get(f"/contract/find?name={symbol}")
+
+    async def suggest_contract(self, base_symbol: str) -> Dict:
+        """Get front-month contract for a base symbol (e.g., 'MES' -> 'MESM6')."""
+        return await self._get(f"/contract/suggest?t={base_symbol}&l=1")
 
     async def get_contract_by_id(self, contract_id: int) -> Dict:
         """Get contract details by ID."""
@@ -177,9 +332,6 @@ class TradovateClient:
         action: 'Buy' or 'Sell'
         bracket: optional {'stopLoss': float, 'takeProfit': float}
         """
-        contract = await self.find_contract(symbol)
-        contract_id = contract["id"]
-
         order_data = {
             "accountSpec": self.account_spec,
             "accountId": self.account_id,
@@ -194,9 +346,9 @@ class TradovateClient:
         order_id = result.get("orderId")
         logger.info(f"Market order placed: {action} {qty} {symbol}, orderId={order_id}")
 
-        # Place bracket orders if specified
+        # Place bracket (OSO) orders if specified
         if bracket and order_id:
-            await self._place_bracket(order_id, contract_id, action, qty, bracket)
+            await self._place_oso_bracket(symbol, action, qty, bracket)
 
         return result
 
@@ -234,31 +386,73 @@ class TradovateClient:
         logger.info(f"Stop order: {action} {qty} {symbol} @ stop={stop_price}")
         return result
 
-    async def _place_bracket(self, parent_order_id: int, contract_id: int,
-                              action: str, qty: int, bracket: Dict):
-        """Place stop loss and take profit around a filled order."""
+    async def _place_oso_bracket(self, symbol: str, action: str, qty: int,
+                                  bracket: Dict):
+        """Place OSO bracket order (SL + TP linked to entry)."""
         exit_action = "Sell" if action == "Buy" else "Buy"
+        other_orders = []
 
         if "stopLoss" in bracket:
-            await self.place_stop_order(
-                symbol="",  # Will be resolved from parent
-                action=exit_action,
-                qty=qty,
-                stop_price=bracket["stopLoss"],
-            )
+            other_orders.append({
+                "action": exit_action,
+                "symbol": symbol,
+                "orderQty": qty,
+                "orderType": "Stop",
+                "stopPrice": bracket["stopLoss"],
+                "isAutomated": True,
+            })
 
         if "takeProfit" in bracket:
-            await self.place_limit_order(
-                symbol="",
-                action=exit_action,
-                qty=qty,
-                price=bracket["takeProfit"],
-            )
+            other_orders.append({
+                "action": exit_action,
+                "symbol": symbol,
+                "orderQty": qty,
+                "orderType": "Limit",
+                "price": bracket["takeProfit"],
+                "isAutomated": True,
+            })
+
+        if other_orders:
+            oso_data = {
+                "accountSpec": self.account_spec,
+                "accountId": self.account_id,
+                "action": action,
+                "symbol": symbol,
+                "orderQty": qty,
+                "orderType": "Market",
+                "isAutomated": True,
+                "bracket1": other_orders[0] if len(other_orders) > 0 else None,
+                "bracket2": other_orders[1] if len(other_orders) > 1 else None,
+            }
+            try:
+                result = await self._post("/order/placeOSO", oso_data)
+                logger.info(f"OSO bracket placed for {symbol}")
+                return result
+            except Exception as e:
+                logger.warning(f"OSO failed, placing separate orders: {e}")
+                for order in other_orders:
+                    order["accountSpec"] = self.account_spec
+                    order["accountId"] = self.account_id
+                    await self._post("/order/placeorder", order)
 
     async def cancel_order(self, order_id: int) -> Dict:
         """Cancel an open order."""
         result = await self._post("/order/cancelorder", {"orderId": order_id})
         logger.info(f"Cancelled order {order_id}")
+        return result
+
+    async def modify_order(self, order_id: int, price: float = None,
+                            stop_price: float = None, qty: int = None) -> Dict:
+        """Modify an existing order."""
+        mod_data = {"orderId": order_id}
+        if price is not None:
+            mod_data["price"] = price
+        if stop_price is not None:
+            mod_data["stopPrice"] = stop_price
+        if qty is not None:
+            mod_data["orderQty"] = qty
+        result = await self._post("/order/modifyorder", mod_data)
+        logger.info(f"Modified order {order_id}")
         return result
 
     async def cancel_all_orders(self) -> None:
@@ -303,15 +497,15 @@ class TradovateClient:
 
     async def get_positions(self) -> List[Dict]:
         """Get all open positions."""
-        return await self._get(f"/position/list")
+        return await self._get("/position/list")
 
     async def get_open_orders(self) -> List[Dict]:
         """Get all open orders."""
-        return await self._get(f"/order/list")
+        return await self._get("/order/list")
 
     async def get_fills(self) -> List[Dict]:
         """Get today's fills."""
-        return await self._get(f"/fill/list")
+        return await self._get("/fill/list")
 
     # ── Market Data (WebSocket) ──
 
@@ -322,56 +516,94 @@ class TradovateClient:
 
         self._callbacks.setdefault(symbol, []).append(callback)
 
-        # Send subscription message
-        sub_msg = f"md/subscribeQuote\n2\n\n{json.dumps({'symbol': symbol})}"
+        self._ws_request_id += 1
+        sub_msg = f"md/subscribeQuote\n{self._ws_request_id}\n\n{json.dumps({'symbol': symbol})}"
         await self._md_ws.send(sub_msg)
         logger.info(f"Subscribed to market data: {symbol}")
 
     async def _connect_md_websocket(self):
         """Connect to market data WebSocket."""
-        self._md_ws = await websockets.connect(self.MD_WS_URL)
+        token = self.md_access_token or self.access_token
+        self._md_ws = await websockets.connect(self.md_ws_url)
+
+        # Wait for open frame
+        msg = await self._md_ws.recv()
+        if msg == "o":
+            logger.debug("MD WebSocket open frame received")
+
         # Authenticate
-        auth_msg = f"authorize\n1\n\n{self.access_token}"
+        auth_msg = f"authorize\n1\n\n{token}"
         await self._md_ws.send(auth_msg)
         response = await self._md_ws.recv()
-        logger.info(f"MD WebSocket connected: {response[:100]}")
+        logger.info(f"MD WebSocket connected")
 
-        # Start listening in background
+        # Start heartbeat and listener
+        self._heartbeat_task = asyncio.create_task(self._ws_heartbeat())
         asyncio.create_task(self._listen_md())
+
+    async def _ws_heartbeat(self):
+        """Send heartbeat responses to keep WebSocket alive."""
+        while True:
+            try:
+                await asyncio.sleep(30)
+                if self._md_ws and self._md_ws.open:
+                    await self._md_ws.send("[]")
+            except asyncio.CancelledError:
+                break
+            except Exception:
+                break
 
     async def _listen_md(self):
         """Listen for market data messages."""
         try:
             async for message in self._md_ws:
                 try:
-                    self._process_md_message(message)
+                    if message == "h":
+                        # Heartbeat from server
+                        await self._md_ws.send("[]")
+                        continue
+                    if message.startswith("a"):
+                        # Data frame - strip 'a' prefix and parse
+                        self._process_md_message(message[1:])
                 except Exception as e:
                     logger.error(f"Error processing MD message: {e}")
         except websockets.ConnectionClosed:
-            logger.warning("MD WebSocket disconnected, reconnecting...")
+            logger.warning("MD WebSocket disconnected, reconnecting in 2s...")
             await asyncio.sleep(2)
+            self._md_ws = None
             await self._connect_md_websocket()
+            # Re-subscribe
+            for symbol in self._callbacks:
+                self._ws_request_id += 1
+                sub_msg = f"md/subscribeQuote\n{self._ws_request_id}\n\n{json.dumps({'symbol': symbol})}"
+                await self._md_ws.send(sub_msg)
 
     def _process_md_message(self, message: str):
         """Parse and dispatch market data messages."""
-        # Tradovate WS messages have format: event\nid\n\njson_data
-        parts = message.split("\n", 3)
-        if len(parts) < 4:
-            return
-
-        event_type = parts[0]
         try:
-            data = json.loads(parts[3]) if parts[3] else {}
+            frames = json.loads(message)
         except json.JSONDecodeError:
             return
 
-        if event_type in ("md/quote", "md/subscribeQuote"):
-            symbol = data.get("contractSymbol", "")
-            for cb in self._callbacks.get(symbol, []):
-                try:
-                    cb(data)
-                except Exception as e:
-                    logger.error(f"Callback error for {symbol}: {e}")
+        if not isinstance(frames, list):
+            frames = [frames]
+
+        for frame in frames:
+            if not isinstance(frame, dict):
+                continue
+
+            event = frame.get("e", "")
+            data = frame.get("d", frame)
+
+            if event == "md" or "bid" in data or "trade" in data:
+                contract_id = data.get("contractId", "")
+                # Dispatch to all callbacks
+                for symbol, cbs in self._callbacks.items():
+                    for cb in cbs:
+                        try:
+                            cb(data)
+                        except Exception as e:
+                            logger.error(f"Callback error for {symbol}: {e}")
 
     # ── Historical Data ──
 
@@ -381,7 +613,6 @@ class TradovateClient:
         Get historical OHLCV bars.
         timeframe: '1min', '5min', '15min', '30min', '1hour', '1day'
         """
-        # Map timeframe to Tradovate elementSize/elementSizeUnit
         tf_map = {
             "1min": (1, "Minute"),
             "5min": (5, "Minute"),
@@ -392,10 +623,6 @@ class TradovateClient:
         }
         size, unit = tf_map.get(timeframe, (5, "Minute"))
 
-        contract = await self.find_contract(symbol)
-        contract_id = contract["id"]
-
-        # Use MD endpoint for historical data
         result = await self._post("/md/getChart", {
             "symbol": symbol,
             "chartDescription": {
