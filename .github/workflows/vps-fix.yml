@@ -1,44 +1,37 @@
-name: VPS Fix and Restart MT5
-
+name: VPS Fix
 on:
   push:
     paths:
-      - '.github/workflows/vps-fix.yml'
       - 'scripts/fix_and_restart.sh'
-      - 'scripts/clean_restart.sh'
-      - 'scripts/upgrade_wine.sh'
-      - 'scripts/fix_wine_version.sh'
-      - 'scripts/force_wine11.sh'
-      - 'scripts/install_mt5_linux.sh'
-  workflow_dispatch:
-
-permissions:
-  contents: write
+      - 'scripts/install_bot.sh'
 
 jobs:
-  fix-vps:
+  fix:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fix and restart MT5 on VPS
-        env:
-          VPS_IP: ${{ secrets.VPS_IP }}
-          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-        run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          chmod +x scripts/fix_and_restart.sh scripts/clean_restart.sh
-          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no scripts/install_mt5_linux.sh ${VPS_USER}@${VPS_IP}:/tmp/fix.sh
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} "bash /tmp/fix.sh" > vps_fix_report.txt 2>&1 || true
-          echo "EXIT_CODE=$?" >> vps_fix_report.txt
-          cat vps_fix_report.txt
+      - name: Fix and restart
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script_stop: true
+          script: |
+            cd /root/MT5-PropFirm-Bot
+            git pull origin ${{ github.ref_name }}
+            bash scripts/fix_and_restart.sh > vps_fix_report.txt 2>&1
+            git add vps_fix_report.txt
+            git commit -m "VPS fix report $(date -u +'%Y-%m-%d %H:%M UTC')" || true
+            git push origin ${{ github.ref_name }} || true
 
-      - name: Commit fix report
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f vps_fix_report.txt
-          git commit -m "VPS fix report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push || true
+      - name: Telegram notification
+        if: always()
+        uses: appleboy/telegram-action@v0
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            VPS Fix completed
+            Status: ${{ job.status }}

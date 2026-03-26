@@ -1,46 +1,37 @@
-name: VPS Status Check
-
+name: VPS Check
 on:
   push:
     paths:
-      - '.github/workflows/vps-check.yml'
       - 'trigger-check.txt'
-      - 'scripts/remote_check.sh'
-      - 'scripts/deep_check.sh'
-      - 'scripts/connection_check.sh'
-      - 'scripts/network_check.sh'
-      - 'scripts/quick_check.sh'
-      - 'scripts/verify_ea.sh'
-      - 'commands/check_status.sh'
-  workflow_dispatch:
-
-permissions:
-  contents: write
+      - 'scripts/check_bot.sh'
 
 jobs:
-  check-vps:
+  check:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run VPS diagnostics
-        env:
-          VPS_IP: ${{ secrets.VPS_IP }}
-          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-        run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          chmod +x scripts/remote_check.sh scripts/deep_check.sh
-          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no scripts/verify_ea.sh ${VPS_USER}@${VPS_IP}:/tmp/check.sh
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_IP} "bash /tmp/check.sh" > vps_report.txt 2>&1
-          echo "EXIT_CODE=$?" >> vps_report.txt
-          cat vps_report.txt
+      - name: Run diagnostics
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script_stop: true
+          script: |
+            cd /root/MT5-PropFirm-Bot
+            git pull origin ${{ github.ref_name }}
+            bash scripts/check_bot.sh > vps_report.txt 2>&1
+            git add vps_report.txt status/status.json
+            git commit -m "VPS check report $(date -u +'%Y-%m-%d %H:%M UTC')" || true
+            git push origin ${{ github.ref_name }} || true
 
-      - name: Commit report
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f vps_report.txt
-          git commit -m "VPS status report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push || true
+      - name: Telegram notification
+        if: always()
+        uses: appleboy/telegram-action@v0
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            VPS Check completed
+            Status: ${{ job.status }}
