@@ -1,64 +1,46 @@
-name: Run Command on VPS
-
+name: VPS Command
 on:
   push:
     paths:
       - 'commands/run.sh'
-  workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   run-command:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
 
-      - name: Execute command on VPS
-        env:
-          VPS_IP: ${{ secrets.VPS_IP }}
-          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-        run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+      - name: Run command on VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script_stop: true
+          script: |
+            cd /root/MT5-PropFirm-Bot
+            git pull origin ${{ github.ref_name }}
+            bash commands/run.sh > commands/output.txt 2>&1
 
-          echo "=== Sending command to VPS ==="
-          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no commands/run.sh ${VPS_USER}@${VPS_IP}:/tmp/run_cmd.sh
+      - name: Pull output
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            cd /root/MT5-PropFirm-Bot
+            git add commands/output.txt status/status.json
+            git commit -m "VPS command output $(date -u +'%Y-%m-%d %H:%M UTC')" || true
+            git push origin ${{ github.ref_name }} || true
 
-          echo "=== Executing on VPS ==="
-          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=10 ${VPS_USER}@${VPS_IP} "bash /tmp/run_cmd.sh" > commands/output.txt 2>&1 || true
-          echo "EXIT_CODE=$?" >> commands/output.txt
-
-          echo "=== Output ==="
-          cat commands/output.txt
-
-      - name: Send Telegram notification
+      - name: Telegram notification
         if: always()
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: |
-          # Send first 500 chars of output to Telegram
-          OUTPUT=$(head -c 500 commands/output.txt 2>/dev/null || echo "No output")
-          STATUS="${{ job.status }}"
-          if [ "$STATUS" = "success" ]; then
-            ICON="✅"
-          else
-            ICON="❌"
-          fi
-          MSG="${ICON} VPS Command Result:
-          ${OUTPUT}"
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-            -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d text="${MSG}" \
-            -d parse_mode="" > /dev/null 2>&1 || true
-
-      - name: Commit output
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f commands/output.txt
-          git commit -m "VPS command output $(date -u '+%Y-%m-%d %H:%M UTC')" || true
-          git push || true
+        uses: appleboy/telegram-action@v0
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            VPS Command completed
+            Status: ${{ job.status }}
+            Branch: ${{ github.ref_name }}

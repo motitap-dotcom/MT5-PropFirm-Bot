@@ -1,4 +1,4 @@
-# PropFirmBot - Project Memory
+# TradeDay Futures Bot - Project Memory
 
 ## User Info
 - Name: Noa
@@ -30,7 +30,7 @@
 - Never try `ssh`, `scp`, or any direct network command to the VPS.
 
 ### 5. No destructive actions without explicit permission.
-- Never kill MT5, restart services, or delete files without Noa's explicit approval.
+- Never kill the bot, restart services, or delete files without Noa's explicit approval.
 - Always explain what a script will do BEFORE pushing it.
 
 ---
@@ -46,13 +46,13 @@
       |
       | (SSH into VPS via sshpass + secrets)
       v
-[Contabo VPS - Ubuntu + Wine]
+[Contabo VPS - Ubuntu]
       |
-      | (Wine runs MT5 with PropFirmBot EA)
+      | (Python bot connects to Tradovate API)
       v
-[MetaTrader 5 → FundedNext broker]
+[Tradovate API → TradeDay account]
       |
-      | (EA writes status.json, logs, journal CSVs)
+      | (Bot writes status.json, logs)
       v
 [Results committed back to repo by Actions]
 ```
@@ -61,38 +61,37 @@ Claude edits files locally -> pushes to GitHub -> GitHub Actions SSH into VPS ->
 
 ---
 
-## GitHub Actions Workflows (the 4 pipelines)
+## GitHub Actions Workflows (4 pipelines)
 
 ### 1. `vps-command.yml` — Run any command on VPS
 - **Trigger**: push that changes `commands/run.sh`
-- **What it does**: Copies `commands/run.sh` to VPS, executes it via bash
-- **Output file**: `commands/output.txt` (committed back by Actions)
-- **Use for**: Status checks, reading logs, running arbitrary commands, diagnostics
-- **How to use**: Write bash commands in `commands/run.sh`, push, wait ~60s, pull
+- **What it does**: Executes `commands/run.sh` on VPS
+- **Output file**: `commands/output.txt`
+- **Use for**: Status checks, reading logs, diagnostics
 
-### 2. `deploy-ea.yml` — Deploy EA code + configs to VPS
-- **Trigger**: push that changes any file in `EA/**` or `configs/**`
-- **What it does**: Copies all `.mq5`/`.mqh` files to VPS EA directory, copies all `.json` configs, recompiles EA with MetaEditor
-- **Output file**: `deploy_report.txt` (committed back by Actions)
-- **Use for**: Code changes, config updates, bug fixes in EA modules
+### 2. `deploy-bot.yml` — Deploy bot code + configs to VPS
+- **Trigger**: push that changes `futures_bot/**`, `configs/**`, or `requirements.txt`
+- **What it does**: Pulls code, installs deps, restarts bot service
+- **Output file**: `deploy_report.txt`
+- **Use for**: Code changes, config updates, bug fixes
 
 ### 3. `vps-check.yml` — Run VPS diagnostics
-- **Trigger**: push that changes `trigger-check.txt`, `commands/check_status.sh`, `scripts/verify_ea.sh`, `scripts/remote_check.sh`, `scripts/deep_check.sh`, `scripts/connection_check.sh`, `scripts/network_check.sh`, or `scripts/quick_check.sh`
-- **What it does**: Copies `scripts/verify_ea.sh` to VPS and runs it
-- **Output file**: `vps_report.txt` (committed back by Actions)
-- **Use for**: Full diagnostic check (MT5 process, connections, logs, Wine status)
+- **Trigger**: push that changes `trigger-check.txt` or `scripts/check_bot.sh`
+- **What it does**: Runs `scripts/check_bot.sh` on VPS
+- **Output file**: `vps_report.txt`
+- **Use for**: Full diagnostic check
 
-### 4. `vps-fix.yml` — Fix and restart MT5
-- **Trigger**: push that changes `scripts/fix_and_restart.sh`, `scripts/clean_restart.sh`, `scripts/upgrade_wine.sh`, `scripts/fix_wine_version.sh`, `scripts/force_wine11.sh`, or `scripts/install_mt5_linux.sh`
-- **What it does**: Copies `scripts/install_mt5_linux.sh` to VPS and runs it (full MT5 reinstall/restart)
-- **Output file**: `vps_fix_report.txt` (committed back by Actions)
-- **Use for**: MT5 crashes, connection issues, Wine problems, full restart
+### 4. `vps-fix.yml` — Fix and restart bot
+- **Trigger**: push that changes `scripts/fix_and_restart.sh` or `scripts/install_bot.sh`
+- **What it does**: Stops bot, pulls latest, restarts service
+- **Output file**: `vps_fix_report.txt`
+- **Use for**: Bot crashes, connection issues, restarts
 
-All workflows also send Telegram notifications on completion.
+All workflows send Telegram notifications on completion.
 
 ---
 
-## Commands Noa Can Ask For (and what Claude does)
+## Commands Noa Can Ask For
 
 | Request from Noa | What Claude does | Trigger file | Output file |
 |---|---|---|---|
@@ -100,8 +99,8 @@ All workflows also send Telegram notifications on completion.
 | "תראה לי לוגים" | Writes log-reading script to `commands/run.sh`, pushes | `commands/run.sh` | `commands/output.txt` |
 | "יש טרייד פתוח?" | Writes position-check script to `commands/run.sh`, pushes | `commands/run.sh` | `commands/output.txt` |
 | "תתקן את הבוט" | Edits `scripts/fix_and_restart.sh`, pushes | `scripts/fix_and_restart.sh` | `vps_fix_report.txt` |
-| "תעדכן את הקוד" | Edits files in `EA/` or `configs/`, pushes | `EA/**` or `configs/**` | `deploy_report.txt` |
-| "תעשה בדיקה מלאה" | Edits `scripts/verify_ea.sh` or `trigger-check.txt`, pushes | `trigger-check.txt` | `vps_report.txt` |
+| "תעדכן את הקוד" | Edits files in `futures_bot/` or `configs/`, pushes | `futures_bot/**` or `configs/**` | `deploy_report.txt` |
+| "תעשה בדיקה מלאה" | Edits `trigger-check.txt`, pushes | `trigger-check.txt` | `vps_report.txt` |
 | "תריץ פקודה X" | Writes command X in `commands/run.sh`, pushes | `commands/run.sh` | `commands/output.txt` |
 
 ### Workflow for every request:
@@ -120,136 +119,117 @@ All workflows also send Telegram notifications on completion.
 
 | Path | Purpose |
 |---|---|
-| `EA/PropFirmBot.mq5` | Main EA entry point |
-| `EA/Guardian.mqh` | Drawdown protection (5 safety layers, trailing DD) |
-| `EA/RiskManager.mqh` | Position sizing, session filter, weekend guard |
-| `EA/SignalEngine.mqh` | Trading signals (EMA crossover + SMC) |
-| `EA/TradeManager.mqh` | Order execution |
-| `EA/Dashboard.mqh` | On-chart display |
-| `EA/TradeJournal.mqh` | CSV trade logging |
-| `EA/Notifications.mqh` | Telegram/Push/Email alerts |
-| `EA/NewsFilter.mqh` | News event filter |
-| `EA/TradeAnalyzer.mqh` | Performance analytics + self-learning |
-| `EA/AccountStateManager.mqh` | Phase management (Challenge/Funded) |
-| `EA/StatusWriter.mqh` | Writes status.json every tick |
-| `configs/account_state.json` | Current phase config (FUNDED_INSTANT) |
-| `configs/challenge_rules.json` | FundedNext rules (6% trailing DD, no daily DD) |
-| `configs/funded_rules.json` | Funded phase risk settings |
-| `configs/risk_params.json` | Risk parameters (lot size, DD guards, session times) |
-| `configs/notifications.json` | Telegram token/chat ID, notification triggers |
-| `configs/symbols.json` | Traded symbols: EURUSD, GBPUSD, USDJPY, XAUUSD |
+| `futures_bot/bot.py` | Main bot entry point |
+| `futures_bot/core/tradovate_client.py` | Tradovate REST + WebSocket API client |
+| `futures_bot/core/guardian.py` | MASTER WATCHDOG - 5 safety layers, TradeDay rules enforcement |
+| `futures_bot/core/risk_manager.py` | Position sizing, session filter, contract specs |
+| `futures_bot/core/news_filter.py` | TradeDay restricted events filter |
+| `futures_bot/core/notifier.py` | Telegram notifications |
+| `futures_bot/core/status_writer.py` | Writes status.json for monitoring |
+| `futures_bot/strategies/vwap_mean_reversion.py` | Primary strategy: VWAP + RSI mean reversion |
+| `futures_bot/strategies/orb_breakout.py` | Secondary strategy: Opening Range Breakout |
+| `configs/bot_config.json` | Main bot configuration (all parameters) |
+| `configs/restricted_events.json` | TradeDay restricted news events calendar |
 | `commands/run.sh` | Script to execute on VPS (trigger for vps-command) |
-| `commands/check_status.sh` | Status check script |
-| `commands/output.txt` | Output from last VPS command (read-only, written by Actions) |
-| `scripts/fix_and_restart.sh` | MT5 fix + restart script |
-| `scripts/install_mt5_linux.sh` | Full MT5 install script (used by vps-fix) |
-| `scripts/verify_ea.sh` | Diagnostic script (used by vps-check) |
+| `commands/output.txt` | Output from last VPS command |
+| `scripts/check_bot.sh` | Bot diagnostic script |
+| `scripts/fix_and_restart.sh` | Fix + restart script |
+| `scripts/install_bot.sh` | Install bot as systemd service |
 | `trigger-check.txt` | Edit to trigger vps-check workflow |
-| `deploy_report.txt` | Output from last EA deploy (written by Actions) |
-| `vps_report.txt` | Output from last VPS check (written by Actions) |
-| `vps_fix_report.txt` | Output from last VPS fix (written by Actions) |
-| `status/status.json` | EA status snapshot (written by StatusWriter.mqh) |
+| `status/status.json` | Bot status snapshot |
+| `logs/bot.log` | Bot log file (on VPS) |
+| `requirements.txt` | Python dependencies |
 
 ### On VPS:
 
 | Path | Purpose |
 |---|---|
 | `/root/MT5-PropFirm-Bot/` | Repo clone on VPS |
-| `/root/.wine/drive_c/Program Files/MetaTrader 5/` | MT5 installation |
-| `.../MQL5/Experts/PropFirmBot/` | EA files (.mq5, .mqh, .ex5) |
-| `.../MQL5/Files/PropFirmBot/` | Config JSONs + status.json |
-| `.../MQL5/Logs/YYYYMMDD.log` | EA logs (daily files) |
-| `/root/.wine/drive_c/Program Files/MetaTrader 5/logs/` | Terminal logs |
+| `/root/MT5-PropFirm-Bot/futures_bot/` | Bot Python code |
+| `/root/MT5-PropFirm-Bot/configs/` | Configuration files |
+| `/root/MT5-PropFirm-Bot/logs/bot.log` | Bot log file |
+| `/root/MT5-PropFirm-Bot/status/status.json` | Status snapshot |
+| `/root/MT5-PropFirm-Bot/.env` | Environment secrets (Tradovate, Telegram) |
 
 ---
 
 ## Account Details
 
-- Prop firm: FundedNext
-- Account type: Stellar Instant (direct funded, NO challenge)
-- Account number: stored in GitHub Secrets (`MT5_ACCOUNT`)
-- Server: FundedNext-Server
-- Password: stored in GitHub Secrets (`MT5_PASSWORD`)
-- Account size: $2,000
-- Profit split: 70% (up to 80%)
+- Prop firm: TradeDay
+- Account type: $50K Intraday Evaluation
+- Account ID: ELTDER260326211630296397
+- Platform: Tradovate
+- Tradovate username: stored in GitHub Secrets (`TRADOVATE_USER`)
+- Tradovate password: stored in GitHub Secrets (`TRADOVATE_PASS`)
 
-### FundedNext Stellar Instant Rules (CRITICAL)
-- NO daily drawdown limit (0%)
-- 6% TRAILING total drawdown (from equity HIGH WATER MARK, not from initial balance)
-- NO profit target
-- NO minimum trading days
-- EA trading: ALLOWED
-- News trading: ALLOWED (max 40% profit from single day)
-- Weekend holding: ALLOWED
-- Min equity: $1,880 ($2,000 - 6%)
-- Consistency rule: max 40% of total profit in a single day
+### TradeDay $50K Intraday Rules (CRITICAL)
+- **Max Drawdown**: $2,000 (balance cannot drop below $48,000)
+- **Profit Target**: $3,000
+- **Min Trading Days**: 5
+- **Consistency Rule**: No single day > 30% of total profit (max ~$900/day)
+- **Position Limit**: 5 contracts / 50 micro contracts
+- **Intraday Only**: ALL positions must be closed before end of day
+- **Restricted Events**: Must flatten before certain news events (see calendar)
+- Automated trading: ALLOWED
+- No time limit to pass
 
 ---
 
 ## Telegram Bot
 - Token: stored in GitHub Secrets (`TELEGRAM_TOKEN`)
 - Chat ID: stored in GitHub Secrets (`TELEGRAM_CHAT_ID`)
-- Status: Configured in EA but BLOCKED in MT5 (needs "Allow WebRequest" for api.telegram.org in MT5 Tools > Options > Expert Advisors)
 
 ## VPS Details
 - Provider: Contabo
 - IP: stored in GitHub Secrets (`VPS_HOST`)
-- OS: Ubuntu Linux (Wine + MT5)
+- OS: Ubuntu Linux
 - SSH: stored in GitHub Secrets (`VPS_USER`, `VPS_PASSWORD`)
-- Contabo panel password: stored securely (not in repo)
 - VNC: port 5900 (RealVNC)
-- Display: Xvfb :99, x11vnc
 
-## Noa's Tools (for manual access)
-- VNC: RealVNC on Windows → VPS_HOST:5900
-- SSH: PowerShell → `ssh root@VPS_HOST`
-- Terminal: PowerShell on Windows
+## GitHub Secrets Needed
+- `VPS_HOST`, `VPS_USER`, `VPS_PASSWORD` — VPS access
+- `TRADOVATE_USER`, `TRADOVATE_PASS` — Tradovate login
+- `TRADOVATE_APP_ID`, `TRADOVATE_CID`, `TRADOVATE_SEC` — Tradovate API credentials
+- `TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID` — Telegram notifications
 
 ---
 
-## EA Architecture (12 modules)
+## Bot Architecture (Python)
 
 | Module | File | Role |
 |---|---|---|
-| Main EA | `PropFirmBot.mq5` | Entry point, OnInit/OnTick/OnDeinit, initializes all modules |
-| Guardian | `Guardian.mqh` | MASTER WATCHDOG - 5 safety layers (ACTIVE→CAUTION→HALTED→EMERGENCY→SHUTDOWN), trailing DD from equity high water mark |
-| Risk Manager | `RiskManager.mqh` | Position sizing, spread filter, session filter (London 07-11, NY 12-16 UTC), weekend guard (close Friday 20:00 UTC) |
-| Signal Engine | `SignalEngine.mqh` | Two strategies: EMA crossover (fallback) + SMC/order blocks (primary). Multi-timeframe: M15 entry, H4 bias |
-| Trade Manager | `TradeManager.mqh` | Order execution via CTrade, slippage 20 points |
-| Dashboard | `Dashboard.mqh` | On-chart display: balance, equity, DD, positions, guardian state |
-| Trade Journal | `TradeJournal.mqh` | CSV logging: `PropFirmBot_Journal_YYYYMMDD.csv` |
-| Notifications | `Notifications.mqh` | Telegram, push, email alerts |
-| News Filter | `NewsFilter.mqh` | Blocks trading around high-impact news events |
-| Trade Analyzer | `TradeAnalyzer.mqh` | Win/loss tracking, performance analytics, self-learning risk adjustment |
-| Account State | `AccountStateManager.mqh` | Phase management (Challenge vs Funded), loads rules from configs |
-| Status Writer | `StatusWriter.mqh` | Writes `status.json` every tick for external monitoring |
+| Main Bot | `futures_bot/bot.py` | Entry point, main loop, strategy coordination |
+| Tradovate Client | `core/tradovate_client.py` | REST + WebSocket API, orders, market data |
+| Guardian | `core/guardian.py` | MASTER WATCHDOG - 5 states, enforces ALL TradeDay rules |
+| Risk Manager | `core/risk_manager.py` | Position sizing, session times, contract specs |
+| News Filter | `core/news_filter.py` | Blocks trading around restricted events |
+| Notifier | `core/notifier.py` | Telegram alerts (trades, guardian, daily summary) |
+| Status Writer | `core/status_writer.py` | Writes status.json for monitoring |
+| VWAP Strategy | `strategies/vwap_mean_reversion.py` | Primary: VWAP + RSI mean reversion (60-70% win rate) |
+| ORB Strategy | `strategies/orb_breakout.py` | Secondary: Opening Range Breakout (trend days) |
 
 ### Guardian Safety Layers:
 1. **ACTIVE** (0) — All systems go
-2. **CAUTION** (1) — Approaching limits (soft DD 3.5%), reduce risk
-3. **HALTED** (2) — No new trades, manage existing only (critical DD 5.0%)
-4. **EMERGENCY** (3) — Close everything NOW
-5. **SHUTDOWN** (4) — Permanent stop (hard DD 6.0%)
+2. **CAUTION** (1) — 60% of max DD used, reduce risk
+3. **HALTED** (2) — 80% of max DD used, no new trades
+4. **EMERGENCY** (3) — 90% of max DD used, close everything NOW
+5. **SHUTDOWN** (4) — Max DD breached or evaluation passed
 
-### Trading Parameters (from configs):
-- Risk per trade: 0.5% (max 0.75%)
-- Max positions: 2
+### Trading Strategy:
+- **Primary**: VWAP Mean Reversion (most days - range days)
+- **Secondary**: ORB Breakout (trend days - auto-detected at 11:00 ET)
+- **Symbols**: MES (Micro S&P 500), MNQ (Micro Nasdaq)
+- **Timeframe**: 5-minute bars
+- **Session**: 9:30-15:30 ET (no overnight positions)
+- **Dead Zone**: 12:00-13:30 ET (reduced size)
+
+### Risk Parameters:
+- Max risk per trade: $150
+- Max daily loss: $400
+- Max daily profit: $900 (consistency rule)
 - Max daily trades: 6
-- Min R:R ratio: 2.0
-- Symbols: EURUSD, GBPUSD, USDJPY, XAUUSD (all M15 entry, H4 higher TF)
-- Sessions: London 07:00-11:00 UTC, New York 12:00-16:00 UTC
-- Weekend: Close all positions Friday 20:00 UTC
-
----
-
-## Known Bugs (from TEST_COVERAGE_ANALYSIS.md)
-
-1. **CRITICAL**: RiskManager.mqh `IsTotalDrawdownOK()` uses fixed DD calculation, not trailing. Guardian.mqh does it correctly. They can disagree.
-2. **HIGH**: Python backtester DD calculation doesn't match EA (uses fixed DD, not trailing).
-3. **HIGH**: Python backtester ignores 40% consistency rule.
-4. **MEDIUM**: Backtester pip values are hardcoded approximations.
-5. **LOW**: Dashboard hardcodes wrong DD limits ("5% daily, 10% total" instead of "0% daily, 6% trailing").
-6. **KNOWN ISSUE**: Telegram notifications blocked in MT5 (needs WebRequest whitelist for api.telegram.org).
+- Max positions: 3
+- Max contracts per trade: 5 micro
 
 ---
 
@@ -257,5 +237,5 @@ All workflows also send Telegram notifications on completion.
 1. Don't assume anything from previous sessions
 2. Fetch fresh status: write check script to `commands/run.sh`, push, pull results
 3. Read `commands/output.txt` for current state
-4. Check `status/status.json` for last EA-written snapshot (may be stale)
+4. Check `status/status.json` for last bot-written snapshot (may be stale)
 5. All output files have timestamps - always verify freshness

@@ -1,0 +1,30 @@
+{
+  "events": [
+    {"date": "2026-04-01", "time": "9:30", "name": "EIA Weekly Report", "applies_to": "energy", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-04-03", "time": "7:30", "name": "Employment Report (NFP)", "applies_to": "all", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-04-08", "time": "9:30", "name": "EIA Weekly Report", "applies_to": "energy", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-04-08", "time": "13:00", "name": "FOMC Minutes April", "applies_to": "all", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-04-09", "time": "11:00", "name": "Agricultural Reports", "applies_to": "all", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-04-10", "time": "7:30", "name": "CPI Report", "applies_to": "all", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-04-15", "time": "9:30", "name": "EIA Weekly Report", "applies_to": "energy", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-04-22", "time": "9:30", "name": "EIA Weekly Report", "applies_to": "energy", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-04-29", "time": "9:30", "name": "EIA Weekly Report", "applies_to": "energy", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-04-29", "time": "13:00", "name": "FOMC Meeting", "applies_to": "all", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-05-01", "time": "7:30", "name": "Employment Report (NFP)", "applies_to": "all", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-05-06", "time": "9:30", "name": "EIA Weekly Report", "applies_to": "energy", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-05-12", "time": "7:30", "name": "CPI Report", "applies_to": "all", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-05-12", "time": "11:00", "name": "Agricultural Reports", "applies_to": "all", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-05-13", "time": "9:30", "name": "EIA Weekly Report", "applies_to": "energy", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-05-20", "time": "9:30", "name": "EIA Weekly Report", "applies_to": "energy", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-05-20", "time": "13:00", "name": "FOMC Minutes May", "applies_to": "all", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-05-27", "time": "9:30", "name": "EIA Weekly Report", "applies_to": "energy", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-06-03", "time": "9:30", "name": "EIA Weekly Report", "applies_to": "energy", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-06-05", "time": "7:30", "name": "Employment Report (NFP)", "applies_to": "all", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-06-10", "time": "7:30", "name": "CPI Report", "applies_to": "all", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-06-10", "time": "9:30", "name": "EIA Weekly Report", "applies_to": "energy", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-06-11", "time": "11:00", "name": "Agricultural Reports", "applies_to": "all", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-06-17", "time": "9:30", "name": "EIA Weekly Report", "applies_to": "energy", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-06-17", "time": "13:00", "name": "FOMC Meeting", "applies_to": "all", "buffer_before": 30, "buffer_after": 15},
+    {"date": "2026-06-24", "time": "9:30", "name": "EIA Weekly Report", "applies_to": "energy", "buffer_before": 30, "buffer_after": 15}
+  ]
+}

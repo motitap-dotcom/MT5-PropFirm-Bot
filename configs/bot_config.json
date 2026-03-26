@@ -1,0 +1,50 @@
+{
+  "symbols": ["MESM6", "MNQM6"],
+  "timeframe": "5min",
+  "live": false,
+  "telegram_enabled": true,
+  "app_version": "1.0",
+
+  "guardian": {
+    "initial_balance": 50000.0,
+    "max_drawdown": 2000.0,
+    "profit_target": 3000.0,
+    "min_trading_days": 5,
+    "consistency_pct": 0.30,
+    "max_contracts": 5,
+    "max_micro_contracts": 50,
+    "dd_warning_pct": 0.60,
+    "dd_critical_pct": 0.80,
+    "dd_emergency_pct": 0.90,
+    "max_daily_loss": 400.0,
+    "max_daily_profit": 900.0,
+    "max_daily_trades": 6
+  },
+
+  "risk": {
+    "max_risk_per_trade": 150.0,
+    "max_risk_pct": 0.003,
+    "max_positions": 3,
+    "max_contracts_per_trade": 5,
+    "reduce_in_dead_zone": true
+  },
+
+  "vwap": {
+    "rsi_period": 14,
+    "rsi_oversold": 35,
+    "rsi_overbought": 65,
+    "max_consecutive_losses": 3,
+    "min_atr": 2.0,
+    "max_atr": 8.0,
+    "atr_period": 14
+  },
+
+  "orb": {
+    "buffer_ticks": 2.0,
+    "tp_multiplier": 1.5,
+    "max_range_points": 15.0,
+    "min_range_points": 3.0,
+    "volume_threshold": 1.2,
+    "max_trades": 2
+  }
+}

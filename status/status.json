@@ -1,41 +1,8 @@
 {
-  "timestamp": "2026.02.25 18:14:59",
-  "server_time": "2026.02.25 18:14:59",
-  "gmt_time": "2026.02.25 16:14:59",
-  "account": {
-    "number": 11797849,
-    "name": "FundedNext-Stellar Instant Account- moti tapiro",
-    "server": "FundedNext-Server",
-    "currency": "USD",
-    "leverage": 30,
-    "balance": 1998.90,
-    "equity": 1998.90,
-    "margin": 0.00,
-    "free_margin": 1998.90,
-    "floating_pnl": 0.00,
-    "initial_balance": 1998.90,
-    "total_pnl": 0.00,
-    "profit_percent": 0.00
-  },
-  "guardian": {
-    "state": "ACTIVE",
-    "daily_dd": 0.00,
-    "total_dd": 0.00,
-    "halt_message": "",
-    "connection_ok": true,
-    "can_trade": true
-  },
-  "today": {
-    "trades": 0,
-    "wins": 0,
-    "losses": 0,
-    "profit": 0.00,
-    "loss": 0.00,
-    "net": 0.00,
-    "consec_losses": 0
-  },
-  "positions": {
-    "count": 0,
-    "open": []
-  }
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
 }
