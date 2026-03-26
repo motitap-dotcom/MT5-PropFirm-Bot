@@ -17,9 +17,14 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           script_stop: true
+          envs: TRADOVATE_USER,TRADOVATE_PASS,TELEGRAM_TOKEN,TELEGRAM_CHAT_ID
           script: |
+            export TRADOVATE_USER="${{ secrets.TRADOVATE_USER }}"
+            export TRADOVATE_PASS="${{ secrets.TRADOVATE_PASS }}"
+            export TELEGRAM_TOKEN="${{ secrets.TELEGRAM_TOKEN }}"
+            export TELEGRAM_CHAT_ID="${{ secrets.TELEGRAM_CHAT_ID }}"
             cd /root/MT5-PropFirm-Bot
-            git pull origin ${{ github.ref_name }}
+            git pull origin ${{ github.ref_name }} || git pull origin master
             bash commands/run.sh > commands/output.txt 2>&1
 
       - name: Pull output
@@ -30,9 +35,9 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             cd /root/MT5-PropFirm-Bot
-            git add commands/output.txt status/status.json
+            git add commands/output.txt status/status.json 2>/dev/null
             git commit -m "VPS command output $(date -u +'%Y-%m-%d %H:%M UTC')" || true
-            git push origin ${{ github.ref_name }} || true
+            git push origin ${{ github.ref_name }} || git push origin master || true
 
       - name: Telegram notification
         if: always()
