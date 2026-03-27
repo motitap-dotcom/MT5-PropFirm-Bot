@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v21 - runner pushes via GITHUB_TOKEN
+# Trigger: v22 - heredoc without quotes to pass env vars
 echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 

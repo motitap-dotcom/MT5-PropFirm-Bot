@@ -21,7 +21,7 @@ jobs:
       - name: Run command on VPS
         run: |
           sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'REMOTE_END'
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << REMOTE_END
           cd /root/MT5-PropFirm-Bot
           git fetch origin
           git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
