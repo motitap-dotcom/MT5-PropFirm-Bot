@@ -26,19 +26,7 @@ jobs:
             git fetch origin ${{ github.ref_name }}
             git checkout ${{ github.ref_name }} 2>/dev/null || git checkout -b ${{ github.ref_name }} origin/${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
-            bash commands/run.sh > commands/output.txt 2>&1
-
-      - name: Pull output
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          script: |
-            cd /root/MT5-PropFirm-Bot
-            git add commands/output.txt status/status.json 2>/dev/null
-            git commit -m "VPS command output $(date -u +'%Y-%m-%d %H:%M UTC')" || true
-            git push origin ${{ github.ref_name }} || git push origin master || true
+            bash commands/run.sh 2>&1
 
       - name: Telegram notification
         if: always()
