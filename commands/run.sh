@@ -1,4 +1,5 @@
 #!/bin/bash
+# Trigger: setup run
 echo "=== TradeDay Futures Bot - Full Setup ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 echo ""
