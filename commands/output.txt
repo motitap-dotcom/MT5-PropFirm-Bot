@@ -1,5 +1,5 @@
 === Bot Status Check ===
-Timestamp: 2026-03-27 11:40:39 UTC
+Timestamp: 2026-03-27 12:54:29 UTC
 .env loaded (5 vars, token=294 chars)
 
 Symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
@@ -12,7 +12,7 @@ Max contracts/trade: 5
 Max positions: 3
 
 Token: ? org=?
-Expires in: 23.3 hours
+Expires in: 22.9 hours
 
 --- Restarting bot ---
 Systemd env override written
@@ -29,17 +29,17 @@ Traceback (most recent call last):
     await bot.start()
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 140, in start
     await self.client.connect()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 88, in connect
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 94, in connect
     await self._get_account_info()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 304, in _get_account_info
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 311, in _get_account_info
     accounts = await self._get("/account/list")
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 286, in _get
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 293, in _get
     raise Exception(f"GET {endpoint} failed ({resp.status}): {text}")
 Exception: GET /account/list failed (401): Expired Access Token
-2026-03-27 11:40:42,752 [bot] INFO: Stopping bot: Fatal: GET /account/list failed (401): Expired Access Token
-2026-03-27 11:40:42,866 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
-2026-03-27 11:40:42,952 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-27 11:40:42,952 [bot] INFO: Bot stopped
+2026-03-27 12:54:32,494 [bot] INFO: Stopping bot: Fatal: GET /account/list failed (401): Expired Access Token
+2026-03-27 12:54:32,612 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
+2026-03-27 12:54:32,701 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-27 12:54:32,701 [bot] INFO: Bot stopped
 
 === Done ===
