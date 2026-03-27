@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v16 - verify bot + fix git push
+# Trigger: v17 - output captured by Actions runner and pushed
 echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 

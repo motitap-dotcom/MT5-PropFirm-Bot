@@ -15,36 +15,41 @@ jobs:
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
-      - name: Run command on VPS
+      - name: Run command on VPS and capture output
         uses: appleboy/ssh-action@v1
+        id: vps
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           envs: TRADOVATE_USER,TRADOVATE_PASS,TRADOVATE_ACCESS_TOKEN,TELEGRAM_TOKEN,TELEGRAM_CHAT_ID
+          capture_stdout: true
           script: |
             cd /root/MT5-PropFirm-Bot
             git fetch origin ${{ github.ref_name }}
             git checkout ${{ github.ref_name }} 2>/dev/null || git checkout -b ${{ github.ref_name }} origin/${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
-            bash commands/run.sh 2>&1 | tee commands/output.txt
+            bash commands/run.sh 2>&1
 
-      - name: Commit output back to repo
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          script: |
-            cd /root/MT5-PropFirm-Bot
-            git config user.email "bot@tradeday.com"
-            git config user.name "TradeDay Bot"
-            git add -f commands/output.txt status/status.json 2>/dev/null
-            git diff --cached --quiet && echo "No changes to commit" || {
-              git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')"
-              git push origin HEAD:${{ github.ref_name }} 2>&1 || echo "Push failed"
-            }
+      - name: Save output to file
+        run: |
+          cat << 'OUTPUTEOF' > commands/output.txt
+          ${{ steps.vps.outputs.stdout }}
+          OUTPUTEOF
+          echo "Output saved ($(wc -l < commands/output.txt) lines)"
+
+      - name: Commit and push output
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add commands/output.txt
+          git diff --cached --quiet && echo "No changes" || {
+            git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push origin HEAD:${{ github.ref_name }}
+          }
 
       - name: Telegram notification
         if: always()
