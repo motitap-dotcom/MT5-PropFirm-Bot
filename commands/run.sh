@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v32 - fresh token, all bugs fixed
+# Trigger: v33 - final verification
 echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
