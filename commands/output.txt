@@ -1,31 +1,22 @@
-=== Bot Status Check ===
-Timestamp: 2026-03-27 13:47:43 UTC
-
---- Service Status ---
-activating
-Service not running
-
---- Bot Process ---
-root        1117  0.0  0.2 105396 22032 ?        Sl   Mar22   2:45 python3 /root/tradovate-bot/dashboard.py
-root     1468075  0.5  1.1 770012 92116 ?        Sl   Mar26   6:28 /opt/hyrotrader-bot/venv/bin/python -u /opt/hyrotrader-bot/bot/main.py
-root     1745622  6.6  0.6 577988 56480 ?        Ssl  12:05   6:50 /root/tradovate-bot/venv/bin/python bot.py
-
---- Token Check ---
-Token expires in: 23.9 hours
-Organization: TradeDay
-
-.env: 5 vars, token=295 chars
-
---- Config ---
-Symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-Max daily trades: 10
-Max daily loss: $400.0
-Max daily profit: $900.0
-
---- Logs (last 30) ---
+=== Quick Status Check ===
+Timestamp: 2026-03-27 14:05:15 UTC
+--- Service ---
+inactive
+not found
+--- Process ---
+root        1117  0.0  0.2 105396 22032 ?        Sl   Mar22   2:46 python3 /root/tradovate-bot/dashboard.py
+root     1468075  0.5  1.1 770012 92116 ?        Sl   Mar26   6:35 /opt/hyrotrader-bot/venv/bin/python -u /opt/hyrotrader-bot/bot/main.py
+root     1772189 12.4  0.6 575956 51660 ?        Ssl  13:55   1:15 /root/tradovate-bot/venv/bin/python bot.py
+--- Last 20 log lines ---
+2026-03-27 13:53:48,770 [tradovate_client] INFO: Using pre-set access token from environment
+2026-03-27 13:53:48,917 [bot] ERROR: Failed to connect: GET /account/list failed (401): Expired Access Token
+2026-03-27 13:53:48,918 [bot] ERROR: Fatal error: GET /account/list failed (401): Expired Access Token
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 593, in main
+    await bot.start()
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 140, in start
     await self.client.connect()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 94, in connect
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 97, in connect
     await self._get_account_info()
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 311, in _get_account_info
     accounts = await self._get("/account/list")
@@ -33,35 +24,8 @@ Max daily profit: $900.0
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 293, in _get
     raise Exception(f"GET {endpoint} failed ({resp.status}): {text}")
 Exception: GET /account/list failed (401): Expired Access Token
-2026-03-27 12:54:32,494 [bot] INFO: Stopping bot: Fatal: GET /account/list failed (401): Expired Access Token
-2026-03-27 12:54:32,612 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
-2026-03-27 12:54:32,701 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-27 12:54:32,701 [bot] INFO: Bot stopped
-2026-03-27 13:01:08,472 [bot] INFO: ============================================================
-2026-03-27 13:01:08,472 [bot] INFO: TradeDay Futures Bot Starting
-2026-03-27 13:01:08,472 [bot] INFO: ============================================================
-2026-03-27 13:01:08,473 [news_filter] INFO: Loaded 26 restricted events
-2026-03-27 13:01:08,473 [tradovate_client] INFO: Loaded saved token, verifying...
-2026-03-27 13:01:08,641 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-03-27 13:01:08,648 [tradovate_client] INFO: Saved token is valid
-2026-03-27 13:01:08,648 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-03-27 13:01:08,757 [bot] INFO: Bot started successfully
-2026-03-27 13:01:08,757 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-03-27 13:01:08,757 [bot] INFO: Timeframe: 5min
-2026-03-27 13:01:08,757 [bot] INFO: New trading day: 2026-03-27
-2026-03-27 13:14:36,047 [bot] INFO: Stopping bot: Signal received
-2026-03-27 13:14:36,181 [bot] ERROR: Error closing positions: GET /position/list failed (401): Access is denied
-2026-03-27 13:14:36,299 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-27 13:14:36,300 [bot] INFO: Bot stopped
-
---- status.json ---
-{
-    "timestamp": "",
-    "bot": "TradeDay Futures Bot",
-    "platform": "Tradovate",
-    "guardian": {},
-    "positions": [],
-    "risk": {}
-}
-
+2026-03-27 13:53:48,922 [bot] INFO: Stopping bot: Fatal: GET /account/list failed (401): Expired Access Token
+2026-03-27 13:53:49,043 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
+2026-03-27 13:53:49,137 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-27 13:53:49,137 [bot] INFO: Bot stopped
 === Done ===
