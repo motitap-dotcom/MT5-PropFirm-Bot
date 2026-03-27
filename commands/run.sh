@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v24 - read .env in Python, no bash source
+# Trigger: v25 - new token, start bot
 echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
