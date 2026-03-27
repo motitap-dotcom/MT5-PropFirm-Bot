@@ -22,6 +22,7 @@ jobs:
         run: sudo apt-get install -y -qq sshpass > /dev/null 2>&1
 
       - name: Run command on VPS
+        continue-on-error: true
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -37,10 +38,12 @@ jobs:
             cat commands/output.txt
 
       - name: Fetch output from VPS
+        if: always()
         run: |
           sshpass -p "${{ secrets.VPS_PASSWORD }}" scp -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/root/MT5-PropFirm-Bot/commands/output.txt commands/output.txt || echo "SCP failed"
 
       - name: Push output to repo
+        if: always()
         run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v26 - simplified, envs via appleboy
+# Trigger: v27 - continue-on-error for all steps
 echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
