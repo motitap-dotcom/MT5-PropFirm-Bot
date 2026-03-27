@@ -1,81 +1,62 @@
 #!/bin/bash
-# Trigger: v12 - use pre-obtained access token
-echo "=== Tradovate Token Setup ==="
+# Trigger: v13 - START THE BOT
+echo "=== Starting TradeDay Futures Bot ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
 cd /root/MT5-PropFirm-Bot
 
+# Update .env with all secrets
 python3 << 'PYEOF'
-import requests, json, time, os
-
+import os
 token = os.environ.get('TRADOVATE_ACCESS_TOKEN', '').strip()
-print(f"Token length: {len(token)}")
-print(f"Token starts: {token[:20]}...")
-print(f"Token ends: ...{token[-10:]}")
+user = os.environ.get('TRADOVATE_USER', '')
+passwd = os.environ.get('TRADOVATE_PASS', '')
+tg_token = os.environ.get('TELEGRAM_TOKEN', '')
+tg_chat = os.environ.get('TELEGRAM_CHAT_ID', '')
 
-if not token:
-    print("ERROR: No token found!")
-    exit(1)
-
-# Test token on DEMO (where TradeDay lives)
-base_url = "https://demo.tradovateapi.com/v1"
-headers = {"Authorization": f"Bearer {token}"}
-
-print("\n--- Testing token on DEMO ---")
-try:
-    resp = requests.get(f"{base_url}/account/list", headers=headers, timeout=10)
-    if resp.status_code == 200:
-        accounts = resp.json()
-        print(f"SUCCESS! Found {len(accounts)} accounts:")
-        for acc in accounts:
-            print(f"  - {acc.get('name','?')} (id={acc.get('id','?')})")
-
-        # Save token to config file
-        token_data = {
-            "access_token": token,
-            "md_access_token": token,
-            "expiry": time.time() + 86400,
-            "environment": "demo",
-            "organization": "TradeDay",
-        }
-        with open("configs/.tradovate_token.json", "w") as f:
-            json.dump(token_data, f, indent=2)
-        print("\nToken saved to configs/.tradovate_token.json")
-
-        # Also save to .env
-        env_lines = []
-        if os.path.exists(".env"):
-            with open(".env") as f:
-                env_lines = [l for l in f.readlines() if not l.startswith("TRADOVATE_ACCESS_TOKEN")]
-        env_lines.append(f"TRADOVATE_ACCESS_TOKEN={token}\n")
-        with open(".env", "w") as f:
-            f.writelines(env_lines)
-        print("Token added to .env")
-
-        # Get balance
-        try:
-            bal_resp = requests.post(f"{base_url}/cashBalance/getcashbalancesnapshot",
-                                     headers=headers,
-                                     json={"accountId": accounts[0]["id"]},
-                                     timeout=10)
-            bal = bal_resp.json()
-            print(f"\nBalance: ${bal.get('totalCashValue', 'N/A')}")
-        except:
-            pass
-
-        # Get positions
-        try:
-            pos_resp = requests.get(f"{base_url}/position/list", headers=headers, timeout=10)
-            positions = pos_resp.json()
-            print(f"Open positions: {len(positions)}")
-        except:
-            pass
-
-    else:
-        print(f"Failed: status={resp.status_code}")
-        print(resp.text[:200])
-except Exception as e:
-    print(f"Error: {e}")
-
-print("\nDone!")
+with open('/root/MT5-PropFirm-Bot/.env', 'w') as f:
+    f.write(f'TRADOVATE_USER={user}\n')
+    f.write(f'TRADOVATE_PASS={passwd}\n')
+    f.write(f'TRADOVATE_ACCESS_TOKEN={token}\n')
+    f.write(f'TELEGRAM_TOKEN={tg_token}\n')
+    f.write(f'TELEGRAM_CHAT_ID={tg_chat}\n')
+print(f".env updated (token_len={len(token)})")
 PYEOF
+
+# Ensure systemd service exists
+cat > /etc/systemd/system/futures-bot.service << 'SERVICEEOF'
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+Restart=on-failure
+RestartSec=30
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+
+[Install]
+WantedBy=multi-user.target
+SERVICEEOF
+
+systemctl daemon-reload
+systemctl enable futures-bot
+
+# Stop if running, then start
+systemctl stop futures-bot 2>/dev/null
+sleep 2
+systemctl start futures-bot
+
+sleep 3
+
+echo ""
+echo "--- Bot Status ---"
+systemctl status futures-bot --no-pager 2>&1 | head -15
+echo ""
+echo "--- Last 10 log lines ---"
+tail -10 /root/MT5-PropFirm-Bot/logs/bot.log 2>/dev/null || journalctl -u futures-bot --no-pager -n 10
+echo ""
+echo "=== Done ==="
