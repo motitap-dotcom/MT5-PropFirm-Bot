@@ -7,6 +7,8 @@ on:
 jobs:
   run-command:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
       TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
@@ -19,27 +21,38 @@ jobs:
       - name: Run command on VPS
         run: |
           sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'REMOTE'
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'REMOTE_END'
           cd /root/MT5-PropFirm-Bot
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git fetch origin ${{ github.ref_name }}
-          git checkout ${{ github.ref_name }} 2>/dev/null || git checkout -b ${{ github.ref_name }} origin/${{ github.ref_name }}
-          git reset --hard origin/${{ github.ref_name }}
+          git fetch origin
+          git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
 
-          export TRADOVATE_USER="${{ secrets.TRADOVATE_USER }}"
-          export TRADOVATE_PASS="${{ secrets.TRADOVATE_PASS }}"
-          export TRADOVATE_ACCESS_TOKEN="${{ secrets.TRADOVATE_ACCESS_TOKEN }}"
-          export TELEGRAM_TOKEN="${{ secrets.TELEGRAM_TOKEN }}"
-          export TELEGRAM_CHAT_ID="${{ secrets.TELEGRAM_CHAT_ID }}"
+          export TRADOVATE_USER="$TRADOVATE_USER"
+          export TRADOVATE_PASS="$TRADOVATE_PASS"
+          export TRADOVATE_ACCESS_TOKEN="$TRADOVATE_ACCESS_TOKEN"
+          export TELEGRAM_TOKEN="$TELEGRAM_TOKEN"
+          export TELEGRAM_CHAT_ID="$TELEGRAM_CHAT_ID"
 
           bash commands/run.sh > commands/output.txt 2>&1
           cat commands/output.txt
+          REMOTE_END
 
-          git add commands/output.txt status/status.json 2>/dev/null
-          git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')" || true
-          git push origin ${{ github.ref_name }} || true
-          REMOTE
+      - name: Fetch output from VPS
+        run: |
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" scp -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/root/MT5-PropFirm-Bot/commands/output.txt commands/output.txt 2>/dev/null || echo "SCP failed, using empty output"
+          echo "--- Output file ---"
+          cat commands/output.txt || echo "No output"
+
+      - name: Push output to repo
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add commands/output.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push origin HEAD:claude/build-cfd-trading-bot-fl0ld
+          else
+            echo "No changes to push"
+          fi
 
       - name: Telegram notification
         if: always()
@@ -50,4 +63,3 @@ jobs:
           message: |
             VPS Command completed
             Status: ${{ job.status }}
-            Branch: ${{ github.ref_name }}
