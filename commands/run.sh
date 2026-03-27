@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v25 - new token, start bot
+# Trigger: v26 - simplified, envs via appleboy
 echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 

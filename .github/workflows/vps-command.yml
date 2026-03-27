@@ -9,21 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
+      TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
+      TRADOVATE_ACCESS_TOKEN: ${{ secrets.TRADOVATE_ACCESS_TOKEN }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Install sshpass
         run: sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-
-      - name: Write .env on VPS
-        run: |
-          sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "cat > /root/MT5-PropFirm-Bot/.env" << 'ENVEOF'
-          TRADOVATE_USER=${{ secrets.TRADOVATE_USER }}
-          TRADOVATE_PASS=${{ secrets.TRADOVATE_PASS }}
-          TRADOVATE_ACCESS_TOKEN=${{ secrets.TRADOVATE_ACCESS_TOKEN }}
-          TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
-          ENVEOF
 
       - name: Run command on VPS
         uses: appleboy/ssh-action@v1
@@ -31,6 +27,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
+          envs: TRADOVATE_USER,TRADOVATE_PASS,TRADOVATE_ACCESS_TOKEN,TELEGRAM_TOKEN,TELEGRAM_CHAT_ID
           command_timeout: 10m
           script: |
             cd /root/MT5-PropFirm-Bot
@@ -41,7 +38,7 @@ jobs:
 
       - name: Fetch output from VPS
         run: |
-          sshpass -p "${{ secrets.VPS_PASSWORD }}" scp -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/root/MT5-PropFirm-Bot/commands/output.txt commands/output.txt
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" scp -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/root/MT5-PropFirm-Bot/commands/output.txt commands/output.txt || echo "SCP failed"
 
       - name: Push output to repo
         run: |
