@@ -1,34 +1,30 @@
-=== Status Check ===
-Timestamp: 2026-03-27 14:59:49 UTC
+=== Trading Status ===
+Timestamp: 2026-03-27 15:40:06 UTC
 --- Service ---
 active
---- Last 25 log lines ---
-2026-03-27 14:58:42,935 [bot] ERROR: Error processing MCLM6: POST /md/getChart failed (404): 
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 684, in get_historical_bars
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 339, in _post
-Exception: POST /md/getChart failed (404): 
-2026-03-27 14:58:43,055 [bot] ERROR: Error processing MGCM6: POST /md/getChart failed (404): 
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 684, in get_historical_bars
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 339, in _post
-Exception: POST /md/getChart failed (404): 
-2026-03-27 14:58:43,173 [bot] ERROR: Error processing MYMM6: POST /md/getChart failed (404): 
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 684, in get_historical_bars
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 339, in _post
-Exception: POST /md/getChart failed (404): 
-2026-03-27 14:58:43,290 [bot] ERROR: Error processing M2KM6: POST /md/getChart failed (404): 
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 684, in get_historical_bars
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 339, in _post
-Exception: POST /md/getChart failed (404): 
-2026-03-27 14:58:43,296 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
---- Fix deployed? ---
-1
-YES
+--- Open Positions ---
+Account: ELTDER260326211630296397
+Balance: $?
+Net Liq: $?
+
+No open positions (total records: 0)
+
+Today's orders: 0
+
+--- Last 15 log lines (non-error) ---
+2026-03-27 15:33:51,615 [bot] ERROR: Error processing M2KM6: POST /md/getChart failed (404): 
+2026-03-27 15:33:51,615 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-03-27 15:38:51,762 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-03-27 15:38:51,762 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-03-27 15:38:51,762 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-03-27 15:38:51,762 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-03-27 15:38:51,762 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-03-27 15:38:51,762 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-03-27 15:38:52,099 [bot] ERROR: Error processing MESM6: POST /md/getChart failed (404): 
+2026-03-27 15:38:52,212 [bot] ERROR: Error processing MNQM6: POST /md/getChart failed (404): 
+2026-03-27 15:38:52,325 [bot] ERROR: Error processing MCLM6: POST /md/getChart failed (404): 
+2026-03-27 15:38:52,435 [bot] ERROR: Error processing MGCM6: POST /md/getChart failed (404): 
+2026-03-27 15:38:52,548 [bot] ERROR: Error processing MYMM6: POST /md/getChart failed (404): 
+2026-03-27 15:38:52,659 [bot] ERROR: Error processing M2KM6: POST /md/getChart failed (404): 
+2026-03-27 15:38:52,659 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 === Done ===
