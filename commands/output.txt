@@ -1,31 +1,35 @@
-=== Quick Status Check ===
-Timestamp: 2026-03-27 14:05:15 UTC
+=== Quick Status ===
+Timestamp: 2026-03-27 14:17:19 UTC
 --- Service ---
 inactive
-not found
---- Process ---
-root        1117  0.0  0.2 105396 22032 ?        Sl   Mar22   2:46 python3 /root/tradovate-bot/dashboard.py
-root     1468075  0.5  1.1 770012 92116 ?        Sl   Mar26   6:35 /opt/hyrotrader-bot/venv/bin/python -u /opt/hyrotrader-bot/bot/main.py
-root     1772189 12.4  0.6 575956 51660 ?        Ssl  13:55   1:15 /root/tradovate-bot/venv/bin/python bot.py
---- Last 20 log lines ---
-2026-03-27 13:53:48,770 [tradovate_client] INFO: Using pre-set access token from environment
-2026-03-27 13:53:48,917 [bot] ERROR: Failed to connect: GET /account/list failed (401): Expired Access Token
-2026-03-27 13:53:48,918 [bot] ERROR: Fatal error: GET /account/list failed (401): Expired Access Token
+not running
+--- Fix verify ---
+1
+FIX IS DEPLOYED
+--- Last 25 log lines ---
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 88, in connect
+    await self._renew_token()
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 236, in _renew_token
+    await self._authenticate()
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 215, in _authenticate
+    raise ConnectionError(f"Authentication failed: {error}")
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+
+During handling of the above exception, another exception occurred:
+
 Traceback (most recent call last):
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 593, in main
     await bot.start()
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 140, in start
     await self.client.connect()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 97, in connect
-    await self._get_account_info()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 311, in _get_account_info
-    accounts = await self._get("/account/list")
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 293, in _get
-    raise Exception(f"GET {endpoint} failed ({resp.status}): {text}")
-Exception: GET /account/list failed (401): Expired Access Token
-2026-03-27 13:53:48,922 [bot] INFO: Stopping bot: Fatal: GET /account/list failed (401): Expired Access Token
-2026-03-27 13:53:49,043 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
-2026-03-27 13:53:49,137 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-27 13:53:49,137 [bot] INFO: Bot stopped
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 93, in connect
+    await self._authenticate()
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 189, in _authenticate
+    raise ConnectionError(
+ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-27 14:10:30,191 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-27 14:10:30,309 [bot] ERROR: Error closing positions: GET /position/list failed (401): Access is denied
+2026-03-27 14:10:30,434 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-27 14:10:30,434 [bot] INFO: Bot stopped
 === Done ===
