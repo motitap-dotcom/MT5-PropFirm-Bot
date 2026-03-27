@@ -1,35 +1,27 @@
-=== Quick Status ===
-Timestamp: 2026-03-27 14:17:19 UTC
---- Service ---
-inactive
-not running
---- Fix verify ---
-1
-FIX IS DEPLOYED
---- Last 25 log lines ---
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 88, in connect
-    await self._renew_token()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 236, in _renew_token
-    await self._authenticate()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 215, in _authenticate
-    raise ConnectionError(f"Authentication failed: {error}")
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+=== Credential Diagnostics ===
+Timestamp: 2026-03-27 14:36:17 UTC
+--- .env contents (masked) ---
+  TRADOVATE_USER = TD******ap (len=10)
+  TRADOVATE_PASS = My*****2! (len=9)
+  TRADOVATE_ACCESS_TOKEN = ey***************************************************************************************************************************************************************************************************************************************************************************************************DA (len=295)
+  TELEGRAM_TOKEN = 84******************************************2g (len=46)
+  TELEGRAM_CHAT_ID = 70******83 (len=10)
 
-During handling of the above exception, another exception occurred:
+--- Systemd env override (masked) ---
+  TRADOVATE_USER = TD******ap (len=10)
+  TRADOVATE_PASS = My*****2! (len=9)
+  TRADOVATE_ACCESS_TOKEN = ey***************************************************************************************************************************************************************************************************************************************************************************************************DA (len=295)
+  TELEGRAM_TOKEN = 84******************************************2g (len=46)
+  TELEGRAM_CHAT_ID = 70******83 (len=10)
 
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 593, in main
-    await bot.start()
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 140, in start
-    await self.client.connect()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 93, in connect
-    await self._authenticate()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 189, in _authenticate
-    raise ConnectionError(
-ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-27 14:10:30,191 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-27 14:10:30,309 [bot] ERROR: Error closing positions: GET /position/list failed (401): Access is denied
-2026-03-27 14:10:30,434 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-27 14:10:30,434 [bot] INFO: Bot stopped
+--- Environment vars (masked) ---
+  TRADOVATE_USER = TD******ap (len=10)
+  TRADOVATE_PASS = My*****2! (len=9)
+  TRADOVATE_ACCESS_TOKEN = ey***************************************************************************************************************************************************************************************************************************************************************************************************DA (len=295)
+
+--- Direct auth test ---
+  User: TD_Motitap
+  Pass length: 9, has special chars: True
+  Response: {"errorText": "Incorrect username or password. Please try again, noting that passwords are case-sensitive."}
+
 === Done ===
