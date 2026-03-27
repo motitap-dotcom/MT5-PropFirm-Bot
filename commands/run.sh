@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v17 - output captured by Actions runner and pushed
+# Trigger: v18 - scp output from VPS to runner then push
 echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 

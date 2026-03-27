@@ -18,28 +18,27 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Run command on VPS and capture output
+      - name: Run command on VPS
         uses: appleboy/ssh-action@v1
-        id: vps
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           envs: TRADOVATE_USER,TRADOVATE_PASS,TRADOVATE_ACCESS_TOKEN,TELEGRAM_TOKEN,TELEGRAM_CHAT_ID
-          capture_stdout: true
           script: |
             cd /root/MT5-PropFirm-Bot
             git fetch origin ${{ github.ref_name }}
             git checkout ${{ github.ref_name }} 2>/dev/null || git checkout -b ${{ github.ref_name }} origin/${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
-            bash commands/run.sh 2>&1
+            bash commands/run.sh > commands/output.txt 2>&1
+            cat commands/run.sh > /dev/null
 
-      - name: Save output to file
+      - name: Fetch output from VPS
         run: |
-          cat << 'OUTPUTEOF' > commands/output.txt
-          ${{ steps.vps.outputs.stdout }}
-          OUTPUTEOF
-          echo "Output saved ($(wc -l < commands/output.txt) lines)"
+          sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" scp -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/root/MT5-PropFirm-Bot/commands/output.txt commands/output.txt
+          echo "Output fetched ($(wc -l < commands/output.txt) lines)"
+          cat commands/output.txt
 
       - name: Commit and push output
         run: |
