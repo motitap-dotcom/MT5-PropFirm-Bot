@@ -125,8 +125,15 @@ class TradovateClient:
             self.access_token = preset_token
             self.token_expiry = time.time() + 86400  # Assume 24h
             logger.info("Using pre-set access token from environment")
-            self._save_token()
-            return
+            # Verify token works before saving
+            try:
+                self._save_token()
+                await self._get_account_info()
+                logger.info("Pre-set token is valid")
+                return
+            except Exception:
+                logger.warning("Pre-set token from environment is expired/invalid, falling back to user/password auth...")
+                self.access_token = None
 
         payload = {
             "name": self.username,
