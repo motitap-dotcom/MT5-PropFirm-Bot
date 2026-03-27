@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v14 - restart bot with latest code + verify
+# Trigger: v15 - restart bot + output pushed back to repo
 echo "=== Restart Bot with Latest Config ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 

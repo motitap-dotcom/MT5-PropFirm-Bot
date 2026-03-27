@@ -103,13 +103,15 @@ All workflows send Telegram notifications on completion.
 | "תעשה בדיקה מלאה" | Edits `trigger-check.txt`, pushes | `trigger-check.txt` | `vps_report.txt` |
 | "תריץ פקודה X" | Writes command X in `commands/run.sh`, pushes | `commands/run.sh` | `commands/output.txt` |
 
-### Workflow for every request:
+### Workflow for every request (MUST FOLLOW):
 1. Write/edit the trigger file
-2. Push to GitHub
-3. Wait ~30-60 seconds for Actions to run
-4. `git pull` to get the output file
-5. Read the output file and present results to Noa WITH timestamp
+2. Push to GitHub (to the correct branch: `claude/build-cfd-trading-bot-fl0ld`)
+3. Wait ~90-120 seconds for Actions to run and push output back
+4. `git pull` to get the output file (`commands/output.txt`)
+5. Read `commands/output.txt` and present results to Noa WITH timestamp
 6. If data is older than 30 minutes, warn and offer to fetch fresh data
+7. **NEVER ask Noa to check GitHub Actions manually** - always pull and read the output file yourself
+8. If `git pull` shows no changes after 120s, wait another 60s and try again
 
 ---
 
