@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v22 - heredoc without quotes to pass env vars
+# Trigger: v23 - .env written separately, bot auth fix
 echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 

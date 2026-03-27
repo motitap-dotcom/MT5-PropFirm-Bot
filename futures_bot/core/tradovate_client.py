@@ -114,7 +114,7 @@ class TradovateClient:
         """
         # First try: check if we have a pre-set access token (from CAPTCHA flow)
         import os
-        preset_token = os.environ.get("TRADOVATE_ACCESS_TOKEN", "")
+        preset_token = os.environ.get("TRADOVATE_ACCESS_TOKEN", "").strip()
         if preset_token:
             self.access_token = preset_token
             self.token_expiry = time.time() + 86400  # Assume 24h
@@ -133,11 +133,22 @@ class TradovateClient:
             "organization": self.organization,
         }
 
-        async with self.session.post(
-            f"{self.base_url}/auth/accesstokenrequest",
-            json=payload
-        ) as resp:
-            data = await resp.json()
+        try:
+            async with self.session.post(
+                f"{self.base_url}/auth/accesstokenrequest",
+                json=payload
+            ) as resp:
+                if resp.content_type == "application/json":
+                    data = await resp.json()
+                else:
+                    text = await resp.text()
+                    raise ConnectionError(
+                        f"Auth returned non-JSON ({resp.status}): {text[:200]}"
+                    )
+        except ConnectionError:
+            raise
+        except Exception as e:
+            raise ConnectionError(f"Auth request failed: {e}")
 
         # Handle different response scenarios
         if "accessToken" in data:
