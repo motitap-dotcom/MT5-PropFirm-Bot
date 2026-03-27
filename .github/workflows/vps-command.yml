@@ -36,7 +36,6 @@ jobs:
             cd /root/MT5-PropFirm-Bot
             git fetch origin claude/build-cfd-trading-bot-fl0ld
             git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
-            set -a; source .env; set +a
             bash commands/run.sh > commands/output.txt 2>&1
             cat commands/output.txt
 

@@ -1,49 +1,75 @@
 #!/bin/bash
-# Trigger: v23 - .env written separately, bot auth fix
+# Trigger: v24 - read .env in Python, no bash source
 echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
 cd /root/MT5-PropFirm-Bot
 
-# Fix git config for push
-git config user.email "bot@tradeday.com"
-git config user.name "TradeDay Bot"
+# Read .env and set up env vars via Python (avoids bash ! issue)
+python3 << 'PYEOF'
+import os, subprocess
 
-# Update .env
-python3 -c "
-import os
-token = os.environ.get('TRADOVATE_ACCESS_TOKEN', '').strip()
-user = os.environ.get('TRADOVATE_USER', '')
-passwd = os.environ.get('TRADOVATE_PASS', '')
-tg_token = os.environ.get('TELEGRAM_TOKEN', '')
-tg_chat = os.environ.get('TELEGRAM_CHAT_ID', '')
-with open('.env', 'w') as f:
-    f.write(f'TRADOVATE_USER={user}\n')
-    f.write(f'TRADOVATE_PASS={passwd}\n')
-    f.write(f'TRADOVATE_ACCESS_TOKEN={token}\n')
-    f.write(f'TELEGRAM_TOKEN={tg_token}\n')
-    f.write(f'TELEGRAM_CHAT_ID={tg_chat}\n')
-print(f'.env updated (token={len(token)} chars)')
-"
+# Load .env file into environment
+env = {}
+if os.path.exists('.env'):
+    with open('.env') as f:
+        for line in f:
+            line = line.strip()
+            if '=' in line and not line.startswith('#'):
+                k, v = line.split('=', 1)
+                env[k] = v
+                os.environ[k] = v
+    print(f".env loaded ({len(env)} vars, token={len(env.get('TRADOVATE_ACCESS_TOKEN',''))} chars)")
+else:
+    print("WARNING: No .env file!")
 
 # Show config
-echo ""
-echo "--- Config ---"
-python3 -c "
 import json
 with open('configs/bot_config.json') as f:
     c = json.load(f)
-print(f'Symbols: {c[\"symbols\"]}')
-print(f'Organization: {c.get(\"organization\",\"\")}')
-print(f'Max daily trades: {c[\"guardian\"][\"max_daily_trades\"]}')
-print(f'Max daily loss: \${c[\"guardian\"][\"max_daily_loss\"]}')
-print(f'Max daily profit: \${c[\"guardian\"][\"max_daily_profit\"]}')
-print(f'Max risk/trade: \${c[\"risk\"][\"max_risk_per_trade\"]}')
-"
+print(f"\nSymbols: {c['symbols']}")
+print(f"Organization: {c.get('organization','')}")
+print(f"Max daily trades: {c['guardian']['max_daily_trades']}")
+print(f"Max daily loss: ${c['guardian']['max_daily_loss']}")
+print(f"Max daily profit: ${c['guardian']['max_daily_profit']}")
+print(f"Max risk/trade: ${c['risk']['max_risk_per_trade']}")
+print(f"Max contracts/trade: {c['risk']['max_contracts_per_trade']}")
+print(f"Max positions: {c['risk']['max_positions']}")
 
-# Restart bot
+# Token status
+import time
+try:
+    with open('configs/.tradovate_token.json') as f:
+        t = json.load(f)
+    remaining = t.get('expiry', 0) - time.time()
+    print(f"\nToken: {t.get('environment','?')} org={t.get('organization','?')}")
+    print(f"Expires in: {remaining/3600:.1f} hours")
+    if remaining < 0:
+        print("TOKEN EXPIRED!")
+except:
+    print("\nNo saved token file")
+PYEOF
+
 echo ""
 echo "--- Restarting bot ---"
+
+# Write systemd env override to pass env vars
+python3 -c "
+import os
+if os.path.exists('.env'):
+    with open('.env') as f:
+        content = f.read()
+    # Write systemd override
+    os.makedirs('/etc/systemd/system/futures-bot.service.d', exist_ok=True)
+    with open('/etc/systemd/system/futures-bot.service.d/env.conf', 'w') as f:
+        f.write('[Service]\n')
+        for line in content.strip().split('\n'):
+            if '=' in line and not line.startswith('#'):
+                f.write(f'Environment=\"{line.strip()}\"\n')
+    print('Systemd env override written')
+"
+
+systemctl daemon-reload
 systemctl stop futures-bot 2>/dev/null
 sleep 2
 systemctl start futures-bot
@@ -54,23 +80,8 @@ echo "--- Service ---"
 systemctl is-active futures-bot
 
 echo ""
-echo "--- Logs (last 20 lines) ---"
+echo "--- Logs (last 20) ---"
 tail -20 logs/bot.log 2>/dev/null || journalctl -u futures-bot --no-pager -n 20
-
-echo ""
-echo "--- Token ---"
-python3 -c "
-import json, time
-try:
-    with open('configs/.tradovate_token.json') as f:
-        t = json.load(f)
-    remaining = t.get('expiry', 0) - time.time()
-    print(f'Environment: {t.get(\"environment\",\"?\")}')
-    print(f'Org: {t.get(\"organization\",\"?\")}')
-    print(f'Expires in: {remaining/3600:.1f} hours')
-except Exception as e:
-    print(f'Token file error: {e}')
-"
 
 echo ""
 echo "=== Done ==="
