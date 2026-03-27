@@ -1,21 +1,26 @@
 === Bot Status Check ===
-Timestamp: 2026-03-27 09:11:01 UTC
-.env updated (token=0 chars)
+Timestamp: 2026-03-27 09:48:40 UTC
+.env loaded (5 vars, token=295 chars)
 
---- Config ---
 Symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
 Organization: TradeDay
 Max daily trades: 10
 Max daily loss: $400.0
 Max daily profit: $900.0
 Max risk/trade: $150.0
+Max contracts/trade: 5
+Max positions: 3
+
+Token: ? org=?
+Expires in: 23.6 hours
 
 --- Restarting bot ---
+Systemd env override written
 
 --- Service ---
 inactive
 
---- Logs (last 20 lines) ---
+--- Logs (last 20) ---
 
 During handling of the above exception, another exception occurred:
 
@@ -24,22 +29,17 @@ Traceback (most recent call last):
     await bot.start()
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 119, in start
     await self.client.connect()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 87, in connect
-    await self._authenticate()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 140, in _authenticate
-    data = await resp.json()
-           ^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/aiohttp/client_reqrep.py", line 756, in json
-    raise ContentTypeError(
-aiohttp.client_exceptions.ContentTypeError: 400, message='Attempt to decode JSON with unexpected mimetype: ', url='https://demo.tradovateapi.com/v1/auth/accesstokenrequest'
-2026-03-27 09:11:04,439 [bot] INFO: Stopping bot: Fatal: 400, message='Attempt to decode JSON with unexpected mimetype: ', url='https://demo.tradovateapi.com/v1/auth/accesstokenrequest'
-2026-03-27 09:11:04,553 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
-2026-03-27 09:11:04,554 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-27 09:11:04,554 [bot] INFO: Bot stopped
-
---- Token ---
-Environment: ?
-Org: ?
-Expires in: 23.9 hours
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 88, in connect
+    await self._get_account_info()
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 303, in _get_account_info
+    accounts = await self._get("/account/list")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 285, in _get
+    raise Exception(f"GET {endpoint} failed ({resp.status}): {text}")
+Exception: GET /account/list failed (401): Expired Access Token
+2026-03-27 09:48:43,668 [bot] INFO: Stopping bot: Fatal: GET /account/list failed (401): Expired Access Token
+2026-03-27 09:48:43,788 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
+2026-03-27 09:48:43,875 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-27 09:48:43,875 [bot] INFO: Bot stopped
 
 === Done ===
