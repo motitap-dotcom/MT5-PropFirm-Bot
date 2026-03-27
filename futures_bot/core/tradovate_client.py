@@ -690,21 +690,21 @@ class TradovateClient:
         timeframe: '1min', '5min', '15min', '30min', '1hour', '1day'
         """
         tf_map = {
-            "1min": (1, "Minute"),
-            "5min": (5, "Minute"),
-            "15min": (15, "Minute"),
-            "30min": (30, "Minute"),
-            "1hour": (1, "Hour"),
-            "1day": (1, "Day"),
+            "1min": (1, "MinuteBar"),
+            "5min": (5, "MinuteBar"),
+            "15min": (15, "MinuteBar"),
+            "30min": (30, "MinuteBar"),
+            "1hour": (60, "MinuteBar"),
+            "1day": (1, "DailyBar"),
         }
-        size, unit = tf_map.get(timeframe, (5, "Minute"))
+        size, underlying = tf_map.get(timeframe, (5, "MinuteBar"))
 
         result = await self._post("/md/getChart", {
             "symbol": symbol,
             "chartDescription": {
-                "underlyingType": "MinuteBar",
+                "underlyingType": underlying,
                 "elementSize": size,
-                "elementSizeUnit": unit,
+                "elementSizeUnit": "UnderlyingUnits",
                 "withHistogram": False,
             },
             "timeRange": {
