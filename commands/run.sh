@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v8 - just test auth (rate limit should be cleared by now)
+# Trigger: v9 - password without !
 echo "=== Tradovate Auth Test ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
