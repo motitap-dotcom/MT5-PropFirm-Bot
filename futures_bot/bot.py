@@ -45,7 +45,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger("bot")
 
-EDT_OFFSET = timedelta(hours=-4)
+try:
+    from zoneinfo import ZoneInfo
+    ET_TZ = ZoneInfo("America/New_York")
+except ImportError:
+    from datetime import timezone as _tz
+    # Fallback: detect DST by month (approximate)
+    ET_TZ = None
 
 
 class FuturesBot:
@@ -68,6 +74,7 @@ class FuturesBot:
         self.orb_strategies: dict = {}
         self.active_strategy: dict = {}  # per symbol: "vwap" or "orb"
         self._last_bar_time: dict = {}  # track last processed bar per symbol
+        self._processed_fills: set = set()  # track processed fill IDs
 
         # Trading state
         self.symbols: list = self.config.get("symbols", ["MESM6"])
@@ -111,10 +118,20 @@ class FuturesBot:
             enabled=self.config.get("telegram_enabled", True),
         )
 
-        # Strategies - separate instance per symbol
+        # Strategies - separate instance per symbol with per-symbol params
+        vwap_base = self.config.get("vwap", {})
+        orb_base = self.config.get("orb", {})
+        vwap_overrides = self.config.get("vwap_per_symbol", {})
+        orb_overrides = self.config.get("orb_per_symbol", {})
+
         for sym in self.symbols:
-            self.vwap_strategies[sym] = VWAPMeanReversion(self.config.get("vwap", {}))
-            self.orb_strategies[sym] = ORBBreakout(self.config.get("orb", {}))
+            # Get base symbol (strip month code: MESM6 -> MES)
+            base = sym.rstrip("0123456789")[:-1] if len(sym) > 3 else sym
+            # Merge base config with per-symbol overrides
+            vwap_cfg = {**vwap_base, **vwap_overrides.get(base, {})}
+            orb_cfg = {**orb_base, **orb_overrides.get(base, {})}
+            self.vwap_strategies[sym] = VWAPMeanReversion(vwap_cfg)
+            self.orb_strategies[sym] = ORBBreakout(orb_cfg)
             self.active_strategy[sym] = "vwap"
             self._last_bar_time[sym] = ""
 
@@ -165,7 +182,12 @@ class FuturesBot:
         while self.running:
             try:
                 now_utc = datetime.now(timezone.utc)
-                now_et = now_utc + EDT_OFFSET
+                if ET_TZ:
+                    now_et = now_utc.astimezone(ET_TZ)
+                else:
+                    # Approximate DST: March-November = EDT (-4), else EST (-5)
+                    offset = timedelta(hours=-4) if 3 <= now_utc.month <= 11 else timedelta(hours=-5)
+                    now_et = now_utc + offset
                 today = now_et.strftime("%Y-%m-%d")
 
                 # New day reset
@@ -217,13 +239,17 @@ class FuturesBot:
                             self.active_strategy[sym] = "orb"
                             logger.info(f"Switching {sym} to ORB strategy (trend day)")
 
-                # Sync positions from Tradovate
+                # Sync positions and detect closed trades
                 try:
                     positions = await self.client.get_positions()
                     actual_open = sum(1 for p in positions if p.get("netPos", 0) != 0)
                     if actual_open != self.risk_mgr.open_positions:
                         logger.info(f"Position sync: {self.risk_mgr.open_positions} -> {actual_open}")
                         self.risk_mgr.open_positions = actual_open
+
+                    # Detect closed trades via fills
+                    fills = await self.client.get_fills()
+                    await self._process_fills(fills)
                 except Exception as e:
                     logger.error(f"Position sync error: {e}")
 
@@ -413,6 +439,35 @@ class FuturesBot:
                             )
             except Exception as e2:
                 logger.error(f"Emergency close failed: {e2}")
+
+    async def _process_fills(self, fills: list):
+        """Process fills to detect closed trades and update PnL."""
+        for fill in fills:
+            fill_id = fill.get("id", 0)
+            if fill_id in self._processed_fills:
+                continue
+            self._processed_fills.add(fill_id)
+
+            action = fill.get("action", "")
+            qty = fill.get("qty", 0)
+            price = fill.get("price", 0)
+            pnl = fill.get("pnl", 0)
+
+            if pnl != 0:
+                # This is a closing fill (has PnL)
+                self.guardian.record_trade(pnl)
+                is_win = pnl > 0
+
+                # Record result in strategies
+                for sym in self.symbols:
+                    self.vwap_strategies[sym].record_trade_result(is_win)
+
+                contract_id = fill.get("contractId", "")
+                logger.info(f"FILL: {action} {qty} @ {price:.2f} PnL=${pnl:.2f}")
+
+                await self.notifier.trade_closed(
+                    str(contract_id), action, pnl, "SL/TP hit"
+                )
 
     async def _verify_bracket_orders(self, symbol: str, direction: str,
                                        qty: int, sl: float, tp: float):

@@ -29,6 +29,15 @@
     "reduce_in_dead_zone": true
   },
 
+  "vwap_per_symbol": {
+    "MES": {"min_atr": 2.0, "max_atr": 8.0},
+    "MNQ": {"min_atr": 10.0, "max_atr": 50.0},
+    "MCL": {"min_atr": 0.05, "max_atr": 0.30},
+    "MGC": {"min_atr": 1.0, "max_atr": 6.0},
+    "MYM": {"min_atr": 20.0, "max_atr": 80.0},
+    "M2K": {"min_atr": 2.0, "max_atr": 10.0}
+  },
+
   "vwap": {
     "rsi_period": 14,
     "rsi_oversold": 35,
@@ -37,6 +46,15 @@
     "min_atr": 2.0,
     "max_atr": 8.0,
     "atr_period": 14
+  },
+
+  "orb_per_symbol": {
+    "MES": {"max_range_points": 15.0, "min_range_points": 3.0, "buffer_ticks": 2.0},
+    "MNQ": {"max_range_points": 60.0, "min_range_points": 10.0, "buffer_ticks": 5.0},
+    "MCL": {"max_range_points": 0.50, "min_range_points": 0.05, "buffer_ticks": 0.03},
+    "MGC": {"max_range_points": 10.0, "min_range_points": 1.0, "buffer_ticks": 0.5},
+    "MYM": {"max_range_points": 100.0, "min_range_points": 20.0, "buffer_ticks": 10.0},
+    "M2K": {"max_range_points": 15.0, "min_range_points": 3.0, "buffer_ticks": 2.0}
   },
 
   "orb": {

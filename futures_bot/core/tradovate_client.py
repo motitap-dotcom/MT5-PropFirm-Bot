@@ -211,6 +211,7 @@ class TradovateClient:
                 if resp.status == 200:
                     data = await resp.json()
                     self.access_token = data.get("accessToken", self.access_token)
+                    self.md_access_token = data.get("mdAccessToken", self.access_token)
                     self._parse_expiry(data.get("expirationTime", ""))
                     self._save_token()
                     logger.info("Token renewed successfully")
@@ -339,7 +340,7 @@ class TradovateClient:
     async def place_market_order(self, symbol: str, action: str, qty: int,
                                   bracket: Optional[Dict] = None) -> Dict:
         """
-        Place a market order.
+        Place a market order with optional SL/TP bracket.
         action: 'Buy' or 'Sell'
         bracket: optional {'stopLoss': float, 'takeProfit': float}
         """
@@ -357,9 +358,13 @@ class TradovateClient:
         order_id = result.get("orderId")
         logger.info(f"Market order placed: {action} {qty} {symbol}, orderId={order_id}")
 
-        # Place bracket (OSO) orders if specified
+        # Place separate SL and TP orders (NOT OSO which creates another market order)
         if bracket and order_id:
-            await self._place_oso_bracket(symbol, action, qty, bracket)
+            exit_action = "Sell" if action == "Buy" else "Buy"
+            if "stopLoss" in bracket:
+                await self.place_stop_order(symbol, exit_action, qty, bracket["stopLoss"])
+            if "takeProfit" in bracket:
+                await self.place_limit_order(symbol, exit_action, qty, bracket["takeProfit"])
 
         return result
 
