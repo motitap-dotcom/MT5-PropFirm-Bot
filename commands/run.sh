@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v19 - GitHub API to write output
+# Trigger: v20 - sshpass like old bot
 echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
