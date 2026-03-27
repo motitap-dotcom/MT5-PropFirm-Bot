@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: setup v5 - read creds from .env, avoid shell escaping
+# Trigger: setup v6 - env vars via job-level env
 echo "=== TradeDay Futures Bot - Setup ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 echo ""

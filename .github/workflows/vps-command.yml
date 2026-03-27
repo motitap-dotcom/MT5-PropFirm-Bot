@@ -7,6 +7,11 @@ on:
 jobs:
   run-command:
     runs-on: ubuntu-latest
+    env:
+      TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
+      TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
     steps:
       - uses: actions/checkout@v4
 
