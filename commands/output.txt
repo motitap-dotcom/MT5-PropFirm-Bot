@@ -1,5 +1,5 @@
 === Bot Status Check ===
-Timestamp: 2026-03-27 10:25:38 UTC
+Timestamp: 2026-03-27 11:40:39 UTC
 .env loaded (5 vars, token=294 chars)
 
 Symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
@@ -12,34 +12,34 @@ Max contracts/trade: 5
 Max positions: 3
 
 Token: ? org=?
-Expires in: 23.6 hours
+Expires in: 23.3 hours
 
 --- Restarting bot ---
 Systemd env override written
 
 --- Service ---
-active
+inactive
 
 --- Logs (last 20) ---
-2026-03-27 10:04:08,260 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-03-27 10:04:08,355 [bot] INFO: Bot started successfully
-2026-03-27 10:04:08,355 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-03-27 10:04:08,355 [bot] INFO: Timeframe: 5min
-2026-03-27 10:04:08,356 [bot] INFO: New trading day: 2026-03-27
-2026-03-27 10:18:55,361 [bot] INFO: Stopping bot: Signal received
-2026-03-27 10:18:55,707 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-27 10:18:55,707 [bot] INFO: Bot stopped
-2026-03-27 10:25:41,909 [bot] INFO: ============================================================
-2026-03-27 10:25:41,909 [bot] INFO: TradeDay Futures Bot Starting
-2026-03-27 10:25:41,909 [bot] INFO: ============================================================
-2026-03-27 10:25:41,909 [news_filter] INFO: Loaded 26 restricted events
-2026-03-27 10:25:41,910 [tradovate_client] INFO: Loaded saved token, verifying...
-2026-03-27 10:25:42,057 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-03-27 10:25:42,057 [tradovate_client] INFO: Saved token is valid
-2026-03-27 10:25:42,057 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-03-27 10:25:42,139 [bot] INFO: Bot started successfully
-2026-03-27 10:25:42,139 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-03-27 10:25:42,139 [bot] INFO: Timeframe: 5min
-2026-03-27 10:25:42,139 [bot] INFO: New trading day: 2026-03-27
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 593, in main
+    await bot.start()
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 140, in start
+    await self.client.connect()
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 88, in connect
+    await self._get_account_info()
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 304, in _get_account_info
+    accounts = await self._get("/account/list")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 286, in _get
+    raise Exception(f"GET {endpoint} failed ({resp.status}): {text}")
+Exception: GET /account/list failed (401): Expired Access Token
+2026-03-27 11:40:42,752 [bot] INFO: Stopping bot: Fatal: GET /account/list failed (401): Expired Access Token
+2026-03-27 11:40:42,866 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
+2026-03-27 11:40:42,952 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-27 11:40:42,952 [bot] INFO: Bot stopped
 
 === Done ===
