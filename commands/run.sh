@@ -1,30 +1,34 @@
 #!/bin/bash
-# Trigger: v15 - restart bot + output pushed back to repo
-echo "=== Restart Bot with Latest Config ==="
+# Trigger: v16 - verify bot + fix git push
+echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
 cd /root/MT5-PropFirm-Bot
 
+# Fix git config for push
+git config user.email "bot@tradeday.com"
+git config user.name "TradeDay Bot"
+
 # Update .env
-python3 << 'PYEOF'
+python3 -c "
 import os
 token = os.environ.get('TRADOVATE_ACCESS_TOKEN', '').strip()
 user = os.environ.get('TRADOVATE_USER', '')
 passwd = os.environ.get('TRADOVATE_PASS', '')
 tg_token = os.environ.get('TELEGRAM_TOKEN', '')
 tg_chat = os.environ.get('TELEGRAM_CHAT_ID', '')
-with open('/root/MT5-PropFirm-Bot/.env', 'w') as f:
+with open('.env', 'w') as f:
     f.write(f'TRADOVATE_USER={user}\n')
     f.write(f'TRADOVATE_PASS={passwd}\n')
     f.write(f'TRADOVATE_ACCESS_TOKEN={token}\n')
     f.write(f'TELEGRAM_TOKEN={tg_token}\n')
     f.write(f'TELEGRAM_CHAT_ID={tg_chat}\n')
-print(f".env updated (token={len(token)} chars)")
-PYEOF
+print(f'.env updated (token={len(token)} chars)')
+"
 
 # Show config
 echo ""
-echo "--- Bot Config ---"
+echo "--- Config ---"
 python3 -c "
 import json
 with open('configs/bot_config.json') as f:
@@ -33,9 +37,8 @@ print(f'Symbols: {c[\"symbols\"]}')
 print(f'Organization: {c.get(\"organization\",\"\")}')
 print(f'Max daily trades: {c[\"guardian\"][\"max_daily_trades\"]}')
 print(f'Max daily loss: \${c[\"guardian\"][\"max_daily_loss\"]}')
+print(f'Max daily profit: \${c[\"guardian\"][\"max_daily_profit\"]}')
 print(f'Max risk/trade: \${c[\"risk\"][\"max_risk_per_trade\"]}')
-print(f'Max positions: {c[\"risk\"][\"max_positions\"]}')
-print(f'Max contracts/trade: {c[\"risk\"][\"max_contracts_per_trade\"]}')
 "
 
 # Restart bot
@@ -47,28 +50,26 @@ systemctl start futures-bot
 sleep 5
 
 echo ""
-echo "--- Service Status ---"
+echo "--- Service ---"
 systemctl is-active futures-bot
-systemctl status futures-bot --no-pager 2>&1 | head -15
 
 echo ""
-echo "--- Bot Logs ---"
-tail -20 /root/MT5-PropFirm-Bot/logs/bot.log 2>/dev/null || journalctl -u futures-bot --no-pager -n 20
+echo "--- Logs (last 20 lines) ---"
+tail -20 logs/bot.log 2>/dev/null || journalctl -u futures-bot --no-pager -n 20
 
 echo ""
-echo "--- Token Status ---"
+echo "--- Token ---"
 python3 -c "
 import json, time
 try:
     with open('configs/.tradovate_token.json') as f:
         t = json.load(f)
-    exp = t.get('expiry', 0)
-    remaining = exp - time.time()
-    print(f'Token env: {t.get(\"environment\",\"?\")}')
-    print(f'Token expires in: {remaining/3600:.1f} hours')
+    remaining = t.get('expiry', 0) - time.time()
+    print(f'Environment: {t.get(\"environment\",\"?\")}')
     print(f'Org: {t.get(\"organization\",\"?\")}')
-except:
-    print('No token file found')
+    print(f'Expires in: {remaining/3600:.1f} hours')
+except Exception as e:
+    print(f'Token file error: {e}')
 "
 
 echo ""

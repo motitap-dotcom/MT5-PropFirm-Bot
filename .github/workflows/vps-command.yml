@@ -38,10 +38,12 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             cd /root/MT5-PropFirm-Bot
+            git config user.email "bot@tradeday.com"
+            git config user.name "TradeDay Bot"
             git add -f commands/output.txt status/status.json 2>/dev/null
             git diff --cached --quiet && echo "No changes to commit" || {
               git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')"
-              git push origin ${{ github.ref_name }} || echo "Push failed"
+              git push origin HEAD:${{ github.ref_name }} 2>&1 || echo "Push failed"
             }
 
       - name: Telegram notification
