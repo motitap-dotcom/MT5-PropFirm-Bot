@@ -318,37 +318,55 @@ class FuturesBot:
             logger.info(f"Position size is 0, skipping trade")
             return
 
-        # Place the trade
-        try:
-            # Determine TP based on strategy type
-            if hasattr(setup, 'take_profit_1'):
-                tp = setup.take_profit_1  # VWAP has two TPs
-            else:
-                tp = setup.take_profit
+        # Determine TP based on strategy type
+        if hasattr(setup, 'take_profit_1'):
+            tp = setup.take_profit_1  # VWAP has two TPs
+        else:
+            tp = setup.take_profit
 
+        sl = setup.stop_loss
+        risk_dollars = self.risk_mgr.calculate_stop_risk_dollars(
+            symbol, stop_distance, contracts
+        )
+
+        # SAFETY: Verify SL and TP are set and valid
+        if sl == 0 or tp == 0:
+            logger.error(f"BLOCKED: SL or TP is zero! SL={sl} TP={tp}")
+            return
+        if direction == "Buy" and sl >= setup.entry_price:
+            logger.error(f"BLOCKED: SL ({sl}) >= entry ({setup.entry_price}) for LONG")
+            return
+        if direction == "Sell" and sl <= setup.entry_price:
+            logger.error(f"BLOCKED: SL ({sl}) <= entry ({setup.entry_price}) for SHORT")
+            return
+
+        # Place the trade with bracket (SL + TP)
+        try:
             result = await self.client.place_market_order(
                 symbol=symbol,
                 action=direction,
                 qty=contracts,
                 bracket={
-                    "stopLoss": setup.stop_loss,
+                    "stopLoss": sl,
                     "takeProfit": tp,
                 },
             )
 
-            risk_dollars = self.risk_mgr.calculate_stop_risk_dollars(
-                symbol, stop_distance, contracts
-            )
+            order_id = result.get("orderId")
 
             logger.info(
                 f"TRADE: {direction} {contracts} {symbol} @ {setup.entry_price:.2f} "
-                f"SL={setup.stop_loss:.2f} TP={tp:.2f} "
+                f"SL={sl:.2f} TP={tp:.2f} "
                 f"Risk=${risk_dollars:.2f} Strategy={strategy_name}"
             )
 
+            # DOUBLE CHECK: Verify SL/TP orders exist after 2 seconds
+            await asyncio.sleep(2)
+            await self._verify_bracket_orders(symbol, direction, contracts, sl, tp)
+
             await self.notifier.trade_opened(
                 symbol, direction, contracts,
-                setup.entry_price, setup.stop_loss, tp, strategy_name
+                setup.entry_price, sl, tp, strategy_name
             )
 
             self.risk_mgr.open_positions += 1
@@ -356,6 +374,67 @@ class FuturesBot:
 
         except Exception as e:
             logger.error(f"Failed to execute trade: {e}")
+            # EMERGENCY: If trade was placed but bracket failed, close immediately
+            try:
+                positions = await self.client.get_positions()
+                for pos in positions:
+                    if pos.get("netPos", 0) != 0:
+                        contract = await self.client.get_contract_by_id(pos["contractId"])
+                        if contract.get("name", "").startswith(symbol.rstrip("0123456789")):
+                            logger.warning(f"EMERGENCY CLOSE: Trade without SL/TP for {symbol}")
+                            await self.client.close_position(symbol)
+                            await self.notifier.guardian_alert(
+                                "EMERGENCY", f"Closed {symbol} - bracket orders failed"
+                            )
+            except Exception as e2:
+                logger.error(f"Emergency close failed: {e2}")
+
+    async def _verify_bracket_orders(self, symbol: str, direction: str,
+                                       qty: int, sl: float, tp: float):
+        """
+        DOUBLE CHECK: Verify that SL and TP orders exist for a position.
+        If missing, place them immediately. If that fails too, close the position.
+        """
+        try:
+            orders = await self.client.get_open_orders()
+            exit_action = "Sell" if direction == "Buy" else "Buy"
+
+            has_sl = False
+            has_tp = False
+            for order in orders:
+                if order.get("action") == exit_action:
+                    if order.get("orderType") == "Stop":
+                        has_sl = True
+                    elif order.get("orderType") == "Limit":
+                        has_tp = True
+
+            if not has_sl:
+                logger.warning(f"NO STOP LOSS found for {symbol}! Placing emergency SL...")
+                try:
+                    await self.client.place_stop_order(symbol, exit_action, qty, sl)
+                    logger.info(f"Emergency SL placed at {sl}")
+                except Exception as e:
+                    logger.error(f"FAILED to place emergency SL: {e}")
+                    logger.warning(f"CLOSING POSITION {symbol} - cannot set SL!")
+                    await self.client.close_position(symbol)
+                    await self.notifier.guardian_alert(
+                        "EMERGENCY", f"Closed {symbol} - could not set stop loss"
+                    )
+                    return
+
+            if not has_tp:
+                logger.warning(f"NO TAKE PROFIT found for {symbol}! Placing emergency TP...")
+                try:
+                    await self.client.place_limit_order(symbol, exit_action, qty, tp)
+                    logger.info(f"Emergency TP placed at {tp}")
+                except Exception as e:
+                    logger.warning(f"Could not place TP for {symbol}: {e} (SL exists, continuing)")
+
+            if has_sl and has_tp:
+                logger.info(f"Bracket verified: SL and TP confirmed for {symbol}")
+
+        except Exception as e:
+            logger.error(f"Bracket verification error: {e}")
 
     async def _flatten_all(self, reason: str):
         """Close all positions and cancel all orders."""
