@@ -31,6 +31,8 @@ class TradovateClient:
     # API base URLs
     DEMO_URL = "https://demo.tradovateapi.com/v1"
     LIVE_URL = "https://live.tradovateapi.com/v1"
+    DEMO_MD_URL = "https://md-demo.tradovateapi.com/v1"
+    LIVE_MD_URL = "https://md.tradovateapi.com/v1"
 
     # WebSocket URLs
     DEMO_WS_URL = "wss://demo.tradovateapi.com/v1/websocket"
@@ -53,6 +55,7 @@ class TradovateClient:
         self.device_id = str(uuid.uuid4())
 
         self.base_url = self.LIVE_URL if live else self.DEMO_URL
+        self.md_base_url = self.LIVE_MD_URL if live else self.DEMO_MD_URL
         self.ws_url = self.LIVE_WS_URL if live else self.DEMO_WS_URL
         self.md_ws_url = self.LIVE_MD_WS_URL if live else self.DEMO_MD_WS_URL
 
@@ -316,6 +319,14 @@ class TradovateClient:
             "Content-Type": "application/json",
         }
 
+    def _md_headers(self) -> Dict[str, str]:
+        """Headers for market data endpoints (uses md_access_token if available)."""
+        token = self.md_access_token or self.access_token
+        return {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        }
+
     # ── REST Helpers ──
 
     async def _get(self, endpoint: str) -> Any:
@@ -331,8 +342,15 @@ class TradovateClient:
     async def _post(self, endpoint: str, data: Dict = None) -> Any:
         """POST request to REST API."""
         await self._ensure_token()
-        async with self.session.post(f"{self.base_url}{endpoint}",
-                                      headers=self._headers(),
+        # Market data endpoints go to the MD server
+        if endpoint.startswith("/md/"):
+            base = self.md_base_url
+            headers = self._md_headers()
+        else:
+            base = self.base_url
+            headers = self._headers()
+        async with self.session.post(f"{base}{endpoint}",
+                                      headers=headers,
                                       json=data or {}) as resp:
             if resp.status != 200:
                 text = await resp.text()
