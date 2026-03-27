@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v31 - token renewal on restart + 1hr buffer
+# Trigger: v32 - fresh token, all bugs fixed
 echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
