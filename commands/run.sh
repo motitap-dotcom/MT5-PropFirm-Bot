@@ -8,8 +8,10 @@ cd /root/MT5-PropFirm-Bot
 python3 << 'PYEOF'
 import requests, json, time, os
 
-token = os.environ.get('TRADOVATE_ACCESS_TOKEN', '')
+token = os.environ.get('TRADOVATE_ACCESS_TOKEN', '').strip()
 print(f"Token length: {len(token)}")
+print(f"Token starts: {token[:20]}...")
+print(f"Token ends: ...{token[-10:]}")
 
 if not token:
     print("ERROR: No token found!")
