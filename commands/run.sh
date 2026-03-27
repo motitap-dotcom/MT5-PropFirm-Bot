@@ -1,111 +1,61 @@
 #!/bin/bash
-# Trigger: v41 - diagnose credentials
-echo "=== Credential Diagnostics ==="
+# Trigger: v42 - deploy token fix + restart with new token
+echo "=== Deploy & Restart ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 
-echo "--- .env contents (masked) ---"
+# Update code
+echo "--- Updating code ---"
+git fetch origin claude/build-cfd-trading-bot-fl0ld
+git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
+echo "Done"
+
+# Update .env with fresh token from GitHub Secrets
+echo "--- Updating .env ---"
 python3 << 'PYEOF'
 import os
-
-# Check .env file
-if os.path.exists('.env'):
-    with open('.env') as f:
-        for line in f:
-            line = line.strip()
-            if '=' in line and not line.startswith('#'):
-                key, val = line.split('=', 1)
-                if len(val) > 4:
-                    masked = val[:2] + '*' * (len(val)-4) + val[-2:]
-                else:
-                    masked = '***'
-                print(f"  {key} = {masked} (len={len(val)})")
-else:
-    print("  .env NOT FOUND!")
-
-# Check systemd env override
-print("\n--- Systemd env override (masked) ---")
-conf = '/etc/systemd/system/futures-bot.service.d/env.conf'
-if os.path.exists(conf):
-    with open(conf) as f:
-        for line in f:
-            line = line.strip()
-            if 'Environment=' in line:
-                # Format: Environment="KEY=VALUE"
-                inner = line.split('Environment=')[1].strip('"')
-                if '=' in inner:
-                    key, val = inner.split('=', 1)
-                    val = val.strip('"')
-                    if len(val) > 4:
-                        masked = val[:2] + '*' * (len(val)-4) + val[-2:]
-                    else:
-                        masked = '***'
-                    print(f"  {key} = {masked} (len={len(val)})")
-else:
-    print("  No systemd override file")
-
-# Check what the bot actually sees
-print("\n--- Environment vars (masked) ---")
-for key in ['TRADOVATE_USER', 'TRADOVATE_PASS', 'TRADOVATE_ACCESS_TOKEN']:
-    val = os.environ.get(key, '')
-    if len(val) > 4:
-        masked = val[:2] + '*' * (len(val)-4) + val[-2:]
-    elif val:
-        masked = '***'
-    else:
-        masked = 'EMPTY'
-    print(f"  {key} = {masked} (len={len(val)})")
-
-# Try auth directly to see exact error
-print("\n--- Direct auth test ---")
-import json
-user = None
-passwd = None
-if os.path.exists('.env'):
-    with open('.env') as f:
-        for line in f:
-            if line.startswith('TRADOVATE_USER='):
-                user = line.split('=',1)[1].strip()
-            elif line.startswith('TRADOVATE_PASS='):
-                passwd = line.split('=',1)[1].strip()
-
-if user and passwd:
-    print(f"  User: {user}")
-    print(f"  Pass length: {len(passwd)}, has special chars: {not passwd.isalnum()}")
-
-    import urllib.request, urllib.error
-    payload = json.dumps({
-        "name": user,
-        "password": passwd,
-        "appId": "tradovate_trader(web)",
-        "appVersion": "3.260220.0",
-        "deviceId": "bot-diag",
-        "cid": 8,
-        "sec": "",
-        "organization": "TradeDay"
-    }).encode()
-    req = urllib.request.Request(
-        "https://demo.tradovateapi.com/v1/auth/accesstokenrequest",
-        data=payload,
-        headers={"Content-Type": "application/json"}
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            data = json.loads(resp.read())
-            if 'accessToken' in data:
-                print(f"  AUTH SUCCESS! Token: {data['accessToken'][:10]}...")
-            elif 'p-ticket' in data:
-                print(f"  Got p-ticket (CAPTCHA={data.get('p-captcha', False)})")
-            else:
-                print(f"  Response: {json.dumps(data)[:200]}")
-    except urllib.error.HTTPError as e:
-        body = e.read().decode()[:300]
-        print(f"  HTTP {e.code}: {body}")
-    except Exception as e:
-        print(f"  Error: {e}")
-else:
-    print(f"  Missing creds: user={'set' if user else 'MISSING'}, pass={'set' if passwd else 'MISSING'}")
+token = os.environ.get('TRADOVATE_ACCESS_TOKEN', '').strip()
+user = os.environ.get('TRADOVATE_USER', '').strip()
+passwd = os.environ.get('TRADOVATE_PASS', '').strip()
+tg_token = os.environ.get('TELEGRAM_TOKEN', '').strip()
+tg_chat = os.environ.get('TELEGRAM_CHAT_ID', '').strip()
+if user:
+    with open('.env', 'w') as f:
+        f.write(f'TRADOVATE_USER={user}\n')
+        f.write(f'TRADOVATE_PASS={passwd}\n')
+        if token:
+            f.write(f'TRADOVATE_ACCESS_TOKEN={token}\n')
+        f.write(f'TELEGRAM_TOKEN={tg_token}\n')
+        f.write(f'TELEGRAM_CHAT_ID={tg_chat}\n')
+    print(f"Token: {'yes (' + str(len(token)) + ' chars)' if token else 'NO'}")
+# Clear old saved token so bot uses fresh env token
+os.remove('configs/.tradovate_token.json') if os.path.exists('configs/.tradovate_token.json') else None
+print("Old token file cleared")
 PYEOF
 
-echo ""
+# Systemd env override
+python3 -c "
+import os
+with open('.env') as f: content = f.read()
+os.makedirs('/etc/systemd/system/futures-bot.service.d', exist_ok=True)
+with open('/etc/systemd/system/futures-bot.service.d/env.conf', 'w') as f:
+    f.write('[Service]\n')
+    for line in content.strip().split('\n'):
+        if '=' in line and not line.startswith('#'):
+            f.write(f'Environment=\"{line.strip()}\"\n')
+print('Systemd override updated')
+"
+
+# Restart
+echo "--- Restarting ---"
+systemctl daemon-reload
+systemctl stop futures-bot 2>/dev/null
+sleep 2
+systemctl start futures-bot
+sleep 10
+
+echo "--- Service ---"
+systemctl is-active futures-bot
+echo "--- Last 20 log lines ---"
+tail -20 logs/bot.log 2>/dev/null
 echo "=== Done ==="

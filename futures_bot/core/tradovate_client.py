@@ -96,6 +96,7 @@ class TradovateClient:
             await self._authenticate()
             await self._get_account_info()
 
+        self._token_obtained_at = time.time()
         logger.info(f"Connected to Tradovate ({'LIVE' if self.live else 'DEMO'}) "
                      f"as {self.username}, account_id={self.account_id}")
 
@@ -236,10 +237,16 @@ class TradovateClient:
             await self._authenticate()
 
     async def _ensure_token(self):
-        """Refresh token if close to expiry (1 hour buffer)."""
-        if time.time() > self.token_expiry - 3600:
-            logger.info("Token expiring soon, renewing...")
+        """Refresh token proactively - renew when 50% of lifetime has passed or within 2 hours of expiry."""
+        remaining = self.token_expiry - time.time()
+        if remaining < 7200:  # Less than 2 hours left
+            logger.info(f"Token expiring in {remaining/3600:.1f}h, renewing...")
             await self._renew_token()
+        elif hasattr(self, '_token_obtained_at') and (time.time() - self._token_obtained_at) > 21600:
+            # Renew every 6 hours regardless
+            logger.info("Proactive token renewal (6h interval)...")
+            await self._renew_token()
+            self._token_obtained_at = time.time()
 
     def _parse_expiry(self, expiry_str: str):
         """Parse token expiration time."""
@@ -253,7 +260,7 @@ class TradovateClient:
             self.token_expiry = time.time() + 86400
 
     def _save_token(self):
-        """Save token to file for persistence across restarts."""
+        """Save token to file and .env for persistence across restarts."""
         try:
             TOKEN_FILE.parent.mkdir(parents=True, exist_ok=True)
             data = {
@@ -264,7 +271,28 @@ class TradovateClient:
             }
             TOKEN_FILE.write_text(json.dumps(data))
         except Exception as e:
-            logger.warning(f"Could not save token: {e}")
+            logger.warning(f"Could not save token file: {e}")
+
+        # Also update .env so restarts use the fresh token
+        try:
+            import os
+            env_path = Path(os.environ.get("BOT_ROOT", ".")) / ".env"
+            if env_path.exists():
+                lines = env_path.read_text().splitlines()
+                new_lines = []
+                token_updated = False
+                for line in lines:
+                    if line.startswith("TRADOVATE_ACCESS_TOKEN="):
+                        new_lines.append(f"TRADOVATE_ACCESS_TOKEN={self.access_token}")
+                        token_updated = True
+                    else:
+                        new_lines.append(line)
+                if not token_updated:
+                    new_lines.append(f"TRADOVATE_ACCESS_TOKEN={self.access_token}")
+                env_path.write_text("\n".join(new_lines) + "\n")
+                logger.debug("Updated .env with fresh token")
+        except Exception as e:
+            logger.debug(f"Could not update .env: {e}")
 
     def _load_saved_token(self) -> bool:
         """Load token from file. Returns True if valid token loaded."""
