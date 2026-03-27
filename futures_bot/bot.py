@@ -63,10 +63,11 @@ class FuturesBot:
         self.notifier: Optional[TelegramNotifier] = None
         self.status_writer: Optional[StatusWriter] = None
 
-        # Strategies
-        self.vwap_strategy: Optional[VWAPMeanReversion] = None
-        self.orb_strategy: Optional[ORBBreakout] = None
-        self.active_strategy: str = "vwap"  # or "orb"
+        # Strategies - one per symbol
+        self.vwap_strategies: dict = {}
+        self.orb_strategies: dict = {}
+        self.active_strategy: dict = {}  # per symbol: "vwap" or "orb"
+        self._last_bar_time: dict = {}  # track last processed bar per symbol
 
         # Trading state
         self.symbols: list = self.config.get("symbols", ["MESM6"])
@@ -110,9 +111,12 @@ class FuturesBot:
             enabled=self.config.get("telegram_enabled", True),
         )
 
-        # Strategies
-        self.vwap_strategy = VWAPMeanReversion(self.config.get("vwap", {}))
-        self.orb_strategy = ORBBreakout(self.config.get("orb", {}))
+        # Strategies - separate instance per symbol
+        for sym in self.symbols:
+            self.vwap_strategies[sym] = VWAPMeanReversion(self.config.get("vwap", {}))
+            self.orb_strategies[sym] = ORBBreakout(self.config.get("orb", {}))
+            self.active_strategy[sym] = "vwap"
+            self._last_bar_time[sym] = ""
 
         # Connect
         try:
@@ -204,12 +208,24 @@ class FuturesBot:
                 except Exception as e:
                     logger.error(f"Error fetching balance: {e}")
 
-                # Check for trend day at 11:00 ET
+                # Check for trend day at 11:00 ET (per symbol)
                 if now_et.hour >= 11:
-                    self.vwap_strategy.check_trend_day(now_et.hour)
-                    if self.vwap_strategy.is_trend_day() and self.active_strategy == "vwap":
-                        self.active_strategy = "orb"
-                        logger.info("Switching to ORB strategy (trend day)")
+                    for sym in self.symbols:
+                        vwap = self.vwap_strategies[sym]
+                        vwap.check_trend_day(now_et.hour)
+                        if vwap.is_trend_day() and self.active_strategy.get(sym) == "vwap":
+                            self.active_strategy[sym] = "orb"
+                            logger.info(f"Switching {sym} to ORB strategy (trend day)")
+
+                # Sync positions from Tradovate
+                try:
+                    positions = await self.client.get_positions()
+                    actual_open = sum(1 for p in positions if p.get("netPos", 0) != 0)
+                    if actual_open != self.risk_mgr.open_positions:
+                        logger.info(f"Position sync: {self.risk_mgr.open_positions} -> {actual_open}")
+                        self.risk_mgr.open_positions = actual_open
+                except Exception as e:
+                    logger.error(f"Position sync error: {e}")
 
                 # Process each symbol
                 for symbol in self.symbols:
@@ -242,32 +258,41 @@ class FuturesBot:
             if not bars_data:
                 return
 
-            # Convert to strategy bar format
-            bar = self._to_bar(bars_data[-1])
+            # Only process NEW bars (avoid re-feeding old data)
+            latest_bar = bars_data[-1]
+            bar_time = latest_bar.get("timestamp", "")
+            if bar_time == self._last_bar_time.get(symbol, ""):
+                return  # Already processed this bar
+            self._last_bar_time[symbol] = bar_time
+
+            bar = self._to_bar(latest_bar)
+
+            # Get this symbol's strategy instances
+            vwap = self.vwap_strategies[symbol]
+            orb = self.orb_strategies[symbol]
 
             # Check ORB period (9:30-10:00 ET)
             is_orb_period = time(9, 30) <= now_et.time() < time(10, 0)
 
             if is_orb_period:
-                self.orb_strategy.on_bar(bar, is_orb_period=True)
+                orb.on_bar(bar, is_orb_period=True)
                 return  # Don't trade during ORB building
 
             # Complete ORB at 10:00
-            if now_et.time() >= time(10, 0) and not self.orb_strategy._orb_complete:
-                self.orb_strategy.complete_range()
+            if now_et.time() >= time(10, 0) and not orb._orb_complete:
+                orb.complete_range()
 
-            # Run active strategy
+            # Run active strategy for THIS symbol
             setup = None
             strategy_name = ""
+            sym_strategy = self.active_strategy.get(symbol, "vwap")
 
-            if self.active_strategy == "vwap":
-                # Feed all bars to VWAP strategy
-                for b in bars_data:
-                    vbar = self._to_bar(b)
-                    setup = self.vwap_strategy.on_bar(vbar)
+            if sym_strategy == "vwap":
+                # Feed only the latest bar
+                setup = vwap.on_bar(bar)
                 strategy_name = "VWAP Mean Reversion"
             else:
-                setup = self.orb_strategy.on_bar(bar, is_orb_period=False)
+                setup = orb.on_bar(bar, is_orb_period=False)
                 strategy_name = "ORB Breakout"
 
             # Execute trade if signal
@@ -468,11 +493,13 @@ class FuturesBot:
             })
 
         self.current_day = today
-        self.active_strategy = "vwap"  # Reset to primary strategy
 
-        # Reset strategies
-        self.vwap_strategy.reset_day()
-        self.orb_strategy.reset_day()
+        # Reset strategies for all symbols
+        for sym in self.symbols:
+            self.vwap_strategies[sym].reset_day()
+            self.orb_strategies[sym].reset_day()
+            self.active_strategy[sym] = "vwap"
+            self._last_bar_time[sym] = ""
 
     def _to_bar(self, data: dict):
         """Convert API bar data to strategy Bar format."""
