@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v37 - fix token + restart bot
+# Trigger: v37b - fix token + restart bot
 echo "=== Fix Token & Restart Bot ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
