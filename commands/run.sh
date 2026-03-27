@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v18 - scp output from VPS to runner then push
+# Trigger: v19 - GitHub API to write output
 echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
