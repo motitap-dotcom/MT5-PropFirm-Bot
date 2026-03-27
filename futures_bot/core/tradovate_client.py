@@ -83,9 +83,15 @@ class TradovateClient:
                 await self._get_account_info()
                 logger.info("Saved token is valid")
             except Exception:
-                logger.info("Saved token expired, re-authenticating...")
-                await self._authenticate()
-                await self._get_account_info()
+                logger.info("Saved token expired, trying to renew...")
+                try:
+                    await self._renew_token()
+                    await self._get_account_info()
+                    logger.info("Token renewed successfully on startup")
+                except Exception:
+                    logger.info("Renewal failed, full re-authentication...")
+                    await self._authenticate()
+                    await self._get_account_info()
         else:
             await self._authenticate()
             await self._get_account_info()
@@ -223,8 +229,9 @@ class TradovateClient:
             await self._authenticate()
 
     async def _ensure_token(self):
-        """Refresh token if close to expiry (5 min buffer)."""
-        if time.time() > self.token_expiry - 300:
+        """Refresh token if close to expiry (1 hour buffer)."""
+        if time.time() > self.token_expiry - 3600:
+            logger.info("Token expiring soon, renewing...")
             await self._renew_token()
 
     def _parse_expiry(self, expiry_str: str):
