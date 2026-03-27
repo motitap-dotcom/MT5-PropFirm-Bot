@@ -1,8 +1,8 @@
 === Status ===
-Timestamp: 2026-03-27 15:59:20 UTC
---- Service ---
+T: 2026-03-27 16:09:25 UTC
 activating
---- Last 30 log ---
+1
+NEW
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 357, in _post
 Exception: POST /md/getChart failed (400): Invalid JSON: illegal enum value "Minute", offset: 0x00000074
 2026-03-27 15:54:14,384 [bot] ERROR: Error processing MCLM6: POST /md/getChart failed (400): Invalid JSON: illegal enum value "Minute", offset: 0x00000074
