@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v34 - write fresh env vars to .env FIRST
+# Trigger: v35 - fix push + fresh env vars
 echo "=== Bot Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
