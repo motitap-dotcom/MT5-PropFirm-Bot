@@ -1,5 +1,5 @@
 {
-  "symbols": ["MESM6", "MNQM6"],
+  "symbols": ["MESM6", "MNQM6", "MCLM6", "MGCM6", "MYMM6", "M2KM6"],
   "timeframe": "5min",
   "live": false,
   "organization": "TradeDay",
@@ -18,7 +18,7 @@
     "dd_emergency_pct": 0.90,
     "max_daily_loss": 400.0,
     "max_daily_profit": 900.0,
-    "max_daily_trades": 6
+    "max_daily_trades": 10
   },
 
   "risk": {
