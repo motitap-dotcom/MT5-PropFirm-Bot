@@ -1,27 +1,34 @@
-=== Credential Diagnostics ===
-Timestamp: 2026-03-27 14:36:17 UTC
---- .env contents (masked) ---
-  TRADOVATE_USER = TD******ap (len=10)
-  TRADOVATE_PASS = My*****2! (len=9)
-  TRADOVATE_ACCESS_TOKEN = ey***************************************************************************************************************************************************************************************************************************************************************************************************DA (len=295)
-  TELEGRAM_TOKEN = 84******************************************2g (len=46)
-  TELEGRAM_CHAT_ID = 70******83 (len=10)
-
---- Systemd env override (masked) ---
-  TRADOVATE_USER = TD******ap (len=10)
-  TRADOVATE_PASS = My*****2! (len=9)
-  TRADOVATE_ACCESS_TOKEN = ey***************************************************************************************************************************************************************************************************************************************************************************************************DA (len=295)
-  TELEGRAM_TOKEN = 84******************************************2g (len=46)
-  TELEGRAM_CHAT_ID = 70******83 (len=10)
-
---- Environment vars (masked) ---
-  TRADOVATE_USER = TD******ap (len=10)
-  TRADOVATE_PASS = My*****2! (len=9)
-  TRADOVATE_ACCESS_TOKEN = ey***************************************************************************************************************************************************************************************************************************************************************************************************DA (len=295)
-
---- Direct auth test ---
-  User: TD_Motitap
-  Pass length: 9, has special chars: True
-  Response: {"errorText": "Incorrect username or password. Please try again, noting that passwords are case-sensitive."}
-
+=== Status Check ===
+Timestamp: 2026-03-27 14:59:49 UTC
+--- Service ---
+active
+--- Last 25 log lines ---
+2026-03-27 14:58:42,935 [bot] ERROR: Error processing MCLM6: POST /md/getChart failed (404): 
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 684, in get_historical_bars
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 339, in _post
+Exception: POST /md/getChart failed (404): 
+2026-03-27 14:58:43,055 [bot] ERROR: Error processing MGCM6: POST /md/getChart failed (404): 
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 684, in get_historical_bars
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 339, in _post
+Exception: POST /md/getChart failed (404): 
+2026-03-27 14:58:43,173 [bot] ERROR: Error processing MYMM6: POST /md/getChart failed (404): 
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 684, in get_historical_bars
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 339, in _post
+Exception: POST /md/getChart failed (404): 
+2026-03-27 14:58:43,290 [bot] ERROR: Error processing M2KM6: POST /md/getChart failed (404): 
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 684, in get_historical_bars
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 339, in _post
+Exception: POST /md/getChart failed (404): 
+2026-03-27 14:58:43,296 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+--- Fix deployed? ---
+1
+YES
 === Done ===
