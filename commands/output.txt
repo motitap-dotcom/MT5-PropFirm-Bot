@@ -1,36 +1,36 @@
 === Status ===
-Timestamp: 2026-03-27 15:51:56 UTC
+Timestamp: 2026-03-27 15:59:20 UTC
 --- Service ---
-active
+activating
 --- Last 30 log ---
-    bars_data = await self.client.get_historical_bars(
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 702, in get_historical_bars
-    result = await self._post("/md/getChart", {
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 357, in _post
-    raise Exception(f"POST {endpoint} failed ({resp.status}): {text}")
 Exception: POST /md/getChart failed (400): Invalid JSON: illegal enum value "Minute", offset: 0x00000074
-2026-03-27 15:49:13,427 [bot] ERROR: Error processing MYMM6: POST /md/getChart failed (400): Invalid JSON: illegal enum value "Minute", offset: 0x00000074
+2026-03-27 15:54:14,384 [bot] ERROR: Error processing MCLM6: POST /md/getChart failed (400): Invalid JSON: illegal enum value "Minute", offset: 0x00000074
 Traceback (most recent call last):
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
-    bars_data = await self.client.get_historical_bars(
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 702, in get_historical_bars
-    result = await self._post("/md/getChart", {
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 357, in _post
-    raise Exception(f"POST {endpoint} failed ({resp.status}): {text}")
 Exception: POST /md/getChart failed (400): Invalid JSON: illegal enum value "Minute", offset: 0x00000074
-2026-03-27 15:49:13,548 [bot] ERROR: Error processing M2KM6: POST /md/getChart failed (400): Invalid JSON: illegal enum value "Minute", offset: 0x00000074
+2026-03-27 15:54:14,502 [bot] ERROR: Error processing MGCM6: POST /md/getChart failed (400): Invalid JSON: illegal enum value "Minute", offset: 0x00000074
 Traceback (most recent call last):
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
-    bars_data = await self.client.get_historical_bars(
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 702, in get_historical_bars
-    result = await self._post("/md/getChart", {
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 357, in _post
-    raise Exception(f"POST {endpoint} failed ({resp.status}): {text}")
 Exception: POST /md/getChart failed (400): Invalid JSON: illegal enum value "Minute", offset: 0x00000074
+2026-03-27 15:54:14,628 [bot] ERROR: Error processing MYMM6: POST /md/getChart failed (400): Invalid JSON: illegal enum value "Minute", offset: 0x00000074
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 702, in get_historical_bars
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 357, in _post
+Exception: POST /md/getChart failed (400): Invalid JSON: illegal enum value "Minute", offset: 0x00000074
+2026-03-27 15:54:14,745 [bot] ERROR: Error processing M2KM6: POST /md/getChart failed (400): Invalid JSON: illegal enum value "Minute", offset: 0x00000074
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 702, in get_historical_bars
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 357, in _post
+Exception: POST /md/getChart failed (400): Invalid JSON: illegal enum value "Minute", offset: 0x00000074
+2026-03-27 15:54:14,746 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-03-27 15:55:27,680 [bot] INFO: Stopping bot: Signal received
+2026-03-27 15:55:28,034 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-27 15:55:28,034 [bot] INFO: Bot stopped
 === Done ===
