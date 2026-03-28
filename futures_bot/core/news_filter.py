@@ -58,7 +58,7 @@ class NewsFilter:
         except Exception as e:
             logger.error(f"Error loading restricted events: {e}")
 
-    def is_restricted(self, symbols: List[str] = None) -> tuple[bool, Optional[str]]:
+    def is_restricted(self, symbols: List[str] = None) -> "tuple[bool, Optional[str]]":
         """
         Check if trading is currently restricted due to a news event.
 
@@ -109,7 +109,7 @@ class NewsFilter:
 
         return False, None
 
-    def must_flatten_for_event(self, symbols: List[str] = None) -> tuple[bool, Optional[str]]:
+    def must_flatten_for_event(self, symbols: List[str] = None) -> "tuple[bool, Optional[str]]":
         """
         Check if we need to flatten positions for an upcoming event.
         Returns True if an event is within flatten_buffer_minutes.

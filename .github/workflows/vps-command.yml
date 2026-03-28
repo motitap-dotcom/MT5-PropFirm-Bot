@@ -32,8 +32,8 @@ jobs:
           command_timeout: 10m
           script: |
             cd /root/MT5-PropFirm-Bot
-            git fetch origin claude/build-cfd-trading-bot-fl0ld
-            git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
+            git fetch origin claude/fix-bot-functionality-h1Sb3
+            git reset --hard origin/claude/fix-bot-functionality-h1Sb3
             bash commands/run.sh > commands/output.txt 2>&1
             cat commands/output.txt
 
@@ -47,12 +47,12 @@ jobs:
         run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git fetch origin claude/build-cfd-trading-bot-fl0ld
-          git reset --soft origin/claude/build-cfd-trading-bot-fl0ld
+          git fetch origin claude/fix-bot-functionality-h1Sb3
+          git reset --soft origin/claude/fix-bot-functionality-h1Sb3
           git add commands/output.txt
           if ! git diff --cached --quiet; then
             git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')"
-            git push origin HEAD:claude/build-cfd-trading-bot-fl0ld
+            git push origin HEAD:claude/fix-bot-functionality-h1Sb3
           fi
 
       - name: Telegram notification

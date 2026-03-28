@@ -15,7 +15,7 @@ TradeDay $50K Intraday Evaluation Rules:
 import logging
 from dataclasses import dataclass
 from enum import IntEnum
-from typing import Dict, Optional
+from typing import Dict, List, Optional, Tuple
 from datetime import datetime, timezone
 
 logger = logging.getLogger("guardian")
@@ -69,7 +69,7 @@ class Guardian:
         self.daily_pnl: float = 0.0
         self.daily_trades: int = 0
         self.total_pnl: float = 0.0
-        self.daily_history: list[DailyPnL] = []
+        self.daily_history: List[DailyPnL] = []
         self.trading_days: int = 0
         self.reason: str = ""
 
@@ -104,7 +104,7 @@ class Guardian:
                 self._set_state(GuardianState.SHUTDOWN,
                                f"EVALUATION PASSED! Profit ${self.total_pnl:.2f} >= ${self.profit_target:.2f}")
 
-    def can_open_trade(self, num_contracts: int = 1, is_micro: bool = True) -> tuple[bool, str]:
+    def can_open_trade(self, num_contracts: int = 1, is_micro: bool = True) -> Tuple[bool, str]:
         """Check if a new trade is allowed."""
         # State check
         if self.state >= GuardianState.HALTED:

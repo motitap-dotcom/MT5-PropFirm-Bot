@@ -463,10 +463,17 @@ class FuturesBot:
                     self.vwap_strategies[sym].record_trade_result(is_win)
 
                 contract_id = fill.get("contractId", "")
+                # Try to resolve symbol name from contract ID
+                symbol_name = str(contract_id)
+                try:
+                    contract = await self.client.get_contract_by_id(contract_id)
+                    symbol_name = contract.get("name", str(contract_id))
+                except Exception:
+                    pass
                 logger.info(f"FILL: {action} {qty} @ {price:.2f} PnL=${pnl:.2f}")
 
                 await self.notifier.trade_closed(
-                    str(contract_id), action, pnl, "SL/TP hit"
+                    symbol_name, action, pnl, "SL/TP hit"
                 )
 
     async def _verify_bracket_orders(self, symbol: str, direction: str,
