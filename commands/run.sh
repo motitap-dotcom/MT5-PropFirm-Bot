@@ -1,110 +1,58 @@
 #!/bin/bash
-# Trigger: auth-debug-v1
-echo "=== AUTH DIAGNOSTIC ==="
+# Trigger: auth-deep-debug-v2
+echo "=== DEEP AUTH DIAGNOSTIC ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 echo ""
 
 cd /root/MT5-PropFirm-Bot
-
-# 1. Check .env format (redacted values)
-echo "=== .ENV FORMAT CHECK ==="
-if [ -f .env ]; then
-    echo "Lines in .env:"
-    wc -l .env
-    echo ""
-    echo "Variable names and value lengths (redacted):"
-    while IFS= read -r line; do
-        # Skip comments and empty lines
-        [[ "$line" =~ ^#.*$ ]] && continue
-        [[ -z "$line" ]] && continue
-        key=$(echo "$line" | cut -d= -f1)
-        val=$(echo "$line" | cut -d= -f2-)
-        echo "  $key = [${#val} chars]"
-        # Check for quoting issues
-        if [[ "$val" == \"*\" ]] || [[ "$val" == \'*\' ]]; then
-            echo "    WARNING: Value is quoted - systemd EnvironmentFile includes quotes as part of the value!"
-        fi
-        # Check for spaces
-        if [[ "$val" == *" "* ]]; then
-            echo "    WARNING: Value contains spaces"
-        fi
-    done < .env
-else
-    echo ".env MISSING!"
-fi
-echo ""
-
-# 2. Check what systemd actually sees
-echo "=== SYSTEMD ENV CHECK ==="
-systemctl show futures-bot --property=Environment 2>/dev/null || echo "Could not read service env"
-echo ""
-# Check the drop-in
-echo "=== SYSTEMD DROP-IN ==="
-if [ -d /etc/systemd/system/futures-bot.service.d/ ]; then
-    echo "Drop-in files:"
-    ls -la /etc/systemd/system/futures-bot.service.d/
-    echo ""
-    for f in /etc/systemd/system/futures-bot.service.d/*.conf; do
-        echo "--- $f ---"
-        cat "$f" | sed 's/PASS=.*/PASS=[REDACTED]/' | sed 's/TOKEN=.*/TOKEN=[REDACTED]/' | sed 's/ACCESS_TOKEN=.*/ACCESS_TOKEN=[REDACTED]/'
-    done
-else
-    echo "No drop-in directory"
-fi
-echo ""
-
-# 3. Check token file content
-echo "=== TOKEN FILE CONTENT ==="
-if [ -f configs/.tradovate_token.json ]; then
-    python3 -c "
-import json
-with open('configs/.tradovate_token.json') as f:
-    d = json.load(f)
-print(f'Keys: {list(d.keys())}')
-print(f'Has access_token: {bool(d.get(\"access_token\"))}')
-print(f'Token length: {len(d.get(\"access_token\", \"\"))}')
-print(f'Expiry timestamp: {d.get(\"expiry\", \"missing\")}')
-print(f'Saved at: {d.get(\"saved_at\", \"missing\")}')
-import time
-exp = d.get('expiry', 0)
-if exp:
-    remaining = exp - time.time()
-    print(f'Time remaining: {remaining/3600:.1f} hours ({\"VALID\" if remaining > 0 else \"EXPIRED\"})')
-" 2>&1
-else
-    echo "No token file"
-fi
-echo ""
-
-# 4. Try actual auth request (just check response, don't log password)
-echo "=== AUTH TEST ==="
 source .env 2>/dev/null
-python3 -c "
-import os, json
-try:
-    import requests
-except ImportError:
-    print('requests not installed, using urllib')
-    import urllib.request, urllib.error
+
+python3 << 'PYEOF'
+import os, json, urllib.request, urllib.error, base64, time
 
 user = os.environ.get('TRADOVATE_USER', '')
 passwd = os.environ.get('TRADOVATE_PASS', '')
-print(f'Username length: {len(user)}')
-print(f'Password length: {len(passwd)}')
-print(f'Username first 3 chars: {user[:3]}...')
+token = os.environ.get('TRADOVATE_ACCESS_TOKEN', '')
 
-if not user or not passwd:
-    print('ERROR: Missing credentials!')
+print(f"Username: {user}")
+print(f"Password length: {len(passwd)}")
+print(f"Token length: {len(token)}")
+print()
+
+# Decode JWT to check expiry
+if token:
+    try:
+        payload_b64 = token.split('.')[1]
+        # Add padding
+        payload_b64 += '=' * (4 - len(payload_b64) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(payload_b64))
+        exp = payload.get('exp', 0)
+        now = time.time()
+        print(f"=== JWT TOKEN ANALYSIS ===")
+        print(f"Subject (user ID): {payload.get('sub')}")
+        print(f"Email: {payload.get('email')}")
+        print(f"Expiry: {exp} ({time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime(exp))})")
+        print(f"Now:    {int(now)} ({time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime(now))})")
+        print(f"Status: {'EXPIRED' if now > exp else 'VALID'} (expired {(now-exp)/3600:.1f}h ago)" if now > exp else f"Valid for {(exp-now)/3600:.1f}h")
+        email = payload.get('email', '')
+    except Exception as e:
+        print(f"JWT decode error: {e}")
+        email = ''
 else:
-    import urllib.request, urllib.error
+    email = ''
+print()
+
+def try_auth(label, name, password, org=""):
+    print(f"=== AUTH TEST: {label} ===")
     payload = json.dumps({
-        'name': user,
-        'password': passwd,
+        'name': name,
+        'password': password,
         'appId': 'tradovate_trader(web)',
         'appVersion': '3.260220.0',
-        'deviceId': 'diag-test-001',
+        'deviceId': 'diag-test-002',
         'cid': 8,
         'sec': '',
+        'organization': org,
     }).encode()
     req = urllib.request.Request(
         'https://demo.tradovateapi.com/v1/auth/accesstokenrequest',
@@ -112,58 +60,179 @@ else:
         headers={'Content-Type': 'application/json'}
     )
     try:
+        resp = urllib.request.urlopen(req, timeout=15)
+        data = json.loads(resp.read())
+        if 'accessToken' in data:
+            print(f"SUCCESS! Got token (len={len(data['accessToken'])})")
+            print(f"Expiry: {data.get('expirationTime', 'unknown')}")
+            # Save the token!
+            save_token(data)
+            return True
+        elif 'p-ticket' in data:
+            print(f"CAPTCHA/WAIT required:")
+            print(f"  p-captcha: {data.get('p-captcha', False)}")
+            print(f"  p-time: {data.get('p-time', 0)}")
+            # If no captcha, wait and retry
+            if not data.get('p-captcha', False):
+                p_time = data.get('p-time', 15)
+                print(f"  Waiting {p_time}s and retrying...")
+                import time
+                time.sleep(p_time)
+                payload2 = json.loads(payload)
+                payload2['p-ticket'] = data['p-ticket']
+                req2 = urllib.request.Request(
+                    'https://demo.tradovateapi.com/v1/auth/accesstokenrequest',
+                    data=json.dumps(payload2).encode(),
+                    headers={'Content-Type': 'application/json'}
+                )
+                try:
+                    resp2 = urllib.request.urlopen(req2, timeout=15)
+                    data2 = json.loads(resp2.read())
+                    if 'accessToken' in data2:
+                        print(f"  SUCCESS after wait! Token len={len(data2['accessToken'])}")
+                        save_token(data2)
+                        return True
+                    else:
+                        print(f"  Still failed: {data2.get('errorText', str(data2))}")
+                except urllib.error.HTTPError as e2:
+                    print(f"  Retry HTTP error: {e2.code} {e2.read().decode()[:200]}")
+            return False
+        else:
+            print(f"FAILED: {data.get('errorText', json.dumps(data)[:200])}")
+            return False
+    except urllib.error.HTTPError as e:
+        body = e.read().decode()
+        print(f"HTTP {e.code}: {body[:300]}")
+        return False
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
+
+def save_token(data):
+    """Save successful token everywhere"""
+    token = data['accessToken']
+    md_token = data.get('mdAccessToken', token)
+    expiry_str = data.get('expirationTime', '')
+
+    # Parse expiry
+    try:
+        from datetime import datetime
+        dt = datetime.fromisoformat(expiry_str.replace('Z', '+00:00'))
+        expiry = dt.timestamp()
+    except:
+        expiry = time.time() + 86400
+
+    # Save to token file
+    token_data = {
+        'access_token': token,
+        'md_access_token': md_token,
+        'expiry': expiry,
+        'saved_at': time.strftime('%Y-%m-%dT%H:%M:%S+00:00', time.gmtime()),
+    }
+    os.makedirs('configs', exist_ok=True)
+    with open('configs/.tradovate_token.json', 'w') as f:
+        json.dump(token_data, f)
+    print("  Saved to configs/.tradovate_token.json")
+
+    # Update .env
+    if os.path.exists('.env'):
+        lines = open('.env').read().splitlines()
+        new_lines = []
+        updated = False
+        for line in lines:
+            if line.startswith('TRADOVATE_ACCESS_TOKEN='):
+                new_lines.append(f'TRADOVATE_ACCESS_TOKEN={token}')
+                updated = True
+            else:
+                new_lines.append(line)
+        if not updated:
+            new_lines.append(f'TRADOVATE_ACCESS_TOKEN={token}')
+        open('.env', 'w').write('\n'.join(new_lines) + '\n')
+        print("  Updated .env")
+
+    # Update systemd drop-in
+    try:
+        dropin = '/etc/systemd/system/futures-bot.service.d/env.conf'
+        if os.path.exists(dropin):
+            lines = open(dropin).read().splitlines()
+            new_lines = []
+            for line in lines:
+                if 'TRADOVATE_ACCESS_TOKEN=' in line:
+                    new_lines.append(f'Environment="TRADOVATE_ACCESS_TOKEN={token}"')
+                else:
+                    new_lines.append(line)
+            open(dropin, 'w').write('\n'.join(new_lines) + '\n')
+            os.system('systemctl daemon-reload')
+            print("  Updated systemd drop-in")
+    except Exception as e:
+        print(f"  Could not update systemd: {e}")
+
+# Test 1: Token renewal
+print("=== TOKEN RENEWAL TEST ===")
+if token:
+    req = urllib.request.Request(
+        'https://demo.tradovateapi.com/v1/auth/renewaccesstoken',
+        data=b'',
+        headers={
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'application/json'
+        },
+        method='POST'
+    )
+    try:
         resp = urllib.request.urlopen(req, timeout=10)
         data = json.loads(resp.read())
         if 'accessToken' in data:
-            print('AUTH SUCCESS! Got access token')
-            print(f'Token length: {len(data[\"accessToken\"])}')
-            print(f'Expiry: {data.get(\"expirationTime\", \"unknown\")}')
-            # Save fresh token
-            token_data = {
-                'access_token': data['accessToken'],
-                'md_access_token': data.get('mdAccessToken', data['accessToken']),
-                'expiry': 0,  # Will be set properly by bot
-                'saved_at': ''
-            }
-            with open('configs/.tradovate_token.json', 'w') as f:
-                json.dump(token_data, f)
-            print('Saved fresh token to configs/.tradovate_token.json')
-            # Update .env
-            if os.path.exists('.env'):
-                lines = open('.env').read().splitlines()
-                new_lines = []
-                updated = False
-                for line in lines:
-                    if line.startswith('TRADOVATE_ACCESS_TOKEN='):
-                        new_lines.append(f'TRADOVATE_ACCESS_TOKEN={data[\"accessToken\"]}')
-                        updated = True
-                    else:
-                        new_lines.append(line)
-                if not updated:
-                    new_lines.append(f'TRADOVATE_ACCESS_TOKEN={data[\"accessToken\"]}')
-                open('.env', 'w').write(chr(10).join(new_lines) + chr(10))
-                print('Updated .env with fresh token')
-        elif 'p-ticket' in data:
-            print(f'Got p-ticket (CAPTCHA/wait required)')
-            print(f'p-captcha: {data.get(\"p-captcha\", False)}')
-            print(f'p-time: {data.get(\"p-time\", 0)}')
+            print(f"RENEWAL SUCCESS! New token len={len(data['accessToken'])}")
+            save_token(data)
         else:
-            print(f'Auth response keys: {list(data.keys())}')
-            print(f'Error: {data.get(\"errorText\", \"unknown\")}')
+            print(f"Renewal response: {json.dumps(data)[:200]}")
     except urllib.error.HTTPError as e:
-        body = e.read().decode()
-        print(f'HTTP Error {e.code}: {body[:500]}')
+        print(f"Renewal failed HTTP {e.code}: {e.read().decode()[:200]}")
     except Exception as e:
-        print(f'Request failed: {e}')
-" 2>&1
-echo ""
+        print(f"Renewal error: {e}")
+else:
+    print("No token to renew")
+print()
 
-# 5. Service restart test
-echo "=== RESTART BOT ==="
-systemctl daemon-reload
-systemctl restart futures-bot
-sleep 3
-systemctl is-active futures-bot
-journalctl -u futures-bot --no-pager -n 20 --since "30 sec ago"
+# Test 2: Username auth
+success = try_auth("Username + Password", user, passwd)
+print()
+
+# Test 3: Email auth (if we got email from JWT)
+if not success and email:
+    print()
+    success = try_auth("Email + Password", email, passwd)
+    print()
+
+# Test 4: Try with organization variations for TradeDay
+if not success:
+    for org in ["TradeDay", "tradeday", "TRADEDAY"]:
+        print()
+        success = try_auth(f"Username + Password + org={org}", user, passwd, org)
+        if success:
+            break
+    print()
+
+# Final: restart bot if we got a token
+if success:
+    print()
+    print("=== RESTARTING BOT WITH FRESH TOKEN ===")
+    os.system('systemctl daemon-reload')
+    os.system('systemctl restart futures-bot')
+    import time
+    time.sleep(5)
+    os.system('systemctl is-active futures-bot')
+    os.system('journalctl -u futures-bot --no-pager -n 25 --since "30 sec ago"')
+else:
+    print()
+    print("ALL AUTH ATTEMPTS FAILED")
+    print("Possible causes:")
+    print("  1. Password was changed on Tradovate")
+    print("  2. Account locked due to too many failed attempts")
+    print("  3. Need to solve CAPTCHA from this IP first")
+    print("  4. TradeDay account expired or deactivated")
+PYEOF
+
 echo ""
 echo "=== DIAGNOSTIC COMPLETE ==="
