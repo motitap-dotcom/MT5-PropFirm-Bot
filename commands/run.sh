@@ -1,65 +1,169 @@
 #!/bin/bash
-# Trigger: status-check-v1
-echo "=== VPS STATUS CHECK ==="
+# Trigger: auth-debug-v1
+echo "=== AUTH DIAGNOSTIC ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 echo ""
 
-echo "=== SYSTEM ==="
-uptime
-free -h | head -2
-echo ""
-
-echo "=== BOT SERVICE ==="
-systemctl is-active futures-bot 2>/dev/null || echo "Service not found"
-systemctl status futures-bot --no-pager 2>/dev/null | head -15
-echo ""
-
-echo "=== RECENT LOGS (last 50 lines) ==="
 cd /root/MT5-PropFirm-Bot
-tail -50 logs/bot.log 2>/dev/null || echo "No bot.log found"
-echo ""
 
-echo "=== JOURNAL LOGS (last 10 min) ==="
-journalctl -u futures-bot --no-pager -n 30 --since "10 min ago" 2>/dev/null || echo "No journal entries"
-echo ""
-
-echo "=== ENV FILE CHECK ==="
-if [ -f /root/MT5-PropFirm-Bot/.env ]; then
-    echo ".env exists"
-    echo "Variables defined:"
-    grep -c "TRADOVATE_USER" .env && echo "  TRADOVATE_USER: SET" || echo "  TRADOVATE_USER: MISSING"
-    grep -c "TRADOVATE_PASS" .env && echo "  TRADOVATE_PASS: SET" || echo "  TRADOVATE_PASS: MISSING"
-    grep -c "TRADOVATE_ACCESS_TOKEN" .env && echo "  TRADOVATE_ACCESS_TOKEN: SET" || echo "  TRADOVATE_ACCESS_TOKEN: MISSING"
-    grep -c "TELEGRAM_TOKEN" .env && echo "  TELEGRAM_TOKEN: SET" || echo "  TELEGRAM_TOKEN: MISSING"
-    grep -c "TELEGRAM_CHAT_ID" .env && echo "  TELEGRAM_CHAT_ID: SET" || echo "  TELEGRAM_CHAT_ID: MISSING"
+# 1. Check .env format (redacted values)
+echo "=== .ENV FORMAT CHECK ==="
+if [ -f .env ]; then
+    echo "Lines in .env:"
+    wc -l .env
+    echo ""
+    echo "Variable names and value lengths (redacted):"
+    while IFS= read -r line; do
+        # Skip comments and empty lines
+        [[ "$line" =~ ^#.*$ ]] && continue
+        [[ -z "$line" ]] && continue
+        key=$(echo "$line" | cut -d= -f1)
+        val=$(echo "$line" | cut -d= -f2-)
+        echo "  $key = [${#val} chars]"
+        # Check for quoting issues
+        if [[ "$val" == \"*\" ]] || [[ "$val" == \'*\' ]]; then
+            echo "    WARNING: Value is quoted - systemd EnvironmentFile includes quotes as part of the value!"
+        fi
+        # Check for spaces
+        if [[ "$val" == *" "* ]]; then
+            echo "    WARNING: Value contains spaces"
+        fi
+    done < .env
 else
-    echo ".env FILE MISSING!"
+    echo ".env MISSING!"
 fi
 echo ""
 
-echo "=== TOKEN FILE ==="
-if [ -f /root/MT5-PropFirm-Bot/configs/.tradovate_token.json ]; then
-    echo "Token file exists:"
-    cat configs/.tradovate_token.json | python3 -c "import sys,json; d=json.load(sys.stdin); print(f'Expires: {d.get(\"expirationTime\",\"unknown\")}')" 2>/dev/null || echo "Could not parse token"
+# 2. Check what systemd actually sees
+echo "=== SYSTEMD ENV CHECK ==="
+systemctl show futures-bot --property=Environment 2>/dev/null || echo "Could not read service env"
+echo ""
+# Check the drop-in
+echo "=== SYSTEMD DROP-IN ==="
+if [ -d /etc/systemd/system/futures-bot.service.d/ ]; then
+    echo "Drop-in files:"
+    ls -la /etc/systemd/system/futures-bot.service.d/
+    echo ""
+    for f in /etc/systemd/system/futures-bot.service.d/*.conf; do
+        echo "--- $f ---"
+        cat "$f" | sed 's/PASS=.*/PASS=[REDACTED]/' | sed 's/TOKEN=.*/TOKEN=[REDACTED]/' | sed 's/ACCESS_TOKEN=.*/ACCESS_TOKEN=[REDACTED]/'
+    done
 else
-    echo "No token file found"
+    echo "No drop-in directory"
 fi
 echo ""
 
-echo "=== PYTHON VERSION ==="
-python3 --version
+# 3. Check token file content
+echo "=== TOKEN FILE CONTENT ==="
+if [ -f configs/.tradovate_token.json ]; then
+    python3 -c "
+import json
+with open('configs/.tradovate_token.json') as f:
+    d = json.load(f)
+print(f'Keys: {list(d.keys())}')
+print(f'Has access_token: {bool(d.get(\"access_token\"))}')
+print(f'Token length: {len(d.get(\"access_token\", \"\"))}')
+print(f'Expiry timestamp: {d.get(\"expiry\", \"missing\")}')
+print(f'Saved at: {d.get(\"saved_at\", \"missing\")}')
+import time
+exp = d.get('expiry', 0)
+if exp:
+    remaining = exp - time.time()
+    print(f'Time remaining: {remaining/3600:.1f} hours ({\"VALID\" if remaining > 0 else \"EXPIRED\"})')
+" 2>&1
+else
+    echo "No token file"
+fi
 echo ""
 
-echo "=== INSTALLED PACKAGES ==="
-pip3 list 2>/dev/null | grep -E "aiohttp|websockets|requests" || echo "Could not check packages"
+# 4. Try actual auth request (just check response, don't log password)
+echo "=== AUTH TEST ==="
+source .env 2>/dev/null
+python3 -c "
+import os, json
+try:
+    import requests
+except ImportError:
+    print('requests not installed, using urllib')
+    import urllib.request, urllib.error
+
+user = os.environ.get('TRADOVATE_USER', '')
+passwd = os.environ.get('TRADOVATE_PASS', '')
+print(f'Username length: {len(user)}')
+print(f'Password length: {len(passwd)}')
+print(f'Username first 3 chars: {user[:3]}...')
+
+if not user or not passwd:
+    print('ERROR: Missing credentials!')
+else:
+    import urllib.request, urllib.error
+    payload = json.dumps({
+        'name': user,
+        'password': passwd,
+        'appId': 'tradovate_trader(web)',
+        'appVersion': '3.260220.0',
+        'deviceId': 'diag-test-001',
+        'cid': 8,
+        'sec': '',
+    }).encode()
+    req = urllib.request.Request(
+        'https://demo.tradovateapi.com/v1/auth/accesstokenrequest',
+        data=payload,
+        headers={'Content-Type': 'application/json'}
+    )
+    try:
+        resp = urllib.request.urlopen(req, timeout=10)
+        data = json.loads(resp.read())
+        if 'accessToken' in data:
+            print('AUTH SUCCESS! Got access token')
+            print(f'Token length: {len(data[\"accessToken\"])}')
+            print(f'Expiry: {data.get(\"expirationTime\", \"unknown\")}')
+            # Save fresh token
+            token_data = {
+                'access_token': data['accessToken'],
+                'md_access_token': data.get('mdAccessToken', data['accessToken']),
+                'expiry': 0,  # Will be set properly by bot
+                'saved_at': ''
+            }
+            with open('configs/.tradovate_token.json', 'w') as f:
+                json.dump(token_data, f)
+            print('Saved fresh token to configs/.tradovate_token.json')
+            # Update .env
+            if os.path.exists('.env'):
+                lines = open('.env').read().splitlines()
+                new_lines = []
+                updated = False
+                for line in lines:
+                    if line.startswith('TRADOVATE_ACCESS_TOKEN='):
+                        new_lines.append(f'TRADOVATE_ACCESS_TOKEN={data[\"accessToken\"]}')
+                        updated = True
+                    else:
+                        new_lines.append(line)
+                if not updated:
+                    new_lines.append(f'TRADOVATE_ACCESS_TOKEN={data[\"accessToken\"]}')
+                open('.env', 'w').write(chr(10).join(new_lines) + chr(10))
+                print('Updated .env with fresh token')
+        elif 'p-ticket' in data:
+            print(f'Got p-ticket (CAPTCHA/wait required)')
+            print(f'p-captcha: {data.get(\"p-captcha\", False)}')
+            print(f'p-time: {data.get(\"p-time\", 0)}')
+        else:
+            print(f'Auth response keys: {list(data.keys())}')
+            print(f'Error: {data.get(\"errorText\", \"unknown\")}')
+    except urllib.error.HTTPError as e:
+        body = e.read().decode()
+        print(f'HTTP Error {e.code}: {body[:500]}')
+    except Exception as e:
+        print(f'Request failed: {e}')
+" 2>&1
 echo ""
 
-echo "=== NETWORK CHECK ==="
-curl -s -o /dev/null -w "Tradovate API: %{http_code}\n" https://demo.tradovateapi.com/v1 --max-time 5 || echo "Tradovate: UNREACHABLE"
-curl -s -o /dev/null -w "Telegram API: %{http_code}\n" https://api.telegram.org --max-time 5 || echo "Telegram: UNREACHABLE"
+# 5. Service restart test
+echo "=== RESTART BOT ==="
+systemctl daemon-reload
+systemctl restart futures-bot
+sleep 3
+systemctl is-active futures-bot
+journalctl -u futures-bot --no-pager -n 20 --since "30 sec ago"
 echo ""
-
-echo "=== STATUS JSON ==="
-cat /root/MT5-PropFirm-Bot/status/status.json 2>/dev/null || echo "No status.json"
-echo ""
-echo "=== CHECK COMPLETE ==="
+echo "=== DIAGNOSTIC COMPLETE ==="
