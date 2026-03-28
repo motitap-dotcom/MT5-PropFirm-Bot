@@ -1,71 +1,53 @@
-=== AUTH DIAGNOSTIC ===
-Timestamp: 2026-03-28 21:53:03 UTC
+=== DEEP AUTH DIAGNOSTIC ===
+Timestamp: 2026-03-28 22:13:19 UTC
 
-=== .ENV FORMAT CHECK ===
-Lines in .env:
-5 .env
-
-Variable names and value lengths (redacted):
-  TRADOVATE_USER = [10 chars]
-  TRADOVATE_PASS = [9 chars]
-  TRADOVATE_ACCESS_TOKEN = [293 chars]
-  TELEGRAM_TOKEN = [46 chars]
-  TELEGRAM_CHAT_ID = [10 chars]
-
-=== SYSTEMD ENV CHECK ===
-Environment=PYTHONUNBUFFERED=1 TRADOVATE_USER=TD_Motitap "TRADOVATE_PASS=Mytl8182!" TRADOVATE_ACCESS_TOKEN=eyJraWQiOiIyNyIsImFsZyI6IkVkRFNBIn0.eyJzdWIiOiI3MTg1OTg3IiwiZXhwIjoxNzc0NjI3NjE3LCJqdGkiOiI5MjQxNzI1ODk0MjM0MTgxNzUtMzU1MTUyMDQyMTc1MTQ4OTc5OSIsInBocyI6LTE0OTM4NzI5MDQsImVtYWlsIjoibW90aXRhcEBnbWFpbC5jb20ifQ.vix18rmEMkV4CppEdcrXCe1sFyZmp_eIOs0qrU9uXU_aiEn1RK-bwWIYMBApJ-xTa3wGNv3-3T1TEbIHyNUGAA TELEGRAM_TOKEN=8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g TELEGRAM_CHAT_ID=7013213983
-
-=== SYSTEMD DROP-IN ===
-Drop-in files:
-total 12
-drwxr-xr-x  2 root root 4096 Mar 27 09:48 .
-drwxr-xr-x 28 root root 4096 Mar 27 09:48 ..
--rw-r--r--  1 root root  538 Mar 27 16:12 env.conf
-
---- /etc/systemd/system/futures-bot.service.d/env.conf ---
-[Service]
-Environment="TRADOVATE_USER=TD_Motitap"
-Environment="TRADOVATE_PASS=[REDACTED]
-Environment="TRADOVATE_ACCESS_TOKEN=[REDACTED]
-Environment="TELEGRAM_TOKEN=[REDACTED]
-Environment="TELEGRAM_CHAT_ID=7013213983"
-
-=== TOKEN FILE CONTENT ===
-Keys: ['access_token', 'md_access_token', 'expiry', 'saved_at']
-Has access_token: True
-Token length: 293
-Expiry timestamp: 1774820836.6391375
-Saved at: 2026-03-28T21:47:16.639446+00:00
-Time remaining: 23.9 hours (VALID)
-
-=== AUTH TEST ===
-Username length: 10
+Username: TD_Motitap
 Password length: 9
-Username first 3 chars: TD_...
-Auth response keys: ['errorText']
-Error: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Token length: 293
 
-=== RESTART BOT ===
-inactive
-Mar 28 21:53:06 vmi3096165 python3[2213086]:     await self._authenticate()
-Mar 28 21:53:06 vmi3096165 python3[2213086]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 219, in _authenticate
-Mar 28 21:53:06 vmi3096165 python3[2213086]:     raise ConnectionError(f"Authentication failed: {error}")
-Mar 28 21:53:06 vmi3096165 python3[2213086]: ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Mar 28 21:53:06 vmi3096165 python3[2213086]: During handling of the above exception, another exception occurred:
-Mar 28 21:53:06 vmi3096165 python3[2213086]: Traceback (most recent call last):
-Mar 28 21:53:06 vmi3096165 python3[2213086]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 600, in main
-Mar 28 21:53:06 vmi3096165 python3[2213086]:     await bot.start()
-Mar 28 21:53:06 vmi3096165 python3[2213086]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 140, in start
-Mar 28 21:53:06 vmi3096165 python3[2213086]:     await self.client.connect()
-Mar 28 21:53:06 vmi3096165 python3[2213086]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 96, in connect
-Mar 28 21:53:06 vmi3096165 python3[2213086]:     await self._authenticate()
-Mar 28 21:53:06 vmi3096165 python3[2213086]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 219, in _authenticate
-Mar 28 21:53:06 vmi3096165 python3[2213086]:     raise ConnectionError(f"Authentication failed: {error}")
-Mar 28 21:53:06 vmi3096165 python3[2213086]: ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Mar 28 21:53:06 vmi3096165 python3[2213086]: 2026-03-28 21:53:06,196 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Mar 28 21:53:06 vmi3096165 python3[2213086]: 2026-03-28 21:53:06,314 [bot] ERROR: Error closing positions: GET /position/list failed (401): Access is denied
-Mar 28 21:53:06 vmi3096165 python3[2213086]: 2026-03-28 21:53:06,431 [tradovate_client] INFO: Disconnected from Tradovate
-Mar 28 21:53:06 vmi3096165 python3[2213086]: 2026-03-28 21:53:06,432 [bot] INFO: Bot stopped
-Mar 28 21:53:06 vmi3096165 systemd[1]: futures-bot.service: Deactivated successfully.
+=== JWT TOKEN ANALYSIS ===
+Subject (user ID): 7185987
+Email: motitap@gmail.com
+Expiry: 1774627617 (2026-03-27 16:06 UTC)
+Now:    1774735999 (2026-03-28 22:13 UTC)
+Status: EXPIRED (expired 30.1h ago)
+
+=== TOKEN RENEWAL TEST ===
+Renewal failed HTTP 401: Expired Access Token
+
+=== AUTH TEST: Username + Password ===
+CAPTCHA/WAIT required:
+  p-captcha: True
+  p-time: 15
+
+
+=== AUTH TEST: Email + Password ===
+CAPTCHA/WAIT required:
+  p-captcha: True
+  p-time: 29
+
+
+=== AUTH TEST: Username + Password + org=TradeDay ===
+CAPTCHA/WAIT required:
+  p-captcha: True
+  p-time: 43
+
+=== AUTH TEST: Username + Password + org=tradeday ===
+CAPTCHA/WAIT required:
+  p-captcha: True
+  p-time: 57
+
+=== AUTH TEST: Username + Password + org=TRADEDAY ===
+CAPTCHA/WAIT required:
+  p-captcha: True
+  p-time: 71
+
+
+ALL AUTH ATTEMPTS FAILED
+Possible causes:
+  1. Password was changed on Tradovate
+  2. Account locked due to too many failed attempts
+  3. Need to solve CAPTCHA from this IP first
+  4. TradeDay account expired or deactivated
 
 === DIAGNOSTIC COMPLETE ===
