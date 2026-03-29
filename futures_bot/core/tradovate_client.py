@@ -245,7 +245,6 @@ class TradovateClient:
             if attempt < 2:
                 await asyncio.sleep(5 * (attempt + 1))
         logger.error("All token renewal attempts failed")
-            await self._authenticate()
 
     async def _ensure_token(self):
         """Refresh token proactively - renew when 50% of lifetime has passed or within 2 hours of expiry."""
