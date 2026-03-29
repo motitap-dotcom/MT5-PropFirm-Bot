@@ -105,7 +105,7 @@ All workflows send Telegram notifications on completion.
 
 ### Workflow for every request (MUST FOLLOW):
 1. Write/edit the trigger file
-2. Push to GitHub (to the correct branch: `claude/build-cfd-trading-bot-fl0ld`)
+2. Push to GitHub (to the correct branch: `claude/fix-bot-functionality-h1Sb3`)
 3. Wait ~90-120 seconds for Actions to run and push output back
 4. `git pull` to get the output file (`commands/output.txt`)
 5. Read `commands/output.txt` and present results to Noa WITH timestamp
@@ -228,7 +228,7 @@ All workflows send Telegram notifications on completion.
 ### Trading Strategy:
 - **Primary**: VWAP Mean Reversion (most days - range days)
 - **Secondary**: ORB Breakout (trend days - auto-detected at 11:00 ET)
-- **Symbols**: MES (Micro S&P 500), MNQ (Micro Nasdaq)
+- **Symbols**: MES (Micro S&P 500), MNQ (Micro Nasdaq), MCL (Micro Crude), MGC (Micro Gold), MYM (Micro Dow), M2K (Micro Russell)
 - **Timeframe**: 5-minute bars
 - **Session**: 9:30-15:30 ET (no overnight positions)
 - **Dead Zone**: 12:00-13:30 ET (reduced size)
@@ -249,3 +249,162 @@ All workflows send Telegram notifications on completion.
 3. Read `commands/output.txt` for current state
 4. Check `status/status.json` for last bot-written snapshot (may be stale)
 5. All output files have timestamps - always verify freshness
+
+---
+
+## Operations Guide - How the Bot is Managed
+
+### Active Branch
+- **Current working branch**: `claude/fix-bot-functionality-h1Sb3`
+- All workflows reference this branch
+- `vps-command.yml` has this branch HARDCODED (lines 35-36, 50-51, 55)
+- Other workflows use `${{ github.ref_name }}` (auto-detect)
+
+### Token Management System
+The Tradovate token is the most critical piece. Here's how it works:
+
+**Token flow:**
+1. Token obtained via CAPTCHA (one-time manual) or user/password auth
+2. Saved to 3 places: `configs/.tradovate_token.json`, `.env`, systemd drop-in
+3. Background renewal task runs every **4 hours** (`start_token_renewal_loop()` in `tradovate_client.py`)
+4. `_ensure_token()` also checks before every API call (renews if < 2h remaining)
+5. `_renew_token()` retries 3 times with backoff on failure
+6. On renewal, token is saved to all 3 locations including systemd drop-in
+
+**Token storage locations (all must be in sync):**
+| Location | Purpose | Updated by |
+|---|---|---|
+| `configs/.tradovate_token.json` | Primary - loaded on bot start | `_save_token()` |
+| `.env` → `TRADOVATE_ACCESS_TOKEN` | Backup - used if token file missing | `_save_token()` |
+| `/etc/systemd/system/futures-bot.service.d/env.conf` | systemd env - used on service restart | `_save_token()` |
+
+**Token lifetime**: ~24 hours from Tradovate. Bot renews every 4 hours.
+
+### Systemd Service
+- Service name: `futures-bot`
+- Config: `/etc/systemd/system/futures-bot.service`
+- Drop-in: `/etc/systemd/system/futures-bot.service.d/env.conf` (credentials + token)
+- WorkingDirectory: `/root/MT5-PropFirm-Bot`
+- Restart: on-failure, every 30s
+- **CRITICAL**: Drop-in env.conf values MUST have proper quoting: `Environment="KEY=value"`
+
+### VPS Command Workflow - Important Notes
+- `commands/run.sh` is the trigger file - ANY push that changes it triggers the workflow
+- The workflow does `git reset --hard` on VPS BEFORE running the script
+- **NEVER put `git reset --hard` inside `commands/run.sh`** - it overwrites `output.txt` and results are lost
+- Keep scripts SHORT (<60 lines) - long scripts may timeout and fail to return output
+- Output captured in `commands/output.txt` via SCP from VPS, then committed back
+
+---
+
+## Troubleshooting Guide - Known Issues & Fixes
+
+### Issue 1: "Authentication failed: Incorrect username or password"
+**Root cause**: Usually means the Tradovate token expired AND CAPTCHA is required from VPS IP.
+**How to identify**: Log shows both:
+- `Pre-set token from environment is expired/invalid`
+- `Authentication failed: Incorrect username or password`
+**Quick fix**:
+1. Ask Noa to log into https://trader.tradovate.com from their browser
+2. Get token from DevTools (F12 → Network → accesstokenrequest → Response → accessToken)
+3. Strip "Bearer " prefix if present
+4. Write a `commands/run.sh` script that saves the token to all 3 locations (token file, .env, systemd drop-in)
+5. Restart bot service
+**Prevention**: Token auto-renewal background task should prevent this. If it happens again, check why renewal failed (VPS network? Tradovate API down?)
+
+### Issue 2: "No module named futures_bot.bot"
+**Root cause**: Code on VPS is out of sync or has syntax errors.
+**Quick fix**:
+1. Run `python3 -c "import py_compile; py_compile.compile('FILE', doraise=True)"` on ALL changed files LOCALLY before pushing
+2. Write `commands/run.sh` that stops bot, verifies syntax, restarts
+3. **Don't do `git reset --hard` inside `run.sh`** - the workflow already handles it
+**Prevention**: Always run syntax check locally before pushing code changes.
+
+### Issue 3: IndentationError / SyntaxError after code edit
+**Root cause**: Bad edit in Python file.
+**Quick fix**: Fix the syntax, verify locally with `py_compile`, push again.
+**Prevention**: After every edit to `futures_bot/**`, run:
+```python
+python3 -c "import py_compile; py_compile.compile('FILEPATH', doraise=True)"
+```
+
+### Issue 4: Systemd drop-in has broken quotes
+**Root cause**: Values with special chars (like `!` in password) need proper quoting.
+**How to identify**: `systemctl show futures-bot --property=Environment` shows garbled values.
+**Quick fix**: Rewrite the drop-in file with proper `Environment="KEY=VALUE"` format.
+**Prevention**: `_save_token()` now properly updates the drop-in.
+
+### Issue 5: Workflow output not returning (output.txt not updated)
+**Root cause**: Usually one of:
+- Script inside `run.sh` does `git reset --hard` which overwrites output.txt
+- Script too long/slow → SSH timeout
+- Deploy workflow and command workflow running simultaneously → push conflict
+**Quick fix**: Simplify `run.sh`, remove any `git` commands from it, wait longer (up to 5 min).
+**Prevention**: Keep `run.sh` short, never include `git` commands in it.
+
+### Issue 6: Bot crashes repeatedly (restart loop)
+**Root cause**: Check `journalctl -u futures-bot -n 50` for the actual error.
+**Common causes**:
+- Auth failure (see Issue 1)
+- Syntax error in code (see Issue 3)
+- Missing dependency
+- Network issue to Tradovate
+**Quick fix**: Read logs via `commands/run.sh`, identify error, fix accordingly.
+
+### Issue 7: Token renewal failed in background
+**Root cause**: Tradovate API temporarily unavailable, or token already fully expired.
+**How to identify**: Logs show `All token renewal attempts failed` or `Token renewal error`.
+**Quick fix**: If token is still somewhat valid, restart bot. If fully expired, need new token from browser (see Issue 1).
+**Prevention**: The 3-retry mechanism with backoff should handle temporary failures.
+
+---
+
+## Quick Diagnostic Script Template
+Use this minimal script for fast status checks (copy to `commands/run.sh`):
+```bash
+#!/bin/bash
+cd /root/MT5-PropFirm-Bot
+echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+echo "Bot: $(systemctl is-active futures-bot)"
+python3 -c "
+import json,time,base64
+d=json.load(open('configs/.tradovate_token.json'))
+t=d['access_token'];p=t.split('.')[1];p+='='*(4-len(p)%4)
+exp=json.loads(base64.urlsafe_b64decode(p)).get('exp',0)
+print(f'Token: {(exp-time.time())/3600:.1f}h')
+"
+journalctl -u futures-bot --no-pager -n 10 --since "5 min ago" 2>/dev/null | grep -v "^--"
+```
+
+---
+
+## Session 2026-03-29 Summary (What Was Fixed)
+
+### Bugs Fixed:
+1. `bot.py`: `trade_closed()` was passing `contract_id` instead of symbol name → Now resolves symbol via `get_contract_by_id()`
+2. `guardian.py`: Python 3.10+ type hints (`list[]`, `tuple[]`) → Changed to `List[]`, `Tuple[]` from `typing`
+3. `news_filter.py`: Same Python 3.10+ type hints fix
+4. `requirements.txt`: Added missing `requests>=2.28.0`
+5. `vps-command.yml`: Updated hardcoded branch from old `claude/build-cfd-trading-bot-fl0ld` to `claude/fix-bot-functionality-h1Sb3`
+6. Added `.gitignore` for `__pycache__/`, `.env`, token files
+7. Fixed systemd drop-in `/etc/systemd/system/futures-bot.service.d/env.conf` broken quotes
+
+### Major Improvements:
+1. **Token auto-renewal background task** (`start_token_renewal_loop()`) - runs every 4h independently
+2. **`_save_token()` now updates systemd drop-in** - tokens persist across service restarts
+3. **`_renew_token()` retry logic** - 3 attempts with exponential backoff
+4. **`_ensure_token()` more aggressive** - checks every 4h instead of 6h
+
+### Root Cause of Main Failure:
+- Tradovate access token expired after ~24h
+- VPS IP required CAPTCHA for fresh user/password auth
+- Old code didn't renew aggressively enough, and didn't update systemd drop-in
+- On service restart, stale token from drop-in was used → expired → fallback to user/pass → CAPTCHA block → "Incorrect password" error
+
+### Final State:
+- Bot: **active**, connected to Tradovate
+- Account: ELTDER260326211630296397, balance $50,000
+- Token: auto-renewing every 4h
+- Telegram: @MyPropFirmTrader_bot connected
+- All 6 symbols configured: MESM6, MNQM6, MCLM6, MGCM6, MYMM6, M2KM6
+- Zero errors in logs
