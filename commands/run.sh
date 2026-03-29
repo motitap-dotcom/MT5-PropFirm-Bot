@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: quick-check-v1
+# Trigger: save-token-v2
 cd /root/MT5-PropFirm-Bot
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
@@ -32,9 +32,6 @@ Environment="TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}"
 EOFCONF
 echo "Fixed systemd drop-in"
 
-# Pull latest code
-git fetch origin claude/fix-bot-functionality-h1Sb3
-git reset --hard origin/claude/fix-bot-functionality-h1Sb3
 mkdir -p logs status
 
 # Restart
