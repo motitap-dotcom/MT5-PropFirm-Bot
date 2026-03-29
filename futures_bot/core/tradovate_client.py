@@ -220,23 +220,31 @@ class TradovateClient:
 
     async def _renew_token(self):
         """Renew access token (no re-auth needed, no CAPTCHA)."""
-        try:
-            async with self.session.post(
-                f"{self.base_url}/auth/renewaccesstoken",
-                headers=self._headers()
-            ) as resp:
-                if resp.status == 200:
-                    data = await resp.json()
-                    self.access_token = data.get("accessToken", self.access_token)
-                    self.md_access_token = data.get("mdAccessToken", self.access_token)
-                    self._parse_expiry(data.get("expirationTime", ""))
-                    self._save_token()
-                    logger.info("Token renewed successfully")
-                else:
-                    logger.warning(f"Token renewal failed ({resp.status}), re-authenticating...")
-                    await self._authenticate()
-        except Exception as e:
-            logger.error(f"Token renewal error: {e}")
+        for attempt in range(3):
+            try:
+                async with self.session.post(
+                    f"{self.base_url}/auth/renewaccesstoken",
+                    headers=self._headers()
+                ) as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
+                        if "accessToken" in data:
+                            self.access_token = data["accessToken"]
+                            self.md_access_token = data.get("mdAccessToken", self.access_token)
+                            self._parse_expiry(data.get("expirationTime", ""))
+                            self._save_token()
+                            self._token_obtained_at = time.time()
+                            logger.info(f"Token renewed successfully (attempt {attempt+1}), "
+                                       f"expires in {(self.token_expiry - time.time())/3600:.1f}h")
+                            return
+                    else:
+                        text = await resp.text()
+                        logger.warning(f"Token renewal failed ({resp.status}): {text[:100]}")
+            except Exception as e:
+                logger.error(f"Token renewal error (attempt {attempt+1}): {e}")
+            if attempt < 2:
+                await asyncio.sleep(5 * (attempt + 1))
+        logger.error("All token renewal attempts failed")
             await self._authenticate()
 
     async def _ensure_token(self):
@@ -245,11 +253,34 @@ class TradovateClient:
         if remaining < 7200:  # Less than 2 hours left
             logger.info(f"Token expiring in {remaining/3600:.1f}h, renewing...")
             await self._renew_token()
-        elif hasattr(self, '_token_obtained_at') and (time.time() - self._token_obtained_at) > 21600:
-            # Renew every 6 hours regardless
-            logger.info("Proactive token renewal (6h interval)...")
+        elif hasattr(self, '_token_obtained_at') and (time.time() - self._token_obtained_at) > 14400:
+            # Renew every 4 hours regardless (was 6h, now more aggressive)
+            logger.info("Proactive token renewal (4h interval)...")
             await self._renew_token()
             self._token_obtained_at = time.time()
+
+    async def start_token_renewal_loop(self):
+        """Background task that renews token every 4 hours, independent of trading loop."""
+        self._renewal_task_running = True
+        logger.info("Token renewal background task started")
+        while self._renewal_task_running:
+            try:
+                await asyncio.sleep(14400)  # 4 hours
+                remaining = self.token_expiry - time.time()
+                logger.info(f"Background token renewal check: {remaining/3600:.1f}h remaining")
+                if remaining < 18000:  # Less than 5 hours left
+                    await self._renew_token()
+                    logger.info("Background token renewal successful")
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logger.error(f"Background token renewal failed: {e}")
+                # Retry sooner on failure
+                await asyncio.sleep(1800)  # 30 min
+
+    def stop_token_renewal_loop(self):
+        """Stop the background renewal task."""
+        self._renewal_task_running = False
 
     def _parse_expiry(self, expiry_str: str):
         """Parse token expiration time."""
@@ -296,6 +327,25 @@ class TradovateClient:
                 logger.debug("Updated .env with fresh token")
         except Exception as e:
             logger.debug(f"Could not update .env: {e}")
+
+        # Update systemd drop-in so service restarts use fresh token
+        try:
+            import os, subprocess
+            dropin = Path("/etc/systemd/system/futures-bot.service.d/env.conf")
+            if dropin.exists():
+                lines = dropin.read_text().splitlines()
+                new_lines = []
+                for line in lines:
+                    if "TRADOVATE_ACCESS_TOKEN=" in line:
+                        new_lines.append(f'Environment="TRADOVATE_ACCESS_TOKEN={self.access_token}"')
+                    else:
+                        new_lines.append(line)
+                dropin.write_text("\n".join(new_lines) + "\n")
+                subprocess.run(["systemctl", "daemon-reload"],
+                               capture_output=True, timeout=10)
+                logger.debug("Updated systemd drop-in with fresh token")
+        except Exception as e:
+            logger.debug(f"Could not update systemd drop-in: {e}")
 
     def _load_saved_token(self) -> bool:
         """Load token from file. Returns True if valid token loaded."""

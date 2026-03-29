@@ -147,6 +147,11 @@ class FuturesBot:
         self.running = True
         logger.info("Bot started successfully")
 
+        # Start background token renewal task
+        self._token_renewal_task = asyncio.create_task(
+            self.client.start_token_renewal_loop()
+        )
+
         # Main loop
         await self._run()
 
@@ -154,6 +159,11 @@ class FuturesBot:
         """Stop the bot gracefully."""
         logger.info(f"Stopping bot: {reason}")
         self.running = False
+
+        # Stop token renewal
+        if hasattr(self, '_token_renewal_task'):
+            self.client.stop_token_renewal_loop()
+            self._token_renewal_task.cancel()
 
         # Close all positions
         if self.client:
