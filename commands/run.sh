@@ -1,43 +1,19 @@
 #!/bin/bash
-# Trigger: save-token-v2
+# Trigger: post-deploy-check-v1
 cd /root/MT5-PropFirm-Bot
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-
-TOKEN="eyJraWQiOiIyOCIsImFsZyI6IkVkRFNBIn0.eyJzdWIiOiI3MTg1OTg3IiwiZXhwIjoxNzc0NzYzOTI0LCJqdGkiOiItNjQzMzM4MDM3OTgwNTc2MzQ5My0tNTc2MDk1NTU1NzA2OTQ0NDA1MSIsInBocyI6LTE0OTM4NzI5MDQsImVtYWlsIjoibW90aXRhcEBnbWFpbC5jb20ifQ.iEun7rwIXNNxvmnEXQ8H1NRHuFo8NN_83U8a7XvPb4cJsfmCmJi1Gwm1duMZG-bePlyIM0pUa7tShTP06Xx3Aw"
-
-# Save token file
-python3 -c "
-import json, time, base64
-token='${TOKEN}'
-p=token.split('.')[1]
-p+='='*(4-len(p)%4)
-exp=json.loads(base64.urlsafe_b64decode(p)).get('exp',time.time()+86400)
-json.dump({'access_token':token,'md_access_token':token,'expiry':exp,'saved_at':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())},open('configs/.tradovate_token.json','w'),indent=2)
-print(f'Token saved, expires in {(exp-time.time())/3600:.1f}h')
-"
-
-# Update .env
-sed -i "s|TRADOVATE_ACCESS_TOKEN=.*|TRADOVATE_ACCESS_TOKEN=${TOKEN}|" .env
-echo "Updated .env"
-
-# Fix systemd drop-in
-source .env
-cat > /etc/systemd/system/futures-bot.service.d/env.conf << EOFCONF
-[Service]
-Environment="TRADOVATE_USER=${TRADOVATE_USER}"
-Environment="TRADOVATE_PASS=${TRADOVATE_PASS}"
-Environment="TRADOVATE_ACCESS_TOKEN=${TOKEN}"
-Environment="TELEGRAM_TOKEN=${TELEGRAM_TOKEN}"
-Environment="TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}"
-EOFCONF
-echo "Fixed systemd drop-in"
-
-mkdir -p logs status
-
-# Restart
-systemctl daemon-reload
-systemctl restart futures-bot
-sleep 5
+echo ""
 echo "Bot status: $(systemctl is-active futures-bot)"
-journalctl -u futures-bot --no-pager -n 20 --since "10 sec ago"
+echo ""
+echo "=== Last 30 log lines ==="
+journalctl -u futures-bot --no-pager -n 30 --since "5 min ago"
+echo ""
+echo "=== Token file ==="
+python3 -c "
+import json, time
+d=json.load(open('configs/.tradovate_token.json'))
+remaining=(d['expiry']-time.time())/3600
+print(f'Token expires in: {remaining:.1f}h ({\"VALID\" if remaining>0 else \"EXPIRED\"})')
+print(f'Saved at: {d.get(\"saved_at\",\"unknown\")}')
+"
 echo "DONE"
