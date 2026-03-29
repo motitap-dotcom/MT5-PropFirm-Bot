@@ -1,22 +1,40 @@
-Timestamp: 2026-03-29 04:55:13 UTC
-Token saved, expires in 1.1h
-Updated .env
-Fixed systemd drop-in
-Bot status: active
-Mar 29 04:55:13 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
-Mar 29 04:55:13 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 29 04:55:13 vmi3096165 python3[2309268]: 2026-03-29 04:55:13,783 [bot] INFO: ============================================================
-Mar 29 04:55:13 vmi3096165 python3[2309268]: 2026-03-29 04:55:13,783 [bot] INFO: TradeDay Futures Bot Starting
-Mar 29 04:55:13 vmi3096165 python3[2309268]: 2026-03-29 04:55:13,783 [bot] INFO: ============================================================
-Mar 29 04:55:13 vmi3096165 python3[2309268]: 2026-03-29 04:55:13,783 [news_filter] INFO: Loaded 26 restricted events
-Mar 29 04:55:13 vmi3096165 python3[2309268]: 2026-03-29 04:55:13,784 [tradovate_client] INFO: Loaded saved token, verifying...
-Mar 29 04:55:13 vmi3096165 python3[2309268]: 2026-03-29 04:55:13,784 [tradovate_client] INFO: Token expiring in 1.1h, renewing...
-Mar 29 04:55:13 vmi3096165 python3[2309268]: 2026-03-29 04:55:13,941 [tradovate_client] INFO: Token renewed successfully
-Mar 29 04:55:14 vmi3096165 python3[2309268]: 2026-03-29 04:55:14,058 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-Mar 29 04:55:14 vmi3096165 python3[2309268]: 2026-03-29 04:55:14,058 [tradovate_client] INFO: Saved token is valid
-Mar 29 04:55:14 vmi3096165 python3[2309268]: 2026-03-29 04:55:14,058 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-Mar 29 04:55:14 vmi3096165 python3[2309268]: 2026-03-29 04:55:14,139 [bot] INFO: Bot started successfully
-Mar 29 04:55:14 vmi3096165 python3[2309268]: 2026-03-29 04:55:14,140 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-Mar 29 04:55:14 vmi3096165 python3[2309268]: 2026-03-29 04:55:14,140 [bot] INFO: Timeframe: 5min
-Mar 29 04:55:14 vmi3096165 python3[2309268]: 2026-03-29 04:55:14,140 [bot] INFO: New trading day: 2026-03-29
+Timestamp: 2026-03-29 05:00:46 UTC
+
+Bot status: activating
+
+=== Last 30 log lines ===
+Mar 29 04:58:44 vmi3096165 python3[2310127]: Traceback (most recent call last):
+Mar 29 04:58:44 vmi3096165 python3[2310127]:   File "<frozen runpy>", line 198, in _run_module_as_main
+Mar 29 04:58:44 vmi3096165 python3[2310127]:   File "<frozen runpy>", line 88, in _run_code
+Mar 29 04:58:44 vmi3096165 python3[2310127]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 25, in <module>
+Mar 29 04:58:44 vmi3096165 python3[2310127]:     from futures_bot.core.tradovate_client import TradovateClient
+Mar 29 04:58:44 vmi3096165 python3[2310127]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 248
+Mar 29 04:58:44 vmi3096165 python3[2310127]:     await self._authenticate()
+Mar 29 04:58:44 vmi3096165 python3[2310127]: IndentationError: unexpected indent
+Mar 29 04:58:44 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 29 04:58:44 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 29 04:59:14 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
+Mar 29 04:59:14 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 29 04:59:14 vmi3096165 python3[2310250]: /usr/bin/python3: No module named futures_bot.bot
+Mar 29 04:59:14 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 29 04:59:14 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 29 04:59:45 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
+Mar 29 04:59:45 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 29 04:59:45 vmi3096165 python3[2310336]: /usr/bin/python3: No module named futures_bot.bot
+Mar 29 04:59:45 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 29 04:59:45 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 29 05:00:15 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 3.
+Mar 29 05:00:15 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 29 05:00:15 vmi3096165 python3[2310559]: /usr/bin/python3: No module named futures_bot.bot
+Mar 29 05:00:15 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 29 05:00:15 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 29 05:00:45 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 4.
+Mar 29 05:00:45 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 29 05:00:45 vmi3096165 python3[2310717]: /usr/bin/python3: No module named futures_bot.bot
+Mar 29 05:00:45 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 29 05:00:45 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+
+=== Token file ===
+Token expires in: 1.3h (VALID)
+Saved at: 2026-03-29T04:58:38.969689+00:00
 DONE
