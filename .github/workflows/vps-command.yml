@@ -37,23 +37,26 @@ jobs:
       - name: Fetch output from VPS
         if: always()
         id: vps_fetch
-        uses: appleboy/ssh-action@v1
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           command_timeout: 1m
-          script: cat /root/MT5-PropFirm-Bot/commands/output.txt 2>/dev/null || echo "No output file"
+          capture_stdout: true
+          script: cat /root/MT5-PropFirm-Bot/commands/output.txt 2>/dev/null || echo "No output file on VPS"
 
       - name: Save and push output
         if: always()
-        env:
-          VPS_OUTPUT: ${{ steps.vps_fetch.outputs.response }}
         run: |
-          if [ -n "$VPS_OUTPUT" ]; then
-            printf '%s\n' "$VPS_OUTPUT" > commands/output.txt
+          STDOUT="${{ steps.vps_fetch.outputs.stdout }}"
+          RESPONSE="${{ steps.vps_fetch.outputs.response }}"
+          if [ -n "$STDOUT" ]; then
+            printf '%s\n' "$STDOUT" > commands/output.txt
+          elif [ -n "$RESPONSE" ]; then
+            printf '%s\n' "$RESPONSE" > commands/output.txt
           else
-            echo "No output captured" > commands/output.txt
+            echo "stdout=[${#STDOUT}] response=[${#RESPONSE}]" > commands/output.txt
           fi
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
