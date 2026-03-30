@@ -1,1 +1,1 @@
-Trigger VPS check - v87 diagnostic - 2026-03-30 19:10 UTC
+Trigger VPS check - v88 diagnostic with fixed workflows - 2026-03-30 19:15 UTC
