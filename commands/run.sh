@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v55 - Deploy token fix and restart bot
+# Trigger: v56 - Deploy token fix and restart bot
 cd /root/MT5-PropFirm-Bot
 
 echo "=== DEPLOY TIMESTAMP ==="
