@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v94 - Setup after code deploy
+# Trigger: v95 - Start bot with fresh token
 cd /root/MT5-PropFirm-Bot
 
 echo "=== PYTHON BOT FIX v93 - $(date -u +'%Y-%m-%d %H:%M:%S UTC') ==="
