@@ -34,36 +34,16 @@ jobs:
             bash commands/run.sh > commands/output.txt 2>&1
             cat commands/output.txt
 
-      - name: Fetch output (base64 safe)
+      - name: Send result via Telegram
         if: always()
-        id: fetch
-        uses: appleboy/ssh-action@master
+        uses: appleboy/telegram-action@master
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          command_timeout: 1m
-          capture_stdout: true
-          script: base64 -w 0 /root/MT5-PropFirm-Bot/commands/output.txt 2>/dev/null || echo "NOFILE"
-
-      - name: Decode and push output
-        if: always()
-        run: |
-          B64="${{ steps.fetch.outputs.stdout }}"
-          if [ -n "$B64" ] && [ "$B64" != "NOFILE" ]; then
-            echo "$B64" | base64 -d > commands/output.txt
-          else
-            echo "Failed to fetch output from VPS" > commands/output.txt
-          fi
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git fetch origin claude/build-cfd-trading-bot-fl0ld
-          git reset --soft origin/claude/build-cfd-trading-bot-fl0ld
-          git add commands/output.txt
-          if ! git diff --cached --quiet; then
-            git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')"
-            git push origin HEAD:claude/build-cfd-trading-bot-fl0ld
-          fi
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            VPS Command v85 executed
+            Bot service restarted with fresh token
+            Check Telegram for bot startup message
 
       - name: Telegram notification
         if: always()
