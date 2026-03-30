@@ -1,69 +1,65 @@
 #!/bin/bash
-echo "=== TradeDay Bot - Full Diagnostic v88 ==="
+echo "=== TradeDay Futures Bot - Status Check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 echo ""
-
-MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
 
 echo "--- System ---"
 uptime
 free -h | head -3
 echo ""
 
-echo "--- MT5 Process ---"
-ps aux | grep -i "terminal64\|metatrader" | grep -v grep || echo "MT5 not running"
-echo ""
-
-echo "--- Search for .ex5 files ---"
-find /root -name "*.ex5" -type f 2>/dev/null || echo "No .ex5 files found"
-echo ""
-
-echo "--- Search for PropFirmBot files ---"
-find /root -name "*PropFirmBot*" -type f 2>/dev/null || echo "No PropFirmBot files found"
-echo ""
-
-echo "--- MT5 Experts Directory ---"
-ls -laR "$MT5_DIR/MQL5/Experts/" 2>/dev/null || echo "Experts dir not found"
-echo ""
-
-echo "--- MT5 Terminal Log (last 30 lines) ---"
-LATEST_LOG=$(ls -t "$MT5_DIR/logs/"*.log 2>/dev/null | head -1)
-if [ -n "$LATEST_LOG" ]; then
-    echo "File: $LATEST_LOG"
-    tail -30 "$LATEST_LOG"
+echo "--- Bot Service ---"
+if systemctl is-active futures-bot >/dev/null 2>&1; then
+    echo "Bot service: RUNNING"
+    systemctl status futures-bot --no-pager | head -15
 else
-    echo "No MT5 terminal logs found"
+    echo "Bot service: NOT RUNNING"
+    if pgrep -f "futures_bot" >/dev/null; then
+        echo "Bot process found (not as service)"
+        ps aux | grep "futures_bot" | grep -v grep
+    else
+        echo "No bot process found"
+    fi
 fi
 echo ""
 
-echo "--- EA Log (latest, last 30 lines) ---"
-LATEST_EA_LOG=$(ls -t "$MT5_DIR/MQL5/Logs/"*.log 2>/dev/null | head -1)
-if [ -n "$LATEST_EA_LOG" ]; then
-    echo "File: $LATEST_EA_LOG"
-    tail -30 "$LATEST_EA_LOG"
+echo "--- Python ---"
+python3 --version
+pip3 show aiohttp websockets 2>/dev/null | grep -E "^(Name|Version)"
+echo ""
+
+echo "--- Bot Logs (last 30 lines) ---"
+if [ -f /root/MT5-PropFirm-Bot/logs/bot.log ]; then
+    tail -30 /root/MT5-PropFirm-Bot/logs/bot.log
 else
-    echo "No EA logs found"
+    echo "No log file found"
 fi
 echo ""
 
-echo "--- Python Bot Service ---"
-systemctl status futures-bot --no-pager 2>&1 | head -5 || echo "futures-bot service not found"
+echo "--- Status JSON ---"
+if [ -f /root/MT5-PropFirm-Bot/status/status.json ]; then
+    cat /root/MT5-PropFirm-Bot/status/status.json
+else
+    echo "No status file found"
+fi
 echo ""
 
-echo "--- Python Bot Log ---"
-tail -20 /root/MT5-PropFirm-Bot/logs/bot.log 2>/dev/null || echo "No Python bot log"
-echo ""
-
-echo "--- status.json ---"
-cat "$MT5_DIR/MQL5/Files/status.json" 2>/dev/null || cat /root/MT5-PropFirm-Bot/status/status.json 2>/dev/null || echo "No status.json"
+echo "--- .env Check ---"
+if [ -f /root/MT5-PropFirm-Bot/.env ]; then
+    echo ".env exists with $(wc -l < /root/MT5-PropFirm-Bot/.env) lines"
+    grep -c "TRADOVATE" /root/MT5-PropFirm-Bot/.env && echo "Tradovate credentials present"
+    grep -c "TELEGRAM" /root/MT5-PropFirm-Bot/.env && echo "Telegram credentials present"
+else
+    echo "NO .env FILE FOUND!"
+fi
 echo ""
 
 echo "--- Network ---"
-curl -s -o /dev/null -w "Tradovate Demo API: HTTP %{http_code}\n" https://demo.tradovateapi.com/v1 2>/dev/null
-curl -s -o /dev/null -w "Telegram API: HTTP %{http_code}\n" https://api.telegram.org 2>/dev/null
+curl -s -o /dev/null -w "Tradovate Demo: HTTP %{http_code}\n" https://demo.tradovateapi.com/v1 || echo "Cannot reach Tradovate"
+curl -s -o /dev/null -w "Telegram: HTTP %{http_code}\n" https://api.telegram.org || echo "Cannot reach Telegram"
 echo ""
 
-echo "--- Repo State ---"
+echo "--- Repo ---"
 cd /root/MT5-PropFirm-Bot
 echo "Branch: $(git branch --show-current)"
 echo "Last commit: $(git log --oneline -1)"
