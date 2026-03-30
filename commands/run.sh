@@ -1,102 +1,70 @@
 #!/bin/bash
-# Trigger: v87 - Full diagnostic + restart with fixes
+# Trigger: v88 - Find missing EA file and check MT5 setup
 cd /root/MT5-PropFirm-Bot
 
-echo "=== DIAGNOSTIC v87 - $(date -u +'%Y-%m-%d %H:%M:%S UTC') ==="
+echo "=== EA SEARCH v88 - $(date -u +'%Y-%m-%d %H:%M:%S UTC') ==="
 
-# Step 1: Write fresh .env from workflow secrets
-echo "--- Step 1: Writing .env ---"
-if [ -n "$TRADOVATE_USER" ]; then
-    echo "TRADOVATE_USER=$TRADOVATE_USER" > .env
-    echo "TRADOVATE_PASS=$TRADOVATE_PASS" >> .env
-    echo "TRADOVATE_ACCESS_TOKEN=$TRADOVATE_ACCESS_TOKEN" >> .env
-    echo "TELEGRAM_TOKEN=$TELEGRAM_TOKEN" >> .env
-    echo "TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID" >> .env
-    echo ".env written with secrets"
-else
-    echo "WARNING: No secrets available from workflow!"
-fi
-
-# Step 2: Check current state
+# Step 1: Find ANY .ex5 or .mq5 files on the system
+echo "--- Step 1: Search for .ex5 files ---"
+find /root -name "*.ex5" -type f 2>/dev/null
 echo ""
-echo "--- Step 2: Current bot state ---"
-echo "Service status: $(systemctl is-active futures-bot 2>/dev/null || echo 'not found')"
-echo "Bot process: $(pgrep -f 'futures_bot' || echo 'not running')"
-echo "Current branch: $(git branch --show-current)"
+
+echo "--- Step 2: Search for .mq5 source files ---"
+find /root -name "*.mq5" -type f 2>/dev/null
+echo ""
+
+echo "--- Step 3: Search for PropFirmBot anywhere ---"
+find /root -name "*PropFirmBot*" -type f 2>/dev/null
+echo ""
+
+# Step 4: Show MT5 directory structure
+echo "--- Step 4: MT5 MQL5 directory ---"
+MT5_DIR="/root/.wine/drive_c/Program Files/MetaTrader 5"
+ls -la "$MT5_DIR/MQL5/Experts/" 2>/dev/null || echo "Experts dir not found"
+echo ""
+ls -la "$MT5_DIR/MQL5/Experts/PropFirmBot/" 2>/dev/null || echo "PropFirmBot subdir not found"
+echo ""
+
+echo "--- Step 5: Full MQL5 tree ---"
+find "$MT5_DIR/MQL5/" -maxdepth 3 -type f -name "*.ex5" -o -name "*.mq5" 2>/dev/null
+echo ""
+
+# Step 6: Check if Python bot service exists
+echo "--- Step 6: Python bot service ---"
+systemctl status futures-bot --no-pager 2>&1 | head -5 || echo "futures-bot service not found"
+echo ""
+
+# Step 7: Check repo state
+echo "--- Step 7: Repo state ---"
+echo "Branch: $(git branch --show-current)"
 echo "Last commit: $(git log --oneline -1)"
 echo ""
 
-# Step 3: Show existing logs
-echo "--- Step 3: Last 30 lines of bot.log ---"
-tail -30 logs/bot.log 2>/dev/null || echo "No bot.log found"
-echo ""
-
-# Step 4: Check Python and dependencies
-echo "--- Step 4: Python environment ---"
-python3 --version
-pip3 list 2>/dev/null | grep -iE "aiohttp|websockets" || echo "Dependencies not found"
-echo ""
-
-# Step 5: Test Tradovate API connectivity
-echo "--- Step 5: API connectivity ---"
-curl -s -o /dev/null -w "Tradovate Demo API: HTTP %{http_code}\n" https://demo.tradovateapi.com/v1 2>/dev/null
-curl -s -o /dev/null -w "Tradovate Live API: HTTP %{http_code}\n" https://live.tradovateapi.com/v1 2>/dev/null
-curl -s -o /dev/null -w "Tradovate MD Demo: HTTP %{http_code}\n" https://md-demo.tradovateapi.com/v1 2>/dev/null
-curl -s -o /dev/null -w "Telegram API: HTTP %{http_code}\n" https://api.telegram.org 2>/dev/null
-echo ""
-
-# Step 6: Stop, pull latest, install deps, restart
-echo "--- Step 6: Deploy latest code and restart ---"
-systemctl stop futures-bot 2>/dev/null
-pkill -f "futures_bot" 2>/dev/null
-sleep 2
-
-pip3 install -r requirements.txt 2>&1 | tail -5
-echo ""
-
-# Step 7: Verify bot can import
-echo "--- Step 7: Import check ---"
-python3 -c "
-import sys
-sys.path.insert(0, '.')
-from futures_bot.core.tradovate_client import TradovateClient
-from futures_bot.core.guardian import Guardian
-from futures_bot.strategies.vwap_mean_reversion import VWAPMeanReversion
-from futures_bot.strategies.orb_breakout import ORBBreakout
-print('All imports OK')
-" 2>&1
-echo ""
-
-# Step 8: Check systemd service file
-echo "--- Step 8: Service file ---"
-if [ -f /etc/systemd/system/futures-bot.service ]; then
-    cat /etc/systemd/system/futures-bot.service
+# Step 8: MT5 terminal log (recent)
+echo "--- Step 8: MT5 terminal log (last 20 lines) ---"
+LATEST_LOG=$(ls -t "$MT5_DIR/logs/"*.log 2>/dev/null | head -1)
+if [ -n "$LATEST_LOG" ]; then
+    echo "File: $LATEST_LOG"
+    tail -20 "$LATEST_LOG"
 else
-    echo "Service file not found! Installing..."
-    bash scripts/install_bot.sh 2>&1 | tail -10
+    echo "No MT5 terminal logs found"
 fi
 echo ""
 
-# Step 9: Start bot
-echo "--- Step 9: Starting bot ---"
-systemctl daemon-reload
-systemctl restart futures-bot
-sleep 10
-
-echo "Service status after restart: $(systemctl is-active futures-bot)"
+# Step 9: EA log (recent)
+echo "--- Step 9: EA logs ---"
+LATEST_EA_LOG=$(ls -t "$MT5_DIR/MQL5/Logs/"*.log 2>/dev/null | head -1)
+if [ -n "$LATEST_EA_LOG" ]; then
+    echo "File: $LATEST_EA_LOG"
+    tail -20 "$LATEST_EA_LOG"
+else
+    echo "No EA logs found"
+fi
 echo ""
 
-# Step 10: Capture startup logs
-echo "--- Step 10: Startup logs ---"
-journalctl -u futures-bot --no-pager -n 30 --since "15 sec ago" 2>&1
-echo ""
-echo "--- Bot log after restart ---"
-tail -30 logs/bot.log 2>/dev/null || echo "No bot.log yet"
+# Step 10: Check if .ex5 in repo
+echo "--- Step 10: .ex5 files in repo ---"
+find /root/MT5-PropFirm-Bot -name "*.ex5" -type f 2>/dev/null || echo "No .ex5 in repo"
 echo ""
 
-# Step 11: Show status.json
-echo "--- Step 11: status.json ---"
-cat status/status.json 2>/dev/null || echo "No status.json"
-echo ""
-
-echo "=== DIAGNOSTIC COMPLETE ==="
+echo "=== SEARCH COMPLETE ==="
