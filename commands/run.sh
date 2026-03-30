@@ -106,12 +106,7 @@ async def test():
         if 'CAPTCHA' in str(e):
             print('')
             print('*** CAPTCHA REQUIRED ***')
-            print('Noa needs to:')
-            print('1. Open browser on VPS (via VNC)')
-            print('2. Go to https://trader.tradovate.com')
-            print('3. Login and solve CAPTCHA')
-            print('4. Copy the access token from browser dev tools')
-            print('5. Set it in GitHub Secrets as TRADOVATE_ACCESS_TOKEN')
+            print('Set a fresh TRADOVATE_ACCESS_TOKEN in GitHub Secrets')
 
 asyncio.run(test())
 " 2>&1

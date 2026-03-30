@@ -4,7 +4,7 @@
 - Name: Noa
 - Language: Hebrew - always respond in Hebrew
 - Experience level: Not a developer - needs simple, clear explanations
-- Local machine: Windows (PowerShell, RealVNC)
+- Local machine: Windows (PowerShell)
 
 ---
 
@@ -186,7 +186,6 @@ All workflows send Telegram notifications on completion.
 - IP: stored in GitHub Secrets (`VPS_HOST`)
 - OS: Ubuntu Linux
 - SSH: stored in GitHub Secrets (`VPS_USER`, `VPS_PASSWORD`)
-- VNC: port 5900 (RealVNC)
 
 ## Tradovate Auth Method
 - **Web-style auth**: No API key subscription needed
