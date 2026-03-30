@@ -1,39 +1,31 @@
 #!/bin/bash
-# Trigger: v55 - Deploy token fix and restart bot
+# Trigger: v73
 cd /root/MT5-PropFirm-Bot
-
-echo "=== DEPLOY TIMESTAMP ==="
 date -u
 
-echo ""
-echo "=== PULLING LATEST CODE ==="
-git fetch origin claude/test-bot-trading-Z6n4I
-git checkout claude/test-bot-trading-Z6n4I 2>/dev/null || git checkout -b claude/test-bot-trading-Z6n4I origin/claude/test-bot-trading-Z6n4I
-git reset --hard origin/claude/test-bot-trading-Z6n4I
+# Write fresh .env from workflow secrets
+if [ -n "$TRADOVATE_ACCESS_TOKEN" ]; then
+    echo "TRADOVATE_USER=$TRADOVATE_USER" > .env
+    echo "TRADOVATE_PASS=$TRADOVATE_PASS" >> .env
+    echo "TRADOVATE_ACCESS_TOKEN=$TRADOVATE_ACCESS_TOKEN" >> .env
+    echo "TELEGRAM_TOKEN=$TELEGRAM_TOKEN" >> .env
+    echo "TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID" >> .env
+    echo ".env updated"
+fi
 
-echo ""
-echo "=== STOPPING BOT ==="
+rm -f configs/.tradovate_token.json
+mkdir -p logs status
+
 systemctl stop futures-bot 2>/dev/null
-sleep 2
-
-echo ""
-echo "=== INSTALLING DEPS ==="
-pip3 install -r requirements.txt -q 2>&1 | tail -3
-
-echo ""
-echo "=== STARTING BOT ==="
+sleep 3
+systemctl daemon-reload
 systemctl start futures-bot
-sleep 5
+sleep 12
 
-echo ""
-echo "=== SERVICE STATUS ==="
+echo "---STATUS---"
 systemctl is-active futures-bot
-systemctl status futures-bot --no-pager -l 2>/dev/null | tail -10
-
-echo ""
-echo "=== RECENT LOGS ==="
-journalctl -u futures-bot --no-pager -n 30 --since "30 sec ago"
-
-echo ""
-echo "=== BOT LOG ==="
-tail -20 logs/bot.log 2>/dev/null || echo "No bot.log yet"
+echo "---LOGS---"
+journalctl -u futures-bot --no-pager -n 30 --since "20 sec ago"
+echo "---BOT-LOG---"
+tail -20 logs/bot.log 2>/dev/null
+echo "---DONE---"

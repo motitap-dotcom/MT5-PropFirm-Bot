@@ -52,7 +52,12 @@ jobs:
           git add commands/output.txt
           if ! git diff --cached --quiet; then
             git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')"
-            git push origin HEAD:claude/build-cfd-trading-bot-fl0ld
+            git push origin HEAD:claude/build-cfd-trading-bot-fl0ld || \
+            (sleep 5 && git fetch origin claude/build-cfd-trading-bot-fl0ld && \
+             git reset --soft origin/claude/build-cfd-trading-bot-fl0ld && \
+             git add commands/output.txt && \
+             git commit -m "VPS output retry $(date -u +'%Y-%m-%d %H:%M UTC')" && \
+             git push origin HEAD:claude/build-cfd-trading-bot-fl0ld)
           fi
 
       - name: Telegram notification

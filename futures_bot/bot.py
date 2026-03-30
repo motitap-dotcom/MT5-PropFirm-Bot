@@ -35,6 +35,9 @@ from futures_bot.strategies.orb_breakout import (
     ORBBreakout, Bar as ORBBar, Signal as ORBSignal,
 )
 
+Path("logs").mkdir(parents=True, exist_ok=True)
+Path("status").mkdir(parents=True, exist_ok=True)
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(name)s] %(levelname)s: %(message)s",

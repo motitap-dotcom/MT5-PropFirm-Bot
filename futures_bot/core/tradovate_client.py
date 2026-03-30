@@ -792,8 +792,7 @@ class TradovateClient:
                 "withHistogram": False,
             },
             "timeRange": {
-                "closestTimestamp": datetime.now(timezone.utc).isoformat(),
-                "asFarAsTimestamp": "",
+                "asMuchAsElements": count,
             },
         })
         return result.get("bars", [])

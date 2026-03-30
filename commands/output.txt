@@ -1,48 +1,12 @@
-Fri Mar 27 16:17:49 UTC 2026
-inactive
-Mar 27 16:11:06 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 28.
-Mar 27 16:11:06 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 27 16:11:06 vmi3096165 python3[1805682]: /usr/bin/python3: No module named futures_bot.bot
-Mar 27 16:11:06 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 27 16:11:06 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 27 16:11:36 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 29.
-Mar 27 16:11:36 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 27 16:11:36 vmi3096165 python3[1805761]: /usr/bin/python3: No module named futures_bot.bot
-Mar 27 16:11:36 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 27 16:11:36 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 27 16:12:06 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 30.
-Mar 27 16:12:06 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 27 16:12:06 vmi3096165 python3[1805900]: /usr/bin/python3: No module named futures_bot.bot
-Mar 27 16:12:06 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 27 16:12:06 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 27 16:12:36 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
-Mar 27 16:12:38 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 27 16:12:39 vmi3096165 python3[1806151]: 2026-03-27 16:12:39,284 [bot] INFO: ============================================================
-Mar 27 16:12:39 vmi3096165 python3[1806151]: 2026-03-27 16:12:39,284 [bot] INFO: TradeDay Futures Bot Starting
-Mar 27 16:12:39 vmi3096165 python3[1806151]: 2026-03-27 16:12:39,284 [bot] INFO: ============================================================
-Mar 27 16:12:39 vmi3096165 python3[1806151]: 2026-03-27 16:12:39,284 [news_filter] INFO: Loaded 26 restricted events
-Mar 27 16:12:39 vmi3096165 python3[1806151]: 2026-03-27 16:12:39,285 [tradovate_client] INFO: Using pre-set access token from environment
-Mar 27 16:12:39 vmi3096165 python3[1806151]: 2026-03-27 16:12:39,447 [tradovate_client] WARNING: Pre-set token from environment is expired/invalid, falling back to user/password auth...
-Mar 27 16:12:39 vmi3096165 python3[1806151]: 2026-03-27 16:12:39,570 [bot] ERROR: Failed to connect: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Mar 27 16:12:39 vmi3096165 python3[1806151]: 2026-03-27 16:12:39,571 [bot] ERROR: Fatal error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Mar 27 16:12:39 vmi3096165 python3[1806151]: Traceback (most recent call last):
-Mar 27 16:12:39 vmi3096165 python3[1806151]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 593, in main
-Mar 27 16:12:39 vmi3096165 python3[1806151]:     await bot.start()
-Mar 27 16:12:39 vmi3096165 python3[1806151]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 140, in start
-Mar 27 16:12:39 vmi3096165 python3[1806151]:     await self.client.connect()
-Mar 27 16:12:39 vmi3096165 python3[1806151]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 99, in connect
-Mar 27 16:12:39 vmi3096165 python3[1806151]:     await self._authenticate()
-Mar 27 16:12:39 vmi3096165 python3[1806151]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 219, in _authenticate
-Mar 27 16:12:39 vmi3096165 python3[1806151]:     raise ConnectionError(f"Authentication failed: {error}")
-Mar 27 16:12:39 vmi3096165 python3[1806151]: ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Mar 27 16:12:39 vmi3096165 python3[1806151]: 2026-03-27 16:12:39,572 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Mar 27 16:12:39 vmi3096165 python3[1806151]: 2026-03-27 16:12:39,722 [bot] ERROR: Error closing positions: GET /position/list failed (401): Access is denied
-Mar 27 16:12:39 vmi3096165 python3[1806151]: 2026-03-27 16:12:39,902 [tradovate_client] INFO: Disconnected from Tradovate
-Mar 27 16:12:39 vmi3096165 python3[1806151]: 2026-03-27 16:12:39,902 [bot] INFO: Bot stopped
-Mar 27 16:12:40 vmi3096165 systemd[1]: futures-bot.service: Deactivated successfully.
----
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-03-27 16:12:39,572 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-03-27 16:12:39,722 [bot] ERROR: Error closing positions: GET /position/list failed (401): Access is denied
-2026-03-27 16:12:39,902 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-27 16:12:39,902 [bot] INFO: Bot stopped
+Mon Mar 30 15:42:44 UTC 2026
+---FILES---
+futures_bot/__init__.py
+futures_bot/bot.py
+---IMPORT---
+OK
+---SERVICE---
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+---DONE---
