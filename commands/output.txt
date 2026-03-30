@@ -1,30 +1,30 @@
-=== FULL INSTALL v96 - 2026-03-30 21:33:47 UTC ===
-bash: scripts/install_bot.sh: No such file or directory
+=== FULL INSTALL v98 - 2026-03-30 21:40:17 UTC ===
+.env written
+--- Installing service ---
+--- Installing watchdog ---
+--- Installing logrotate ---
+--- Installing token backup ---
+--- Restarting bot ---
 
---- Service status ---
-activating
+Service: deactivating
+Watchdog: active
 
---- Watchdog timer ---
-active
+    raise ConnectionError(
+ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-30 21:40:19,891 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-30 21:40:20,016 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-03-30 21:40:20,137 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-03-30 21:40:20,138 [tradovate_client] WARNING: Token renewal failed - keeping current token (DO NOT fall back to CAPTCHA auth)
+2026-03-30 21:40:20,261 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
+2026-03-30 21:40:20,356 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-30 21:40:20,357 [bot] INFO: Bot stopped
+2026-03-30 21:40:20,357 [bot] INFO: Retrying in 30s...
+2026-03-30 21:40:21,540 [bot] INFO: Stopping bot: Signal received
+2026-03-30 21:40:21,540 [bot] ERROR: Error closing positions: Session is closed
+2026-03-30 21:40:21,540 [notifier] ERROR: Telegram error: Session is closed
+2026-03-30 21:40:21,540 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-30 21:40:21,540 [bot] INFO: Bot stopped
 
---- Bot log (last 15 lines) ---
-2026-03-30 21:28:00,618 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-03-30 21:28:00,737 [tradovate_client] ERROR: CAPTCHA required for first login!
-Run: python3 get_token.py
-Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
-2026-03-30 21:28:00,737 [bot] ERROR: Error flattening: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-30 21:28:10,494 [bot] INFO: Stopping bot: Signal received
-2026-03-30 21:28:10,616 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-03-30 21:28:10,735 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-30 21:28:10,736 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-03-30 21:28:10,854 [tradovate_client] ERROR: CAPTCHA required for first login!
-Run: python3 get_token.py
-Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
-2026-03-30 21:28:10,854 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-30 21:28:10,923 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-30 21:28:10,923 [bot] INFO: Bot stopped
-
---- Disk space ---
-/dev/sda1       145G   26G  119G  18% /
+Disk: /dev/sda1       145G   26G  119G  18% /
 
 === DONE ===
