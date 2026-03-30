@@ -1,0 +1,78 @@
+name: Bot Monitor
+
+# Runs automatically during trading hours (ET):
+# - 9:30 AM ET (13:30 UTC) - Market open check
+# - Every 30 min from 10:00-15:30 ET (14:00-19:30 UTC)
+# - 16:00 ET (20:00 UTC) - End of day summary
+on:
+  schedule:
+    - cron: '30 13 * * 1-5'   # 9:30 ET - market open (Mon-Fri)
+    - cron: '0 14-19 * * 1-5'  # Every hour 10:00-15:00 ET
+    - cron: '30 14-19 * * 1-5' # Every :30 from 10:30-15:30 ET
+    - cron: '0 20 * * 1-5'     # 16:00 ET - end of day
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check bot health
+        id: health
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          # Copy monitor script and run it
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no scripts/monitor_bot.sh ${VPS_USER}@${VPS_HOST}:/tmp/monitor_bot.sh
+          RESULT=$(sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ${VPS_USER}@${VPS_HOST} "bash /tmp/monitor_bot.sh 2>&1")
+          echo "$RESULT"
+
+          # Parse status
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no ${VPS_USER}@${VPS_HOST}:/tmp/bot_monitor_result.txt /tmp/bot_monitor_result.txt 2>/dev/null || true
+          if [ -f /tmp/bot_monitor_result.txt ]; then
+            source /tmp/bot_monitor_result.txt
+            echo "status=${BOT_STATUS}" >> $GITHUB_OUTPUT
+            echo "details=${BOT_DETAILS}" >> $GITHUB_OUTPUT
+          else
+            echo "status=UNREACHABLE" >> $GITHUB_OUTPUT
+            echo "details=Could not connect to VPS" >> $GITHUB_OUTPUT
+          fi
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+
+      - name: Send Telegram alert
+        if: always()
+        run: |
+          STATUS="${{ steps.health.outputs.status }}"
+          DETAILS="${{ steps.health.outputs.details }}"
+          HOUR=$(date -u +'%H')
+
+          if [ "$STATUS" = "OK" ]; then
+            # Only send OK message at market open (13 UTC = 9 ET) and end of day (20 UTC)
+            if [ "$HOUR" = "13" ] || [ "$HOUR" = "20" ]; then
+              MSG="Bot Monitor: OK
+          ${DETAILS}"
+            else
+              echo "Bot OK, skipping mid-day notification"
+              exit 0
+            fi
+          elif [ "$STATUS" = "DOWN" ]; then
+            MSG="BOT DOWN - Auto-restarting
+          ${DETAILS}"
+          elif [ "$STATUS" = "ERROR" ]; then
+            MSG="BOT ERROR
+          ${DETAILS}"
+          else
+            MSG="Bot Status: ${STATUS}
+          ${DETAILS}"
+          fi
+
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
+            -d "text=${MSG:0:4000}" > /dev/null 2>&1 || true
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
