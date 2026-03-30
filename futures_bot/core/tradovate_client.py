@@ -76,30 +76,73 @@ class TradovateClient:
         self.account_spec: Optional[str] = None
 
     async def connect(self):
-        """Initialize session and authenticate."""
+        """Initialize session and authenticate with robust multi-step fallback."""
         self.session = aiohttp.ClientSession()
 
-        # Try to load saved token first
-        if self._load_saved_token():
-            logger.info("Loaded saved token, verifying...")
+        # Auth strategy order:
+        # 1. Load saved token file → verify
+        # 2. If saved token invalid → try renew it (works even if "expired" by our clock)
+        # 3. Load env token → verify
+        # 4. If env token invalid → try renew it
+        # 5. Full user/password auth (may need CAPTCHA on new IP)
+
+        connected = False
+
+        # Step 1+2: Try saved token file (even expired ones - server may still accept renewal)
+        saved_token, saved_md_token, saved_expiry = self._load_any_saved_token()
+        if saved_token:
+            self.access_token = saved_token
+            self.md_access_token = saved_md_token
+            self.token_expiry = saved_expiry
+            logger.info("Loaded saved token from file, verifying...")
             try:
                 await self._get_account_info()
-                logger.info("Saved token is valid")
+                logger.info("Saved token is still valid")
+                connected = True
             except Exception:
-                logger.info("Saved token expired, trying to renew...")
+                logger.info("Saved token invalid, attempting renewal...")
                 try:
-                    await self._renew_token()
+                    renewed = await self._renew_token_safe()
+                    if renewed:
+                        await self._get_account_info()
+                        logger.info("Token renewed successfully from saved token")
+                        connected = True
+                except Exception as e:
+                    logger.warning(f"Renewal from saved token failed: {e}")
+
+        # Step 3+4: Try env token
+        if not connected:
+            import os
+            preset_token = os.environ.get("TRADOVATE_ACCESS_TOKEN", "").strip()
+            if preset_token:
+                self.access_token = preset_token
+                self.md_access_token = preset_token
+                self.token_expiry = time.time() + 86400
+                logger.info("Trying pre-set access token from environment...")
+                try:
                     await self._get_account_info()
-                    logger.info("Token renewed successfully on startup")
+                    logger.info("Environment token is valid")
+                    self._save_token()
+                    connected = True
                 except Exception:
-                    logger.info("Renewal failed, full re-authentication...")
-                    await self._authenticate()
-                    await self._get_account_info()
-        else:
+                    logger.info("Environment token invalid, attempting renewal...")
+                    try:
+                        renewed = await self._renew_token_safe()
+                        if renewed:
+                            await self._get_account_info()
+                            logger.info("Token renewed successfully from env token")
+                            connected = True
+                    except Exception as e:
+                        logger.warning(f"Renewal from env token failed: {e}")
+
+        # Step 5: Full user/password auth (last resort)
+        if not connected:
+            logger.info("All tokens failed, attempting user/password authentication...")
             await self._authenticate()
             await self._get_account_info()
 
         self._token_obtained_at = time.time()
+        self._save_token()
         logger.info(f"Connected to Tradovate ({'LIVE' if self.live else 'DEMO'}) "
                      f"as {self.username}, account_id={self.account_id}")
 
@@ -119,26 +162,10 @@ class TradovateClient:
 
     async def _authenticate(self):
         """
-        Authenticate using web-style auth.
+        Authenticate using web-style user/password auth.
         No API keys needed - uses same method as Tradovate web trader.
+        Note: env token is handled in connect(), not here.
         """
-        # First try: check if we have a pre-set access token (from CAPTCHA flow)
-        import os
-        preset_token = os.environ.get("TRADOVATE_ACCESS_TOKEN", "").strip()
-        if preset_token:
-            self.access_token = preset_token
-            self.token_expiry = time.time() + 86400  # Assume 24h
-            logger.info("Using pre-set access token from environment")
-            # Verify token works before saving
-            try:
-                self._save_token()
-                await self._get_account_info()
-                logger.info("Pre-set token is valid")
-                return
-            except Exception:
-                logger.warning("Pre-set token from environment is expired/invalid, falling back to user/password auth...")
-                self.access_token = None
-
         payload = {
             "name": self.username,
             "password": self.password,
@@ -218,8 +245,14 @@ class TradovateClient:
         error = data.get("errorText", str(data))
         raise ConnectionError(f"Authentication failed: {error}")
 
-    async def _renew_token(self):
-        """Renew access token (no re-auth needed, no CAPTCHA)."""
+    async def _renew_token_safe(self) -> bool:
+        """
+        Renew access token without falling back to _authenticate().
+        Returns True if renewal succeeded, False otherwise.
+        This prevents infinite loops: renew -> authenticate -> renew.
+        """
+        if not self.access_token:
+            return False
         try:
             async with self.session.post(
                 f"{self.base_url}/auth/renewaccesstoken",
@@ -227,27 +260,43 @@ class TradovateClient:
             ) as resp:
                 if resp.status == 200:
                     data = await resp.json()
-                    self.access_token = data.get("accessToken", self.access_token)
-                    self.md_access_token = data.get("mdAccessToken", self.access_token)
-                    self._parse_expiry(data.get("expirationTime", ""))
-                    self._save_token()
-                    logger.info("Token renewed successfully")
+                    if "accessToken" in data:
+                        self.access_token = data["accessToken"]
+                        self.md_access_token = data.get("mdAccessToken", self.access_token)
+                        self._parse_expiry(data.get("expirationTime", ""))
+                        self._save_token()
+                        self._token_obtained_at = time.time()
+                        logger.info("Token renewed successfully")
+                        return True
+                    else:
+                        logger.warning(f"Renewal response missing accessToken: {data}")
+                        return False
                 else:
-                    logger.warning(f"Token renewal failed ({resp.status}), re-authenticating...")
-                    await self._authenticate()
+                    text = await resp.text()
+                    logger.warning(f"Token renewal failed ({resp.status}): {text[:200]}")
+                    return False
         except Exception as e:
             logger.error(f"Token renewal error: {e}")
-            await self._authenticate()
+            return False
+
+    async def _renew_token(self):
+        """Renew token, fall back to full auth if renewal fails."""
+        if await self._renew_token_safe():
+            return
+        logger.warning("Renewal failed, falling back to full authentication...")
+        await self._authenticate()
 
     async def _ensure_token(self):
-        """Refresh token proactively - renew when 50% of lifetime has passed or within 2 hours of expiry."""
+        """Refresh token proactively - renew every 4 hours or when close to expiry."""
         remaining = self.token_expiry - time.time()
+        hours_since_obtained = (time.time() - getattr(self, '_token_obtained_at', time.time())) / 3600
+
         if remaining < 7200:  # Less than 2 hours left
             logger.info(f"Token expiring in {remaining/3600:.1f}h, renewing...")
             await self._renew_token()
-        elif hasattr(self, '_token_obtained_at') and (time.time() - self._token_obtained_at) > 21600:
-            # Renew every 6 hours regardless
-            logger.info("Proactive token renewal (6h interval)...")
+        elif hours_since_obtained > 4:
+            # Renew every 4 hours proactively (Tradovate tokens last ~24h but renew early)
+            logger.info(f"Proactive token renewal ({hours_since_obtained:.1f}h since last)...")
             await self._renew_token()
             self._token_obtained_at = time.time()
 
@@ -298,7 +347,7 @@ class TradovateClient:
             logger.debug(f"Could not update .env: {e}")
 
     def _load_saved_token(self) -> bool:
-        """Load token from file. Returns True if valid token loaded."""
+        """Load token from file. Returns True if valid (non-expired) token loaded."""
         try:
             if not TOKEN_FILE.exists():
                 return False
@@ -312,6 +361,21 @@ class TradovateClient:
         except Exception:
             pass
         return False
+
+    def _load_any_saved_token(self):
+        """Load token from file even if expired (for renewal attempts).
+        Returns (access_token, md_access_token, expiry) or (None, None, 0)."""
+        try:
+            if not TOKEN_FILE.exists():
+                return None, None, 0
+            data = json.loads(TOKEN_FILE.read_text())
+            token = data.get("access_token")
+            if token:
+                logger.debug(f"Loaded saved token (expiry: {data.get('expiry', 0)}, saved: {data.get('saved_at', '?')})")
+                return token, data.get("md_access_token"), data.get("expiry", 0)
+        except Exception as e:
+            logger.debug(f"Could not load saved token: {e}")
+        return None, None, 0
 
     def _headers(self) -> Dict[str, str]:
         return {
@@ -330,17 +394,26 @@ class TradovateClient:
     # ── REST Helpers ──
 
     async def _get(self, endpoint: str) -> Any:
-        """GET request to REST API."""
+        """GET request with automatic token refresh on 401."""
         await self._ensure_token()
         async with self.session.get(f"{self.base_url}{endpoint}",
                                      headers=self._headers()) as resp:
+            if resp.status == 401:
+                logger.warning(f"GET {endpoint} got 401, renewing token and retrying...")
+                await self._renew_token()
+                async with self.session.get(f"{self.base_url}{endpoint}",
+                                             headers=self._headers()) as resp2:
+                    if resp2.status != 200:
+                        text = await resp2.text()
+                        raise Exception(f"GET {endpoint} failed ({resp2.status}): {text}")
+                    return await resp2.json()
             if resp.status != 200:
                 text = await resp.text()
                 raise Exception(f"GET {endpoint} failed ({resp.status}): {text}")
             return await resp.json()
 
     async def _post(self, endpoint: str, data: Dict = None) -> Any:
-        """POST request to REST API."""
+        """POST request with automatic token refresh on 401."""
         await self._ensure_token()
         # Market data endpoints go to the MD server
         if endpoint.startswith("/md/"):
@@ -352,6 +425,17 @@ class TradovateClient:
         async with self.session.post(f"{base}{endpoint}",
                                       headers=headers,
                                       json=data or {}) as resp:
+            if resp.status == 401:
+                logger.warning(f"POST {endpoint} got 401, renewing token and retrying...")
+                await self._renew_token()
+                headers = self._md_headers() if endpoint.startswith("/md/") else self._headers()
+                async with self.session.post(f"{base}{endpoint}",
+                                              headers=headers,
+                                              json=data or {}) as resp2:
+                    if resp2.status != 200:
+                        text = await resp2.text()
+                        raise Exception(f"POST {endpoint} failed ({resp2.status}): {text}")
+                    return await resp2.json()
             if resp.status != 200:
                 text = await resp.text()
                 raise Exception(f"POST {endpoint} failed ({resp.status}): {text}")

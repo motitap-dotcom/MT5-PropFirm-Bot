@@ -574,14 +574,17 @@ class FuturesBot:
 
 
 async def main():
-    """Entry point."""
-    bot = FuturesBot()
+    """Entry point with retry logic for connection failures."""
+    MAX_RETRIES = 5
+    RETRY_DELAYS = [30, 60, 120, 300, 600]  # 30s, 1m, 2m, 5m, 10m
 
     # Handle shutdown signals
     loop = asyncio.get_event_loop()
+    shutdown_requested = False
 
     def shutdown_handler():
-        asyncio.create_task(bot.stop("Signal received"))
+        nonlocal shutdown_requested
+        shutdown_requested = True
 
     for sig in (signal.SIGINT, signal.SIGTERM):
         try:
@@ -589,13 +592,42 @@ async def main():
         except NotImplementedError:
             pass  # Windows
 
-    try:
-        await bot.start()
-    except KeyboardInterrupt:
-        await bot.stop("Keyboard interrupt")
-    except Exception as e:
-        logger.error(f"Fatal error: {e}", exc_info=True)
-        await bot.stop(f"Fatal: {e}")
+    for attempt in range(MAX_RETRIES):
+        if shutdown_requested:
+            break
+
+        bot = FuturesBot()
+
+        # Wire up shutdown handler to current bot instance
+        def make_stop_handler(b):
+            def handler():
+                nonlocal shutdown_requested
+                shutdown_requested = True
+                asyncio.create_task(b.stop("Signal received"))
+            return handler
+
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            try:
+                loop.add_signal_handler(sig, make_stop_handler(bot))
+            except NotImplementedError:
+                pass
+
+        try:
+            await bot.start()
+            break  # Clean exit
+        except KeyboardInterrupt:
+            await bot.stop("Keyboard interrupt")
+            break
+        except Exception as e:
+            logger.error(f"Fatal error (attempt {attempt + 1}/{MAX_RETRIES}): {e}", exc_info=True)
+            await bot.stop(f"Fatal: {e}")
+
+            if attempt < MAX_RETRIES - 1 and not shutdown_requested:
+                delay = RETRY_DELAYS[attempt]
+                logger.info(f"Retrying in {delay}s...")
+                await asyncio.sleep(delay)
+            else:
+                logger.error("Max retries reached. Bot shutting down permanently.")
 
 
 if __name__ == "__main__":

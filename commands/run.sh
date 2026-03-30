@@ -1,24 +1,39 @@
 #!/bin/bash
-# Trigger: v54 - full trading status check
+# Trigger: v55 - Deploy token fix and restart bot
 cd /root/MT5-PropFirm-Bot
-echo "=== TIMESTAMP ==="
+
+echo "=== DEPLOY TIMESTAMP ==="
 date -u
+
+echo ""
+echo "=== PULLING LATEST CODE ==="
+git fetch origin claude/test-bot-trading-Z6n4I
+git checkout claude/test-bot-trading-Z6n4I 2>/dev/null || git checkout -b claude/test-bot-trading-Z6n4I origin/claude/test-bot-trading-Z6n4I
+git reset --hard origin/claude/test-bot-trading-Z6n4I
+
+echo ""
+echo "=== STOPPING BOT ==="
+systemctl stop futures-bot 2>/dev/null
+sleep 2
+
+echo ""
+echo "=== INSTALLING DEPS ==="
+pip3 install -r requirements.txt -q 2>&1 | tail -3
+
+echo ""
+echo "=== STARTING BOT ==="
+systemctl start futures-bot
+sleep 5
+
 echo ""
 echo "=== SERVICE STATUS ==="
 systemctl is-active futures-bot
-systemctl status futures-bot --no-pager -l 2>/dev/null | tail -5
+systemctl status futures-bot --no-pager -l 2>/dev/null | tail -10
+
 echo ""
-echo "=== RECENT LOGS (last 20 min) ==="
-journalctl -u futures-bot --no-pager -n 80 --since "20 min ago"
+echo "=== RECENT LOGS ==="
+journalctl -u futures-bot --no-pager -n 30 --since "30 sec ago"
+
 echo ""
-echo "=== BOT LOG TAIL ==="
-tail -30 logs/bot.log 2>/dev/null || echo "No bot.log found"
-echo ""
-echo "=== STATUS JSON ==="
-cat status/status.json 2>/dev/null || echo "No status.json found"
-echo ""
-echo "=== ENV FILE EXISTS ==="
-test -f .env && echo ".env exists" || echo ".env NOT FOUND"
-echo ""
-echo "=== PYTHON PROCESS ==="
-ps aux | grep -i "bot\|python" | grep -v grep
+echo "=== BOT LOG ==="
+tail -20 logs/bot.log 2>/dev/null || echo "No bot.log yet"
