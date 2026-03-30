@@ -20,7 +20,6 @@ jobs:
 
       - name: Run command on VPS
         continue-on-error: true
-        id: vps_run
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -35,29 +34,25 @@ jobs:
             bash commands/run.sh > commands/output.txt 2>&1
             cat commands/output.txt
 
-      - name: Fetch output from VPS
+      - name: Fetch output (base64 safe)
         if: always()
-        id: vps_fetch
+        id: fetch
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           command_timeout: 1m
-          capture_stdout: true
-          script: cat /root/MT5-PropFirm-Bot/commands/output.txt 2>/dev/null || echo "No output file on VPS"
+          script: base64 /root/MT5-PropFirm-Bot/commands/output.txt 2>/dev/null || echo "NOFILE"
 
-      - name: Save and push output
+      - name: Decode and push output
         if: always()
         run: |
-          STDOUT="${{ steps.vps_fetch.outputs.stdout }}"
-          RESPONSE="${{ steps.vps_fetch.outputs.response }}"
-          if [ -n "$STDOUT" ]; then
-            printf '%s\n' "$STDOUT" > commands/output.txt
-          elif [ -n "$RESPONSE" ]; then
-            printf '%s\n' "$RESPONSE" > commands/output.txt
+          B64="${{ steps.fetch.outputs.stdout }}"
+          if [ -n "$B64" ] && [ "$B64" != "NOFILE" ]; then
+            echo "$B64" | base64 -d > commands/output.txt
           else
-            echo "stdout=[${#STDOUT}] response=[${#RESPONSE}]" > commands/output.txt
+            echo "Failed to fetch output from VPS" > commands/output.txt
           fi
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
