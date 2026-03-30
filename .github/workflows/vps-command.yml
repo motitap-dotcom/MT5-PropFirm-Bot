@@ -32,7 +32,8 @@ jobs:
             cd /root/MT5-PropFirm-Bot
             git fetch origin claude/build-cfd-trading-bot-fl0ld
             git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
-            bash commands/run.sh 2>&1
+            bash commands/run.sh > commands/output.txt 2>&1
+            cat commands/output.txt
 
       - name: Fetch output from VPS
         if: always()
