@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v91 - Install and start Python futures bot on VPS
+# Trigger: v92 - Install and start Python futures bot on VPS
 cd /root/MT5-PropFirm-Bot
 
 echo "=== PYTHON BOT SETUP v91 - $(date -u +'%Y-%m-%d %H:%M:%S UTC') ==="
