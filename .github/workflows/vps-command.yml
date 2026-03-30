@@ -44,7 +44,7 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           command_timeout: 1m
           capture_stdout: true
-          script: base64 /root/MT5-PropFirm-Bot/commands/output.txt 2>/dev/null || echo "NOFILE"
+          script: base64 -w 0 /root/MT5-PropFirm-Bot/commands/output.txt 2>/dev/null || echo "NOFILE"
 
       - name: Decode and push output
         if: always()
