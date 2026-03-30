@@ -34,6 +34,15 @@ jobs:
             cd /root/MT5-PropFirm-Bot
             git fetch origin claude/build-cfd-trading-bot-fl0ld
             git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
+            # Always update .env with fresh secrets from GitHub
+            cat > .env << ENVEOF
+            TRADOVATE_USER=${TRADOVATE_USER}
+            TRADOVATE_PASS=${TRADOVATE_PASS}
+            TRADOVATE_ACCESS_TOKEN=${TRADOVATE_ACCESS_TOKEN}
+            TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+            TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+            ENVEOF
+            sed -i 's/^[[:space:]]*//' .env
             bash commands/run.sh > commands/output.txt 2>&1
             cat commands/output.txt
 

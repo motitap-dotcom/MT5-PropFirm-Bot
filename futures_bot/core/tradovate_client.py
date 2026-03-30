@@ -783,6 +783,9 @@ class TradovateClient:
         }
         size, underlying = tf_map.get(timeframe, (5, "MinuteBar"))
 
+        # Tradovate requires ISO 8601 with 'Z' suffix, not '+00:00'
+        now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
         result = await self._post("/md/getChart", {
             "symbol": symbol,
             "chartDescription": {
@@ -792,8 +795,8 @@ class TradovateClient:
                 "withHistogram": False,
             },
             "timeRange": {
-                "closestTimestamp": datetime.now(timezone.utc).isoformat(),
-                "asFarAsTimestamp": "",
+                "asMuchAsElements": count,
+                "closestTimestamp": now,
             },
         })
         return result.get("bars", [])
