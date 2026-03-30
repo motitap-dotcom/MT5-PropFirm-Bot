@@ -370,7 +370,7 @@ class TradovateClient:
     def _load_any_saved_token(self):
         """Load token from file even if expired (for renewal attempts).
         Checks primary file and backup. Returns (access_token, md_access_token, expiry) or (None, None, 0)."""
-        for token_path in [TOKEN_FILE, Path("configs/.tradovate_token_backup.json")]:
+        for token_path in [TOKEN_FILE, Path("configs/.tradovate_token_backup.json"), Path("/root/.tradovate_token_safe.json")]:
             try:
                 if not token_path.exists():
                     continue
