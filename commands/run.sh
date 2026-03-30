@@ -1,7 +1,7 @@
 #!/bin/bash
-# Trigger: v73
+# Trigger: v74
 cd /root/MT5-PropFirm-Bot
-date -u
+date -u > commands/output.txt
 
 # Write fresh .env from workflow secrets
 if [ -n "$TRADOVATE_ACCESS_TOKEN" ]; then
@@ -10,7 +10,7 @@ if [ -n "$TRADOVATE_ACCESS_TOKEN" ]; then
     echo "TRADOVATE_ACCESS_TOKEN=$TRADOVATE_ACCESS_TOKEN" >> .env
     echo "TELEGRAM_TOKEN=$TELEGRAM_TOKEN" >> .env
     echo "TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID" >> .env
-    echo ".env updated"
+    echo ".env updated" >> commands/output.txt
 fi
 
 rm -f configs/.tradovate_token.json
@@ -22,10 +22,15 @@ systemctl daemon-reload
 systemctl start futures-bot
 sleep 12
 
-echo "---STATUS---"
-systemctl is-active futures-bot
-echo "---LOGS---"
-journalctl -u futures-bot --no-pager -n 30 --since "20 sec ago"
-echo "---BOT-LOG---"
-tail -20 logs/bot.log 2>/dev/null
-echo "---DONE---"
+echo "---STATUS---" >> commands/output.txt
+systemctl is-active futures-bot >> commands/output.txt
+echo "---LOGS---" >> commands/output.txt
+journalctl -u futures-bot --no-pager -n 30 --since "20 sec ago" >> commands/output.txt 2>&1
+echo "---BOT-LOG---" >> commands/output.txt
+tail -20 logs/bot.log >> commands/output.txt 2>/dev/null
+echo "---DONE---" >> commands/output.txt
+
+# Push output directly from VPS (SCP is broken)
+git add commands/output.txt
+git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')" || true
+git push origin HEAD:claude/build-cfd-trading-bot-fl0ld || true
