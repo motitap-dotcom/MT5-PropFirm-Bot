@@ -1,43 +1,26 @@
 #!/bin/bash
-# Trigger: v56 - Deploy token fix and restart bot
+# Trigger: v57 - Simple status check (no deploy)
 cd /root/MT5-PropFirm-Bot
-
-echo "=== DEPLOY TIMESTAMP ==="
+echo "=== TIMESTAMP ==="
 date -u
-
-echo ""
-echo "=== PULLING LATEST CODE ==="
-git fetch origin claude/build-cfd-trading-bot-fl0ld
-git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
-
-echo ""
-echo "=== STOPPING BOT ==="
-systemctl stop futures-bot 2>/dev/null
-sleep 2
-
-echo ""
-echo "=== INSTALLING DEPS ==="
-pip3 install -r requirements.txt -q 2>&1 | tail -3
-
-echo ""
-echo "=== CLEARING OLD TOKEN FILE ==="
-rm -f configs/.tradovate_token.json
-echo "Old token file removed"
-
-echo ""
-echo "=== STARTING BOT ==="
-systemctl start futures-bot
-sleep 8
-
 echo ""
 echo "=== SERVICE STATUS ==="
 systemctl is-active futures-bot
-systemctl status futures-bot --no-pager -l 2>/dev/null | tail -10
-
 echo ""
-echo "=== RECENT LOGS ==="
-journalctl -u futures-bot --no-pager -n 40 --since "30 sec ago"
-
+echo "=== LAST 50 JOURNAL LINES ==="
+journalctl -u futures-bot --no-pager -n 50
 echo ""
-echo "=== BOT LOG ==="
-tail -30 logs/bot.log 2>/dev/null || echo "No bot.log yet"
+echo "=== BOT LOG TAIL ==="
+tail -20 logs/bot.log 2>/dev/null || echo "No bot.log"
+echo ""
+echo "=== GIT LOG ==="
+git log --oneline -3
+echo ""
+echo "=== PYTHON CODE VERSION CHECK ==="
+head -5 futures_bot/core/tradovate_client.py
+echo ""
+echo "=== TOKEN FILE ==="
+cat configs/.tradovate_token.json 2>/dev/null || echo "No token file"
+echo ""
+echo "=== PROCESSES ==="
+ps aux | grep "futures_bot\|python.*bot" | grep -v grep
