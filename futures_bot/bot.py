@@ -181,6 +181,7 @@ class FuturesBot:
         """Main trading loop."""
         logger.info(f"Trading symbols: {self.symbols}")
         logger.info(f"Timeframe: {self.timeframe}")
+        loop_count = 0
 
         while self.running:
             try:
@@ -214,6 +215,9 @@ class FuturesBot:
                 # Check if trading session is active
                 in_session, session_msg = self.risk_mgr.is_trading_session()
                 if not in_session:
+                    loop_count += 1
+                    if loop_count % 60 == 1:  # Log every ~30 min
+                        logger.info(f"Outside trading session: {session_msg}")
                     await asyncio.sleep(30)
                     continue
 
@@ -245,6 +249,7 @@ class FuturesBot:
                 # Sync positions and detect closed trades
                 try:
                     positions = await self.client.get_positions()
+                    self.positions = positions  # Update instance positions
                     actual_open = sum(1 for p in positions if p.get("netPos", 0) != 0)
                     if actual_open != self.risk_mgr.open_positions:
                         logger.info(f"Position sync: {self.risk_mgr.open_positions} -> {actual_open}")
@@ -257,6 +262,10 @@ class FuturesBot:
                     logger.error(f"Position sync error: {e}")
 
                 # Process each symbol
+                loop_count += 1
+                if loop_count % 12 == 1:  # Log every ~1 hour (12 * 5min)
+                    logger.info(f"Main loop #{loop_count}: processing {len(self.symbols)} symbols, "
+                                f"guardian={self.guardian.state.name}, positions={self.risk_mgr.open_positions}")
                 for symbol in self.symbols:
                     await self._process_symbol(symbol, now_et)
 

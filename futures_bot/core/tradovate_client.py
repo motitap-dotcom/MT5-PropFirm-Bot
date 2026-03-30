@@ -795,4 +795,13 @@ class TradovateClient:
                 "asMuchAsElements": count,
             },
         })
-        return result.get("bars", [])
+
+        # Tradovate returns bars nested in charts array or directly
+        bars = result.get("bars", [])
+        if not bars:
+            charts = result.get("charts", [])
+            if charts and isinstance(charts, list) and len(charts) > 0:
+                bars = charts[0].get("bars", [])
+        if not bars:
+            logger.warning(f"No bars returned for {symbol}. Response keys: {list(result.keys())}")
+        return bars

@@ -108,7 +108,18 @@ class RiskManager:
 
     def is_trading_session(self) -> Tuple[bool, str]:
         """Check if we're in a valid trading session."""
-        now_et = self._get_et_time()
+        # Check weekend (futures markets closed Sat-Sun)
+        now_utc = datetime.now(timezone.utc)
+        month = now_utc.month
+        if 3 <= month <= 11:
+            now_et_dt = now_utc + EDT_OFFSET
+        else:
+            now_et_dt = now_utc + ET_OFFSET
+        weekday = now_et_dt.weekday()  # 0=Mon, 5=Sat, 6=Sun
+        if weekday >= 5:
+            return False, f"Weekend (day={weekday}), markets closed"
+
+        now_et = now_et_dt.time()
 
         if now_et < self.session_start:
             return False, f"Pre-market: {now_et.strftime('%H:%M')} ET (opens {self.session_start})"
