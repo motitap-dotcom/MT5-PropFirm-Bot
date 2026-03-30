@@ -1,12 +1,1 @@
-Mon Mar 30 15:42:44 UTC 2026
----FILES---
-futures_bot/__init__.py
-futures_bot/bot.py
----IMPORT---
-OK
----SERVICE---
-WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/usr/bin/python3 -m futures_bot.bot
-Environment=PYTHONUNBUFFERED=1
-EnvironmentFile=/root/MT5-PropFirm-Bot/.env
----DONE---
+SSH fetch failed
