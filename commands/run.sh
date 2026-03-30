@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v93 - Fix pip install + check CAPTCHA status
+# Trigger: v94 - Setup after code deploy
 cd /root/MT5-PropFirm-Bot
 
 echo "=== PYTHON BOT FIX v93 - $(date -u +'%Y-%m-%d %H:%M:%S UTC') ==="
