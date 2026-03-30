@@ -42,6 +42,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin ${{ github.ref_name }} || true
           git add vps_fix_report.txt
           git commit -m "VPS fix report $(date -u +'%Y-%m-%d %H:%M UTC')" || true
           git push || true

@@ -1,0 +1,108 @@
+name: Deploy EA to VPS
+
+on:
+  push:
+    paths:
+      - 'EA/**'
+      - 'configs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy EA files to VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          MT5_BASE="/root/.wine/drive_c/Program Files/MetaTrader 5"
+          EA_DIR="${MT5_BASE}/MQL5/Experts/PropFirmBot"
+          CONFIG_DIR="${MT5_BASE}/MQL5/Files/PropFirmBot"
+
+          echo "=== Creating directories on VPS ==="
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_HOST} "mkdir -p \"${EA_DIR}\" \"${CONFIG_DIR}\""
+
+          echo "=== Deploying EA source files ==="
+          for f in EA/*.mq5 EA/*.mqh; do
+            if [ -f "$f" ]; then
+              echo "Copying $f..."
+              sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_HOST}:\"${EA_DIR}/\""
+            fi
+          done
+
+          echo "=== Deploying config files ==="
+          for f in configs/*.json; do
+            if [ -f "$f" ]; then
+              echo "Copying $f..."
+              sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no "$f" "${VPS_USER}@${VPS_HOST}:\"${CONFIG_DIR}/\""
+            fi
+          done
+
+          echo "=== Compiling EA on VPS ==="
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 ${VPS_USER}@${VPS_HOST} bash -c "'
+            cd \"${EA_DIR}\"
+            echo \"EA files deployed:\"
+            ls -la *.mq5 *.mqh 2>/dev/null
+            echo \"\"
+
+            # Try MetaEditor compilation
+            METAEDITOR=\"/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe\"
+            if [ -f \"/root/.wine/drive_c/Program Files/MetaTrader 5/metaeditor64.exe\" ]; then
+              echo \"MetaEditor found, compiling...\"
+              WINEPREFIX=/root/.wine wine \"${METAEDITOR}\" /compile:\"${EA_DIR}/PropFirmBot.mq5\" /log 2>/dev/null
+              sleep 5
+              if [ -f \"${EA_DIR}/PropFirmBot.ex5\" ]; then
+                echo \"SUCCESS: PropFirmBot.ex5 compiled\"
+                ls -la PropFirmBot.ex5
+              else
+                echo \"WARNING: Compilation may have failed, checking...\"
+                ls -la *.ex5 2>/dev/null || echo \"No .ex5 files found\"
+              fi
+            else
+              echo \"MetaEditor not found on VPS\"
+              echo \"Looking for existing .ex5 files...\"
+              find /root -name \"PropFirmBot.ex5\" -type f 2>/dev/null || echo \"No PropFirmBot.ex5 found anywhere\"
+            fi
+          '" > deploy_report.txt 2>&1 || true
+
+          cat deploy_report.txt
+
+      - name: Send Telegram notification
+        if: always()
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          STATUS="${{ job.status }}"
+          REPORT=$(cat deploy_report.txt 2>/dev/null | head -20)
+          if [ "$STATUS" = "success" ]; then
+            MSG="EA deployed to VPS - Status: ${STATUS}
+          ${REPORT}"
+          else
+            MSG="EA deployment failed - check GitHub Actions
+          ${REPORT}"
+          fi
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
+            -d "text=${MSG:0:4000}" > /dev/null 2>&1 || true
+
+      - name: Commit deploy report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin ${{ github.ref_name }} || true
+          git add -f deploy_report.txt
+          git commit -m "EA deploy report $(date -u '+%Y-%m-%d %H:%M UTC')" || true
+          git push || true
