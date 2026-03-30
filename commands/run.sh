@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v96 - Install full protection stack
+# Trigger: v97 - Install full protection stack
 cd /root/MT5-PropFirm-Bot
 
 echo "=== FULL INSTALL v96 - $(date -u +'%Y-%m-%d %H:%M:%S UTC') ==="
