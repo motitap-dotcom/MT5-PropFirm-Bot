@@ -1,9 +1,9 @@
 #!/bin/bash
-# Trigger: v71 - Deploy all fixes + restart with fresh token
+# Trigger: v72
 cd /root/MT5-PropFirm-Bot
 date -u
 
-# Update .env with secrets from workflow env vars
+# Write fresh .env from workflow secrets
 if [ -n "$TRADOVATE_ACCESS_TOKEN" ]; then
     echo "TRADOVATE_USER=$TRADOVATE_USER" > .env
     echo "TRADOVATE_PASS=$TRADOVATE_PASS" >> .env
@@ -13,13 +13,9 @@ if [ -n "$TRADOVATE_ACCESS_TOKEN" ]; then
     echo ".env updated"
 fi
 
-# Create required dirs
-mkdir -p logs status configs
-
-# Clear old token file
 rm -f configs/.tradovate_token.json
+mkdir -p logs status
 
-# Stop, restart
 systemctl stop futures-bot 2>/dev/null
 sleep 3
 systemctl daemon-reload
