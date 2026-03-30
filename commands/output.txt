@@ -1,1 +1,1 @@
-SCP failed - check Actions log for SSH output
+No output captured
