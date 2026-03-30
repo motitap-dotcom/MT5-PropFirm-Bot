@@ -9,40 +9,40 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
-      TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
-      TRADOVATE_ACCESS_TOKEN: ${{ secrets.TRADOVATE_ACCESS_TOKEN }}
-      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run command on VPS
-        continue-on-error: true
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          envs: TRADOVATE_USER,TRADOVATE_PASS,TRADOVATE_ACCESS_TOKEN,TELEGRAM_TOKEN,TELEGRAM_CHAT_ID
-          command_timeout: 10m
-          script: |
-            cd /root/MT5-PropFirm-Bot
-            git fetch origin ${{ github.ref_name }}
-            git reset --hard origin/${{ github.ref_name }}
-            bash commands/run.sh > commands/output.txt 2>&1
-            cat commands/output.txt
-
-      - name: Fetch output from VPS
+      - name: Copy script to VPS and run
         continue-on-error: true
         run: |
-          sudo apt-get install -y sshpass -qq
-          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no ${VPS_USER}@${VPS_HOST}:/root/MT5-PropFirm-Bot/commands/output.txt commands/output.txt 2>/dev/null || echo "Failed to fetch output from VPS" > commands/output.txt
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+
+          # Copy run.sh to VPS
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no commands/run.sh ${VPS_USER}@${VPS_HOST}:/tmp/run.sh
+
+          # Run it on VPS
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ${VPS_USER}@${VPS_HOST} "
+            cd /root/MT5-PropFirm-Bot
+            export TRADOVATE_USER='$TRADOVATE_USER'
+            export TRADOVATE_PASS='$TRADOVATE_PASS'
+            export TRADOVATE_ACCESS_TOKEN='$TRADOVATE_ACCESS_TOKEN'
+            export TELEGRAM_TOKEN='$TELEGRAM_TOKEN'
+            export TELEGRAM_CHAT_ID='$TELEGRAM_CHAT_ID'
+            bash /tmp/run.sh > /tmp/vps_output.txt 2>&1
+            cat /tmp/vps_output.txt
+          "
+
+          # Fetch output back
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no ${VPS_USER}@${VPS_HOST}:/tmp/vps_output.txt commands/output.txt 2>/dev/null || echo "Failed to fetch output" > commands/output.txt
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
+          TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
+          TRADOVATE_ACCESS_TOKEN: ${{ secrets.TRADOVATE_ACCESS_TOKEN }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
       - name: Commit output back to repo
         run: |
@@ -50,8 +50,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git pull --rebase origin ${{ github.ref_name }} || true
           git add commands/output.txt
-          git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')" || true
-          git push || true
+          git diff --staged --quiet && echo "No changes" || (git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')" && git push) || true
 
       - name: Telegram notification
         if: always()

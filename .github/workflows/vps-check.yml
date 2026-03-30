@@ -13,26 +13,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run diagnostics on VPS
-        continue-on-error: true
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          command_timeout: 5m
-          script: |
-            cd /root/MT5-PropFirm-Bot
-            git fetch origin ${{ github.ref_name }} || true
-            git reset --hard origin/${{ github.ref_name }} || true
-            bash scripts/check_bot.sh > vps_report.txt 2>&1 || true
-            cat vps_report.txt
-
-      - name: Fetch report from VPS
+      - name: Copy script to VPS and run diagnostics
         continue-on-error: true
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no ${VPS_USER}@${VPS_HOST}:/root/MT5-PropFirm-Bot/vps_report.txt vps_report.txt 2>/dev/null || echo "Failed to fetch report from VPS" > vps_report.txt
+
+          # Copy check script to VPS
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no scripts/check_bot.sh ${VPS_USER}@${VPS_HOST}:/tmp/check_bot.sh
+
+          # Run it
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ${VPS_USER}@${VPS_HOST} "bash /tmp/check_bot.sh > /tmp/vps_report.txt 2>&1; cat /tmp/vps_report.txt"
+
+          # Fetch output back
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no ${VPS_USER}@${VPS_HOST}:/tmp/vps_report.txt vps_report.txt 2>/dev/null || echo "Failed to fetch report" > vps_report.txt
           sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no ${VPS_USER}@${VPS_HOST}:/root/MT5-PropFirm-Bot/status/status.json status/status.json 2>/dev/null || true
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
@@ -45,7 +38,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git pull --rebase origin ${{ github.ref_name }} || true
           git add vps_report.txt status/status.json 2>/dev/null || true
-          git diff --staged --quiet && echo "No changes to commit" || (git commit -m "VPS check report $(date -u +'%Y-%m-%d %H:%M UTC')" && git push) || true
+          git diff --staged --quiet && echo "No changes" || (git commit -m "VPS check report $(date -u +'%Y-%m-%d %H:%M UTC')" && git push) || true
 
       - name: Telegram notification
         if: always()

@@ -9,37 +9,56 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
       - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          script_stop: true
-          script: |
+        continue-on-error: true
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass rsync > /dev/null 2>&1
+
+          # Sync bot code to VPS
+          sshpass -p "$VPS_PASSWORD" rsync -avz --delete \
+            -e "ssh -o StrictHostKeyChecking=no" \
+            futures_bot/ ${VPS_USER}@${VPS_HOST}:/root/MT5-PropFirm-Bot/futures_bot/
+
+          sshpass -p "$VPS_PASSWORD" rsync -avz \
+            -e "ssh -o StrictHostKeyChecking=no" \
+            configs/ ${VPS_USER}@${VPS_HOST}:/root/MT5-PropFirm-Bot/configs/
+
+          sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no \
+            requirements.txt ${VPS_USER}@${VPS_HOST}:/root/MT5-PropFirm-Bot/requirements.txt
+
+          # Install deps and restart
+          sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ${VPS_USER}@${VPS_HOST} "
             cd /root/MT5-PropFirm-Bot
-            git fetch origin ${{ github.ref_name }}
-            git reset --hard origin/${{ github.ref_name }}
 
-            # Install/update dependencies
-            pip3 install -r requirements.txt
+            # Write secrets to .env
+            echo 'TRADOVATE_USER=$TRADOVATE_USER' > .env
+            echo 'TRADOVATE_PASS=$TRADOVATE_PASS' >> .env
+            echo 'TRADOVATE_ACCESS_TOKEN=$TRADOVATE_ACCESS_TOKEN' >> .env
+            echo 'TELEGRAM_TOKEN=$TELEGRAM_TOKEN' >> .env
+            echo 'TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID' >> .env
 
-            # Write fresh secrets to .env (systemd reads from this file)
-            echo "TRADOVATE_USER=${{ secrets.TRADOVATE_USER }}" > .env
-            echo "TRADOVATE_PASS=${{ secrets.TRADOVATE_PASS }}" >> .env
-            echo "TRADOVATE_ACCESS_TOKEN=${{ secrets.TRADOVATE_ACCESS_TOKEN }}" >> .env
-            echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .env
-            echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
+            pip3 install -r requirements.txt 2>&1 | tail -3
 
-            # Restart bot service
             systemctl daemon-reload
-            systemctl restart futures-bot 2>/dev/null || echo "Service not yet installed"
-
-            echo "Deploy completed at $(date -u +'%Y-%m-%d %H:%M UTC')" > deploy_report.txt
-            python3 -c "import sys; sys.path.insert(0,'.'); import futures_bot; print('Import OK')" >> deploy_report.txt 2>&1
+            systemctl restart futures-bot 2>/dev/null || echo 'Service not yet installed'
+            sleep 5
+            echo 'Service status:' \$(systemctl is-active futures-bot 2>/dev/null || echo 'not found')
+          " > deploy_report.txt 2>&1
+          cat deploy_report.txt
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+          TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
+          TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
+          TRADOVATE_ACCESS_TOKEN: ${{ secrets.TRADOVATE_ACCESS_TOKEN }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
       - name: Telegram notification
         if: always()
