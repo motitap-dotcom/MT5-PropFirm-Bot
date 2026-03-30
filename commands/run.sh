@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v72
+# Trigger: v73
 cd /root/MT5-PropFirm-Bot
 date -u
 
