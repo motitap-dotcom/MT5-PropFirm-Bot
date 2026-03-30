@@ -6,10 +6,6 @@ on:
       - 'configs/**'
       - 'requirements.txt'
 
-concurrency:
-  group: vps-access
-  cancel-in-progress: false
-
 jobs:
   deploy:
     runs-on: ubuntu-latest

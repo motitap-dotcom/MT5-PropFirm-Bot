@@ -4,10 +4,6 @@ on:
     paths:
       - 'commands/run.sh'
 
-concurrency:
-  group: vps-access
-  cancel-in-progress: true
-
 jobs:
   run-command:
     runs-on: ubuntu-latest
