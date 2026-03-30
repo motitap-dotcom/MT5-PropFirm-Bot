@@ -18,14 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install sshpass
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq sshpass
-          which sshpass && echo "sshpass OK"
-
       - name: Run command on VPS
         continue-on-error: true
+        id: vps_run
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -37,25 +32,29 @@ jobs:
             cd /root/MT5-PropFirm-Bot
             git fetch origin claude/build-cfd-trading-bot-fl0ld
             git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
-            bash commands/run.sh > commands/output.txt 2>&1
-            echo "OUTPUT_FILE_SIZE=$(wc -c < commands/output.txt)"
-            cat commands/output.txt
+            bash commands/run.sh 2>&1
 
-      - name: Fetch output via SCP
+      - name: Fetch output from VPS
         if: always()
-        run: |
-          echo "Attempting SCP..."
-          sshpass -p "${{ secrets.VPS_PASSWORD }}" scp -o StrictHostKeyChecking=no -o ConnectTimeout=30 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/root/MT5-PropFirm-Bot/commands/output.txt" commands/output.txt
-          echo "SCP exit code: $?"
-          echo "Local file size: $(wc -c < commands/output.txt 2>/dev/null || echo 'MISSING')"
+        id: vps_fetch
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          command_timeout: 1m
+          script: cat /root/MT5-PropFirm-Bot/commands/output.txt 2>/dev/null || echo "No output file"
 
-      - name: Fallback - write error output
-        if: failure()
-        run: echo "SCP failed - check Actions log for SSH output" > commands/output.txt
-
-      - name: Push output to repo
+      - name: Save and push output
         if: always()
+        env:
+          VPS_OUTPUT: ${{ steps.vps_fetch.outputs.response }}
         run: |
+          if [ -n "$VPS_OUTPUT" ]; then
+            printf '%s\n' "$VPS_OUTPUT" > commands/output.txt
+          else
+            echo "No output captured" > commands/output.txt
+          fi
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git fetch origin claude/build-cfd-trading-bot-fl0ld
