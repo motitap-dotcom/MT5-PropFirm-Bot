@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v69 - Deploy all fixes + restart
+# Trigger: v70 - Deploy all fixes + restart with fresh token
 cd /root/MT5-PropFirm-Bot
 date -u
 
