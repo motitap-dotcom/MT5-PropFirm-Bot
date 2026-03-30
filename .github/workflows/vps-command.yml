@@ -18,7 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run command on VPS and fetch output
+      - name: Install sshpass
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq sshpass
+          which sshpass && echo "sshpass OK"
+
+      - name: Run command on VPS
         continue-on-error: true
         uses: appleboy/ssh-action@v1
         with:
@@ -27,31 +33,25 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           envs: TRADOVATE_USER,TRADOVATE_PASS,TRADOVATE_ACCESS_TOKEN,TELEGRAM_TOKEN,TELEGRAM_CHAT_ID
           command_timeout: 10m
-          capture_stdout: true
           script: |
             cd /root/MT5-PropFirm-Bot
             git fetch origin claude/build-cfd-trading-bot-fl0ld
             git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
             bash commands/run.sh > commands/output.txt 2>&1
-            echo "===OUTPUT_START==="
+            echo "OUTPUT_FILE_SIZE=$(wc -c < commands/output.txt)"
             cat commands/output.txt
-            echo "===OUTPUT_END==="
-        id: ssh_step
 
-      - name: Save output file
+      - name: Fetch output via SCP
         if: always()
         run: |
-          # Extract output between markers, or use full stdout
-          FULL_OUTPUT="${{ steps.ssh_step.outputs.stdout }}"
-          if [ -n "$FULL_OUTPUT" ]; then
-            echo "$FULL_OUTPUT" | sed -n '/===OUTPUT_START===/,/===OUTPUT_END===/p' | grep -v '===OUTPUT' > commands/output.txt
-            # If sed extraction failed, use full output
-            if [ ! -s commands/output.txt ]; then
-              echo "$FULL_OUTPUT" > commands/output.txt
-            fi
-          else
-            echo "No output captured from VPS" > commands/output.txt
-          fi
+          echo "Attempting SCP..."
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" scp -o StrictHostKeyChecking=no -o ConnectTimeout=30 "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/root/MT5-PropFirm-Bot/commands/output.txt" commands/output.txt
+          echo "SCP exit code: $?"
+          echo "Local file size: $(wc -c < commands/output.txt 2>/dev/null || echo 'MISSING')"
+
+      - name: Fallback - write error output
+        if: failure()
+        run: echo "SCP failed - check Actions log for SSH output" > commands/output.txt
 
       - name: Push output to repo
         if: always()
