@@ -1,59 +1,33 @@
-=== PYTHON BOT SETUP v91 - 2026-03-30 20:29:39 UTC ===
+=== PYTHON BOT FIX v93 - 2026-03-30 20:34:31 UTC ===
 --- Step 1: Writing .env ---
 .env written OK
 
---- Step 2: Installing Python dependencies ---
+--- Step 2: Installing dependencies ---
 Python 3.12.3
-    
-    See /usr/share/doc/python3.12/README.venv for more information.
-
-note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
-hint: See PEP 668 for the detailed specification.
+Creating virtual environment...
+Using venv pip...
+ERROR: Could not open requirements file: [Errno 2] No such file or directory: 'requirements.txt'
 
 --- Step 3: Import check ---
 Traceback (most recent call last):
   File "<string>", line 4, in <module>
 ModuleNotFoundError: No module named 'futures_bot.core.tradovate_client'
 
---- Step 4: Installing service ---
+--- Step 4: Updating service ---
 
---- Step 5: Starting bot ---
-
---- Step 6: Bot status ---
-Service: activating
-● futures-bot.service - TradeDay Futures Trading Bot
-     Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
-    Drop-In: /etc/systemd/system/futures-bot.service.d
-             └─env.conf
-     Active: activating (auto-restart) (Result: exit-code) since Mon 2026-03-30 20:29:43 UTC; 9s ago
-    Process: 2859392 ExecStart=/usr/bin/python3 -m futures_bot.bot (code=exited, status=1/FAILURE)
-   Main PID: 2859392 (code=exited, status=1/FAILURE)
-        CPU: 33ms
-
-Mar 30 20:29:43 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 30 20:29:43 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-
---- Step 7: Bot logs ---
-Mar 30 20:29:43 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 20:29:43 vmi3096165 python3[2859392]: /usr/bin/python3: No module named futures_bot.bot
-Mar 30 20:29:43 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 30 20:29:43 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-
-2026-03-30 20:21:43,014 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-30 20:21:43,015 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-03-30 20:21:43,138 [tradovate_client] ERROR: CAPTCHA required for first login!
-Run: python3 get_token.py
-Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
-2026-03-30 20:21:43,138 [tradovate_client] INFO: Environment token invalid, attempting renewal...
-2026-03-30 20:21:43,260 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-30 20:21:43,260 [tradovate_client] INFO: All tokens failed, attempting user/password authentication...
-2026-03-30 20:21:43,385 [tradovate_client] ERROR: CAPTCHA required for first login!
-Run: python3 get_token.py
-Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
-2026-03-30 20:21:43,385 [bot] ERROR: Failed to connect: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-30 20:21:43,385 [bot] ERROR: Fatal error (attempt 5/5): CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+--- Step 5: Testing Tradovate auth ---
 Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 628, in main
+  File "<string>", line 12, in <module>
+ModuleNotFoundError: No module named 'futures_bot.core.tradovate_client'
+
+--- Step 6: Restarting bot ---
+Service: activating
+Mar 30 20:34:36 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 20:34:37 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 20:34:37 vmi3096165 python3[2860810]: /root/MT5-PropFirm-Bot/venv/bin/python3: No module named futures_bot.bot
+Mar 30 20:34:37 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 20:34:37 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 141, in connect
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 220, in _authenticate
@@ -70,7 +44,4 @@ Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
 2026-03-30 20:21:43,853 [bot] INFO: Bot stopped
 2026-03-30 20:21:43,853 [bot] ERROR: Max retries reached. Bot shutting down permanently.
 
---- Step 8: status.json ---
-No status.json yet
-
-=== SETUP COMPLETE ===
+=== FIX COMPLETE ===
