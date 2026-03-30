@@ -287,15 +287,16 @@ class TradovateClient:
         await self._authenticate()
 
     async def _ensure_token(self):
-        """Refresh token proactively - renew every 4 hours or when close to expiry."""
+        """Refresh token proactively - renew every 2 hours or when close to expiry.
+        Aggressive renewal prevents token expiration which would require CAPTCHA."""
         remaining = self.token_expiry - time.time()
         hours_since_obtained = (time.time() - getattr(self, '_token_obtained_at', time.time())) / 3600
 
         if remaining < 7200:  # Less than 2 hours left
             logger.info(f"Token expiring in {remaining/3600:.1f}h, renewing...")
             await self._renew_token()
-        elif hours_since_obtained > 4:
-            # Renew every 4 hours proactively (Tradovate tokens last ~24h but renew early)
+        elif hours_since_obtained > 2:
+            # Renew every 2 hours proactively to keep token alive
             logger.info(f"Proactive token renewal ({hours_since_obtained:.1f}h since last)...")
             await self._renew_token()
             self._token_obtained_at = time.time()
@@ -312,7 +313,8 @@ class TradovateClient:
             self.token_expiry = time.time() + 86400
 
     def _save_token(self):
-        """Save token to file and .env for persistence across restarts."""
+        """Save token to file and .env for persistence across restarts.
+        CRITICAL: Token must survive restarts to avoid CAPTCHA on next login."""
         try:
             TOKEN_FILE.parent.mkdir(parents=True, exist_ok=True)
             data = {
@@ -322,6 +324,9 @@ class TradovateClient:
                 "saved_at": datetime.now(timezone.utc).isoformat(),
             }
             TOKEN_FILE.write_text(json.dumps(data))
+            # Backup copy in case primary gets deleted
+            backup = Path("configs/.tradovate_token_backup.json")
+            backup.write_text(json.dumps(data))
         except Exception as e:
             logger.warning(f"Could not save token file: {e}")
 
@@ -364,17 +369,18 @@ class TradovateClient:
 
     def _load_any_saved_token(self):
         """Load token from file even if expired (for renewal attempts).
-        Returns (access_token, md_access_token, expiry) or (None, None, 0)."""
-        try:
-            if not TOKEN_FILE.exists():
-                return None, None, 0
-            data = json.loads(TOKEN_FILE.read_text())
-            token = data.get("access_token")
-            if token:
-                logger.debug(f"Loaded saved token (expiry: {data.get('expiry', 0)}, saved: {data.get('saved_at', '?')})")
-                return token, data.get("md_access_token"), data.get("expiry", 0)
-        except Exception as e:
-            logger.debug(f"Could not load saved token: {e}")
+        Checks primary file and backup. Returns (access_token, md_access_token, expiry) or (None, None, 0)."""
+        for token_path in [TOKEN_FILE, Path("configs/.tradovate_token_backup.json")]:
+            try:
+                if not token_path.exists():
+                    continue
+                data = json.loads(token_path.read_text())
+                token = data.get("access_token")
+                if token:
+                    logger.debug(f"Loaded token from {token_path} (saved: {data.get('saved_at', '?')})")
+                    return token, data.get("md_access_token"), data.get("expiry", 0)
+            except Exception as e:
+                logger.debug(f"Could not load {token_path}: {e}")
         return None, None, 0
 
     def _headers(self) -> Dict[str, str]:
