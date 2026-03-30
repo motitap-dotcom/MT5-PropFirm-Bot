@@ -1,99 +1,26 @@
-=== TIMESTAMP ===
-Mon Mar 30 14:04:04 UTC 2026
+Mon Mar 30 14:18:59 UTC 2026
+---SERVICE---
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
 
-=== SERVICE STATUS ===
-activating
+[Service]
+Type=simple
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+Restart=on-failure
+RestartSec=30
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 
-=== LAST 50 JOURNAL LINES ===
-Mar 30 13:58:21 vmi3096165 python3[2755078]: 2026-03-30 13:58:21,044 [bot] INFO: Bot stopped
-Mar 30 13:59:51 vmi3096165 systemd[1]: futures-bot.service: State 'stop-sigterm' timed out. Killing.
-Mar 30 13:59:51 vmi3096165 systemd[1]: futures-bot.service: Killing process 2755078 (python3) with signal SIGKILL.
-Mar 30 13:59:51 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=killed, status=9/KILL
-Mar 30 13:59:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'timeout'.
-Mar 30 13:59:51 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 13:59:53 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 13:59:53 vmi3096165 python3[2757284]: /usr/bin/python3: No module named futures_bot.bot
-Mar 30 13:59:53 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 30 13:59:53 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 30 14:00:23 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
-Mar 30 14:00:23 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 14:00:23 vmi3096165 python3[2757590]: /usr/bin/python3: No module named futures_bot.bot
-Mar 30 14:00:23 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 30 14:00:23 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 30 14:00:53 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
-Mar 30 14:00:53 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 14:00:53 vmi3096165 python3[2757804]: /usr/bin/python3: No module named futures_bot.bot
-Mar 30 14:00:53 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 30 14:00:53 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 30 14:01:24 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 3.
-Mar 30 14:01:24 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 14:01:24 vmi3096165 python3[2757930]: /usr/bin/python3: No module named futures_bot.bot
-Mar 30 14:01:24 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 30 14:01:24 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 30 14:01:54 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 4.
-Mar 30 14:01:54 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 14:01:54 vmi3096165 python3[2758188]: /usr/bin/python3: No module named futures_bot.bot
-Mar 30 14:01:54 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 30 14:01:54 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 30 14:02:24 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 5.
-Mar 30 14:02:24 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 14:02:24 vmi3096165 python3[2758357]: /usr/bin/python3: No module named futures_bot.bot
-Mar 30 14:02:24 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 30 14:02:24 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 30 14:02:54 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 6.
-Mar 30 14:02:54 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 14:02:54 vmi3096165 python3[2758491]: /usr/bin/python3: No module named futures_bot.bot
-Mar 30 14:02:54 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 30 14:02:54 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 30 14:03:24 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 7.
-Mar 30 14:03:24 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 14:03:24 vmi3096165 python3[2758594]: /usr/bin/python3: No module named futures_bot.bot
-Mar 30 14:03:24 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 30 14:03:24 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 30 14:03:55 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 8.
-Mar 30 14:03:55 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 14:03:55 vmi3096165 python3[2758721]: /usr/bin/python3: No module named futures_bot.bot
-Mar 30 14:03:55 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 30 14:03:55 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-
-=== BOT LOG TAIL ===
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 140, in start
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 141, in connect
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 220, in _authenticate
-ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-30 13:55:35,903 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-30 13:55:36,022 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-03-30 13:55:36,142 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-30 13:55:36,142 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-03-30 13:55:36,274 [tradovate_client] ERROR: CAPTCHA required for first login!
-Run: python3 get_token.py
-Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
-2026-03-30 13:55:36,274 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-30 13:55:36,513 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-30 13:55:36,513 [bot] INFO: Bot stopped
-2026-03-30 13:55:36,513 [bot] INFO: Retrying in 300s...
-2026-03-30 13:58:21,043 [bot] INFO: Stopping bot: Signal received
-2026-03-30 13:58:21,044 [bot] ERROR: Error closing positions: Session is closed
-2026-03-30 13:58:21,044 [notifier] ERROR: Telegram error: Session is closed
-2026-03-30 13:58:21,044 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-30 13:58:21,044 [bot] INFO: Bot stopped
-
-=== GIT LOG ===
-4e19898 Simple status check v57
-651c3be Retrigger deploy v56
-71e06a4 Deploy token fix to VPS and restart bot - v55
-
-=== PYTHON CODE VERSION CHECK ===
-"""
-Tradovate API Client
-Handles authentication, order management, and market data via REST + WebSocket.
-
-Auth method: Web-style authentication (no API keys needed).
-
-=== TOKEN FILE ===
-No token file
-
-=== PROCESSES ===
-root        1117  0.0  0.2 105396 22044 ?        Sl   Mar22   4:28 python3 /root/tradovate-bot/dashboard.py
-root     1468075  0.5  1.1 770012 95400 ?        Sl   Mar26  30:08 /opt/hyrotrader-bot/venv/bin/python -u /opt/hyrotrader-bot/bot/main.py
-root     2758289  9.1  0.6 501912 49352 ?        Ssl  14:02   0:10 /root/tradovate-bot/venv/bin/python bot.py
+[Install]
+WantedBy=multi-user.target
+---ENV-KEYS---
+TRADOVATE_USER
+TRADOVATE_PASS
+TRADOVATE_ACCESS_TOKEN
+TELEGRAM_TOKEN
+TELEGRAM_CHAT_ID
+---IMPORT-TEST---
+OK
+---DONE---
