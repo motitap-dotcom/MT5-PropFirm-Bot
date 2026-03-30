@@ -1,4 +1,1 @@
-No output file on VPS
-===============================================
-✅ Successfully executed commands to all hosts.
-===============================================
+Failed to fetch output from VPS
