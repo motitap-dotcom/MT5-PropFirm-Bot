@@ -280,26 +280,20 @@ class TradovateClient:
             return False
 
     async def _renew_token(self):
-        """Renew token, fall back to full auth if renewal fails."""
+        """Renew token. NEVER fall back to authenticate - that requires CAPTCHA."""
         if await self._renew_token_safe():
             return
-        logger.warning("Renewal failed, falling back to full authentication...")
-        await self._authenticate()
+        logger.warning("Token renewal failed - keeping current token (DO NOT fall back to CAPTCHA auth)")
 
     async def _ensure_token(self):
-        """Refresh token proactively - renew every 2 hours or when close to expiry.
-        Aggressive renewal prevents token expiration which would require CAPTCHA."""
+        """Try to renew token when getting close to expiry.
+        SAFE: never triggers CAPTCHA, just tries renewal silently."""
         remaining = self.token_expiry - time.time()
-        hours_since_obtained = (time.time() - getattr(self, '_token_obtained_at', time.time())) / 3600
 
-        if remaining < 7200:  # Less than 2 hours left
-            logger.info(f"Token expiring in {remaining/3600:.1f}h, renewing...")
+        # Only renew when actually close to expiry (less than 2 hours left)
+        if remaining < 7200:
+            logger.info(f"Token expiring in {remaining/3600:.1f}h, attempting renewal...")
             await self._renew_token()
-        elif hours_since_obtained > 2:
-            # Renew every 2 hours proactively to keep token alive
-            logger.info(f"Proactive token renewal ({hours_since_obtained:.1f}h since last)...")
-            await self._renew_token()
-            self._token_obtained_at = time.time()
 
     def _parse_expiry(self, expiry_str: str):
         """Parse token expiration time."""
