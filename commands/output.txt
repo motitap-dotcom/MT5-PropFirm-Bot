@@ -1,26 +1,48 @@
-Mon Mar 30 14:18:59 UTC 2026
----SERVICE---
-[Unit]
-Description=TradeDay Futures Trading Bot
-After=network.target
-
-[Service]
-Type=simple
-WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/usr/bin/python3 -m futures_bot.bot
-Restart=on-failure
-RestartSec=30
-Environment=PYTHONUNBUFFERED=1
-EnvironmentFile=/root/MT5-PropFirm-Bot/.env
-
-[Install]
-WantedBy=multi-user.target
----ENV-KEYS---
-TRADOVATE_USER
-TRADOVATE_PASS
-TRADOVATE_ACCESS_TOKEN
-TELEGRAM_TOKEN
-TELEGRAM_CHAT_ID
----IMPORT-TEST---
-OK
+Mon Mar 30 14:37:56 UTC 2026
+---UPDATING-ENV-FILE---
+.env updated with fresh secrets
+---TOKEN-CHECK---
+Token length: 295
+Expires in: 1465s (0.4h)
+VALID
+---CLEAR-OLD-TOKEN-FILE---
+---RESTART-BOT---
+---STATUS---
+active
+Mar 30 14:38:00 vmi3096165 python3[2768124]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
+Mar 30 14:38:00 vmi3096165 python3[2768124]:     bars_data = await self.client.get_historical_bars(
+Mar 30 14:38:00 vmi3096165 python3[2768124]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 30 14:38:00 vmi3096165 python3[2768124]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 786, in get_historical_bars
+Mar 30 14:38:00 vmi3096165 python3[2768124]:     result = await self._post("/md/getChart", {
+Mar 30 14:38:00 vmi3096165 python3[2768124]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 30 14:38:00 vmi3096165 python3[2768124]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 441, in _post
+Mar 30 14:38:00 vmi3096165 python3[2768124]:     raise Exception(f"POST {endpoint} failed ({resp.status}): {text}")
+Mar 30 14:38:00 vmi3096165 python3[2768124]: Exception: POST /md/getChart failed (400): Invalid date format
+Mar 30 14:38:00 vmi3096165 python3[2768124]: 2026-03-30 14:38:00,972 [bot] ERROR: Error processing M2KM6: POST /md/getChart failed (400): Invalid date format
+Mar 30 14:38:00 vmi3096165 python3[2768124]: Traceback (most recent call last):
+Mar 30 14:38:00 vmi3096165 python3[2768124]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
+Mar 30 14:38:00 vmi3096165 python3[2768124]:     bars_data = await self.client.get_historical_bars(
+Mar 30 14:38:00 vmi3096165 python3[2768124]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 30 14:38:00 vmi3096165 python3[2768124]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 786, in get_historical_bars
+Mar 30 14:38:00 vmi3096165 python3[2768124]:     result = await self._post("/md/getChart", {
+Mar 30 14:38:00 vmi3096165 python3[2768124]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 30 14:38:00 vmi3096165 python3[2768124]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 441, in _post
+Mar 30 14:38:00 vmi3096165 python3[2768124]:     raise Exception(f"POST {endpoint} failed ({resp.status}): {text}")
+Mar 30 14:38:00 vmi3096165 python3[2768124]: Exception: POST /md/getChart failed (400): Invalid date format
+---BOT-LOG---
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 441, in _post
+    raise Exception(f"POST {endpoint} failed ({resp.status}): {text}")
+Exception: POST /md/getChart failed (400): Invalid date format 
+2026-03-30 14:38:00,972 [bot] ERROR: Error processing M2KM6: POST /md/getChart failed (400): Invalid date format 
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
+    bars_data = await self.client.get_historical_bars(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 786, in get_historical_bars
+    result = await self._post("/md/getChart", {
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 441, in _post
+    raise Exception(f"POST {endpoint} failed ({resp.status}): {text}")
+Exception: POST /md/getChart failed (400): Invalid date format 
 ---DONE---
