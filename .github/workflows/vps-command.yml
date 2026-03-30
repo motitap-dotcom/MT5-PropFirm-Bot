@@ -18,10 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install sshpass
-        run: sudo apt-get install -y -qq sshpass > /dev/null 2>&1
-
-      - name: Run command on VPS
+      - name: Run command on VPS and fetch output
         continue-on-error: true
         uses: appleboy/ssh-action@v1
         with:
@@ -30,28 +27,35 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           envs: TRADOVATE_USER,TRADOVATE_PASS,TRADOVATE_ACCESS_TOKEN,TELEGRAM_TOKEN,TELEGRAM_CHAT_ID
           command_timeout: 10m
+          capture_stdout: true
           script: |
             cd /root/MT5-PropFirm-Bot
             git fetch origin claude/build-cfd-trading-bot-fl0ld
             git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
             bash commands/run.sh > commands/output.txt 2>&1
+            echo "===OUTPUT_START==="
             cat commands/output.txt
+            echo "===OUTPUT_END==="
+        id: ssh_step
 
-      - name: Fetch output from VPS
-        if: always()
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          command_timeout: 2m
-          script: cat /root/MT5-PropFirm-Bot/commands/output.txt
-        id: fetch_output
-
-      - name: Save and push output
+      - name: Save output file
         if: always()
         run: |
-          echo '${{ steps.fetch_output.outputs.stdout }}' > commands/output.txt
+          # Extract output between markers, or use full stdout
+          FULL_OUTPUT="${{ steps.ssh_step.outputs.stdout }}"
+          if [ -n "$FULL_OUTPUT" ]; then
+            echo "$FULL_OUTPUT" | sed -n '/===OUTPUT_START===/,/===OUTPUT_END===/p' | grep -v '===OUTPUT' > commands/output.txt
+            # If sed extraction failed, use full output
+            if [ ! -s commands/output.txt ]; then
+              echo "$FULL_OUTPUT" > commands/output.txt
+            fi
+          else
+            echo "No output captured from VPS" > commands/output.txt
+          fi
+
+      - name: Push output to repo
+        if: always()
+        run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git fetch origin claude/build-cfd-trading-bot-fl0ld
