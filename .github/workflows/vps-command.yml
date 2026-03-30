@@ -40,7 +40,7 @@ jobs:
       - name: Fetch output from VPS
         if: always()
         run: |
-          sshpass -p "${{ secrets.VPS_PASSWORD }}" scp -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/root/MT5-PropFirm-Bot/commands/output.txt commands/output.txt || echo "SCP failed"
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "cat /root/MT5-PropFirm-Bot/commands/output.txt" > commands/output.txt 2>/dev/null || echo "SSH fetch failed" > commands/output.txt
 
       - name: Push output to repo
         if: always()
