@@ -39,12 +39,19 @@ jobs:
 
       - name: Fetch output from VPS
         if: always()
-        run: |
-          sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "cat /root/MT5-PropFirm-Bot/commands/output.txt" > commands/output.txt 2>/dev/null || echo "SSH fetch failed" > commands/output.txt
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          command_timeout: 2m
+          script: cat /root/MT5-PropFirm-Bot/commands/output.txt
+        id: fetch_output
 
-      - name: Push output to repo
+      - name: Save and push output
         if: always()
         run: |
+          echo '${{ steps.fetch_output.outputs.stdout }}' > commands/output.txt
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git fetch origin claude/build-cfd-trading-bot-fl0ld
@@ -52,12 +59,7 @@ jobs:
           git add commands/output.txt
           if ! git diff --cached --quiet; then
             git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')"
-            git push origin HEAD:claude/build-cfd-trading-bot-fl0ld || \
-            (sleep 5 && git fetch origin claude/build-cfd-trading-bot-fl0ld && \
-             git reset --soft origin/claude/build-cfd-trading-bot-fl0ld && \
-             git add commands/output.txt && \
-             git commit -m "VPS output retry $(date -u +'%Y-%m-%d %H:%M UTC')" && \
-             git push origin HEAD:claude/build-cfd-trading-bot-fl0ld)
+            git push origin HEAD:claude/build-cfd-trading-bot-fl0ld
           fi
 
       - name: Telegram notification
