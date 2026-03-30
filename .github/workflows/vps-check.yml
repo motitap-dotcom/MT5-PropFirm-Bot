@@ -20,18 +20,18 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
-          script_stop: true
+          command_timeout: 5m
           script: |
             cd /root/MT5-PropFirm-Bot
-            git fetch origin ${{ github.ref_name }}
-            git reset --hard origin/${{ github.ref_name }}
-            bash scripts/check_bot.sh > vps_report.txt 2>&1
+            git fetch origin ${{ github.ref_name }} || true
+            git reset --hard origin/${{ github.ref_name }} || true
+            bash scripts/check_bot.sh > vps_report.txt 2>&1 || true
             cat vps_report.txt
 
       - name: Fetch report from VPS
         continue-on-error: true
         run: |
-          sudo apt-get install -y sshpass -qq
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
           sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no ${VPS_USER}@${VPS_HOST}:/root/MT5-PropFirm-Bot/vps_report.txt vps_report.txt 2>/dev/null || echo "Failed to fetch report from VPS" > vps_report.txt
           sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no ${VPS_USER}@${VPS_HOST}:/root/MT5-PropFirm-Bot/status/status.json status/status.json 2>/dev/null || true
         env:
@@ -44,9 +44,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git pull --rebase origin ${{ github.ref_name }} || true
-          git add vps_report.txt status/status.json
-          git commit -m "VPS check report $(date -u +'%Y-%m-%d %H:%M UTC')" || true
-          git push || true
+          git add vps_report.txt status/status.json 2>/dev/null || true
+          git diff --staged --quiet && echo "No changes to commit" || (git commit -m "VPS check report $(date -u +'%Y-%m-%d %H:%M UTC')" && git push) || true
 
       - name: Telegram notification
         if: always()
