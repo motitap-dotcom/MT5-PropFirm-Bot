@@ -7,9 +7,8 @@ date -u
 
 echo ""
 echo "=== PULLING LATEST CODE ==="
-git fetch origin claude/test-bot-trading-Z6n4I
-git checkout claude/test-bot-trading-Z6n4I 2>/dev/null || git checkout -b claude/test-bot-trading-Z6n4I origin/claude/test-bot-trading-Z6n4I
-git reset --hard origin/claude/test-bot-trading-Z6n4I
+git fetch origin claude/build-cfd-trading-bot-fl0ld
+git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
 
 echo ""
 echo "=== STOPPING BOT ==="
@@ -21,9 +20,14 @@ echo "=== INSTALLING DEPS ==="
 pip3 install -r requirements.txt -q 2>&1 | tail -3
 
 echo ""
+echo "=== CLEARING OLD TOKEN FILE ==="
+rm -f configs/.tradovate_token.json
+echo "Old token file removed"
+
+echo ""
 echo "=== STARTING BOT ==="
 systemctl start futures-bot
-sleep 5
+sleep 8
 
 echo ""
 echo "=== SERVICE STATUS ==="
@@ -32,8 +36,8 @@ systemctl status futures-bot --no-pager -l 2>/dev/null | tail -10
 
 echo ""
 echo "=== RECENT LOGS ==="
-journalctl -u futures-bot --no-pager -n 30 --since "30 sec ago"
+journalctl -u futures-bot --no-pager -n 40 --since "30 sec ago"
 
 echo ""
 echo "=== BOT LOG ==="
-tail -20 logs/bot.log 2>/dev/null || echo "No bot.log yet"
+tail -30 logs/bot.log 2>/dev/null || echo "No bot.log yet"
