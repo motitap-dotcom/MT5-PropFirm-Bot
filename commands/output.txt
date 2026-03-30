@@ -1,62 +1,30 @@
-=== PYTHON BOT FIX v93 - 2026-03-30 21:05:40 UTC ===
---- Step 1: Writing .env ---
-.env written OK
+=== FULL INSTALL v96 - 2026-03-30 21:33:47 UTC ===
+bash: scripts/install_bot.sh: No such file or directory
 
---- Step 2: Installing dependencies ---
-Python 3.12.3
-Using venv pip...
-Requirement already satisfied: websockets>=12.0 in ./venv/lib/python3.12/site-packages (from -r requirements.txt (line 2)) (16.0)
-Requirement already satisfied: aiohappyeyeballs>=2.5.0 in ./venv/lib/python3.12/site-packages (from aiohttp>=3.9.0->-r requirements.txt (line 1)) (2.6.1)
-Requirement already satisfied: aiosignal>=1.4.0 in ./venv/lib/python3.12/site-packages (from aiohttp>=3.9.0->-r requirements.txt (line 1)) (1.4.0)
-Requirement already satisfied: attrs>=17.3.0 in ./venv/lib/python3.12/site-packages (from aiohttp>=3.9.0->-r requirements.txt (line 1)) (26.1.0)
-Requirement already satisfied: frozenlist>=1.1.1 in ./venv/lib/python3.12/site-packages (from aiohttp>=3.9.0->-r requirements.txt (line 1)) (1.8.0)
-Requirement already satisfied: multidict<7.0,>=4.5 in ./venv/lib/python3.12/site-packages (from aiohttp>=3.9.0->-r requirements.txt (line 1)) (6.7.1)
-Requirement already satisfied: propcache>=0.2.0 in ./venv/lib/python3.12/site-packages (from aiohttp>=3.9.0->-r requirements.txt (line 1)) (0.4.1)
-Requirement already satisfied: yarl<2.0,>=1.17.0 in ./venv/lib/python3.12/site-packages (from aiohttp>=3.9.0->-r requirements.txt (line 1)) (1.23.0)
-Requirement already satisfied: typing-extensions>=4.2 in ./venv/lib/python3.12/site-packages (from aiosignal>=1.4.0->aiohttp>=3.9.0->-r requirements.txt (line 1)) (4.15.0)
-Requirement already satisfied: idna>=2.0 in ./venv/lib/python3.12/site-packages (from yarl<2.0,>=1.17.0->aiohttp>=3.9.0->-r requirements.txt (line 1)) (3.11)
+--- Service status ---
+activating
 
---- Step 3: Import check ---
-All imports OK
+--- Watchdog timer ---
+active
 
---- Step 4: Updating service ---
+--- Bot log (last 15 lines) ---
+2026-03-30 21:28:00,618 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-03-30 21:28:00,737 [tradovate_client] ERROR: CAPTCHA required for first login!
+Run: python3 get_token.py
+Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
+2026-03-30 21:28:00,737 [bot] ERROR: Error flattening: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-30 21:28:10,494 [bot] INFO: Stopping bot: Signal received
+2026-03-30 21:28:10,616 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-03-30 21:28:10,735 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-03-30 21:28:10,736 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-03-30 21:28:10,854 [tradovate_client] ERROR: CAPTCHA required for first login!
+Run: python3 get_token.py
+Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
+2026-03-30 21:28:10,854 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-30 21:28:10,923 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-30 21:28:10,923 [bot] INFO: Bot stopped
 
---- Step 5: Testing Tradovate auth ---
-CONNECTED! Account: ELTDER260326211630296397 ID: 45373493
-Balance: $50000.00
+--- Disk space ---
+/dev/sda1       145G   26G  119G  18% /
 
---- Step 6: Restarting bot ---
-Service: active
-Mar 30 21:05:51 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 21:05:52 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 21:05:52 vmi3096165 python3[2869667]: 2026-03-30 21:05:52,450 [bot] INFO: ============================================================
-Mar 30 21:05:52 vmi3096165 python3[2869667]: 2026-03-30 21:05:52,450 [bot] INFO: TradeDay Futures Bot Starting
-Mar 30 21:05:52 vmi3096165 python3[2869667]: 2026-03-30 21:05:52,450 [bot] INFO: ============================================================
-Mar 30 21:05:52 vmi3096165 python3[2869667]: 2026-03-30 21:05:52,450 [news_filter] INFO: Loaded 26 restricted events
-Mar 30 21:05:52 vmi3096165 python3[2869667]: 2026-03-30 21:05:52,451 [tradovate_client] INFO: Loaded saved token from file, verifying...
-Mar 30 21:05:52 vmi3096165 python3[2869667]: 2026-03-30 21:05:52,594 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-Mar 30 21:05:52 vmi3096165 python3[2869667]: 2026-03-30 21:05:52,594 [tradovate_client] INFO: Saved token is still valid
-Mar 30 21:05:52 vmi3096165 python3[2869667]: 2026-03-30 21:05:52,595 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-Mar 30 21:05:52 vmi3096165 python3[2869667]: 2026-03-30 21:05:52,685 [bot] INFO: Bot started successfully
-Mar 30 21:05:52 vmi3096165 python3[2869667]: 2026-03-30 21:05:52,685 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-Mar 30 21:05:52 vmi3096165 python3[2869667]: 2026-03-30 21:05:52,685 [bot] INFO: Timeframe: 5min
-Mar 30 21:05:52 vmi3096165 python3[2869667]: 2026-03-30 21:05:52,685 [bot] INFO: New trading day: 2026-03-30
-Mar 30 21:05:52 vmi3096165 python3[2869667]: 2026-03-30 21:05:52,685 [bot] WARNING: FLATTENING ALL: End of day flatten
-
-2026-03-30 21:04:31,486 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-30 21:04:31,486 [bot] INFO: Bot stopped
-2026-03-30 21:05:52,450 [bot] INFO: ============================================================
-2026-03-30 21:05:52,450 [bot] INFO: TradeDay Futures Bot Starting
-2026-03-30 21:05:52,450 [bot] INFO: ============================================================
-2026-03-30 21:05:52,450 [news_filter] INFO: Loaded 26 restricted events
-2026-03-30 21:05:52,451 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-03-30 21:05:52,594 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-03-30 21:05:52,594 [tradovate_client] INFO: Saved token is still valid
-2026-03-30 21:05:52,595 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-03-30 21:05:52,685 [bot] INFO: Bot started successfully
-2026-03-30 21:05:52,685 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-03-30 21:05:52,685 [bot] INFO: Timeframe: 5min
-2026-03-30 21:05:52,685 [bot] INFO: New trading day: 2026-03-30
-2026-03-30 21:05:52,685 [bot] WARNING: FLATTENING ALL: End of day flatten
-
-=== FIX COMPLETE ===
+=== DONE ===
