@@ -1,29 +1,28 @@
 #!/bin/bash
-# Trigger: v65
+# Trigger: v66
 cd /root/MT5-PropFirm-Bot
 date -u
-
-# Update .env with env vars from GitHub Secrets (passed by workflow)
-if [ -n "$TRADOVATE_ACCESS_TOKEN" ]; then
-    echo "TRADOVATE_USER=$TRADOVATE_USER" > .env
-    echo "TRADOVATE_PASS=$TRADOVATE_PASS" >> .env
-    echo "TRADOVATE_ACCESS_TOKEN=$TRADOVATE_ACCESS_TOKEN" >> .env
-    echo "TELEGRAM_TOKEN=$TELEGRAM_TOKEN" >> .env
-    echo "TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID" >> .env
-    echo ".env updated from secrets"
-fi
-
-rm -f configs/.tradovate_token.json
-systemctl stop futures-bot 2>/dev/null
-sleep 2
-systemctl daemon-reload
-systemctl start futures-bot
-sleep 10
-
-echo "---STATUS---"
+echo "---ENV-TOKEN-CHECK---"
+TOKEN=$(grep TRADOVATE_ACCESS_TOKEN .env 2>/dev/null | cut -d= -f2)
+echo "Token length: ${#TOKEN}"
+python3 -c "
+import base64,json,time
+t='$TOKEN'
+if t and '.' in t:
+ p=t.split('.')[1]+'=='
+ d=json.loads(base64.urlsafe_b64decode(p))
+ r=d.get('exp',0)-time.time()
+ print(f'Remaining: {r:.0f}s ({r/3600:.1f}h)')
+ print('VALID' if r>0 else 'EXPIRED')
+else:
+ print('No JWT')
+" 2>&1
+echo "---GIT-VERSION---"
+git log --oneline -1
+echo "---SERVICE---"
 systemctl is-active futures-bot
-echo "---LOGS---"
-journalctl -u futures-bot --no-pager -n 25 --since "15 sec ago"
+echo "---JOURNAL---"
+journalctl -u futures-bot --no-pager -n 20 --since "5 min ago" 2>/dev/null
 echo "---BOT-LOG---"
-tail -20 logs/bot.log 2>/dev/null
+tail -15 logs/bot.log 2>/dev/null
 echo "---DONE---"
