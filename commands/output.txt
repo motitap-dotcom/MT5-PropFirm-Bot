@@ -1,48 +1,47 @@
-Mon Mar 30 14:37:56 UTC 2026
----UPDATING-ENV-FILE---
-.env updated with fresh secrets
----TOKEN-CHECK---
+Mon Mar 30 15:29:59 UTC 2026
+---ENV-TOKEN-CHECK---
 Token length: 295
-Expires in: 1465s (0.4h)
-VALID
----CLEAR-OLD-TOKEN-FILE---
----RESTART-BOT---
----STATUS---
-active
-Mar 30 14:38:00 vmi3096165 python3[2768124]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
-Mar 30 14:38:00 vmi3096165 python3[2768124]:     bars_data = await self.client.get_historical_bars(
-Mar 30 14:38:00 vmi3096165 python3[2768124]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Mar 30 14:38:00 vmi3096165 python3[2768124]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 786, in get_historical_bars
-Mar 30 14:38:00 vmi3096165 python3[2768124]:     result = await self._post("/md/getChart", {
-Mar 30 14:38:00 vmi3096165 python3[2768124]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Mar 30 14:38:00 vmi3096165 python3[2768124]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 441, in _post
-Mar 30 14:38:00 vmi3096165 python3[2768124]:     raise Exception(f"POST {endpoint} failed ({resp.status}): {text}")
-Mar 30 14:38:00 vmi3096165 python3[2768124]: Exception: POST /md/getChart failed (400): Invalid date format
-Mar 30 14:38:00 vmi3096165 python3[2768124]: 2026-03-30 14:38:00,972 [bot] ERROR: Error processing M2KM6: POST /md/getChart failed (400): Invalid date format
-Mar 30 14:38:00 vmi3096165 python3[2768124]: Traceback (most recent call last):
-Mar 30 14:38:00 vmi3096165 python3[2768124]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
-Mar 30 14:38:00 vmi3096165 python3[2768124]:     bars_data = await self.client.get_historical_bars(
-Mar 30 14:38:00 vmi3096165 python3[2768124]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Mar 30 14:38:00 vmi3096165 python3[2768124]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 786, in get_historical_bars
-Mar 30 14:38:00 vmi3096165 python3[2768124]:     result = await self._post("/md/getChart", {
-Mar 30 14:38:00 vmi3096165 python3[2768124]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Mar 30 14:38:00 vmi3096165 python3[2768124]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 441, in _post
-Mar 30 14:38:00 vmi3096165 python3[2768124]:     raise Exception(f"POST {endpoint} failed ({resp.status}): {text}")
-Mar 30 14:38:00 vmi3096165 python3[2768124]: Exception: POST /md/getChart failed (400): Invalid date format
+Remaining: -1658s (-0.5h)
+EXPIRED
+---GIT-VERSION---
+8013ef4 Clean status check v66
+---SERVICE---
+activating
+---JOURNAL---
+Mar 30 15:28:23 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 41.
+Mar 30 15:28:23 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 15:28:23 vmi3096165 python3[2780690]: /usr/bin/python3: No module named futures_bot.bot
+Mar 30 15:28:23 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 15:28:23 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 30 15:28:54 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 42.
+Mar 30 15:28:54 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 15:28:54 vmi3096165 python3[2780810]: /usr/bin/python3: No module named futures_bot.bot
+Mar 30 15:28:54 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 15:28:54 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 30 15:29:24 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 43.
+Mar 30 15:29:24 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 15:29:24 vmi3096165 python3[2781058]: /usr/bin/python3: No module named futures_bot.bot
+Mar 30 15:29:24 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 15:29:24 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 30 15:29:54 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 44.
+Mar 30 15:29:54 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 15:29:54 vmi3096165 python3[2781202]: /usr/bin/python3: No module named futures_bot.bot
+Mar 30 15:29:54 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 15:29:54 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
 ---BOT-LOG---
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 441, in _post
-    raise Exception(f"POST {endpoint} failed ({resp.status}): {text}")
-Exception: POST /md/getChart failed (400): Invalid date format 
-2026-03-30 14:38:00,972 [bot] ERROR: Error processing M2KM6: POST /md/getChart failed (400): Invalid date format 
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 281, in _process_symbol
-    bars_data = await self.client.get_historical_bars(
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 786, in get_historical_bars
-    result = await self._post("/md/getChart", {
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 441, in _post
-    raise Exception(f"POST {endpoint} failed ({resp.status}): {text}")
-Exception: POST /md/getChart failed (400): Invalid date format 
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 430, in _post
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 287, in _renew_token
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 220, in _authenticate
+ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-30 15:03:10,916 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-03-30 15:06:11,428 [bot] INFO: Stopping bot: Signal received
+2026-03-30 15:06:11,589 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-03-30 15:06:11,709 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-03-30 15:06:11,710 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-03-30 15:06:11,831 [tradovate_client] ERROR: CAPTCHA required for first login!
+Run: python3 get_token.py
+Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
+2026-03-30 15:06:11,831 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-30 15:06:11,960 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-30 15:06:11,960 [bot] INFO: Bot stopped
 ---DONE---
