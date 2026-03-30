@@ -34,11 +34,6 @@ jobs:
             cd /root/MT5-PropFirm-Bot
             git fetch origin claude/build-cfd-trading-bot-fl0ld
             git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
-            echo "TRADOVATE_USER=${TRADOVATE_USER}" > .env
-            echo "TRADOVATE_PASS=${TRADOVATE_PASS}" >> .env
-            echo "TRADOVATE_ACCESS_TOKEN=${TRADOVATE_ACCESS_TOKEN}" >> .env
-            echo "TELEGRAM_TOKEN=${TELEGRAM_TOKEN}" >> .env
-            echo "TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}" >> .env
             bash commands/run.sh > commands/output.txt 2>&1
             cat commands/output.txt
 
