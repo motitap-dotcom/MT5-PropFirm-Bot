@@ -1,153 +1,99 @@
 === TIMESTAMP ===
-Mon Mar 30 13:47:01 UTC 2026
+Mon Mar 30 14:04:04 UTC 2026
 
 === SERVICE STATUS ===
-deactivating
-Mar 30 13:46:51 vmi3096165 python3[2313881]: 2026-03-30 13:46:51,260 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:46:51 vmi3096165 python3[2313881]: 2026-03-30 13:46:51,260 [tradovate_client] ERROR: All token renewal attempts failed
-Mar 30 13:46:51 vmi3096165 python3[2313881]: 2026-03-30 13:46:51,374 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
-Mar 30 13:46:51 vmi3096165 python3[2313881]: 2026-03-30 13:46:51,452 [tradovate_client] INFO: Disconnected from Tradovate
-Mar 30 13:46:51 vmi3096165 python3[2313881]: 2026-03-30 13:46:51,453 [bot] INFO: Bot stopped
+activating
 
-=== RECENT LOGS (last 20 min) ===
-Mar 30 13:45:06 vmi3096165 python3[2313881]: 2026-03-30 13:45:06,061 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:45:11 vmi3096165 python3[2313881]: 2026-03-30 13:45:11,182 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:45:21 vmi3096165 python3[2313881]: 2026-03-30 13:45:21,306 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:45:21 vmi3096165 python3[2313881]: 2026-03-30 13:45:21,306 [tradovate_client] ERROR: All token renewal attempts failed
-Mar 30 13:45:21 vmi3096165 python3[2313881]: 2026-03-30 13:45:21,452 [bot] ERROR: Error processing MESM6: POST /md/getChart failed (401): Expired Access Token
-Mar 30 13:45:21 vmi3096165 python3[2313881]: Traceback (most recent call last):
-Mar 30 13:45:21 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 291, in _process_symbol
-Mar 30 13:45:21 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 751, in get_historical_bars
-Mar 30 13:45:21 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 406, in _post
-Mar 30 13:45:21 vmi3096165 python3[2313881]: Exception: POST /md/getChart failed (401): Expired Access Token
-Mar 30 13:45:21 vmi3096165 python3[2313881]: 2026-03-30 13:45:21,454 [tradovate_client] INFO: Token expiring in -31.2h, renewing...
-Mar 30 13:45:21 vmi3096165 python3[2313881]: 2026-03-30 13:45:21,568 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:45:26 vmi3096165 python3[2313881]: 2026-03-30 13:45:26,686 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:45:36 vmi3096165 python3[2313881]: 2026-03-30 13:45:36,815 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:45:36 vmi3096165 python3[2313881]: 2026-03-30 13:45:36,816 [tradovate_client] ERROR: All token renewal attempts failed
-Mar 30 13:45:36 vmi3096165 python3[2313881]: 2026-03-30 13:45:36,983 [bot] ERROR: Error processing MNQM6: POST /md/getChart failed (401): Expired Access Token
-Mar 30 13:45:36 vmi3096165 python3[2313881]: Traceback (most recent call last):
-Mar 30 13:45:36 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 291, in _process_symbol
-Mar 30 13:45:36 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 751, in get_historical_bars
-Mar 30 13:45:36 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 406, in _post
-Mar 30 13:45:36 vmi3096165 python3[2313881]: Exception: POST /md/getChart failed (401): Expired Access Token
-Mar 30 13:45:36 vmi3096165 python3[2313881]: 2026-03-30 13:45:36,984 [tradovate_client] INFO: Token expiring in -31.2h, renewing...
-Mar 30 13:45:37 vmi3096165 python3[2313881]: 2026-03-30 13:45:37,099 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:45:42 vmi3096165 python3[2313881]: 2026-03-30 13:45:42,216 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:45:52 vmi3096165 python3[2313881]: 2026-03-30 13:45:52,339 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:45:52 vmi3096165 python3[2313881]: 2026-03-30 13:45:52,339 [tradovate_client] ERROR: All token renewal attempts failed
-Mar 30 13:45:52 vmi3096165 python3[2313881]: 2026-03-30 13:45:52,492 [bot] ERROR: Error processing MCLM6: POST /md/getChart failed (401): Expired Access Token
-Mar 30 13:45:52 vmi3096165 python3[2313881]: Traceback (most recent call last):
-Mar 30 13:45:52 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 291, in _process_symbol
-Mar 30 13:45:52 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 751, in get_historical_bars
-Mar 30 13:45:52 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 406, in _post
-Mar 30 13:45:52 vmi3096165 python3[2313881]: Exception: POST /md/getChart failed (401): Expired Access Token
-Mar 30 13:45:52 vmi3096165 python3[2313881]: 2026-03-30 13:45:52,493 [tradovate_client] INFO: Token expiring in -31.3h, renewing...
-Mar 30 13:45:52 vmi3096165 python3[2313881]: 2026-03-30 13:45:52,608 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:45:57 vmi3096165 python3[2313881]: 2026-03-30 13:45:57,725 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:46:07 vmi3096165 python3[2313881]: 2026-03-30 13:46:07,851 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:46:07 vmi3096165 python3[2313881]: 2026-03-30 13:46:07,851 [tradovate_client] ERROR: All token renewal attempts failed
-Mar 30 13:46:08 vmi3096165 python3[2313881]: 2026-03-30 13:46:08,006 [bot] ERROR: Error processing MGCM6: POST /md/getChart failed (401): Expired Access Token
-Mar 30 13:46:08 vmi3096165 python3[2313881]: Traceback (most recent call last):
-Mar 30 13:46:08 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 291, in _process_symbol
-Mar 30 13:46:08 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 751, in get_historical_bars
-Mar 30 13:46:08 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 406, in _post
-Mar 30 13:46:08 vmi3096165 python3[2313881]: Exception: POST /md/getChart failed (401): Expired Access Token
-Mar 30 13:46:08 vmi3096165 python3[2313881]: 2026-03-30 13:46:08,007 [tradovate_client] INFO: Token expiring in -31.3h, renewing...
-Mar 30 13:46:08 vmi3096165 python3[2313881]: 2026-03-30 13:46:08,121 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:46:13 vmi3096165 python3[2313881]: 2026-03-30 13:46:13,240 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:46:23 vmi3096165 python3[2313881]: 2026-03-30 13:46:23,364 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:46:23 vmi3096165 python3[2313881]: 2026-03-30 13:46:23,364 [tradovate_client] ERROR: All token renewal attempts failed
-Mar 30 13:46:23 vmi3096165 python3[2313881]: 2026-03-30 13:46:23,517 [bot] ERROR: Error processing MYMM6: POST /md/getChart failed (401): Expired Access Token
-Mar 30 13:46:23 vmi3096165 python3[2313881]: Traceback (most recent call last):
-Mar 30 13:46:23 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 291, in _process_symbol
-Mar 30 13:46:23 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 751, in get_historical_bars
-Mar 30 13:46:23 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 406, in _post
-Mar 30 13:46:23 vmi3096165 python3[2313881]: Exception: POST /md/getChart failed (401): Expired Access Token
-Mar 30 13:46:23 vmi3096165 python3[2313881]: 2026-03-30 13:46:23,518 [tradovate_client] INFO: Token expiring in -31.3h, renewing...
-Mar 30 13:46:23 vmi3096165 python3[2313881]: 2026-03-30 13:46:23,632 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:46:28 vmi3096165 python3[2313881]: 2026-03-30 13:46:28,749 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:46:35 vmi3096165 systemd[1]: Stopping futures-bot.service - TradeDay Futures Trading Bot...
-Mar 30 13:46:35 vmi3096165 python3[2313881]: 2026-03-30 13:46:35,892 [bot] INFO: Stopping bot: Signal received
-Mar 30 13:46:35 vmi3096165 python3[2313881]: 2026-03-30 13:46:35,892 [tradovate_client] INFO: Token expiring in -31.3h, renewing...
-Mar 30 13:46:36 vmi3096165 python3[2313881]: 2026-03-30 13:46:36,021 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:46:38 vmi3096165 python3[2313881]: 2026-03-30 13:46:38,865 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:46:38 vmi3096165 python3[2313881]: 2026-03-30 13:46:38,866 [tradovate_client] ERROR: All token renewal attempts failed
-Mar 30 13:46:39 vmi3096165 python3[2313881]: 2026-03-30 13:46:39,007 [bot] ERROR: Error processing M2KM6: POST /md/getChart failed (401): Expired Access Token
-Mar 30 13:46:39 vmi3096165 python3[2313881]: Traceback (most recent call last):
-Mar 30 13:46:39 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 291, in _process_symbol
-Mar 30 13:46:39 vmi3096165 python3[2313881]:     return  # Already processed this bar
-Mar 30 13:46:39 vmi3096165 python3[2313881]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Mar 30 13:46:39 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 751, in get_historical_bars
-Mar 30 13:46:39 vmi3096165 python3[2313881]:     for frame in frames:
-Mar 30 13:46:39 vmi3096165 python3[2313881]:              ^^^^^^^^^^^
-Mar 30 13:46:39 vmi3096165 python3[2313881]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 406, in _post
-Mar 30 13:46:39 vmi3096165 python3[2313881]:     if resp2.status != 200:
-Mar 30 13:46:39 vmi3096165 python3[2313881]: Exception: POST /md/getChart failed (401): Expired Access Token
-Mar 30 13:46:41 vmi3096165 python3[2313881]: 2026-03-30 13:46:41,137 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:46:51 vmi3096165 python3[2313881]: 2026-03-30 13:46:51,260 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Mar 30 13:46:51 vmi3096165 python3[2313881]: 2026-03-30 13:46:51,260 [tradovate_client] ERROR: All token renewal attempts failed
-Mar 30 13:46:51 vmi3096165 python3[2313881]: 2026-03-30 13:46:51,374 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
-Mar 30 13:46:51 vmi3096165 python3[2313881]: 2026-03-30 13:46:51,452 [tradovate_client] INFO: Disconnected from Tradovate
-Mar 30 13:46:51 vmi3096165 python3[2313881]: 2026-03-30 13:46:51,453 [bot] INFO: Bot stopped
+=== LAST 50 JOURNAL LINES ===
+Mar 30 13:58:21 vmi3096165 python3[2755078]: 2026-03-30 13:58:21,044 [bot] INFO: Bot stopped
+Mar 30 13:59:51 vmi3096165 systemd[1]: futures-bot.service: State 'stop-sigterm' timed out. Killing.
+Mar 30 13:59:51 vmi3096165 systemd[1]: futures-bot.service: Killing process 2755078 (python3) with signal SIGKILL.
+Mar 30 13:59:51 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=killed, status=9/KILL
+Mar 30 13:59:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'timeout'.
+Mar 30 13:59:51 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 13:59:53 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 13:59:53 vmi3096165 python3[2757284]: /usr/bin/python3: No module named futures_bot.bot
+Mar 30 13:59:53 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 13:59:53 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 30 14:00:23 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
+Mar 30 14:00:23 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 14:00:23 vmi3096165 python3[2757590]: /usr/bin/python3: No module named futures_bot.bot
+Mar 30 14:00:23 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 14:00:23 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 30 14:00:53 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
+Mar 30 14:00:53 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 14:00:53 vmi3096165 python3[2757804]: /usr/bin/python3: No module named futures_bot.bot
+Mar 30 14:00:53 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 14:00:53 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 30 14:01:24 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 3.
+Mar 30 14:01:24 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 14:01:24 vmi3096165 python3[2757930]: /usr/bin/python3: No module named futures_bot.bot
+Mar 30 14:01:24 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 14:01:24 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 30 14:01:54 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 4.
+Mar 30 14:01:54 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 14:01:54 vmi3096165 python3[2758188]: /usr/bin/python3: No module named futures_bot.bot
+Mar 30 14:01:54 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 14:01:54 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 30 14:02:24 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 5.
+Mar 30 14:02:24 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 14:02:24 vmi3096165 python3[2758357]: /usr/bin/python3: No module named futures_bot.bot
+Mar 30 14:02:24 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 14:02:24 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 30 14:02:54 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 6.
+Mar 30 14:02:54 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 14:02:54 vmi3096165 python3[2758491]: /usr/bin/python3: No module named futures_bot.bot
+Mar 30 14:02:54 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 14:02:54 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 30 14:03:24 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 7.
+Mar 30 14:03:24 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 14:03:24 vmi3096165 python3[2758594]: /usr/bin/python3: No module named futures_bot.bot
+Mar 30 14:03:24 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 14:03:24 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 30 14:03:55 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 8.
+Mar 30 14:03:55 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 30 14:03:55 vmi3096165 python3[2758721]: /usr/bin/python3: No module named futures_bot.bot
+Mar 30 14:03:55 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 30 14:03:55 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
 
 === BOT LOG TAIL ===
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 291, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 751, in get_historical_bars
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 406, in _post
-Exception: POST /md/getChart failed (401): Expired Access Token
-2026-03-30 13:46:23,518 [tradovate_client] INFO: Token expiring in -31.3h, renewing...
-2026-03-30 13:46:23,632 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-30 13:46:28,749 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-30 13:46:35,892 [bot] INFO: Stopping bot: Signal received
-2026-03-30 13:46:35,892 [tradovate_client] INFO: Token expiring in -31.3h, renewing...
-2026-03-30 13:46:36,021 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-30 13:46:38,865 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-30 13:46:38,866 [tradovate_client] ERROR: All token renewal attempts failed
-2026-03-30 13:46:39,007 [bot] ERROR: Error processing M2KM6: POST /md/getChart failed (401): Expired Access Token
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 291, in _process_symbol
-    return  # Already processed this bar
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 751, in get_historical_bars
-    for frame in frames:
-             ^^^^^^^^^^^
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 406, in _post
-    if resp2.status != 200:
-Exception: POST /md/getChart failed (401): Expired Access Token
-2026-03-30 13:46:41,137 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-30 13:46:51,260 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-30 13:46:51,260 [tradovate_client] ERROR: All token renewal attempts failed
-2026-03-30 13:46:51,374 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
-2026-03-30 13:46:51,452 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-30 13:46:51,453 [bot] INFO: Bot stopped
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 140, in start
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 141, in connect
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 220, in _authenticate
+ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-30 13:55:35,903 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-30 13:55:36,022 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-03-30 13:55:36,142 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-03-30 13:55:36,142 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-03-30 13:55:36,274 [tradovate_client] ERROR: CAPTCHA required for first login!
+Run: python3 get_token.py
+Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
+2026-03-30 13:55:36,274 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-30 13:55:36,513 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-30 13:55:36,513 [bot] INFO: Bot stopped
+2026-03-30 13:55:36,513 [bot] INFO: Retrying in 300s...
+2026-03-30 13:58:21,043 [bot] INFO: Stopping bot: Signal received
+2026-03-30 13:58:21,044 [bot] ERROR: Error closing positions: Session is closed
+2026-03-30 13:58:21,044 [notifier] ERROR: Telegram error: Session is closed
+2026-03-30 13:58:21,044 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-30 13:58:21,044 [bot] INFO: Bot stopped
 
-=== STATUS JSON ===
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+=== GIT LOG ===
+4e19898 Simple status check v57
+651c3be Retrigger deploy v56
+71e06a4 Deploy token fix to VPS and restart bot - v55
 
-=== ENV FILE EXISTS ===
-.env exists
+=== PYTHON CODE VERSION CHECK ===
+"""
+Tradovate API Client
+Handles authentication, order management, and market data via REST + WebSocket.
 
-=== PYTHON PROCESS ===
-root         664  0.0  0.0   7740  3720 ?        Ss   Mar22   0:52 /bin/bash /root/PropFirmBot/scripts/mt5_status_writer.sh
-root         667  0.0  0.2  32520 20868 ?        Ss   Mar22   0:00 /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
-root         671  0.0  0.3  34772 26176 ?        Ss   Mar22   2:27 /usr/bin/python3 /root/MT5-PropFirm-Bot/management/server.py
-root         683  0.0  0.3  39356 29700 ?        Ss   Mar22   8:28 /usr/bin/python3 /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
-root         688  0.0  0.3  41616 31856 ?        Ss   Mar22   4:45 /usr/bin/python3 /root/Tradovate-Bot/server_agent.py --interval 30
-root         728  0.0  0.2 110000 23072 ?        Ssl  Mar22   0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
-root         871  0.0  0.0   7872  3800 ?        Ss   Mar22   3:45 /bin/bash /root/MT5-PropFirm-Bot/relay/daemon.sh
-root        1117  0.0  0.2 105396 22044 ?        Sl   Mar22   4:27 python3 /root/tradovate-bot/dashboard.py
-root     1468075  0.5  1.1 770012 95400 ?        Sl   Mar26  30:02 /opt/hyrotrader-bot/venv/bin/python -u /opt/hyrotrader-bot/bot/main.py
-root     2313881  0.0  0.4 122404 38640 ?        Ssl  Mar29   0:11 /usr/bin/python3 -m futures_bot.bot
-root     2729718  5.5  0.7 501980 57036 ?        Ssl  12:00   5:53 /root/tradovate-bot/venv/bin/python bot.py
-root     2753619  0.0  0.0   7740  3492 ?        Ss   13:46   0:00 bash -c cd /root/MT5-PropFirm-Bot git pull origin claude/test-bot-trading-Z6n4I  # Install/update dependencies pip3 install -r requirements.txt  # Set environment variables export TRADOVATE_USER="TD_Motitap" export TRADOVATE_PASS="Mytl8182!" export TRADOVATE_APP_ID="" export TRADOVATE_CID="" export TRADOVATE_SEC="" export TELEGRAM_TOKEN="8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g" export TELEGRAM_CHAT_ID="7013213983"  # Restart bot service systemctl restart futures-bot 2>/dev/null || echo "Service not yet installed"  echo "Deploy completed at $(date -u +'%Y-%m-%d %H:%M UTC')" > deploy_report.txt python3 -c "import futures_bot; print('Import OK')" >> deploy_report.txt 2>&1  git add deploy_report.txt git commit -m "Deploy report $(date -u +'%Y-%m-%d %H:%M UTC')" || true git push origin claude/test-bot-trading-Z6n4I || true
-root     2753659  0.0  0.0  17632  6016 ?        S    13:46   0:00 systemctl restart futures-bot
-root     2753792  0.6  0.0   7740  3516 ?        Ss   13:47   0:00 bash -c export TRADOVATE_USER='TD_Motitap' export TRADOVATE_PASS='Mytl8182!' export TRADOVATE_ACCESS_TOKEN='eyJraWQiOiIyOCIsImFsZyI6IkVkRFNBIn0.eyJzdWIiOiI3MTg1OTg3IiwiZXhwIjoxNzc0ODgyOTQyLCJqdGkiOiItODkzMDI2NzAxMzEyMjI0NTQzLS04MzQwNTcyNTQ4MzA5NzI4NjIxIiwicGhzIjotMTQ5Mzg3MjkwNCwiZW1haWwiOiJtb3RpdGFwQGdtYWlsLmNvbSJ9.NGGtnkUPIvcmLgo_l_MuAKv3_DzJ2KFLVLekEE3eVLuVNgKLP_XeTHfK_XEC77dERllLvN-S5cxbByGlCNtbDQ' export TELEGRAM_TOKEN='8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g' export TELEGRAM_CHAT_ID='7013213983' cd /root/MT5-PropFirm-Bot git fetch origin claude/build-cfd-trading-bot-fl0ld git reset --hard origin/claude/build-cfd-trading-bot-fl0ld bash commands/run.sh > commands/output.txt 2>&1 cat commands/output.txt
+Auth method: Web-style authentication (no API keys needed).
+
+=== TOKEN FILE ===
+No token file
+
+=== PROCESSES ===
+root        1117  0.0  0.2 105396 22044 ?        Sl   Mar22   4:28 python3 /root/tradovate-bot/dashboard.py
+root     1468075  0.5  1.1 770012 95400 ?        Sl   Mar26  30:08 /opt/hyrotrader-bot/venv/bin/python -u /opt/hyrotrader-bot/bot/main.py
+root     2758289  9.1  0.6 501912 49352 ?        Ssl  14:02   0:10 /root/tradovate-bot/venv/bin/python bot.py
