@@ -1,47 +1,84 @@
-=== PYTHON BOT FIX v93 - 2026-03-30 20:34:31 UTC ===
+=== PYTHON BOT FIX v93 - 2026-03-30 20:43:34 UTC ===
 --- Step 1: Writing .env ---
 .env written OK
 
 --- Step 2: Installing dependencies ---
 Python 3.12.3
-Creating virtual environment...
 Using venv pip...
-ERROR: Could not open requirements file: [Errno 2] No such file or directory: 'requirements.txt'
+Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 67.5/67.5 kB 6.0 MB/s eta 0:00:00
+Using cached frozenlist-1.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (242 kB)
+Using cached multidict-6.7.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (256 kB)
+Using cached propcache-0.4.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (221 kB)
+Using cached yarl-1.23.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (100 kB)
+Using cached idna-3.11-py3-none-any.whl (71 kB)
+Using cached typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+Installing collected packages: websockets, typing-extensions, propcache, multidict, idna, frozenlist, attrs, aiohappyeyeballs, yarl, aiosignal, aiohttp
+Successfully installed aiohappyeyeballs-2.6.1 aiohttp-3.13.4 aiosignal-1.4.0 attrs-26.1.0 frozenlist-1.8.0 idna-3.11 multidict-6.7.1 propcache-0.4.1 typing-extensions-4.15.0 websockets-16.0 yarl-1.23.0
 
 --- Step 3: Import check ---
-Traceback (most recent call last):
-  File "<string>", line 4, in <module>
-ModuleNotFoundError: No module named 'futures_bot.core.tradovate_client'
+All imports OK
 
 --- Step 4: Updating service ---
 
 --- Step 5: Testing Tradovate auth ---
-Traceback (most recent call last):
-  File "<string>", line 12, in <module>
-ModuleNotFoundError: No module named 'futures_bot.core.tradovate_client'
-
---- Step 6: Restarting bot ---
-Service: activating
-Mar 30 20:34:36 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 20:34:37 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 30 20:34:37 vmi3096165 python3[2860810]: /root/MT5-PropFirm-Bot/venv/bin/python3: No module named futures_bot.bot
-Mar 30 20:34:37 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 30 20:34:37 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 141, in connect
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 220, in _authenticate
-ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-30 20:21:43,385 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-30 20:21:43,507 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-03-30 20:21:43,629 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-30 20:21:43,629 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-03-30 20:21:43,754 [tradovate_client] ERROR: CAPTCHA required for first login!
+GET /account/list got 401, renewing token and retrying...
+Token renewal failed (401): Expired Access Token
+Renewal failed, falling back to full authentication...
+CAPTCHA required for first login!
 Run: python3 get_token.py
 Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
-2026-03-30 20:21:43,754 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-30 20:21:43,852 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-30 20:21:43,853 [bot] INFO: Bot stopped
-2026-03-30 20:21:43,853 [bot] ERROR: Max retries reached. Bot shutting down permanently.
+Token renewal failed (401): Expired Access Token
+CAPTCHA required for first login!
+Run: python3 get_token.py
+Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
+Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x784054aaa600>
+Unclosed connector
+connections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x7840548f46b0>, 738500.866444156)])']
+connector: <aiohttp.connector.TCPConnector object at 0x784054e499d0>
+AUTH FAILED: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+
+*** CAPTCHA REQUIRED ***
+Noa needs to:
+1. Open browser on VPS (via VNC)
+2. Go to https://trader.tradovate.com
+3. Login and solve CAPTCHA
+4. Copy the access token from browser dev tools
+5. Set it in GitHub Secrets as TRADOVATE_ACCESS_TOKEN
+
+--- Step 6: Restarting bot ---
+Service: active
+Mar 30 20:43:41 vmi3096165 python3[2863443]:     await self._authenticate()
+Mar 30 20:43:41 vmi3096165 python3[2863443]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 220, in _authenticate
+Mar 30 20:43:41 vmi3096165 python3[2863443]:     raise ConnectionError(
+Mar 30 20:43:41 vmi3096165 python3[2863443]: ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+Mar 30 20:43:41 vmi3096165 python3[2863443]: 2026-03-30 20:43:41,924 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+Mar 30 20:43:42 vmi3096165 python3[2863443]: 2026-03-30 20:43:42,043 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+Mar 30 20:43:42 vmi3096165 python3[2863443]: 2026-03-30 20:43:42,165 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+Mar 30 20:43:42 vmi3096165 python3[2863443]: 2026-03-30 20:43:42,165 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+Mar 30 20:43:42 vmi3096165 python3[2863443]: 2026-03-30 20:43:42,285 [tradovate_client] ERROR: CAPTCHA required for first login!
+Mar 30 20:43:42 vmi3096165 python3[2863443]: Run: python3 get_token.py
+Mar 30 20:43:42 vmi3096165 python3[2863443]: Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
+Mar 30 20:43:42 vmi3096165 python3[2863443]: 2026-03-30 20:43:42,285 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+Mar 30 20:43:42 vmi3096165 python3[2863443]: 2026-03-30 20:43:42,387 [tradovate_client] INFO: Disconnected from Tradovate
+Mar 30 20:43:42 vmi3096165 python3[2863443]: 2026-03-30 20:43:42,387 [bot] INFO: Bot stopped
+Mar 30 20:43:42 vmi3096165 python3[2863443]: 2026-03-30 20:43:42,388 [bot] INFO: Retrying in 30s...
+
+    await self._authenticate()
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 220, in _authenticate
+    raise ConnectionError(
+ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-30 20:43:41,924 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-30 20:43:42,043 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-03-30 20:43:42,165 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-03-30 20:43:42,165 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-03-30 20:43:42,285 [tradovate_client] ERROR: CAPTCHA required for first login!
+Run: python3 get_token.py
+Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
+2026-03-30 20:43:42,285 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-03-30 20:43:42,387 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-30 20:43:42,387 [bot] INFO: Bot stopped
+2026-03-30 20:43:42,388 [bot] INFO: Retrying in 30s...
 
 === FIX COMPLETE ===
