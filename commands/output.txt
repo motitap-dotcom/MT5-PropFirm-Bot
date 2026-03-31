@@ -1,4 +1,4 @@
-=== FULL INSTALL v98 - 2026-03-30 21:40:17 UTC ===
+=== FULL INSTALL v98 - 2026-03-31 05:48:06 UTC ===
 .env written
 --- Installing service ---
 --- Installing watchdog ---
@@ -6,24 +6,24 @@
 --- Installing token backup ---
 --- Restarting bot ---
 
-Service: deactivating
+Service: active
 Watchdog: active
 
-    raise ConnectionError(
-ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-30 21:40:19,891 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-30 21:40:20,016 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-03-30 21:40:20,137 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-30 21:40:20,138 [tradovate_client] WARNING: Token renewal failed - keeping current token (DO NOT fall back to CAPTCHA auth)
-2026-03-30 21:40:20,261 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
-2026-03-30 21:40:20,356 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-30 21:40:20,357 [bot] INFO: Bot stopped
-2026-03-30 21:40:20,357 [bot] INFO: Retrying in 30s...
-2026-03-30 21:40:21,540 [bot] INFO: Stopping bot: Signal received
-2026-03-30 21:40:21,540 [bot] ERROR: Error closing positions: Session is closed
-2026-03-30 21:40:21,540 [notifier] ERROR: Telegram error: Session is closed
-2026-03-30 21:40:21,540 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-30 21:40:21,540 [bot] INFO: Bot stopped
+2026-03-31 05:49:38,939 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-03-31 05:49:39,086 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
+2026-03-31 05:49:39,206 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-03-31 05:49:39,206 [tradovate_client] WARNING: Token renewal failed - keeping current token (DO NOT fall back to CAPTCHA auth)
+2026-03-31 05:49:39,327 [tradovate_client] INFO: Saved token invalid, attempting renewal...
+2026-03-31 05:49:39,447 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-03-31 05:49:39,450 [tradovate_client] INFO: Trying pre-set access token from environment...
+2026-03-31 05:49:39,578 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-03-31 05:49:39,578 [tradovate_client] INFO: Environment token is valid
+2026-03-31 05:49:39,582 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-03-31 05:49:39,650 [bot] INFO: Bot started successfully
+2026-03-31 05:49:39,650 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-03-31 05:49:39,650 [bot] INFO: Timeframe: 5min
+2026-03-31 05:49:39,650 [bot] INFO: New trading day: 2026-03-31
+2026-03-31 05:49:39,650 [bot] INFO: Outside trading session: Pre-market: 01:49 ET (opens 09:30:00)
 
 Disk: /dev/sda1       145G   26G  119G  18% /
 
