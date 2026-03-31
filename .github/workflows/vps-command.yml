@@ -19,6 +19,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run command on VPS
+        id: vps_command
         continue-on-error: true
         uses: appleboy/ssh-action@v1
         with:
@@ -29,21 +30,25 @@ jobs:
           command_timeout: 10m
           script: |
             cd /root/MT5-PropFirm-Bot
-            git fetch origin claude/build-cfd-trading-bot-fl0ld
-            git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
+            git fetch origin ${{ github.ref_name }}
+            git reset --hard origin/${{ github.ref_name }}
             bash commands/run.sh > commands/output.txt 2>&1
             cat commands/output.txt
 
-      - name: Send result via Telegram
-        if: always()
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-            VPS Command v85 executed
-            Bot service restarted with fresh token
-            Check Telegram for bot startup message
+      - name: Fetch output from VPS
+        continue-on-error: true
+        run: |
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" scp -o StrictHostKeyChecking=no \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/root/MT5-PropFirm-Bot/commands/output.txt" \
+            commands/output.txt 2>/dev/null || echo "Failed to fetch output from VPS" > commands/output.txt
+
+      - name: Commit output back
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add commands/output.txt
+          git diff --cached --quiet || git commit -m "VPS command output [auto]"
+          git push origin ${{ github.ref_name }}
 
       - name: Telegram notification
         if: always()
@@ -53,4 +58,5 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
             VPS Command completed
+            Branch: ${{ github.ref_name }}
             Status: ${{ job.status }}
