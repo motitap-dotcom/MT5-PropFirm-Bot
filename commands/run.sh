@@ -1,32 +1,17 @@
 #!/bin/bash
-# Trigger: v90 - Fix venv + test auth methods
+# Trigger: v91 - Test auth with aiohttp (available in venv)
 cd /root/MT5-PropFirm-Bot
 
-echo "=== FIX VENV + TEST AUTH ==="
+echo "=== AUTH TEST ==="
 echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 echo ""
 
-# Fix 1: Install packages in venv
-echo "=== Installing packages in venv ==="
-if [ -d "venv" ]; then
-    venv/bin/pip install -r requirements.txt 2>&1 | tail -5
-    venv/bin/python3 -m playwright install chromium --with-deps 2>&1 | tail -3
-    echo ""
-    echo "=== Verify venv imports ==="
-    venv/bin/python3 -c "from futures_bot.core.tradovate_client import TradovateClient; print('venv import OK')" 2>&1
-    venv/bin/python3 -c "from playwright.sync_api import sync_playwright; print('venv playwright OK')" 2>&1
-else
-    echo "No venv found, using global python"
-fi
-echo ""
-
-# Fix 2: Test both auth methods (encrypted vs plain)
-echo "=== Testing Auth Methods ==="
 source .env 2>/dev/null
-
-# Use venv python if available
 PY="python3"
 [ -d "venv" ] && PY="venv/bin/python3"
+
+# Install requests in venv
+$PY -m pip install requests -q 2>&1 | tail -2
 
 $PY << 'PYEOF'
 import os, json, base64, hashlib, hmac as hmac_mod, uuid, requests
@@ -51,7 +36,7 @@ def compute_hmac(payload):
     message = "".join(str(payload.get(f, "")) for f in HMAC_FIELDS)
     return hmac_mod.new(HMAC_KEY.encode(), message.encode(), hashlib.sha256).hexdigest()
 
-# Test 1: Encrypted password + HMAC (like Tradovate-Bot)
+# Test 1: Encrypted password + HMAC
 enc_pw = encrypt_pw(username, password)
 payload1 = {
     "name": username, "password": enc_pw,
@@ -68,6 +53,15 @@ for url_name, url in [("demo", "https://demo.tradovateapi.com/v1/auth/accesstoke
         data = resp.json()
         if "accessToken" in data:
             print(f"  {url_name}: SUCCESS! Token: {data['accessToken'][:20]}...")
+            # Save token for the bot
+            token_data = {
+                "access_token": data["accessToken"],
+                "md_access_token": data.get("mdAccessToken", data["accessToken"]),
+                "expiry": __import__('time').time() + 86400,
+            }
+            with open("configs/.tradovate_token.json", "w") as f:
+                json.dump(token_data, f, indent=2)
+            print(f"  Token saved to configs/.tradovate_token.json")
         elif "p-ticket" in data:
             print(f"  {url_name}: p-ticket (captcha={data.get('p-captcha', False)})")
         else:
@@ -84,7 +78,7 @@ payload2 = {
     "deviceId": device_id, "cid": 8, "sec": "", "organization": "",
 }
 
-print("--- Test 2: Plain password (old method) ---")
+print("--- Test 2: Plain password ---")
 for url_name, url in [("demo", "https://demo.tradovateapi.com/v1/auth/accesstokenrequest"),
                         ("live", "https://live.tradovateapi.com/v1/auth/accesstokenrequest")]:
     try:
