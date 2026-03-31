@@ -1,7 +1,7 @@
 """
 TradeDay Futures Bot - Main Entry Point
 Connects to Tradovate API and runs trading strategies.
-Auth: Supports web-style auth + Playwright browser fallback for CAPTCHA bypass.
+Auth: Web-style auth + Playwright browser fallback for automatic CAPTCHA bypass.
 
 Architecture:
   1. Connect to Tradovate
