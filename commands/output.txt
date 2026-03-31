@@ -1,110 +1,90 @@
-=== BOT STATUS CHECK ===
-Timestamp: 2026-03-31 14:45:36 UTC
+=== POST-DEPLOY STATUS CHECK ===
+Timestamp: 2026-03-31 15:36:19 UTC
+
+=== Python version ===
+Python 3.12.3
+
+=== Playwright installed? ===
+Playwright OK
+
+=== Chromium browser installed? ===
+Chrome for Testing 145.0.7632.6 (playwright chromium v1208)
+  Install location:    /root/.cache/ms-playwright/chromium-1208
+  Download url:        https://cdn.playwright.dev/chrome-for-testing-public/145.0.7632.6/linux64/chrome-linux64.zip
+
+FFmpeg (playwright ffmpeg v1011)
+total 24
+drwxr-xr-x 6 root root 4096 Mar 31 15:34 .
+drwx------ 8 root root 4096 Feb 26 19:20 ..
+drwxr-xr-x 2 root root 4096 Feb 24 07:17 .links
+drwxr-xr-x 3 root root 4096 Feb 24 06:21 chromium-1208
+drwxr-xr-x 3 root root 4096 Feb 24 06:21 chromium_headless_shell-1208
+drwxr-xr-x 2 root root 4096 Feb 24 06:21 ffmpeg-1011
+
+=== Bot module importable? ===
+Import OK - new auth functions available
 
 === Service Status ===
 activating
-● futures-bot.service - TradeDay Futures Trading Bot
-     Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
-    Drop-In: /etc/systemd/system/futures-bot.service.d
-             └─env.conf
-     Active: activating (auto-restart) (Result: exit-code) since Tue 2026-03-31 14:45:14 UTC; 21s ago
-    Process: 3107284 ExecStart=/root/MT5-PropFirm-Bot/venv/bin/python3 -m futures_bot.bot (code=exited, status=1/FAILURE)
-   Main PID: 3107284 (code=exited, status=1/FAILURE)
-        CPU: 23ms
 
-=== Recent Bot Log (last 40 lines) ===
-2026-03-31 14:40:38,718 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
-2026-03-31 14:40:38,838 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-31 14:40:38,838 [tradovate_client] WARNING: Token renewal failed - keeping current token (DO NOT fall back to CAPTCHA auth)
-2026-03-31 14:40:38,957 [tradovate_client] INFO: Saved token invalid, attempting renewal...
-2026-03-31 14:40:39,076 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-31 14:40:39,076 [tradovate_client] INFO: Trying pre-set access token from environment...
-2026-03-31 14:40:39,195 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
-2026-03-31 14:40:39,316 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-31 14:40:39,317 [tradovate_client] WARNING: Token renewal failed - keeping current token (DO NOT fall back to CAPTCHA auth)
-2026-03-31 14:40:39,437 [tradovate_client] INFO: Environment token invalid, attempting renewal...
-2026-03-31 14:40:39,557 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-31 14:40:39,557 [tradovate_client] INFO: All tokens failed, attempting user/password authentication...
-2026-03-31 14:40:39,677 [tradovate_client] ERROR: CAPTCHA required for first login!
-Run: python3 get_token.py
-Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
-2026-03-31 14:40:39,677 [bot] ERROR: Failed to connect: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-31 14:40:39,677 [bot] ERROR: Fatal error (attempt 3/5): CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+=== Recent Bot Log (last 30 lines) ===
+2026-03-31 15:34:20,939 [bot] ERROR: Failed to connect: All authentication methods failed. Set TRADOVATE_ACCESS_TOKEN in .env after logging in via browser.
+2026-03-31 15:34:20,939 [bot] ERROR: Fatal error (attempt 1/5): All authentication methods failed. Set TRADOVATE_ACCESS_TOKEN in .env after logging in via browser.
 Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 643, in main
-    await bot.start()
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 154, in start
-    await self.client.connect()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 143, in connect
-    await self._authenticate()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 222, in _authenticate
-    raise ConnectionError(
-ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-31 14:40:39,677 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-03-31 14:40:39,797 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-03-31 14:40:39,916 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-31 14:40:39,917 [tradovate_client] WARNING: Token renewal failed - keeping current token (DO NOT fall back to CAPTCHA auth)
-2026-03-31 14:40:40,037 [bot] ERROR: Error closing positions: GET /position/list failed (401): Expired Access Token
-2026-03-31 14:40:40,126 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-31 14:40:40,126 [bot] INFO: Bot stopped
-2026-03-31 14:40:40,126 [bot] INFO: Retrying in 120s...
-2026-03-31 14:41:25,844 [bot] INFO: Stopping bot: Signal received
-2026-03-31 14:41:25,845 [bot] ERROR: Error closing positions: Session is closed
-2026-03-31 14:41:25,845 [notifier] ERROR: Telegram error: Session is closed
-2026-03-31 14:41:25,845 [tradovate_client] INFO: Disconnected from Tradovate
-2026-03-31 14:41:25,845 [bot] INFO: Bot stopped
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 169, in connect
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 220, in _authenticate
+ConnectionError: All authentication methods failed. Set TRADOVATE_ACCESS_TOKEN in .env after logging in via browser.
+2026-03-31 15:34:20,940 [bot] INFO: Stopping bot: Fatal: All authentication methods failed. Set TRADOVATE_ACCESS_TOKEN in .env after logging in via browser.
+2026-03-31 15:34:21,079 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-03-31 15:34:21,199 [tradovate_client] WARNING: Token renewal failed on demo.tradovateapi.com (401): Expired Access Token
+2026-03-31 15:34:21,350 [tradovate_client] WARNING: Token renewal failed on live.tradovateapi.com (401): Expired Access Token
+2026-03-31 15:34:21,351 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-03-31 15:34:21,351 [tradovate_client] INFO: Trying web auth on live endpoint...
+2026-03-31 15:34:21,471 [tradovate_client] WARNING: Web auth: 'Incorrect username or password. Please try again, noting that passwords are case-sensitive.' — may be rate-limited. Waiting 20s...
+2026-03-31 15:34:41,484 [tradovate_client] INFO: Trying web auth on demo endpoint...
+2026-03-31 15:34:41,623 [tradovate_client] WARNING: Web auth: 'Incorrect username or password. Please try again, noting that passwords are case-sensitive.' — may be rate-limited. Waiting 20s...
+2026-03-31 15:34:48,455 [bot] INFO: Stopping bot: Signal received
+2026-03-31 15:34:48,573 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-03-31 15:34:48,693 [tradovate_client] WARNING: Token renewal failed on demo.tradovateapi.com (401): Expired Access Token
+2026-03-31 15:34:48,838 [tradovate_client] WARNING: Token renewal failed on live.tradovateapi.com (401): Expired Access Token
+2026-03-31 15:34:48,838 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-03-31 15:34:48,838 [tradovate_client] INFO: Trying web auth on live endpoint...
+2026-03-31 15:34:48,959 [tradovate_client] WARNING: Web auth: 'Incorrect username or password. Please try again, noting that passwords are case-sensitive.' — may be rate-limited. Waiting 20s...
+2026-03-31 15:35:01,678 [tradovate_client] INFO: Web auth failed on all endpoints, trying browser login...
+2026-03-31 15:35:01,683 [tradovate_client] INFO: Playwright not installed, skipping browser auth
+2026-03-31 15:35:01,683 [bot] ERROR: Error closing positions: All authentication methods failed. Set TRADOVATE_ACCESS_TOKEN in .env after logging in via browser.
+2026-03-31 15:35:01,940 [tradovate_client] INFO: Disconnected from Tradovate
+2026-03-31 15:35:01,941 [bot] INFO: Bot stopped
+2026-03-31 15:35:01,941 [bot] ERROR: Max retries reached. Bot shutting down permanently.
 
-=== Status JSON ===
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+=== Journal (last 20 lines) ===
+Mar 31 15:35:01 vmi3096165 python3[3119023]: 2026-03-31 15:35:01,683 [bot] ERROR: Error closing positions: All authentication methods failed. Set TRADOVATE_ACCESS_TOKEN in .env after logging in via browser.
+Mar 31 15:35:01 vmi3096165 python3[3119023]: 2026-03-31 15:35:01,940 [tradovate_client] INFO: Disconnected from Tradovate
+Mar 31 15:35:01 vmi3096165 python3[3119023]: 2026-03-31 15:35:01,941 [bot] INFO: Bot stopped
+Mar 31 15:35:01 vmi3096165 python3[3119023]: 2026-03-31 15:35:01,941 [bot] ERROR: Max retries reached. Bot shutting down permanently.
+Mar 31 15:35:02 vmi3096165 systemd[1]: futures-bot.service: Deactivated successfully.
+Mar 31 15:35:02 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
+Mar 31 15:35:02 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 31 15:35:02 vmi3096165 python3[3119846]: /root/MT5-PropFirm-Bot/venv/bin/python3: No module named futures_bot.bot
+Mar 31 15:35:02 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 31 15:35:02 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 31 15:35:32 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
+Mar 31 15:35:32 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 31 15:35:32 vmi3096165 python3[3120029]: /root/MT5-PropFirm-Bot/venv/bin/python3: No module named futures_bot.bot
+Mar 31 15:35:32 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 31 15:35:32 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Mar 31 15:36:02 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
+Mar 31 15:36:02 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Mar 31 15:36:02 vmi3096165 python3[3120141]: /root/MT5-PropFirm-Bot/venv/bin/python3: No module named futures_bot.bot
+Mar 31 15:36:02 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Mar 31 15:36:02 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
 
-=== Journal (last 30 lines) ===
-Mar 31 14:42:43 vmi3096165 systemd[1]: /etc/systemd/system/futures-bot.service:14: Unknown key name 'StartLimitIntervalSec' in section 'Service', ignoring.
-Mar 31 14:42:43 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 31 14:42:43 vmi3096165 python3[3106662]: /root/MT5-PropFirm-Bot/venv/bin/python3: No module named futures_bot.bot
-Mar 31 14:42:43 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 31 14:42:43 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 31 14:43:13 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
-Mar 31 14:43:13 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 31 14:43:13 vmi3096165 python3[3106777]: /root/MT5-PropFirm-Bot/venv/bin/python3: No module named futures_bot.bot
-Mar 31 14:43:13 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 31 14:43:13 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 31 14:43:44 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
-Mar 31 14:43:44 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 31 14:43:44 vmi3096165 python3[3106870]: /root/MT5-PropFirm-Bot/venv/bin/python3: No module named futures_bot.bot
-Mar 31 14:43:44 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 31 14:43:44 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 31 14:44:14 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 3.
-Mar 31 14:44:14 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 31 14:44:14 vmi3096165 python3[3106995]: /root/MT5-PropFirm-Bot/venv/bin/python3: No module named futures_bot.bot
-Mar 31 14:44:14 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 31 14:44:14 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 31 14:44:44 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 4.
-Mar 31 14:44:44 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 31 14:44:44 vmi3096165 python3[3107111]: /root/MT5-PropFirm-Bot/venv/bin/python3: No module named futures_bot.bot
-Mar 31 14:44:44 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 31 14:44:44 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Mar 31 14:45:14 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 5.
-Mar 31 14:45:14 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Mar 31 14:45:14 vmi3096165 python3[3107284]: /root/MT5-PropFirm-Bot/venv/bin/python3: No module named futures_bot.bot
-Mar 31 14:45:14 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Mar 31 14:45:14 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+=== Current branch on VPS ===
+claude/claude-md-mm3qa8i9848jcovk-X3DTU
+a223a4e Post-deploy status check v89
+739472a Add encrypted password + HMAC auth + Playwright browser fallback
+cb22d7f VPS command output [auto]
 
-=== Disk & Memory ===
-/dev/sda1       145G   26G  119G  18% /
-               total        used        free      shared  buff/cache   available
-Mem:           7.8Gi       977Mi       6.3Gi        14Mi       781Mi       6.8Gi
-
-=== Process Check ===
-No futures process found
-
-=== .env exists? ===
--rw-r--r-- 1 root root 462 Mar 31 14:41 .env
-
-=== END STATUS CHECK ===
+=== END CHECK ===
