@@ -1,23 +1,15 @@
-=== FIX VENV + TEST AUTH ===
-Timestamp: 2026-03-31 15:39:17 UTC
+=== AUTH TEST ===
+Timestamp: 2026-03-31 15:45:12 UTC
 
-=== Installing packages in venv ===
-Using cached playwright-1.58.0-py3-none-manylinux1_x86_64.whl (46.2 MB)
-Using cached greenlet-3.3.2-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (613 kB)
-Using cached pyee-13.0.1-py3-none-any.whl (15 kB)
-Installing collected packages: pyee, greenlet, playwright
-Successfully installed greenlet-3.3.2 playwright-1.58.0 pyee-13.0.1
-  node-xtend
-Use 'apt autoremove' to remove them.
-0 upgraded, 0 newly installed, 0 to remove and 110 not upgraded.
+Username: TD_Motitap
+Password length: 9
 
-=== Verify venv imports ===
-venv import OK
-venv playwright OK
+--- Test 1: Encrypted password + HMAC ---
+  demo: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+  live: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 
-=== Testing Auth Methods ===
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-ModuleNotFoundError: No module named 'requests'
+--- Test 2: Plain password ---
+  demo: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+  live: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 
 === END ===
