@@ -1,15 +1,1 @@
-=== AUTH TEST ===
-Timestamp: 2026-03-31 15:45:12 UTC
-
-Username: TD_Motitap
-Password length: 9
-
---- Test 1: Encrypted password + HMAC ---
-  demo: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-  live: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-
---- Test 2: Plain password ---
-  demo: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-  live: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-
-=== END ===
+Failed to fetch output from VPS
