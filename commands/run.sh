@@ -1,39 +1,44 @@
 #!/bin/bash
-# Trigger: v88 - Full status check
+# Trigger: v89 - Check if new auth works after deploy
 cd /root/MT5-PropFirm-Bot
 
-echo "=== BOT STATUS CHECK ==="
+echo "=== POST-DEPLOY STATUS CHECK ==="
 echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+echo ""
+
+echo "=== Python version ==="
+python3 --version
+echo ""
+
+echo "=== Playwright installed? ==="
+python3 -c "from playwright.sync_api import sync_playwright; print('Playwright OK')" 2>&1
+echo ""
+
+echo "=== Chromium browser installed? ==="
+python3 -m playwright install --dry-run chromium 2>&1 | head -5 || echo "Cannot check"
+ls -la /root/.cache/ms-playwright/ 2>/dev/null || echo "No playwright cache"
+echo ""
+
+echo "=== Bot module importable? ==="
+cd /root/MT5-PropFirm-Bot
+python3 -c "from futures_bot.core.tradovate_client import TradovateClient, _encrypt_password, _compute_hmac_sec; print('Import OK - new auth functions available')" 2>&1
 echo ""
 
 echo "=== Service Status ==="
 systemctl is-active futures-bot
-systemctl status futures-bot --no-pager -l 2>&1 | head -20
 echo ""
 
-echo "=== Recent Bot Log (last 40 lines) ==="
-tail -40 logs/bot.log 2>/dev/null || echo "No bot.log found"
+echo "=== Recent Bot Log (last 30 lines) ==="
+tail -30 logs/bot.log 2>/dev/null || echo "No bot.log"
 echo ""
 
-echo "=== Status JSON ==="
-cat status/status.json 2>/dev/null || echo "No status.json found"
+echo "=== Journal (last 20 lines) ==="
+journalctl -u futures-bot --no-pager -n 20 2>&1
 echo ""
 
-echo "=== Journal (last 30 lines) ==="
-journalctl -u futures-bot --no-pager -n 30 2>&1
+echo "=== Current branch on VPS ==="
+git branch --show-current
+git log --oneline -3
 echo ""
 
-echo "=== Disk & Memory ==="
-df -h / | tail -1
-free -h | head -2
-echo ""
-
-echo "=== Process Check ==="
-ps aux | grep -i "[f]utures" || echo "No futures process found"
-echo ""
-
-echo "=== .env exists? ==="
-ls -la .env 2>/dev/null || echo "No .env file"
-echo ""
-
-echo "=== END STATUS CHECK ==="
+echo "=== END CHECK ==="
