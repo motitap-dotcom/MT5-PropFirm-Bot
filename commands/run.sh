@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v94 - Browser auth to get token + restart bot
+# Trigger: v95 - Browser auth to get token + restart bot
 cd /root/MT5-PropFirm-Bot
 
 echo "=== BROWSER AUTH + RESTART ==="

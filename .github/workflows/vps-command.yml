@@ -37,7 +37,20 @@ jobs:
 
       - name: Fetch output from VPS
         continue-on-error: true
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          command_timeout: 2m
+          script: |
+            cat /root/MT5-PropFirm-Bot/commands/output.txt | base64 -w 0
+
+      - name: Save output
+        continue-on-error: true
         run: |
+          # Get output from previous step's log via a second SSH call
+          sudo apt-get install -y sshpass > /dev/null 2>&1
           sshpass -p "${{ secrets.VPS_PASSWORD }}" scp -o StrictHostKeyChecking=no \
             "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/root/MT5-PropFirm-Bot/commands/output.txt" \
             commands/output.txt 2>/dev/null || echo "Failed to fetch output from VPS" > commands/output.txt
