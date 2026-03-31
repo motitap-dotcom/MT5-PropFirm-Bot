@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v98 - Install protection stack + fix token renewal
+# Trigger: v99 - Fresh token deploy + verify stays alive
 cd /root/MT5-PropFirm-Bot
 
 echo "=== FULL INSTALL v98 - $(date -u +'%Y-%m-%d %H:%M:%S UTC') ==="
