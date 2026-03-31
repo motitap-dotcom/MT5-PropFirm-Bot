@@ -27,6 +27,9 @@ jobs:
             # Install/update dependencies
             pip3 install -r requirements.txt
 
+            # Install Playwright + Chromium for browser-based auth
+            python3 -m playwright install chromium --with-deps 2>/dev/null || echo "Playwright install skipped"
+
             # Write fresh secrets to .env (systemd reads from this file)
             echo "TRADOVATE_USER=${{ secrets.TRADOVATE_USER }}" > .env
             echo "TRADOVATE_PASS=${{ secrets.TRADOVATE_PASS }}" >> .env

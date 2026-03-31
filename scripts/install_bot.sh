@@ -7,6 +7,9 @@ cd /root/MT5-PropFirm-Bot
 # Install Python dependencies
 pip3 install -r requirements.txt
 
+# Install Playwright + Chromium for browser-based auth (CAPTCHA bypass)
+python3 -m playwright install chromium --with-deps 2>/dev/null || echo "Playwright browser install skipped"
+
 # Create systemd service
 cat > /etc/systemd/system/futures-bot.service << 'SERVICEEOF'
 [Unit]

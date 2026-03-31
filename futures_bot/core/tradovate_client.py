@@ -3,12 +3,16 @@ Tradovate API Client
 Handles authentication, order management, and market data via REST + WebSocket.
 
 Auth method: Web-style authentication (no API keys needed).
-Uses appId="tradovate_trader(web)", cid=8, sec="" to mimic the web trader.
-First login from new IP requires solving CAPTCHA once, then token auto-renews.
+Uses password encryption + HMAC signing to mimic the Tradovate web trader.
+Falls back to Playwright browser login to bypass CAPTCHA automatically.
 """
 
 import asyncio
+import base64
+import hashlib
+import hmac as hmac_mod
 import json
+import os
 import time
 import uuid
 import logging
@@ -20,6 +24,30 @@ import aiohttp
 import websockets
 
 logger = logging.getLogger("tradovate_client")
+
+# ─────────────────────────────────────────────
+# Tradovate Web Auth Helpers
+# ─────────────────────────────────────────────
+# Reverse-engineered from the Tradovate web trader JS bundle.
+
+_HMAC_KEY = "1259-11e7-485a-aeae-9b6016579351"
+_HMAC_FIELDS = ["chl", "deviceId", "name", "password", "appId"]
+
+
+def _encrypt_password(name: str, password: str) -> str:
+    """Tradovate's client-side password encoding (btoa of shifted+reversed)."""
+    offset = len(name) % len(password)
+    rearranged = password[offset:] + password[:offset]
+    reversed_pw = rearranged[::-1]
+    return base64.b64encode(reversed_pw.encode()).decode()
+
+
+def _compute_hmac_sec(payload: dict) -> str:
+    """Compute the HMAC-SHA256 'sec' field from the auth payload."""
+    message = "".join(str(payload.get(f, "")) for f in _HMAC_FIELDS)
+    return hmac_mod.new(
+        _HMAC_KEY.encode(), message.encode(), hashlib.sha256
+    ).hexdigest()
 
 # Token file path for persistence across restarts
 TOKEN_FILE = Path("configs/.tradovate_token.json")
@@ -162,122 +190,269 @@ class TradovateClient:
 
     async def _authenticate(self):
         """
-        Authenticate using web-style user/password auth.
-        No API keys needed - uses same method as Tradovate web trader.
-        Note: env token is handled in connect(), not here.
+        Authenticate with multi-layer fallback:
+        1. Web-style auth (encrypted password + HMAC) on live endpoint
+        2. Web-style auth on demo endpoint
+        3. Playwright browser login (bypasses CAPTCHA)
         """
+        # Try live endpoint first, then demo
+        urls = [
+            f"{self.LIVE_URL}/auth/accesstokenrequest",
+        ]
+        if not self.live:
+            urls.append(f"{self.DEMO_URL}/auth/accesstokenrequest")
+        else:
+            urls.append(f"{self.DEMO_URL}/auth/accesstokenrequest")
+
+        data = None
+        for url in urls:
+            data = await self._try_web_auth(url)
+            if data and "accessToken" in data:
+                break
+            data = None
+
+        # Fallback: Playwright browser login (bypasses CAPTCHA)
+        if data is None:
+            logger.info("Web auth failed on all endpoints, trying browser login...")
+            data = await asyncio.to_thread(self._try_browser_auth)
+
+        if data is None:
+            raise ConnectionError(
+                "All authentication methods failed. "
+                "Set TRADOVATE_ACCESS_TOKEN in .env after logging in via browser."
+            )
+
+        self.access_token = data["accessToken"]
+        self.md_access_token = data.get("mdAccessToken", self.access_token)
+        self._parse_expiry(data.get("expirationTime", ""))
+        self._save_token()
+        logger.info("Authenticated successfully")
+
+    async def _try_web_auth(self, url: str) -> Optional[dict]:
+        """
+        Web-style auth with encrypted password and HMAC signing.
+        Matches the Tradovate web trader's authentication mechanism.
+        """
+        encrypted_pw = _encrypt_password(self.username, self.password)
         payload = {
             "name": self.username,
-            "password": self.password,
+            "password": encrypted_pw,
             "appId": self.WEB_APP_ID,
             "appVersion": self.WEB_APP_VERSION,
             "deviceId": self.device_id,
             "cid": self.WEB_CID,
-            "sec": self.WEB_SEC,
+            "sec": "",
+            "chl": "",
             "organization": self.organization,
         }
+        # Compute HMAC signature
+        payload["sec"] = _compute_hmac_sec(payload)
+
+        endpoint_name = "live" if "live" in url else "demo"
+        logger.info(f"Trying web auth on {endpoint_name} endpoint...")
 
         try:
-            async with self.session.post(
-                f"{self.base_url}/auth/accesstokenrequest",
-                json=payload
-            ) as resp:
+            async with self.session.post(url, json=payload) as resp:
                 if resp.content_type == "application/json":
                     data = await resp.json()
                 else:
                     text = await resp.text()
-                    raise ConnectionError(
-                        f"Auth returned non-JSON ({resp.status}): {text[:200]}"
-                    )
-        except ConnectionError:
-            raise
+                    logger.warning(f"Web auth non-JSON response ({resp.status}): {text[:200]}")
+                    return None
         except Exception as e:
-            raise ConnectionError(f"Auth request failed: {e}")
+            logger.warning(f"Web auth request failed ({endpoint_name}): {e}")
+            return None
 
-        # Handle different response scenarios
         if "accessToken" in data:
-            # Success - got full token set
-            self.access_token = data["accessToken"]
-            self.md_access_token = data.get("mdAccessToken", self.access_token)
-            self._parse_expiry(data.get("expirationTime", ""))
-            self._save_token()
-            logger.info("Authenticated successfully (direct)")
-            return
+            logger.info(f"Web auth succeeded on {endpoint_name}")
+            return data
 
         if "p-ticket" in data:
-            # CAPTCHA or wait required
-            p_ticket = data["p-ticket"]
-            p_time = data.get("p-time", 15)
-            p_captcha = data.get("p-captcha", False)
+            return await self._handle_p_ticket(url, data, payload)
 
-            if p_captcha:
-                # CAPTCHA required - need manual intervention
-                logger.error(
-                    "CAPTCHA required for first login!\n"
-                    "Run: python3 get_token.py\n"
-                    "Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser."
-                )
-                raise ConnectionError(
-                    "CAPTCHA required. Run get_token.py on a machine with a browser, "
-                    "then set TRADOVATE_ACCESS_TOKEN in .env"
-                )
-            else:
-                # Wait and retry (no CAPTCHA)
-                logger.info(f"Waiting {p_time}s before retry (p-ticket received)...")
-                await asyncio.sleep(p_time)
+        error = data.get("errorText", "")
+        if "Incorrect" in error:
+            logger.warning(f"Web auth: '{error}' — may be rate-limited. Waiting 20s...")
+            await asyncio.sleep(20)
+        else:
+            logger.info(f"Web auth response ({endpoint_name}): {error}")
+        return None
 
-                payload["p-ticket"] = p_ticket
-                async with self.session.post(
-                    f"{self.base_url}/auth/accesstokenrequest",
-                    json=payload
-                ) as resp:
-                    data = await resp.json()
+    async def _handle_p_ticket(self, url: str, ticket_data: dict, original_payload: dict) -> Optional[dict]:
+        """Handle Tradovate's p-ticket device verification flow."""
+        p_ticket = ticket_data["p-ticket"]
+        p_time = ticket_data.get("p-time", 15)
+        needs_captcha = ticket_data.get("p-captcha", False)
 
+        logger.info(f"Device verification required (captcha={needs_captcha}, timeout={p_time}s)")
+
+        if needs_captcha:
+            logger.info("CAPTCHA required, trying browser login to bypass...")
+            browser_data = await asyncio.to_thread(self._try_browser_auth)
+            if browser_data:
+                return browser_data
+            logger.warning("Browser auth also failed. Manual token needed.")
+            return None
+
+        # No CAPTCHA - just wait and verify
+        logger.info(f"Waiting {p_time}s before verification...")
+        await asyncio.sleep(p_time + 1)
+
+        verify_payload = dict(original_payload)
+        verify_payload["p-ticket"] = p_ticket
+
+        try:
+            async with self.session.post(url, json=verify_payload) as resp:
+                data = await resp.json()
                 if "accessToken" in data:
-                    self.access_token = data["accessToken"]
-                    self.md_access_token = data.get("mdAccessToken", self.access_token)
-                    self._parse_expiry(data.get("expirationTime", ""))
-                    self._save_token()
-                    logger.info("Authenticated successfully (after wait)")
-                    return
+                    logger.info("Device verification succeeded!")
+                    return data
+                logger.info(f"Verification response: {data.get('errorText', data)}")
+        except Exception as e:
+            logger.warning(f"Verification request failed: {e}")
+        return None
 
-        # Auth failed
-        error = data.get("errorText", str(data))
-        raise ConnectionError(f"Authentication failed: {error}")
+    def _try_browser_auth(self) -> Optional[dict]:
+        """
+        Authenticate via headless Playwright browser.
+        Bypasses CAPTCHA by using a real browser session.
+        """
+        try:
+            from playwright.sync_api import sync_playwright
+        except ImportError:
+            logger.info("Playwright not installed, skipping browser auth")
+            return None
+
+        trader_url = "https://trader.tradovate.com"
+        captured: dict = {}
+
+        def _on_response(response):
+            if captured:
+                return
+            try:
+                ct = response.headers.get("content-type", "")
+                if "json" not in ct:
+                    return
+                data = response.json()
+                if isinstance(data, dict) and "accessToken" in data:
+                    captured.update(data)
+            except Exception:
+                pass
+
+        for attempt in range(1, 3):
+            logger.info(f"Browser login attempt {attempt}/2...")
+            browser = None
+            try:
+                with sync_playwright() as pw:
+                    browser = pw.chromium.launch(
+                        headless=True,
+                        args=[
+                            "--no-sandbox",
+                            "--disable-blink-features=AutomationControlled",
+                            "--disable-dev-shm-usage",
+                            "--disable-gpu",
+                        ],
+                    )
+                    ctx = browser.new_context(
+                        viewport={"width": 1280, "height": 720},
+                        user_agent=(
+                            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                            "AppleWebKit/537.36 (KHTML, like Gecko) "
+                            "Chrome/121.0.0.0 Safari/537.36"
+                        ),
+                        ignore_https_errors=True,
+                    )
+                    ctx.add_init_script(
+                        "Object.defineProperty(navigator,'webdriver',{get:()=>undefined});"
+                    )
+                    page = ctx.new_page()
+                    page.on("response", _on_response)
+
+                    logger.info(f"Loading {trader_url}...")
+                    page.goto(trader_url, timeout=60000, wait_until="domcontentloaded")
+                    page.wait_for_timeout(10000)
+
+                    text_input = page.query_selector('input[type="text"]')
+                    pass_input = page.query_selector('input[type="password"]')
+                    if text_input and pass_input:
+                        logger.info("Login form found, filling credentials...")
+                        text_input.fill(self.username)
+                        pass_input.fill(self.password)
+                        page.wait_for_timeout(500)
+
+                        clicked = False
+                        for btn in page.query_selector_all("button"):
+                            btn_text = (btn.inner_text() or "").strip().lower()
+                            if any(w in btn_text for w in ("login", "sign in", "log in")):
+                                btn.click()
+                                clicked = True
+                                break
+                        if not clicked:
+                            page.keyboard.press("Enter")
+
+                        logger.info("Waiting for auth response (up to 60s)...")
+                        for i in range(60):
+                            if captured:
+                                break
+                            page.wait_for_timeout(1000)
+                    else:
+                        logger.warning("Login form not found on page")
+
+                    browser.close()
+                    browser = None
+
+                if captured and "accessToken" in captured:
+                    logger.info("Browser auth succeeded!")
+                    return captured
+                logger.warning(f"Browser auth attempt {attempt}: no token captured")
+            except Exception as e:
+                logger.warning(f"Browser auth attempt {attempt} failed: {e}")
+                if browser:
+                    try:
+                        browser.close()
+                    except Exception:
+                        pass
+
+            if attempt < 2:
+                time.sleep(10)
+
+        return None
 
     async def _renew_token_safe(self) -> bool:
         """
         Renew access token without falling back to _authenticate().
-        Returns True if renewal succeeded, False otherwise.
-        This prevents infinite loops: renew -> authenticate -> renew.
+        Tries both demo and live endpoints since token may have been issued on either.
         """
         if not self.access_token:
             return False
-        try:
-            async with self.session.post(
-                f"{self.base_url}/auth/renewaccesstoken",
-                headers=self._headers()
-            ) as resp:
-                if resp.status == 200:
-                    data = await resp.json()
-                    if "accessToken" in data:
-                        self.access_token = data["accessToken"]
-                        self.md_access_token = data.get("mdAccessToken", self.access_token)
-                        self._parse_expiry(data.get("expirationTime", ""))
-                        self._save_token()
-                        self._token_obtained_at = time.time()
-                        logger.info("Token renewed successfully")
-                        return True
+
+        urls = [f"{self.base_url}/auth/renewaccesstoken"]
+        # Add the other environment as fallback
+        if "demo" in self.base_url:
+            urls.append(f"{self.LIVE_URL}/auth/renewaccesstoken")
+        else:
+            urls.append(f"{self.DEMO_URL}/auth/renewaccesstoken")
+
+        for url in urls:
+            try:
+                async with self.session.post(url, headers=self._headers()) as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
+                        if "accessToken" in data:
+                            self.access_token = data["accessToken"]
+                            self.md_access_token = data.get("mdAccessToken", self.access_token)
+                            self._parse_expiry(data.get("expirationTime", ""))
+                            self._save_token()
+                            self._token_obtained_at = time.time()
+                            endpoint = "live" if "live" in url else "demo"
+                            logger.info(f"Token renewed successfully via {endpoint}")
+                            return True
                     else:
-                        logger.warning(f"Renewal response missing accessToken: {data}")
-                        return False
-                else:
-                    text = await resp.text()
-                    logger.warning(f"Token renewal failed ({resp.status}): {text[:200]}")
-                    return False
-        except Exception as e:
-            logger.error(f"Token renewal error: {e}")
-            return False
+                        text = await resp.text()
+                        logger.warning(f"Token renewal failed on {url.split('/')[2]} ({resp.status}): {text[:200]}")
+            except Exception as e:
+                logger.warning(f"Token renewal error on {url.split('/')[2]}: {e}")
+        return False
 
     async def _renew_token(self):
         """Renew token, fall back to full auth if renewal fails."""
