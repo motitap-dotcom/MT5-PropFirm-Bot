@@ -1,45 +1,39 @@
 #!/bin/bash
-# Trigger: v86 - Send status via Telegram directly from VPS
+# Trigger: v87 - Full status check
 cd /root/MT5-PropFirm-Bot
 
-# Write fresh .env from workflow secrets
-if [ -n "$TRADOVATE_ACCESS_TOKEN" ]; then
-    echo "TRADOVATE_USER=$TRADOVATE_USER" > .env
-    echo "TRADOVATE_PASS=$TRADOVATE_PASS" >> .env
-    echo "TRADOVATE_ACCESS_TOKEN=$TRADOVATE_ACCESS_TOKEN" >> .env
-    echo "TELEGRAM_TOKEN=$TELEGRAM_TOKEN" >> .env
-    echo "TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID" >> .env
-fi
+echo "=== BOT STATUS CHECK ==="
+echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+echo ""
 
-rm -f configs/.tradovate_token.json
-mkdir -p logs status
+echo "=== Service Status ==="
+systemctl is-active futures-bot
+systemctl status futures-bot --no-pager -l 2>&1 | head -20
+echo ""
 
-# Restart bot
-systemctl stop futures-bot 2>/dev/null
-sleep 3
-systemctl daemon-reload
-systemctl start futures-bot
-sleep 15
+echo "=== Recent Bot Log (last 40 lines) ==="
+tail -40 logs/bot.log 2>/dev/null || echo "No bot.log found"
+echo ""
 
-# Collect status
-STATUS=$(systemctl is-active futures-bot)
-LOGS=$(journalctl -u futures-bot --no-pager -n 20 --since "20 sec ago" 2>&1)
-BOTLOG=$(tail -15 logs/bot.log 2>/dev/null)
+echo "=== Status JSON ==="
+cat status/status.json 2>/dev/null || echo "No status.json found"
+echo ""
 
-# Send to Telegram directly from VPS
-MSG="🤖 Bot Status Report v86
-━━━━━━━━━━━━━━━
-Service: ${STATUS}
-━━━━━━━━━━━━━━━
-Journal:
-${LOGS}
-━━━━━━━━━━━━━━━
-Bot Log:
-${BOTLOG}"
+echo "=== Journal (last 30 lines) ==="
+journalctl -u futures-bot --no-pager -n 30 2>&1
+echo ""
 
-curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-  -d chat_id="${TELEGRAM_CHAT_ID}" \
-  -d text="${MSG:0:4000}" \
-  -d parse_mode="" > /dev/null 2>&1
+echo "=== Disk & Memory ==="
+df -h / | tail -1
+free -h | head -2
+echo ""
 
-echo "Status sent to Telegram"
+echo "=== Process Check ==="
+ps aux | grep -i "[f]utures" || echo "No futures process found"
+echo ""
+
+echo "=== .env exists? ==="
+ls -la .env 2>/dev/null || echo "No .env file"
+echo ""
+
+echo "=== END STATUS CHECK ==="
