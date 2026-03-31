@@ -18,31 +18,78 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
-          script_stop: true
+          script_stop: false
+          command_timeout: 15m
           script: |
             cd /root/MT5-PropFirm-Bot
+
+            # Kill any stuck chromium/browser processes
+            pkill -f chromium 2>/dev/null || true
+            pkill -f playwright 2>/dev/null || true
+
+            # Pull latest code
             git fetch origin ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
 
-            # Install/update dependencies
-            pip3 install -r requirements.txt
+            # Setup venv if needed
+            if [ ! -d "venv" ]; then
+                python3 -m venv venv
+            fi
 
-            # Install Playwright + Chromium for browser-based auth
-            python3 -m playwright install chromium --with-deps 2>/dev/null || echo "Playwright install skipped"
+            # Install dependencies in venv
+            venv/bin/pip install -r requirements.txt 2>&1 | tail -5
+            venv/bin/python3 -m playwright install chromium --with-deps 2>&1 | tail -3
 
-            # Write fresh secrets to .env (systemd reads from this file)
-            echo "TRADOVATE_USER=${{ secrets.TRADOVATE_USER }}" > .env
-            echo "TRADOVATE_PASS=${{ secrets.TRADOVATE_PASS }}" >> .env
-            echo "TRADOVATE_ACCESS_TOKEN=${{ secrets.TRADOVATE_ACCESS_TOKEN }}" >> .env
-            echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .env
-            echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
+            # Also install globally as fallback
+            pip3 install -r requirements.txt 2>&1 | tail -3
 
-            # Restart bot service
+            # Verify imports
+            venv/bin/python3 -c "from futures_bot.core.tradovate_client import TradovateClient; print('Import OK')"
+            venv/bin/python3 -c "from playwright.sync_api import sync_playwright; print('Playwright OK')"
+
+            # Write fresh secrets to .env
+            cat > .env << ENVEOF
+            TRADOVATE_USER=${{ secrets.TRADOVATE_USER }}
+            TRADOVATE_PASS=${{ secrets.TRADOVATE_PASS }}
+            TRADOVATE_ACCESS_TOKEN=${{ secrets.TRADOVATE_ACCESS_TOKEN }}
+            TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}
+            TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
+            ENVEOF
+            # Remove leading whitespace from heredoc
+            sed -i 's/^[[:space:]]*//' .env
+
+            # Clear old invalid tokens
+            rm -f configs/.tradovate_token.json
+
+            # Update systemd service to use venv python
+            cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
+            [Unit]
+            Description=TradeDay Futures Trading Bot
+            After=network.target
+
+            [Service]
+            Type=simple
+            WorkingDirectory=/root/MT5-PropFirm-Bot
+            ExecStart=/root/MT5-PropFirm-Bot/venv/bin/python3 -m futures_bot.bot
+            Restart=on-failure
+            RestartSec=60
+            Environment=PYTHONUNBUFFERED=1
+            EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+
+            [Install]
+            WantedBy=multi-user.target
+            SVCEOF
+            sed -i 's/^[[:space:]]*//' /etc/systemd/system/futures-bot.service
+
+            # Restart bot
             systemctl daemon-reload
-            systemctl restart futures-bot 2>/dev/null || echo "Service not yet installed"
+            systemctl restart futures-bot
 
-            echo "Deploy completed at $(date -u +'%Y-%m-%d %H:%M UTC')" > deploy_report.txt
-            python3 -c "import sys; sys.path.insert(0,'.'); import futures_bot; print('Import OK')" >> deploy_report.txt 2>&1
+            sleep 15
+            echo "=== Deploy Result ==="
+            echo "Service: $(systemctl is-active futures-bot)"
+            echo "Branch: $(git branch --show-current)"
+            tail -15 logs/bot.log 2>/dev/null || echo "No logs yet"
 
       - name: Telegram notification
         if: always()
@@ -52,4 +99,5 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
             Bot Deploy completed
+            Branch: ${{ github.ref_name }}
             Status: ${{ job.status }}
