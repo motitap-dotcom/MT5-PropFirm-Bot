@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v99 - Fresh token deploy + verify stays alive
+# Trigger: v100 - Final verification after full safety audit
 cd /root/MT5-PropFirm-Bot
 
 echo "=== FULL INSTALL v98 - $(date -u +'%Y-%m-%d %H:%M:%S UTC') ==="
