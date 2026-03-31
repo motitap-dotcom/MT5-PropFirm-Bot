@@ -1,18 +1,1 @@
-=== QUICK DEBUG ===
-Timestamp: 2026-03-31 15:52:45 UTC
-
-=== Password Check ===
-TRADOVATE_USER from env: 'TD_Motitap'
-TRADOVATE_PASS from env length: 9
-
-=== .env file (masked) ===
-  TRADOVATE_USER = [10 chars] first='T' last='p'
-  TRADOVATE_PASS = [9 chars] first='M' last='!'
-  TRADOVATE_ACCESS_TOKEN = [297 chars] first='e' last='A'
-  TELEGRAM_TOKEN = [46 chars] first='8' last='g'
-  TELEGRAM_CHAT_ID = [10 chars] first='7' last='3'
-
-Testing with user=TD_Motitap, pass_len=9, pass_repr='Mytl8182!'
-Response: {'p-ticket': 'MzEsYzdGcDFnOUFuNXdkbVlRLXR3M05fWmRsVVEzNEpKT1N1dzMwNGx2YUZkcHdBLTYyVTdVb3p1eVhQRHdBaWVPYU01SlRDU1ljbWZ2S2xiM0c2ZG1p', 'p-time': 15, 'p-captcha': True, 'p-message': 'Rate limit exceeded:
-
-=== END ===
+Failed to fetch output from VPS
