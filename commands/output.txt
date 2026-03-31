@@ -1,4 +1,4 @@
-=== FULL INSTALL v98 - 2026-03-31 05:48:06 UTC ===
+=== FULL INSTALL v98 - 2026-03-31 06:09:01 UTC ===
 .env written
 --- Installing service ---
 --- Installing watchdog ---
@@ -9,21 +9,21 @@
 Service: active
 Watchdog: active
 
-2026-03-31 05:49:38,939 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-03-31 05:49:39,086 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
-2026-03-31 05:49:39,206 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-31 05:49:39,206 [tradovate_client] WARNING: Token renewal failed - keeping current token (DO NOT fall back to CAPTCHA auth)
-2026-03-31 05:49:39,327 [tradovate_client] INFO: Saved token invalid, attempting renewal...
-2026-03-31 05:49:39,447 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-03-31 05:49:39,450 [tradovate_client] INFO: Trying pre-set access token from environment...
-2026-03-31 05:49:39,578 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-03-31 05:49:39,578 [tradovate_client] INFO: Environment token is valid
-2026-03-31 05:49:39,582 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-03-31 05:49:39,650 [bot] INFO: Bot started successfully
-2026-03-31 05:49:39,650 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-03-31 05:49:39,650 [bot] INFO: Timeframe: 5min
-2026-03-31 05:49:39,650 [bot] INFO: New trading day: 2026-03-31
-2026-03-31 05:49:39,650 [bot] INFO: Outside trading session: Pre-market: 01:49 ET (opens 09:30:00)
+2026-03-31 06:09:03,229 [bot] INFO: Bot stopped
+2026-03-31 06:09:11,569 [bot] INFO: ============================================================
+2026-03-31 06:09:11,570 [bot] INFO: TradeDay Futures Bot Starting
+2026-03-31 06:09:11,570 [bot] INFO: ============================================================
+2026-03-31 06:09:11,570 [guardian] INFO: No saved guardian state, starting fresh
+2026-03-31 06:09:11,570 [news_filter] INFO: Loaded 26 restricted events
+2026-03-31 06:09:11,571 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-03-31 06:09:11,717 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-03-31 06:09:11,718 [tradovate_client] INFO: Saved token is still valid
+2026-03-31 06:09:11,718 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-03-31 06:09:11,809 [bot] INFO: Bot started successfully
+2026-03-31 06:09:11,809 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-03-31 06:09:11,810 [bot] INFO: Timeframe: 5min
+2026-03-31 06:09:11,810 [bot] INFO: New trading day: 2026-03-31
+2026-03-31 06:09:11,810 [bot] INFO: Outside trading session: Pre-market: 02:09 ET (opens 09:30:00)
 
 Disk: /dev/sda1       145G   26G  119G  18% /
 
