@@ -233,10 +233,9 @@ class TradovateClient:
         Web-style auth with encrypted password and HMAC signing.
         Matches the Tradovate web trader's authentication mechanism.
         """
-        encrypted_pw = _encrypt_password(self.username, self.password)
         payload = {
             "name": self.username,
-            "password": encrypted_pw,
+            "password": self.password,
             "appId": self.WEB_APP_ID,
             "appVersion": self.WEB_APP_VERSION,
             "deviceId": self.device_id,
