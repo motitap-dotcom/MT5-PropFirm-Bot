@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v87 - Full status check
+# Trigger: v88 - Full status check
 cd /root/MT5-PropFirm-Bot
 
 echo "=== BOT STATUS CHECK ==="
