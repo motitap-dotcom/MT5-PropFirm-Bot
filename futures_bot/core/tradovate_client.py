@@ -77,7 +77,9 @@ class TradovateClient:
 
     async def connect(self):
         """Initialize session and authenticate with robust multi-step fallback."""
-        self.session = aiohttp.ClientSession()
+        self.session = aiohttp.ClientSession(
+            timeout=aiohttp.ClientTimeout(total=30, connect=10, sock_read=15)
+        )
 
         # Auth strategy order:
         # 1. Load saved token file → verify

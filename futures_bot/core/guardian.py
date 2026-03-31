@@ -12,13 +12,17 @@ TradeDay $50K Intraday Evaluation Rules:
   - Restricted trading events: Must flatten before news events
 """
 
+import json
 import logging
 from dataclasses import dataclass
 from enum import IntEnum
-from typing import Dict, Optional
+from typing import Dict
 from datetime import datetime, timezone
+from pathlib import Path
 
 logger = logging.getLogger("guardian")
+
+STATE_FILE = Path("status/guardian_state.json")
 
 
 class GuardianState(IntEnum):
@@ -40,6 +44,7 @@ class Guardian:
     """
     Master watchdog for TradeDay rule compliance.
     Checks are run BEFORE every trade and continuously during the session.
+    State is persisted to disk so restarts don't lose safety data.
     """
 
     def __init__(self, config: dict):
@@ -53,16 +58,16 @@ class Guardian:
         self.max_micro_contracts: int = config.get("max_micro_contracts", 50)
 
         # Safety buffers (don't wait until the last dollar)
-        self.dd_warning_pct: float = config.get("dd_warning_pct", 0.60)  # 60% of max DD
-        self.dd_critical_pct: float = config.get("dd_critical_pct", 0.80)  # 80% of max DD
-        self.dd_emergency_pct: float = config.get("dd_emergency_pct", 0.90)  # 90% of max DD
+        self.dd_warning_pct: float = config.get("dd_warning_pct", 0.60)
+        self.dd_critical_pct: float = config.get("dd_critical_pct", 0.80)
+        self.dd_emergency_pct: float = config.get("dd_emergency_pct", 0.90)
 
         # Daily limits
         self.max_daily_loss: float = config.get("max_daily_loss", 400.0)
         self.max_daily_profit: float = config.get("max_daily_profit", 900.0)
         self.max_daily_trades: int = config.get("max_daily_trades", 6)
 
-        # State
+        # State - loaded from disk if available
         self.state: GuardianState = GuardianState.ACTIVE
         self.current_balance: float = self.initial_balance
         self.min_balance: float = self.initial_balance - self.max_drawdown
@@ -72,6 +77,61 @@ class Guardian:
         self.daily_history: list[DailyPnL] = []
         self.trading_days: int = 0
         self.reason: str = ""
+
+        self._load_state()
+
+    def _save_state(self):
+        """Persist guardian state to disk. Called after every state change."""
+        try:
+            STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+            data = {
+                "state": self.state.value,
+                "current_balance": self.current_balance,
+                "daily_pnl": self.daily_pnl,
+                "daily_trades": self.daily_trades,
+                "total_pnl": self.total_pnl,
+                "trading_days": self.trading_days,
+                "reason": self.reason,
+                "daily_history": [
+                    {"date": d.date, "pnl": d.pnl, "trades": d.trades}
+                    for d in self.daily_history
+                ],
+                "saved_at": datetime.now(timezone.utc).isoformat(),
+            }
+            # Atomic write: write to temp file then rename
+            tmp = STATE_FILE.with_suffix(".tmp")
+            tmp.write_text(json.dumps(data, indent=2))
+            tmp.rename(STATE_FILE)
+        except Exception as e:
+            logger.error(f"Failed to save guardian state: {e}")
+
+    def _load_state(self):
+        """Load guardian state from disk on startup."""
+        try:
+            if not STATE_FILE.exists():
+                logger.info("No saved guardian state, starting fresh")
+                return
+            data = json.loads(STATE_FILE.read_text())
+            saved_at = data.get("saved_at", "")
+            logger.info(f"Loading guardian state from {saved_at}")
+
+            self.state = GuardianState(data.get("state", 0))
+            self.current_balance = data.get("current_balance", self.initial_balance)
+            self.daily_pnl = data.get("daily_pnl", 0.0)
+            self.daily_trades = data.get("daily_trades", 0)
+            self.total_pnl = data.get("total_pnl", 0.0)
+            self.trading_days = data.get("trading_days", 0)
+            self.reason = data.get("reason", "")
+            self.daily_history = [
+                DailyPnL(date=d["date"], pnl=d["pnl"], trades=d["trades"])
+                for d in data.get("daily_history", [])
+            ]
+            logger.info(f"Guardian restored: state={self.state.name}, "
+                        f"daily_pnl=${self.daily_pnl:.2f}, "
+                        f"daily_trades={self.daily_trades}, "
+                        f"total_pnl=${self.total_pnl:.2f}")
+        except Exception as e:
+            logger.error(f"Failed to load guardian state: {e}, starting fresh")
 
     def update_balance(self, current_balance: float, unrealized_pnl: float = 0.0):
         """Update current balance and check all rules."""
@@ -104,31 +164,26 @@ class Guardian:
                 self._set_state(GuardianState.SHUTDOWN,
                                f"EVALUATION PASSED! Profit ${self.total_pnl:.2f} >= ${self.profit_target:.2f}")
 
+        self._save_state()
+
     def can_open_trade(self, num_contracts: int = 1, is_micro: bool = True) -> tuple[bool, str]:
         """Check if a new trade is allowed."""
-        # State check
         if self.state >= GuardianState.HALTED:
             return False, f"Trading halted: {self.reason}"
 
-        # Daily loss limit
         if self.daily_pnl <= -self.max_daily_loss:
             return False, f"Daily loss limit reached: ${self.daily_pnl:.2f}"
 
-        # Daily profit limit (consistency rule)
         if self.daily_pnl >= self.max_daily_profit:
             return False, f"Daily profit limit reached: ${self.daily_pnl:.2f} (consistency rule)"
 
-        # Daily trade count
         if self.daily_trades >= self.max_daily_trades:
             return False, f"Max daily trades reached: {self.daily_trades}"
 
-        # Position limit check
-        # Note: actual position check should be done against real positions
         limit = self.max_micro_contracts if is_micro else self.max_contracts
         if num_contracts > limit:
             return False, f"Contract limit exceeded: {num_contracts} > {limit}"
 
-        # Caution state: allow but with reduced size
         if self.state == GuardianState.CAUTION:
             return True, "CAUTION: Reduce position size"
 
@@ -139,6 +194,7 @@ class Guardian:
         self.daily_pnl += pnl
         self.daily_trades += 1
         self.total_pnl += pnl
+        self._save_state()
 
     def start_new_day(self, date_str: str):
         """Reset daily counters for a new trading day."""
@@ -153,11 +209,11 @@ class Guardian:
         self.daily_pnl = 0.0
         self.daily_trades = 0
 
-        # Re-evaluate state
         if self.state != GuardianState.SHUTDOWN:
             self.state = GuardianState.ACTIVE
             self.reason = ""
 
+        self._save_state()
         logger.info(f"New day started. Trading days: {self.trading_days}, "
                      f"Total PnL: ${self.total_pnl:.2f}")
 
@@ -166,7 +222,6 @@ class Guardian:
         return self.state >= GuardianState.EMERGENCY
 
     def is_evaluation_passed(self) -> bool:
-        """Check if all evaluation targets are met."""
         return (
             self.total_pnl >= self.profit_target and
             self.trading_days >= self.min_trading_days and
@@ -177,7 +232,6 @@ class Guardian:
         """Check the 30% consistency rule."""
         if not self.daily_history or self.total_pnl <= 0:
             return True
-
         for day in self.daily_history:
             if day.pnl > 0 and day.pnl / self.total_pnl > self.consistency_pct:
                 logger.warning(
@@ -189,15 +243,13 @@ class Guardian:
 
     def get_max_risk_per_trade(self) -> float:
         """Get maximum allowed risk based on current state."""
-        base_risk = 150.0  # $150 max per trade normally
-
+        base_risk = 150.0
         if self.state == GuardianState.CAUTION:
-            return base_risk * 0.5  # $75
+            return base_risk * 0.5
         elif self.state == GuardianState.HALTED:
             return 0.0
         else:
-            # Also limit based on remaining daily loss budget
-            remaining = self.max_daily_loss + self.daily_pnl  # daily_pnl is negative when losing
+            remaining = self.max_daily_loss + self.daily_pnl
             return min(base_risk, max(remaining, 0))
 
     def get_status(self) -> Dict:

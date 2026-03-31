@@ -80,18 +80,29 @@ class FuturesBot:
         self._processed_fills: set = set()  # track processed fill IDs
 
         # Trading state
+        self._notify_failures: int = 0
         self.symbols: list = self.config.get("symbols", ["MESM6"])
         self.timeframe: str = self.config.get("timeframe", "5min")
         self.current_day: str = ""
         self.positions: list = []
+
+    async def _notify(self, coro):
+        """Safe wrapper for all Telegram notifications - never crashes the bot."""
+        try:
+            await coro
+            self._notify_failures = 0
+        except Exception as e:
+            self._notify_failures += 1
+            if self._notify_failures <= 3:
+                logger.warning(f"Telegram notification failed ({self._notify_failures}): {e}")
 
     def _load_config(self, path: str) -> dict:
         """Load bot configuration."""
         try:
             with open(path) as f:
                 return json.load(f)
-        except FileNotFoundError:
-            logger.warning(f"Config not found at {path}, using defaults")
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            logger.warning(f"Config error at {path}: {e}, using defaults")
             return {}
 
     async def start(self):
@@ -141,11 +152,15 @@ class FuturesBot:
         # Connect
         try:
             await self.client.connect()
-            await self.notifier.start()
-            await self.notifier.bot_started()
         except Exception as e:
             logger.error(f"Failed to connect: {e}")
             raise
+
+        try:
+            await self.notifier.start()
+            await self.notifier.bot_started()
+        except Exception as e:
+            logger.warning(f"Telegram notification failed (non-fatal): {e}")
 
         self.running = True
         logger.info("Bot started successfully")
@@ -208,7 +223,7 @@ class FuturesBot:
                 restricted, event_name = self.news_filter.must_flatten_for_event(self.symbols)
                 if restricted:
                     await self._flatten_all(f"News event: {event_name}")
-                    await self.notifier.news_alert(event_name)
+                    await self._notify(self.notifier.news_alert(event_name))
                     await asyncio.sleep(60)
                     continue
 
@@ -427,10 +442,10 @@ class FuturesBot:
             await asyncio.sleep(2)
             await self._verify_bracket_orders(symbol, direction, contracts, sl, tp)
 
-            await self.notifier.trade_opened(
+            await self._notify(self.notifier.trade_opened(
                 symbol, direction, contracts,
                 setup.entry_price, sl, tp, strategy_name
-            )
+            ))
 
             self.risk_mgr.open_positions += 1
             self.risk_mgr.open_contracts += contracts
@@ -446,9 +461,9 @@ class FuturesBot:
                         if contract.get("name", "").startswith(symbol.rstrip("0123456789")):
                             logger.warning(f"EMERGENCY CLOSE: Trade without SL/TP for {symbol}")
                             await self.client.close_position(symbol)
-                            await self.notifier.guardian_alert(
+                            await self._notify(self.notifier.guardian_alert(
                                 "EMERGENCY", f"Closed {symbol} - bracket orders failed"
-                            )
+                            ))
             except Exception as e2:
                 logger.error(f"Emergency close failed: {e2}")
 
@@ -477,9 +492,9 @@ class FuturesBot:
                 contract_id = fill.get("contractId", "")
                 logger.info(f"FILL: {action} {qty} @ {price:.2f} PnL=${pnl:.2f}")
 
-                await self.notifier.trade_closed(
+                await self._notify(self.notifier.trade_closed(
                     str(contract_id), action, pnl, "SL/TP hit"
-                )
+                ))
 
     async def _verify_bracket_orders(self, symbol: str, direction: str,
                                        qty: int, sl: float, tp: float):
@@ -509,9 +524,9 @@ class FuturesBot:
                     logger.error(f"FAILED to place emergency SL: {e}")
                     logger.warning(f"CLOSING POSITION {symbol} - cannot set SL!")
                     await self.client.close_position(symbol)
-                    await self.notifier.guardian_alert(
+                    await self._notify(self.notifier.guardian_alert(
                         "EMERGENCY", f"Closed {symbol} - could not set stop loss"
-                    )
+                    ))
                     return
 
             if not has_tp:
@@ -549,7 +564,7 @@ class FuturesBot:
 
             # Send daily summary
             status = self.guardian.get_status()
-            await self.notifier.daily_summary({
+            await self._notify(self.notifier.daily_summary({
                 "date": self.current_day,
                 "trades": status["daily_trades"],
                 "pnl": status["daily_pnl"],
@@ -557,7 +572,7 @@ class FuturesBot:
                 "dd_used": status["drawdown_used"],
                 "trading_days": status["trading_days"],
                 "total_pnl": status["total_pnl"],
-            })
+            }))
 
         self.current_day = today
 
