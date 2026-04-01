@@ -1,22 +1,17 @@
 #!/bin/bash
-# Trigger: v105 - Simple token + restart
+# Trigger: v106 - Status check only (don't touch the bot)
 cd /root/MT5-PropFirm-Bot
-echo "=== v105 ==="
+echo "=== STATUS CHECK v106 ==="
 date -u
-
-systemctl stop futures-bot 2>/dev/null
-mkdir -p configs logs
-
-echo '{"access_token":"eyJraWQiOiIyOCIsImFsZyI6IkVkRFNBIn0.eyJzdWIiOiI3MTg1OTg3IiwiZXhwIjoxNzc0OTg0NTkxLCJqdGkiOiItNDEwNDg0MjU2NTUyMzY3MDkxOC0tNDA4ODI1MTkxMjA3MTkxMzUzOCIsInBocyI6LTE0OTM4NzI5MDQsImVtYWlsIjoibW90aXRhcEBnbWFpbC5jb20ifQ.yj04GEOYGG5fHmtMi0301jeeh6J3cNzIQk-CmbiR22_cSw0oQNLCBdegST6zryM90FrSvxbY19SCUKzcdPIdDA","md_access_token":"eyJraWQiOiIyOCIsImFsZyI6IkVkRFNBIn0.eyJzdWIiOiI3MTg1OTg3IiwiZXhwIjoxNzc0OTg0NTkxLCJqdGkiOiItNDEwNDg0MjU2NTUyMzY3MDkxOC0tNDA4ODI1MTkxMjA3MTkxMzUzOCIsInBocyI6LTE0OTM4NzI5MDQsImVtYWlsIjoibW90aXRhcEBnbWFpbC5jb20ifQ.yj04GEOYGG5fHmtMi0301jeeh6J3cNzIQk-CmbiR22_cSw0oQNLCBdegST6zryM90FrSvxbY19SCUKzcdPIdDA","expiry":9999999999}' > configs/.tradovate_token.json
-echo "Token saved"
-
-printf '[Unit]\nDescription=TradeDay Futures Trading Bot\nAfter=network.target\n\n[Service]\nType=simple\nWorkingDirectory=/root/MT5-PropFirm-Bot\nExecStart=/usr/bin/python3 -m futures_bot.bot\nRestart=on-failure\nRestartSec=60\nEnvironment=PYTHONUNBUFFERED=1\nEnvironmentFile=/root/MT5-PropFirm-Bot/.env\n\n[Install]\nWantedBy=multi-user.target\n' > /etc/systemd/system/futures-bot.service
-
-systemctl daemon-reload
-systemctl start futures-bot
-echo "Bot started"
-sleep 12
+echo ""
 echo "Service: $(systemctl is-active futures-bot)"
-tail -15 logs/bot.log 2>/dev/null || echo "No log yet"
-journalctl -u futures-bot --no-pager -n 5 2>&1
-echo "=== DONE ==="
+echo ""
+echo "=== Token file ==="
+cat configs/.tradovate_token.json 2>/dev/null || echo "No token"
+echo ""
+echo "=== Bot Log (last 30) ==="
+tail -30 logs/bot.log 2>/dev/null || echo "No log"
+echo ""
+echo "=== Journal (last 10) ==="
+journalctl -u futures-bot --no-pager -n 10 2>&1
+echo "=== END ==="
