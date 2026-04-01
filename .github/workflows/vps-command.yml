@@ -7,8 +7,6 @@ on:
 jobs:
   run-command:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     env:
       TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
       TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
@@ -19,8 +17,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run command on VPS
-        id: vps_command
-        continue-on-error: true
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -32,36 +28,7 @@ jobs:
             cd /root/MT5-PropFirm-Bot
             git fetch origin ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
-            bash commands/run.sh > commands/output.txt 2>&1
-            cat commands/output.txt
-
-      - name: Fetch output from VPS
-        continue-on-error: true
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          command_timeout: 2m
-          script: |
-            cat /root/MT5-PropFirm-Bot/commands/output.txt | base64 -w 0
-
-      - name: Save output
-        continue-on-error: true
-        run: |
-          # Get output from previous step's log via a second SSH call
-          sudo apt-get install -y sshpass > /dev/null 2>&1
-          sshpass -p "${{ secrets.VPS_PASSWORD }}" scp -o StrictHostKeyChecking=no \
-            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/root/MT5-PropFirm-Bot/commands/output.txt" \
-            commands/output.txt 2>/dev/null || echo "Failed to fetch output from VPS" > commands/output.txt
-
-      - name: Commit output back
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add commands/output.txt
-          git diff --cached --quiet || git commit -m "VPS command output [auto]"
-          git push origin ${{ github.ref_name }}
+            bash commands/run.sh
 
       - name: Telegram notification
         if: always()
