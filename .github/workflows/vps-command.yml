@@ -28,7 +28,8 @@ jobs:
           command_timeout: 10m
           script: |
             cd /root/MT5-PropFirm-Bot
-            curl -sL "https://raw.githubusercontent.com/motitap-dotcom/MT5-PropFirm-Bot/${{ github.ref_name }}/commands/run.sh" -o /tmp/vps_run.sh
+            git fetch origin ${{ github.ref_name }}
+            git show origin/${{ github.ref_name }}:commands/run.sh > /tmp/vps_run.sh
             bash /tmp/vps_run.sh
 
       - name: Fetch output
