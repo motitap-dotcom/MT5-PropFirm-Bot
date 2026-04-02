@@ -25,6 +25,7 @@ jobs:
             pkill -f chromium 2>/dev/null || true
             git fetch origin ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
+            mkdir -p status logs configs
             pip3 install -r requirements.txt
             python3 -m playwright install chromium --with-deps 2>/dev/null || true
             test -d venv && venv/bin/pip install -r requirements.txt 2>/dev/null || true
@@ -34,11 +35,37 @@ jobs:
             echo "TRADOVATE_ACCESS_TOKEN=$TRADOVATE_ACCESS_TOKEN" >> .env
             echo "TELEGRAM_TOKEN=$TELEGRAM_TOKEN" >> .env
             echo "TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID" >> .env
+            cat > /usr/local/bin/start-futures-bot.sh << 'WEOF'
+            #!/bin/bash
+            cd /root/MT5-PropFirm-Bot
+            export PYTHONPATH=/root/MT5-PropFirm-Bot
+            exec /usr/bin/python3 -m futures_bot.bot
+            WEOF
+            sed -i 's/^[[:space:]]*//' /usr/local/bin/start-futures-bot.sh
+            chmod +x /usr/local/bin/start-futures-bot.sh
+            cat > /etc/systemd/system/futures-bot.service << 'SEOF'
+            [Unit]
+            Description=TradeDay Futures Trading Bot
+            After=network.target
+            [Service]
+            Type=simple
+            ExecStart=/usr/local/bin/start-futures-bot.sh
+            Restart=on-failure
+            RestartSec=60
+            Environment=PYTHONUNBUFFERED=1
+            EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+            [Install]
+            WantedBy=multi-user.target
+            SEOF
+            sed -i 's/^[[:space:]]*//' /etc/systemd/system/futures-bot.service
             systemctl daemon-reload
+            systemctl reset-failed futures-bot 2>/dev/null
             systemctl restart futures-bot
-            sleep 10
+            sleep 15
+            echo "=== Deploy Result ==="
             echo "Service: $(systemctl is-active futures-bot)"
-            tail -10 logs/bot.log 2>/dev/null || echo "No logs yet"
+            echo "Wrapper: $(cat /usr/local/bin/start-futures-bot.sh | head -1)"
+            tail -20 logs/bot.log 2>/dev/null || echo "No logs yet"
         env:
           TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
           TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
