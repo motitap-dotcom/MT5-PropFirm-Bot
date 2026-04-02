@@ -465,8 +465,8 @@ class TradovateClient:
         remaining = self.token_expiry - time.time()
         hours_since_obtained = (time.time() - getattr(self, '_token_obtained_at', time.time())) / 3600
 
-        if remaining < 7200:  # Less than 2 hours left
-            logger.info(f"Token expiring in {remaining/3600:.1f}h, renewing...")
+        if remaining < 900:  # Less than 15 minutes left
+            logger.info(f"Token expiring in {remaining/60:.0f}min, renewing...")
             await self._renew_token()
         elif hours_since_obtained > 4:
             # Renew every 4 hours proactively (Tradovate tokens last ~24h but renew early)
