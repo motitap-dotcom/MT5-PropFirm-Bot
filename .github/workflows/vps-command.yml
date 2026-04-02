@@ -7,6 +7,8 @@ on:
 jobs:
   run-command:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
       TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
@@ -16,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run command on VPS
+      - name: Run command on VPS and capture output
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -24,17 +26,34 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           envs: TRADOVATE_USER,TRADOVATE_PASS,TRADOVATE_ACCESS_TOKEN,TELEGRAM_TOKEN,TELEGRAM_CHAT_ID
           command_timeout: 10m
+          capture_stdout: true
           script: |
             cd /root/MT5-PropFirm-Bot
             git fetch origin ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
             mkdir -p status
-            bash commands/run.sh
-            git config user.name "VPS Bot"
-            git config user.email "bot@vps"
-            git add -f commands/output.txt status/status.json 2>/dev/null
-            git commit -m "VPS output [auto]" 2>/dev/null || true
-            git push origin HEAD:${{ github.ref_name }} 2>/dev/null || true
+            bash commands/run.sh 2>&1 | tee commands/output.txt
+            echo "---OUTPUT_BASE64_START---"
+            base64 -w 0 commands/output.txt
+            echo ""
+            echo "---OUTPUT_BASE64_END---"
+
+      - name: Decode and save output
+        run: |
+          # Try to get output from VPS via SSH
+          sudo apt-get install -y sshpass > /dev/null 2>&1
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" scp -o StrictHostKeyChecking=no \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/root/MT5-PropFirm-Bot/commands/output.txt" \
+            commands/output.txt 2>/dev/null || echo "Failed to fetch output" > commands/output.txt
+
+      - name: Commit output
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git pull origin ${{ github.ref_name }} --rebase 2>/dev/null || true
+          git add -f commands/output.txt
+          git diff --cached --quiet || git commit -m "VPS output [auto]"
+          git push origin ${{ github.ref_name }} || true
 
       - name: Telegram notification
         if: always()
