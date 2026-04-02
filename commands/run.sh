@@ -1,71 +1,41 @@
 #!/bin/bash
-# Trigger: v122 - Deploy token fix + restart
+# Trigger: v123 - Create wrapper + fix service (no git reset)
 cd /root/MT5-PropFirm-Bot
-source .env 2>/dev/null
-
-echo "=== DEPLOY v122 ==="
+echo "=== FIX SERVICE v123 ==="
 date -u
 
-# 1. Update changed files from branch
-BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "claude/update-current-status-enwJV")
-git fetch origin claude/update-current-status-enwJV 2>/dev/null
-for f in futures_bot/core/tradovate_client.py futures_bot/bot.py; do
-  git show origin/claude/update-current-status-enwJV:$f > $f 2>/dev/null && echo "Updated $f"
-done
-
-# 2. Permanent wrapper
-cat > /usr/local/bin/start-futures-bot.sh << 'W'
-#!/bin/bash
-cd /root/MT5-PropFirm-Bot
-export PYTHONPATH=/root/MT5-PropFirm-Bot
-exec /usr/bin/python3 -m futures_bot.bot
-W
+echo '#!/bin/bash' > /usr/local/bin/start-futures-bot.sh
+echo 'cd /root/MT5-PropFirm-Bot' >> /usr/local/bin/start-futures-bot.sh
+echo 'export PYTHONPATH=/root/MT5-PropFirm-Bot' >> /usr/local/bin/start-futures-bot.sh
+echo 'exec /usr/bin/python3 -m futures_bot.bot' >> /usr/local/bin/start-futures-bot.sh
 chmod +x /usr/local/bin/start-futures-bot.sh
+echo "Wrapper created"
 
-# 3. Service
-cat > /etc/systemd/system/futures-bot.service << 'S'
-[Unit]
-Description=TradeDay Futures Trading Bot
-After=network.target
+echo '[Unit]' > /etc/systemd/system/futures-bot.service
+echo 'Description=TradeDay Futures Trading Bot' >> /etc/systemd/system/futures-bot.service
+echo 'After=network.target' >> /etc/systemd/system/futures-bot.service
+echo '' >> /etc/systemd/system/futures-bot.service
+echo '[Service]' >> /etc/systemd/system/futures-bot.service
+echo 'Type=simple' >> /etc/systemd/system/futures-bot.service
+echo 'ExecStart=/usr/local/bin/start-futures-bot.sh' >> /etc/systemd/system/futures-bot.service
+echo 'Restart=on-failure' >> /etc/systemd/system/futures-bot.service
+echo 'RestartSec=60' >> /etc/systemd/system/futures-bot.service
+echo 'Environment=PYTHONUNBUFFERED=1' >> /etc/systemd/system/futures-bot.service
+echo 'EnvironmentFile=/root/MT5-PropFirm-Bot/.env' >> /etc/systemd/system/futures-bot.service
+echo '' >> /etc/systemd/system/futures-bot.service
+echo '[Install]' >> /etc/systemd/system/futures-bot.service
+echo 'WantedBy=multi-user.target' >> /etc/systemd/system/futures-bot.service
+echo "Service file created"
 
-[Service]
-Type=simple
-ExecStart=/usr/local/bin/start-futures-bot.sh
-Restart=on-failure
-RestartSec=60
-Environment=PYTHONUNBUFFERED=1
-EnvironmentFile=/root/MT5-PropFirm-Bot/.env
-
-[Install]
-WantedBy=multi-user.target
-S
-
-# 4. Dirs
-mkdir -p status logs configs
-
-# 5. Restart
 systemctl daemon-reload
 systemctl reset-failed futures-bot 2>/dev/null
-systemctl stop futures-bot 2>/dev/null
-sleep 2
-systemctl start futures-bot
-echo "Bot started"
+systemctl restart futures-bot
+echo "Bot restarted"
+
 sleep 20
-
-# 6. Status
-STATUS=$(systemctl is-active futures-bot)
-BOTLOG=$(tail -25 logs/bot.log 2>/dev/null)
-echo "Service: $STATUS"
-echo "$BOTLOG"
-
-# 7. Telegram
-MSG="Bot v122 - Token Fix
-Service: ${STATUS}
-$(date -u '+%Y-%m-%d %H:%M UTC')
----
-${BOTLOG}"
-curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-  -d chat_id="${TELEGRAM_CHAT_ID}" \
-  -d text="${MSG:0:4000}" > /dev/null 2>&1
-
+echo "Service: $(systemctl is-active futures-bot)"
+echo ""
+tail -25 logs/bot.log 2>/dev/null || echo "No log"
+echo ""
+journalctl -u futures-bot --no-pager -n 5 2>&1
 echo "=== END ==="
