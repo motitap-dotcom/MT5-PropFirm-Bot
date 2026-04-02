@@ -35,31 +35,11 @@ jobs:
             echo "TRADOVATE_ACCESS_TOKEN=$TRADOVATE_ACCESS_TOKEN" >> .env
             echo "TELEGRAM_TOKEN=$TELEGRAM_TOKEN" >> .env
             echo "TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID" >> .env
-            echo '#!/bin/bash' > /usr/local/bin/start-futures-bot.sh
-            echo 'cd /root/MT5-PropFirm-Bot' >> /usr/local/bin/start-futures-bot.sh
-            echo 'export PYTHONPATH=/root/MT5-PropFirm-Bot' >> /usr/local/bin/start-futures-bot.sh
-            echo 'exec /usr/bin/python3 -m futures_bot.bot' >> /usr/local/bin/start-futures-bot.sh
-            chmod +x /usr/local/bin/start-futures-bot.sh
-            echo '[Unit]' > /etc/systemd/system/futures-bot.service
-            echo 'Description=TradeDay Futures Trading Bot' >> /etc/systemd/system/futures-bot.service
-            echo 'After=network.target' >> /etc/systemd/system/futures-bot.service
-            echo '' >> /etc/systemd/system/futures-bot.service
-            echo '[Service]' >> /etc/systemd/system/futures-bot.service
-            echo 'Type=simple' >> /etc/systemd/system/futures-bot.service
-            echo 'ExecStart=/usr/local/bin/start-futures-bot.sh' >> /etc/systemd/system/futures-bot.service
-            echo 'Restart=on-failure' >> /etc/systemd/system/futures-bot.service
-            echo 'RestartSec=60' >> /etc/systemd/system/futures-bot.service
-            echo 'Environment=PYTHONUNBUFFERED=1' >> /etc/systemd/system/futures-bot.service
-            echo 'EnvironmentFile=/root/MT5-PropFirm-Bot/.env' >> /etc/systemd/system/futures-bot.service
-            echo '' >> /etc/systemd/system/futures-bot.service
-            echo '[Install]' >> /etc/systemd/system/futures-bot.service
-            echo 'WantedBy=multi-user.target' >> /etc/systemd/system/futures-bot.service
             systemctl daemon-reload
-            systemctl reset-failed futures-bot 2>/dev/null
             systemctl restart futures-bot
-            sleep 15
+            sleep 10
             echo "Service: $(systemctl is-active futures-bot)"
-            tail -20 logs/bot.log 2>/dev/null || echo "No logs yet"
+            tail -10 logs/bot.log 2>/dev/null || echo "No logs yet"
         env:
           TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
           TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
