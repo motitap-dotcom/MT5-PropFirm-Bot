@@ -28,7 +28,13 @@ jobs:
             cd /root/MT5-PropFirm-Bot
             git fetch origin ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
+            mkdir -p status
             bash commands/run.sh
+            git config user.name "VPS Bot"
+            git config user.email "bot@vps"
+            git add -f commands/output.txt status/status.json 2>/dev/null
+            git commit -m "VPS output [auto]" 2>/dev/null || true
+            git push origin HEAD:${{ github.ref_name }} 2>/dev/null || true
 
       - name: Telegram notification
         if: always()
