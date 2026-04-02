@@ -33,6 +33,9 @@ jobs:
             echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
             systemctl daemon-reload
             systemctl restart futures-bot 2>/dev/null || echo "Service not yet installed"
+            sleep 15
+            echo "Service: $(systemctl is-active futures-bot)"
+            tail -15 logs/bot.log 2>/dev/null || echo "No logs yet"
 
       - name: Telegram notification
         if: always()
