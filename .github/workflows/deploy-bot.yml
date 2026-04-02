@@ -18,34 +18,21 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
-          envs: TRADOVATE_USER,TRADOVATE_PASS,TRADOVATE_ACCESS_TOKEN,TELEGRAM_TOKEN,TELEGRAM_CHAT_ID
-          command_timeout: 10m
+          script_stop: true
           script: |
             cd /root/MT5-PropFirm-Bot
-            pkill -f chromium 2>/dev/null || true
             git fetch origin ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
             mkdir -p status logs configs
             pip3 install -r requirements.txt
-            python3 -m playwright install chromium --with-deps 2>/dev/null || true
-            test -d venv && venv/bin/pip install -r requirements.txt 2>/dev/null || true
-            test -d venv && venv/bin/python3 -m playwright install chromium --with-deps 2>/dev/null || true
-            echo "TRADOVATE_USER=$TRADOVATE_USER" > .env
-            echo "TRADOVATE_PASS=$TRADOVATE_PASS" >> .env
-            echo "TRADOVATE_ACCESS_TOKEN=$TRADOVATE_ACCESS_TOKEN" >> .env
-            echo "TELEGRAM_TOKEN=$TELEGRAM_TOKEN" >> .env
-            echo "TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID" >> .env
+            python3 -m playwright install chromium --with-deps 2>/dev/null || echo "Playwright install skipped"
+            echo "TRADOVATE_USER=${{ secrets.TRADOVATE_USER }}" > .env
+            echo "TRADOVATE_PASS=${{ secrets.TRADOVATE_PASS }}" >> .env
+            echo "TRADOVATE_ACCESS_TOKEN=${{ secrets.TRADOVATE_ACCESS_TOKEN }}" >> .env
+            echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .env
+            echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
             systemctl daemon-reload
-            systemctl restart futures-bot
-            sleep 10
-            echo "Service: $(systemctl is-active futures-bot)"
-            tail -10 logs/bot.log 2>/dev/null || echo "No logs yet"
-        env:
-          TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
-          TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
-          TRADOVATE_ACCESS_TOKEN: ${{ secrets.TRADOVATE_ACCESS_TOKEN }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+            systemctl restart futures-bot 2>/dev/null || echo "Service not yet installed"
 
       - name: Telegram notification
         if: always()
@@ -55,5 +42,4 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
             Bot Deploy completed
-            Branch: ${{ github.ref_name }}
             Status: ${{ job.status }}
