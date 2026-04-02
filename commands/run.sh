@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v118 - Full fix + no git reset (safe for running bot)
+# Trigger: v120 - Full fix (no git reset, safe for bot)
 cd /root/MT5-PropFirm-Bot
 exec > commands/output.txt 2>&1
 
