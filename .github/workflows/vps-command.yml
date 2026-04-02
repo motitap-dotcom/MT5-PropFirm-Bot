@@ -7,8 +7,6 @@ on:
 jobs:
   run-command:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     env:
       TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
       TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
@@ -31,28 +29,6 @@ jobs:
             git fetch origin ${{ github.ref_name }}
             git show origin/${{ github.ref_name }}:commands/run.sh > /tmp/vps_run.sh
             bash /tmp/vps_run.sh
-
-      - name: Fetch output
-        continue-on-error: true
-        uses: appleboy/ssh-action@v1
-        id: fetch
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          command_timeout: 2m
-          capture_stdout: true
-          script: |
-            cat /root/MT5-PropFirm-Bot/commands/output.txt 2>/dev/null || echo "No output file"
-
-      - name: Save output
-        run: |
-          echo "${{ steps.fetch.outputs.stdout }}" > commands/output.txt 2>/dev/null || echo "No output" > commands/output.txt
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add -f commands/output.txt
-          git diff --cached --quiet || git commit -m "VPS output [auto]"
-          git push origin ${{ github.ref_name }} || true
 
       - name: Telegram notification
         if: always()

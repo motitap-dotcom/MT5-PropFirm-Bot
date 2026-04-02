@@ -1,24 +1,22 @@
 #!/bin/bash
-# Trigger: v120 - Full fix (no git reset, safe for bot)
+# Trigger: v121 - Fix bot + send status to Telegram
 cd /root/MT5-PropFirm-Bot
-exec > commands/output.txt 2>&1
+source .env 2>/dev/null
 
-echo "=== FULL FIX v118 ==="
+echo "=== FIX v121 ==="
 date -u
-echo ""
 
-# 1. Create permanent wrapper (survives git reset)
-cat > /usr/local/bin/start-futures-bot.sh << 'WRAPPER'
+# 1. Permanent wrapper
+cat > /usr/local/bin/start-futures-bot.sh << 'W'
 #!/bin/bash
 cd /root/MT5-PropFirm-Bot
 export PYTHONPATH=/root/MT5-PropFirm-Bot
 exec /usr/bin/python3 -m futures_bot.bot
-WRAPPER
+W
 chmod +x /usr/local/bin/start-futures-bot.sh
-echo "Wrapper: /usr/local/bin/start-futures-bot.sh created"
 
-# 2. Fix service file
-cat > /etc/systemd/system/futures-bot.service << 'EOF'
+# 2. Service file
+cat > /etc/systemd/system/futures-bot.service << 'S'
 [Unit]
 Description=TradeDay Futures Trading Bot
 After=network.target
@@ -33,40 +31,37 @@ EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 
 [Install]
 WantedBy=multi-user.target
-EOF
-echo "Service file updated"
+S
 
-# 3. Ensure dirs exist
+# 3. Dirs
 mkdir -p status logs configs
 
-# 4. Verify code exists
-echo ""
-echo "=== Verify ==="
-ls futures_bot/__init__.py futures_bot/bot.py futures_bot/core/tradovate_client.py 2>&1
-PYTHONPATH=/root/MT5-PropFirm-Bot /usr/bin/python3 -c "from futures_bot.bot import main; print('Import: OK')" 2>&1
-echo ""
-
-# 5. Restart bot
+# 4. Restart
 systemctl daemon-reload
 systemctl reset-failed futures-bot 2>/dev/null
 systemctl stop futures-bot 2>/dev/null
 sleep 2
 systemctl start futures-bot
-echo "Bot restarted"
-
-# 6. Wait and check
+echo "Bot started"
 sleep 20
-echo ""
-echo "=== Result ==="
-echo "Service: $(systemctl is-active futures-bot)"
-echo ""
-echo "=== Bot Log ==="
-tail -25 logs/bot.log 2>/dev/null || echo "No log"
-echo ""
-echo "=== Journal ==="
-journalctl -u futures-bot --no-pager -n 10 2>&1
-echo ""
-echo "=== Token ==="
-cat configs/.tradovate_token.json 2>/dev/null | head -3 || echo "No token"
-echo ""
-echo "=== END ==="
+
+# 5. Collect status
+STATUS=$(systemctl is-active futures-bot)
+LOGLINES=$(tail -25 logs/bot.log 2>/dev/null)
+TOKEN_INFO=$(cat configs/.tradovate_token.json 2>/dev/null | head -1 | cut -c1-60)
+
+echo "Service: $STATUS"
+echo "$LOGLINES"
+
+# 6. Send to Telegram
+MSG="Bot Status v121
+Service: ${STATUS}
+$(date -u '+%Y-%m-%d %H:%M UTC')
+---
+${LOGLINES}"
+
+curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+  -d chat_id="${TELEGRAM_CHAT_ID}" \
+  -d text="${MSG:0:4000}" > /dev/null 2>&1
+
+echo "=== Sent to Telegram ==="
