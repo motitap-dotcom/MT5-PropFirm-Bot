@@ -7,6 +7,8 @@ on:
 jobs:
   run-command:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
       TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
@@ -17,6 +19,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run command on VPS
+        id: run
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -26,9 +29,23 @@ jobs:
           command_timeout: 10m
           script: |
             cd /root/MT5-PropFirm-Bot
-            git fetch origin ${{ github.ref_name }}
-            git show origin/${{ github.ref_name }}:commands/run.sh > /tmp/vps_run.sh
+            git fetch origin ${{ github.ref_name }} 2>/dev/null
+            git show origin/${{ github.ref_name }}:commands/run.sh > /tmp/vps_run.sh 2>/dev/null
             bash /tmp/vps_run.sh
+
+      - name: Get output from VPS
+        id: output
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            tail -50 /root/MT5-PropFirm-Bot/logs/bot.log 2>/dev/null
+            echo "---SERVICE---"
+            systemctl is-active futures-bot 2>/dev/null
+            echo "---JOURNAL---"
+            journalctl -u futures-bot --no-pager -n 5 2>&1
 
       - name: Telegram notification
         if: always()
