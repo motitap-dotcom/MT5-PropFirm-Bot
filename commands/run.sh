@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: debug-trading-v1 - Full diagnostic: why bot not trading
+# Trigger: debug-trading-v2 - Full diagnostic: why bot not trading
 cd /root/MT5-PropFirm-Bot
 
 echo "=== BOT DEBUG - WHY NOT TRADING ==="
