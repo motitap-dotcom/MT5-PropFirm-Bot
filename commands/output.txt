@@ -1,23 +1,16 @@
 === Post-Deploy Status Check ===
-Timestamp: 2026-04-03 14:32:59 UTC
-ET Time: 10:32 EDT
+Timestamp: 2026-04-03 15:06:16 UTC
+ET Time: 11:06 EDT
 
 === Service Status ===
 ● futures-bot.service - TradeDay Futures Trading Bot
      Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
     Drop-In: /etc/systemd/system/futures-bot.service.d
              └─env.conf
-     Active: deactivating (stop-sigterm) since Fri 2026-04-03 14:32:56 UTC; 2s ago
-   Main PID: 4081423 (python3)
-      Tasks: 2 (limit: 9483)
-     Memory: 31.8M (peak: 312.6M)
-        CPU: 7.477s
-     CGroup: /system.slice/futures-bot.service
-             └─4081423 /usr/bin/python3 -m futures_bot.bot
-
-Apr 03 14:03:22 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:22,933 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-Apr 03 14:08:24 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:08:24,062 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-Apr 03 14:13:25 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:13:25,245 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+     Active: activating (auto-restart) (Result: exit-code) since Fri 2026-04-03 15:05:46 UTC; 29s ago
+    Process: 4097591 ExecStart=/root/MT5-PropFirm-Bot/venv/bin/python -m futures_bot.bot (code=exited, status=1/FAILURE)
+   Main PID: 4097591 (code=exited, status=1/FAILURE)
+        CPU: 31ms
 
 === Venv Check ===
 lrwxrwxrwx 1 root root 7 Mar 30 20:34 venv/bin/python -> python3
@@ -28,8 +21,8 @@ playwright: OK
 
 === Token File ===
 Token file exists
-Saved at: 2026-04-03T14:03:21.744947+00:00
-Remaining: 50 minutes
+Saved at: 2026-04-03T14:40:32.547910+00:00
+Remaining: 17 minutes
 
 === .env Check ===
 .env exists
@@ -37,35 +30,35 @@ TRADOVATE lines: 3
 TELEGRAM lines: 2
 
 === Last 30 Journal Lines ===
-Apr 03 14:02:27 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:02:27,927 [tradovate_client] WARNING: Token renewal failed on live.tradovateapi.com (401): Expired Access Token
-Apr 03 14:02:27 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:02:27,927 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-Apr 03 14:02:27 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:02:27,927 [tradovate_client] INFO: Trying web auth on live endpoint...
-Apr 03 14:02:28 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:02:28,074 [tradovate_client] WARNING: Web auth: 'Incorrect username or password. Please try again, noting that passwords are case-sensitive.' — may be rate-limited. Waiting 20s...
-Apr 03 14:02:48 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:02:48,078 [tradovate_client] INFO: Trying web auth on demo endpoint...
-Apr 03 14:02:48 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:02:48,238 [tradovate_client] WARNING: Web auth: 'Incorrect username or password. Please try again, noting that passwords are case-sensitive.' — may be rate-limited. Waiting 20s...
-Apr 03 14:03:08 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:08,240 [tradovate_client] INFO: Web auth failed on all endpoints, trying browser login...
-Apr 03 14:03:08 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:08,275 [tradovate_client] INFO: Browser login attempt 1/2...
-Apr 03 14:03:09 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:09,045 [tradovate_client] INFO: Loading https://trader.tradovate.com...
-Apr 03 14:03:19 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:19,794 [tradovate_client] INFO: Login form found, filling credentials...
-Apr 03 14:03:20 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:20,487 [tradovate_client] INFO: Waiting for auth response (up to 60s)...
-Apr 03 14:03:21 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:21,575 [tradovate_client] INFO: Browser auth succeeded!
-Apr 03 14:03:21 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:21,577 [tradovate_client] INFO: Authenticated successfully
-Apr 03 14:03:21 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:21,744 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-Apr 03 14:03:21 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:21,744 [tradovate_client] INFO: Environment token is valid
-Apr 03 14:03:21 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:21,745 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-Apr 03 14:03:21 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:21,846 [bot] INFO: Bot started successfully
-Apr 03 14:03:21 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:21,846 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-Apr 03 14:03:21 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:21,846 [bot] INFO: Timeframe: 5min
-Apr 03 14:03:21 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:21,846 [bot] INFO: New trading day: 2026-04-03
-Apr 03 14:03:22 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:03:22,933 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-Apr 03 14:08:24 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:08:24,062 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-Apr 03 14:13:25 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:13:25,245 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-Apr 03 14:18:26 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:18:26,475 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-Apr 03 14:23:27 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:23:27,705 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-Apr 03 14:28:28 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:28:28,908 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-Apr 03 14:32:56 vmi3096165 systemd[1]: Stopping futures-bot.service - TradeDay Futures Trading Bot...
-Apr 03 14:32:56 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:32:56,497 [bot] INFO: Stopping bot: Signal received
-Apr 03 14:32:56 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:32:56,846 [tradovate_client] INFO: Disconnected from Tradovate
-Apr 03 14:32:56 vmi3096165 start_bot.sh[4081423]: 2026-04-03 14:32:56,846 [bot] INFO: Bot stopped
+Apr 03 15:03:45 vmi3096165 python[4097094]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
+Apr 03 15:03:45 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 03 15:03:45 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 03 15:04:15 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 44.
+Apr 03 15:04:15 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 03 15:04:15 vmi3096165 python[4097231]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
+Apr 03 15:04:15 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 03 15:04:15 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 03 15:04:45 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 45.
+Apr 03 15:04:45 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 03 15:04:45 vmi3096165 python[4097310]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
+Apr 03 15:04:45 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 03 15:04:45 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 03 15:05:15 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 46.
+Apr 03 15:05:15 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 03 15:05:15 vmi3096165 python[4097480]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
+Apr 03 15:05:15 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 03 15:05:15 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 03 15:05:46 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 47.
+Apr 03 15:05:46 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 03 15:05:46 vmi3096165 python[4097591]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
+Apr 03 15:05:46 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 03 15:05:46 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 03 15:06:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 48.
+Apr 03 15:06:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,631 [bot] INFO: ============================================================
+Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,631 [bot] INFO: TradeDay Futures Bot Starting
+Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,631 [bot] INFO: ============================================================
+Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,632 [news_filter] INFO: Loaded 26 restricted events
+Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,632 [tradovate_client] INFO: Loaded saved token from file, verifying...
 
 === DONE ===
