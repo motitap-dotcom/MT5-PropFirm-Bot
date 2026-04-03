@@ -1,0 +1,14 @@
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/root/MT5-PropFirm-Bot/scripts/start_bot.sh
+Restart=on-failure
+RestartSec=60
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+
+[Install]
+WantedBy=multi-user.target

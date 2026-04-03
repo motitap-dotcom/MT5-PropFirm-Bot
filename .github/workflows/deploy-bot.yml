@@ -5,6 +5,7 @@ on:
       - 'futures_bot/**'
       - 'configs/**'
       - 'requirements.txt'
+      - 'scripts/**'
 
 jobs:
   deploy:
@@ -31,8 +32,11 @@ jobs:
             echo "TRADOVATE_ACCESS_TOKEN=${{ secrets.TRADOVATE_ACCESS_TOKEN }}" >> .env
             echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .env
             echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
+            chmod +x scripts/start_bot.sh
+            cp scripts/futures-bot.service /etc/systemd/system/futures-bot.service
             systemctl daemon-reload
-            systemctl restart futures-bot 2>/dev/null || echo "Service not yet installed"
+            systemctl reset-failed futures-bot 2>/dev/null
+            systemctl restart futures-bot
             sleep 15
             echo "Service: $(systemctl is-active futures-bot)"
             tail -15 logs/bot.log 2>/dev/null || echo "No logs yet"
