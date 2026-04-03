@@ -5,12 +5,17 @@ on:
       - 'futures_bot/**'
       - 'configs/**'
       - 'requirements.txt'
+      - 'scripts/install_bot.sh'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1
@@ -18,28 +23,92 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
-          script_stop: true
+          command_timeout: 15m
           script: |
             cd /root/MT5-PropFirm-Bot
             git fetch origin ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
 
-            # Install/update dependencies
-            pip3 install -r requirements.txt
+            # Create venv if missing
+            [ ! -d "venv" ] && python3 -m venv venv
 
-            # Write fresh secrets to .env (systemd reads from this file)
+            # Install/update dependencies
+            venv/bin/pip install --upgrade pip
+            venv/bin/pip install -r requirements.txt
+
+            # Install Playwright + Chromium for CAPTCHA bypass
+            venv/bin/playwright install chromium 2>/dev/null || true
+            venv/bin/playwright install-deps chromium 2>/dev/null || true
+
+            # Create directories
+            mkdir -p logs status configs
+
+            # Write fresh secrets to .env (DO NOT delete token file!)
             echo "TRADOVATE_USER=${{ secrets.TRADOVATE_USER }}" > .env
             echo "TRADOVATE_PASS=${{ secrets.TRADOVATE_PASS }}" >> .env
             echo "TRADOVATE_ACCESS_TOKEN=${{ secrets.TRADOVATE_ACCESS_TOKEN }}" >> .env
             echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .env
             echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
 
+            # Update systemd service to use venv
+            cat > /etc/systemd/system/futures-bot.service << 'SERVICEEOF'
+            [Unit]
+            Description=TradeDay Futures Trading Bot
+            After=network-online.target
+            Wants=network-online.target
+
+            [Service]
+            Type=simple
+            WorkingDirectory=/root/MT5-PropFirm-Bot
+            ExecStart=/root/MT5-PropFirm-Bot/venv/bin/python -m futures_bot.bot
+            Restart=always
+            RestartSec=30
+            MemoryMax=2G
+            Environment=PYTHONUNBUFFERED=1
+            EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+
+            [Install]
+            WantedBy=multi-user.target
+            SERVICEEOF
+
             # Restart bot service
             systemctl daemon-reload
-            systemctl restart futures-bot 2>/dev/null || echo "Service not yet installed"
+            systemctl enable futures-bot
+            systemctl restart futures-bot
 
-            echo "Deploy completed at $(date -u +'%Y-%m-%d %H:%M UTC')" > deploy_report.txt
-            python3 -c "import sys; sys.path.insert(0,'.'); import futures_bot; print('Import OK')" >> deploy_report.txt 2>&1
+            sleep 10
+
+            # Build deploy report
+            echo "=== Deploy Report ===" > /tmp/deploy_report.txt
+            echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> /tmp/deploy_report.txt
+            echo "Branch: ${{ github.ref_name }}" >> /tmp/deploy_report.txt
+            echo "" >> /tmp/deploy_report.txt
+            echo "=== Import Check ===" >> /tmp/deploy_report.txt
+            cd /root/MT5-PropFirm-Bot && venv/bin/python -c "import futures_bot; print('Import OK')" >> /tmp/deploy_report.txt 2>&1
+            echo "" >> /tmp/deploy_report.txt
+            echo "=== Service Status ===" >> /tmp/deploy_report.txt
+            systemctl status futures-bot --no-pager | head -15 >> /tmp/deploy_report.txt 2>&1
+            echo "" >> /tmp/deploy_report.txt
+            echo "=== Last 20 Journal Lines ===" >> /tmp/deploy_report.txt
+            journalctl -u futures-bot --no-pager -n 20 >> /tmp/deploy_report.txt 2>&1
+
+            cat /tmp/deploy_report.txt
+
+      - name: Fetch deploy report
+        continue-on-error: true
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+          sshpass -p '${{ secrets.VPS_PASSWORD }}' scp -o StrictHostKeyChecking=no \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/tmp/deploy_report.txt \
+            deploy_report.txt 2>/dev/null || echo "Failed to fetch deploy report" > deploy_report.txt
+
+      - name: Commit deploy report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add deploy_report.txt
+          git commit -m "deploy: $(date -u '+%F %H:%M UTC') | ${{ github.ref_name }}" || true
+          git push origin HEAD:${{ github.ref_name }} || true
 
       - name: Telegram notification
         if: always()
@@ -48,5 +117,6 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            Bot Deploy completed
+            🚀 TradeDay Bot Deploy
+            Branch: ${{ github.ref_name }}
             Status: ${{ job.status }}

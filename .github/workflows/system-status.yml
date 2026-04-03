@@ -1,0 +1,122 @@
+name: System Status Check
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # Every 30 minutes
+  push:
+    branches: [main, claude/**]
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Collect status via SSH
+        id: ssh_status
+        continue-on-error: true
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          command_timeout: 5m
+          script: |
+            cd /root/MT5-PropFirm-Bot
+
+            BOT_ACTIVE=$(systemctl is-active futures-bot 2>/dev/null || echo "unknown")
+            BOT_PID=$(systemctl show futures-bot --property=MainPID --value 2>/dev/null || echo "0")
+            UPTIME=$(systemctl show futures-bot --property=ActiveEnterTimestamp --value 2>/dev/null || echo "unknown")
+            MEM=$(ps -p "$BOT_PID" -o rss= 2>/dev/null | awk '{printf "%.0f", $1/1024}' || echo "0")
+
+            # Live status from bot
+            LIVE_STATUS=$(cat status/status.json 2>/dev/null || echo '{}')
+
+            # Token info
+            TOKEN_INFO="no token file"
+            if [ -f configs/.tradovate_token.json ]; then
+                TOKEN_INFO=$(python3 -c "
+import json, time
+d = json.loads(open('configs/.tradovate_token.json').read())
+exp = d.get('expiry', 0)
+remaining = exp - time.time()
+saved = d.get('saved_at', 'unknown')
+print(f'saved={saved}, remaining={remaining/60:.0f}min')
+" 2>/dev/null || echo "cannot read")
+            fi
+
+            # Recent journal logs
+            JOURNAL_TAIL=$(journalctl -u futures-bot --no-pager -n 50 2>&1)
+
+            # Bot log file
+            BOT_LOG_TAIL=$(tail -30 logs/bot.log 2>/dev/null || echo "no log file")
+
+            # Disk and memory
+            DISK=$(df -h / | tail -1 | awk '{print $3"/"$2" ("$5")"}')
+            MEMORY=$(free -h | awk 'NR==2{print $3"/"$2}')
+
+            # Current time info
+            ET_TIME=$(TZ='America/New_York' date '+%H:%M %Z')
+            UTC_TIME=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
+
+            # .env check
+            ENV_OK="missing"
+            if [ -f .env ]; then
+                ENV_OK="exists ($(grep -c 'TRADOVATE' .env) tradovate lines)"
+            fi
+
+            # Build JSON status
+            python3 -c "
+import json
+status = {
+    'timestamp': '$UTC_TIME',
+    'et_time': '$ET_TIME',
+    'bot_active': '$BOT_ACTIVE' == 'active',
+    'bot_status': '$BOT_ACTIVE',
+    'bot_pid': '$BOT_PID',
+    'uptime_since': '$UPTIME',
+    'memory_mb': '$MEM',
+    'token': '$TOKEN_INFO',
+    'env_file': '$ENV_OK',
+    'disk': '$DISK',
+    'system_memory': '$MEMORY',
+    'live_status': json.loads('''$LIVE_STATUS''') if '''$LIVE_STATUS'''.strip().startswith('{') else {},
+    'journal_tail': '''$JOURNAL_TAIL'''[:3000],
+    'bot_log_tail': '''$BOT_LOG_TAIL'''[:2000],
+}
+print(json.dumps(status, indent=2))
+" > /tmp/td_system_status.json
+
+            cat /tmp/td_system_status.json
+
+      - name: Fetch status file from VPS
+        continue-on-error: true
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null 2>&1
+          sshpass -p '${{ secrets.VPS_PASSWORD }}' scp -o StrictHostKeyChecking=no \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/tmp/td_system_status.json \
+            system_status.json 2>/dev/null || echo '{"error": "Failed to fetch status", "timestamp": "'$(date -u +%F\ %T\ UTC)'"}' > system_status.json
+
+      - name: Commit status
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add system_status.json
+          TIMESTAMP=$(date -u +"%F %H:%M UTC")
+          BOT_STATUS=$(python3 -c "import json; d=json.loads(open('system_status.json').read()); print(d.get('bot_status','unknown'))" 2>/dev/null || echo "unknown")
+          git commit -m "status: ${TIMESTAMP} | bot=${BOT_STATUS}" || true
+          git push || true
+
+      - name: Telegram notification on failure
+        if: failure()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ⚠️ TradeDay Bot Status Check Failed
+            Branch: ${{ github.ref_name }}
+            Time: ${{ github.event.head_commit.timestamp }}
