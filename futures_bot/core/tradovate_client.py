@@ -26,8 +26,8 @@ import websockets
 
 logger = logging.getLogger("tradovate_client")
 
-# Token file path for persistence across restarts
-TOKEN_FILE = Path("configs/.tradovate_token.json")
+# Token file path for persistence across restarts (absolute path)
+TOKEN_FILE = Path(__file__).parent.parent.parent / "configs" / ".tradovate_token.json"
 
 # HMAC key and fields for web-style auth (same as Tradovate web trader)
 _HMAC_KEY = "1259-11e7-485a-aeae-9b6016579351"

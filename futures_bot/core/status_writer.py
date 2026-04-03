@@ -15,7 +15,9 @@ class StatusWriter:
     """Writes periodic status snapshots for external monitoring."""
 
     def __init__(self, output_path: str = "status/status.json"):
-        self.output_path = Path(output_path)
+        # Use absolute path relative to project root
+        project_root = Path(__file__).parent.parent.parent
+        self.output_path = project_root / output_path
         self.output_path.parent.mkdir(parents=True, exist_ok=True)
 
     def write(self, guardian_status: Dict, risk_status: Dict = None,
