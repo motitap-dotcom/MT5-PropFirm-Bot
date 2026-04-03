@@ -1,13 +1,8 @@
 #!/bin/bash
-# READ-ONLY status check v130
+# READ-ONLY status check v131
 cd /root/MT5-PropFirm-Bot
-echo "=== BOT STATUS ==="
-date -u
 echo "Service: $(systemctl is-active futures-bot)"
-echo ""
-echo "=== Bot Log (last 50) ==="
-tail -50 logs/bot.log 2>/dev/null || echo "No log"
-echo ""
-echo "=== Journal ==="
-journalctl -u futures-bot --no-pager -n 10 2>&1
-echo "=== END ==="
+echo "---JOURNAL LAST 20---"
+journalctl -u futures-bot --no-pager -n 20 2>&1
+echo "---BOT LOG LAST 10---"
+tail -10 logs/bot.log 2>/dev/null
