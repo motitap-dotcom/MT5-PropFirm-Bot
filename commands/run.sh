@@ -1,5 +1,5 @@
 #!/bin/bash
-# READ-ONLY status check v131
+# READ-ONLY status check v132
 cd /root/MT5-PropFirm-Bot
 echo "Service: $(systemctl is-active futures-bot)"
 echo "---JOURNAL LAST 20---"
