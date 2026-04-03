@@ -286,6 +286,7 @@ class FuturesBot:
                 symbol, self.timeframe, count=50
             )
             if not bars_data:
+                logger.debug(f"{symbol}: No bars returned from API")
                 return
 
             # Only process NEW bars (avoid re-feeding old data)
@@ -294,6 +295,7 @@ class FuturesBot:
             if bar_time == self._last_bar_time.get(symbol, ""):
                 return  # Already processed this bar
             self._last_bar_time[symbol] = bar_time
+            logger.info(f"{symbol}: New bar at {bar_time}, close={latest_bar.get('close', '?')}, bars={len(bars_data)}")
 
             bar = self._to_bar(latest_bar)
 
@@ -327,7 +329,10 @@ class FuturesBot:
 
             # Execute trade if signal
             if setup and setup.signal.value != 0:
+                logger.info(f"{symbol}: SIGNAL from {strategy_name}: {setup.signal}, entry={getattr(setup, 'entry', '?')}")
                 await self._execute_trade(symbol, setup, strategy_name)
+            elif setup:
+                logger.debug(f"{symbol}: {strategy_name} returned setup but no signal")
 
         except Exception as e:
             logger.error(f"Error processing {symbol}: {e}", exc_info=True)
