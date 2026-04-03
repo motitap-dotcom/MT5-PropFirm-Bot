@@ -50,26 +50,28 @@ jobs:
             echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .env
             echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
 
-            # Update systemd service to use venv
+            # Update systemd service (no leading whitespace!)
+            chmod +x scripts/start_bot.sh
+            rm -rf /etc/systemd/system/futures-bot.service.d
             cat > /etc/systemd/system/futures-bot.service << 'SERVICEEOF'
-            [Unit]
-            Description=TradeDay Futures Trading Bot
-            After=network-online.target
-            Wants=network-online.target
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network-online.target
+Wants=network-online.target
 
-            [Service]
-            Type=simple
-            WorkingDirectory=/root/MT5-PropFirm-Bot
-            ExecStart=/root/MT5-PropFirm-Bot/venv/bin/python -m futures_bot.bot
-            Restart=always
-            RestartSec=30
-            MemoryMax=2G
-            Environment=PYTHONUNBUFFERED=1
-            EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+[Service]
+Type=simple
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/bin/bash /root/MT5-PropFirm-Bot/scripts/start_bot.sh
+Restart=always
+RestartSec=30
+MemoryMax=2G
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 
-            [Install]
-            WantedBy=multi-user.target
-            SERVICEEOF
+[Install]
+WantedBy=multi-user.target
+SERVICEEOF
 
             # Restart bot service
             systemctl daemon-reload
