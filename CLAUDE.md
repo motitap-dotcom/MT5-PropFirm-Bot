@@ -118,15 +118,20 @@ All workflows send Telegram notifications on completion.
 | "תעשה בדיקה מלאה" | Edits `trigger-check.txt`, pushes | `trigger-check.txt` | `vps_report.txt` |
 | "תריץ פקודה X" | Writes command X in `commands/run.sh`, pushes | `commands/run.sh` | `commands/output.txt` |
 
-### Workflow for every request (MUST FOLLOW):
-1. Write/edit the trigger file
-2. Push to GitHub (to the correct branch: `claude/build-cfd-trading-bot-fl0ld`)
-3. Wait ~90-120 seconds for Actions to run and push output back
-4. `git pull` to get the output file (`commands/output.txt`)
-5. Read `commands/output.txt` and present results to Noa WITH timestamp
-6. If data is older than 30 minutes, warn and offer to fetch fresh data
-7. **NEVER ask Noa to check GitHub Actions manually** - always pull and read the output file yourself
-8. If `git pull` shows no changes after 120s, wait another 60s and try again
+### Workflow for status checks (READ-ONLY via VPS Command):
+1. Write a READ-ONLY script to `commands/run.sh` (NO systemctl, NO file changes)
+2. Push to current working branch
+3. Wait ~120 seconds for Actions to run
+4. Output shows in GitHub Actions log — ask Noa for screenshot if needed
+5. ⚠️ VPS Command output does NOT reliably commit back to repo (scp pipeline is broken)
+6. For reliable output: have the script send results to Telegram from VPS
+
+### Workflow for code changes (via Deploy):
+1. Edit files in `futures_bot/`, `configs/`, `requirements.txt`, or `scripts/`
+2. Push to current working branch
+3. Deploy workflow runs automatically: git reset, install deps, copy service file, restart bot
+4. Check Deploy Bot status in GitHub Actions (green = success)
+5. Bot logs visible in Deploy Bot → "Deploy to VPS" step
 
 ---
 
@@ -149,6 +154,8 @@ All workflows send Telegram notifications on completion.
 | `configs/restricted_events.json` | TradeDay restricted news events calendar |
 | `commands/run.sh` | Script to execute on VPS (trigger for vps-command) |
 | `commands/output.txt` | Output from last VPS command |
+| `scripts/start_bot.sh` | **Bot startup wrapper** (sets PYTHONPATH, runs bot) — MUST be in repo |
+| `scripts/futures-bot.service` | **Systemd service file** — deploy copies to `/etc/systemd/system/` |
 | `scripts/check_bot.sh` | Bot diagnostic script |
 | `scripts/fix_and_restart.sh` | Fix + restart script |
 | `scripts/install_bot.sh` | Install bot as systemd service |
@@ -203,13 +210,21 @@ All workflows send Telegram notifications on completion.
 - SSH: stored in GitHub Secrets (`VPS_USER`, `VPS_PASSWORD`)
 - VNC: port 5900 (RealVNC)
 
-## Tradovate Auth Method
-- **Web-style auth**: No API key subscription needed
-- Uses `appId="tradovate_trader(web)"`, `cid=8`, `sec=""`
-- First login from new IP requires CAPTCHA (solve once via `get_token.py`)
-- After that, token auto-renews via `/auth/renewaccesstoken`
+## Tradovate Auth Method (5-layer fallback)
+1. **Saved token** from `configs/.tradovate_token.json` → verify → renew if needed
+2. **Env token** from `TRADOVATE_ACCESS_TOKEN` in `.env` → verify → renew if needed
+3. **Web-style auth** (username+password) → tries live first, then demo
+4. **Playwright browser auth** → headless Chromium logs into trader.tradovate.com, bypasses CAPTCHA automatically
+5. If all fail → crash → systemd restarts in 60s → retry
+
+### Auth details:
+- Uses `appId="tradovate_trader(web)"`, `cid=8`
+- HMAC-SHA256 signing with key `1259-11e7-485a-aeae-9b6016579351`
 - Token saved to `configs/.tradovate_token.json`
-- Can also set `TRADOVATE_ACCESS_TOKEN` in `.env` as override
+- **Token renewal threshold: 15 minutes** (in `_ensure_token()`, `remaining < 900`)
+- ⚠️ NEVER set threshold > 80 minutes! Tradovate demo tokens expire in ~80min. Setting 2h caused the bot to renew on EVERY API call instead of trading.
+- Token renewal tries both demo and live endpoints (token may have been issued on either)
+- Playwright requires: `pip3 install playwright` + `python3 -m playwright install chromium --with-deps`
 
 ## GitHub Secrets Needed
 - `VPS_HOST`, `VPS_USER`, `VPS_PASSWORD` — VPS access
@@ -260,7 +275,17 @@ All workflows send Telegram notifications on completion.
 
 ## How to Resume Work
 1. Don't assume anything from previous sessions
-2. Fetch fresh status: write check script to `commands/run.sh`, push, pull results
-3. Read `commands/output.txt` for current state
+2. Fetch fresh status via READ-ONLY VPS Command (no restart!)
+3. Output visible in GitHub Actions log or Telegram
 4. Check `status/status.json` for last bot-written snapshot (may be stale)
 5. All output files have timestamps - always verify freshness
+6. **NEVER restart the bot via VPS Command** — use Deploy only
+7. The bot's startup chain: systemd → `scripts/start_bot.sh` → PYTHONPATH → `python3 -m futures_bot.bot`
+
+## Known Issues & Lessons Learned
+- **VPS Command output pipeline broken**: sshpass/scp fails, output doesn't commit back to repo. Use Telegram or GitHub Actions log instead.
+- **Token renewal threshold must be < 80 min**: Tradovate demo tokens expire in ~80min. If threshold ≥ 80min, bot renews on EVERY API call and never trades.
+- **git reset --hard in VPS Command breaks the bot**: It changes code under the running bot. Only deploy should do git reset.
+- **Service file + wrapper MUST be in repo**: If created by VPS Command, git reset deletes them. Tracked files in `scripts/` survive.
+- **Playwright browser auth works**: Successfully bypasses CAPTCHA on Tradovate. Requires Chromium installed on VPS.
+- **Deploy Bot workflow is the ONLY safe way to restart**: It does git reset + install deps + copy service file + restart, all in the right order.
