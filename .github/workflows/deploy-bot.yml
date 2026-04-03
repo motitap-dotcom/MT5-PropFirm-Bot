@@ -5,7 +5,7 @@ on:
       - 'futures_bot/**'
       - 'configs/**'
       - 'requirements.txt'
-      - 'scripts/install_bot.sh'
+      - 'scripts/**'
 
 jobs:
   deploy:
