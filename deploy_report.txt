@@ -1,0 +1,38 @@
+=== Deploy Report ===
+Timestamp: 2026-04-03 14:42:14 UTC
+Branch: claude/debug-bot-trading-IXcXi
+
+=== Import Check ===
+Import OK
+
+=== Service Status ===
+● futures-bot.service - TradeDay Futures Trading Bot
+     Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
+    Drop-In: /etc/systemd/system/futures-bot.service.d
+             └─env.conf
+     Active: activating (auto-restart) (Result: exit-code) since Fri 2026-04-03 14:42:04 UTC; 10s ago
+    Process: 4092213 ExecStart=/root/MT5-PropFirm-Bot/venv/bin/python -m futures_bot.bot (code=exited, status=1/FAILURE)
+   Main PID: 4092213 (code=exited, status=1/FAILURE)
+        CPU: 21ms
+
+=== Last 20 Journal Lines ===
+Apr 03 14:40:32 vmi3096165 python[4091774]: 2026-04-03 14:40:32,547 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+Apr 03 14:40:32 vmi3096165 python[4091774]: 2026-04-03 14:40:32,547 [tradovate_client] INFO: Saved token is still valid
+Apr 03 14:40:32 vmi3096165 python[4091774]: 2026-04-03 14:40:32,548 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+Apr 03 14:40:32 vmi3096165 python[4091774]: 2026-04-03 14:40:32,629 [bot] INFO: Bot started successfully
+Apr 03 14:40:32 vmi3096165 python[4091774]: 2026-04-03 14:40:32,630 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+Apr 03 14:40:32 vmi3096165 python[4091774]: 2026-04-03 14:40:32,630 [bot] INFO: Timeframe: 5min
+Apr 03 14:40:32 vmi3096165 python[4091774]: 2026-04-03 14:40:32,630 [bot] INFO: New trading day: 2026-04-03
+Apr 03 14:40:34 vmi3096165 systemd[1]: Stopping futures-bot.service - TradeDay Futures Trading Bot...
+Apr 03 14:40:34 vmi3096165 python[4091774]: 2026-04-03 14:40:34,658 [bot] INFO: Stopping bot: Signal received
+Apr 03 14:40:34 vmi3096165 python[4091774]: 2026-04-03 14:40:34,964 [tradovate_client] INFO: Disconnected from Tradovate
+Apr 03 14:40:34 vmi3096165 python[4091774]: 2026-04-03 14:40:34,964 [bot] INFO: Bot stopped
+Apr 03 14:42:04 vmi3096165 systemd[1]: futures-bot.service: State 'stop-sigterm' timed out. Killing.
+Apr 03 14:42:04 vmi3096165 systemd[1]: futures-bot.service: Killing process 4091774 (python) with signal SIGKILL.
+Apr 03 14:42:04 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=killed, status=9/KILL
+Apr 03 14:42:04 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'timeout'.
+Apr 03 14:42:04 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
+Apr 03 14:42:04 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 03 14:42:04 vmi3096165 python[4092213]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
+Apr 03 14:42:04 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 03 14:42:04 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
