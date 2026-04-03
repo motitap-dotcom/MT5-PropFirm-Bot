@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: post-deploy-check-v1
+# Trigger: post-deploy-check-v2
 cd /root/MT5-PropFirm-Bot
 
 echo "=== Post-Deploy Status Check ==="
