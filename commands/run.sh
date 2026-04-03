@@ -1,5 +1,5 @@
 #!/bin/bash
-# READ-ONLY status check v127
+# READ-ONLY status check v128
 cd /root/MT5-PropFirm-Bot
 echo "=== BOT STATUS ==="
 date -u
