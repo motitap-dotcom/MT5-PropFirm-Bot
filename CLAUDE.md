@@ -33,6 +33,19 @@
 - Never kill the bot, restart services, or delete files without Noa's explicit approval.
 - Always explain what a script will do BEFORE pushing it.
 
+### 6. NEVER use VPS Command workflow to restart or modify the bot.
+- VPS Command (`commands/run.sh`) does `git fetch + git show` which is safe for READ-ONLY checks.
+- But ANY script that runs `systemctl restart/stop`, writes service files, or changes bot files **WILL BREAK THE RUNNING BOT**.
+- The bot's service file and wrapper are tracked in the repo at `scripts/futures-bot.service` and `scripts/start_bot.sh`.
+- **For code changes**: use Deploy Bot workflow ONLY (push changes to `futures_bot/**`, `configs/**`, `requirements.txt`, or `scripts/**`).
+- **For status checks**: use VPS Command with a READ-ONLY script (no restart, no file changes).
+- Deploy workflow automatically: copies service file, sets permissions, restarts bot with correct PYTHONPATH.
+
+### 7. Bot startup requires PYTHONPATH.
+- The bot runs via `scripts/start_bot.sh` which sets `PYTHONPATH=/root/MT5-PropFirm-Bot` before running `python3 -m futures_bot.bot`.
+- Without PYTHONPATH, Python cannot find the `futures_bot` module → "No module named futures_bot.bot".
+- NEVER change the service file to run `python3 -m futures_bot.bot` directly without the wrapper.
+
 ---
 
 ## Architecture: How This Bot Works
@@ -63,17 +76,19 @@ Claude edits files locally -> pushes to GitHub -> GitHub Actions SSH into VPS ->
 
 ## GitHub Actions Workflows (4 pipelines)
 
-### 1. `vps-command.yml` — Run any command on VPS
+### 1. `vps-command.yml` — Run READ-ONLY command on VPS
 - **Trigger**: push that changes `commands/run.sh`
-- **What it does**: Executes `commands/run.sh` on VPS
-- **Output file**: `commands/output.txt`
-- **Use for**: Status checks, reading logs, diagnostics
+- **What it does**: Downloads `commands/run.sh` via `git show` (NO git reset!) and runs it
+- **Output**: Shown in GitHub Actions log + sent to Telegram
+- **Use for**: READ-ONLY status checks, reading logs (NEVER restart bot from here!)
+- **⚠️ WARNING**: Scripts that restart/modify the bot WILL BREAK IT. Use deploy instead.
 
-### 2. `deploy-bot.yml` — Deploy bot code + configs to VPS
-- **Trigger**: push that changes `futures_bot/**`, `configs/**`, or `requirements.txt`
-- **What it does**: Pulls code, installs deps, restarts bot service
-- **Output file**: `deploy_report.txt`
-- **Use for**: Code changes, config updates, bug fixes
+### 2. `deploy-bot.yml` — Deploy bot code + configs to VPS (PRIMARY workflow)
+- **Trigger**: push that changes `futures_bot/**`, `configs/**`, `requirements.txt`, or `scripts/**`
+- **What it does**: git reset, installs deps, copies service file from repo, restarts bot
+- **Output**: Shown in GitHub Actions log
+- **Use for**: ALL code changes, bug fixes, restarts, config updates
+- **Key**: Copies `scripts/futures-bot.service` to systemd and `scripts/start_bot.sh` as wrapper
 
 ### 3. `vps-check.yml` — Run VPS diagnostics
 - **Trigger**: push that changes `trigger-check.txt` or `scripts/check_bot.sh`
