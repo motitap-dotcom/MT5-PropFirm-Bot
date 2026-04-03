@@ -25,6 +25,8 @@ jobs:
             git fetch origin ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
             mkdir -p status logs configs
+            chmod +x scripts/start_bot.sh
+            cp scripts/futures-bot.service /etc/systemd/system/futures-bot.service
             pip3 install -r requirements.txt
             python3 -m playwright install chromium --with-deps 2>/dev/null || echo "Playwright install skipped"
             echo "TRADOVATE_USER=${{ secrets.TRADOVATE_USER }}" > .env
@@ -32,8 +34,6 @@ jobs:
             echo "TRADOVATE_ACCESS_TOKEN=${{ secrets.TRADOVATE_ACCESS_TOKEN }}" >> .env
             echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .env
             echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
-            chmod +x scripts/start_bot.sh
-            cp scripts/futures-bot.service /etc/systemd/system/futures-bot.service
             systemctl daemon-reload
             systemctl reset-failed futures-bot 2>/dev/null
             systemctl restart futures-bot
