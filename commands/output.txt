@@ -1,15 +1,7 @@
-=== FULL BOT VERIFICATION ===
-Timestamp: 2026-04-03 15:17:30 UTC
-ET Time: 11:17 EDT
+=== Fixing Service + Restarting ===
+Timestamp: 2026-04-03 15:21:20 UTC
 
-=== 1. SERVICE STATUS ===
-active
-PID: 4097846
-Uptime since: Fri 2026-04-03 15:06:16 UTC
-Restarts: 48
-Memory: 37MB
-
-=== 2. SYSTEMD SERVICE FILE ===
+=== New Service File ===
 [Unit]
 Description=TradeDay Futures Trading Bot
 After=network-online.target
@@ -18,7 +10,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/root/MT5-PropFirm-Bot/venv/bin/python -m futures_bot.bot
+ExecStart=/bin/bash /root/MT5-PropFirm-Bot/scripts/start_bot.sh
 Restart=always
 RestartSec=30
 MemoryMax=2G
@@ -28,172 +20,46 @@ EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 [Install]
 WantedBy=multi-user.target
 
---- Drop-ins:
-env.conf
+Drop-ins:
+None (good)
 
-=== 3. TOKEN STATUS ===
-Token saved at: 2026-04-03T15:11:18.214382+00:00
-Expires in: 74 minutes
-STATUS: VALID
+=== Service Status ===
+● futures-bot.service - TradeDay Futures Trading Bot
+     Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Fri 2026-04-03 15:22:51 UTC; 10s ago
+    Process: 4102241 ExecStart=/bin/bash /root/MT5-PropFirm-Bot/scripts/start_bot.sh (code=exited, status=127)
+   Main PID: 4102241 (code=exited, status=127)
+        CPU: 5ms
 
-=== 4. .ENV FILE ===
-File exists
-TELEGRAM_CHAT_ID
-TELEGRAM_TOKEN
-TRADOVATE_ACCESS_TOKEN
-TRADOVATE_PASS
-TRADOVATE_USER
+Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
 
-=== 5. CONFIG VALIDATION ===
-Live mode: False
-Symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-Telegram: True
-Max drawdown: $2000.0
-Profit target: $3000.0
-Max daily loss: $400.0
-Max daily profit: $900.0
-Max daily trades: 10
-Max risk/trade: $150.0
-Max positions: 3
-Max contracts/trade: 5
+=== Last 20 Journal Lines ===
+Apr 03 15:21:20 vmi3096165 python[4097846]: 2026-04-03 15:21:20,560 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:21:20 vmi3096165 python[4097846]: 2026-04-03 15:21:20,561 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:21:20 vmi3096165 python[4097846]: 2026-04-03 15:21:20,561 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:21:20 vmi3096165 python[4097846]: 2026-04-03 15:21:20,561 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:21:20 vmi3096165 python[4097846]: 2026-04-03 15:21:20,561 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:21:20 vmi3096165 python[4097846]: 2026-04-03 15:21:20,561 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:21:21 vmi3096165 systemd[1]: Stopping futures-bot.service - TradeDay Futures Trading Bot...
+Apr 03 15:21:21 vmi3096165 python[4097846]: 2026-04-03 15:21:21,292 [bot] INFO: Stopping bot: Signal received
+Apr 03 15:21:21 vmi3096165 python[4097846]: 2026-04-03 15:21:21,606 [tradovate_client] INFO: Disconnected from Tradovate
+Apr 03 15:21:21 vmi3096165 python[4097846]: 2026-04-03 15:21:21,607 [bot] INFO: Bot stopped
+Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: State 'stop-sigterm' timed out. Killing.
+Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Killing process 4097846 (python) with signal SIGKILL.
+Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Failed to kill control group /system.slice/futures-bot.service, ignoring: Invalid argument
+Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=killed, status=9/KILL
+Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'timeout'.
+Apr 03 15:22:51 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
+Apr 03 15:22:51 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 03 15:22:51 vmi3096165 bash[4102241]: /bin/bash: /root/MT5-PropFirm-Bot/scripts/start_bot.sh: No such file or directory
+Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=127/n/a
+Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
 
-=== 6. PYTHON IMPORTS ===
-futures_bot: OK
-TradovateClient: OK
-Guardian: OK
-RiskManager: OK
-NewsFilter: OK
-Notifier: OK
-StatusWriter: OK
-VWAP: OK
-ORB: OK
-Playwright: OK
+=== Status File ===
+Not yet written
 
-=== 7. FILES ON DISK ===
-futures_bot/:
-futures_bot/__init__.py
-futures_bot/bot.py
-futures_bot/core/__init__.py
-futures_bot/core/guardian.py
-futures_bot/core/news_filter.py
-futures_bot/core/notifier.py
-futures_bot/core/risk_manager.py
-futures_bot/core/status_writer.py
-futures_bot/core/tradovate_client.py
-futures_bot/strategies/__init__.py
-futures_bot/strategies/orb_breakout.py
-futures_bot/strategies/vwap_mean_reversion.py
-
-configs/:
-28
-.
-..
-.browser_auth_result.txt
-.tradovate_token.json
-.tradovate_token_backup.json
-bot_config.json
-restricted_events.json
-
-status/:
-12
-.
-..
-status.json
-
-logs/:
-2972
-.
-..
-.gitkeep
-bot.log
-
-=== 8. LAST 50 JOURNAL LINES ===
-Apr 03 15:05:15 vmi3096165 python[4097480]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
-Apr 03 15:05:15 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 03 15:05:15 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 03 15:05:46 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 47.
-Apr 03 15:05:46 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 03 15:05:46 vmi3096165 python[4097591]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
-Apr 03 15:05:46 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 03 15:05:46 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 03 15:06:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 48.
-Apr 03 15:06:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,631 [bot] INFO: ============================================================
-Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,631 [bot] INFO: TradeDay Futures Bot Starting
-Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,631 [bot] INFO: ============================================================
-Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,632 [news_filter] INFO: Loaded 26 restricted events
-Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,632 [tradovate_client] INFO: Loaded saved token from file, verifying...
-Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,804 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,804 [tradovate_client] INFO: Saved token is still valid
-Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,805 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,939 [bot] INFO: Bot started successfully
-Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,939 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,939 [bot] INFO: Timeframe: 5min
-Apr 03 15:06:16 vmi3096165 python[4097846]: 2026-04-03 15:06:16,939 [bot] INFO: New trading day: 2026-04-03
-Apr 03 15:06:17 vmi3096165 python[4097846]: 2026-04-03 15:06:17,062 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:06:17 vmi3096165 python[4097846]: 2026-04-03 15:06:17,063 [bot] INFO: Switching MESM6 to ORB strategy (trend day)
-Apr 03 15:06:17 vmi3096165 python[4097846]: 2026-04-03 15:06:17,063 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:06:17 vmi3096165 python[4097846]: 2026-04-03 15:06:17,063 [bot] INFO: Switching MNQM6 to ORB strategy (trend day)
-Apr 03 15:06:17 vmi3096165 python[4097846]: 2026-04-03 15:06:17,063 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:06:17 vmi3096165 python[4097846]: 2026-04-03 15:06:17,063 [bot] INFO: Switching MCLM6 to ORB strategy (trend day)
-Apr 03 15:06:17 vmi3096165 python[4097846]: 2026-04-03 15:06:17,063 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:06:17 vmi3096165 python[4097846]: 2026-04-03 15:06:17,063 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
-Apr 03 15:06:17 vmi3096165 python[4097846]: 2026-04-03 15:06:17,063 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:06:17 vmi3096165 python[4097846]: 2026-04-03 15:06:17,063 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
-Apr 03 15:06:17 vmi3096165 python[4097846]: 2026-04-03 15:06:17,063 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:06:17 vmi3096165 python[4097846]: 2026-04-03 15:06:17,063 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
-Apr 03 15:11:18 vmi3096165 python[4097846]: 2026-04-03 15:11:18,041 [tradovate_client] INFO: Token expiring in 12min, renewing...
-Apr 03 15:11:18 vmi3096165 python[4097846]: 2026-04-03 15:11:18,215 [tradovate_client] INFO: Token renewed successfully via https://demo.tradovateapi.com/v1/auth/renewaccesstoken
-Apr 03 15:11:18 vmi3096165 python[4097846]: 2026-04-03 15:11:18,339 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:11:18 vmi3096165 python[4097846]: 2026-04-03 15:11:18,339 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:11:18 vmi3096165 python[4097846]: 2026-04-03 15:11:18,339 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:11:18 vmi3096165 python[4097846]: 2026-04-03 15:11:18,339 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:11:18 vmi3096165 python[4097846]: 2026-04-03 15:11:18,339 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:11:18 vmi3096165 python[4097846]: 2026-04-03 15:11:18,339 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:11:19 vmi3096165 python[4097846]: 2026-04-03 15:11:19,284 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: '/root/MT5-PropFirm-Bot/status/status.json'
-Apr 03 15:16:19 vmi3096165 python[4097846]: 2026-04-03 15:16:19,431 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:16:19 vmi3096165 python[4097846]: 2026-04-03 15:16:19,431 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:16:19 vmi3096165 python[4097846]: 2026-04-03 15:16:19,432 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:16:19 vmi3096165 python[4097846]: 2026-04-03 15:16:19,432 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:16:19 vmi3096165 python[4097846]: 2026-04-03 15:16:19,432 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:16:19 vmi3096165 python[4097846]: 2026-04-03 15:16:19,432 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:16:20 vmi3096165 python[4097846]: 2026-04-03 15:16:20,401 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: '/root/MT5-PropFirm-Bot/status/status.json'
-
-=== 9. BOT LOG (last 30 lines) ===
-2026-04-03 15:06:16,939 [bot] INFO: Timeframe: 5min
-2026-04-03 15:06:16,939 [bot] INFO: New trading day: 2026-04-03
-2026-04-03 15:06:17,062 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:06:17,063 [bot] INFO: Switching MESM6 to ORB strategy (trend day)
-2026-04-03 15:06:17,063 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:06:17,063 [bot] INFO: Switching MNQM6 to ORB strategy (trend day)
-2026-04-03 15:06:17,063 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:06:17,063 [bot] INFO: Switching MCLM6 to ORB strategy (trend day)
-2026-04-03 15:06:17,063 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:06:17,063 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
-2026-04-03 15:06:17,063 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:06:17,063 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
-2026-04-03 15:06:17,063 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:06:17,063 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
-2026-04-03 15:11:18,041 [tradovate_client] INFO: Token expiring in 12min, renewing...
-2026-04-03 15:11:18,215 [tradovate_client] INFO: Token renewed successfully via https://demo.tradovateapi.com/v1/auth/renewaccesstoken
-2026-04-03 15:11:18,339 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:11:18,339 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:11:18,339 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:11:18,339 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:11:18,339 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:11:18,339 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:11:19,284 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: '/root/MT5-PropFirm-Bot/status/status.json'
-2026-04-03 15:16:19,431 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:16:19,431 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:16:19,432 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:16:19,432 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:16:19,432 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:16:19,432 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-03 15:16:20,401 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: '/root/MT5-PropFirm-Bot/status/status.json'
-
-=== 10. DISK & MEMORY ===
-/dev/sda1       145G   27G  119G  19% /
-               total        used        free      shared  buff/cache   available
-Mem:           7.8Gi       1.0Gi       6.3Gi        13Mi       647Mi       6.7Gi
+=== Token ===
+Remaining: 68 minutes
+Saved: 2026-04-03T15:11:18.214382+00:00
 
 === DONE ===
