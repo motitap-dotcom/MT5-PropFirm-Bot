@@ -1,65 +1,58 @@
-=== Fixing Service + Restarting ===
-Timestamp: 2026-04-03 15:21:20 UTC
-
-=== New Service File ===
-[Unit]
-Description=TradeDay Futures Trading Bot
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-Type=simple
-WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/bin/bash /root/MT5-PropFirm-Bot/scripts/start_bot.sh
-Restart=always
-RestartSec=30
-MemoryMax=2G
-Environment=PYTHONUNBUFFERED=1
-EnvironmentFile=/root/MT5-PropFirm-Bot/.env
-
-[Install]
-WantedBy=multi-user.target
-
-Drop-ins:
-None (good)
+=== Fix Service v2 ===
+Timestamp: 2026-04-03 15:25:04 UTC
+scripts/ contents:
+total 40
+drwxr-xr-x  2 root root 4096 Apr  3 15:25 .
+drwxr-xr-x 13 root root 4096 Apr  3 15:25 ..
+-rw-r--r--  1 root root 1449 Apr  3 15:25 check_bot.sh
+-rw-r--r--  1 root root  808 Apr  3 15:25 fix_and_restart.sh
+-rw-r--r--  1 root root 1774 Apr  3 15:25 install_bot.sh
+-rwxr-xr-x  1 root root 2836 Mar  2 10:53 setup-whatsapp-service.sh
+-rwxr-xr-x  1 root root  977 Mar  4 09:43 setup_watchdog.sh
+-rw-r--r--  1 root root  136 Apr  3 15:25 start_bot.sh
+-rwxr-xr-x  1 root root 1061 Mar  4 09:43 test_telegram.sh
+-rwxr-xr-x  1 root root 2096 Mar  4 09:43 watchdog.sh
 
 === Service Status ===
 ● futures-bot.service - TradeDay Futures Trading Bot
      Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
-     Active: activating (auto-restart) (Result: exit-code) since Fri 2026-04-03 15:22:51 UTC; 10s ago
-    Process: 4102241 ExecStart=/bin/bash /root/MT5-PropFirm-Bot/scripts/start_bot.sh (code=exited, status=127)
-   Main PID: 4102241 (code=exited, status=127)
-        CPU: 5ms
+     Active: active (running) since Fri 2026-04-03 15:25:04 UTC; 10s ago
+   Main PID: 4103108 (python)
+      Tasks: 2 (limit: 9483)
+     Memory: 23.5M (max: 2.0G available: 1.9G peak: 24.0M)
+        CPU: 351ms
+     CGroup: /system.slice/futures-bot.service
+             └─4103108 venv/bin/python -m futures_bot.bot
 
-Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [bot] INFO: Switching MNQM6 to ORB strategy (trend day)
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [bot] INFO: Switching MCLM6 to ORB strategy (trend day)
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,350 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,350 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
 
-=== Last 20 Journal Lines ===
-Apr 03 15:21:20 vmi3096165 python[4097846]: 2026-04-03 15:21:20,560 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:21:20 vmi3096165 python[4097846]: 2026-04-03 15:21:20,561 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:21:20 vmi3096165 python[4097846]: 2026-04-03 15:21:20,561 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:21:20 vmi3096165 python[4097846]: 2026-04-03 15:21:20,561 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:21:20 vmi3096165 python[4097846]: 2026-04-03 15:21:20,561 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:21:20 vmi3096165 python[4097846]: 2026-04-03 15:21:20,561 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-Apr 03 15:21:21 vmi3096165 systemd[1]: Stopping futures-bot.service - TradeDay Futures Trading Bot...
-Apr 03 15:21:21 vmi3096165 python[4097846]: 2026-04-03 15:21:21,292 [bot] INFO: Stopping bot: Signal received
-Apr 03 15:21:21 vmi3096165 python[4097846]: 2026-04-03 15:21:21,606 [tradovate_client] INFO: Disconnected from Tradovate
-Apr 03 15:21:21 vmi3096165 python[4097846]: 2026-04-03 15:21:21,607 [bot] INFO: Bot stopped
-Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: State 'stop-sigterm' timed out. Killing.
-Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Killing process 4097846 (python) with signal SIGKILL.
-Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Failed to kill control group /system.slice/futures-bot.service, ignoring: Invalid argument
-Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=killed, status=9/KILL
-Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'timeout'.
-Apr 03 15:22:51 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
-Apr 03 15:22:51 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 03 15:22:51 vmi3096165 bash[4102241]: /bin/bash: /root/MT5-PropFirm-Bot/scripts/start_bot.sh: No such file or directory
-Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=127/n/a
-Apr 03 15:22:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-
-=== Status File ===
-Not yet written
+=== Last 15 Journal Lines ===
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,225 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,225 [bot] INFO: Timeframe: 5min
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,225 [bot] INFO: New trading day: 2026-04-03
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [bot] INFO: Switching MESM6 to ORB strategy (trend day)
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [bot] INFO: Switching MNQM6 to ORB strategy (trend day)
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [bot] INFO: Switching MCLM6 to ORB strategy (trend day)
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,349 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,350 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 03 15:25:05 vmi3096165 bash[4103108]: 2026-04-03 15:25:05,350 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
 
 === Token ===
-Remaining: 68 minutes
-Saved: 2026-04-03T15:11:18.214382+00:00
+Remaining: 66 min | Saved: 2026-04-03T15:25:05.126177+00:00
 
 === DONE ===
