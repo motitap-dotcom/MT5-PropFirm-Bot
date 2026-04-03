@@ -1,45 +1,72 @@
 #!/bin/bash
-# Trigger: v86 - Send status via Telegram directly from VPS
+# Trigger: debug-trading-v1 - Full diagnostic: why bot not trading
 cd /root/MT5-PropFirm-Bot
 
-# Write fresh .env from workflow secrets
-if [ -n "$TRADOVATE_ACCESS_TOKEN" ]; then
-    echo "TRADOVATE_USER=$TRADOVATE_USER" > .env
-    echo "TRADOVATE_PASS=$TRADOVATE_PASS" >> .env
-    echo "TRADOVATE_ACCESS_TOKEN=$TRADOVATE_ACCESS_TOKEN" >> .env
-    echo "TELEGRAM_TOKEN=$TELEGRAM_TOKEN" >> .env
-    echo "TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID" >> .env
+echo "=== BOT DEBUG - WHY NOT TRADING ==="
+echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+echo ""
+
+echo "=== 1. SERVICE STATUS ==="
+systemctl status futures-bot --no-pager 2>&1 || echo "Service not found"
+echo ""
+
+echo "=== 2. IS PROCESS RUNNING? ==="
+ps aux | grep -E "[p]ython.*bot" || echo "No bot process found"
+echo ""
+
+echo "=== 3. LAST 100 LOG LINES ==="
+tail -100 /root/MT5-PropFirm-Bot/logs/bot.log 2>/dev/null || echo "No log file"
+echo ""
+
+echo "=== 4. STATUS JSON ==="
+cat /root/MT5-PropFirm-Bot/status/status.json 2>/dev/null || echo "No status file"
+echo ""
+
+echo "=== 5. ENV FILE CHECK ==="
+if [ -f /root/MT5-PropFirm-Bot/.env ]; then
+    echo ".env exists"
+    echo "TRADOVATE lines: $(grep -c 'TRADOVATE' /root/MT5-PropFirm-Bot/.env)"
+    echo "TELEGRAM lines: $(grep -c 'TELEGRAM' /root/MT5-PropFirm-Bot/.env)"
+else
+    echo ".env NOT FOUND"
 fi
+echo ""
 
-rm -f configs/.tradovate_token.json
-mkdir -p logs status
+echo "=== 6. TOKEN FILE ==="
+ls -la /root/MT5-PropFirm-Bot/configs/.tradovate_token.json 2>/dev/null || echo "No token file"
+python3 -c "
+import json
+with open('/root/MT5-PropFirm-Bot/configs/.tradovate_token.json') as f:
+    d = json.load(f)
+print('Token expires:', d.get('expiration','unknown'))
+" 2>/dev/null || echo "Cannot read token"
+echo ""
 
-# Restart bot
-systemctl stop futures-bot 2>/dev/null
-sleep 3
-systemctl daemon-reload
-systemctl start futures-bot
-sleep 15
+echo "=== 7. CONFIG CHECK ==="
+python3 -c "
+import json
+with open('/root/MT5-PropFirm-Bot/configs/bot_config.json') as f:
+    c = json.load(f)
+print('Trading enabled:', c.get('trading_enabled', 'NOT SET'))
+print('Symbols:', c.get('symbols', 'NOT SET'))
+print('Paper mode:', c.get('paper_mode', 'NOT SET'))
+print('Max daily trades:', c.get('risk', {}).get('max_daily_trades', 'NOT SET'))
+" 2>/dev/null || echo "Cannot read config"
+echo ""
 
-# Collect status
-STATUS=$(systemctl is-active futures-bot)
-LOGS=$(journalctl -u futures-bot --no-pager -n 20 --since "20 sec ago" 2>&1)
-BOTLOG=$(tail -15 logs/bot.log 2>/dev/null)
+echo "=== 8. JOURNAL LOGS (last 50 lines) ==="
+journalctl -u futures-bot --no-pager -n 50 2>&1
+echo ""
 
-# Send to Telegram directly from VPS
-MSG="🤖 Bot Status Report v86
-━━━━━━━━━━━━━━━
-Service: ${STATUS}
-━━━━━━━━━━━━━━━
-Journal:
-${LOGS}
-━━━━━━━━━━━━━━━
-Bot Log:
-${BOTLOG}"
+echo "=== 9. DISK & MEMORY ==="
+df -h / | tail -1
+free -h | head -2
+echo ""
 
-curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-  -d chat_id="${TELEGRAM_CHAT_ID}" \
-  -d text="${MSG:0:4000}" \
-  -d parse_mode="" > /dev/null 2>&1
+echo "=== 10. CURRENT TIME vs TRADING SESSION ==="
+echo "UTC now: $(date -u '+%H:%M')"
+echo "ET now: $(TZ='America/New_York' date '+%H:%M %Z')"
+echo "Trading session: 9:30-15:30 ET"
+echo ""
 
-echo "Status sent to Telegram"
+echo "=== DONE ==="
