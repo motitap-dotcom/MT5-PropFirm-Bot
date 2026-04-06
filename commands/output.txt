@@ -1,17 +1,17 @@
 === Bot Status Report ===
-Timestamp: 2026-04-06 18:52 UTC
+Timestamp: 2026-04-06 19:03 UTC
 
 Service: activating
 unknown
-Running since: Mon 2026-04-06 18:52:29 UTC
+Running since: Mon 2026-04-06 19:02:58 UTC
 
 === System ===
 Disk: 18%
-Memory: 1051MB/7941MB (13%)
+Memory: 1044MB/7941MB (13%)
 
 === Git ===
 Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
-Commit: 65df69e Fix VPS push: use github.token for authenticated git push from VPS
+Commit: 7b5d03b Status check v95 - verify deploy
 
 === Auth ===
 Token file: MISSING
@@ -20,48 +20,48 @@ Token file: MISSING
 .env: EXISTS (5 lines)
 
 === Journal Logs (last 20 lines) ===
-Apr 06 18:50:58 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 4.
-Apr 06 18:50:58 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 06 18:50:58 vmi3096165 bash[923116]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
-Apr 06 18:50:58 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 06 18:50:58 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 06 18:51:28 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 5.
-Apr 06 18:51:28 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 06 18:51:28 vmi3096165 bash[923213]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
-Apr 06 18:51:28 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 06 18:51:28 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 06 18:51:58 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 6.
-Apr 06 18:51:58 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 06 18:51:58 vmi3096165 bash[923322]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
-Apr 06 18:51:58 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 06 18:51:58 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 06 18:52:29 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 7.
-Apr 06 18:52:29 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 06 18:52:29 vmi3096165 bash[923444]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
-Apr 06 18:52:29 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 06 18:52:29 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 06 19:01:27 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
+Apr 06 19:01:27 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 06 19:01:27 vmi3096165 bash[926100]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
+Apr 06 19:01:27 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 06 19:01:27 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 06 19:01:57 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
+Apr 06 19:01:57 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 06 19:01:57 vmi3096165 bash[926231]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
+Apr 06 19:01:57 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 06 19:01:57 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 06 19:02:27 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
+Apr 06 19:02:27 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 06 19:02:27 vmi3096165 bash[926359]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
+Apr 06 19:02:27 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 06 19:02:27 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 06 19:02:58 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 3.
+Apr 06 19:02:58 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 06 19:02:58 vmi3096165 bash[926470]: /root/MT5-PropFirm-Bot/venv/bin/python: No module named futures_bot.bot
+Apr 06 19:02:58 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 06 19:02:58 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
 
 === Bot Log (last 20 lines) ===
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
-    await self.client.connect()
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 141, in connect
-    await self._authenticate()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 246, in _authenticate
-    raise ConnectionError(f"Authentication failed: {error}")
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-06 18:48:27,064 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-06 18:48:27,184 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-06 18:48:27,310 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-06 18:48:27,310 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-06 18:48:27,430 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-06 18:48:27,502 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-06 18:48:27,503 [bot] INFO: Bot stopped
-2026-04-06 18:48:27,503 [bot] INFO: Retrying in 30s...
-2026-04-06 18:48:36,345 [bot] INFO: Stopping bot: Signal received
-2026-04-06 18:48:36,345 [bot] ERROR: Error closing positions: Session is closed
-2026-04-06 18:48:36,345 [notifier] ERROR: Telegram error: Session is closed
-2026-04-06 18:48:36,345 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-06 18:48:36,345 [bot] INFO: Bot stopped
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 220, in _authenticate
+ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-06 18:56:42,166 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-06 18:56:42,282 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-06 18:56:42,414 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-06 18:56:42,414 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-06 18:56:42,529 [tradovate_client] ERROR: CAPTCHA required for first login!
+Run: python3 get_token.py
+Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
+2026-04-06 18:56:42,529 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-06 18:56:42,627 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-06 18:56:42,627 [bot] INFO: Bot stopped
+2026-04-06 18:56:42,627 [bot] INFO: Retrying in 300s...
+2026-04-06 18:59:57,224 [bot] INFO: Stopping bot: Signal received
+2026-04-06 18:59:57,224 [bot] ERROR: Error closing positions: Session is closed
+2026-04-06 18:59:57,224 [notifier] ERROR: Telegram error: Session is closed
+2026-04-06 18:59:57,224 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-06 18:59:57,224 [bot] INFO: Bot stopped
 
 === status.json ===
 {
