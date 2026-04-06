@@ -8,7 +8,8 @@ on:
       - '*.md'
       - 'server_status.json'
       - 'system_status.json'
-      - 'commands/output.txt'
+      - 'commands/**'
+      - 'trigger-check.txt'
 
 env:
   DEPLOY_BRANCH: main

@@ -1,53 +1,18 @@
 #!/bin/bash
-# Trigger: v100 - Fix PYTHONPATH in service + write .env + restart
+# Trigger: v101 - Just check status after deploy fixed things
 cd /root/MT5-PropFirm-Bot
-
-echo "=== Fix v100 ==="
+echo "=== Status v101 ==="
 echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')"
-
-# Fix service file with PYTHONPATH
-cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
-[Unit]
-Description=TradeDay Futures Trading Bot
-After=network.target
-
-[Service]
-Type=simple
-WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/usr/bin/python3 -m futures_bot.bot
-Restart=on-failure
-RestartSec=30
-Environment=PYTHONUNBUFFERED=1
-Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
-EnvironmentFile=/root/MT5-PropFirm-Bot/.env
-
-[Install]
-WantedBy=multi-user.target
-SVCEOF
-
-# Write .env
-if [ -n "${TRADOVATE_USER}" ]; then
-    cat > .env << ENVEOF
-TRADOVATE_USER=${TRADOVATE_USER}
-TRADOVATE_PASS=${TRADOVATE_PASS}
-TRADOVATE_ACCESS_TOKEN=${TRADOVATE_ACCESS_TOKEN}
-TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
-TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
-ENVEOF
-    echo ".env written"
-fi
-
-# Restart
-systemctl daemon-reload
-systemctl stop futures-bot 2>/dev/null
-sleep 2
-systemctl start futures-bot
-sleep 15
-
 echo "Service: $(systemctl is-active futures-bot)"
 echo ""
-echo "=== Logs ==="
-journalctl -u futures-bot --no-pager -n 20 2>&1
+echo "=== Service file ExecStart ==="
+grep "ExecStart\|PYTHONPATH\|Environment" /etc/systemd/system/futures-bot.service 2>/dev/null
 echo ""
-echo "=== Bot log ==="
-tail -15 logs/bot.log 2>/dev/null || echo "No bot.log"
+echo "=== .env ==="
+[ -f .env ] && echo "exists ($(wc -l < .env) lines)" || echo "MISSING"
+echo ""
+echo "=== Last 15 journal ==="
+journalctl -u futures-bot --no-pager -n 15 2>&1
+echo ""
+echo "=== Last 10 bot.log ==="
+tail -10 logs/bot.log 2>/dev/null || echo "No bot.log"
