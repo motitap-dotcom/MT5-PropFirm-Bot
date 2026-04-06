@@ -9,16 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
-      TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
-      TRADOVATE_ACCESS_TOKEN: ${{ secrets.TRADOVATE_ACCESS_TOKEN }}
-      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Run command on VPS
+        id: ssh
         continue-on-error: true
         uses: appleboy/ssh-action@v1
         with:
@@ -29,21 +24,19 @@ jobs:
           command_timeout: 10m
           script: |
             cd /root/MT5-PropFirm-Bot
-            git fetch origin claude/build-cfd-trading-bot-fl0ld
-            git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
+            git fetch origin ${{ github.ref_name }}
+            git reset --hard origin/${{ github.ref_name }}
             bash commands/run.sh > commands/output.txt 2>&1
-            cat commands/output.txt
-
-      - name: Send result via Telegram
-        if: always()
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-            VPS Command v85 executed
-            Bot service restarted with fresh token
-            Check Telegram for bot startup message
+            echo "--- VPS Command completed at $(date -u +'%Y-%m-%d %H:%M UTC') ---" >> commands/output.txt
+            git add commands/output.txt status/status.json 2>/dev/null || true
+            git commit -m "VPS command output $(date -u +'%Y-%m-%d %H:%M UTC')" || true
+            git push origin HEAD:${{ github.ref_name }} || true
+        env:
+          TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
+          TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
+          TRADOVATE_ACCESS_TOKEN: ${{ secrets.TRADOVATE_ACCESS_TOKEN }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
       - name: Telegram notification
         if: always()
@@ -53,4 +46,6 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
             VPS Command completed
+            Branch: ${{ github.ref_name }}
             Status: ${{ job.status }}
+            Output committed to commands/output.txt

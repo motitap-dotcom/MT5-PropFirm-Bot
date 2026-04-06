@@ -9,6 +9,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -38,8 +40,17 @@ jobs:
             systemctl daemon-reload
             systemctl restart futures-bot 2>/dev/null || echo "Service not yet installed"
 
+            # Create deploy report
             echo "Deploy completed at $(date -u +'%Y-%m-%d %H:%M UTC')" > deploy_report.txt
             python3 -c "import sys; sys.path.insert(0,'.'); import futures_bot; print('Import OK')" >> deploy_report.txt 2>&1
+            systemctl is-active futures-bot >> deploy_report.txt 2>&1 || true
+            echo "--- Last 10 journal lines ---" >> deploy_report.txt
+            journalctl -u futures-bot --no-pager -n 10 >> deploy_report.txt 2>&1 || true
+
+            # Commit report back to repo
+            git add deploy_report.txt status/status.json 2>/dev/null || true
+            git commit -m "Deploy report $(date -u +'%Y-%m-%d %H:%M UTC')" || true
+            git push origin HEAD:${{ github.ref_name }} || true
 
       - name: Telegram notification
         if: always()
@@ -49,4 +60,6 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
             Bot Deploy completed
+            Branch: ${{ github.ref_name }}
             Status: ${{ job.status }}
+            Report committed to deploy_report.txt
