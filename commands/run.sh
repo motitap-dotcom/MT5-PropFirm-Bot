@@ -1,22 +1,16 @@
 #!/bin/bash
-# Trigger: v104 - ONLY copy token, nothing else
+# Trigger: v105 - Check if bot is running with token
 cd /root/MT5-PropFirm-Bot
-echo "=== v104 ==="
+echo "=== Status v105 ==="
 echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')"
+echo "Service: $(systemctl is-active futures-bot)"
+echo "Token: $([ -f configs/.tradovate_token.json ] && echo 'EXISTS' || echo 'MISSING')"
 echo ""
-echo "Looking for token..."
-ls -la /root/tradovate-bot/.tradovate_token.json 2>&1
-ls -la /root/tradovate-bot/.tradovate_token* 2>&1
-ls -la /root/tradovate-bot/configs/.tradovate_token* 2>&1
+echo "=== Service file ==="
+grep "ExecStart\|PYTHONPATH\|Environment" /etc/systemd/system/futures-bot.service 2>/dev/null
 echo ""
-if [ -f /root/tradovate-bot/.tradovate_token.json ]; then
-    cp /root/tradovate-bot/.tradovate_token.json configs/.tradovate_token.json
-    echo "COPIED!"
-    cat configs/.tradovate_token.json | python3 -c "import sys,json; t=json.load(sys.stdin); print(f'Expires: {t.get(\"expirationTime\",\"?\")}')" 2>&1
-elif [ -f /root/tradovate-bot/configs/.tradovate_token.json ]; then
-    cp /root/tradovate-bot/configs/.tradovate_token.json configs/.tradovate_token.json
-    echo "COPIED from configs/!"
-else
-    echo "No token file found in tradovate-bot"
-    find /root/tradovate-bot -name "*token*" -type f 2>/dev/null | head -10
-fi
+echo "=== Last 20 journal ==="
+journalctl -u futures-bot --no-pager -n 20 2>&1
+echo ""
+echo "=== Last 15 bot.log ==="
+tail -15 logs/bot.log 2>/dev/null || echo "No bot.log"
