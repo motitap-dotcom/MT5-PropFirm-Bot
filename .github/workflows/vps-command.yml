@@ -7,8 +7,6 @@ on:
 jobs:
   run-command:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     env:
       TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
       TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
@@ -19,7 +17,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run command on VPS
-        continue-on-error: true
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -29,43 +26,12 @@ jobs:
           command_timeout: 10m
           script: |
             cd /root/MT5-PropFirm-Bot
-            BRANCH="${GITHUB_REF##*/}"
             git fetch origin ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
             bash commands/run.sh > commands/output.txt 2>&1
-            cat commands/output.txt
-
-      - name: Fetch output from VPS
-        if: always()
-        continue-on-error: true
-        uses: appleboy/ssh-action@v1
-        id: fetch_output
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          command_timeout: 2m
-          script: |
-            cat /root/MT5-PropFirm-Bot/commands/output.txt 2>/dev/null || echo "No output file found"
-
-      - name: Write output to repo
-        if: always()
-        run: |
-          OUTPUT='${{ steps.fetch_output.outputs.stdout }}'
-          if [ -n "$OUTPUT" ]; then
-            echo "$OUTPUT" > commands/output.txt
-          else
-            echo "Failed to fetch output from VPS" > commands/output.txt
-          fi
-
-      - name: Commit output back to repo
-        if: always()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add commands/output.txt
-          git diff --cached --quiet || git commit -m "Update commands/output.txt with VPS result"
-          git push origin HEAD:${{ github.ref_name }}
+            git add commands/output.txt
+            git commit -m "VPS command output $(date -u +'%Y-%m-%d %H:%M UTC')" || true
+            git push origin HEAD:${{ github.ref_name }} || true
 
       - name: Telegram notification
         if: always()
