@@ -15,10 +15,11 @@ jobs:
       TRADOVATE_ACCESS_TOKEN: ${{ secrets.TRADOVATE_ACCESS_TOKEN }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      GH_TOKEN: ${{ secrets.SERVER_GH_PAT || github.token }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run command on VPS and collect output
+      - name: Run command on VPS and push output
         id: vps_run
         continue-on-error: true
         uses: appleboy/ssh-action@v1
@@ -26,19 +27,26 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
-          envs: TRADOVATE_USER,TRADOVATE_PASS,TRADOVATE_ACCESS_TOKEN,TELEGRAM_TOKEN,TELEGRAM_CHAT_ID
+          envs: TRADOVATE_USER,TRADOVATE_PASS,TRADOVATE_ACCESS_TOKEN,TELEGRAM_TOKEN,TELEGRAM_CHAT_ID,GH_TOKEN
           command_timeout: 10m
           script: |
             cd /root/MT5-PropFirm-Bot
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git config user.name "github-actions[bot]"
+
+            # Set authenticated remote URL so VPS can push
+            REPO=$(git remote get-url origin | sed -E 's|.*github\.com[:/]||; s|\.git$||')
+            git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
+
             git fetch origin ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
             bash commands/run.sh > commands/output.txt 2>&1
+            echo "--- OUTPUT ---"
             cat commands/output.txt
+            echo "--- PUSHING ---"
             git add commands/output.txt
             git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')" || true
-            git push origin HEAD:${{ github.ref_name }} || true
+            git push origin HEAD:${{ github.ref_name }} 2>&1 || echo "Push failed"
 
       - name: Telegram notification
         if: always()
