@@ -1,45 +1,22 @@
 #!/bin/bash
-# Trigger: v97 - Fix deps + restart bot
+# Trigger: v98 - Install deps + write .env + fix service + restart
 cd /root/MT5-PropFirm-Bot
 
-echo "=== Fix & Restart ==="
+echo "=== Fix & Restart v98 ==="
 echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')"
+echo "Branch: $(git branch --show-current 2>/dev/null)"
+echo "Commit: $(git log -1 --oneline 2>/dev/null)"
 
-# 1. Switch to main branch properly
+# 1. Install dependencies
 echo ""
-echo "=== Switching to main ==="
-git fetch origin main 2>&1
-git checkout -B main origin/main 2>&1
-echo "Branch: $(git branch --show-current)"
-echo "Commit: $(git log -1 --oneline)"
+echo "=== Installing deps ==="
+pip3 install aiohttp websockets python-dotenv numpy 2>&1 | tail -5
+echo "Verify: $(python3 -c 'import aiohttp,websockets; print("OK")' 2>&1)"
 
-# 2. Install dependencies for system python3
+# 2. Write .env from workflow secrets
 echo ""
-echo "=== Installing dependencies ==="
-pip3 install -r requirements.txt 2>&1 | tail -10
-echo ""
-echo "Verify imports:"
-python3 -c "import aiohttp; print(f'  aiohttp: {aiohttp.__version__}')" 2>&1
-python3 -c "import websockets; print(f'  websockets: {websockets.__version__}')" 2>&1
-python3 -c "import futures_bot; print('  futures_bot: OK')" 2>&1
-
-# 3. Check .env
-echo ""
-echo "=== Environment ==="
-if [ -f .env ]; then
-    echo ".env exists ($(wc -l < .env) lines)"
-    grep -c "TRADOVATE_ACCESS_TOKEN" .env > /dev/null && echo "TRADOVATE_ACCESS_TOKEN: SET" || echo "TRADOVATE_ACCESS_TOKEN: MISSING"
-    grep -c "TRADOVATE_USER" .env > /dev/null && echo "TRADOVATE_USER: SET" || echo "TRADOVATE_USER: MISSING"
-    grep -c "TRADOVATE_PASS" .env > /dev/null && echo "TRADOVATE_PASS: SET" || echo "TRADOVATE_PASS: MISSING"
-    grep -c "TELEGRAM_TOKEN" .env > /dev/null && echo "TELEGRAM_TOKEN: SET" || echo "TELEGRAM_TOKEN: MISSING"
-else
-    echo ".env MISSING!"
-fi
-
-# 4. Write fresh .env from workflow env vars (if available)
+echo "=== Writing .env ==="
 if [ -n "${TRADOVATE_USER}" ]; then
-    echo ""
-    echo "=== Writing fresh .env from secrets ==="
     cat > .env << ENVEOF
 TRADOVATE_USER=${TRADOVATE_USER}
 TRADOVATE_PASS=${TRADOVATE_PASS}
@@ -47,19 +24,16 @@ TRADOVATE_ACCESS_TOKEN=${TRADOVATE_ACCESS_TOKEN}
 TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
 TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
 ENVEOF
-    echo ".env written ($(wc -l < .env) lines)"
-    # Check if token is actually set
+    echo ".env written"
     TOKEN_VAL=$(grep "TRADOVATE_ACCESS_TOKEN=" .env | cut -d= -f2)
-    if [ -z "$TOKEN_VAL" ]; then
-        echo "WARNING: TRADOVATE_ACCESS_TOKEN is EMPTY in secrets!"
-    else
-        echo "TRADOVATE_ACCESS_TOKEN: SET (${#TOKEN_VAL} chars)"
-    fi
+    [ -z "$TOKEN_VAL" ] && echo "WARNING: TRADOVATE_ACCESS_TOKEN is EMPTY!" || echo "TOKEN: SET (${#TOKEN_VAL} chars)"
+else
+    echo "No secrets from workflow"
 fi
 
-# 5. Fix service file
+# 3. Fix service + restart
 echo ""
-echo "=== Fixing service file ==="
+echo "=== Service ==="
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -78,29 +52,12 @@ EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 WantedBy=multi-user.target
 SVCEOF
 systemctl daemon-reload
-echo "Service file updated"
-
-# 6. Restart bot
-echo ""
-echo "=== Restarting bot ==="
 systemctl stop futures-bot 2>/dev/null
 sleep 2
 systemctl start futures-bot
-sleep 15
-
-STATUS=$(systemctl is-active futures-bot)
-echo "Service: $STATUS"
-
-if [ "$STATUS" = "active" ]; then
-    echo "BOT IS RUNNING!"
-    PID=$(systemctl show futures-bot --property=MainPID --value)
-    echo "PID: $PID"
-fi
+sleep 10
+echo "Status: $(systemctl is-active futures-bot)"
 
 echo ""
-echo "=== Recent logs ==="
-journalctl -u futures-bot --no-pager -n 30 2>&1
-
-echo ""
-echo "=== Bot log ==="
-tail -20 logs/bot.log 2>/dev/null || echo "No bot.log yet"
+echo "=== Logs ==="
+journalctl -u futures-bot --no-pager -n 15 2>&1
