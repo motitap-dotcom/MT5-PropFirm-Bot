@@ -1,37 +1,40 @@
-=== Quick Diag v99 ===
-Timestamp: 2026-04-06 19:39 UTC
-Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
-Commit: 60bd643 Quick diag v99
+=== Status v101 ===
+Timestamp: 2026-04-06 19:49 UTC
+Service: active
 
-Python3: /usr/bin/python3 Python 3.12.3
-pip3: /usr/bin/pip3
-
-=== Module check ===
-aiohttp OK
-websockets OK
-futures_bot OK
-futures_bot.bot OK
+=== Service file ExecStart ===
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 
 === .env ===
 exists (5 lines)
 
-=== Token ===
-token file MISSING
+=== Last 15 journal ===
+Apr 06 19:46:59 vmi3096165 python3[938288]:   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
+Apr 06 19:46:59 vmi3096165 python3[938288]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
+Apr 06 19:46:59 vmi3096165 python3[938288]:   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 241, in _authenticate
+Apr 06 19:46:59 vmi3096165 python3[938288]: ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+Apr 06 19:46:59 vmi3096165 python3[938288]: 2026-04-06 19:46:59,081 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+Apr 06 19:46:59 vmi3096165 python3[938288]: 2026-04-06 19:46:59,199 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+Apr 06 19:46:59 vmi3096165 python3[938288]: 2026-04-06 19:46:59,318 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+Apr 06 19:46:59 vmi3096165 python3[938288]: 2026-04-06 19:46:59,318 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+Apr 06 19:46:59 vmi3096165 python3[938288]: 2026-04-06 19:46:59,439 [tradovate_client] ERROR: CAPTCHA required for first login!
+Apr 06 19:46:59 vmi3096165 python3[938288]: Run: python3 get_token.py
+Apr 06 19:46:59 vmi3096165 python3[938288]: Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
+Apr 06 19:46:59 vmi3096165 python3[938288]: 2026-04-06 19:46:59,440 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+Apr 06 19:46:59 vmi3096165 python3[938288]: 2026-04-06 19:46:59,535 [tradovate_client] INFO: Disconnected from Tradovate
+Apr 06 19:46:59 vmi3096165 python3[938288]: 2026-04-06 19:46:59,535 [bot] INFO: Bot stopped
+Apr 06 19:46:59 vmi3096165 python3[938288]: 2026-04-06 19:46:59,535 [bot] INFO: Retrying in 300s...
 
-=== Service file ===
-ExecStart=/usr/bin/python3 -m futures_bot.bot
-
-=== Service status ===
-activating
-
-=== Last 10 journal lines ===
-Apr 06 19:38:51 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 8.
-Apr 06 19:38:51 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 06 19:38:51 vmi3096165 python3[936656]: /usr/bin/python3: No module named futures_bot.bot
-Apr 06 19:38:51 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 06 19:38:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 06 19:39:21 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 9.
-Apr 06 19:39:21 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 06 19:39:21 vmi3096165 python3[936772]: /usr/bin/python3: No module named futures_bot.bot
-Apr 06 19:39:21 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 06 19:39:21 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+=== Last 10 bot.log ===
+2026-04-06 19:46:59,199 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-06 19:46:59,318 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-06 19:46:59,318 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-06 19:46:59,439 [tradovate_client] ERROR: CAPTCHA required for first login!
+Run: python3 get_token.py
+Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
+2026-04-06 19:46:59,440 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-06 19:46:59,535 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-06 19:46:59,535 [bot] INFO: Bot stopped
+2026-04-06 19:46:59,535 [bot] INFO: Retrying in 300s...
