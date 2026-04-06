@@ -1,5 +1,5 @@
 #!/bin/bash
-# Trigger: v89 - Status check only (no restart)
+# Trigger: v90 - Status check only (no restart)
 cd /root/MT5-PropFirm-Bot
 
 mkdir -p logs status
