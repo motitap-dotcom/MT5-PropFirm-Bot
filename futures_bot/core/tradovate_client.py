@@ -8,6 +8,9 @@ First login from new IP requires solving CAPTCHA once, then token auto-renews.
 """
 
 import asyncio
+import base64
+import hashlib
+import hmac
 import json
 import time
 import uuid
@@ -20,6 +23,22 @@ import aiohttp
 import websockets
 
 logger = logging.getLogger("tradovate_client")
+
+
+def _encrypt_password(name: str, password: str) -> str:
+    """Encrypt password using Tradovate's web-style method."""
+    offset = len(name) % len(password)
+    rearranged = password[offset:] + password[:offset]
+    reversed_pw = rearranged[::-1]
+    return base64.b64encode(reversed_pw.encode()).decode()
+
+
+def _compute_hmac(payload: dict) -> str:
+    """Compute HMAC signature for auth request."""
+    hmac_key = "1259-11e7-485a-aeae-9b6016579351"
+    fields = ["chl", "deviceId", "name", "password", "appId"]
+    msg = "".join(str(payload.get(f, "")) for f in fields)
+    return hmac.new(hmac_key.encode(), msg.encode(), hashlib.sha256).hexdigest()
 
 # Token file path for persistence across restarts
 TOKEN_FILE = Path("configs/.tradovate_token.json")
@@ -166,9 +185,10 @@ class TradovateClient:
         No API keys needed - uses same method as Tradovate web trader.
         Note: env token is handled in connect(), not here.
         """
+        encrypted_pw = _encrypt_password(self.username, self.password)
         payload = {
             "name": self.username,
-            "password": self.password,
+            "password": encrypted_pw,
             "appId": self.WEB_APP_ID,
             "appVersion": self.WEB_APP_VERSION,
             "deviceId": self.device_id,
@@ -176,6 +196,7 @@ class TradovateClient:
             "sec": self.WEB_SEC,
             "organization": self.organization,
         }
+        payload["hmac"] = _compute_hmac(payload)
 
         try:
             async with self.session.post(
