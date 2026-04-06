@@ -1,34 +1,30 @@
 #!/bin/bash
-echo "=== TradeDay Futures Bot - Fix & Restart ==="
+echo "=== Fix & Restart ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-echo ""
 
 cd /root/MT5-PropFirm-Bot
 
-echo "--- Pulling latest code ---"
-git pull origin $(git branch --show-current)
-echo ""
+# Fix service with PYTHONPATH
+cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
 
-echo "--- Installing dependencies ---"
-pip3 install -r requirements.txt
-echo ""
+[Service]
+Type=simple
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+Restart=on-failure
+RestartSec=30
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 
-echo "--- Stopping existing bot ---"
-systemctl stop futures-bot 2>/dev/null
-pkill -f "futures_bot/bot.py" 2>/dev/null
-sleep 2
-echo "Bot stopped"
-echo ""
+[Install]
+WantedBy=multi-user.target
+SVCEOF
 
-echo "--- Starting bot ---"
-if [ -f /etc/systemd/system/futures-bot.service ]; then
-    systemctl start futures-bot
-    sleep 3
-    systemctl status futures-bot --no-pager | head -10
-else
-    echo "Service not installed, running install script..."
-    bash scripts/install_bot.sh
-fi
-echo ""
-
-echo "=== Fix & Restart Complete ==="
+systemctl daemon-reload
+systemctl restart futures-bot
+echo "Bot restarted"
+echo "Status: $(systemctl is-active futures-bot)"
