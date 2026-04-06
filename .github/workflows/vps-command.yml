@@ -19,6 +19,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run command on VPS
+        id: vps_command
         continue-on-error: true
         uses: appleboy/ssh-action@v1
         with:
@@ -29,21 +30,40 @@ jobs:
           command_timeout: 10m
           script: |
             cd /root/MT5-PropFirm-Bot
-            git fetch origin claude/build-cfd-trading-bot-fl0ld
-            git reset --hard origin/claude/build-cfd-trading-bot-fl0ld
+            git fetch origin ${{ github.ref_name }}
+            git reset --hard origin/${{ github.ref_name }}
             bash commands/run.sh > commands/output.txt 2>&1
             cat commands/output.txt
 
-      - name: Send result via Telegram
+      - name: Fetch output from VPS
         if: always()
-        uses: appleboy/telegram-action@master
+        continue-on-error: true
+        uses: appleboy/scp-action@v0.1.7
         with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-            VPS Command v85 executed
-            Bot service restarted with fresh token
-            Check Telegram for bot startup message
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          source: "/root/MT5-PropFirm-Bot/commands/output.txt"
+          target: "."
+          strip_components: 3
+
+      - name: Commit output back to repo
+        if: always()
+        run: |
+          if [ -f commands/output.txt ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add commands/output.txt
+            git diff --staged --quiet || git commit -m "VPS command output [skip ci]"
+            git push
+          else
+            echo "Failed to fetch output from VPS" > commands/output.txt
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add commands/output.txt
+            git commit -m "VPS command failed [skip ci]"
+            git push
+          fi
 
       - name: Telegram notification
         if: always()
@@ -53,4 +73,5 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
             VPS Command completed
+            Branch: ${{ github.ref_name }}
             Status: ${{ job.status }}
