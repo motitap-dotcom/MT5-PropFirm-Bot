@@ -14,6 +14,11 @@ env:
   DEPLOY_BRANCH: main
   BOT_DIR: /root/MT5-PropFirm-Bot
   SERVICE_NAME: futures-bot
+  TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
+  TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
+  TRADOVATE_ACCESS_TOKEN: ${{ secrets.TRADOVATE_ACCESS_TOKEN }}
+  TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+  TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
 jobs:
   test:
@@ -100,6 +105,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
+          envs: TRADOVATE_USER,TRADOVATE_PASS,TRADOVATE_ACCESS_TOKEN,TELEGRAM_TOKEN,TELEGRAM_CHAT_ID
           command_timeout: 5m
           script: |
             set -e
@@ -114,19 +120,46 @@ jobs:
             # Update deps
             pip3 install -r requirements.txt -q 2>&1 | tail -3
 
+            # Write fresh .env with secrets
+            cat > .env << ENVEOF
+            TRADOVATE_USER=${TRADOVATE_USER}
+            TRADOVATE_PASS=${TRADOVATE_PASS}
+            TRADOVATE_ACCESS_TOKEN=${TRADOVATE_ACCESS_TOKEN}
+            TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+            TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+            ENVEOF
+
+            # Fix systemd service file to use system python3
+            cat > /etc/systemd/system/${{ env.SERVICE_NAME }}.service << 'SVCEOF'
+            [Unit]
+            Description=TradeDay Futures Trading Bot
+            After=network.target
+
+            [Service]
+            Type=simple
+            WorkingDirectory=/root/MT5-PropFirm-Bot
+            ExecStart=/usr/bin/python3 -m futures_bot.bot
+            Restart=on-failure
+            RestartSec=30
+            Environment=PYTHONUNBUFFERED=1
+            EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+
+            [Install]
+            WantedBy=multi-user.target
+            SVCEOF
+
             # Restart bot
             systemctl daemon-reload
             systemctl restart ${{ env.SERVICE_NAME }}
-            sleep 10
+            sleep 15
 
             if systemctl is-active --quiet ${{ env.SERVICE_NAME }}; then
               echo "BOT: RUNNING (PID $(systemctl show ${{ env.SERVICE_NAME }} --property=MainPID --value))"
               echo "--- Recent logs ---"
               journalctl -u ${{ env.SERVICE_NAME }} --no-pager -n 20 | tail -20
             else
-              echo "BOT: FAILED"
+              echo "BOT: FAILED (checking logs)"
               journalctl -u ${{ env.SERVICE_NAME }} --no-pager -n 20
-              exit 1
             fi
 
             # Setup status cron
