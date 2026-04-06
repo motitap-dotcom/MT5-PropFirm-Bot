@@ -1,45 +1,38 @@
 #!/bin/bash
-# Trigger: v86 - Send status via Telegram directly from VPS
+# Trigger: v87 - Full status check
 cd /root/MT5-PropFirm-Bot
 
-# Write fresh .env from workflow secrets
-if [ -n "$TRADOVATE_ACCESS_TOKEN" ]; then
-    echo "TRADOVATE_USER=$TRADOVATE_USER" > .env
-    echo "TRADOVATE_PASS=$TRADOVATE_PASS" >> .env
-    echo "TRADOVATE_ACCESS_TOKEN=$TRADOVATE_ACCESS_TOKEN" >> .env
-    echo "TELEGRAM_TOKEN=$TELEGRAM_TOKEN" >> .env
-    echo "TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID" >> .env
-fi
+echo "=== VPS Status Check - $(date -u '+%Y-%m-%d %H:%M:%S UTC') ==="
 
-rm -f configs/.tradovate_token.json
-mkdir -p logs status
+echo ""
+echo "=== Service Status ==="
+systemctl is-active futures-bot
+systemctl status futures-bot --no-pager -l 2>&1 | head -20
 
-# Restart bot
-systemctl stop futures-bot 2>/dev/null
-sleep 3
-systemctl daemon-reload
-systemctl start futures-bot
-sleep 15
+echo ""
+echo "=== Recent Bot Log (last 40 lines) ==="
+tail -40 logs/bot.log 2>/dev/null || echo "No bot.log found"
 
-# Collect status
-STATUS=$(systemctl is-active futures-bot)
-LOGS=$(journalctl -u futures-bot --no-pager -n 20 --since "20 sec ago" 2>&1)
-BOTLOG=$(tail -15 logs/bot.log 2>/dev/null)
+echo ""
+echo "=== Status JSON ==="
+cat status/status.json 2>/dev/null || echo "No status.json found"
 
-# Send to Telegram directly from VPS
-MSG="🤖 Bot Status Report v86
-━━━━━━━━━━━━━━━
-Service: ${STATUS}
-━━━━━━━━━━━━━━━
-Journal:
-${LOGS}
-━━━━━━━━━━━━━━━
-Bot Log:
-${BOTLOG}"
+echo ""
+echo "=== Journal Logs (last 30 lines) ==="
+journalctl -u futures-bot --no-pager -n 30 2>&1
 
-curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-  -d chat_id="${TELEGRAM_CHAT_ID}" \
-  -d text="${MSG:0:4000}" \
-  -d parse_mode="" > /dev/null 2>&1
+echo ""
+echo "=== Disk & Memory ==="
+df -h / | tail -1
+free -h | head -2
 
-echo "Status sent to Telegram"
+echo ""
+echo "=== Process Check ==="
+ps aux | grep -i "[f]utures" || echo "No futures process found"
+
+echo ""
+echo "=== .env Check ==="
+if [ -f .env ]; then echo ".env exists ($(wc -l < .env) lines)"; else echo "NO .env FILE"; fi
+
+echo ""
+echo "=== Done ==="
