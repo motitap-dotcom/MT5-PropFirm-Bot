@@ -1,23 +1,32 @@
-=== Debug Auth v107 ===
-Timestamp: 2026-04-06 20:23 UTC
+=== Status v109 ===
+Timestamp: 2026-04-06 20:30 UTC
+Service: active
+PID: 950921
+Uptime: Mon 2026-04-06 20:26:59 UTC
 
-=== Token details ===
-accessToken: ...ijan4hW_2TtvHEn4QgAA
-mdAccessToken: ...NEcjPWIk9qk_WdDNQVDw
-userId: 5644210
-accountSpec: FNFTCHMOTITAPIRO67510
-accountId: 39996695
-expirationTime: 2026-04-06T20:30:18.100000+00:00
-savedAt: 2026-04-06T19:10:18.356601+00:00
+=== Token ===
+Account: ?
+Expires: 2026-04-06T21:43:32.890Z
+Remaining: 73 min
 
-=== .env user ===
-TRADOVATE_USER=TD_Motitap
-
-=== Test token against API ===
-Demo API status: 200
-  Account: FNFTCHMOTITAPIRO67510 id=39996695 active=True
-
-=== Try renewal ===
-Renewal status: 200
-RENEWAL SUCCESS! New token obtained
-Saved new token
+=== Last 20 bot.log ===
+Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
+2026-04-06 20:28:32,261 [bot] ERROR: Failed to connect: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-06 20:28:32,262 [bot] ERROR: Fatal error (attempt 3/5): CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 241, in _authenticate
+ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-06 20:28:32,262 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-06 20:28:32,380 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-06 20:28:32,501 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-06 20:28:32,501 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-06 20:28:32,620 [tradovate_client] ERROR: CAPTCHA required for first login!
+Run: python3 get_token.py
+Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
+2026-04-06 20:28:32,620 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-06 20:28:32,738 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-06 20:28:32,738 [bot] INFO: Bot stopped
+2026-04-06 20:28:32,738 [bot] INFO: Retrying in 120s...
