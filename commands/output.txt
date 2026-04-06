@@ -1,32 +1,13 @@
-=== Status v109 ===
-Timestamp: 2026-04-06 20:30 UTC
-Service: active
-PID: 950921
-Uptime: Mon 2026-04-06 20:26:59 UTC
+=== Get TradeDay Token v110 ===
+Timestamp: 2026-04-06 20:42 UTC
+User: TD_Motitap
+Authenticating as: TD_Motitap
 
-=== Token ===
-Account: ?
-Expires: 2026-04-06T21:43:32.890Z
-Remaining: 73 min
+=== Trying demo endpoint ===
+Status: 200
+CAPTCHA REQUIRED (p-captcha=true)
+Need to solve CAPTCHA manually
 
-=== Last 20 bot.log ===
-Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
-2026-04-06 20:28:32,261 [bot] ERROR: Failed to connect: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-06 20:28:32,262 [bot] ERROR: Fatal error (attempt 3/5): CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 241, in _authenticate
-ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-06 20:28:32,262 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-06 20:28:32,380 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-06 20:28:32,501 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-06 20:28:32,501 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-06 20:28:32,620 [tradovate_client] ERROR: CAPTCHA required for first login!
-Run: python3 get_token.py
-Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
-2026-04-06 20:28:32,620 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-06 20:28:32,738 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-06 20:28:32,738 [bot] INFO: Bot stopped
-2026-04-06 20:28:32,738 [bot] INFO: Retrying in 120s...
+=== Trying live endpoint ===
+Status: 200
+Response: {"errorText": "Incorrect username or password. Please try again, noting that passwords are case-sensitive."}
