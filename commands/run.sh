@@ -1,31 +1,53 @@
 #!/bin/bash
-# Trigger: v99 - Quick diag
+# Trigger: v100 - Fix PYTHONPATH in service + write .env + restart
 cd /root/MT5-PropFirm-Bot
-echo "=== Quick Diag v99 ==="
+
+echo "=== Fix v100 ==="
 echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')"
-echo "Branch: $(git branch --show-current)"
-echo "Commit: $(git log -1 --oneline)"
+
+# Fix service file with PYTHONPATH
+cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+Restart=on-failure
+RestartSec=30
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+
+[Install]
+WantedBy=multi-user.target
+SVCEOF
+
+# Write .env
+if [ -n "${TRADOVATE_USER}" ]; then
+    cat > .env << ENVEOF
+TRADOVATE_USER=${TRADOVATE_USER}
+TRADOVATE_PASS=${TRADOVATE_PASS}
+TRADOVATE_ACCESS_TOKEN=${TRADOVATE_ACCESS_TOKEN}
+TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+ENVEOF
+    echo ".env written"
+fi
+
+# Restart
+systemctl daemon-reload
+systemctl stop futures-bot 2>/dev/null
+sleep 2
+systemctl start futures-bot
+sleep 15
+
+echo "Service: $(systemctl is-active futures-bot)"
 echo ""
-echo "Python3: $(which python3) $(python3 --version 2>&1)"
-echo "pip3: $(which pip3)"
+echo "=== Logs ==="
+journalctl -u futures-bot --no-pager -n 20 2>&1
 echo ""
-echo "=== Module check ==="
-python3 -c "import aiohttp; print('aiohttp OK')" 2>&1
-python3 -c "import websockets; print('websockets OK')" 2>&1
-python3 -c "import futures_bot; print('futures_bot OK')" 2>&1
-python3 -c "import futures_bot.bot; print('futures_bot.bot OK')" 2>&1
-echo ""
-echo "=== .env ==="
-[ -f .env ] && echo "exists ($(wc -l < .env) lines)" || echo "MISSING"
-echo ""
-echo "=== Token ==="
-[ -f configs/.tradovate_token.json ] && echo "token file exists" || echo "token file MISSING"
-echo ""
-echo "=== Service file ==="
-cat /etc/systemd/system/futures-bot.service 2>/dev/null | grep ExecStart
-echo ""
-echo "=== Service status ==="
-systemctl is-active futures-bot 2>&1
-echo ""
-echo "=== Last 10 journal lines ==="
-journalctl -u futures-bot --no-pager -n 10 2>&1
+echo "=== Bot log ==="
+tail -15 logs/bot.log 2>/dev/null || echo "No bot.log"
