@@ -1,28 +1,67 @@
 #!/bin/bash
-# Trigger: v106 - Final status check
+# Trigger: v107 - Check token details + try auth manually
 cd /root/MT5-PropFirm-Bot
-echo "=== Status v106 ==="
+echo "=== Debug Auth v107 ==="
 echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')"
-echo "Service: $(systemctl is-active futures-bot)"
-echo "PID: $(systemctl show futures-bot --property=MainPID --value 2>/dev/null)"
-echo "Uptime: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value 2>/dev/null)"
+
+# Check what account the token belongs to
 echo ""
-echo "=== Token ==="
+echo "=== Token details ==="
 python3 -c "
 import json
-from datetime import datetime, timezone
-try:
-    with open('configs/.tradovate_token.json') as f:
-        t = json.load(f)
-    exp = t.get('expirationTime','')
-    print(f'Expires: {exp}')
-    e = datetime.fromisoformat(exp.replace('Z','+00:00'))
-    remaining = (e - datetime.now(timezone.utc)).total_seconds() / 60
-    print(f'Remaining: {remaining:.0f} min')
-    print(f'Valid: {remaining > 0}')
-except Exception as ex:
-    print(f'Error: {ex}')
+with open('configs/.tradovate_token.json') as f:
+    t = json.load(f)
+for k,v in t.items():
+    if k == 'accessToken' or k == 'mdAccessToken':
+        print(f'{k}: ...{str(v)[-20:]}')
+    else:
+        print(f'{k}: {v}')
 " 2>&1
+
+# Check .env username
 echo ""
-echo "=== Last 20 bot.log ==="
-tail -20 logs/bot.log 2>/dev/null || echo "No bot.log"
+echo "=== .env user ==="
+grep "TRADOVATE_USER" .env 2>/dev/null | head -1
+
+# Try loading token and hitting API
+echo ""
+echo "=== Test token against API ==="
+python3 << 'PYEOF'
+import json, requests
+
+try:
+    with open("configs/.tradovate_token.json") as f:
+        t = json.load(f)
+    token = t.get("accessToken", "")
+
+    # Try demo endpoint
+    headers = {"Authorization": f"Bearer {token}"}
+    r = requests.get("https://demo.tradovateapi.com/v1/account/list", headers=headers, timeout=10)
+    print(f"Demo API status: {r.status_code}")
+    if r.status_code == 200:
+        accounts = r.json()
+        for a in accounts[:3]:
+            print(f"  Account: {a.get('name','')} id={a.get('id','')} active={a.get('active','')}")
+    else:
+        print(f"  Response: {r.text[:200]}")
+
+    # Try renewal
+    print("")
+    print("=== Try renewal ===")
+    r2 = requests.post("https://demo.tradovateapi.com/v1/auth/renewaccesstoken", headers=headers, timeout=10)
+    print(f"Renewal status: {r2.status_code}")
+    if r2.status_code == 200:
+        data = r2.json()
+        if "accessToken" in data:
+            print("RENEWAL SUCCESS! New token obtained")
+            # Save it
+            with open("configs/.tradovate_token.json", "w") as f:
+                json.dump(data, f, indent=2)
+            print("Saved new token")
+        else:
+            print(f"Response: {data}")
+    else:
+        print(f"Response: {r2.text[:200]}")
+except Exception as e:
+    print(f"Error: {e}")
+PYEOF
