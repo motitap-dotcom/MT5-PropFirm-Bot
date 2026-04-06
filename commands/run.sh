@@ -1,45 +1,41 @@
 #!/bin/bash
-# Trigger: v86 - Send status via Telegram directly from VPS
+# Trigger: v87 - Status check only (no restart)
 cd /root/MT5-PropFirm-Bot
 
-# Write fresh .env from workflow secrets
-if [ -n "$TRADOVATE_ACCESS_TOKEN" ]; then
-    echo "TRADOVATE_USER=$TRADOVATE_USER" > .env
-    echo "TRADOVATE_PASS=$TRADOVATE_PASS" >> .env
-    echo "TRADOVATE_ACCESS_TOKEN=$TRADOVATE_ACCESS_TOKEN" >> .env
-    echo "TELEGRAM_TOKEN=$TELEGRAM_TOKEN" >> .env
-    echo "TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID" >> .env
-fi
+echo "=== Bot Status Check - $(date -u '+%Y-%m-%d %H:%M:%S UTC') ==="
+echo ""
 
-rm -f configs/.tradovate_token.json
-mkdir -p logs status
+# Service status
+echo "--- Service Status ---"
+systemctl is-active futures-bot
+systemctl status futures-bot --no-pager -l 2>&1 | head -20
+echo ""
 
-# Restart bot
-systemctl stop futures-bot 2>/dev/null
-sleep 3
-systemctl daemon-reload
-systemctl start futures-bot
-sleep 15
+# Uptime
+echo "--- Bot Uptime ---"
+ps aux | grep -E '[p]ython.*bot' || echo "No bot process found"
+echo ""
 
-# Collect status
-STATUS=$(systemctl is-active futures-bot)
-LOGS=$(journalctl -u futures-bot --no-pager -n 20 --since "20 sec ago" 2>&1)
-BOTLOG=$(tail -15 logs/bot.log 2>/dev/null)
+# Recent logs
+echo "--- Last 30 lines of bot.log ---"
+tail -30 logs/bot.log 2>/dev/null || echo "No bot.log found"
+echo ""
 
-# Send to Telegram directly from VPS
-MSG="🤖 Bot Status Report v86
-━━━━━━━━━━━━━━━
-Service: ${STATUS}
-━━━━━━━━━━━━━━━
-Journal:
-${LOGS}
-━━━━━━━━━━━━━━━
-Bot Log:
-${BOTLOG}"
+# Status JSON
+echo "--- status.json ---"
+cat status/status.json 2>/dev/null || echo "No status.json found"
+echo ""
 
-curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-  -d chat_id="${TELEGRAM_CHAT_ID}" \
-  -d text="${MSG:0:4000}" \
-  -d parse_mode="" > /dev/null 2>&1
+# Check .env exists
+echo "--- Environment ---"
+if [ -f .env ]; then echo ".env exists"; else echo ".env MISSING"; fi
+if [ -f configs/.tradovate_token.json ]; then echo "Token file exists"; else echo "No token file"; fi
+echo ""
 
-echo "Status sent to Telegram"
+# Disk and memory
+echo "--- System Resources ---"
+df -h / | tail -1
+free -h | head -2
+echo ""
+
+echo "=== End Status Check ==="
