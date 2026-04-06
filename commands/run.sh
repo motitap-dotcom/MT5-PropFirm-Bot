@@ -1,21 +1,28 @@
 #!/bin/bash
-# Trigger: v108 - Restart bot with renewed token + check
+# Trigger: v109 - Status check (no restart)
 cd /root/MT5-PropFirm-Bot
-echo "=== v108 ==="
+echo "=== Status v109 ==="
 echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')"
-
-# Bot should pick up the renewed token
-# Just restart and check quickly (no sleep to avoid output issues)
-systemctl restart futures-bot
-echo "Restarted"
-echo ""
-
-# Give it a few seconds then check
-sleep 8
 echo "Service: $(systemctl is-active futures-bot)"
+echo "PID: $(systemctl show futures-bot --property=MainPID --value 2>/dev/null)"
+echo "Uptime: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value 2>/dev/null)"
 echo ""
-echo "=== Last 15 journal ==="
-journalctl -u futures-bot --no-pager -n 15 --since "10 sec ago" 2>&1
+echo "=== Token ==="
+python3 -c "
+import json
+from datetime import datetime, timezone
+try:
+    with open('configs/.tradovate_token.json') as f:
+        t = json.load(f)
+    exp = t.get('expirationTime','')
+    print(f'Account: {t.get(\"accountSpec\",\"?\")}')
+    print(f'Expires: {exp}')
+    e = datetime.fromisoformat(exp.replace('Z','+00:00'))
+    remaining = (e - datetime.now(timezone.utc)).total_seconds() / 60
+    print(f'Remaining: {remaining:.0f} min')
+except Exception as ex:
+    print(f'Error: {ex}')
+" 2>&1
 echo ""
-echo "=== Last 10 bot.log ==="
-tail -10 logs/bot.log 2>/dev/null
+echo "=== Last 20 bot.log ==="
+tail -20 logs/bot.log 2>/dev/null || echo "No bot.log"
