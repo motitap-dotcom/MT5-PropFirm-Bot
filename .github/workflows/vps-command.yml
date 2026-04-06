@@ -7,8 +7,6 @@ on:
 jobs:
   run-command:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     env:
       TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
       TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
@@ -18,8 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run command on VPS
-        continue-on-error: true
+      - name: Run command on VPS and push output
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -29,40 +26,15 @@ jobs:
           command_timeout: 10m
           script: |
             cd /root/MT5-PropFirm-Bot
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git config user.name "github-actions[bot]"
             git fetch origin ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
             bash commands/run.sh > commands/output.txt 2>&1
             cat commands/output.txt
-
-      - name: Fetch output (base64 safe)
-        if: always()
-        id: fetch
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          command_timeout: 1m
-          script: base64 -w 0 /root/MT5-PropFirm-Bot/commands/output.txt 2>/dev/null || echo "NOFILE"
-
-      - name: Decode and push output
-        if: always()
-        run: |
-          B64="${{ steps.fetch.outputs.stdout }}"
-          if [ -n "$B64" ] && [ "$B64" != "NOFILE" ]; then
-            echo "$B64" | base64 -d > commands/output.txt
-          else
-            echo "Failed to fetch output from VPS" > commands/output.txt
-          fi
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git fetch origin ${{ github.ref_name }}
-          git reset --soft origin/${{ github.ref_name }}
-          git add commands/output.txt
-          if ! git diff --cached --quiet; then
-            git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')"
-            git push origin HEAD:${{ github.ref_name }}
-          fi
+            git add commands/output.txt
+            git commit -m "VPS output $(date -u +'%Y-%m-%d %H:%M UTC')" || true
+            git push origin HEAD:${{ github.ref_name }} || true
 
       - name: Telegram notification
         if: always()
