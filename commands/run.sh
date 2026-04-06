@@ -1,16 +1,16 @@
 #!/bin/bash
-# Trigger: v102 - Copy token from working Tradovate-Bot + fix PYTHONPATH + restart
+# Trigger: v103 - Copy token + fix service (NO restart - do separately)
 cd /root/MT5-PropFirm-Bot
 
-echo "=== Full Fix v102 ==="
+echo "=== Fix v103 (no restart) ==="
 echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')"
 
-# 1. Copy token from the working Tradovate-Bot
+# 1. Copy token
 echo ""
-echo "=== Copying token from Tradovate-Bot ==="
+echo "=== Token ==="
 if [ -f /root/tradovate-bot/.tradovate_token.json ]; then
     cp /root/tradovate-bot/.tradovate_token.json configs/.tradovate_token.json
-    echo "Token copied!"
+    echo "Copied from Tradovate-Bot!"
     python3 -c "
 import json
 from datetime import datetime, timezone
@@ -25,14 +25,13 @@ if exp:
     print(f'Valid: {remaining > 0}')
 " 2>&1
 else
-    echo "Token file not found at /root/tradovate-bot/.tradovate_token.json"
-    echo "Checking other locations..."
-    find /root/tradovate-bot -name "*.tradovate_token*" -o -name "*token*.json" 2>/dev/null | head -5
+    echo "NOT FOUND at /root/tradovate-bot/.tradovate_token.json"
+    ls -la /root/tradovate-bot/*.json /root/tradovate-bot/.*.json 2>/dev/null
 fi
 
-# 2. Write .env from secrets
+# 2. Write .env
 echo ""
-echo "=== Writing .env ==="
+echo "=== .env ==="
 if [ -n "${TRADOVATE_USER}" ]; then
     cat > .env << ENVEOF
 TRADOVATE_USER=${TRADOVATE_USER}
@@ -41,12 +40,12 @@ TRADOVATE_ACCESS_TOKEN=${TRADOVATE_ACCESS_TOKEN}
 TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
 TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
 ENVEOF
-    echo ".env written ($(wc -l < .env) lines)"
+    echo "Written ($(wc -l < .env) lines)"
 fi
 
 # 3. Fix service with PYTHONPATH
 echo ""
-echo "=== Fixing service ==="
+echo "=== Service ==="
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -66,24 +65,16 @@ EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 WantedBy=multi-user.target
 SVCEOF
 systemctl daemon-reload
-echo "Service file updated with PYTHONPATH"
+echo "Service file updated"
 
-# 4. Stop and start fresh
+# 4. Stop bot (will restart automatically via Restart=on-failure after output is committed)
 echo ""
-echo "=== Restarting bot ==="
+echo "=== Stopping bot (auto-restart in 30s) ==="
 systemctl stop futures-bot 2>/dev/null
-sleep 3
-systemctl start futures-bot
-sleep 15
-
-STATUS=$(systemctl is-active futures-bot)
-echo "Service: $STATUS"
-
-# 5. Show results
-echo ""
-echo "=== Journal (last 20) ==="
-journalctl -u futures-bot --no-pager -n 20 2>&1
+echo "Stopped. Will auto-restart in 30s with new token."
 
 echo ""
-echo "=== Bot log (last 15) ==="
-tail -15 logs/bot.log 2>/dev/null || echo "No bot.log"
+echo "=== Current status ==="
+echo "Service: $(systemctl is-active futures-bot)"
+echo "Token file: $([ -f configs/.tradovate_token.json ] && echo 'EXISTS' || echo 'MISSING')"
+echo ".env: $([ -f .env ] && echo 'EXISTS' || echo 'MISSING')"
