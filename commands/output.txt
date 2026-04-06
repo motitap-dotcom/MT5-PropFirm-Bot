@@ -1,74 +1,37 @@
-=== Bot Status Report ===
-Timestamp: 2026-04-06 19:11 UTC
-
-Service: activating
-unknown
-Running since: Mon 2026-04-06 19:11:13 UTC
-
-=== System ===
-Disk: 18%
-Memory: 1110MB/7941MB (14%)
-
-=== Git ===
+=== Quick Diag v99 ===
+Timestamp: 2026-04-06 19:39 UTC
 Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
-Commit: 62babc7 Status check v96 - after service fix
+Commit: 60bd643 Quick diag v99
 
-=== Auth ===
-Token file: MISSING
+Python3: /usr/bin/python3 Python 3.12.3
+pip3: /usr/bin/pip3
 
-=== Environment ===
-.env: EXISTS (5 lines)
+=== Module check ===
+aiohttp OK
+websockets OK
+futures_bot OK
+futures_bot.bot OK
 
-=== Journal Logs (last 20 lines) ===
-Apr 06 19:09:42 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
-Apr 06 19:09:42 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 06 19:09:42 vmi3096165 python3[928449]: /usr/bin/python3: No module named futures_bot.bot
-Apr 06 19:09:42 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 06 19:09:42 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 06 19:10:13 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 3.
-Apr 06 19:10:13 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 06 19:10:13 vmi3096165 python3[928783]: /usr/bin/python3: No module named futures_bot.bot
-Apr 06 19:10:13 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 06 19:10:13 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 06 19:10:43 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 4.
-Apr 06 19:10:43 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 06 19:10:43 vmi3096165 python3[928939]: /usr/bin/python3: No module named futures_bot.bot
-Apr 06 19:10:43 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 06 19:10:43 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 06 19:11:13 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 5.
-Apr 06 19:11:13 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 06 19:11:13 vmi3096165 python3[929063]: /usr/bin/python3: No module named futures_bot.bot
-Apr 06 19:11:13 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 06 19:11:13 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+=== .env ===
+exists (5 lines)
 
-=== Bot Log (last 20 lines) ===
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 241, in _authenticate
-ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-06 19:06:53,991 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-06 19:06:54,112 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-06 19:06:54,233 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-06 19:06:54,233 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-06 19:06:54,353 [tradovate_client] ERROR: CAPTCHA required for first login!
-Run: python3 get_token.py
-Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
-2026-04-06 19:06:54,353 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-06 19:06:54,447 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-06 19:06:54,447 [bot] INFO: Bot stopped
-2026-04-06 19:06:54,447 [bot] INFO: Retrying in 300s...
-2026-04-06 19:07:12,289 [bot] INFO: Stopping bot: Signal received
-2026-04-06 19:07:12,290 [bot] ERROR: Error closing positions: Session is closed
-2026-04-06 19:07:12,290 [notifier] ERROR: Telegram error: Session is closed
-2026-04-06 19:07:12,290 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-06 19:07:12,290 [bot] INFO: Bot stopped
+=== Token ===
+token file MISSING
 
-=== status.json ===
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+=== Service file ===
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+
+=== Service status ===
+activating
+
+=== Last 10 journal lines ===
+Apr 06 19:38:51 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 8.
+Apr 06 19:38:51 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 06 19:38:51 vmi3096165 python3[936656]: /usr/bin/python3: No module named futures_bot.bot
+Apr 06 19:38:51 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 06 19:38:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 06 19:39:21 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 9.
+Apr 06 19:39:21 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 06 19:39:21 vmi3096165 python3[936772]: /usr/bin/python3: No module named futures_bot.bot
+Apr 06 19:39:21 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 06 19:39:21 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
