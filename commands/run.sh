@@ -1,19 +1,22 @@
 #!/bin/bash
-# Trigger: v111 - Browser auth via Playwright (bypass CAPTCHA)
+# Trigger: v112 - Use Tradovate-Bot's Playwright + venv for browser auth
 cd /root/MT5-PropFirm-Bot
-
-echo "=== Browser Auth v111 ==="
-echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')"
-
-# Install playwright if needed
-echo "Checking Playwright..."
-pip3 install playwright -q 2>&1 | tail -2
-python3 -m playwright install chromium 2>&1 | tail -3
-
 source .env
+
+echo "=== Browser Auth v112 ==="
+echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')"
 echo "User: $TRADOVATE_USER"
 
-python3 << 'PYEOF'
+# Use the other bot's venv which already has Playwright installed
+PYTHON="/root/tradovate-bot/venv/bin/python3"
+if [ ! -f "$PYTHON" ]; then
+    echo "ERROR: Tradovate-Bot venv not found"
+    exit 1
+fi
+echo "Using Python: $PYTHON"
+echo "Playwright check: $($PYTHON -c 'import playwright; print("OK")' 2>&1)"
+
+$PYTHON << 'PYEOF'
 import os, json, asyncio
 
 async def browser_auth():
@@ -21,10 +24,6 @@ async def browser_auth():
 
     username = os.environ.get("TRADOVATE_USER", "")
     password = os.environ.get("TRADOVATE_PASS", "")
-
-    if not username or not password:
-        print("ERROR: credentials not set")
-        return
 
     print(f"Launching browser for {username}...")
     token_data = None
@@ -34,77 +33,66 @@ async def browser_auth():
         context = await browser.new_context()
         page = await context.new_page()
 
-        # Intercept network responses to catch the token
         async def handle_response(response):
             nonlocal token_data
-            if "accesstokenrequest" in response.url or "renewaccesstoken" in response.url:
+            url = response.url.lower()
+            if "accesstoken" in url or "auth" in url:
                 try:
                     data = await response.json()
-                    if "accessToken" in data:
+                    if isinstance(data, dict) and "accessToken" in data:
                         token_data = data
-                        print(f"TOKEN CAPTURED from {response.url}")
+                        print(f"TOKEN CAPTURED!")
                 except:
                     pass
 
         page.on("response", handle_response)
 
-        # Go to Tradovate login
-        print("Opening Tradovate login page...")
+        print("Opening Tradovate...")
         await page.goto("https://trader.tradovate.com/welcome", timeout=30000)
-        await page.wait_for_load_state("networkidle", timeout=15000)
+        await asyncio.sleep(3)
 
-        # Fill credentials
-        print("Filling credentials...")
+        print("Filling login form...")
         try:
-            # Try common selectors for username/password
-            for selector in ['input[name="name"]', 'input[name="username"]', '#username', 'input[type="text"]']:
-                el = await page.query_selector(selector)
-                if el:
-                    await el.fill(username)
-                    print(f"  Username filled via {selector}")
-                    break
-
-            for selector in ['input[name="password"]', '#password', 'input[type="password"]']:
-                el = await page.query_selector(selector)
-                if el:
-                    await el.fill(password)
-                    print(f"  Password filled via {selector}")
-                    break
-
-            # Click login button
-            for selector in ['button[type="submit"]', 'button:has-text("Log In")', 'button:has-text("Sign In")', '.login-button']:
-                el = await page.query_selector(selector)
-                if el:
-                    await el.click()
-                    print(f"  Clicked login via {selector}")
-                    break
-
-            # Wait for auth response
-            print("Waiting for auth response (30s)...")
-            for i in range(30):
-                if token_data:
-                    break
-                await asyncio.sleep(1)
-
+            await page.fill('input[name="name"]', username, timeout=10000)
+            await page.fill('input[name="password"]', password, timeout=10000)
+            await page.click('button[type="submit"]', timeout=10000)
+            print("Login submitted")
         except Exception as e:
-            print(f"Browser interaction error: {e}")
+            print(f"Selector error: {e}")
+            # Try alternative selectors
+            try:
+                inputs = await page.query_selector_all('input')
+                print(f"Found {len(inputs)} inputs")
+                for i, inp in enumerate(inputs):
+                    inp_type = await inp.get_attribute("type")
+                    inp_name = await inp.get_attribute("name")
+                    print(f"  Input {i}: type={inp_type} name={inp_name}")
+                buttons = await page.query_selector_all('button')
+                print(f"Found {len(buttons)} buttons")
+            except:
+                pass
 
-        # Take screenshot for debug
-        await page.screenshot(path="/tmp/tradovate_login.png")
-        print(f"Screenshot saved to /tmp/tradovate_login.png")
-        print(f"Page URL: {page.url}")
+        print("Waiting for token (45s)...")
+        for i in range(45):
+            if token_data:
+                break
+            await asyncio.sleep(1)
+            if i % 10 == 9:
+                print(f"  ...{i+1}s")
 
+        print(f"Final URL: {page.url}")
         await browser.close()
 
     if token_data:
-        print("\nSUCCESS!")
+        print(f"\nSUCCESS!")
         print(f"Account: {token_data.get('accountSpec', '?')}")
         print(f"Expires: {token_data.get('expirationTime', '?')}")
-        with open("configs/.tradovate_token.json", "w") as f:
+        token_path = "/root/MT5-PropFirm-Bot/configs/.tradovate_token.json"
+        with open(token_path, "w") as f:
             json.dump(token_data, f, indent=2)
-        print("Token saved!")
+        print(f"Token saved to {token_path}")
     else:
-        print("\nNo token captured. Login may have failed or page structure changed.")
+        print("\nNo token captured.")
 
 asyncio.run(browser_auth())
 PYEOF
