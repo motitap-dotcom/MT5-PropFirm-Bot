@@ -1,0 +1,157 @@
+name: Auto-merge & Deploy
+
+on:
+  push:
+    branches:
+      - 'claude/**'
+    paths-ignore:
+      - '*.md'
+      - 'server_status.json'
+      - 'system_status.json'
+      - 'commands/output.txt'
+
+env:
+  DEPLOY_BRANCH: main
+  BOT_DIR: /root/MT5-PropFirm-Bot
+  SERVICE_NAME: futures-bot
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Syntax check all Python modules
+        run: |
+          for f in $(find futures_bot -name "*.py" 2>/dev/null); do
+            python -m py_compile "$f" && echo "  OK: $f" || echo "  FAIL: $f"
+          done
+
+  merge-and-deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge to main
+        run: |
+          for attempt in 1 2 3; do
+            echo "Attempt $attempt/3..."
+            if git fetch origin ${{ env.DEPLOY_BRANCH }} 2>/dev/null; then
+              git checkout ${{ env.DEPLOY_BRANCH }}
+              git reset --hard origin/${{ env.DEPLOY_BRANCH }}
+              if ! git merge ${{ github.sha }} --no-edit \
+                -m "Auto-merge ${{ github.ref_name }} → ${{ env.DEPLOY_BRANCH }}" 2>/dev/null; then
+                echo "Merge had conflicts, resolving..."
+                for f in server_status.json system_status.json commands/output.txt; do
+                  if git diff --name-only --diff-filter=U | grep -q "^${f}$"; then
+                    echo "  Resolving $f: keeping main's version"
+                    git checkout --ours "$f"
+                    git add "$f"
+                  fi
+                done
+                REMAINING=$(git diff --name-only --diff-filter=U 2>/dev/null)
+                if [ -n "$REMAINING" ]; then
+                  echo "  Remaining conflicts: $REMAINING"
+                  git checkout --theirs $REMAINING
+                  git add $REMAINING
+                fi
+                git commit --no-edit || { echo "Merge failed"; exit 1; }
+              fi
+            else
+              echo "Branch ${{ env.DEPLOY_BRANCH }} does not exist — creating from ${{ github.sha }}"
+              git checkout -b ${{ env.DEPLOY_BRANCH }} ${{ github.sha }}
+            fi
+            if git push origin ${{ env.DEPLOY_BRANCH }}; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push failed (main moved), retrying in 5s..."
+            sleep 5
+          done
+          echo "All 3 attempts failed"
+          exit 1
+
+      - name: Deploy to VPS via SSH
+        id: ssh_deploy
+        continue-on-error: true
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          command_timeout: 5m
+          script: |
+            set -e
+            echo "=== Auto-merge deploy: ${{ github.ref_name }} → ${{ env.DEPLOY_BRANCH }} ==="
+            BOT_DIR="${{ env.BOT_DIR }}"
+            cd "$BOT_DIR" || exit 1
+
+            git fetch origin ${{ env.DEPLOY_BRANCH }}
+            git reset --hard origin/${{ env.DEPLOY_BRANCH }}
+            echo "Now at: $(git log -1 --oneline)"
+
+            # Update deps
+            pip3 install -r requirements.txt -q 2>&1 | tail -3
+
+            # Restart bot
+            systemctl daemon-reload
+            systemctl restart ${{ env.SERVICE_NAME }}
+            sleep 10
+
+            if systemctl is-active --quiet ${{ env.SERVICE_NAME }}; then
+              echo "BOT: RUNNING (PID $(systemctl show ${{ env.SERVICE_NAME }} --property=MainPID --value))"
+              echo "--- Recent logs ---"
+              journalctl -u ${{ env.SERVICE_NAME }} --no-pager -n 20 | tail -20
+            else
+              echo "BOT: FAILED"
+              journalctl -u ${{ env.SERVICE_NAME }} --no-pager -n 20
+              exit 1
+            fi
+
+            # Setup status cron
+            CRON_CMD="cd $BOT_DIR && bash server_cron.sh >> /var/log/futures-bot-cron.log 2>&1"
+            if ! crontab -l 2>/dev/null | grep -q "server_cron.sh"; then
+              (crontab -l 2>/dev/null; echo "*/5 * * * * $CRON_CMD") | crontab -
+              echo "Status cron installed."
+            fi
+
+      - name: Verify deploy
+        if: always()
+        run: |
+          if [ "${{ steps.ssh_deploy.outcome }}" = "failure" ]; then
+            echo "::error::SSH deploy FAILED"
+          else
+            echo "SSH deploy succeeded."
+          fi
+
+      - name: Telegram notification
+        if: always()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Auto-merge & Deploy
+            Source: ${{ github.ref_name }}
+            Status: ${{ job.status }}

@@ -8,23 +8,29 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run diagnostics
+      - name: Run diagnostics on VPS
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
-          script_stop: true
+          command_timeout: 2m
           script: |
             cd /root/MT5-PropFirm-Bot
-            git pull origin ${{ github.ref_name }}
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git config user.name "github-actions[bot]"
+            git fetch origin ${{ github.ref_name }}
+            git reset --hard origin/${{ github.ref_name }}
             bash scripts/check_bot.sh > vps_report.txt 2>&1
-            git add vps_report.txt status/status.json
+            cat vps_report.txt
+            git add vps_report.txt status/status.json 2>/dev/null
             git commit -m "VPS check report $(date -u +'%Y-%m-%d %H:%M UTC')" || true
-            git push origin ${{ github.ref_name }} || true
+            git push origin HEAD:${{ github.ref_name }} || true
 
       - name: Telegram notification
         if: always()
@@ -33,5 +39,4 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            VPS Check completed
-            Status: ${{ job.status }}
+            VPS Check: ${{ job.status }}

@@ -1,13 +1,31 @@
 name: Deploy Bot
 on:
   push:
+    branches:
+      - main
     paths:
       - 'futures_bot/**'
       - 'configs/**'
       - 'requirements.txt'
 
 jobs:
+  pre-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install -r requirements.txt
+      - name: Syntax check
+        run: |
+          for f in $(find futures_bot -name "*.py"); do
+            python -m py_compile "$f" && echo "OK: $f" || { echo "FAIL: $f"; exit 1; }
+          done
+
   deploy:
+    needs: pre-check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,28 +36,33 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
-          script_stop: true
+          command_timeout: 5m
           script: |
+            set -e
             cd /root/MT5-PropFirm-Bot
-            git fetch origin ${{ github.ref_name }}
-            git reset --hard origin/${{ github.ref_name }}
+            git fetch origin main
+            git reset --hard origin/main
+            echo "Now at: $(git log -1 --oneline)"
 
-            # Install/update dependencies
-            pip3 install -r requirements.txt
+            pip3 install -r requirements.txt -q 2>&1 | tail -3
 
-            # Write fresh secrets to .env (systemd reads from this file)
-            echo "TRADOVATE_USER=${{ secrets.TRADOVATE_USER }}" > .env
-            echo "TRADOVATE_PASS=${{ secrets.TRADOVATE_PASS }}" >> .env
-            echo "TRADOVATE_ACCESS_TOKEN=${{ secrets.TRADOVATE_ACCESS_TOKEN }}" >> .env
-            echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .env
-            echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
-
-            # Restart bot service
             systemctl daemon-reload
-            systemctl restart futures-bot 2>/dev/null || echo "Service not yet installed"
+            systemctl restart futures-bot
+            sleep 15
 
-            echo "Deploy completed at $(date -u +'%Y-%m-%d %H:%M UTC')" > deploy_report.txt
-            python3 -c "import sys; sys.path.insert(0,'.'); import futures_bot; print('Import OK')" >> deploy_report.txt 2>&1
+            # Verify bot started
+            if systemctl is-active --quiet futures-bot; then
+              echo "BOT: RUNNING"
+              journalctl -u futures-bot --no-pager -n 20 | tail -20
+              # Check for fatal errors
+              if journalctl -u futures-bot --no-pager -n 20 | grep -qi "fatal\|traceback\|error.*auth"; then
+                echo "WARNING: Errors detected in startup logs"
+              fi
+            else
+              echo "BOT: FAILED TO START"
+              journalctl -u futures-bot --no-pager -n 30
+              exit 1
+            fi
 
       - name: Telegram notification
         if: always()
@@ -48,5 +71,5 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            Bot Deploy completed
-            Status: ${{ job.status }}
+            Bot Deploy: ${{ job.status }}
+            Commit: ${{ github.sha }}

@@ -7,6 +7,8 @@ on:
 jobs:
   run-command:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       TRADOVATE_USER: ${{ secrets.TRADOVATE_USER }}
       TRADOVATE_PASS: ${{ secrets.TRADOVATE_PASS }}
@@ -16,7 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run command on VPS and push output
+      - name: Run command on VPS and collect output
+        id: vps_run
+        continue-on-error: true
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -43,5 +47,4 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            VPS Command completed
-            Status: ${{ job.status }}
+            VPS Command: ${{ steps.vps_run.outcome }}

@@ -1,0 +1,187 @@
+name: Server Management
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Command to run on server'
+        required: false
+        default: 'status'
+        type: choice
+        options:
+          - status
+          - restart-bot
+          - bot-logs
+          - check-trades
+          - fix-bot
+          - full-diagnostic
+
+permissions:
+  contents: write
+
+env:
+  BOT_DIR: /root/MT5-PropFirm-Bot
+  SERVICE: futures-bot
+
+jobs:
+  manage-server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set command
+        id: cmd
+        run: |
+          CMD="${{ github.event.inputs.command || 'full-diagnostic' }}"
+          echo "command=$CMD" >> $GITHUB_OUTPUT
+
+      - name: Server diagnostic via SSH
+        id: ssh_diag
+        continue-on-error: true
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          command_timeout: 60s
+          script: |
+            BOT_DIR="${{ env.BOT_DIR }}"
+            SERVICE="${{ env.SERVICE }}"
+            CMD="${{ steps.cmd.outputs.command }}"
+
+            echo "==JSON_START=="
+            python3 << 'PYEOF'
+            import json, subprocess, os
+            from datetime import datetime, timezone
+
+            BOT_DIR = "/root/MT5-PropFirm-Bot"
+            SERVICE = "futures-bot"
+            CMD = os.environ.get("CMD", "full-diagnostic")
+
+            def run(cmd, timeout=10):
+                try:
+                    r = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=timeout)
+                    return r.stdout.strip()
+                except:
+                    return ""
+
+            result = {
+                "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "server_time": run("date '+%Y-%m-%d %H:%M:%S %Z'"),
+                "command": CMD,
+            }
+
+            bot_active = run(f"systemctl is-active {SERVICE}") == "active"
+            result["bot_active"] = bot_active
+            result["bot_pid"] = run(f"systemctl show {SERVICE} --property=MainPID --value")
+            result["uptime_since"] = run(f"systemctl show {SERVICE} --property=ActiveEnterTimestamp --value")
+
+            if CMD in ("status", "full-diagnostic"):
+                result["disk"] = run("df -h / | tail -1 | awk '{print $5}'")
+                result["memory"] = run("free -m | awk '/^Mem:/{printf \"%dMB/%dMB (%.0f%%)\", $3, $2, $3/$2*100}'")
+                result["git_commit"] = run(f"cd {BOT_DIR} && git log -1 --format='%h %s'")
+                result["git_branch"] = run(f"cd {BOT_DIR} && git branch --show-current")
+                result["token_exists"] = os.path.exists(f"{BOT_DIR}/configs/.tradovate_token.json")
+                result["env_exists"] = os.path.exists(f"{BOT_DIR}/.env")
+                result["cron_active"] = "server_cron" in run("crontab -l 2>/dev/null")
+
+            if CMD in ("bot-logs", "full-diagnostic"):
+                result["bot_logs"] = run(f"journalctl -u {SERVICE} --no-pager -n 50 2>/dev/null || tail -50 {BOT_DIR}/logs/bot.log 2>/dev/null")
+
+            if CMD == "restart-bot":
+                run(f"systemctl restart {SERVICE}")
+                import time; time.sleep(5)
+                result["bot_active"] = run(f"systemctl is-active {SERVICE}") == "active"
+                result["restart_logs"] = run(f"journalctl -u {SERVICE} --no-pager -n 10")
+                result["restarted"] = True
+
+            if CMD == "fix-bot":
+                run(f"cd {BOT_DIR} && git fetch origin main && git reset --hard origin/main")
+                result["git_commit"] = run(f"cd {BOT_DIR} && git log -1 --format='%h %s'")
+                run(f"cd {BOT_DIR} && pip3 install -r requirements.txt -q")
+                run(f"systemctl restart {SERVICE}")
+                import time; time.sleep(5)
+                result["bot_active"] = run(f"systemctl is-active {SERVICE}") == "active"
+                result["fixed"] = True
+
+            if CMD == "check-trades":
+                status_json = run(f"cat {BOT_DIR}/status/status.json 2>/dev/null")
+                try:
+                    result["bot_status"] = json.loads(status_json)
+                except:
+                    result["bot_status_raw"] = status_json[:1000]
+
+            print(json.dumps(result, indent=2, ensure_ascii=False))
+            PYEOF
+            echo "==JSON_END=="
+
+      - name: Process results
+        id: results
+        env:
+          SSH_OUTPUT: ${{ steps.ssh_diag.outputs.stdout || '' }}
+          SSH_OK: ${{ steps.ssh_diag.outcome == 'success' && 'true' || 'false' }}
+        run: |
+          python3 << 'PYEOF'
+          import json, os, re
+          from datetime import datetime, timezone
+
+          ssh_output = os.environ.get("SSH_OUTPUT", "")
+          ssh_ok = os.environ.get("SSH_OK") == "true"
+
+          result = {
+              "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "ssh_connected": ssh_ok,
+          }
+
+          if ssh_ok and ssh_output:
+              match = re.search(r"==JSON_START==\s*([\s\S]*?)\s*==JSON_END==", ssh_output)
+              if match:
+                  try:
+                      result["server"] = json.loads(match.group(1).strip())
+                  except:
+                      result["server_raw"] = match.group(1).strip()[:2000]
+              else:
+                  result["server_raw"] = ssh_output[:2000]
+          else:
+              result["error"] = "SSH connection failed"
+
+          with open("server_manage_result.json", "w") as f:
+              json.dump(result, f, indent=2, ensure_ascii=False)
+
+          # Print summary
+          srv = result.get("server", {})
+          bot_active = srv.get("bot_active", False)
+          print(f"\nBot: {'RUNNING' if bot_active else 'STOPPED'}")
+          print(f"PID: {srv.get('bot_pid', '?')}")
+          print(f"Disk: {srv.get('disk', '?')}")
+          print(f"Memory: {srv.get('memory', '?')}")
+          print(f"Commit: {srv.get('git_commit', '?')}")
+          PYEOF
+
+      - name: Commit result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add server_manage_result.json
+          if ! git diff --cached --quiet; then
+            git commit -m "server-manage: ${{ steps.cmd.outputs.command }} $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push origin main
+          fi
+
+      - name: Telegram notification
+        if: always()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Server Management: ${{ steps.cmd.outputs.command }}
+            Status: ${{ job.status }}
