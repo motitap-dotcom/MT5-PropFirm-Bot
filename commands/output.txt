@@ -1,14 +1,8 @@
-=== v147 2026-04-07 14:37 UTC ===
-Service: active
-PID: 1204962
+=== v148 2026-04-07 14:45 UTC ===
+Service: activating
+PID: 0
+Code: b6f06b2 v148
 
-2026-04-07 14:31:28,628 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:28,753 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:28,870 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:28,999 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,122 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:29,251 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,375 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
 2026-04-07 14:31:29,502 [tradovate_client] INFO: Token renewed successfully
 2026-04-07 14:31:29,620 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
 2026-04-07 14:31:29,745 [tradovate_client] INFO: Token renewed successfully
@@ -32,3 +26,10 @@ PID: 1204962
 2026-04-07 14:36:32,013 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
 2026-04-07 14:36:32,141 [tradovate_client] INFO: Token renewed successfully
 2026-04-07 14:36:32,265 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-07 14:41:04,915 [bot] INFO: Stopping bot: Signal received
+2026-04-07 14:41:04,915 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:41:05,059 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:41:05,179 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:41:05,306 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:41:05,546 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-07 14:41:05,546 [bot] INFO: Bot stopped
