@@ -1,55 +1,58 @@
-=== v151 2026-04-07 15:21 UTC ===
-Service: activating
-PID: 0
-Code: b72bcf4 chore: status check v151 after fix attempt
-Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
+=== v152 API Test 2026-04-07 15:25 UTC ===
 
---- Journal (last 15) ---
-Apr 07 15:18:51 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
-Apr 07 15:18:51 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 07 15:18:51 vmi3096165 python3[1224328]: /usr/bin/python3: No module named futures_bot.bot
-Apr 07 15:18:51 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 07 15:18:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 07 15:19:51 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
-Apr 07 15:19:51 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 07 15:19:51 vmi3096165 python3[1224658]: /usr/bin/python3: No module named futures_bot.bot
-Apr 07 15:19:51 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 07 15:19:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 07 15:20:52 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 3.
-Apr 07 15:20:52 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 07 15:20:52 vmi3096165 python3[1225002]: /usr/bin/python3: No module named futures_bot.bot
-Apr 07 15:20:52 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 07 15:20:52 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Connected: account=45373493
+Balance: {
+  "balance": 50000.0,
+  "realized_pnl": 0,
+  "unrealized_pnl": 0
+}
+find_contract(MESM6): {
+  "id": 4327108,
+  "name": "MESM6",
+  "contractMaturityId": 61502,
+  "timestamp": "2025-01-01T00:00Z",
+  "status": "DefinitionChecked",
+  "providerTickSize": 0.25
+}
+find_contract(MES): ERROR - GET /contract/find?name=MES failed (404): 
+find_contract(MNQM6): {
+  "id": 4327110,
+  "name": "MNQM6",
+  "contractMaturityId": 61504,
+  "timestamp": "2025-01-01T00:00Z",
+  "status": "DefinitionChecked",
+  "providerTickSize": 0.25
+}
+suggest(MES): [
+  {
+    "id": 4327108,
+    "name": "MESM6",
+    "contractMaturityId": 61502,
+    "timestamp": "2025-01-01T00:00Z",
+    "status": "DefinitionChecked",
+    "providerTickSize": 0.25
+  }
+]
+suggest(MNQ): [
+  {
+    "id": 4327110,
+    "name": "MNQM6",
+    "contractMaturityId": 61504,
+    "timestamp": "2025-01-01T00:00Z",
+    "status": "DefinitionChecked",
+    "providerTickSize": 0.25
+  }
+]
+bars(MESM6): got 0 bars
+  Raw response: {
+  "errorCode": "OperationNotSupported",
+  "mode": "None"
+}
+bars(MES): got 0 bars
+  Raw response: {
+  "errorCode": "OperationNotSupported",
+  "mode": "None"
+}
+Positions: 0 open
 
---- Bot Log (last 30) ---
-2026-04-07 15:12:50,015 [news_filter] INFO: Loaded 26 restricted events
-2026-04-07 15:12:50,016 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-04-07 15:12:50,171 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-07 15:12:50,171 [tradovate_client] INFO: Saved token is still valid
-2026-04-07 15:12:50,172 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-07 15:12:50,257 [bot] INFO: Bot started successfully
-2026-04-07 15:12:50,258 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-07 15:12:50,258 [bot] INFO: Timeframe: 5min
-2026-04-07 15:12:50,258 [bot] INFO: New trading day: 2026-04-07
-2026-04-07 15:12:50,378 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-07 15:12:50,378 [bot] INFO: Switching MESM6 to ORB strategy (trend day)
-2026-04-07 15:12:50,378 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-07 15:12:50,378 [bot] INFO: Switching MNQM6 to ORB strategy (trend day)
-2026-04-07 15:12:50,378 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-07 15:12:50,378 [bot] INFO: Switching MCLM6 to ORB strategy (trend day)
-2026-04-07 15:12:50,378 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-07 15:12:50,378 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
-2026-04-07 15:12:50,378 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-07 15:12:50,378 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
-2026-04-07 15:12:50,378 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-07 15:12:50,379 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
-2026-04-07 15:12:50,776 [bot] WARNING: No bars returned for MESM6
-2026-04-07 15:12:50,896 [bot] WARNING: No bars returned for MNQM6
-2026-04-07 15:12:51,017 [bot] WARNING: No bars returned for MCLM6
-2026-04-07 15:12:51,139 [bot] WARNING: No bars returned for MGCM6
-2026-04-07 15:12:51,261 [bot] WARNING: No bars returned for MYMM6
-2026-04-07 15:12:51,382 [bot] WARNING: No bars returned for M2KM6
-2026-04-07 15:16:56,352 [bot] INFO: Stopping bot: Signal received
-2026-04-07 15:16:56,704 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 15:16:56,704 [bot] INFO: Bot stopped
 === END ===
