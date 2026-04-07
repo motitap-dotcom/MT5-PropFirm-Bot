@@ -1,66 +1,98 @@
-=== v156 2026-04-07 15:57 UTC ===
-Service: activating
-PID: 0
-Code: 4a37fc0 chore: v156 status check
+=== v157 2026-04-07 16:08 UTC ===
+Service: active
+PID: 1235274
+Uptime:       07:26
+Code: f360dce chore: v157 final status check
 
-2026-04-07 15:48:33,252 [strategy.vwap] INFO: VWAP LONG signal: price=24079.50 RSI=28.7 SL=24107.24 TP1=24193.44
-2026-04-07 15:48:33,252 [strategy.vwap] INFO: VWAP LONG signal: price=24019.50 RSI=23.7 SL=24049.35 TP1=24177.20
-2026-04-07 15:48:33,252 [strategy.vwap] INFO: VWAP LONG signal: price=24035.25 RSI=27.3 SL=24025.38 TP1=24168.16
-2026-04-07 15:48:33,252 [strategy.vwap] INFO: VWAP LONG signal: price=24055.50 RSI=31.7 SL=24012.57 TP1=24161.55
-2026-04-07 15:48:33,252 [strategy.vwap] INFO: VWAP LONG signal: price=24090.00 RSI=40.0 SL=24008.23 TP1=24150.37
-2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=24075.25 RSI=38.2 SL=24005.72 TP1=24147.94
-2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=24077.75 RSI=38.7 SL=24004.53 TP1=24145.96
-2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=24064.50 RSI=36.9 SL=24001.64 TP1=24143.64
-2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=24009.25 RSI=30.7 SL=23994.89 TP1=24140.29
-2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=23976.75 RSI=27.8 SL=23980.32 TP1=24134.54
-2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=23966.75 RSI=26.9 SL=23965.99 TP1=24129.26
-2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=24005.50 RSI=35.3 SL=23957.25 TP1=24124.82
-2026-04-07 15:48:33,253 [bot] INFO: MNQM6 initialized: 51 bars loaded
-2026-04-07 15:48:33,713 [tradovate_client] INFO: Got 51 bars for MCLM6
-2026-04-07 15:48:33,713 [bot] INFO: Initializing MCLM6 with 51 historical bars
-2026-04-07 15:48:33,714 [strategy.vwap] INFO: VWAP SHORT signal: price=100.29 RSI=60.8 SL=102.29 TP1=99.74
-2026-04-07 15:48:33,718 [strategy.vwap] INFO: VWAP SHORT signal: price=100.35 RSI=61.6 SL=102.34 TP1=99.76
-2026-04-07 15:48:33,718 [strategy.vwap] INFO: VWAP SHORT signal: price=100.46 RSI=63.2 SL=102.40 TP1=99.78
-2026-04-07 15:48:33,720 [strategy.vwap] INFO: VWAP SHORT signal: price=100.66 RSI=61.8 SL=102.54 TP1=99.87
-2026-04-07 15:48:33,720 [strategy.vwap] INFO: VWAP SHORT signal: price=101.13 RSI=67.3 SL=102.71 TP1=99.92
-2026-04-07 15:48:33,720 [strategy.vwap] INFO: VWAP SHORT signal: price=100.90 RSI=62.5 SL=102.83 TP1=99.96
-2026-04-07 15:48:33,720 [bot] INFO: MCLM6 initialized: 51 bars loaded
-2026-04-07 15:48:34,162 [tradovate_client] INFO: Got 51 bars for MGCM6
-2026-04-07 15:48:34,162 [bot] INFO: Initializing MGCM6 with 51 historical bars
-2026-04-07 15:48:34,162 [strategy.vwap] INFO: VWAP LONG signal: price=4671.90 RSI=39.2 SL=4669.95 TP1=4681.48
-2026-04-07 15:48:34,163 [strategy.vwap] INFO: VWAP LONG signal: price=4664.00 RSI=34.0 SL=4665.56 TP1=4680.05
-2026-04-07 15:48:34,163 [strategy.vwap] INFO: VWAP LONG signal: price=4649.00 RSI=31.3 SL=4655.53 TP1=4676.38
-2026-04-07 15:48:34,163 [strategy.vwap] INFO: VWAP LONG signal: price=4636.90 RSI=27.0 SL=4641.60 TP1=4672.39
-2026-04-07 15:48:34,164 [bot] INFO: MGCM6 initialized: 51 bars loaded
-2026-04-07 15:48:34,631 [tradovate_client] INFO: Got 51 bars for MYMM6
-2026-04-07 15:48:34,632 [bot] INFO: Initializing MYMM6 with 51 historical bars
-2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP SHORT signal: price=46790.00 RSI=63.2 SL=46825.72 TP1=46735.64
-2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP SHORT signal: price=46790.00 RSI=61.6 SL=46830.06 TP1=46739.93
-2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP SHORT signal: price=46801.00 RSI=63.2 SL=46832.99 TP1=46742.39
-2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP LONG signal: price=46644.00 RSI=38.5 SL=46649.18 TP1=46734.31
-2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP LONG signal: price=46562.00 RSI=31.5 SL=46563.13 TP1=46705.17
-2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP LONG signal: price=46572.00 RSI=33.1 SL=46539.16 TP1=46693.80
-2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP LONG signal: price=46576.00 RSI=33.8 SL=46522.90 TP1=46684.61
-2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP LONG signal: price=46580.00 RSI=39.4 SL=46522.98 TP1=46675.89
-2026-04-07 15:48:34,633 [strategy.vwap] INFO: VWAP LONG signal: price=46568.00 RSI=38.6 SL=46509.44 TP1=46667.88
-2026-04-07 15:48:34,633 [strategy.vwap] INFO: VWAP LONG signal: price=46472.00 RSI=32.2 SL=46468.35 TP1=46650.80
-2026-04-07 15:48:34,633 [strategy.vwap] INFO: VWAP LONG signal: price=46507.00 RSI=36.3 SL=46454.16 TP1=46643.79
-2026-04-07 15:48:34,633 [strategy.vwap] INFO: VWAP LONG signal: price=46497.00 RSI=36.7 SL=46468.79 TP1=46641.36
-2026-04-07 15:48:34,633 [strategy.vwap] INFO: VWAP LONG signal: price=46441.00 RSI=33.2 SL=46449.67 TP1=46633.99
-2026-04-07 15:48:34,633 [strategy.vwap] INFO: VWAP LONG signal: price=46460.00 RSI=35.5 SL=46438.77 TP1=46628.97
-2026-04-07 15:48:34,634 [strategy.vwap] INFO: VWAP LONG signal: price=46480.00 RSI=39.4 SL=46426.42 TP1=46619.84
-2026-04-07 15:48:34,634 [strategy.vwap] INFO: VWAP LONG signal: price=46463.00 RSI=39.1 SL=46417.70 TP1=46613.09
-2026-04-07 15:48:34,634 [strategy.vwap] INFO: VWAP LONG signal: price=46468.00 RSI=39.7 SL=46416.07 TP1=46612.14
-2026-04-07 15:48:34,634 [strategy.vwap] INFO: VWAP LONG signal: price=46449.00 RSI=38.2 SL=46413.72 TP1=46610.85
-2026-04-07 15:48:34,634 [bot] INFO: MYMM6 initialized: 51 bars loaded
-2026-04-07 15:48:35,022 [tradovate_client] INFO: Got 51 bars for M2KM6
-2026-04-07 15:48:35,022 [bot] INFO: Initializing M2KM6 with 51 historical bars
-2026-04-07 15:48:35,023 [strategy.vwap] INFO: VWAP LONG signal: price=2529.10 RSI=39.9 SL=2527.86 TP1=2537.67
-2026-04-07 15:48:35,023 [strategy.vwap] INFO: VWAP LONG signal: price=2530.20 RSI=39.8 SL=2527.97 TP1=2538.30
-2026-04-07 15:48:35,023 [strategy.vwap] INFO: VWAP LONG signal: price=2527.10 RSI=36.9 SL=2526.75 TP1=2537.90
-2026-04-07 15:48:35,024 [bot] INFO: M2KM6 initialized: 51 bars loaded
-2026-04-07 15:48:35,024 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 15:52:49,775 [bot] INFO: Stopping bot: Signal received
-2026-04-07 15:52:50,197 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 15:52:50,197 [bot] INFO: Bot stopped
+--- Bot Log (last 80) ---
+2026-04-07 16:01:28,886 [strategy.vwap] INFO: VWAP LONG signal: price=23966.75 RSI=27.5 SL=23964.90 TP1=24128.04
+2026-04-07 16:01:28,886 [strategy.vwap] INFO: VWAP LONG signal: price=24005.50 RSI=35.7 SL=23956.20 TP1=24123.58
+2026-04-07 16:01:28,887 [bot] INFO: MNQM6 initialized: 51 bars loaded
+2026-04-07 16:01:29,768 [tradovate_client] INFO: Got 51 bars for MCLM6
+2026-04-07 16:01:29,768 [bot] INFO: Initializing MCLM6 with 51 historical bars
+2026-04-07 16:01:29,769 [strategy.vwap] INFO: VWAP SHORT signal: price=101.13 RSI=65.7 SL=102.72 TP1=99.93
+2026-04-07 16:01:29,769 [strategy.vwap] INFO: VWAP SHORT signal: price=100.90 RSI=61.0 SL=102.84 TP1=99.97
+2026-04-07 16:01:29,770 [strategy.vwap] INFO: VWAP LONG signal: price=99.29 RSI=38.1 SL=97.13 TP1=99.97
+2026-04-07 16:01:29,770 [strategy.vwap] INFO: VWAP LONG signal: price=99.17 RSI=36.7 SL=97.11 TP1=99.97
+2026-04-07 16:01:29,770 [strategy.vwap] INFO: VWAP LONG signal: price=99.13 RSI=36.2 SL=97.09 TP1=99.95
+2026-04-07 16:01:29,770 [bot] INFO: MCLM6 initialized: 51 bars loaded
+2026-04-07 16:01:30,658 [tradovate_client] INFO: Got 51 bars for MGCM6
+2026-04-07 16:01:30,658 [bot] INFO: Initializing MGCM6 with 51 historical bars
+2026-04-07 16:01:30,659 [strategy.vwap] INFO: VWAP LONG signal: price=4664.00 RSI=35.7 SL=4664.89 TP1=4679.61
+2026-04-07 16:01:30,659 [strategy.vwap] INFO: VWAP LONG signal: price=4649.00 RSI=32.3 SL=4654.84 TP1=4675.79
+2026-04-07 16:01:30,659 [strategy.vwap] INFO: VWAP LONG signal: price=4636.90 RSI=28.0 SL=4640.64 TP1=4671.63
+2026-04-07 16:01:30,660 [bot] INFO: MGCM6 initialized: 51 bars loaded
+2026-04-07 16:01:31,539 [tradovate_client] INFO: Got 51 bars for MYMM6
+2026-04-07 16:01:31,539 [bot] INFO: Initializing MYMM6 with 51 historical bars
+2026-04-07 16:01:31,539 [strategy.vwap] INFO: VWAP SHORT signal: price=46801.00 RSI=63.4 SL=46834.93 TP1=46746.17
+2026-04-07 16:01:31,539 [strategy.vwap] INFO: VWAP LONG signal: price=46644.00 RSI=39.9 SL=46652.22 TP1=46736.73
+2026-04-07 16:01:31,539 [strategy.vwap] INFO: VWAP LONG signal: price=46562.00 RSI=33.0 SL=46561.06 TP1=46705.86
+2026-04-07 16:01:31,540 [strategy.vwap] INFO: VWAP LONG signal: price=46572.00 RSI=34.5 SL=46536.45 TP1=46693.99
+2026-04-07 16:01:31,540 [strategy.vwap] INFO: VWAP LONG signal: price=46576.00 RSI=35.1 SL=46519.95 TP1=46684.46
+2026-04-07 16:01:31,540 [strategy.vwap] INFO: VWAP LONG signal: price=46568.00 RSI=39.3 SL=46506.92 TP1=46667.31
+2026-04-07 16:01:31,540 [strategy.vwap] INFO: VWAP LONG signal: price=46472.00 RSI=33.0 SL=46465.64 TP1=46649.87
+2026-04-07 16:01:31,540 [strategy.vwap] INFO: VWAP LONG signal: price=46507.00 RSI=36.9 SL=46451.46 TP1=46642.74
+2026-04-07 16:01:31,541 [strategy.vwap] INFO: VWAP LONG signal: price=46497.00 RSI=37.0 SL=46467.23 TP1=46640.65
+2026-04-07 16:01:31,541 [strategy.vwap] INFO: VWAP LONG signal: price=46441.00 RSI=33.5 SL=46448.07 TP1=46633.21
+2026-04-07 16:01:31,541 [strategy.vwap] INFO: VWAP LONG signal: price=46460.00 RSI=35.7 SL=46437.19 TP1=46628.14
+2026-04-07 16:01:31,542 [strategy.vwap] INFO: VWAP LONG signal: price=46480.00 RSI=39.6 SL=46424.98 TP1=46618.96
+2026-04-07 16:01:31,542 [strategy.vwap] INFO: VWAP LONG signal: price=46463.00 RSI=39.3 SL=46416.37 TP1=46612.19
+2026-04-07 16:01:31,542 [bot] INFO: MYMM6 initialized: 51 bars loaded
+2026-04-07 16:01:32,419 [tradovate_client] INFO: Got 51 bars for M2KM6
+2026-04-07 16:01:32,419 [bot] INFO: Initializing M2KM6 with 51 historical bars
+2026-04-07 16:01:32,420 [strategy.vwap] INFO: VWAP LONG signal: price=2530.20 RSI=40.0 SL=2527.94 TP1=2538.33
+2026-04-07 16:01:32,420 [strategy.vwap] INFO: VWAP LONG signal: price=2527.10 RSI=37.1 SL=2526.71 TP1=2537.92
+2026-04-07 16:01:32,427 [bot] INFO: M2KM6 initialized: 51 bars loaded
+2026-04-07 16:06:33,702 [tradovate_client] INFO: Got 51 bars for MESM6
+2026-04-07 16:06:33,706 [strategy.vwap] INFO: VWAP SHORT signal: price=6618.25 RSI=63.8 SL=6632.36 TP1=6603.35
+2026-04-07 16:06:33,707 [bot] INFO: SIGNAL: MESM6 VWAP Mean Reversion -> SHORT
+2026-04-07 16:06:33,834 [tradovate_client] INFO: Market order placed: Sell 1 MESM6, orderId=451715410007
+2026-04-07 16:06:33,957 [tradovate_client] INFO: Stop order: Buy 1 MESM6 @ stop=6632.363383118265
+2026-04-07 16:06:34,078 [tradovate_client] INFO: Limit order: Buy 1 MESM6 @ 6603.3493780187855
+2026-04-07 16:06:34,078 [bot] INFO: TRADE: Sell 1 MESM6 @ 6618.25 SL=6632.36 TP=6603.35 Risk=$70.57 Strategy=VWAP Mean Reversion
+2026-04-07 16:06:36,200 [bot] WARNING: NO STOP LOSS found for MESM6! Placing emergency SL...
+2026-04-07 16:06:36,328 [tradovate_client] INFO: Stop order: Buy 1 MESM6 @ stop=6632.363383118265
+2026-04-07 16:06:36,329 [bot] INFO: Emergency SL placed at 6632.363383118265
+2026-04-07 16:06:36,329 [bot] WARNING: NO TAKE PROFIT found for MESM6! Placing emergency TP...
+2026-04-07 16:06:36,451 [tradovate_client] INFO: Limit order: Buy 1 MESM6 @ 6603.3493780187855
+2026-04-07 16:06:36,451 [bot] INFO: Emergency TP placed at 6603.3493780187855
+2026-04-07 16:06:37,437 [tradovate_client] INFO: Got 51 bars for MNQM6
+2026-04-07 16:06:38,299 [tradovate_client] INFO: Got 51 bars for MCLM6
+2026-04-07 16:06:38,299 [strategy.vwap] INFO: VWAP LONG signal: price=98.89 RSI=33.5 SL=97.07 TP1=99.95
+2026-04-07 16:06:38,299 [bot] INFO: SIGNAL: MCLM6 VWAP Mean Reversion -> LONG
+2026-04-07 16:06:38,428 [tradovate_client] INFO: Market order placed: Buy 1 MCLM6, orderId=451715410030
+2026-04-07 16:06:38,550 [tradovate_client] INFO: Stop order: Sell 1 MCLM6 @ stop=97.07018038492703
+2026-04-07 16:06:38,673 [tradovate_client] INFO: Limit order: Sell 1 MCLM6 @ 99.94855455513603
+2026-04-07 16:06:38,673 [bot] INFO: TRADE: Buy 1 MCLM6 @ 98.89 SL=97.07 TP=99.95 Risk=$181.98 Strategy=VWAP Mean Reversion
+2026-04-07 16:06:40,794 [bot] WARNING: NO STOP LOSS found for MCLM6! Placing emergency SL...
+2026-04-07 16:06:40,918 [tradovate_client] INFO: Stop order: Sell 1 MCLM6 @ stop=97.07018038492703
+2026-04-07 16:06:40,919 [bot] INFO: Emergency SL placed at 97.07018038492703
+2026-04-07 16:06:40,919 [bot] WARNING: NO TAKE PROFIT found for MCLM6! Placing emergency TP...
+2026-04-07 16:06:41,040 [tradovate_client] INFO: Limit order: Sell 1 MCLM6 @ 99.94855455513603
+2026-04-07 16:06:41,041 [bot] INFO: Emergency TP placed at 99.94855455513603
+2026-04-07 16:06:41,960 [tradovate_client] INFO: Got 51 bars for MGCM6
+2026-04-07 16:06:42,836 [tradovate_client] INFO: Got 51 bars for MYMM6
+2026-04-07 16:06:43,716 [tradovate_client] INFO: Got 51 bars for M2KM6
+2026-04-07 16:06:43,716 [strategy.vwap] INFO: VWAP SHORT signal: price=2546.40 RSI=62.0 SL=2548.29 TP1=2537.52
+2026-04-07 16:06:43,716 [bot] INFO: SIGNAL: M2KM6 VWAP Mean Reversion -> SHORT
+2026-04-07 16:06:43,839 [tradovate_client] INFO: Market order placed: Sell 5 M2KM6, orderId=451715410050
+2026-04-07 16:06:43,961 [tradovate_client] INFO: Stop order: Buy 5 M2KM6 @ stop=2548.2851906880687
+2026-04-07 16:06:44,083 [tradovate_client] INFO: Limit order: Buy 5 M2KM6 @ 2537.5221553008223
+2026-04-07 16:06:44,084 [bot] INFO: TRADE: Sell 5 M2KM6 @ 2546.40 SL=2548.29 TP=2537.52 Risk=$47.13 Strategy=VWAP Mean Reversion
+2026-04-07 16:06:46,210 [bot] WARNING: NO STOP LOSS found for M2KM6! Placing emergency SL...
+2026-04-07 16:06:46,347 [tradovate_client] INFO: Stop order: Buy 5 M2KM6 @ stop=2548.2851906880687
+2026-04-07 16:06:46,347 [bot] INFO: Emergency SL placed at 2548.2851906880687
+2026-04-07 16:06:46,347 [bot] WARNING: NO TAKE PROFIT found for M2KM6! Placing emergency TP...
+2026-04-07 16:06:46,469 [tradovate_client] INFO: Limit order: Buy 5 M2KM6 @ 2537.5221553008223
+2026-04-07 16:06:46,469 [bot] INFO: Emergency TP placed at 2537.5221553008223
+
+--- Status JSON ---
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
 === END ===
