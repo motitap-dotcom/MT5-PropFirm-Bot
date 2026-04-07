@@ -91,6 +91,7 @@ class TradovateClient:
         self._heartbeat_task: Optional[asyncio.Task] = None
         self._pending_responses: Dict[int, asyncio.Future] = {}
         self._chart_bars: Dict[int, list] = {}  # Accumulate bars per request
+        self._chart_id_to_req: Dict[int, int] = {}  # Map chart ID -> request ID
 
         # Token renewal cooldown
         self._last_renewal_check: float = 0
@@ -847,56 +848,59 @@ class TradovateClient:
             frames = [frames]
 
         for frame in frames:
+            if isinstance(frame, str):
+                try:
+                    frame = json.loads(frame)
+                except json.JSONDecodeError:
+                    continue
             if not isinstance(frame, dict):
                 continue
 
-            # Handle chart response (from md/getChart request)
+            # Handle chart subscription response: {"s":200,"i":reqId,"d":{"historicalId":X,"realtimeId":X}}
             req_id = frame.get("i")
             if req_id and req_id in self._pending_responses:
-                status = frame.get("s", 0)
                 data = frame.get("d", {})
-
                 if isinstance(data, dict):
-                    # Chart data comes in "bars" or "charts" field
-                    bars = data.get("bars", [])
-                    if bars and req_id in self._chart_bars:
-                        self._chart_bars[req_id].extend(bars)
-
-                    # Check for end of chart data (eoh = end of history)
-                    charts = data.get("charts", [])
-                    if charts:
-                        for chart in charts:
-                            chart_bars = chart.get("bars", [])
-                            if chart_bars and req_id in self._chart_bars:
-                                self._chart_bars[req_id].extend(chart_bars)
-
-                    eoh = data.get("eoh", False)
-                    if eoh or status == 200:
-                        future = self._pending_responses.get(req_id)
-                        if future and not future.done():
-                            future.set_result(data)
+                    hist_id = data.get("historicalId")
+                    rt_id = data.get("realtimeId")
+                    if hist_id:
+                        self._chart_id_to_req[hist_id] = req_id
+                    if rt_id and rt_id != hist_id:
+                        self._chart_id_to_req[rt_id] = req_id
                 continue
 
-            # Handle regular market data (quotes, trades)
+            # Handle chart data events: {"e":"chart","d":{"charts":[{"id":X,"bars":[...],"eoh":bool}]}}
             event = frame.get("e", "")
             data = frame.get("d", frame)
 
-            # Also handle chart bars that come as events
-            if event == "chart":
-                # Find which request this belongs to
-                chart_id = data.get("id")
-                bars = data.get("bars", [])
-                if bars:
-                    for rid, accumulated in self._chart_bars.items():
-                        accumulated.extend(bars)
-                eoh = data.get("eoh", False)
-                if eoh:
-                    # Signal completion for any pending chart request
-                    for rid, future in list(self._pending_responses.items()):
-                        if not future.done():
-                            future.set_result(data)
+            if event == "chart" and isinstance(data, dict):
+                charts = data.get("charts", [])
+                for chart in charts:
+                    if not isinstance(chart, dict):
+                        continue
+                    chart_id = chart.get("id")
+                    bars = chart.get("bars", [])
+                    eoh = chart.get("eoh", False)
+
+                    # Find request ID for this chart
+                    rid = self._chart_id_to_req.get(chart_id)
+
+                    # Convert bar format (upVolume+downVolume -> volume)
+                    if bars and rid and rid in self._chart_bars:
+                        for bar in bars:
+                            bar["volume"] = bar.get("upVolume", 0) + bar.get("downVolume", 0)
+                        self._chart_bars[rid].extend(bars)
+
+                    # End of history - resolve the future
+                    if eoh and rid:
+                        future = self._pending_responses.get(rid)
+                        if future and not future.done():
+                            future.set_result(True)
+                        # Clean up chart ID mapping
+                        self._chart_id_to_req.pop(chart_id, None)
                 continue
 
+            # Handle regular market data (quotes, trades)
             if event == "md" or "bid" in data or "trade" in data:
                 for symbol, cbs in self._callbacks.items():
                     for cb in cbs:
@@ -959,13 +963,28 @@ class TradovateClient:
         await self._md_ws.send(msg)
 
         try:
-            await asyncio.wait_for(future, timeout=15)
+            result = await asyncio.wait_for(future, timeout=15)
         except asyncio.TimeoutError:
             logger.warning(f"Chart request timed out for {symbol}")
         finally:
             self._pending_responses.pop(req_id, None)
 
         bars = self._chart_bars.pop(req_id, [])
+
+        # Cancel chart subscription to stop real-time updates
+        # Find and cancel any chart IDs mapped to this request
+        chart_ids_to_remove = [cid for cid, rid in self._chart_id_to_req.items() if rid == req_id]
+        for cid in chart_ids_to_remove:
+            self._chart_id_to_req.pop(cid, None)
+            try:
+                self._ws_request_id += 1
+                cancel_msg = f"md/cancelChart\n{self._ws_request_id}\n\n{json.dumps({'id': cid})}"
+                await self._md_ws.send(cancel_msg)
+            except Exception:
+                pass
+
         if bars:
-            logger.debug(f"Got {len(bars)} bars for {symbol}")
+            logger.info(f"Got {len(bars)} bars for {symbol}")
+        else:
+            logger.warning(f"No bars received for {symbol}")
         return bars
