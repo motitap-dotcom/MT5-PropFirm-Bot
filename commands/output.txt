@@ -1,21 +1,44 @@
-=== v142 2026-04-07 13:52 UTC ===
-Apr 07 13:48:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 10.
-Apr 07 13:48:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 07 13:48:34 vmi3096165 python3[1201686]: /usr/bin/python3: No module named futures_bot.bot
-Apr 07 13:48:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 07 13:48:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 07 13:49:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 11.
-Apr 07 13:49:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 07 13:49:34 vmi3096165 python3[1201890]: /usr/bin/python3: No module named futures_bot.bot
-Apr 07 13:49:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 07 13:49:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 07 13:50:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 12.
-Apr 07 13:50:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 07 13:50:35 vmi3096165 python3[1202178]: /usr/bin/python3: No module named futures_bot.bot
-Apr 07 13:50:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 07 13:50:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 07 13:51:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 13.
-Apr 07 13:51:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 07 13:51:35 vmi3096165 python3[1202357]: /usr/bin/python3: No module named futures_bot.bot
-Apr 07 13:51:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 07 13:51:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+=== v146 2026-04-07 14:21 UTC ===
+Service: active
+PID: 1204962
+
+2026-04-07 14:11:20,199 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:11:20,324 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-07 14:16:20,423 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
+2026-04-07 14:16:20,572 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:16:20,694 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:16:20,819 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:16:20,938 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:16:21,064 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:16:21,187 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:16:21,312 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:16:21,472 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:16:21,598 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:16:21,728 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:16:21,852 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:16:21,982 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:16:22,110 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:16:22,241 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:16:22,367 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:16:22,495 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:16:22,621 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:16:22,748 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-07 14:21:22,849 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
+2026-04-07 14:21:22,999 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:21:23,123 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:21:23,251 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:21:23,374 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:21:23,501 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:21:23,625 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:21:23,755 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:21:23,910 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:21:24,038 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:21:24,166 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:21:24,295 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:21:24,419 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:21:24,545 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:21:24,671 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:21:24,798 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:21:24,930 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:21:25,058 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:21:25,183 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'

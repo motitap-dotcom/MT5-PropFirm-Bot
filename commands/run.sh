@@ -1,5 +1,8 @@
 #!/bin/bash
-# Trigger: v142
+# Trigger: v146
 cd /root/MT5-PropFirm-Bot
-echo "=== v142 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
-journalctl -u futures-bot --no-pager -n 20 --since "5 min ago" 2>&1
+echo "=== v146 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "Service: $(systemctl is-active futures-bot)"
+echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
+echo ""
+tail -40 logs/bot.log 2>/dev/null

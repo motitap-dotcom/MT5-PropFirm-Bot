@@ -33,6 +33,23 @@
 - Never kill the bot, restart services, or delete files without Noa's explicit approval.
 - Always explain what a script will do BEFORE pushing it.
 
+### 6. Scripts with `systemctl restart` don't return VPS output.
+- NEVER include `systemctl restart/stop/start` inside `commands/run.sh` - it causes the SSH session to not push output back.
+- For restarts: use `scripts/fix_and_restart.sh` (triggers `vps-fix.yml`), NOT `commands/run.sh`.
+- For status checks: use `commands/run.sh` with read-only commands only.
+- **Separate restart and status check into two different pushes.**
+
+### 7. Preserve token and .env during git reset.
+- ALL workflows do `git reset --hard` which DELETES untracked/modified files.
+- Token file (`configs/.tradovate_token.json`) and `.env` MUST be backed up before and restored after `git reset --hard`.
+- Pattern: `cp configs/.tradovate_token.json /tmp/.tradovate_token_backup.json` → `git reset --hard` → `cp /tmp/.tradovate_token_backup.json configs/.tradovate_token.json`
+
+### 8. Don't push too fast — avoid workflow race conditions.
+- Wait for one workflow to finish before pushing the next change.
+- `auto-merge-deploy.yml` and `vps-command.yml` can trigger simultaneously on the same push → they fight over VPS git state.
+- `auto-merge-deploy.yml` has `paths-ignore: commands/**` so pushing ONLY `commands/run.sh` won't trigger it.
+- If you change code files + `commands/run.sh` in the same push, both workflows trigger and race.
+
 ---
 
 ## Architecture: How This Bot Works
@@ -40,11 +57,11 @@
 ```
 [Repo on GitHub]
       |
-      | (push triggers workflow)
+      | (push to claude/** triggers auto-merge → main)
       v
 [GitHub Actions runner]
       |
-      | (SSH into VPS via sshpass + secrets)
+      | (SSH into VPS via appleboy/ssh-action + password)
       v
 [Contabo VPS - Ubuntu]
       |
@@ -54,40 +71,117 @@
       |
       | (Bot writes status.json, logs)
       v
-[Results committed back to repo by Actions]
+[Results committed back to repo by VPS git push]
 ```
 
-Claude edits files locally -> pushes to GitHub -> GitHub Actions SSH into VPS -> executes -> commits results back.
+Claude edits files locally -> pushes to `claude/**` branch -> auto-merge-deploy merges to `main` + deploys -> VPS runs bot -> VPS pushes output back to repo.
 
 ---
 
-## GitHub Actions Workflows (4 pipelines)
+## GitHub Actions Workflows (6 pipelines)
 
-### 1. `vps-command.yml` — Run any command on VPS
+### 1. `auto-merge-deploy.yml` — Auto-merge + Deploy (NEW - from Tradovate-Bot)
+- **Trigger**: push to `claude/**` branches (except `commands/**`, `*.md`, status files)
+- **What it does**: Syntax check → merge to `main` → SSH deploy to VPS → restart bot
+- **Key features**: Auto conflict resolution, token preservation, PYTHONPATH in service
+- **Use for**: All code/config changes
+
+### 2. `vps-command.yml` — Run any command on VPS
 - **Trigger**: push that changes `commands/run.sh`
-- **What it does**: Executes `commands/run.sh` on VPS
+- **What it does**: Executes `commands/run.sh` on VPS, VPS pushes output back
 - **Output file**: `commands/output.txt`
-- **Use for**: Status checks, reading logs, diagnostics
+- **IMPORTANT**: VPS needs `GH_TOKEN` (github.token) to push output back. Token is passed via `envs` and set as git remote URL.
+- **Use for**: Status checks, reading logs, diagnostics. **NO restarts in this script!**
 
-### 2. `deploy-bot.yml` — Deploy bot code + configs to VPS
-- **Trigger**: push that changes `futures_bot/**`, `configs/**`, or `requirements.txt`
-- **What it does**: Pulls code, installs deps, restarts bot service
-- **Output file**: `deploy_report.txt`
-- **Use for**: Code changes, config updates, bug fixes
+### 3. `deploy-bot.yml` — Deploy on push to main
+- **Trigger**: push to `main` that changes `futures_bot/**`, `configs/**`, or `requirements.txt`
+- **What it does**: Syntax check → deploy → fix service file → restart
+- **Includes**: Token preservation, PYTHONPATH, Playwright install
 
-### 3. `vps-check.yml` — Run VPS diagnostics
+### 4. `vps-check.yml` — Run VPS diagnostics
 - **Trigger**: push that changes `trigger-check.txt` or `scripts/check_bot.sh`
-- **What it does**: Runs `scripts/check_bot.sh` on VPS
 - **Output file**: `vps_report.txt`
-- **Use for**: Full diagnostic check
 
-### 4. `vps-fix.yml` — Fix and restart bot
+### 5. `vps-fix.yml` — Fix and restart bot
 - **Trigger**: push that changes `scripts/fix_and_restart.sh` or `scripts/install_bot.sh`
-- **What it does**: Stops bot, pulls latest, restarts service
 - **Output file**: `vps_fix_report.txt`
-- **Use for**: Bot crashes, connection issues, restarts
+- **Use for**: Restarts! This is the correct way to restart the bot.
 
-All workflows send Telegram notifications on completion.
+### 6. `server-manage.yml` — Manual server management (NEW)
+- **Trigger**: manual `workflow_dispatch` in GitHub Actions UI
+- **Commands**: status, restart-bot, bot-logs, check-trades, fix-bot, full-diagnostic
+- **Output**: `server_manage_result.json`
+
+All workflows: preserve token, include PYTHONPATH, send Telegram notifications.
+
+---
+
+## Tradovate Auth — CRITICAL KNOWLEDGE
+
+### Auth Method (web-style, no API key needed)
+1. Password is **encrypted**: rearrange by offset + reverse + base64 encode
+2. **HMAC** is computed and placed in the `sec` field (NOT `hmac` field!)
+3. Payload includes `chl: ""` (empty string, but must be present)
+4. `organization: ""` (empty for TradeDay — NOT "TradeDay"!)
+5. `cid: 8`, `appId: "tradovate_trader(web)"`
+
+### CAPTCHA Bypass — Playwright Browser Auth
+- First login from new IP requires CAPTCHA (`p-captcha: true`)
+- Bot has `_try_browser_auth()` in `tradovate_client.py` that launches headless Chromium
+- Fills username/password on `trader.tradovate.com/welcome` and captures token from network response
+- Selectors: `input[type="text"]` for username, `input[type="password"]` for password, `button:has-text("Log")` for submit
+- **Requires**: `playwright` pip package + Chromium installed (`python3 -m playwright install chromium`)
+- **Tradovate-Bot's venv** at `/root/tradovate-bot/venv/bin/python3` already has Playwright installed
+
+### Token Lifecycle
+1. Playwright captures token → saved to `configs/.tradovate_token.json`
+2. Token valid for ~2 hours
+3. Bot renews automatically via `/auth/renewaccesstoken` every 4 hours
+4. Token file must survive `git reset --hard` (see Iron Rule #7)
+
+### Auth Fallback Chain (in `connect()`)
+1. Load saved token from file → verify with `/account/list`
+2. If invalid → try renew
+3. Load env token (`TRADOVATE_ACCESS_TOKEN`) → verify
+4. If invalid → try renew
+5. Full user/password auth (encrypted + HMAC)
+6. If CAPTCHA → Playwright browser auth (automatic!)
+
+### Common Auth Errors
+| Error | Cause | Fix |
+|---|---|---|
+| `CAPTCHA required` | First login from IP | Playwright handles automatically |
+| `Incorrect username or password` | Wrong encryption, wrong `organization`, or `hmac` instead of `sec` | Check `_authenticate()` payload |
+| `Expired Access Token` | Token expired, renewal failed | Playwright will get fresh token |
+| Token renewal loop | `_ensure_token()` threshold too aggressive | Check `remaining < 7200` logic |
+
+---
+
+## VPS Service File — MUST HAVE PYTHONPATH
+
+The systemd service file **MUST** include `Environment=PYTHONPATH=/root/MT5-PropFirm-Bot`:
+
+```ini
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+Restart=on-failure
+RestartSec=60
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Without PYTHONPATH: `No module named futures_bot.bot`
+Without EnvironmentFile: No Tradovate credentials
 
 ---
 
@@ -99,19 +193,30 @@ All workflows send Telegram notifications on completion.
 | "תראה לי לוגים" | Writes log-reading script to `commands/run.sh`, pushes | `commands/run.sh` | `commands/output.txt` |
 | "יש טרייד פתוח?" | Writes position-check script to `commands/run.sh`, pushes | `commands/run.sh` | `commands/output.txt` |
 | "תתקן את הבוט" | Edits `scripts/fix_and_restart.sh`, pushes | `scripts/fix_and_restart.sh` | `vps_fix_report.txt` |
-| "תעדכן את הקוד" | Edits files in `futures_bot/` or `configs/`, pushes | `futures_bot/**` or `configs/**` | `deploy_report.txt` |
+| "תעדכן את הקוד" | Edits files in `futures_bot/` or `configs/`, pushes | `futures_bot/**` or `configs/**` | auto-merge deploys |
 | "תעשה בדיקה מלאה" | Edits `trigger-check.txt`, pushes | `trigger-check.txt` | `vps_report.txt` |
-| "תריץ פקודה X" | Writes command X in `commands/run.sh`, pushes | `commands/run.sh` | `commands/output.txt` |
 
 ### Workflow for every request (MUST FOLLOW):
 1. Write/edit the trigger file
-2. Push to GitHub (to the correct branch: `claude/build-cfd-trading-bot-fl0ld`)
-3. Wait ~90-120 seconds for Actions to run and push output back
-4. `git pull` to get the output file (`commands/output.txt`)
-5. Read `commands/output.txt` and present results to Noa WITH timestamp
-6. If data is older than 30 minutes, warn and offer to fetch fresh data
-7. **NEVER ask Noa to check GitHub Actions manually** - always pull and read the output file yourself
-8. If `git pull` shows no changes after 120s, wait another 60s and try again
+2. Push to GitHub (to branch: `claude/build-cfd-trading-bot-fl0ld`)
+3. Wait ~180-240 seconds for Actions to run and push output back
+4. `git fetch origin claude/build-cfd-trading-bot-fl0ld` + check if output commit exists
+5. `git checkout origin/claude/build-cfd-trading-bot-fl0ld -- commands/output.txt`
+6. Read output and present results to Noa WITH timestamp
+7. If `git pull` conflict (VPS pushed while we pushed): `git pull --rebase` then retry
+8. **NEVER ask Noa to check GitHub Actions manually**
+
+### Output retrieval pattern (copy-paste this):
+```bash
+BEFORE=$(git log origin/claude/build-cfd-trading-bot-fl0ld -1 --format=%H -- commands/output.txt)
+sleep 180
+git fetch origin claude/build-cfd-trading-bot-fl0ld
+AFTER=$(git log origin/claude/build-cfd-trading-bot-fl0ld -1 --format=%H -- commands/output.txt)
+if [ "$BEFORE" != "$AFTER" ]; then
+  git checkout origin/claude/build-cfd-trading-bot-fl0ld -- commands/output.txt
+  cat commands/output.txt
+fi
+```
 
 ---
 
@@ -122,36 +227,46 @@ All workflows send Telegram notifications on completion.
 | Path | Purpose |
 |---|---|
 | `futures_bot/bot.py` | Main bot entry point |
-| `futures_bot/core/tradovate_client.py` | Tradovate REST + WebSocket API client |
-| `futures_bot/core/guardian.py` | MASTER WATCHDOG - 5 safety layers, TradeDay rules enforcement |
+| `futures_bot/core/tradovate_client.py` | Tradovate REST + WebSocket API client + Playwright auth |
+| `futures_bot/core/guardian.py` | MASTER WATCHDOG - 5 safety layers |
 | `futures_bot/core/risk_manager.py` | Position sizing, session filter, contract specs |
-| `futures_bot/core/news_filter.py` | TradeDay restricted events filter |
+| `futures_bot/core/news_filter.py` | Restricted events filter |
 | `futures_bot/core/notifier.py` | Telegram notifications |
 | `futures_bot/core/status_writer.py` | Writes status.json for monitoring |
-| `futures_bot/strategies/vwap_mean_reversion.py` | Primary strategy: VWAP + RSI mean reversion |
-| `futures_bot/strategies/orb_breakout.py` | Secondary strategy: Opening Range Breakout |
-| `configs/bot_config.json` | Main bot configuration (all parameters) |
-| `configs/restricted_events.json` | TradeDay restricted news events calendar |
+| `futures_bot/strategies/vwap_mean_reversion.py` | Primary: VWAP + RSI mean reversion |
+| `futures_bot/strategies/orb_breakout.py` | Secondary: Opening Range Breakout |
+| `configs/bot_config.json` | Main bot configuration |
+| `configs/restricted_events.json` | Restricted news events calendar |
+| `configs/.tradovate_token.json` | Saved auth token (in .gitignore!) |
 | `commands/run.sh` | Script to execute on VPS (trigger for vps-command) |
 | `commands/output.txt` | Output from last VPS command |
+| `commands/check_status.sh` | Reusable status check script |
 | `scripts/check_bot.sh` | Bot diagnostic script |
 | `scripts/fix_and_restart.sh` | Fix + restart script |
 | `scripts/install_bot.sh` | Install bot as systemd service |
+| `server_cron.sh` | Auto-heal cron (every 5 min) |
+| `.github/workflows/auto-merge-deploy.yml` | Auto-merge claude/** → main + deploy |
+| `.github/workflows/deploy-bot.yml` | Deploy on push to main |
+| `.github/workflows/vps-command.yml` | Run commands on VPS |
+| `.github/workflows/vps-check.yml` | VPS diagnostics |
+| `.github/workflows/vps-fix.yml` | Fix and restart |
+| `.github/workflows/server-manage.yml` | Manual server management |
 | `trigger-check.txt` | Edit to trigger vps-check workflow |
-| `status/status.json` | Bot status snapshot |
-| `logs/bot.log` | Bot log file (on VPS) |
-| `requirements.txt` | Python dependencies |
+| `requirements.txt` | Python dependencies (includes playwright) |
+| `.gitignore` | Ignores __pycache__, .env, .tradovate_token.json |
 
 ### On VPS:
 
 | Path | Purpose |
 |---|---|
-| `/root/MT5-PropFirm-Bot/` | Repo clone on VPS |
-| `/root/MT5-PropFirm-Bot/futures_bot/` | Bot Python code |
-| `/root/MT5-PropFirm-Bot/configs/` | Configuration files |
-| `/root/MT5-PropFirm-Bot/logs/bot.log` | Bot log file |
+| `/root/MT5-PropFirm-Bot/` | This repo (clone) |
+| `/root/MT5-PropFirm-Bot/.env` | Environment secrets |
+| `/root/MT5-PropFirm-Bot/configs/.tradovate_token.json` | Auth token (NOT in git!) |
+| `/root/MT5-PropFirm-Bot/logs/bot.log` | Bot log |
 | `/root/MT5-PropFirm-Bot/status/status.json` | Status snapshot |
-| `/root/MT5-PropFirm-Bot/.env` | Environment secrets (Tradovate, Telegram) |
+| `/root/tradovate-bot/` | Working Tradovate-Bot (FundedNext) - reference code |
+| `/root/tradovate-bot/venv/bin/python3` | Python with Playwright installed |
+| `/etc/systemd/system/futures-bot.service` | Systemd service file |
 
 ---
 
@@ -160,9 +275,9 @@ All workflows send Telegram notifications on completion.
 - Prop firm: TradeDay
 - Account type: $50K Intraday Evaluation
 - Account ID: ELTDER260326211630296397
-- Platform: Tradovate
-- Tradovate username: stored in GitHub Secrets (`TRADOVATE_USER`)
-- Tradovate password: stored in GitHub Secrets (`TRADOVATE_PASS`)
+- Tradovate account ID: 45373493
+- Platform: Tradovate (DEMO)
+- Tradovate username: `TD_Motitap` (stored in `TRADOVATE_USER` secret)
 
 ### TradeDay $50K Intraday Rules (CRITICAL)
 - **Max Drawdown**: $2,000 (balance cannot drop below $48,000)
@@ -171,9 +286,19 @@ All workflows send Telegram notifications on completion.
 - **Consistency Rule**: No single day > 30% of total profit (max ~$900/day)
 - **Position Limit**: 5 contracts / 50 micro contracts
 - **Intraday Only**: ALL positions must be closed before end of day
-- **Restricted Events**: Must flatten before certain news events (see calendar)
+- **Restricted Events**: Must flatten before certain news events
 - Automated trading: ALLOWED
 - No time limit to pass
+
+---
+
+## Other Bot on Same VPS
+
+There is another working bot at `/root/tradovate-bot/` (repo: `motitap-dotcom/Tradovate-Bot`):
+- Account: FundedNext (`FNFTMOTITAPWnBks`)
+- Service: `tradovate-bot.service`
+- Has Playwright + venv fully installed
+- Our workflows were built based on patterns from this bot
 
 ---
 
@@ -188,19 +313,11 @@ All workflows send Telegram notifications on completion.
 - SSH: stored in GitHub Secrets (`VPS_USER`, `VPS_PASSWORD`)
 - VNC: port 5900 (RealVNC)
 
-## Tradovate Auth Method
-- **Web-style auth**: No API key subscription needed
-- Uses `appId="tradovate_trader(web)"`, `cid=8`, `sec=""`
-- First login from new IP requires CAPTCHA (solve once via `get_token.py`)
-- After that, token auto-renews via `/auth/renewaccesstoken`
-- Token saved to `configs/.tradovate_token.json`
-- Can also set `TRADOVATE_ACCESS_TOKEN` in `.env` as override
-
 ## GitHub Secrets Needed
 - `VPS_HOST`, `VPS_USER`, `VPS_PASSWORD` — VPS access
 - `TRADOVATE_USER`, `TRADOVATE_PASS` — Tradovate login
 - `TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID` — Telegram notifications
-- `TRADOVATE_ACCESS_TOKEN` — (optional) Pre-obtained token from CAPTCHA flow
+- `TRADOVATE_ACCESS_TOKEN` — (optional, can be empty - Playwright handles CAPTCHA)
 
 ---
 
@@ -209,43 +326,61 @@ All workflows send Telegram notifications on completion.
 | Module | File | Role |
 |---|---|---|
 | Main Bot | `futures_bot/bot.py` | Entry point, main loop, strategy coordination |
-| Tradovate Client | `core/tradovate_client.py` | REST + WebSocket API, orders, market data |
-| Guardian | `core/guardian.py` | MASTER WATCHDOG - 5 states, enforces ALL TradeDay rules |
+| Tradovate Client | `core/tradovate_client.py` | REST + WebSocket API + Playwright auth |
+| Guardian | `core/guardian.py` | MASTER WATCHDOG - 5 states, enforces ALL rules |
 | Risk Manager | `core/risk_manager.py` | Position sizing, session times, contract specs |
 | News Filter | `core/news_filter.py` | Blocks trading around restricted events |
-| Notifier | `core/notifier.py` | Telegram alerts (trades, guardian, daily summary) |
-| Status Writer | `core/status_writer.py` | Writes status.json for monitoring |
-| VWAP Strategy | `strategies/vwap_mean_reversion.py` | Primary: VWAP + RSI mean reversion (60-70% win rate) |
-| ORB Strategy | `strategies/orb_breakout.py` | Secondary: Opening Range Breakout (trend days) |
+| Notifier | `core/notifier.py` | Telegram alerts |
+| Status Writer | `core/status_writer.py` | Writes status.json |
+| VWAP Strategy | `strategies/vwap_mean_reversion.py` | Primary: VWAP + RSI mean reversion |
+| ORB Strategy | `strategies/orb_breakout.py` | Secondary: Opening Range Breakout |
 
-### Guardian Safety Layers:
-1. **ACTIVE** (0) — All systems go
-2. **CAUTION** (1) — 60% of max DD used, reduce risk
-3. **HALTED** (2) — 80% of max DD used, no new trades
-4. **EMERGENCY** (3) — 90% of max DD used, close everything NOW
-5. **SHUTDOWN** (4) — Max DD breached or evaluation passed
+---
 
-### Trading Strategy:
-- **Primary**: VWAP Mean Reversion (most days - range days)
-- **Secondary**: ORB Breakout (trend days - auto-detected at 11:00 ET)
-- **Symbols**: MES (Micro S&P 500), MNQ (Micro Nasdaq)
-- **Timeframe**: 5-minute bars
-- **Session**: 9:30-15:30 ET (no overnight positions)
-- **Dead Zone**: 12:00-13:30 ET (reduced size)
+## Troubleshooting Guide
 
-### Risk Parameters:
-- Max risk per trade: $150
-- Max daily loss: $400
-- Max daily profit: $900 (consistency rule)
-- Max daily trades: 6
-- Max positions: 3
-- Max contracts per trade: 5 micro
+### Bot not starting
+1. Check `systemctl status futures-bot` — what's the error?
+2. `No module named futures_bot.bot` → Missing `PYTHONPATH` in service file
+3. `CAPTCHA required` → Playwright should handle. If not, check Playwright is installed
+4. `Incorrect username or password` → Check: `organization` must be `""`, HMAC must go in `sec` field, password must be encrypted
+
+### Bot starts but doesn't trade
+1. Check trading hours: 9:30-15:30 ET (13:30-19:30 UTC in EDT, 14:30-20:30 UTC in EST)
+2. Check `configs/bot_config.json` exists on VPS (may be deleted by `git reset --hard`)
+3. Check `status/` directory exists on VPS
+4. Check market data: Tradovate WebSocket may not deliver data for micro contracts
+5. Check `configs/restricted_events.json` exists
+
+### Token issues
+1. Token expires → bot auto-renews (every 4 hours or when < 2 hours left)
+2. Token renewal loop → check `_ensure_token()` thresholds
+3. Token lost after deploy → all workflows should backup/restore (Iron Rule #7)
+4. CAPTCHA on every restart → Playwright handles. Token should be saved and survive restarts.
+
+### Workflow output not returning
+1. Script has `systemctl restart` → output won't come back (Iron Rule #6)
+2. Two workflows racing → wait for first to finish (Iron Rule #8)
+3. `git push` from VPS fails → check `GH_TOKEN` is passed and git remote is set
+
+### Deploy issues
+1. Code not on VPS → check if auto-merge to main happened (`git log origin/main`)
+2. Config missing after deploy → `git reset --hard` deleted it; need to ensure it's committed in repo
+3. Service file wrong → check deploy workflow writes correct service file with PYTHONPATH
 
 ---
 
 ## How to Resume Work
 1. Don't assume anything from previous sessions
-2. Fetch fresh status: write check script to `commands/run.sh`, push, pull results
-3. Read `commands/output.txt` for current state
-4. Check `status/status.json` for last bot-written snapshot (may be stale)
+2. Push a read-only status check to `commands/run.sh`:
+   ```bash
+   #!/bin/bash
+   cd /root/MT5-PropFirm-Bot
+   echo "=== Status $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+   echo "Service: $(systemctl is-active futures-bot)"
+   echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
+   tail -20 logs/bot.log
+   ```
+3. Wait 180s, fetch output, read results
+4. Check `status/status.json` for last bot-written snapshot
 5. All output files have timestamps - always verify freshness
