@@ -1,35 +1,57 @@
-=== v154 WS Debug 2026-04-07 15:39 UTC ===
-Using token: eyJraWQiOiIyOSIsImFs...
-Connecting to wss://md-demo.tradovateapi.com/v1/websocket...
-Open frame: 'o'
-Auth response: 'a[{"s":200,"i":1}]'
+=== v155 2026-04-07 15:48 UTC ===
+Service: activating
+PID: 0
+Code: e14267b chore: status check v155
 
-Sending: md/getChart
-42
-
-{"symbol": "MESM6", "chartDescription": {"underlyingType": "MinuteBar", "elementSize...
-
---- Raw WS messages (10s) ---
-MSG[0]: 'a[{"s":200,"i":42,"d":{"mode":"RealTime","historicalId":657396,"realtimeId":657396}}]'
-MSG[1]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"db","td":20260407,"bars":[{"timestamp":"2026-04-07T15:15Z","open":6582.5,"high":6600.75,"low":6580.0,"close":6592.25,"upVolume":20680,"downVolume":18549,"upTicks":13286,"downTicks":12205,"histogram":{},"bidVolume":17732,"offerVolume":21497},{"timestamp":"2026-04-07T15:20Z","open":6592.5,"high":6593.0,"low":6585.75,"close":6586.5,"upVolume":5490,"downVolume":6447,"upTicks":3360,"downTicks":4166,"histogram":{},"bidVolume":6412,"offerVolume":5525},{"t'
-MSG[2]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"s","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.5,"upVolume":6991,"downVolume":7794,"upTicks":4264,"downTicks":4655,"histogram":{},"bidVolume":8055,"offerVolume":6730}]},{"id":657396,"eoh":true}]}}]'
-MSG[3]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.25,"upVolume":6991,"downVolume":7800,"upTicks":4264,"downTicks":4659,"histogram":{},"bidVolume":8061,"offerVolume":6730}]}]}}]'
-MSG[4]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.25,"upVolume":6991,"downVolume":7801,"upTicks":4264,"downTicks":4660,"histogram":{},"bidVolume":8062,"offerVolume":6730}]}]}}]'
-MSG[5]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.5,"upVolume":6993,"downVolume":7801,"upTicks":4266,"downTicks":4660,"histogram":{},"bidVolume":8062,"offerVolume":6732}]}]}}]'
-MSG[6]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.25,"upVolume":6993,"downVolume":7810,"upTicks":4266,"downTicks":4667,"histogram":{},"bidVolume":8067,"offerVolume":6736}]}]}}]'
-MSG[7]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.0,"upVolume":6993,"downVolume":7814,"upTicks":4266,"downTicks":4670,"histogram":{},"bidVolume":8071,"offerVolume":6736}]}]}}]'
-MSG[8]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.25,"upVolume":6996,"downVolume":7814,"upTicks":4268,"downTicks":4670,"histogram":{},"bidVolume":8071,"offerVolume":6739}]}]}}]'
-MSG[9]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.25,"upVolume":6997,"downVolume":7814,"upTicks":4269,"downTicks":4670,"histogram":{},"bidVolume":8071,"offerVolume":6740}]}]}}]'
-MSG[10]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.0,"upVolume":6997,"downVolume":7816,"upTicks":4269,"downTicks":4672,"histogram":{},"bidVolume":8073,"offerVolume":6740}]}]}}]'
-MSG[11]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.0,"upVolume":6997,"downVolume":7817,"upTicks":4269,"downTicks":4673,"histogram":{},"bidVolume":8074,"offerVolume":6740}]}]}}]'
-MSG[12]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.0,"upVolume":6997,"downVolume":7818,"upTicks":4269,"downTicks":4674,"histogram":{},"bidVolume":8075,"offerVolume":6740}]}]}}]'
-MSG[13]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.0,"upVolume":6997,"downVolume":7846,"upTicks":4269,"downTicks":4687,"histogram":{},"bidVolume":8084,"offerVolume":6759}]}]}}]'
-MSG[14]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.0,"upVolume":6997,"downVolume":7849,"upTicks":4269,"downTicks":4689,"histogram":{},"bidVolume":8084,"offerVolume":6762}]}]}}]'
-MSG[15]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6591.5,"upVolume":6997,"downVolume":7872,"upTicks":4269,"downTicks":4702,"histogram":{},"bidVolume":8100,"offerVolume":6769}]}]}}]'
-MSG[16]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6591.75,"upVolume":7005,"downVolume":7872,"upTicks":4273,"downTicks":4702,"histogram":{},"bidVolume":8100,"offerVolume":6777}]}]}}]'
-MSG[17]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6591.75,"upVolume":7035,"downVolume":7874,"upTicks":4291,"downTicks":4704,"histogram":{},"bidVolume":8100,"offerVolume":6809}]}]}}]'
-MSG[18]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6592.0,"upVolume":7036,"downVolume":7874,"upTicks":4292,"downTicks":4704,"histogram":{},"bidVolume":8100,"offerVolume":6810}]}]}}]'
-MSG[19]: 'a[{"e":"chart","d":{"charts":[{"id":657396,"s":"","td":20260407,"bars":[{"timestamp":"2026-04-07T15:35Z","open":6594.75,"high":6600.0,"low":6590.25,"close":6591.75,"upVolume":7036,"downVolume":7877,"upTicks":4292,"downTicks":4706,"histogram":{},"bidVolume":8103,"offerVolume":6810}]}]}}]'
-
-Done
+--- Bot Log (last 50) ---
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 289, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 959, in get_historical_bars
+  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 478, in send
+    async with self.send_context():
+  File "/usr/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 965, in send_context
+    raise self.protocol.close_exc from original_exc
+websockets.exceptions.ConnectionClosedOK: received 1000 (OK) Bye; then sent 1000 (OK) Bye
+2026-04-07 15:41:23,247 [bot] ERROR: Error processing MGCM6: received 1000 (OK) Bye; then sent 1000 (OK) Bye
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 289, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 959, in get_historical_bars
+  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 478, in send
+    async with self.send_context():
+  File "/usr/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 965, in send_context
+    raise self.protocol.close_exc from original_exc
+websockets.exceptions.ConnectionClosedOK: received 1000 (OK) Bye; then sent 1000 (OK) Bye
+2026-04-07 15:41:23,248 [bot] ERROR: Error processing MYMM6: received 1000 (OK) Bye; then sent 1000 (OK) Bye
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 289, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 959, in get_historical_bars
+  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 478, in send
+    async with self.send_context():
+  File "/usr/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 965, in send_context
+    raise self.protocol.close_exc from original_exc
+websockets.exceptions.ConnectionClosedOK: received 1000 (OK) Bye; then sent 1000 (OK) Bye
+2026-04-07 15:41:23,248 [bot] ERROR: Error processing M2KM6: received 1000 (OK) Bye; then sent 1000 (OK) Bye
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 289, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 959, in get_historical_bars
+  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 478, in send
+    async with self.send_context():
+  File "/usr/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 965, in send_context
+    raise self.protocol.close_exc from original_exc
+websockets.exceptions.ConnectionClosedOK: received 1000 (OK) Bye; then sent 1000 (OK) Bye
+2026-04-07 15:41:23,249 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-07 15:44:00,234 [bot] INFO: Stopping bot: Signal received
+2026-04-07 15:44:00,559 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-07 15:44:00,559 [bot] INFO: Bot stopped
 === END ===
