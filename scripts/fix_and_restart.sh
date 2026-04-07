@@ -1,10 +1,9 @@
 #!/bin/bash
 echo "=== Fix & Restart ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-
 cd /root/MT5-PropFirm-Bot
 
-# Fix service with PYTHONPATH
+# Ensure PYTHONPATH in service
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -26,5 +25,6 @@ SVCEOF
 
 systemctl daemon-reload
 systemctl restart futures-bot
-echo "Bot restarted"
+echo "Restarted"
+sleep 5
 echo "Status: $(systemctl is-active futures-bot)"
