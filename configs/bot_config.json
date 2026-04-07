@@ -2,7 +2,7 @@
   "symbols": ["MESM6", "MNQM6", "MCLM6", "MGCM6", "MYMM6", "M2KM6"],
   "timeframe": "5min",
   "live": false,
-  "organization": "TradeDay",
+  "organization": "",
   "telegram_enabled": true,
 
   "guardian": {
