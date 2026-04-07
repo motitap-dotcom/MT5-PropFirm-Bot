@@ -1,37 +1,28 @@
-=== FINAL STATUS v126 ===
-Timestamp: 2026-04-07 11:36 UTC
+=== Status v127 ===
+Timestamp: 2026-04-07 11:44 UTC
 Service: activating
-PID: 0
-Uptime: Tue 2026-04-07 11:35:45 UTC
 
-=== Last 30 bot.log ===
-2026-04-07 11:33:43,435 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-07 11:33:43,435 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-07 11:33:43,576 [tradovate_client] INFO: Environment token invalid, attempting renewal...
-2026-04-07 11:33:43,695 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-07 11:33:43,695 [tradovate_client] INFO: All tokens failed, attempting user/password authentication...
-2026-04-07 11:33:43,815 [bot] ERROR: Failed to connect: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-07 11:33:43,815 [bot] ERROR: Fatal error (attempt 1/5): Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
-    await bot.start()
+=== Config org ===
+
+
+=== Last 20 bot.log ===
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
-    await self.client.connect()
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
-    await self._authenticate()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 268, in _authenticate
-    raise ConnectionError(f"Authentication failed: {error}")
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-07 11:33:43,816 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-07 11:33:43,934 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-07 11:33:44,052 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-07 11:33:44,053 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-07 11:33:44,171 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-07 11:33:44,252 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 11:33:44,252 [bot] INFO: Bot stopped
-2026-04-07 11:33:44,252 [bot] INFO: Retrying in 30s...
-2026-04-07 11:33:54,601 [bot] INFO: Stopping bot: Signal received
-2026-04-07 11:33:54,601 [bot] ERROR: Error closing positions: Session is closed
-2026-04-07 11:33:54,601 [notifier] ERROR: Telegram error: Session is closed
-2026-04-07 11:33:54,601 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 11:33:54,601 [bot] INFO: Bot stopped
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 242, in _authenticate
+ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-07 11:39:49,898 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-07 11:39:50,010 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-07 11:39:50,123 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-07 11:39:50,123 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-07 11:39:50,239 [tradovate_client] ERROR: CAPTCHA required for first login!
+Run: python3 get_token.py
+Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
+2026-04-07 11:39:50,239 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-07 11:39:50,322 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-07 11:39:50,322 [bot] INFO: Bot stopped
+2026-04-07 11:39:50,322 [bot] INFO: Retrying in 300s...
+2026-04-07 11:40:10,753 [bot] INFO: Stopping bot: Signal received
+2026-04-07 11:40:10,753 [bot] ERROR: Error closing positions: Session is closed
+2026-04-07 11:40:10,753 [notifier] ERROR: Telegram error: Session is closed
+2026-04-07 11:40:10,753 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-07 11:40:10,754 [bot] INFO: Bot stopped
