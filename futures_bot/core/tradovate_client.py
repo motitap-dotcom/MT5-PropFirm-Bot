@@ -193,10 +193,11 @@ class TradovateClient:
             "appVersion": self.WEB_APP_VERSION,
             "deviceId": self.device_id,
             "cid": self.WEB_CID,
-            "sec": self.WEB_SEC,
+            "sec": "",
+            "chl": "",
             "organization": self.organization,
         }
-        payload["hmac"] = _compute_hmac(payload)
+        payload["sec"] = _compute_hmac(payload)
 
         try:
             async with self.session.post(
