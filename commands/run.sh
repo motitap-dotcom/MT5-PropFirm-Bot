@@ -1,85 +1,119 @@
 #!/bin/bash
-# Trigger: v120 - Force fresh browser auth for TradeDay (TD_Motitap)
+# Trigger: v121 - Direct browser auth for TradeDay
 cd /root/MT5-PropFirm-Bot
 source .env
 
-echo "=== TradeDay Browser Auth v120 ==="
+echo "=== TradeDay Auth v121 ==="
 echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')"
 echo "User: $TRADOVATE_USER"
 
-# Backup and remove Tradovate-Bot's saved token to force fresh auth
-cp /root/tradovate-bot/.tradovate_token.json /root/tradovate-bot/.tradovate_token.json.bak 2>/dev/null
-rm -f /root/tradovate-bot/.tradovate_token.json
-
-# Override env vars for TradeDay account
-export TRADOVATE_USERNAME="$TRADOVATE_USER"
-export TRADOVATE_PASSWORD="$TRADOVATE_PASS"
-export TRADOVATE_ACCESS_TOKEN=""
-export TRADOVATE_ENV="demo"
-export TRADOVATE_ORGANIZATION=""
-export TRADOVATE_APP_ID=""
-export TRADOVATE_CID="0"
-export TRADOVATE_SECRET=""
-export TRADOVATE_DEVICE_ID="futures-bot-td"
-
-cd /root/tradovate-bot
-/root/tradovate-bot/venv/bin/python3 << 'PYEOF'
-import sys, os, json, importlib
+# Use Tradovate-Bot's venv with Playwright
+/root/tradovate-bot/venv/bin/python3 << PYEOF
+import sys, os, json, base64, hashlib, hmac, requests, time
 sys.path.insert(0, "/root/tradovate-bot")
 
-# Force reload config with new env vars
-import config
-importlib.reload(config)
+username = "$TRADOVATE_USER"
+password = "$TRADOVATE_PASS"
 
-print(f"Config username: {config.TRADOVATE_USERNAME}")
-print(f"Config env: {config.TRADOVATE_ENV}")
+# 1. Try web auth first (encrypted password + HMAC)
+print("=== Trying web auth ===")
+offset = len(username) % len(password)
+rearranged = password[offset:] + password[:offset]
+encrypted_pw = base64.b64encode(rearranged[::-1].encode()).decode()
 
-from tradovate_api import TradovateAPI
-api = TradovateAPI()
-print(f"Authenticating...")
-success = api.authenticate()
-print(f"Result: {success}")
+payload = {
+    "name": username, "password": encrypted_pw,
+    "appId": "tradovate_trader(web)", "appVersion": "3.260220.0",
+    "deviceId": "futures-bot-td", "cid": 8, "sec": "", "chl": "",
+    "organization": "",
+}
+fields = ["chl", "deviceId", "name", "password", "appId"]
+msg = "".join(str(payload.get(f, "")) for f in fields)
+payload["sec"] = hmac.new("1259-11e7-485a-aeae-9b6016579351".encode(), msg.encode(), hashlib.sha256).hexdigest()
 
-if success and api.access_token:
-    # Get accounts
-    try:
-        accounts = api._get("/account/list")
-        print(f"\nAccounts found: {len(accounts)}")
-        for a in accounts:
-            print(f"  {a.get('name','')} id={a.get('id','')} active={a.get('active','')}")
+url = "https://demo.tradovateapi.com/v1/auth/accesstokenrequest"
+r = requests.post(url, json=payload, timeout=15)
+data = r.json()
 
-        # Find TradeDay account
-        td_account = None
-        for a in accounts:
-            name = a.get("name", "")
-            if "ELTDER" in name or "TD" in name.upper() or "TRADEDAY" in name.upper():
-                td_account = a
-                break
-
-        if not td_account and accounts:
-            td_account = accounts[0]
-            print(f"\nNo TradeDay-specific account found, using first: {td_account.get('name')}")
-
-        token_data = {
-            "accessToken": api.access_token,
-            "mdAccessToken": getattr(api, "md_access_token", api.access_token),
-            "userId": getattr(api, "user_id", 0),
-            "expirationTime": getattr(api, "expiration_time", ""),
-            "accountSpec": td_account.get("name", "") if td_account else "",
-            "accountId": td_account.get("id", 0) if td_account else 0,
-        }
-
-        token_path = "/root/MT5-PropFirm-Bot/configs/.tradovate_token.json"
-        with open(token_path, "w") as f:
-            json.dump(token_data, f, indent=2)
-        print(f"\nToken saved to {token_path}")
-        print(f"Account: {token_data['accountSpec']}")
-    except Exception as e:
-        print(f"Error getting accounts: {e}")
+if "accessToken" in data:
+    print("Web auth SUCCESS!")
+    token_data = data
+elif "p-ticket" in data and not data.get("p-captcha"):
+    print(f"p-ticket without captcha, waiting {data.get('p-time',15)}s...")
+    time.sleep(data.get("p-time", 15) + 1)
+    payload["p-ticket"] = data["p-ticket"]
+    r2 = requests.post(url, json=payload, timeout=15)
+    data2 = r2.json()
+    if "accessToken" in data2:
+        print("Web auth SUCCESS after p-ticket!")
+        token_data = data2
+    else:
+        token_data = None
+        print(f"p-ticket retry failed: {data2}")
 else:
-    print("Auth FAILED")
+    token_data = None
+    captcha = data.get("p-captcha", False)
+    print(f"Web auth needs CAPTCHA: {captcha}")
 
+    # 2. Try browser auth (Playwright)
+    print("\n=== Trying Playwright browser auth ===")
+    try:
+        import asyncio
+        from playwright.async_api import async_playwright
+
+        async def browser_login():
+            captured = None
+            async with async_playwright() as p:
+                browser = await p.chromium.launch(headless=True)
+                page = await browser.new_page()
+
+                async def on_response(resp):
+                    nonlocal captured
+                    if "accesstoken" in resp.url.lower() or "auth" in resp.url.lower():
+                        try:
+                            d = await resp.json()
+                            if isinstance(d, dict) and "accessToken" in d:
+                                captured = d
+                        except:
+                            pass
+                page.on("response", on_response)
+
+                await page.goto("https://trader.tradovate.com/welcome", timeout=30000)
+                await asyncio.sleep(2)
+                await page.fill('input[name="name"]', username, timeout=10000)
+                await page.fill('input[name="password"]', password, timeout=10000)
+                await page.click('button[type="submit"]', timeout=10000)
+                print("Login submitted, waiting 45s for token...")
+                for i in range(45):
+                    if captured: break
+                    await asyncio.sleep(1)
+                await browser.close()
+            return captured
+
+        token_data = asyncio.run(browser_login())
+        if token_data:
+            print("Browser auth SUCCESS!")
+        else:
+            print("Browser auth: no token captured")
+    except Exception as e:
+        print(f"Browser auth error: {e}")
+
+# Save if we got a token
+if token_data and "accessToken" in token_data:
+    path = "/root/MT5-PropFirm-Bot/configs/.tradovate_token.json"
+    with open(path, "w") as f:
+        json.dump(token_data, f, indent=2)
+    print(f"\nToken saved!")
+    print(f"Account: {token_data.get('accountSpec', '?')}")
+    print(f"Expires: {token_data.get('expirationTime', '?')}")
+
+    # List accounts
+    headers = {"Authorization": f"Bearer {token_data['accessToken']}"}
+    ar = requests.get("https://demo.tradovateapi.com/v1/account/list", headers=headers, timeout=10)
+    if ar.status_code == 200:
+        print("\nAll accounts:")
+        for a in ar.json():
+            print(f"  {a.get('name')} id={a.get('id')} active={a.get('active')}")
+else:
+    print("\nFAILED to get token")
 PYEOF
-
-# Restore Tradovate-Bot's token
-cp /root/tradovate-bot/.tradovate_token.json.bak /root/tradovate-bot/.tradovate_token.json 2>/dev/null
