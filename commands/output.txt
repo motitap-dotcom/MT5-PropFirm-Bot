@@ -1,8 +1,9 @@
-=== Browser Auth via Tradovate-Bot v117 ===
-Timestamp: 2026-04-07 10:05 UTC
-User: TD_Motitap
-Authenticating TD_Motitap...
-Auth result: True
-Account: FNFTCHMOTITAPIRO67510
-Token saved to /root/MT5-PropFirm-Bot/configs/.tradovate_token.json!
-Expires: 
+=== List All Accounts v118 ===
+Timestamp: 2026-04-07 10:11 UTC
+=== All Accounts ===
+  id=39996695 name=FNFTCHMOTITAPIRO67510 active=True nickname=
+
+=== Cash Balances ===
+  accountId=39996695 balance=55423.380000001
+
+=== User Info ===
