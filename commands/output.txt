@@ -1,5 +1,33 @@
-=== Auth Test v135 2026-04-07 12:52 UTC ===
-org="": p-ticket (captcha=True)
-org="tradeday": p-ticket (captcha=True)
-org="TradeDay": p-ticket (captcha=True)
-org="TRADEDAY": p-ticket (captcha=True)
+=== v137 2026-04-07 12:58 UTC ===
+Service: activating
+
+2026-04-07 12:47:39,319 [bot] INFO: Bot stopped
+2026-04-07 12:47:39,319 [bot] INFO: Retrying in 30s...
+2026-04-07 12:48:09,321 [bot] WARNING: Config not found at configs/bot_config.json, using defaults
+2026-04-07 12:48:09,322 [bot] INFO: ============================================================
+2026-04-07 12:48:09,322 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-07 12:48:09,322 [bot] INFO: ============================================================
+2026-04-07 12:48:09,322 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
+2026-04-07 12:48:09,323 [tradovate_client] INFO: Trying pre-set access token from environment...
+2026-04-07 12:48:09,475 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
+2026-04-07 12:48:09,590 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-07 12:48:09,590 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-07 12:48:09,708 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+2026-04-07 12:48:11,844 [tradovate_client] INFO: Opening Tradovate login page...
+2026-04-07 12:48:18,502 [tradovate_client] INFO: Login submitted, waiting for token...
+2026-04-07 12:48:19,602 [tradovate_client] INFO: Browser auth: token captured successfully
+2026-04-07 12:48:19,603 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
+2026-04-07 12:48:19,720 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-07 12:48:19,720 [tradovate_client] INFO: Environment token is valid
+2026-04-07 12:48:19,722 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-07 12:48:19,812 [bot] INFO: Bot started successfully
+2026-04-07 12:48:19,812 [bot] INFO: Trading symbols: ['MESM6']
+2026-04-07 12:48:19,812 [bot] INFO: Timeframe: 5min
+2026-04-07 12:48:19,813 [bot] INFO: New trading day: 2026-04-07
+2026-04-07 12:55:52,053 [bot] INFO: Stopping bot: Signal received
+2026-04-07 12:55:52,055 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
+2026-04-07 12:55:52,388 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 12:55:52,510 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 12:55:52,644 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 12:55:52,918 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-07 12:55:52,918 [bot] INFO: Bot stopped
