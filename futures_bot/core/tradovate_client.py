@@ -233,16 +233,21 @@ class TradovateClient:
             p_captcha = data.get("p-captcha", False)
 
             if p_captcha:
-                # CAPTCHA required - need manual intervention
-                logger.error(
-                    "CAPTCHA required for first login!\n"
-                    "Run: python3 get_token.py\n"
-                    "Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser."
-                )
-                raise ConnectionError(
-                    "CAPTCHA required. Run get_token.py on a machine with a browser, "
-                    "then set TRADOVATE_ACCESS_TOKEN in .env"
-                )
+                # CAPTCHA required - try browser auth (Playwright)
+                logger.info("CAPTCHA required, attempting browser auth via Playwright...")
+                browser_result = await self._try_browser_auth()
+                if browser_result:
+                    self.access_token = browser_result["accessToken"]
+                    self.md_access_token = browser_result.get("mdAccessToken", self.access_token)
+                    self._parse_expiry(browser_result.get("expirationTime", ""))
+                    self._save_token()
+                    logger.info("Authenticated successfully via browser (CAPTCHA bypassed)")
+                    return
+                else:
+                    raise ConnectionError(
+                        "CAPTCHA required and browser auth failed. "
+                        "Set TRADOVATE_ACCESS_TOKEN in .env"
+                    )
             else:
                 # Wait and retry (no CAPTCHA)
                 logger.info(f"Waiting {p_time}s before retry (p-ticket received)...")
@@ -266,6 +271,72 @@ class TradovateClient:
         # Auth failed
         error = data.get("errorText", str(data))
         raise ConnectionError(f"Authentication failed: {error}")
+
+    async def _try_browser_auth(self) -> Optional[Dict]:
+        """
+        Authenticate using Playwright headless browser to bypass CAPTCHA.
+        Uses the actual Tradovate web login page - a real browser session
+        doesn't trigger CAPTCHA like API requests do.
+        """
+        try:
+            from playwright.async_api import async_playwright
+        except ImportError:
+            logger.warning("Playwright not installed - cannot bypass CAPTCHA")
+            return None
+
+        captured = None
+
+        try:
+            async with async_playwright() as p:
+                browser = await p.chromium.launch(headless=True)
+                page = await browser.new_page()
+
+                async def on_response(response):
+                    nonlocal captured
+                    try:
+                        if "auth" in response.url.lower() and response.status == 200:
+                            data = await response.json()
+                            if isinstance(data, dict) and "accessToken" in data:
+                                captured = data
+                    except Exception:
+                        pass
+
+                page.on("response", on_response)
+
+                logger.info("Opening Tradovate login page...")
+                await page.goto(
+                    "https://trader.tradovate.com/welcome", timeout=60000
+                )
+                await asyncio.sleep(5)
+
+                await page.fill(
+                    'input[type="text"]', self.username, timeout=15000
+                )
+                await page.fill(
+                    'input[type="password"]', self.password, timeout=15000
+                )
+                await page.click(
+                    'button:has-text("Log")', timeout=15000
+                )
+
+                logger.info("Login submitted, waiting for token...")
+                for _ in range(45):
+                    if captured:
+                        break
+                    await asyncio.sleep(1)
+
+                await browser.close()
+
+            if captured:
+                logger.info("Browser auth: token captured successfully")
+            else:
+                logger.warning("Browser auth: no token captured after 45s")
+
+        except Exception as e:
+            logger.error(f"Browser auth error: {e}")
+            return None
+
+        return captured
 
     async def _renew_token_safe(self) -> bool:
         """

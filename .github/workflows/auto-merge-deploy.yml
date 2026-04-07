@@ -124,8 +124,11 @@ jobs:
             # Restore token
             cp /tmp/.tradovate_token_backup.json configs/.tradovate_token.json 2>/dev/null || true
 
-            # Update deps
+            # Update deps + Playwright
             pip3 install -r requirements.txt -q 2>&1 | tail -3
+            if ! python3 -c "import playwright" 2>/dev/null; then
+              pip3 install playwright -q && python3 -m playwright install chromium 2>&1 | tail -3
+            fi
 
             # Write .env
             cat > .env << ENVEOF
