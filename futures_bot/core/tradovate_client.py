@@ -380,16 +380,11 @@ class TradovateClient:
         await self._authenticate()
 
     async def _ensure_token(self):
-        """Refresh token proactively - renew every 4 hours or when close to expiry."""
+        """Refresh token proactively - renew when close to expiry."""
         remaining = self.token_expiry - time.time()
-        hours_since_obtained = (time.time() - getattr(self, '_token_obtained_at', time.time())) / 3600
 
-        if remaining < 7200:  # Less than 2 hours left
-            logger.info(f"Token expiring in {remaining/3600:.1f}h, renewing...")
-            await self._renew_token()
-        elif hours_since_obtained > 4:
-            # Renew every 4 hours proactively (Tradovate tokens last ~24h but renew early)
-            logger.info(f"Proactive token renewal ({hours_since_obtained:.1f}h since last)...")
+        if remaining < 1800:  # Less than 30 minutes left
+            logger.info(f"Token expiring in {remaining/60:.0f}min, renewing...")
             await self._renew_token()
             self._token_obtained_at = time.time()
 
