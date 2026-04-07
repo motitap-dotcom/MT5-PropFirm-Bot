@@ -1,58 +1,17 @@
-=== v139 2026-04-07 13:34 UTC ===
+=== v141 2026-04-07 13:44 UTC ===
+Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
+Commit: 28d288a v141
+Config: YES
 Service: activating
-PID: 0
+Restarts: 5
 
-=== status.json ===
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+● futures-bot.service - TradeDay Futures Trading Bot
+     Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Tue 2026-04-07 13:43:33 UTC; 38s ago
+    Process: 1200222 ExecStart=/usr/bin/python3 -m futures_bot.bot (code=exited, status=1/FAILURE)
+   Main PID: 1200222 (code=exited, status=1/FAILURE)
+        CPU: 30ms
 
-=== Last 50 bot.log ===
-2026-04-07 12:47:38,342 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
-2026-04-07 12:47:38,462 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-07 12:47:38,462 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-07 12:47:38,605 [tradovate_client] INFO: Environment token invalid, attempting renewal...
-2026-04-07 12:47:38,726 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-07 12:47:38,726 [tradovate_client] INFO: All tokens failed, attempting user/password authentication...
-2026-04-07 12:47:38,849 [bot] ERROR: Failed to connect: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-07 12:47:38,849 [bot] ERROR: Fatal error (attempt 1/5): Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-07 12:47:38,850 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-07 12:47:38,973 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-07 12:47:39,092 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-07 12:47:39,092 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-07 12:47:39,219 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-07 12:47:39,319 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 12:47:39,319 [bot] INFO: Bot stopped
-2026-04-07 12:47:39,319 [bot] INFO: Retrying in 30s...
-2026-04-07 12:48:09,321 [bot] WARNING: Config not found at configs/bot_config.json, using defaults
-2026-04-07 12:48:09,322 [bot] INFO: ============================================================
-2026-04-07 12:48:09,322 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-07 12:48:09,322 [bot] INFO: ============================================================
-2026-04-07 12:48:09,322 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
-2026-04-07 12:48:09,323 [tradovate_client] INFO: Trying pre-set access token from environment...
-2026-04-07 12:48:09,475 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
-2026-04-07 12:48:09,590 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-07 12:48:09,590 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-07 12:48:09,708 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-07 12:48:11,844 [tradovate_client] INFO: Opening Tradovate login page...
-2026-04-07 12:48:18,502 [tradovate_client] INFO: Login submitted, waiting for token...
-2026-04-07 12:48:19,602 [tradovate_client] INFO: Browser auth: token captured successfully
-2026-04-07 12:48:19,603 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
-2026-04-07 12:48:19,720 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-07 12:48:19,720 [tradovate_client] INFO: Environment token is valid
-2026-04-07 12:48:19,722 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-07 12:48:19,812 [bot] INFO: Bot started successfully
 2026-04-07 12:48:19,812 [bot] INFO: Trading symbols: ['MESM6']
 2026-04-07 12:48:19,812 [bot] INFO: Timeframe: 5min
 2026-04-07 12:48:19,813 [bot] INFO: New trading day: 2026-04-07
