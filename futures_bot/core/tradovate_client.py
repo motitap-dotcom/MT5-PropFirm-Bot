@@ -89,6 +89,8 @@ class TradovateClient:
         self._callbacks: Dict[str, List[Callable]] = {}
         self._ws_request_id: int = 10
         self._heartbeat_task: Optional[asyncio.Task] = None
+        self._pending_responses: Dict[int, asyncio.Future] = {}
+        self._chart_bars: Dict[int, list] = {}  # Accumulate bars per request
 
         # Token renewal cooldown
         self._last_renewal_check: float = 0
@@ -818,11 +820,9 @@ class TradovateClient:
             async for message in self._md_ws:
                 try:
                     if message == "h":
-                        # Heartbeat from server
                         await self._md_ws.send("[]")
                         continue
                     if message.startswith("a"):
-                        # Data frame - strip 'a' prefix and parse
                         self._process_md_message(message[1:])
                 except Exception as e:
                     logger.error(f"Error processing MD message: {e}")
@@ -831,14 +831,13 @@ class TradovateClient:
             await asyncio.sleep(2)
             self._md_ws = None
             await self._connect_md_websocket()
-            # Re-subscribe
             for symbol in self._callbacks:
                 self._ws_request_id += 1
                 sub_msg = f"md/subscribeQuote\n{self._ws_request_id}\n\n{json.dumps({'symbol': symbol})}"
                 await self._md_ws.send(sub_msg)
 
     def _process_md_message(self, message: str):
-        """Parse and dispatch market data messages."""
+        """Parse and dispatch market data messages (quotes + chart data)."""
         try:
             frames = json.loads(message)
         except json.JSONDecodeError:
@@ -851,12 +850,54 @@ class TradovateClient:
             if not isinstance(frame, dict):
                 continue
 
+            # Handle chart response (from md/getChart request)
+            req_id = frame.get("i")
+            if req_id and req_id in self._pending_responses:
+                status = frame.get("s", 0)
+                data = frame.get("d", {})
+
+                if isinstance(data, dict):
+                    # Chart data comes in "bars" or "charts" field
+                    bars = data.get("bars", [])
+                    if bars and req_id in self._chart_bars:
+                        self._chart_bars[req_id].extend(bars)
+
+                    # Check for end of chart data (eoh = end of history)
+                    charts = data.get("charts", [])
+                    if charts:
+                        for chart in charts:
+                            chart_bars = chart.get("bars", [])
+                            if chart_bars and req_id in self._chart_bars:
+                                self._chart_bars[req_id].extend(chart_bars)
+
+                    eoh = data.get("eoh", False)
+                    if eoh or status == 200:
+                        future = self._pending_responses.get(req_id)
+                        if future and not future.done():
+                            future.set_result(data)
+                continue
+
+            # Handle regular market data (quotes, trades)
             event = frame.get("e", "")
             data = frame.get("d", frame)
 
+            # Also handle chart bars that come as events
+            if event == "chart":
+                # Find which request this belongs to
+                chart_id = data.get("id")
+                bars = data.get("bars", [])
+                if bars:
+                    for rid, accumulated in self._chart_bars.items():
+                        accumulated.extend(bars)
+                eoh = data.get("eoh", False)
+                if eoh:
+                    # Signal completion for any pending chart request
+                    for rid, future in list(self._pending_responses.items()):
+                        if not future.done():
+                            future.set_result(data)
+                continue
+
             if event == "md" or "bid" in data or "trade" in data:
-                contract_id = data.get("contractId", "")
-                # Dispatch to all callbacks
                 for symbol, cbs in self._callbacks.items():
                     for cb in cbs:
                         try:
@@ -866,12 +907,22 @@ class TradovateClient:
 
     # ── Historical Data ──
 
+    async def connect_market_data(self):
+        """Ensure market data WebSocket is connected."""
+        if not self._md_ws:
+            await self._connect_md_websocket()
+            logger.info("Market data WebSocket ready")
+
     async def get_historical_bars(self, symbol: str, timeframe: str = "5min",
                                    count: int = 100) -> List[Dict]:
         """
-        Get historical OHLCV bars.
+        Get historical OHLCV bars via WebSocket.
         timeframe: '1min', '5min', '15min', '30min', '1hour', '1day'
         """
+        # Ensure MD WebSocket is connected
+        if not self._md_ws:
+            await self._connect_md_websocket()
+
         tf_map = {
             "1min": (1, "MinuteBar"),
             "5min": (5, "MinuteBar"),
@@ -882,7 +933,16 @@ class TradovateClient:
         }
         size, underlying = tf_map.get(timeframe, (5, "MinuteBar"))
 
-        result = await self._post("/md/getChart", {
+        self._ws_request_id += 1
+        req_id = self._ws_request_id
+
+        # Set up future for response
+        loop = asyncio.get_event_loop()
+        future = loop.create_future()
+        self._pending_responses[req_id] = future
+        self._chart_bars[req_id] = []
+
+        payload = json.dumps({
             "symbol": symbol,
             "chartDescription": {
                 "underlyingType": underlying,
@@ -894,4 +954,18 @@ class TradovateClient:
                 "asMuchAsElements": count,
             },
         })
-        return result.get("bars", [])
+
+        msg = f"md/getChart\n{req_id}\n\n{payload}"
+        await self._md_ws.send(msg)
+
+        try:
+            await asyncio.wait_for(future, timeout=15)
+        except asyncio.TimeoutError:
+            logger.warning(f"Chart request timed out for {symbol}")
+        finally:
+            self._pending_responses.pop(req_id, None)
+
+        bars = self._chart_bars.pop(req_id, [])
+        if bars:
+            logger.debug(f"Got {len(bars)} bars for {symbol}")
+        return bars

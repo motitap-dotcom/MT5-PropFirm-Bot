@@ -142,6 +142,7 @@ class FuturesBot:
         # Connect
         try:
             await self.client.connect()
+            await self.client.connect_market_data()  # Required for chart data
             await self.notifier.start()
             await self.notifier.bot_started()
         except Exception as e:
@@ -235,13 +236,16 @@ class FuturesBot:
                     logger.error(f"Error fetching balance: {e}")
 
                 # Check for trend day at 11:00 ET (per symbol)
+                # Only check if symbol has been initialized and has enough bars
                 if now_et.hour >= 11:
                     for sym in self.symbols:
                         vwap = self.vwap_strategies[sym]
-                        vwap.check_trend_day(now_et.hour)
-                        if vwap.is_trend_day() and self.active_strategy.get(sym) == "vwap":
-                            self.active_strategy[sym] = "orb"
-                            logger.info(f"Switching {sym} to ORB strategy (trend day)")
+                        # Need at least 15 bars (75 min of data) before declaring trend day
+                        if len(vwap._bars) >= 15 and not vwap.is_trend_day():
+                            vwap.check_trend_day(now_et.hour)
+                            if vwap.is_trend_day() and self.active_strategy.get(sym) == "vwap":
+                                self.active_strategy[sym] = "orb"
+                                logger.info(f"Switching {sym} to ORB strategy (trend day)")
 
                 # Sync positions and detect closed trades
                 try:
