@@ -1,82 +1,64 @@
 #!/bin/bash
-# Trigger: v116 - Direct auth test with full response
+# Trigger: v117 - Use Tradovate-Bot's auth code to get TradeDay token
 cd /root/MT5-PropFirm-Bot
 source .env
-echo "=== Direct Auth Test v116 ==="
+
+echo "=== Browser Auth via Tradovate-Bot v117 ==="
 echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')"
+echo "User: $TRADOVATE_USER"
 
-python3 << 'PYEOF'
-import requests, json, os, base64, hmac, hashlib, time
+# Use Tradovate-Bot's venv + code to authenticate our TradeDay account
+cd /root/tradovate-bot
+/root/tradovate-bot/venv/bin/python3 << PYEOF
+import sys, os, json
+sys.path.insert(0, "/root/tradovate-bot")
 
-username = os.environ.get("TRADOVATE_USER", "")
-password = os.environ.get("TRADOVATE_PASS", "")
-print(f"User: {username}")
+# Override config for our TradeDay account
+os.environ["TRADOVATE_USERNAME"] = "$TRADOVATE_USER"
+os.environ["TRADOVATE_PASSWORD"] = "$TRADOVATE_PASS"
+os.environ["TRADOVATE_ENV"] = "demo"
+os.environ["TRADOVATE_ORGANIZATION"] = ""
+os.environ["TRADOVATE_APP_ID"] = ""
+os.environ["TRADOVATE_CID"] = "0"
+os.environ["TRADOVATE_SECRET"] = ""
+os.environ["TRADOVATE_ACCESS_TOKEN"] = ""
+os.environ["TRADOVATE_DEVICE_ID"] = "futures-bot-td"
 
-# Encrypt
-offset = len(username) % len(password)
-rearranged = password[offset:] + password[:offset]
-encrypted_pw = base64.b64encode(rearranged[::-1].encode()).decode()
+import importlib
+import config
+importlib.reload(config)
 
-# Build payload exactly like Tradovate-Bot
-payload = {
-    "name": username,
-    "password": encrypted_pw,
-    "appId": "tradovate_trader(web)",
-    "appVersion": "3.260220.0",
-    "deviceId": "futures-bot-td",
-    "cid": 8,
-    "sec": "",
-    "chl": "",
-    "organization": "",
-}
+from tradovate_api import TradovateAPI
 
-# HMAC into sec
-fields = ["chl", "deviceId", "name", "password", "appId"]
-msg = "".join(str(payload.get(f, "")) for f in fields)
-payload["sec"] = hmac.new(
-    "1259-11e7-485a-aeae-9b6016579351".encode(),
-    msg.encode(), hashlib.sha256
-).hexdigest()
+api = TradovateAPI()
+print(f"Authenticating {config.TRADOVATE_USERNAME}...")
+success = api.authenticate()
+print(f"Auth result: {success}")
 
-print(f"\nPayload keys: {list(payload.keys())}")
-print(f"sec length: {len(payload['sec'])}")
+if success and api.access_token:
+    token_data = {
+        "accessToken": api.access_token,
+        "mdAccessToken": getattr(api, "md_access_token", api.access_token),
+        "userId": getattr(api, "user_id", 0),
+        "expirationTime": getattr(api, "expiration_time", ""),
+    }
+    # Also get account info
+    try:
+        accounts = api._get("/account/list")
+        if accounts:
+            token_data["accountSpec"] = accounts[0].get("name", "")
+            token_data["accountId"] = accounts[0].get("id", 0)
+            print(f"Account: {token_data['accountSpec']}")
+    except:
+        pass
 
-# Try demo
-url = "https://demo.tradovateapi.com/v1/auth/accesstokenrequest"
-print(f"\nPOST {url}")
-r = requests.post(url, json=payload, timeout=15)
-print(f"Status: {r.status_code}")
-data = r.json()
-print(f"Response keys: {list(data.keys())}")
-
-if "accessToken" in data:
-    print(f"\nSUCCESS!")
-    print(f"Account: {data.get('accountSpec')}")
-    with open("configs/.tradovate_token.json", "w") as f:
-        json.dump(data, f, indent=2)
-    print("Token saved!")
-elif "p-ticket" in data:
-    print(f"\np-ticket received!")
-    print(f"p-captcha: {data.get('p-captcha', 'NOT SET')}")
-    print(f"p-time: {data.get('p-time', 'NOT SET')}")
-    if not data.get("p-captcha", False):
-        wait = data.get("p-time", 15)
-        print(f"No captcha needed! Waiting {wait}s...")
-        time.sleep(wait + 1)
-        payload["p-ticket"] = data["p-ticket"]
-        r2 = requests.post(url, json=payload, timeout=15)
-        data2 = r2.json()
-        print(f"Retry keys: {list(data2.keys())}")
-        if "accessToken" in data2:
-            print("SUCCESS after p-ticket!")
-            print(f"Account: {data2.get('accountSpec')}")
-            with open("configs/.tradovate_token.json", "w") as f:
-                json.dump(data2, f, indent=2)
-            print("Token saved!")
-        else:
-            print(f"Failed: {json.dumps(data2)[:300]}")
-    else:
-        print("CAPTCHA IS REQUIRED (p-captcha=true)")
+    # Save to OUR bot's token file
+    token_path = "/root/MT5-PropFirm-Bot/configs/.tradovate_token.json"
+    with open(token_path, "w") as f:
+        json.dump(token_data, f, indent=2)
+    print(f"Token saved to {token_path}!")
+    print(f"Expires: {token_data.get('expirationTime', '?')}")
 else:
-    print(f"Error: {data.get('errorText', json.dumps(data)[:300])}")
+    print("Authentication FAILED")
+    print(f"Token: {api.access_token is not None}")
 PYEOF
