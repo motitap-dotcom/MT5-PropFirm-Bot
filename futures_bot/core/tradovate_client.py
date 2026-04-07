@@ -90,6 +90,10 @@ class TradovateClient:
         self._ws_request_id: int = 10
         self._heartbeat_task: Optional[asyncio.Task] = None
 
+        # Token renewal cooldown
+        self._last_renewal_check: float = 0
+        self._renewal_cooldown: float = 300  # 5 minutes between renewal checks
+
         # Account info
         self.account_id: Optional[int] = None
         self.account_spec: Optional[str] = None
@@ -381,7 +385,14 @@ class TradovateClient:
 
     async def _ensure_token(self):
         """Refresh token proactively - renew when close to expiry."""
-        remaining = self.token_expiry - time.time()
+        now = time.time()
+
+        # Cooldown: don't check more than once every 5 minutes
+        if now - self._last_renewal_check < self._renewal_cooldown:
+            return
+        self._last_renewal_check = now
+
+        remaining = self.token_expiry - now
 
         if remaining < 1800:  # Less than 30 minutes left
             logger.info(f"Token expiring in {remaining/60:.0f}min, renewing...")

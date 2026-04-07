@@ -125,13 +125,23 @@ class VWAPMeanReversion:
            (prev.close > vwap_data.vwap and current.close < vwap_data.vwap):
             self._vwap_crossed = True
 
-        # LONG signal
+        # Log indicator values for debugging
+        logger.debug(
+            f"VWAP check: price={current.close:.2f} VWAP={vwap_data.vwap:.2f} "
+            f"lower1SD={vwap_data.lower_1sd:.2f} upper1SD={vwap_data.upper_1sd:.2f} "
+            f"RSI={rsi:.1f} ATR={atr:.2f}"
+        )
+
+        # LONG signal: price touches lower band + RSI oversold
         if (current.low <= vwap_data.lower_1sd and
-                rsi < self.rsi_oversold and
-                current.close > current.open):  # Bullish candle
+                rsi < self.rsi_oversold):
             sl = vwap_data.lower_2sd - 2  # 2 points below -2SD
             tp1 = vwap_data.vwap
             tp2 = vwap_data.upper_1sd
+            logger.info(
+                f"VWAP LONG signal: price={current.close:.2f} RSI={rsi:.1f} "
+                f"SL={sl:.2f} TP1={tp1:.2f}"
+            )
             return TradeSetup(
                 signal=Signal.LONG,
                 entry_price=current.close,
@@ -140,13 +150,16 @@ class VWAPMeanReversion:
                 take_profit_2=tp2,
             )
 
-        # SHORT signal
+        # SHORT signal: price touches upper band + RSI overbought
         if (current.high >= vwap_data.upper_1sd and
-                rsi > self.rsi_overbought and
-                current.close < current.open):  # Bearish candle
+                rsi > self.rsi_overbought):
             sl = vwap_data.upper_2sd + 2
             tp1 = vwap_data.vwap
             tp2 = vwap_data.lower_1sd
+            logger.info(
+                f"VWAP SHORT signal: price={current.close:.2f} RSI={rsi:.1f} "
+                f"SL={sl:.2f} TP1={tp1:.2f}"
+            )
             return TradeSetup(
                 signal=Signal.SHORT,
                 entry_price=current.close,
@@ -200,22 +213,27 @@ class VWAPMeanReversion:
         )
 
     def _calc_rsi(self, period: int = None) -> float:
-        """Calculate RSI from recent bars."""
+        """Calculate RSI using Wilder's smoothed moving average (standard RSI)."""
         period = period or self.rsi_period
         if len(self._bars) < period + 1:
             return 50.0  # Neutral
 
-        gains = 0.0
-        losses = 0.0
-        for i in range(-period, 0):
-            change = self._bars[i].close - self._bars[i - 1].close
-            if change > 0:
-                gains += change
-            else:
-                losses += abs(change)
+        # Collect all price changes
+        changes = []
+        for i in range(1, len(self._bars)):
+            changes.append(self._bars[i].close - self._bars[i - 1].close)
 
-        avg_gain = gains / period
-        avg_loss = losses / period
+        if len(changes) < period:
+            return 50.0
+
+        # Initial SMA for first period
+        avg_gain = sum(max(0, c) for c in changes[:period]) / period
+        avg_loss = sum(max(0, -c) for c in changes[:period]) / period
+
+        # Wilder's smoothing for remaining periods
+        for c in changes[period:]:
+            avg_gain = (avg_gain * (period - 1) + max(0, c)) / period
+            avg_loss = (avg_loss * (period - 1) + max(0, -c)) / period
 
         if avg_loss == 0:
             return 100.0

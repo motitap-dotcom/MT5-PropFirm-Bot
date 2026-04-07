@@ -78,6 +78,7 @@ class FuturesBot:
         self.active_strategy: dict = {}  # per symbol: "vwap" or "orb"
         self._last_bar_time: dict = {}  # track last processed bar per symbol
         self._processed_fills: set = set()  # track processed fill IDs
+        self._symbol_initialized: dict = {}  # track if symbol has been fed historical bars
 
         # Trading state
         self.symbols: list = self.config.get("symbols", ["MESM6"])
@@ -285,7 +286,21 @@ class FuturesBot:
                 symbol, self.timeframe, count=50
             )
             if not bars_data:
+                logger.warning(f"No bars returned for {symbol}")
                 return
+
+            # First time processing: feed ALL historical bars to build indicators
+            if not self._symbol_initialized.get(symbol):
+                logger.info(f"Initializing {symbol} with {len(bars_data)} historical bars")
+                vwap = self.vwap_strategies[symbol]
+                orb = self.orb_strategies[symbol]
+                for bar_data in bars_data:
+                    b = self._to_bar(bar_data)
+                    vwap.on_bar(b)  # Build VWAP, RSI, ATR history
+                self._symbol_initialized[symbol] = True
+                self._last_bar_time[symbol] = bars_data[-1].get("timestamp", "")
+                logger.info(f"{symbol} initialized: {len(vwap._bars)} bars loaded")
+                return  # Don't trade on init cycle, just build indicators
 
             # Only process NEW bars (avoid re-feeding old data)
             latest_bar = bars_data[-1]
@@ -304,6 +319,7 @@ class FuturesBot:
             is_orb_period = time(9, 30) <= now_et.time() < time(10, 0)
 
             if is_orb_period:
+                vwap.on_bar(bar)  # Keep feeding VWAP even during ORB period
                 orb.on_bar(bar, is_orb_period=True)
                 return  # Don't trade during ORB building
 
@@ -317,16 +333,25 @@ class FuturesBot:
             sym_strategy = self.active_strategy.get(symbol, "vwap")
 
             if sym_strategy == "vwap":
-                # Feed only the latest bar
                 setup = vwap.on_bar(bar)
                 strategy_name = "VWAP Mean Reversion"
             else:
                 setup = orb.on_bar(bar, is_orb_period=False)
                 strategy_name = "ORB Breakout"
 
-            # Execute trade if signal
+            # Log signal status for debugging
             if setup and setup.signal.value != 0:
+                logger.info(f"SIGNAL: {symbol} {strategy_name} -> {setup.signal.name}")
                 await self._execute_trade(symbol, setup, strategy_name)
+            else:
+                # Log indicator values periodically for debugging
+                vwap_data = vwap.get_vwap_data()
+                rsi = vwap._calc_rsi() if len(vwap._bars) > vwap.rsi_period else 50
+                logger.debug(
+                    f"{symbol} [{sym_strategy}] bars={len(vwap._bars)} "
+                    f"RSI={rsi:.1f} VWAP={vwap_data.vwap:.2f} "
+                    f"price={bar.close:.2f}"
+                )
 
         except Exception as e:
             logger.error(f"Error processing {symbol}: {e}", exc_info=True)
@@ -558,6 +583,7 @@ class FuturesBot:
             self.orb_strategies[sym].reset_day()
             self.active_strategy[sym] = "vwap"
             self._last_bar_time[sym] = ""
+            self._symbol_initialized[sym] = False  # Re-init with historical bars
 
     def _to_bar(self, data: dict):
         """Convert API bar data to strategy Bar format."""

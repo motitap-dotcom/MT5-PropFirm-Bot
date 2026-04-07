@@ -1,44 +1,82 @@
-=== v146 2026-04-07 14:31 UTC ===
-Service: active
-PID: 1204962
+=== v150 DIAGNOSE 2026-04-07 15:08 UTC ===
 
-2026-04-07 14:21:25,058 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:21:25,183 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:26:25,227 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
-2026-04-07 14:26:25,378 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:25,497 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:25,620 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:25,742 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:25,869 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:25,986 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:26,111 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:26,263 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:26,381 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:26,505 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:26,624 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:26,742 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:26,863 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:26,979 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:27,107 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:27,224 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:27,343 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:27,460 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:31:27,558 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
-2026-04-07 14:31:27,720 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:27,843 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:27,973 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:28,095 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:28,223 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:28,348 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:28,476 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:28,628 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:28,753 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:28,870 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:28,999 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,122 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:29,251 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,375 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:29,502 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,620 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:29,745 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,864 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+--- Service Status ---
+● futures-bot.service - TradeDay Futures Trading Bot
+     Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Tue 2026-04-07 15:07:38 UTC; 30s ago
+    Process: 1221110 ExecStart=/usr/bin/python3 -m futures_bot.bot (code=exited, status=1/FAILURE)
+   Main PID: 1221110 (code=exited, status=1/FAILURE)
+        CPU: 30ms
+
+--- Journal Logs (last 30 lines) ---
+Apr 07 15:02:37 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 21.
+Apr 07 15:02:37 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 07 15:02:37 vmi3096165 python3[1219927]: /usr/bin/python3: No module named futures_bot.bot
+Apr 07 15:02:37 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 07 15:02:37 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 07 15:03:37 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 22.
+Apr 07 15:03:37 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 07 15:03:37 vmi3096165 python3[1220108]: /usr/bin/python3: No module named futures_bot.bot
+Apr 07 15:03:37 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 07 15:03:37 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 07 15:04:37 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 23.
+Apr 07 15:04:37 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 07 15:04:37 vmi3096165 python3[1220461]: /usr/bin/python3: No module named futures_bot.bot
+Apr 07 15:04:37 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 07 15:04:37 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 07 15:05:38 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 24.
+Apr 07 15:05:38 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 07 15:05:38 vmi3096165 python3[1220714]: /usr/bin/python3: No module named futures_bot.bot
+Apr 07 15:05:38 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 07 15:05:38 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 07 15:06:38 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 25.
+Apr 07 15:06:38 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 07 15:06:38 vmi3096165 python3[1220918]: /usr/bin/python3: No module named futures_bot.bot
+Apr 07 15:06:38 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 07 15:06:38 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 07 15:07:38 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 26.
+Apr 07 15:07:38 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 07 15:07:38 vmi3096165 python3[1221110]: /usr/bin/python3: No module named futures_bot.bot
+Apr 07 15:07:38 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 07 15:07:38 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+
+--- Git Status ---
+55d4157 chore: diagnose bot crash after deploy v150
+e087d9e VPS output 2026-04-07 15:04 UTC
+016eff9 chore: status check after trading fixes deploy v149
+
+--- Python Check ---
+Import OK
+
+--- Check dirs ---
+total 12
+drwxr-xr-x  2 root root 4096 Apr  7 15:08 .
+drwxr-xr-x 13 root root 4096 Apr  7 15:08 ..
+-rw-r--r--  1 root root    0 Apr  7 15:08 .gitkeep
+-rw-r--r--  1 root root  133 Apr  7 15:08 status.json
+total 3292
+drwxr-xr-x  2 root root    4096 Mar 27 08:11 .
+drwxr-xr-x 13 root root    4096 Apr  7 15:08 ..
+-rw-r--r--  1 root root       0 Feb 22 12:15 .gitkeep
+-rw-r--r--  1 root root 3357702 Apr  7 14:41 bot.log
+-rw-r--r-- 1 root root 1937 Apr  7 15:08 configs/bot_config.json
+
+--- Service File ---
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+Restart=on-failure
+RestartSec=60
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+
+[Install]
+WantedBy=multi-user.target
+
+=== END ===
