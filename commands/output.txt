@@ -1,7 +1,6 @@
-=== v138 2026-04-07 13:30 UTC ===
+=== v139 2026-04-07 13:34 UTC ===
 Service: activating
 PID: 0
-Uptime: Tue 2026-04-07 13:30:30 UTC
 
 === status.json ===
 {
@@ -13,7 +12,17 @@ Uptime: Tue 2026-04-07 13:30:30 UTC
   "risk": {}
 }
 
-=== Last 40 bot.log ===
+=== Last 50 bot.log ===
+2026-04-07 12:47:38,342 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
+2026-04-07 12:47:38,462 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-07 12:47:38,462 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-07 12:47:38,605 [tradovate_client] INFO: Environment token invalid, attempting renewal...
+2026-04-07 12:47:38,726 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-07 12:47:38,726 [tradovate_client] INFO: All tokens failed, attempting user/password authentication...
+2026-04-07 12:47:38,849 [bot] ERROR: Failed to connect: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-07 12:47:38,849 [bot] ERROR: Fatal error (attempt 1/5): Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
