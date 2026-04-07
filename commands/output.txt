@@ -1,82 +1,55 @@
-=== v150 DIAGNOSE 2026-04-07 15:08 UTC ===
+=== v151 2026-04-07 15:21 UTC ===
+Service: activating
+PID: 0
+Code: b72bcf4 chore: status check v151 after fix attempt
+Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
 
---- Service Status ---
-● futures-bot.service - TradeDay Futures Trading Bot
-     Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
-     Active: activating (auto-restart) (Result: exit-code) since Tue 2026-04-07 15:07:38 UTC; 30s ago
-    Process: 1221110 ExecStart=/usr/bin/python3 -m futures_bot.bot (code=exited, status=1/FAILURE)
-   Main PID: 1221110 (code=exited, status=1/FAILURE)
-        CPU: 30ms
+--- Journal (last 15) ---
+Apr 07 15:18:51 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
+Apr 07 15:18:51 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 07 15:18:51 vmi3096165 python3[1224328]: /usr/bin/python3: No module named futures_bot.bot
+Apr 07 15:18:51 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 07 15:18:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 07 15:19:51 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
+Apr 07 15:19:51 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 07 15:19:51 vmi3096165 python3[1224658]: /usr/bin/python3: No module named futures_bot.bot
+Apr 07 15:19:51 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 07 15:19:51 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 07 15:20:52 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 3.
+Apr 07 15:20:52 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 07 15:20:52 vmi3096165 python3[1225002]: /usr/bin/python3: No module named futures_bot.bot
+Apr 07 15:20:52 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 07 15:20:52 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
 
---- Journal Logs (last 30 lines) ---
-Apr 07 15:02:37 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 21.
-Apr 07 15:02:37 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 07 15:02:37 vmi3096165 python3[1219927]: /usr/bin/python3: No module named futures_bot.bot
-Apr 07 15:02:37 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 07 15:02:37 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 07 15:03:37 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 22.
-Apr 07 15:03:37 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 07 15:03:37 vmi3096165 python3[1220108]: /usr/bin/python3: No module named futures_bot.bot
-Apr 07 15:03:37 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 07 15:03:37 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 07 15:04:37 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 23.
-Apr 07 15:04:37 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 07 15:04:37 vmi3096165 python3[1220461]: /usr/bin/python3: No module named futures_bot.bot
-Apr 07 15:04:37 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 07 15:04:37 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 07 15:05:38 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 24.
-Apr 07 15:05:38 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 07 15:05:38 vmi3096165 python3[1220714]: /usr/bin/python3: No module named futures_bot.bot
-Apr 07 15:05:38 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 07 15:05:38 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 07 15:06:38 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 25.
-Apr 07 15:06:38 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 07 15:06:38 vmi3096165 python3[1220918]: /usr/bin/python3: No module named futures_bot.bot
-Apr 07 15:06:38 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 07 15:06:38 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 07 15:07:38 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 26.
-Apr 07 15:07:38 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 07 15:07:38 vmi3096165 python3[1221110]: /usr/bin/python3: No module named futures_bot.bot
-Apr 07 15:07:38 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 07 15:07:38 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-
---- Git Status ---
-55d4157 chore: diagnose bot crash after deploy v150
-e087d9e VPS output 2026-04-07 15:04 UTC
-016eff9 chore: status check after trading fixes deploy v149
-
---- Python Check ---
-Import OK
-
---- Check dirs ---
-total 12
-drwxr-xr-x  2 root root 4096 Apr  7 15:08 .
-drwxr-xr-x 13 root root 4096 Apr  7 15:08 ..
--rw-r--r--  1 root root    0 Apr  7 15:08 .gitkeep
--rw-r--r--  1 root root  133 Apr  7 15:08 status.json
-total 3292
-drwxr-xr-x  2 root root    4096 Mar 27 08:11 .
-drwxr-xr-x 13 root root    4096 Apr  7 15:08 ..
--rw-r--r--  1 root root       0 Feb 22 12:15 .gitkeep
--rw-r--r--  1 root root 3357702 Apr  7 14:41 bot.log
--rw-r--r-- 1 root root 1937 Apr  7 15:08 configs/bot_config.json
-
---- Service File ---
-[Unit]
-Description=TradeDay Futures Trading Bot
-After=network.target
-
-[Service]
-Type=simple
-WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/usr/bin/python3 -m futures_bot.bot
-Restart=on-failure
-RestartSec=60
-Environment=PYTHONUNBUFFERED=1
-Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
-EnvironmentFile=/root/MT5-PropFirm-Bot/.env
-
-[Install]
-WantedBy=multi-user.target
-
+--- Bot Log (last 30) ---
+2026-04-07 15:12:50,015 [news_filter] INFO: Loaded 26 restricted events
+2026-04-07 15:12:50,016 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-07 15:12:50,171 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-07 15:12:50,171 [tradovate_client] INFO: Saved token is still valid
+2026-04-07 15:12:50,172 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-07 15:12:50,257 [bot] INFO: Bot started successfully
+2026-04-07 15:12:50,258 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-07 15:12:50,258 [bot] INFO: Timeframe: 5min
+2026-04-07 15:12:50,258 [bot] INFO: New trading day: 2026-04-07
+2026-04-07 15:12:50,378 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-07 15:12:50,378 [bot] INFO: Switching MESM6 to ORB strategy (trend day)
+2026-04-07 15:12:50,378 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-07 15:12:50,378 [bot] INFO: Switching MNQM6 to ORB strategy (trend day)
+2026-04-07 15:12:50,378 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-07 15:12:50,378 [bot] INFO: Switching MCLM6 to ORB strategy (trend day)
+2026-04-07 15:12:50,378 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-07 15:12:50,378 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
+2026-04-07 15:12:50,378 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-07 15:12:50,378 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
+2026-04-07 15:12:50,378 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-07 15:12:50,379 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
+2026-04-07 15:12:50,776 [bot] WARNING: No bars returned for MESM6
+2026-04-07 15:12:50,896 [bot] WARNING: No bars returned for MNQM6
+2026-04-07 15:12:51,017 [bot] WARNING: No bars returned for MCLM6
+2026-04-07 15:12:51,139 [bot] WARNING: No bars returned for MGCM6
+2026-04-07 15:12:51,261 [bot] WARNING: No bars returned for MYMM6
+2026-04-07 15:12:51,382 [bot] WARNING: No bars returned for M2KM6
+2026-04-07 15:16:56,352 [bot] INFO: Stopping bot: Signal received
+2026-04-07 15:16:56,704 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-07 15:16:56,704 [bot] INFO: Bot stopped
 === END ===
