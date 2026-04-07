@@ -1,8 +1,5 @@
 #!/bin/bash
-# Trigger: v133 - Just read current bot.log
+# Trigger: v142
 cd /root/MT5-PropFirm-Bot
-echo "=== v133 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
-echo "Service: $(systemctl is-active futures-bot)"
-echo "Token: $([ -f configs/.tradovate_token.json ] && echo EXISTS || echo MISSING)"
-echo ""
-tail -30 logs/bot.log 2>/dev/null
+echo "=== v142 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+journalctl -u futures-bot --no-pager -n 20 --since "5 min ago" 2>&1

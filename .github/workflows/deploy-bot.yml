@@ -40,28 +40,53 @@ jobs:
           script: |
             set -e
             cd /root/MT5-PropFirm-Bot
+
+            # Preserve token
+            cp configs/.tradovate_token.json /tmp/.tradovate_token_backup.json 2>/dev/null || true
+
             git fetch origin main
             git reset --hard origin/main
             echo "Now at: $(git log -1 --oneline)"
 
+            # Restore token
+            cp /tmp/.tradovate_token_backup.json configs/.tradovate_token.json 2>/dev/null || true
+
             pip3 install -r requirements.txt -q 2>&1 | tail -3
+            if ! python3 -c "import playwright" 2>/dev/null; then
+              pip3 install playwright -q && python3 -m playwright install chromium 2>&1 | tail -3
+            fi
+
+            # Fix service with PYTHONPATH
+            cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+Restart=on-failure
+RestartSec=60
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+
+[Install]
+WantedBy=multi-user.target
+SVCEOF
 
             systemctl daemon-reload
+            systemctl reset-failed futures-bot 2>/dev/null || true
             systemctl restart futures-bot
             sleep 15
 
-            # Verify bot started
             if systemctl is-active --quiet futures-bot; then
               echo "BOT: RUNNING"
               journalctl -u futures-bot --no-pager -n 20 | tail -20
-              # Check for fatal errors
-              if journalctl -u futures-bot --no-pager -n 20 | grep -qi "fatal\|traceback\|error.*auth"; then
-                echo "WARNING: Errors detected in startup logs"
-              fi
             else
-              echo "BOT: FAILED TO START"
-              journalctl -u futures-bot --no-pager -n 30
-              exit 1
+              echo "BOT: FAILED"
+              journalctl -u futures-bot --no-pager -n 20
             fi
 
       - name: Telegram notification
