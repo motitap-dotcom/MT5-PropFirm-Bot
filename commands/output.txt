@@ -1,15 +1,8 @@
-=== Direct Auth Test v116 ===
-Timestamp: 2026-04-07 10:02 UTC
+=== Browser Auth via Tradovate-Bot v117 ===
+Timestamp: 2026-04-07 10:05 UTC
 User: TD_Motitap
-
-Payload keys: ['name', 'password', 'appId', 'appVersion', 'deviceId', 'cid', 'sec', 'chl', 'organization']
-sec length: 64
-
-POST https://demo.tradovateapi.com/v1/auth/accesstokenrequest
-Status: 200
-Response keys: ['p-ticket', 'p-time', 'p-captcha', 'p-message']
-
-p-ticket received!
-p-captcha: True
-p-time: 15
-CAPTCHA IS REQUIRED (p-captcha=true)
+Authenticating TD_Motitap...
+Auth result: True
+Account: FNFTCHMOTITAPIRO67510
+Token saved to /root/MT5-PropFirm-Bot/configs/.tradovate_token.json!
+Expires: 
