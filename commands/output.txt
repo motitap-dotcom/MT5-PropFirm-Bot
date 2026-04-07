@@ -1,20 +1,20 @@
-=== Check Auth Result v123 ===
-Timestamp: 2026-04-07 11:21 UTC
-
-=== Browser auth log ===
-Starting browser auth for TD_Motitap
-Opening Tradovate...
-Filling form...
-ERROR: Page.fill: Timeout 15000ms exceeded.
-Call log:
-  - waiting for locator("input[name=\"name\"]")
-
-
-=== Browser auth stdout ===
-
-=== Token file ===
-Account: FNFTCHMOTITAPIRO67510
-Expires: 
-
-=== Process check ===
-Finished
+=== Browser Auth v124 ===
+Timestamp: 2026-04-07 11:25 UTC
+Opening login page...
+URL: https://trader.tradovate.com/welcome
+Found 2 inputs:
+  [0] type=text name= placeholder=
+  [1] type=password name= placeholder=
+Found 6 buttons:
+  [0] type=button text=
+  [1] type=button text=Login
+  [2] type=button text=Sign in with Google
+  [3] type=button text=Sign in with Apple
+  [4] type=button text=Accept Cookies
+  [5] type=button text=Download Desktop App
+Username filled via: input[type="text"]
+Password filled via: input[type="password"]
+Clicked: button:has-text("Log")
+Waiting 30s for token...
+TOKEN CAPTURED!
+Token saved! Account: ?
