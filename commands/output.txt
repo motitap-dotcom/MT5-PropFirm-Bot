@@ -1,35 +1,5 @@
-=== v134 2026-04-07 12:47 UTC ===
-Service: activating
-Token: EXISTS
-Playwright: OK
-
-2026-04-07 12:44:05,423 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-07 12:44:05,423 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-07 12:44:05,565 [tradovate_client] INFO: Environment token invalid, attempting renewal...
-2026-04-07 12:44:05,685 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-07 12:44:05,685 [tradovate_client] INFO: All tokens failed, attempting user/password authentication...
-2026-04-07 12:44:05,804 [bot] ERROR: Failed to connect: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-07 12:44:05,805 [bot] ERROR: Fatal error (attempt 1/5): Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
-    await bot.start()
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
-    await self.client.connect()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
-    await self._authenticate()
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
-    raise ConnectionError(f"Authentication failed: {error}")
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-07 12:44:05,806 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-07 12:44:05,925 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-07 12:44:06,044 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-07 12:44:06,045 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-07 12:44:06,164 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-07 12:44:06,241 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 12:44:06,242 [bot] INFO: Bot stopped
-2026-04-07 12:44:06,242 [bot] INFO: Retrying in 30s...
-2026-04-07 12:44:19,589 [bot] INFO: Stopping bot: Signal received
-2026-04-07 12:44:19,589 [bot] ERROR: Error closing positions: Session is closed
-2026-04-07 12:44:19,589 [notifier] ERROR: Telegram error: Session is closed
-2026-04-07 12:44:19,589 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 12:44:19,589 [bot] INFO: Bot stopped
+=== Auth Test v135 2026-04-07 12:52 UTC ===
+org="": p-ticket (captcha=True)
+org="tradeday": p-ticket (captcha=True)
+org="TradeDay": p-ticket (captcha=True)
+org="TRADEDAY": p-ticket (captcha=True)
