@@ -1,26 +1,15 @@
 #!/bin/bash
-# Trigger: v150-diagnose-crash
+# Trigger: v151-check-after-fix
 cd /root/MT5-PropFirm-Bot
-echo "=== v150 DIAGNOSE $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== v151 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "Service: $(systemctl is-active futures-bot)"
+echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
+echo "Code: $(git log -1 --oneline)"
+echo "Branch: $(git branch --show-current 2>/dev/null || git rev-parse --abbrev-ref HEAD)"
 echo ""
-echo "--- Service Status ---"
-systemctl status futures-bot --no-pager -l 2>&1 | tail -30
+echo "--- Journal (last 15) ---"
+journalctl -u futures-bot --no-pager -n 15 2>&1
 echo ""
-echo "--- Journal Logs (last 30 lines) ---"
-journalctl -u futures-bot --no-pager -n 30 2>&1
-echo ""
-echo "--- Git Status ---"
-git log -3 --oneline
-echo ""
-echo "--- Python Check ---"
-python3 -c "import futures_bot.bot; print('Import OK')" 2>&1
-echo ""
-echo "--- Check dirs ---"
-ls -la status/ 2>&1
-ls -la logs/ 2>&1
-ls -la configs/bot_config.json 2>&1
-echo ""
-echo "--- Service File ---"
-cat /etc/systemd/system/futures-bot.service 2>&1
-echo ""
+echo "--- Bot Log (last 30) ---"
+tail -30 logs/bot.log 2>/dev/null || echo "No log"
 echo "=== END ==="
