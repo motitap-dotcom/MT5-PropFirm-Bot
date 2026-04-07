@@ -1,8 +1,29 @@
-=== v148 2026-04-07 14:45 UTC ===
+=== v149 2026-04-07 15:04 UTC ===
 Service: activating
 PID: 0
-Code: b6f06b2 v148
+Code: 016eff9 chore: status check after trading fixes deploy v149
 
+--- Last 50 lines of log ---
+2026-04-07 14:26:26,979 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:26:27,107 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:26:27,224 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:26:27,343 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:26:27,460 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-07 14:31:27,558 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
+2026-04-07 14:31:27,720 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:31:27,843 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:31:27,973 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:31:28,095 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:31:28,223 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:31:28,348 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:31:28,476 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:31:28,628 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:31:28,753 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:31:28,870 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:31:28,999 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:31:29,122 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
+2026-04-07 14:31:29,251 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 14:31:29,375 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
 2026-04-07 14:31:29,502 [tradovate_client] INFO: Token renewed successfully
 2026-04-07 14:31:29,620 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
 2026-04-07 14:31:29,745 [tradovate_client] INFO: Token renewed successfully
@@ -33,3 +54,16 @@ Code: b6f06b2 v148
 2026-04-07 14:41:05,306 [tradovate_client] INFO: Token renewed successfully
 2026-04-07 14:41:05,546 [tradovate_client] INFO: Disconnected from Tradovate
 2026-04-07 14:41:05,546 [bot] INFO: Bot stopped
+
+--- Positions ---
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
+
+--- Process ---
+=== END ===
