@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v2 ==="
+echo "=== Fix & Restart v3 ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 

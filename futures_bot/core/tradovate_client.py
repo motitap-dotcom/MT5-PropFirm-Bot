@@ -912,21 +912,15 @@ class TradovateClient:
     # ── Historical Data ──
 
     async def connect_market_data(self):
-        """Ensure market data WebSocket is connected."""
-        if not self._md_ws:
-            await self._connect_md_websocket()
-            logger.info("Market data WebSocket ready")
+        """Connect market data WebSocket (for real-time subscriptions)."""
+        pass  # Historical bars use their own connection now
 
     async def get_historical_bars(self, symbol: str, timeframe: str = "5min",
                                    count: int = 100) -> List[Dict]:
         """
-        Get historical OHLCV bars via WebSocket.
-        timeframe: '1min', '5min', '15min', '30min', '1hour', '1day'
+        Get historical OHLCV bars via a dedicated WebSocket connection.
+        Opens a fresh connection, gets data, closes it. Clean and reliable.
         """
-        # Ensure MD WebSocket is connected
-        if not self._md_ws:
-            await self._connect_md_websocket()
-
         tf_map = {
             "1min": (1, "MinuteBar"),
             "5min": (5, "MinuteBar"),
@@ -937,54 +931,86 @@ class TradovateClient:
         }
         size, underlying = tf_map.get(timeframe, (5, "MinuteBar"))
 
-        self._ws_request_id += 1
-        req_id = self._ws_request_id
-
-        # Set up future for response
-        loop = asyncio.get_event_loop()
-        future = loop.create_future()
-        self._pending_responses[req_id] = future
-        self._chart_bars[req_id] = []
-
-        payload = json.dumps({
-            "symbol": symbol,
-            "chartDescription": {
-                "underlyingType": underlying,
-                "elementSize": size,
-                "elementSizeUnit": "UnderlyingUnits",
-                "withHistogram": False,
-            },
-            "timeRange": {
-                "asMuchAsElements": count,
-            },
-        })
-
-        msg = f"md/getChart\n{req_id}\n\n{payload}"
-        await self._md_ws.send(msg)
+        token = self.md_access_token or self.access_token
+        bars = []
 
         try:
-            result = await asyncio.wait_for(future, timeout=15)
-        except asyncio.TimeoutError:
-            logger.warning(f"Chart request timed out for {symbol}")
-        finally:
-            self._pending_responses.pop(req_id, None)
+            ws = await websockets.connect(self.md_ws_url)
 
-        bars = self._chart_bars.pop(req_id, [])
+            # Wait for open frame
+            msg = await asyncio.wait_for(ws.recv(), timeout=10)
 
-        # Cancel chart subscription to stop real-time updates
-        # Find and cancel any chart IDs mapped to this request
-        chart_ids_to_remove = [cid for cid, rid in self._chart_id_to_req.items() if rid == req_id]
-        for cid in chart_ids_to_remove:
-            self._chart_id_to_req.pop(cid, None)
-            try:
-                self._ws_request_id += 1
-                cancel_msg = f"md/cancelChart\n{self._ws_request_id}\n\n{json.dumps({'id': cid})}"
-                await self._md_ws.send(cancel_msg)
-            except Exception:
-                pass
+            # Authenticate
+            await ws.send(f"authorize\n1\n\n{token}")
+            msg = await asyncio.wait_for(ws.recv(), timeout=10)
+
+            # Request chart data
+            payload = json.dumps({
+                "symbol": symbol,
+                "chartDescription": {
+                    "underlyingType": underlying,
+                    "elementSize": size,
+                    "elementSizeUnit": "UnderlyingUnits",
+                    "withHistogram": False,
+                },
+                "timeRange": {
+                    "asMuchAsElements": count,
+                },
+            })
+            await ws.send(f"md/getChart\n1\n\n{payload}")
+
+            # Read messages until end-of-history
+            got_eoh = False
+            for _ in range(100):
+                try:
+                    msg = await asyncio.wait_for(ws.recv(), timeout=10)
+                except asyncio.TimeoutError:
+                    break
+
+                if msg == "h":
+                    await ws.send("[]")
+                    continue
+                if not msg.startswith("a"):
+                    continue
+
+                try:
+                    frames = json.loads(msg[1:])
+                except json.JSONDecodeError:
+                    continue
+
+                if not isinstance(frames, list):
+                    frames = [frames]
+
+                for frame in frames:
+                    if isinstance(frame, str):
+                        try:
+                            frame = json.loads(frame)
+                        except json.JSONDecodeError:
+                            continue
+                    if not isinstance(frame, dict):
+                        continue
+
+                    # Chart data event
+                    if frame.get("e") == "chart":
+                        d = frame.get("d", {})
+                        for chart in d.get("charts", []):
+                            if not isinstance(chart, dict):
+                                continue
+                            chart_bars = chart.get("bars", [])
+                            for b in chart_bars:
+                                b["volume"] = b.get("upVolume", 0) + b.get("downVolume", 0)
+                            bars.extend(chart_bars)
+                            if chart.get("eoh"):
+                                got_eoh = True
+
+                if got_eoh:
+                    break
+
+            await ws.close()
+
+        except Exception as e:
+            logger.error(f"Chart error for {symbol}: {e}")
 
         if bars:
             logger.info(f"Got {len(bars)} bars for {symbol}")
-        else:
-            logger.warning(f"No bars received for {symbol}")
         return bars
