@@ -29,8 +29,10 @@ jobs:
             git config user.name "github-actions[bot]"
             REPO=$(git remote get-url origin | sed -E 's|.*github\.com[:/]||; s|\.git$||')
             git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
+            cp configs/.tradovate_token.json /tmp/.tradovate_token_backup.json 2>/dev/null || true
             git fetch origin ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
+            cp /tmp/.tradovate_token_backup.json configs/.tradovate_token.json 2>/dev/null || true
             bash scripts/fix_and_restart.sh > vps_fix_report.txt 2>&1
             cat vps_fix_report.txt
             git add vps_fix_report.txt
