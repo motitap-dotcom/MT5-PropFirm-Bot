@@ -1,13 +1,80 @@
-=== Get TradeDay Token v110 ===
-Timestamp: 2026-04-06 20:42 UTC
-User: TD_Motitap
-Authenticating as: TD_Motitap
+=== Tradovate-Bot Auth Analysis v113 ===
+Timestamp: 2026-04-07 09:46 UTC
 
-=== Trying demo endpoint ===
-Status: 200
-CAPTCHA REQUIRED (p-captcha=true)
-Need to solve CAPTCHA manually
+=== Token files ===
+-rw-r--r-- 1 root root 937 Apr  7 08:45 /root/tradovate-bot/.tradovate_token.json
+ls: cannot access '/root/tradovate-bot/configs/.tradovate_token*': No such file or directory
 
-=== Trying live endpoint ===
-Status: 200
-Response: {"errorText": "Incorrect username or password. Please try again, noting that passwords are case-sensitive."}
+=== .env of Tradovate-Bot ===
+# ─── Tradovate Bot Configuration ───────────────────────────
+# IMPORTANT: Edit these values with your actual credentials!
+
+# Tradovate Credentials
+TRADOVATE_USERNAME=FNFTMOTITAPWnBks
+TRADOVATE_APP_ID=
+TRADOVATE_CID=0
+TRADOVATE_DEVICE_ID=tradovate-bot-vps
+
+# Environment: demo or live
+TRADOVATE_ENV=demo
+
+# Prop Firm
+PROP_FIRM=fundednext
+
+# Logging
+LOG_LEVEL=INFO
+LOG_FILE=bot.log
+
+Token-related env vars (redacted):
+0
+  No ACCESS_TOKEN line
+
+=== Tradovate-Bot service status ===
+active
+
+=== Tradovate-Bot recent auth logs ===
+
+=== Tradovate-Bot config.py auth section ===
+TRADOVATE_APP_ID = os.getenv("TRADOVATE_APP_ID", "")
+try:
+    TRADOVATE_CID = int(os.getenv("TRADOVATE_CID", "0"))
+except (ValueError, TypeError):
+    TRADOVATE_CID = 0
+TRADOVATE_SECRET = os.getenv("TRADOVATE_SECRET", "")
+TRADOVATE_DEVICE_ID = os.getenv("TRADOVATE_DEVICE_ID", "tradovate-bot-001")
+
+# Manual token override — paste from browser DevTools to skip CAPTCHA.
+# After first use, the bot saves the token to .tradovate_token.json
+# and renews it automatically. You only need this once.
+TRADOVATE_ACCESS_TOKEN = os.getenv("TRADOVATE_ACCESS_TOKEN", "")
+
+# ─────────────────────────────────────────────
+--
+# Each prop firm has its own org name that must be sent with auth requests.
+TRADOVATE_ORGANIZATION = os.getenv("TRADOVATE_ORGANIZATION", "")
+
+CHALLENGE_SETTINGS = {
+    "apex": {
+        "account_size": 50_000,
+
+=== tradovate_api.py auth method order ===
+17:import hmac as hmac_mod
+40:# The web app encrypts the password and computes an HMAC before
+50:def _encrypt_password(name: str, password: str) -> str:
+58:def _compute_hmac_sec(payload: dict) -> str:
+61:    return hmac_mod.new(
+92:        Inject auth tokens from an external source (e.g. browser login).
+104:    def authenticate(self) -> bool:
+153:        data = self._try_web_auth(live_url)
+157:            data = self._try_web_auth(url)
+160:            data = self._try_api_auth(url)
+161:        # 5. Direct browser login (handles CAPTCHA automatically)
+163:            data = self._try_browser_auth()
+229:    def _try_web_auth(self, url: str) -> Optional[dict]:
+233:        Password is encrypted and HMAC sec is computed to match the web app.
+240:        encrypted_pw = _encrypt_password(name, password)
+243:            "password": encrypted_pw,
+254:        payload["sec"] = _compute_hmac_sec(payload)
+272:            # Handle p-ticket (device verification / CAPTCHA required)
+273:            if "p-ticket" in data:
+278:            if "Incorrect" in error and "p-ticket" not in str(data):
