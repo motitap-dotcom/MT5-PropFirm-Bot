@@ -1,20 +1,13 @@
-=== Browser Auth v124 ===
-Timestamp: 2026-04-07 11:25 UTC
-Opening login page...
-URL: https://trader.tradovate.com/welcome
-Found 2 inputs:
-  [0] type=text name= placeholder=
-  [1] type=password name= placeholder=
-Found 6 buttons:
-  [0] type=button text=
-  [1] type=button text=Login
-  [2] type=button text=Sign in with Google
-  [3] type=button text=Sign in with Apple
-  [4] type=button text=Accept Cookies
-  [5] type=button text=Download Desktop App
-Username filled via: input[type="text"]
-Password filled via: input[type="password"]
-Clicked: button:has-text("Log")
-Waiting 30s for token...
-TOKEN CAPTURED!
-Token saved! Account: ?
+=== Verify & Go v125 ===
+Timestamp: 2026-04-07 11:29 UTC
+
+=== Token ===
+Expires: 2026-04-07T12:45:35.529Z
+
+Accounts (1):
+  ELTDER260326211630296397 id=45373493 active=True
+  Balance for 45373493: $50,000.00
+
+=== Service ===
+Status: activating
+PID: 0
