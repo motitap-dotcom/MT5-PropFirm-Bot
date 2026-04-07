@@ -22,7 +22,7 @@ ls futures_bot/__init__.py futures_bot/bot.py futures_bot/core/tradovate_client.
 
 # Install dependencies
 echo "--- Dependencies ---"
-pip3 install aiohttp websockets 2>&1 | tail -3
+pip3 install aiohttp websockets 2>&1 | tail -5
 
 # Ensure correct service file
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
