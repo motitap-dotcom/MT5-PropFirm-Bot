@@ -1,6 +1,29 @@
-=== v137 2026-04-07 12:58 UTC ===
+=== v138 2026-04-07 13:30 UTC ===
 Service: activating
+PID: 0
+Uptime: Tue 2026-04-07 13:30:30 UTC
 
+=== status.json ===
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
+
+=== Last 40 bot.log ===
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-07 12:47:38,850 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-07 12:47:38,973 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-07 12:47:39,092 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-07 12:47:39,092 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-07 12:47:39,219 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-07 12:47:39,319 [tradovate_client] INFO: Disconnected from Tradovate
 2026-04-07 12:47:39,319 [bot] INFO: Bot stopped
 2026-04-07 12:47:39,319 [bot] INFO: Retrying in 30s...
 2026-04-07 12:48:09,321 [bot] WARNING: Config not found at configs/bot_config.json, using defaults
