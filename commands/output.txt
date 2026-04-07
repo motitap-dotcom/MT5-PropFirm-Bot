@@ -1,31 +1,15 @@
-=== Status v115 ===
-Timestamp: 2026-04-07 09:57 UTC
-Service: active
-PID: 1143327
+=== Direct Auth Test v116 ===
+Timestamp: 2026-04-07 10:02 UTC
+User: TD_Motitap
 
-=== Last 25 bot.log ===
-2026-04-07 09:55:41,334 [tradovate_client] INFO: Environment token invalid, attempting renewal...
-2026-04-07 09:55:41,456 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-07 09:55:41,456 [tradovate_client] INFO: All tokens failed, attempting user/password authentication...
-2026-04-07 09:55:41,576 [tradovate_client] ERROR: CAPTCHA required for first login!
-Run: python3 get_token.py
-Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
-2026-04-07 09:55:41,576 [bot] ERROR: Failed to connect: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-07 09:55:41,576 [bot] ERROR: Fatal error (attempt 3/5): CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 242, in _authenticate
-ConnectionError: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-07 09:55:41,577 [bot] INFO: Stopping bot: Fatal: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-07 09:55:41,696 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-07 09:55:41,815 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-07 09:55:41,815 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-07 09:55:41,935 [tradovate_client] ERROR: CAPTCHA required for first login!
-Run: python3 get_token.py
-Or set TRADOVATE_ACCESS_TOKEN in .env after solving CAPTCHA in browser.
-2026-04-07 09:55:41,935 [bot] ERROR: Error closing positions: CAPTCHA required. Run get_token.py on a machine with a browser, then set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-07 09:55:42,029 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 09:55:42,029 [bot] INFO: Bot stopped
-2026-04-07 09:55:42,029 [bot] INFO: Retrying in 120s...
+Payload keys: ['name', 'password', 'appId', 'appVersion', 'deviceId', 'cid', 'sec', 'chl', 'organization']
+sec length: 64
+
+POST https://demo.tradovateapi.com/v1/auth/accesstokenrequest
+Status: 200
+Response keys: ['p-ticket', 'p-time', 'p-captcha', 'p-message']
+
+p-ticket received!
+p-captcha: True
+p-time: 15
+CAPTCHA IS REQUIRED (p-captcha=true)
