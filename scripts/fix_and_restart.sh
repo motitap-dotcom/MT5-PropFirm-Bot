@@ -3,36 +3,28 @@ echo "=== Fix & Restart ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 
-# Preserve token and .env
-cp configs/.tradovate_token.json /tmp/.tradovate_token_backup.json 2>/dev/null || true
-cp .env /tmp/.env_backup 2>/dev/null || true
-
-# Fetch all branches
-git fetch origin --prune
-
-# Reset to main, then merge the fix branch
-git checkout main 2>/dev/null || git checkout -b main origin/main
-git reset --hard origin/main
-
-# Merge the fix branch into main
-echo "Merging fix branch..."
-git merge origin/claude/fix-bot-trading-Noxpp --no-edit -X theirs 2>&1 || true
+# Code is already updated by the workflow (git reset --hard)
 echo "Code: $(git log -1 --oneline)"
 
-# Verify key files exist
-echo "Checking files..."
-python3 -c "import futures_bot.bot; print('Import: OK')" 2>&1
-ls -la futures_bot/__init__.py 2>&1
-ls -la futures_bot/bot.py 2>&1
+# Preserve token
+cp configs/.tradovate_token.json /tmp/.tradovate_token_backup.json 2>/dev/null || true
 
-# Restore token and .env
+# Restore token (in case git reset deleted it)
 cp /tmp/.tradovate_token_backup.json configs/.tradovate_token.json 2>/dev/null || true
-cp /tmp/.env_backup .env 2>/dev/null || true
 
-# Ensure dirs
+# Ensure directories exist
 mkdir -p status logs configs
 
-# Ensure service file is correct with PYTHONPATH
+# Verify code is correct
+echo "--- Verify ---"
+python3 -c "import futures_bot.bot; print('Import: OK')" 2>&1
+ls futures_bot/__init__.py futures_bot/bot.py futures_bot/core/tradovate_client.py 2>&1
+
+# Install dependencies
+echo "--- Dependencies ---"
+pip3 install aiohttp websockets 2>&1 | tail -3
+
+# Ensure correct service file
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -52,15 +44,15 @@ EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 WantedBy=multi-user.target
 SVCEOF
 
-# Install dependencies if needed
-pip3 install aiohttp websockets 2>&1 | tail -3
-
+# Restart service
 systemctl daemon-reload
 systemctl reset-failed futures-bot 2>/dev/null
 systemctl restart futures-bot
+
+# Wait and check
 sleep 5
 echo ""
 echo "=== Result ==="
 echo "Status: $(systemctl is-active futures-bot)"
 echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
-journalctl -u futures-bot --no-pager -n 10 2>&1
+tail -15 logs/bot.log 2>/dev/null || echo "No log yet"
