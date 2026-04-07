@@ -1,11 +1,12 @@
 #!/bin/bash
-# Trigger: v126 - Final status check
+# Trigger: v127 - Check after org fix deploy
 cd /root/MT5-PropFirm-Bot
-echo "=== FINAL STATUS v126 ==="
+echo "=== Status v127 ==="
 echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')"
 echo "Service: $(systemctl is-active futures-bot)"
-echo "PID: $(systemctl show futures-bot --property=MainPID --value 2>/dev/null)"
-echo "Uptime: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value 2>/dev/null)"
 echo ""
-echo "=== Last 30 bot.log ==="
-tail -30 logs/bot.log 2>/dev/null || echo "No bot.log"
+echo "=== Config org ==="
+python3 -c "import json; print(json.load(open('configs/bot_config.json')).get('organization','?'))" 2>&1
+echo ""
+echo "=== Last 20 bot.log ==="
+tail -20 logs/bot.log 2>/dev/null || echo "No bot.log"
