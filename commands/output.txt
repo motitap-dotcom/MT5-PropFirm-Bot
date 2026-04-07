@@ -1,8 +1,20 @@
-=== Background Browser Auth v122 ===
-Timestamp: 2026-04-07 11:16 UTC
-Launching browser auth in background...
-PID: 1163311
-Script is running (PID 1163311)
-Will check result in next status check
+=== Check Auth Result v123 ===
+Timestamp: 2026-04-07 11:21 UTC
 
-=== Current logs ===
+=== Browser auth log ===
+Starting browser auth for TD_Motitap
+Opening Tradovate...
+Filling form...
+ERROR: Page.fill: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator("input[name=\"name\"]")
+
+
+=== Browser auth stdout ===
+
+=== Token file ===
+Account: FNFTCHMOTITAPIRO67510
+Expires: 
+
+=== Process check ===
+Finished
