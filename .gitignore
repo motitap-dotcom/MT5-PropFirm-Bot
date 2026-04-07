@@ -1,1 +1,4 @@
-futures_bot/core/__pycache__/
+__pycache__/
+*.pyc
+.env
+configs/.tradovate_token.json
