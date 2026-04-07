@@ -1,7 +1,8 @@
-=== TradeDay Browser Auth v120 ===
-Timestamp: 2026-04-07 10:26 UTC
-User: TD_Motitap
-Config username: TD_Motitap
-Traceback (most recent call last):
-  File "<stdin>", line 9, in <module>
-AttributeError: module 'config' has no attribute 'TRADOVATE_ENV'. Did you mean: 'TRADOVATE_CID'?
+=== Background Browser Auth v122 ===
+Timestamp: 2026-04-07 11:16 UTC
+Launching browser auth in background...
+PID: 1163311
+Script is running (PID 1163311)
+Will check result in next status check
+
+=== Current logs ===
