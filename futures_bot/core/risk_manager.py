@@ -99,8 +99,8 @@ class RiskManager:
 
         # Double check: actual risk with this size
         actual_risk = contracts * risk_per_contract
-        if actual_risk > risk * 1.1:  # 10% buffer
-            contracts = max(0, contracts - 1)
+        if actual_risk > risk * 1.5 and contracts > 1:  # Only reduce if significantly over AND more than 1
+            contracts -= 1
 
         logger.debug(f"Position size: {contracts} {symbol} "
                       f"(stop={stop_distance:.2f}pts, risk=${contracts * risk_per_contract:.2f})")
