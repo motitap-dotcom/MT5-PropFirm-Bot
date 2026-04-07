@@ -1,64 +1,45 @@
 #!/bin/bash
-# Trigger: v117 - Use Tradovate-Bot's auth code to get TradeDay token
+# Trigger: v118 - List all accounts + find TradeDay
 cd /root/MT5-PropFirm-Bot
-source .env
 
-echo "=== Browser Auth via Tradovate-Bot v117 ==="
+echo "=== List All Accounts v118 ==="
 echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M UTC')"
-echo "User: $TRADOVATE_USER"
 
-# Use Tradovate-Bot's venv + code to authenticate our TradeDay account
-cd /root/tradovate-bot
-/root/tradovate-bot/venv/bin/python3 << PYEOF
-import sys, os, json
-sys.path.insert(0, "/root/tradovate-bot")
+python3 << 'PYEOF'
+import json, requests
 
-# Override config for our TradeDay account
-os.environ["TRADOVATE_USERNAME"] = "$TRADOVATE_USER"
-os.environ["TRADOVATE_PASSWORD"] = "$TRADOVATE_PASS"
-os.environ["TRADOVATE_ENV"] = "demo"
-os.environ["TRADOVATE_ORGANIZATION"] = ""
-os.environ["TRADOVATE_APP_ID"] = ""
-os.environ["TRADOVATE_CID"] = "0"
-os.environ["TRADOVATE_SECRET"] = ""
-os.environ["TRADOVATE_ACCESS_TOKEN"] = ""
-os.environ["TRADOVATE_DEVICE_ID"] = "futures-bot-td"
+# Load renewed token
+with open("configs/.tradovate_token.json") as f:
+    t = json.load(f)
+token = t.get("accessToken", "")
 
-import importlib
-import config
-importlib.reload(config)
+if not token:
+    print("No token!")
+    exit(1)
 
-from tradovate_api import TradovateAPI
+headers = {"Authorization": f"Bearer {token}"}
 
-api = TradovateAPI()
-print(f"Authenticating {config.TRADOVATE_USERNAME}...")
-success = api.authenticate()
-print(f"Auth result: {success}")
-
-if success and api.access_token:
-    token_data = {
-        "accessToken": api.access_token,
-        "mdAccessToken": getattr(api, "md_access_token", api.access_token),
-        "userId": getattr(api, "user_id", 0),
-        "expirationTime": getattr(api, "expiration_time", ""),
-    }
-    # Also get account info
-    try:
-        accounts = api._get("/account/list")
-        if accounts:
-            token_data["accountSpec"] = accounts[0].get("name", "")
-            token_data["accountId"] = accounts[0].get("id", 0)
-            print(f"Account: {token_data['accountSpec']}")
-    except:
-        pass
-
-    # Save to OUR bot's token file
-    token_path = "/root/MT5-PropFirm-Bot/configs/.tradovate_token.json"
-    with open(token_path, "w") as f:
-        json.dump(token_data, f, indent=2)
-    print(f"Token saved to {token_path}!")
-    print(f"Expires: {token_data.get('expirationTime', '?')}")
+# List all accounts
+print("=== All Accounts ===")
+r = requests.get("https://demo.tradovateapi.com/v1/account/list", headers=headers, timeout=10)
+if r.status_code == 200:
+    for a in r.json():
+        print(f"  id={a.get('id')} name={a.get('name')} active={a.get('active')} nickname={a.get('nickname','')}")
 else:
-    print("Authentication FAILED")
-    print(f"Token: {api.access_token is not None}")
+    print(f"Error: {r.status_code} {r.text[:200]}")
+
+# Cash balances
+print("\n=== Cash Balances ===")
+r2 = requests.get("https://demo.tradovateapi.com/v1/cashBalance/list", headers=headers, timeout=10)
+if r2.status_code == 200:
+    for b in r2.json():
+        print(f"  accountId={b.get('accountId')} balance={b.get('amount',0)}")
+
+# User info
+print("\n=== User Info ===")
+r3 = requests.get("https://demo.tradovateapi.com/v1/user/getUser", headers=headers, timeout=10)
+if r3.status_code == 200:
+    u = r3.json()
+    print(f"  userId={u.get('id')} name={u.get('name')} email={u.get('email','')}")
+    print(f"  professional={u.get('professional')} status={u.get('status')}")
 PYEOF
