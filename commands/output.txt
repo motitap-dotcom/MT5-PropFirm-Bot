@@ -1,57 +1,66 @@
-=== v155 2026-04-07 15:48 UTC ===
+=== v156 2026-04-07 15:57 UTC ===
 Service: activating
 PID: 0
-Code: e14267b chore: status check v155
+Code: 4a37fc0 chore: v156 status check
 
---- Bot Log (last 50) ---
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 289, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 959, in get_historical_bars
-  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 478, in send
-    async with self.send_context():
-  File "/usr/lib/python3.12/contextlib.py", line 210, in __aenter__
-    return await anext(self.gen)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 965, in send_context
-    raise self.protocol.close_exc from original_exc
-websockets.exceptions.ConnectionClosedOK: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-07 15:41:23,247 [bot] ERROR: Error processing MGCM6: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 289, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 959, in get_historical_bars
-  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 478, in send
-    async with self.send_context():
-  File "/usr/lib/python3.12/contextlib.py", line 210, in __aenter__
-    return await anext(self.gen)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 965, in send_context
-    raise self.protocol.close_exc from original_exc
-websockets.exceptions.ConnectionClosedOK: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-07 15:41:23,248 [bot] ERROR: Error processing MYMM6: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 289, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 959, in get_historical_bars
-  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 478, in send
-    async with self.send_context():
-  File "/usr/lib/python3.12/contextlib.py", line 210, in __aenter__
-    return await anext(self.gen)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 965, in send_context
-    raise self.protocol.close_exc from original_exc
-websockets.exceptions.ConnectionClosedOK: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-07 15:41:23,248 [bot] ERROR: Error processing M2KM6: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 289, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 959, in get_historical_bars
-  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 478, in send
-    async with self.send_context():
-  File "/usr/lib/python3.12/contextlib.py", line 210, in __aenter__
-    return await anext(self.gen)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/websockets/asyncio/connection.py", line 965, in send_context
-    raise self.protocol.close_exc from original_exc
-websockets.exceptions.ConnectionClosedOK: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-07 15:41:23,249 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 15:44:00,234 [bot] INFO: Stopping bot: Signal received
-2026-04-07 15:44:00,559 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 15:44:00,559 [bot] INFO: Bot stopped
+2026-04-07 15:48:33,252 [strategy.vwap] INFO: VWAP LONG signal: price=24079.50 RSI=28.7 SL=24107.24 TP1=24193.44
+2026-04-07 15:48:33,252 [strategy.vwap] INFO: VWAP LONG signal: price=24019.50 RSI=23.7 SL=24049.35 TP1=24177.20
+2026-04-07 15:48:33,252 [strategy.vwap] INFO: VWAP LONG signal: price=24035.25 RSI=27.3 SL=24025.38 TP1=24168.16
+2026-04-07 15:48:33,252 [strategy.vwap] INFO: VWAP LONG signal: price=24055.50 RSI=31.7 SL=24012.57 TP1=24161.55
+2026-04-07 15:48:33,252 [strategy.vwap] INFO: VWAP LONG signal: price=24090.00 RSI=40.0 SL=24008.23 TP1=24150.37
+2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=24075.25 RSI=38.2 SL=24005.72 TP1=24147.94
+2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=24077.75 RSI=38.7 SL=24004.53 TP1=24145.96
+2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=24064.50 RSI=36.9 SL=24001.64 TP1=24143.64
+2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=24009.25 RSI=30.7 SL=23994.89 TP1=24140.29
+2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=23976.75 RSI=27.8 SL=23980.32 TP1=24134.54
+2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=23966.75 RSI=26.9 SL=23965.99 TP1=24129.26
+2026-04-07 15:48:33,253 [strategy.vwap] INFO: VWAP LONG signal: price=24005.50 RSI=35.3 SL=23957.25 TP1=24124.82
+2026-04-07 15:48:33,253 [bot] INFO: MNQM6 initialized: 51 bars loaded
+2026-04-07 15:48:33,713 [tradovate_client] INFO: Got 51 bars for MCLM6
+2026-04-07 15:48:33,713 [bot] INFO: Initializing MCLM6 with 51 historical bars
+2026-04-07 15:48:33,714 [strategy.vwap] INFO: VWAP SHORT signal: price=100.29 RSI=60.8 SL=102.29 TP1=99.74
+2026-04-07 15:48:33,718 [strategy.vwap] INFO: VWAP SHORT signal: price=100.35 RSI=61.6 SL=102.34 TP1=99.76
+2026-04-07 15:48:33,718 [strategy.vwap] INFO: VWAP SHORT signal: price=100.46 RSI=63.2 SL=102.40 TP1=99.78
+2026-04-07 15:48:33,720 [strategy.vwap] INFO: VWAP SHORT signal: price=100.66 RSI=61.8 SL=102.54 TP1=99.87
+2026-04-07 15:48:33,720 [strategy.vwap] INFO: VWAP SHORT signal: price=101.13 RSI=67.3 SL=102.71 TP1=99.92
+2026-04-07 15:48:33,720 [strategy.vwap] INFO: VWAP SHORT signal: price=100.90 RSI=62.5 SL=102.83 TP1=99.96
+2026-04-07 15:48:33,720 [bot] INFO: MCLM6 initialized: 51 bars loaded
+2026-04-07 15:48:34,162 [tradovate_client] INFO: Got 51 bars for MGCM6
+2026-04-07 15:48:34,162 [bot] INFO: Initializing MGCM6 with 51 historical bars
+2026-04-07 15:48:34,162 [strategy.vwap] INFO: VWAP LONG signal: price=4671.90 RSI=39.2 SL=4669.95 TP1=4681.48
+2026-04-07 15:48:34,163 [strategy.vwap] INFO: VWAP LONG signal: price=4664.00 RSI=34.0 SL=4665.56 TP1=4680.05
+2026-04-07 15:48:34,163 [strategy.vwap] INFO: VWAP LONG signal: price=4649.00 RSI=31.3 SL=4655.53 TP1=4676.38
+2026-04-07 15:48:34,163 [strategy.vwap] INFO: VWAP LONG signal: price=4636.90 RSI=27.0 SL=4641.60 TP1=4672.39
+2026-04-07 15:48:34,164 [bot] INFO: MGCM6 initialized: 51 bars loaded
+2026-04-07 15:48:34,631 [tradovate_client] INFO: Got 51 bars for MYMM6
+2026-04-07 15:48:34,632 [bot] INFO: Initializing MYMM6 with 51 historical bars
+2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP SHORT signal: price=46790.00 RSI=63.2 SL=46825.72 TP1=46735.64
+2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP SHORT signal: price=46790.00 RSI=61.6 SL=46830.06 TP1=46739.93
+2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP SHORT signal: price=46801.00 RSI=63.2 SL=46832.99 TP1=46742.39
+2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP LONG signal: price=46644.00 RSI=38.5 SL=46649.18 TP1=46734.31
+2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP LONG signal: price=46562.00 RSI=31.5 SL=46563.13 TP1=46705.17
+2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP LONG signal: price=46572.00 RSI=33.1 SL=46539.16 TP1=46693.80
+2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP LONG signal: price=46576.00 RSI=33.8 SL=46522.90 TP1=46684.61
+2026-04-07 15:48:34,632 [strategy.vwap] INFO: VWAP LONG signal: price=46580.00 RSI=39.4 SL=46522.98 TP1=46675.89
+2026-04-07 15:48:34,633 [strategy.vwap] INFO: VWAP LONG signal: price=46568.00 RSI=38.6 SL=46509.44 TP1=46667.88
+2026-04-07 15:48:34,633 [strategy.vwap] INFO: VWAP LONG signal: price=46472.00 RSI=32.2 SL=46468.35 TP1=46650.80
+2026-04-07 15:48:34,633 [strategy.vwap] INFO: VWAP LONG signal: price=46507.00 RSI=36.3 SL=46454.16 TP1=46643.79
+2026-04-07 15:48:34,633 [strategy.vwap] INFO: VWAP LONG signal: price=46497.00 RSI=36.7 SL=46468.79 TP1=46641.36
+2026-04-07 15:48:34,633 [strategy.vwap] INFO: VWAP LONG signal: price=46441.00 RSI=33.2 SL=46449.67 TP1=46633.99
+2026-04-07 15:48:34,633 [strategy.vwap] INFO: VWAP LONG signal: price=46460.00 RSI=35.5 SL=46438.77 TP1=46628.97
+2026-04-07 15:48:34,634 [strategy.vwap] INFO: VWAP LONG signal: price=46480.00 RSI=39.4 SL=46426.42 TP1=46619.84
+2026-04-07 15:48:34,634 [strategy.vwap] INFO: VWAP LONG signal: price=46463.00 RSI=39.1 SL=46417.70 TP1=46613.09
+2026-04-07 15:48:34,634 [strategy.vwap] INFO: VWAP LONG signal: price=46468.00 RSI=39.7 SL=46416.07 TP1=46612.14
+2026-04-07 15:48:34,634 [strategy.vwap] INFO: VWAP LONG signal: price=46449.00 RSI=38.2 SL=46413.72 TP1=46610.85
+2026-04-07 15:48:34,634 [bot] INFO: MYMM6 initialized: 51 bars loaded
+2026-04-07 15:48:35,022 [tradovate_client] INFO: Got 51 bars for M2KM6
+2026-04-07 15:48:35,022 [bot] INFO: Initializing M2KM6 with 51 historical bars
+2026-04-07 15:48:35,023 [strategy.vwap] INFO: VWAP LONG signal: price=2529.10 RSI=39.9 SL=2527.86 TP1=2537.67
+2026-04-07 15:48:35,023 [strategy.vwap] INFO: VWAP LONG signal: price=2530.20 RSI=39.8 SL=2527.97 TP1=2538.30
+2026-04-07 15:48:35,023 [strategy.vwap] INFO: VWAP LONG signal: price=2527.10 RSI=36.9 SL=2526.75 TP1=2537.90
+2026-04-07 15:48:35,024 [bot] INFO: M2KM6 initialized: 51 bars loaded
+2026-04-07 15:48:35,024 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-07 15:52:49,775 [bot] INFO: Stopping bot: Signal received
+2026-04-07 15:52:50,197 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-07 15:52:50,197 [bot] INFO: Bot stopped
 === END ===
