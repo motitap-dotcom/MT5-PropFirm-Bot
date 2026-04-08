@@ -1,40 +1,36 @@
-=== Wrapper Check v156 2026-04-08 18:50 UTC ===
-
+=== Verify v157 2026-04-08 18:59 UTC ===
 Service: activating
 PID: 0
-Uptime: Wed 2026-04-08 18:50:19 UTC
+Uptime: Wed 2026-04-08 18:58:59 UTC
 
---- Service ExecStart ---
-ExecStart=/root/MT5-PropFirm-Bot/start_bot.sh
-
---- start_bot.sh exists? ---
--rwxr-xr-x 1 root root 120 Apr  8 18:50 /root/MT5-PropFirm-Bot/start_bot.sh
+--- ExecStart line ---
+ExecStart=/bin/bash -c "cd /root/MT5-PropFirm-Bot && export PYTHONPATH=/root/MT5-PropFirm-Bot && exec /usr/bin/python3 -m futures_bot.bot"
 
 --- Journal (last 15) ---
-Apr 08 18:48:48 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 08 18:48:48 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=203/EXEC
-Apr 08 18:48:48 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 08 18:49:18 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 6.
-Apr 08 18:49:18 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 08 18:49:18 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=203/EXEC
-Apr 08 18:49:18 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 08 18:49:49 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 7.
-Apr 08 18:49:49 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 08 18:49:49 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=203/EXEC
-Apr 08 18:49:49 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 08 18:50:19 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 8.
-Apr 08 18:50:19 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 08 18:50:19 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=203/EXEC
-Apr 08 18:50:19 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 08 18:57:58 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 6.
+Apr 08 18:57:58 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 08 18:57:58 vmi3096165 bash[1603743]: /usr/bin/python3: No module named futures_bot.bot
+Apr 08 18:57:58 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 18:57:58 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 08 18:58:28 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 7.
+Apr 08 18:58:28 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 08 18:58:28 vmi3096165 bash[1603861]: /usr/bin/python3: No module named futures_bot.bot
+Apr 08 18:58:28 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 18:58:28 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 08 18:58:59 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 8.
+Apr 08 18:58:59 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 08 18:58:59 vmi3096165 bash[1603978]: /usr/bin/python3: No module named futures_bot.bot
+Apr 08 18:58:59 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 18:58:59 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
 
 --- Bot Log (last 10) ---
-2026-04-08 18:45:32,115 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-08 18:45:32,115 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-08 18:45:33,096 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-08 18:50:33,341 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-08 18:50:33,341 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-08 18:50:33,342 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-08 18:50:33,342 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
 2026-04-08 18:50:33,342 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
 2026-04-08 18:50:33,342 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
 2026-04-08 18:50:34,337 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:55:35,557 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
