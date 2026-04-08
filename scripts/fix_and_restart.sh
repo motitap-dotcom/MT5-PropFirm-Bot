@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v4 - Wrapper Script ==="
+echo "=== Fix & Restart v5 - bash -c approach ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 
@@ -19,10 +19,7 @@ cp /tmp/.env_backup .env 2>/dev/null || true
 # Ensure required directories exist
 mkdir -p status logs
 
-# Make start script executable
-chmod +x start_bot.sh
-
-# Service file using wrapper script
+# Service file - use bash -c to set PYTHONPATH inline
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -31,7 +28,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/root/MT5-PropFirm-Bot/start_bot.sh
+ExecStart=/bin/bash -c "cd /root/MT5-PropFirm-Bot && export PYTHONPATH=/root/MT5-PropFirm-Bot && exec /usr/bin/python3 -m futures_bot.bot"
 Restart=on-failure
 RestartSec=30
 Environment=PYTHONUNBUFFERED=1
