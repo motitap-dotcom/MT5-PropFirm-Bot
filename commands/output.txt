@@ -1,36 +1,69 @@
-=== Verify v157 2026-04-08 18:59 UTC ===
-Service: activating
-PID: 0
-Uptime: Wed 2026-04-08 18:58:59 UTC
+=== File Check v158 2026-04-08 19:02 UTC ===
 
---- ExecStart line ---
-ExecStart=/bin/bash -c "cd /root/MT5-PropFirm-Bot && export PYTHONPATH=/root/MT5-PropFirm-Bot && exec /usr/bin/python3 -m futures_bot.bot"
+--- Current git commit ---
+117a655 File check v158 - debug missing module
 
---- Journal (last 15) ---
-Apr 08 18:57:58 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 6.
-Apr 08 18:57:58 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 08 18:57:58 vmi3096165 bash[1603743]: /usr/bin/python3: No module named futures_bot.bot
-Apr 08 18:57:58 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 08 18:57:58 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 08 18:58:28 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 7.
-Apr 08 18:58:28 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 08 18:58:28 vmi3096165 bash[1603861]: /usr/bin/python3: No module named futures_bot.bot
-Apr 08 18:58:28 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 08 18:58:28 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 08 18:58:59 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 8.
-Apr 08 18:58:59 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 08 18:58:59 vmi3096165 bash[1603978]: /usr/bin/python3: No module named futures_bot.bot
-Apr 08 18:58:59 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 08 18:58:59 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+--- git branch ---
+  claude/bot-server-connection-qmvC0      635a224 [behind 32] Fast deploy script (under 5min timeout)
+  claude/bot-status-check-g8Wi9           6865c29 [behind 1] 📊 Report: check_status @ 2026-03-01 09:09
+  claude/bot-status-command-CfoXO         4c63f82 Quick deploy verify script (shorter timeout)
+  claude/build-cfd-trading-bot-fl0ld      61d5a3f [ahead 1, behind 213] VPS output 2026-03-27 09:05 UTC
+  claude/check-bot-status-1N9wR           5fcf68d [behind 3] Fix deploy script: use nohup to prevent SSH timeout
+  claude/check-bot-status-X0f8o           ab01154 Fix SignalEngine: relax criteria so bot actually trades
+  claude/check-bot-update-status-KDu5H    a2ef26e [behind 7] Fix enable_autotrading: check state before toggling, fix VPS repo
+  claude/check-status-update-pSQRq        f5d8e73 [behind 10] Manual deploy: pull new EA code on VPS, compile, restart MT5
+  claude/check-update-compile-UvvFk       1187af7 [behind 5] Full deploy fix: stop MT5 before compile to prevent .ex5 lock
+* claude/claude-md-mm3qa8i9848jcovk-X3DTU 117a655 [ahead 349, behind 161] File check v158 - debug missing module
+  claude/connect-server-verify-bot-MPIZX  41737b6 Add Telegram listener + bot health verification scripts
+  claude/debug-bot-trading-HN2Tc          605f1bf [behind 9] Trigger deploy: pull, compile, restart MT5 with updated EA
+  claude/debug-bot-transactions-wRINL     d0a342d Rewrite deploy workflow: use SSH git pull instead of SCP (fixes path spaces issue)
+  claude/deploy-bot-server-vDXK7          e63690c [behind 1] Start MT5 bot on VPS - deploy trigger 2026-03-04
+  claude/enable-github-actions-38lPd      cde3414 [behind 1] Deploy latest EA code to VPS via run command
+  claude/fix-bot-server-connection-JbPec  c05e39c [behind 10] Robust VPS deploy workflow with retry logic and error reporting
+  claude/fix-bot-trading-config-N1uDv     90fb34f [behind 3] Deploy all fixes + install watchdog cron on VPS
+  claude/fix-propfirmbot-ea-03Qtp         6f03036 status: auto-update 2026-02-25 16:15
+  claude/redesign-bot-strategy-woBVq      ca63bea [behind 1] Fix deploy: use nohup+setsid to detach MT5 so SSH can exit cleanly
+  claude/setup-bot-workflow-OUSci         d0111d9 [behind 20] Increase max positions 2->3, fix JSON session times, deploy + restart
+  claude/update-bot-deployment-Ej25j      27e3ccf [behind 11] Deploy latest EA from repo + restart MT5
+  claude/update-current-status-1jEP6      70180a7 [behind 1] Deploy fixed Guardian, recompile, restart MT5
+  claude/update-server-version-3dUGg      bf1afe9 [behind 2] Simple deploy: copy files + restart MT5 (auto-compiles, no MetaEditor)
+  claude/update-server-vnc-wsD2d          468f040 [behind 5] Fix #20: Recompile EA with updated code + clean state files + restart
+  main                                    5cf6bf8 [ahead 12] Merge remote-tracking branch 'origin/claude/fix-bot-trading-Noxpp'
 
---- Bot Log (last 10) ---
-2026-04-08 18:50:33,342 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-08 18:50:33,342 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-08 18:50:34,337 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-08 18:55:35,557 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+--- futures_bot directory ---
+total 48
+drwxr-xr-x  5 1001 1001  4096 Apr  8 19:02 .
+drwxr-xr-x 13 root root  4096 Apr  8 19:02 ..
+-rw-r--r--  1 root root   114 Apr  8 19:02 __init__.py
+drwxr-xr-x  2 root root  4096 Apr  8 18:40 __pycache__
+-rw-r--r--  1 root root 24016 Apr  8 19:02 bot.py
+drwxr-xr-x  3 1001 1001  4096 Apr  8 19:02 core
+drwxr-xr-x  3 1001 1001  4096 Apr  8 19:02 strategies
+
+--- futures_bot/__init__.py ---
+# TradeDay Futures Bot - Tradovate API
+# Micro futures trading bot for prop firm evaluation
+__version__ = "2.0.0"
+
+--- futures_bot/bot.py (first 5 lines) ---
+"""
+TradeDay Futures Bot - Main Entry Point
+Connects to Tradovate API and runs trading strategies.
+
+Architecture:
+
+--- What python3 sees ---
+CWD: /root/MT5-PropFirm-Bot
+PYTHONPATH: NOT SET
+futures_bot dir exists: True
+__init__.py exists: True
+bot.py exists: True
+IMPORT: OK
+
+--- Running processes with bot ---
+root         688  0.0  0.3  41748 32140 ?        Ss   Mar22   9:30 /usr/bin/python3 /root/Tradovate-Bot/server_agent.py --interval 30
+root        1117  0.0  0.2 105396 22080 ?        Sl   Mar22   8:00 python3 /root/tradovate-bot/dashboard.py
+root     1468075  0.4  1.2 991388 102084 ?       Sl   Mar26  87:22 /opt/hyrotrader-bot/venv/bin/python -u /opt/hyrotrader-bot/bot/main.py
+root     1599185  0.0  0.4 122332 37884 ?        Sl   18:40   0:00 /usr/bin/python3 -m futures_bot.bot --help
+root     1600667  6.2  0.6 575812 48952 ?        Ssl  18:46   1:01 /root/tradovate-bot/venv/bin/python bot.py
+root     3119702  0.0  0.3  34764 26280 ?        Ss   Mar31   2:15 /usr/bin/python3 /root/MT5-PropFirm-Bot/management/server.py
