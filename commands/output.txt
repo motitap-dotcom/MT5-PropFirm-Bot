@@ -1,41 +1,18 @@
-=== Trading Check v152 2026-04-08 18:25 UTC ===
+=== Verify Fix v153 2026-04-08 18:33 UTC ===
 
-Service: active
-PID: 1590950
+Service: activating
+PID: 0
+Uptime: Wed 2026-04-08 18:33:07 UTC
 
---- Open Positions ---
-2026-04-07 19:15:04,979 [tradovate_client] INFO: Cancelled order 451715410158
-2026-04-07 19:15:05,100 [tradovate_client] INFO: Cancelled order 451715410027
-2026-04-07 19:15:05,227 [tradovate_client] INFO: Cancelled order 451715410044
-2026-04-07 19:15:05,349 [tradovate_client] INFO: Cancelled order 451715410069
-2026-04-07 19:15:05,470 [tradovate_client] INFO: Cancelled order 451715410066
-2026-04-07 19:15:05,589 [tradovate_client] INFO: Cancelled order 451715410134
-2026-04-07 19:15:05,708 [tradovate_client] INFO: Cancelled order 451715410007
-2026-04-07 19:15:05,827 [tradovate_client] INFO: Cancelled order 451715410021
-2026-04-07 19:15:05,949 [tradovate_client] INFO: Cancelled order 451715410063
-2026-04-07 19:15:06,069 [tradovate_client] INFO: Cancelled order 451715410041
-2026-04-07 19:15:06,188 [tradovate_client] INFO: Cancelled order 451715410030
-2026-04-07 19:15:06,308 [tradovate_client] INFO: Cancelled order 451715410149
-2026-04-07 19:15:06,429 [tradovate_client] INFO: Cancelled order 451715410047
-2026-04-07 19:15:06,550 [tradovate_client] INFO: Cancelled order 451715410024
-2026-04-07 19:15:06,671 [tradovate_client] INFO: Cancelled order 451715410018
-2026-04-07 19:15:06,791 [tradovate_client] INFO: Cancelled order 451715410050
-2026-04-08 18:11:21,048 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-08 18:11:22,201 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-08 18:11:22,445 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-08 18:11:52,600 [bot] INFO: TradeDay Futures Bot Starting
+--- Critical Files ---
+status dir: status/
+status.json: -rw-r--r-- 1 root root 133 Apr  8 18:33 status/status.json
+restricted_events: -rw-r--r-- 1 root root 3573 Apr  8 18:33 configs/restricted_events.json
+bot_config: -rw-r--r-- 1 root root 1934 Apr  8 18:33 configs/bot_config.json
+.env: -rw-r--r-- 1 root root 459 Apr  8 18:29 .env
+token: -rw-r--r-- 1 root root 816 Apr  8 18:33 configs/.tradovate_token.json
 
---- Last 30 Bot Log Lines ---
-2026-04-08 18:11:52,600 [bot] INFO: ============================================================
-2026-04-08 18:11:52,600 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
-2026-04-08 18:11:52,600 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-04-08 18:11:52,600 [tradovate_client] INFO: Token expiring in -1317min, renewing...
-2026-04-08 18:11:52,745 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-08 18:11:52,745 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-08 18:11:52,895 [tradovate_client] INFO: Saved token invalid, attempting renewal...
-2026-04-08 18:11:53,018 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-08 18:11:53,018 [tradovate_client] INFO: Trying pre-set access token from environment...
-2026-04-08 18:11:53,140 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
+--- Last 25 Bot Log Lines ---
 2026-04-08 18:11:53,263 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
 2026-04-08 18:11:53,264 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
 2026-04-08 18:11:53,386 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
@@ -56,8 +33,13 @@ PID: 1590950
 2026-04-08 18:17:03,137 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 2026-04-08 18:22:03,385 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
 2026-04-08 18:22:03,758 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-08 18:27:03,921 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:27:04,336 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-08 18:29:36,453 [bot] INFO: Stopping bot: Signal received
+2026-04-08 18:29:36,814 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-08 18:29:36,814 [bot] INFO: Bot stopped
 
---- Status JSON ---
+--- Live Status JSON ---
 {
   "timestamp": "",
   "bot": "TradeDay Futures Bot",
