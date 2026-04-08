@@ -1,29 +1,90 @@
-=== Verify v159 2026-04-08 19:12 UTC ===
-Service: active
+=== Full Health Check v160 2026-04-08 19:19 UTC ===
+
+=== 1. SERVICE ===
+Status: active
 PID: 1606656
 Uptime: Wed 2026-04-08 19:08:14 UTC
+Restarts: 0
 
---- ExecStart ---
-ExecStart=/usr/bin/python3 /root/MT5-PropFirm-Bot/futures_bot/bot.py
+=== 2. CRITICAL FILES ===
+status dir: status/
+status.json writable: YES
+status.json: -rw-r--r-- 1 root root 133 Apr  8 19:19 status/status.json
+restricted_events: -rw-r--r-- 1 root root 3573 Apr  8 19:19 configs/restricted_events.json
+bot_config: -rw-r--r-- 1 root root 1934 Apr  8 19:19 configs/bot_config.json
+.env: -rw-r--r-- 1 root root 459 Apr  8 19:08 .env
+token: -rw-r--r-- 1 root root 813 Apr  8 19:19 configs/.tradovate_token.json
 
---- Journal (last 15) ---
-Apr 08 19:08:14 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 08 19:08:14 vmi3096165 python3[1606656]: 2026-04-08 19:08:14,567 [bot] INFO: ============================================================
-Apr 08 19:08:14 vmi3096165 python3[1606656]: 2026-04-08 19:08:14,567 [bot] INFO: TradeDay Futures Bot Starting
-Apr 08 19:08:14 vmi3096165 python3[1606656]: 2026-04-08 19:08:14,567 [bot] INFO: ============================================================
-Apr 08 19:08:14 vmi3096165 python3[1606656]: 2026-04-08 19:08:14,568 [news_filter] INFO: Loaded 26 restricted events
-Apr 08 19:08:14 vmi3096165 python3[1606656]: 2026-04-08 19:08:14,568 [tradovate_client] INFO: Loaded saved token from file, verifying...
-Apr 08 19:08:14 vmi3096165 python3[1606656]: 2026-04-08 19:08:14,568 [tradovate_client] INFO: Token expiring in 24min, renewing...
-Apr 08 19:08:14 vmi3096165 python3[1606656]: 2026-04-08 19:08:14,738 [tradovate_client] INFO: Token renewed successfully
-Apr 08 19:08:14 vmi3096165 python3[1606656]: 2026-04-08 19:08:14,858 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-Apr 08 19:08:14 vmi3096165 python3[1606656]: 2026-04-08 19:08:14,858 [tradovate_client] INFO: Saved token is still valid
-Apr 08 19:08:14 vmi3096165 python3[1606656]: 2026-04-08 19:08:14,859 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-Apr 08 19:08:15 vmi3096165 python3[1606656]: 2026-04-08 19:08:15,063 [bot] INFO: Bot started successfully
-Apr 08 19:08:15 vmi3096165 python3[1606656]: 2026-04-08 19:08:15,063 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-Apr 08 19:08:15 vmi3096165 python3[1606656]: 2026-04-08 19:08:15,063 [bot] INFO: Timeframe: 5min
-Apr 08 19:08:15 vmi3096165 python3[1606656]: 2026-04-08 19:08:15,063 [bot] INFO: New trading day: 2026-04-08
+=== 3. TRADING ACTIVITY ===
+--- Signals, trades, positions from log ---
+2026-04-08 18:11:21,048 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-08 18:11:22,201 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-08 18:11:22,445 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-08 18:11:52,600 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-08 18:12:01,852 [bot] INFO: Switching MESM6 to ORB strategy (trend day)
+2026-04-08 18:29:36,453 [bot] INFO: Stopping bot: Signal received
+2026-04-08 18:40:30,467 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-08 18:40:30,923 [bot] INFO: Switching MESM6 to ORB strategy (trend day)
+2026-04-08 18:40:30,923 [bot] INFO: Switching MNQM6 to ORB strategy (trend day)
+2026-04-08 18:40:30,923 [bot] INFO: Switching MCLM6 to ORB strategy (trend day)
+2026-04-08 18:40:30,923 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
+2026-04-08 18:40:30,923 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
+2026-04-08 18:40:30,923 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
+2026-04-08 19:08:14,567 [bot] INFO: TradeDay Futures Bot Starting
 
---- Bot Log (last 15) ---
+=== 4. STATUS JSON (live) ===
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
+
+=== 5. ERRORS in last hour ===
+2026-04-08 18:11:22,445 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-08 18:11:52,599 [bot] WARNING: Config not found at configs/bot_config.json, using defaults
+2026-04-08 18:11:52,600 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
+2026-04-08 18:11:52,745 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-08 18:11:52,745 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-08 18:11:53,018 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-08 18:11:53,140 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
+2026-04-08 18:11:53,263 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-08 18:11:53,264 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-08 18:17:03,137 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-08 18:22:03,758 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-08 18:27:04,336 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-08 18:45:33,096 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-08 18:50:34,337 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-08 18:55:35,557 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+
+=== 6. FULL LOG (last 40 lines) ===
+2026-04-08 18:40:30,923 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
+2026-04-08 18:40:30,923 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:40:30,923 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
+2026-04-08 18:40:30,923 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:40:30,923 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
+2026-04-08 18:45:32,115 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:45:32,115 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:45:32,115 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:45:32,115 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:45:32,115 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:45:32,115 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:45:33,096 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-08 18:50:33,341 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:50:33,341 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:50:33,342 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:50:33,342 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:50:33,342 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:50:33,342 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:50:34,337 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-08 18:55:34,545 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
 2026-04-08 18:55:35,557 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 2026-04-08 19:08:14,567 [bot] INFO: ============================================================
 2026-04-08 19:08:14,567 [bot] INFO: TradeDay Futures Bot Starting
