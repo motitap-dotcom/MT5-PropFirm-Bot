@@ -139,7 +139,10 @@ TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
 TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
 ENVEOF
 
-            # Service file with PYTHONPATH
+            # Make start script executable
+            chmod +x start_bot.sh
+
+            # Service file using wrapper script
             cat > /etc/systemd/system/${{ env.SERVICE_NAME }}.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -148,11 +151,10 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/usr/bin/python3 -m futures_bot.bot
+ExecStart=/root/MT5-PropFirm-Bot/start_bot.sh
 Restart=on-failure
 RestartSec=30
 Environment=PYTHONUNBUFFERED=1
-Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
 EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 
 [Install]

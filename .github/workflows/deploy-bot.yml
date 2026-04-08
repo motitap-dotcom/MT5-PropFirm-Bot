@@ -56,7 +56,10 @@ jobs:
               pip3 install playwright -q && python3 -m playwright install chromium 2>&1 | tail -3
             fi
 
-            # Fix service with PYTHONPATH
+            # Make start script executable
+            chmod +x start_bot.sh
+
+            # Service file using wrapper script
             cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -65,11 +68,10 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/usr/bin/python3 -m futures_bot.bot
+ExecStart=/root/MT5-PropFirm-Bot/start_bot.sh
 Restart=on-failure
-RestartSec=60
+RestartSec=30
 Environment=PYTHONUNBUFFERED=1
-Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
 EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 
 [Install]
