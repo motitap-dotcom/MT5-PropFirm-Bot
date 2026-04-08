@@ -1,17 +1,13 @@
 #!/bin/bash
-# Trigger: v156 - check if wrapper script fix worked
+# Trigger: v157 - verify bash -c fix
 cd /root/MT5-PropFirm-Bot
-echo "=== Wrapper Check v156 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
-echo ""
+echo "=== Verify v157 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo "Service: $(systemctl is-active futures-bot)"
 echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
 echo "Uptime: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
 echo ""
-echo "--- Service ExecStart ---"
-grep ExecStart /etc/systemd/system/futures-bot.service 2>/dev/null
-echo ""
-echo "--- start_bot.sh exists? ---"
-ls -la /root/MT5-PropFirm-Bot/start_bot.sh 2>/dev/null || echo "start_bot.sh NOT FOUND"
+echo "--- ExecStart line ---"
+grep ExecStart /etc/systemd/system/futures-bot.service
 echo ""
 echo "--- Journal (last 15) ---"
 journalctl -u futures-bot --no-pager -n 15 2>&1
