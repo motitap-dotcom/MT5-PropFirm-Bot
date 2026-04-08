@@ -1,35 +1,64 @@
-=== v148 2026-04-07 14:45 UTC ===
+=== Bot Status Check v149 2026-04-08 17:54 UTC ===
+
+--- Service Status ---
 Service: activating
 PID: 0
-Code: b6f06b2 v148
+Uptime: Wed 2026-04-08 17:54:45 UTC
 
-2026-04-07 14:31:29,502 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,620 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:29,745 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,864 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:36:29,932 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
-2026-04-07 14:36:30,083 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,214 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,343 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,465 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,591 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,714 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,840 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,990 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,119 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,252 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,382 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,509 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,636 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,757 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,884 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:32,013 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:32,141 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:32,265 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:41:04,915 [bot] INFO: Stopping bot: Signal received
-2026-04-07 14:41:04,915 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:41:05,059 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:41:05,179 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:41:05,306 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:41:05,546 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 14:41:05,546 [bot] INFO: Bot stopped
+--- Latest Code ---
+Code: 8587492 Status check v149 - full bot status with logs, service, and balance
+
+--- Last 40 Lines of Bot Log ---
+2026-04-07 18:54:47,587 [tradovate_client] INFO: Token renewed successfully
+2026-04-07 18:54:48,809 [tradovate_client] INFO: Got 51 bars for MESM6
+2026-04-07 18:54:49,613 [tradovate_client] INFO: Got 51 bars for MNQM6
+2026-04-07 18:54:50,505 [tradovate_client] INFO: Got 51 bars for MCLM6
+2026-04-07 18:54:51,398 [tradovate_client] INFO: Got 51 bars for MGCM6
+2026-04-07 18:54:52,267 [tradovate_client] INFO: Got 51 bars for MYMM6
+2026-04-07 18:54:53,127 [tradovate_client] INFO: Got 51 bars for M2KM6
+2026-04-07 18:59:54,449 [tradovate_client] INFO: Got 51 bars for MESM6
+2026-04-07 18:59:55,259 [tradovate_client] INFO: Got 51 bars for MNQM6
+2026-04-07 18:59:56,120 [tradovate_client] INFO: Got 51 bars for MCLM6
+2026-04-07 18:59:57,005 [tradovate_client] INFO: Got 51 bars for MGCM6
+2026-04-07 18:59:57,868 [tradovate_client] INFO: Got 51 bars for MYMM6
+2026-04-07 18:59:57,869 [strategy.vwap] INFO: VWAP LONG signal: price=46530.00 RSI=32.4 SL=46429.16 TP1=46619.05
+2026-04-07 18:59:57,869 [bot] INFO: SIGNAL: MYMM6 VWAP Mean Reversion -> LONG
+2026-04-07 18:59:57,869 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-07 18:59:58,728 [tradovate_client] INFO: Got 51 bars for M2KM6
+2026-04-07 19:15:03,625 [bot] INFO: Stopping bot: Signal received
+2026-04-07 19:15:04,009 [tradovate_client] INFO: Market order placed: Sell 3 MESM6, orderId=451715410134
+2026-04-07 19:15:04,254 [tradovate_client] INFO: Market order placed: Buy 1 MCLM6, orderId=451715410149
+2026-04-07 19:15:04,499 [tradovate_client] INFO: Market order placed: Sell 15 M2KM6, orderId=451715410158
+2026-04-07 19:15:04,738 [tradovate_client] INFO: Cancelled order 451715410038
+2026-04-07 19:15:04,858 [tradovate_client] INFO: Cancelled order 451715410060
+2026-04-07 19:15:04,979 [tradovate_client] INFO: Cancelled order 451715410158
+2026-04-07 19:15:05,100 [tradovate_client] INFO: Cancelled order 451715410027
+2026-04-07 19:15:05,227 [tradovate_client] INFO: Cancelled order 451715410044
+2026-04-07 19:15:05,349 [tradovate_client] INFO: Cancelled order 451715410069
+2026-04-07 19:15:05,470 [tradovate_client] INFO: Cancelled order 451715410066
+2026-04-07 19:15:05,589 [tradovate_client] INFO: Cancelled order 451715410134
+2026-04-07 19:15:05,708 [tradovate_client] INFO: Cancelled order 451715410007
+2026-04-07 19:15:05,827 [tradovate_client] INFO: Cancelled order 451715410021
+2026-04-07 19:15:05,949 [tradovate_client] INFO: Cancelled order 451715410063
+2026-04-07 19:15:06,069 [tradovate_client] INFO: Cancelled order 451715410041
+2026-04-07 19:15:06,188 [tradovate_client] INFO: Cancelled order 451715410030
+2026-04-07 19:15:06,308 [tradovate_client] INFO: Cancelled order 451715410149
+2026-04-07 19:15:06,429 [tradovate_client] INFO: Cancelled order 451715410047
+2026-04-07 19:15:06,550 [tradovate_client] INFO: Cancelled order 451715410024
+2026-04-07 19:15:06,671 [tradovate_client] INFO: Cancelled order 451715410018
+2026-04-07 19:15:06,791 [tradovate_client] INFO: Cancelled order 451715410050
+2026-04-07 19:15:06,882 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-07 19:15:06,883 [bot] INFO: Bot stopped
+
+--- Status JSON ---
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
+
+--- Account/Balance Info ---
+No balance info in recent logs
