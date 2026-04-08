@@ -1,21 +1,31 @@
 #!/bin/bash
-# Trigger: v149
+# Trigger: v150 - diagnose why bot won't start
 cd /root/MT5-PropFirm-Bot
-echo "=== Bot Status Check v149 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== Bot Diagnostic v150 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo ""
-echo "--- Service Status ---"
-echo "Service: $(systemctl is-active futures-bot)"
-echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
-echo "Uptime: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
+echo "--- Service Status (detailed) ---"
+systemctl status futures-bot --no-pager -l 2>&1 | head -30
 echo ""
-echo "--- Latest Code ---"
-echo "Code: $(git log -1 --oneline)"
+echo "--- Service File ---"
+cat /etc/systemd/system/futures-bot.service 2>/dev/null || echo "SERVICE FILE NOT FOUND"
 echo ""
-echo "--- Last 40 Lines of Bot Log ---"
-tail -40 logs/bot.log 2>/dev/null
+echo "--- Journal Logs (last 50 lines) ---"
+journalctl -u futures-bot --no-pager -n 50 2>&1
 echo ""
-echo "--- Status JSON ---"
-cat status/status.json 2>/dev/null || echo "No status.json found"
+echo "--- .env exists? ---"
+ls -la /root/MT5-PropFirm-Bot/.env 2>/dev/null || echo ".env NOT FOUND"
 echo ""
-echo "--- Account/Balance Info ---"
-tail -5 logs/bot.log 2>/dev/null | grep -i -E "balance|equity|pnl|account" || echo "No balance info in recent logs"
+echo "--- Token file exists? ---"
+ls -la /root/MT5-PropFirm-Bot/configs/.tradovate_token.json 2>/dev/null || echo "Token file NOT FOUND"
+echo ""
+echo "--- Config files ---"
+ls -la /root/MT5-PropFirm-Bot/configs/ 2>/dev/null
+echo ""
+echo "--- Python test import ---"
+cd /root/MT5-PropFirm-Bot && PYTHONPATH=/root/MT5-PropFirm-Bot python3 -c "import futures_bot.bot; print('Import OK')" 2>&1
+echo ""
+echo "--- Disk space ---"
+df -h / | tail -1
+echo ""
+echo "--- Memory ---"
+free -m | head -2
