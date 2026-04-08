@@ -1,64 +1,105 @@
-=== Bot Status Check v149 2026-04-08 17:54 UTC ===
+=== Bot Diagnostic v150 2026-04-08 18:07 UTC ===
 
---- Service Status ---
-Service: activating
-PID: 0
-Uptime: Wed 2026-04-08 17:54:45 UTC
+--- Service Status (detailed) ---
+● futures-bot.service - TradeDay Futures Trading Bot
+     Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Wed 2026-04-08 18:06:48 UTC; 27s ago
+    Process: 1589496 ExecStart=/usr/bin/python3 -m futures_bot.bot (code=exited, status=1/FAILURE)
+   Main PID: 1589496 (code=exited, status=1/FAILURE)
+        CPU: 24ms
 
---- Latest Code ---
-Code: 8587492 Status check v149 - full bot status with logs, service, and balance
+--- Service File ---
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
 
---- Last 40 Lines of Bot Log ---
-2026-04-07 18:54:47,587 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 18:54:48,809 [tradovate_client] INFO: Got 51 bars for MESM6
-2026-04-07 18:54:49,613 [tradovate_client] INFO: Got 51 bars for MNQM6
-2026-04-07 18:54:50,505 [tradovate_client] INFO: Got 51 bars for MCLM6
-2026-04-07 18:54:51,398 [tradovate_client] INFO: Got 51 bars for MGCM6
-2026-04-07 18:54:52,267 [tradovate_client] INFO: Got 51 bars for MYMM6
-2026-04-07 18:54:53,127 [tradovate_client] INFO: Got 51 bars for M2KM6
-2026-04-07 18:59:54,449 [tradovate_client] INFO: Got 51 bars for MESM6
-2026-04-07 18:59:55,259 [tradovate_client] INFO: Got 51 bars for MNQM6
-2026-04-07 18:59:56,120 [tradovate_client] INFO: Got 51 bars for MCLM6
-2026-04-07 18:59:57,005 [tradovate_client] INFO: Got 51 bars for MGCM6
-2026-04-07 18:59:57,868 [tradovate_client] INFO: Got 51 bars for MYMM6
-2026-04-07 18:59:57,869 [strategy.vwap] INFO: VWAP LONG signal: price=46530.00 RSI=32.4 SL=46429.16 TP1=46619.05
-2026-04-07 18:59:57,869 [bot] INFO: SIGNAL: MYMM6 VWAP Mean Reversion -> LONG
-2026-04-07 18:59:57,869 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-07 18:59:58,728 [tradovate_client] INFO: Got 51 bars for M2KM6
-2026-04-07 19:15:03,625 [bot] INFO: Stopping bot: Signal received
-2026-04-07 19:15:04,009 [tradovate_client] INFO: Market order placed: Sell 3 MESM6, orderId=451715410134
-2026-04-07 19:15:04,254 [tradovate_client] INFO: Market order placed: Buy 1 MCLM6, orderId=451715410149
-2026-04-07 19:15:04,499 [tradovate_client] INFO: Market order placed: Sell 15 M2KM6, orderId=451715410158
-2026-04-07 19:15:04,738 [tradovate_client] INFO: Cancelled order 451715410038
-2026-04-07 19:15:04,858 [tradovate_client] INFO: Cancelled order 451715410060
-2026-04-07 19:15:04,979 [tradovate_client] INFO: Cancelled order 451715410158
-2026-04-07 19:15:05,100 [tradovate_client] INFO: Cancelled order 451715410027
-2026-04-07 19:15:05,227 [tradovate_client] INFO: Cancelled order 451715410044
-2026-04-07 19:15:05,349 [tradovate_client] INFO: Cancelled order 451715410069
-2026-04-07 19:15:05,470 [tradovate_client] INFO: Cancelled order 451715410066
-2026-04-07 19:15:05,589 [tradovate_client] INFO: Cancelled order 451715410134
-2026-04-07 19:15:05,708 [tradovate_client] INFO: Cancelled order 451715410007
-2026-04-07 19:15:05,827 [tradovate_client] INFO: Cancelled order 451715410021
-2026-04-07 19:15:05,949 [tradovate_client] INFO: Cancelled order 451715410063
-2026-04-07 19:15:06,069 [tradovate_client] INFO: Cancelled order 451715410041
-2026-04-07 19:15:06,188 [tradovate_client] INFO: Cancelled order 451715410030
-2026-04-07 19:15:06,308 [tradovate_client] INFO: Cancelled order 451715410149
-2026-04-07 19:15:06,429 [tradovate_client] INFO: Cancelled order 451715410047
-2026-04-07 19:15:06,550 [tradovate_client] INFO: Cancelled order 451715410024
-2026-04-07 19:15:06,671 [tradovate_client] INFO: Cancelled order 451715410018
-2026-04-07 19:15:06,791 [tradovate_client] INFO: Cancelled order 451715410050
-2026-04-07 19:15:06,882 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 19:15:06,883 [bot] INFO: Bot stopped
+[Service]
+Type=simple
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+Restart=on-failure
+RestartSec=60
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 
---- Status JSON ---
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+[Install]
+WantedBy=multi-user.target
 
---- Account/Balance Info ---
-No balance info in recent logs
+--- Journal Logs (last 50 lines) ---
+Apr 08 17:57:46 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 192.
+Apr 08 17:57:46 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 08 17:57:46 vmi3096165 python3[1587462]: /usr/bin/python3: No module named futures_bot.bot
+Apr 08 17:57:46 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 17:57:46 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 08 17:58:46 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 193.
+Apr 08 17:58:46 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 08 17:58:46 vmi3096165 python3[1587689]: /usr/bin/python3: No module named futures_bot.bot
+Apr 08 17:58:46 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 17:58:46 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 08 17:59:47 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 194.
+Apr 08 17:59:47 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 08 17:59:47 vmi3096165 python3[1587870]: /usr/bin/python3: No module named futures_bot.bot
+Apr 08 17:59:47 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 17:59:47 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 08 18:00:47 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 195.
+Apr 08 18:00:47 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 08 18:00:47 vmi3096165 python3[1588192]: /usr/bin/python3: No module named futures_bot.bot
+Apr 08 18:00:47 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 18:00:47 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 08 18:01:47 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 196.
+Apr 08 18:01:47 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 08 18:01:47 vmi3096165 python3[1588394]: /usr/bin/python3: No module named futures_bot.bot
+Apr 08 18:01:47 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 18:01:47 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 08 18:02:47 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 197.
+Apr 08 18:02:47 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 08 18:02:47 vmi3096165 python3[1588597]: /usr/bin/python3: No module named futures_bot.bot
+Apr 08 18:02:47 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 18:02:47 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 08 18:03:48 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 198.
+Apr 08 18:03:48 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 08 18:03:48 vmi3096165 python3[1588793]: /usr/bin/python3: No module named futures_bot.bot
+Apr 08 18:03:48 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 18:03:48 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 08 18:04:48 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 199.
+Apr 08 18:04:48 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 08 18:04:48 vmi3096165 python3[1589022]: /usr/bin/python3: No module named futures_bot.bot
+Apr 08 18:04:48 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 18:04:48 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 08 18:05:48 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 200.
+Apr 08 18:05:48 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 08 18:05:48 vmi3096165 python3[1589288]: /usr/bin/python3: No module named futures_bot.bot
+Apr 08 18:05:48 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 18:05:48 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 08 18:06:48 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 201.
+Apr 08 18:06:48 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 08 18:06:48 vmi3096165 python3[1589496]: /usr/bin/python3: No module named futures_bot.bot
+Apr 08 18:06:48 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 18:06:48 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+
+--- .env exists? ---
+-rw-r--r-- 1 root root 459 Apr  7 18:54 /root/MT5-PropFirm-Bot/.env
+
+--- Token file exists? ---
+-rw-r--r-- 1 root root 813 Apr  8 18:07 /root/MT5-PropFirm-Bot/configs/.tradovate_token.json
+
+--- Config files ---
+total 28
+drwxr-xr-x  2 1001 1001 4096 Apr  8 18:07 .
+drwxr-xr-x 13 root root 4096 Apr  8 18:07 ..
+-rw-r--r--  1 root root  487 Mar 31 16:25 .browser_auth_result.txt
+-rw-r--r--  1 root root  813 Apr  8 18:07 .tradovate_token.json
+-rw-r--r--  1 root root  715 Mar 31 06:46 .tradovate_token_backup.json
+-rw-r--r--  1 root root 1934 Apr  8 18:07 bot_config.json
+-rw-r--r--  1 root root 3573 Apr  8 18:07 restricted_events.json
+
+--- Python test import ---
+Import OK
+
+--- Disk space ---
+/dev/sda1       145G   26G  119G  18% /
+
+--- Memory ---
+               total        used        free      shared  buff/cache   available
+Mem:            7941        1099        6063          14        1061        6842
