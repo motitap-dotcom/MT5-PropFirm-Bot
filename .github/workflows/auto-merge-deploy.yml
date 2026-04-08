@@ -148,7 +148,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/bin/bash -c "cd /root/MT5-PropFirm-Bot && export PYTHONPATH=/root/MT5-PropFirm-Bot && exec /usr/bin/python3 -m futures_bot.bot"
+ExecStart=/usr/bin/python3 /root/MT5-PropFirm-Bot/futures_bot/bot.py
 Restart=on-failure
 RestartSec=30
 Environment=PYTHONUNBUFFERED=1
