@@ -1,19 +1,16 @@
 #!/bin/bash
-# Trigger: v151 - verify bot is running after fix
+# Trigger: v152 - check if bot is actively trading
 cd /root/MT5-PropFirm-Bot
-echo "=== Post-Fix Check v151 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== Trading Check v152 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo ""
 echo "Service: $(systemctl is-active futures-bot)"
 echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
-echo "Uptime: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
-echo "Restarts: $(systemctl show futures-bot --property=NRestarts --value)"
 echo ""
-echo "--- Journal (last 20 lines) ---"
-journalctl -u futures-bot --no-pager -n 20 --since "5 min ago" 2>&1
+echo "--- Open Positions ---"
+tail -100 logs/bot.log 2>/dev/null | grep -i -E "position|order|fill|trade|signal|entry|exit|buy|sell|placed|blocked" | tail -20
 echo ""
-echo "--- Bot Log (last 15 lines) ---"
-tail -15 logs/bot.log 2>/dev/null
+echo "--- Last 30 Bot Log Lines ---"
+tail -30 logs/bot.log 2>/dev/null
 echo ""
-echo "--- Files check ---"
-ls -la futures_bot/__init__.py 2>/dev/null
-ls -la futures_bot/bot.py 2>/dev/null
+echo "--- Status JSON ---"
+cat status/status.json 2>/dev/null || echo "No status.json"
