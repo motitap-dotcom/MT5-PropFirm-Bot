@@ -1,31 +1,19 @@
 #!/bin/bash
-# Trigger: v150 - diagnose why bot won't start
+# Trigger: v151 - verify bot is running after fix
 cd /root/MT5-PropFirm-Bot
-echo "=== Bot Diagnostic v150 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== Post-Fix Check v151 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo ""
-echo "--- Service Status (detailed) ---"
-systemctl status futures-bot --no-pager -l 2>&1 | head -30
+echo "Service: $(systemctl is-active futures-bot)"
+echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
+echo "Uptime: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
+echo "Restarts: $(systemctl show futures-bot --property=NRestarts --value)"
 echo ""
-echo "--- Service File ---"
-cat /etc/systemd/system/futures-bot.service 2>/dev/null || echo "SERVICE FILE NOT FOUND"
+echo "--- Journal (last 20 lines) ---"
+journalctl -u futures-bot --no-pager -n 20 --since "5 min ago" 2>&1
 echo ""
-echo "--- Journal Logs (last 50 lines) ---"
-journalctl -u futures-bot --no-pager -n 50 2>&1
+echo "--- Bot Log (last 15 lines) ---"
+tail -15 logs/bot.log 2>/dev/null
 echo ""
-echo "--- .env exists? ---"
-ls -la /root/MT5-PropFirm-Bot/.env 2>/dev/null || echo ".env NOT FOUND"
-echo ""
-echo "--- Token file exists? ---"
-ls -la /root/MT5-PropFirm-Bot/configs/.tradovate_token.json 2>/dev/null || echo "Token file NOT FOUND"
-echo ""
-echo "--- Config files ---"
-ls -la /root/MT5-PropFirm-Bot/configs/ 2>/dev/null
-echo ""
-echo "--- Python test import ---"
-cd /root/MT5-PropFirm-Bot && PYTHONPATH=/root/MT5-PropFirm-Bot python3 -c "import futures_bot.bot; print('Import OK')" 2>&1
-echo ""
-echo "--- Disk space ---"
-df -h / | tail -1
-echo ""
-echo "--- Memory ---"
-free -m | head -2
+echo "--- Files check ---"
+ls -la futures_bot/__init__.py 2>/dev/null
+ls -la futures_bot/bot.py 2>/dev/null
