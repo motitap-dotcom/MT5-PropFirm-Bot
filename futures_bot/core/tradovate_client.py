@@ -94,6 +94,10 @@ class TradovateClient:
         self.account_id: Optional[int] = None
         self.account_spec: Optional[str] = None
 
+        # Auth cooldown - prevent hammering Tradovate when auth fails
+        self._last_auth_failure: float = 0
+        self._auth_cooldown: float = 120  # Wait 2 min between auth attempts
+
     async def connect(self):
         """Initialize session and authenticate with robust multi-step fallback."""
         self.session = aiohttp.ClientSession()
@@ -305,18 +309,23 @@ class TradovateClient:
 
                 logger.info("Opening Tradovate login page...")
                 await page.goto(
-                    "https://trader.tradovate.com/welcome", timeout=60000
+                    "https://trader.tradovate.com/welcome",
+                    timeout=60000,
+                    wait_until="networkidle",
                 )
-                await asyncio.sleep(5)
+                await asyncio.sleep(8)  # Extra wait for SPA to render
 
-                await page.fill(
-                    'input[type="text"]', self.username, timeout=15000
+                await page.wait_for_selector(
+                    'input[type="text"]', state="visible", timeout=30000
                 )
                 await page.fill(
-                    'input[type="password"]', self.password, timeout=15000
+                    'input[type="text"]', self.username, timeout=30000
+                )
+                await page.fill(
+                    'input[type="password"]', self.password, timeout=30000
                 )
                 await page.click(
-                    'button:has-text("Log")', timeout=15000
+                    'button:has-text("Log")', timeout=30000
                 )
 
                 logger.info("Login submitted, waiting for token...")
@@ -384,9 +393,20 @@ class TradovateClient:
         remaining = self.token_expiry - time.time()
 
         if remaining < 1800:  # Less than 30 minutes left
+            # Check cooldown to avoid hammering Tradovate API
+            since_last_failure = time.time() - self._last_auth_failure
+            if self._last_auth_failure > 0 and since_last_failure < self._auth_cooldown:
+                wait_left = self._auth_cooldown - since_last_failure
+                logger.warning(f"Auth cooldown active, {wait_left:.0f}s remaining. Skipping renewal.")
+                return
             logger.info(f"Token expiring in {remaining/60:.0f}min, renewing...")
-            await self._renew_token()
-            self._token_obtained_at = time.time()
+            try:
+                await self._renew_token()
+                self._token_obtained_at = time.time()
+                self._last_auth_failure = 0  # Reset on success
+            except Exception as e:
+                self._last_auth_failure = time.time()
+                raise
 
     def _parse_expiry(self, expiry_str: str):
         """Parse token expiration time."""
