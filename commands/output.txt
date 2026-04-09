@@ -1,37 +1,74 @@
-=== WEBSOCKET CHART TEST v155 2026-04-09 14:28 UTC ===
-MD token loaded: True
-Open frame: o
-Auth response: a[{"s":200,"i":1}]
+=== WEBSOCKET VERIFY v156 2026-04-09 14:39 UTC ===
 
-Sent md/getChart for MESM6...
-Sent md/subscribeQuote for MESM6...
-Frame: {"s": 200, "i": 2, "d": {"mode": "RealTime", "historicalId": 535474, "realtimeId": 535474}}
-Frame: {"s": 200, "i": 3, "d": {"mode": "RealTime", "subscriptionId": 4327108}}
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.554Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 26}, "Offer": {"price": 6805.0, "size": 72}, "Trade": {"price": 6804.75, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pri
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.621Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 30}, "Offer": {"price": 6805.0, "size": 71}, "Trade": {"price": 6804.75, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pri
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.666Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 34}, "Offer": {"price": 6805.0, "size": 66}, "Trade": {"price": 6804.75, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pri
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.666Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 34}, "Offer": {"price": 6805.0, "size": 66}, "Trade": {"price": 6805.0, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.666Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 34}, "Offer": {"price": 6805.0, "size": 66}, "Trade": {"price": 6805.0, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.683Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 30}, "Offer": {"price": 6805.0, "size": 47}, "Trade": {"price": 6805.0, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.750Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 38}, "Offer": {"price": 6805.0, "size": 40}, "Trade": {"price": 6805.0, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.771Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 38}, "Offer": {"price": 6805.0, "size": 37}, "Trade": {"price": 6805.0, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Chart response: {"e": "chart", "d": {"charts": [{"id": 535474, "s": "db", "td": 20260409, "bars": [{"timestamp": "2026-04-09T13:40Z", "open": 6815.5, "high": 6821.75, "low": 6812.25, "close": 6819.25, "upVolume": 10015, "downVolume": 8051, "upTicks": 5947, "downTicks": 4714, "histogram": {}, "bidVolume": 8251, "off
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.830Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 39}, "Offer": {"price": 6805.0, "size": 29}, "Trade": {"price": 6805.0, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.859Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 40}, "Offer": {"price": 6805.0, "size": 22}, "Trade": {"price": 6805.0, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.859Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 40}, "Offer": {"price": 6805.0, "size": 22}, "Trade": {"price": 6805.0, "size": 2}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.859Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 40}, "Offer": {"price": 6805.0, "size": 22}, "Trade": {"price": 6805.0, "size": 2}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Chart response: {"e": "chart", "d": {"charts": [{"id": 535474, "s": "s", "td": 20260409, "bars": [{"timestamp": "2026-04-09T14:25Z", "open": 6809.5, "high": 6809.75, "low": 6803.0, "close": 6805.0, "upVolume": 4352, "downVolume": 6822, "upTicks": 2677, "downTicks": 4208, "histogram": {}, "bidVolume": 6723, "offerVo
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.921Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 40}, "Offer": {"price": 6805.0, "size": 25}, "Trade": {"price": 6805.0, "size": 2}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.947Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 39}, "Offer": {"price": 6805.0, "size": 34}, "Trade": {"price": 6805.0, "size": 2}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:20.962Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 39}, "Offer": {"price": 6805.0, "size": 24}, "Trade": {"price": 6805.0, "size": 2}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:21.008Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 39}, "Offer": {"price": 6805.0, "size": 35}, "Trade": {"price": 6805.0, "size": 2}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:21.054Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 38}, "Offer": {"price": 6805.0, "size": 35}, "Trade": {"price": 6805.0, "size": 2}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:21.076Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 37}, "Offer": {"price": 6805.0, "size": 37}, "Trade": {"price": 6805.0, "size": 2}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pric
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:21.076Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 37}, "Offer": {"price": 6805.0, "size": 37}, "Trade": {"price": 6804.75, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pri
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:21.076Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 37}, "Offer": {"price": 6805.0, "size": 37}, "Trade": {"price": 6804.75, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pri
-Chart response: {"e": "chart", "d": {"charts": [{"id": 535474, "s": "", "td": 20260409, "bars": [{"timestamp": "2026-04-09T14:25Z", "open": 6809.5, "high": 6809.75, "low": 6803.0, "close": 6804.75, "upVolume": 4352, "downVolume": 6823, "upTicks": 2677, "downTicks": 4209, "histogram": {}, "bidVolume": 6724, "offerVo
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:21.135Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 29}, "Offer": {"price": 6805.0, "size": 46}, "Trade": {"price": 6804.75, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pri
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:21.226Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 25}, "Offer": {"price": 6805.0, "size": 56}, "Trade": {"price": 6804.75, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pri
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:21.226Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 25}, "Offer": {"price": 6805.0, "size": 71}, "Trade": {"price": 6804.75, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pri
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:21.322Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 24}, "Offer": {"price": 6805.0, "size": 72}, "Trade": {"price": 6804.75, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pri
-Quote data: {"e": "md", "d": {"quotes": [{"id": 4327108, "timestamp": "2026-04-09T14:28:21.359Z", "contractId": 4327108, "entries": {"Bid": {"price": 6804.75, "size": 14}, "Offer": {"price": 6805.0, "size": 75}, "Trade": {"price": 6804.75, "size": 1}, "OpeningPrice": {"price": 6815.25}, "SettlementPrice": {"pri
+Service: activating
+PID: 0
+Started: Thu 2026-04-09 14:39:08 UTC
+
+--- Code version ---
+Commit: 604a95e Verify WebSocket chart data v156
+Has _subscribe_chart: 3
+Has _chart_bars: 7
+
+--- Last 40 log lines ---
+2026-04-09 14:24:04,783 [bot] INFO: ============================================================
+2026-04-09 14:24:04,783 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-09 14:24:04,783 [bot] INFO: ============================================================
+2026-04-09 14:24:04,783 [news_filter] INFO: Loaded 26 restricted events
+2026-04-09 14:24:04,783 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-09 14:24:04,931 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-09 14:24:04,931 [tradovate_client] INFO: Saved token is still valid
+2026-04-09 14:24:04,932 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-09 14:24:04,998 [bot] INFO: Bot started successfully
+2026-04-09 14:24:04,998 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-09 14:24:04,998 [bot] INFO: Timeframe: 5min
+2026-04-09 14:24:04,998 [bot] INFO: New trading day: 2026-04-09
+2026-04-09 14:24:05,000 [bot] INFO: === Trading cycle 10:24 ET | Guardian: ACTIVE ===
+2026-04-09 14:24:05,496 [bot] WARNING: MESM6: No bars returned from API
+2026-04-09 14:24:05,613 [bot] WARNING: MNQM6: No bars returned from API
+2026-04-09 14:24:05,730 [bot] WARNING: MCLM6: No bars returned from API
+2026-04-09 14:24:05,848 [bot] WARNING: MGCM6: No bars returned from API
+2026-04-09 14:24:05,966 [bot] WARNING: MYMM6: No bars returned from API
+2026-04-09 14:24:06,086 [bot] WARNING: M2KM6: No bars returned from API
+2026-04-09 14:25:49,584 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-09 14:29:06,186 [bot] INFO: === Trading cycle 10:29 ET | Guardian: ACTIVE ===
+2026-04-09 14:29:06,710 [bot] WARNING: MESM6: No bars returned from API
+2026-04-09 14:29:06,833 [bot] WARNING: MNQM6: No bars returned from API
+2026-04-09 14:29:06,956 [bot] WARNING: MCLM6: No bars returned from API
+2026-04-09 14:29:07,080 [bot] WARNING: MGCM6: No bars returned from API
+2026-04-09 14:29:07,201 [bot] WARNING: MYMM6: No bars returned from API
+2026-04-09 14:29:07,323 [bot] WARNING: M2KM6: No bars returned from API
+2026-04-09 14:30:49,683 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:31:50,053 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:32:50,406 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:33:50,776 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:34:07,424 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:34:51,128 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:34:56,921 [bot] INFO: Stopping bot: Signal received
+2026-04-09 14:34:57,286 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-09 14:34:57,286 [bot] INFO: Bot stopped
+2026-04-09 14:35:51,478 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:36:51,833 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:37:52,202 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:38:52,534 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+
+--- Chart/bars activity ---
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
+2026-04-09 14:15:17,973 [bot] INFO: Stopping bot: Signal received
+2026-04-09 14:24:05,000 [bot] INFO: === Trading cycle 10:24 ET | Guardian: ACTIVE ===
+2026-04-09 14:24:05,496 [bot] WARNING: MESM6: No bars returned from API
+2026-04-09 14:24:05,613 [bot] WARNING: MNQM6: No bars returned from API
+2026-04-09 14:24:05,730 [bot] WARNING: MCLM6: No bars returned from API
+2026-04-09 14:24:05,848 [bot] WARNING: MGCM6: No bars returned from API
+2026-04-09 14:24:05,966 [bot] WARNING: MYMM6: No bars returned from API
+2026-04-09 14:24:06,086 [bot] WARNING: M2KM6: No bars returned from API
+2026-04-09 14:29:06,186 [bot] INFO: === Trading cycle 10:29 ET | Guardian: ACTIVE ===
+2026-04-09 14:29:06,710 [bot] WARNING: MESM6: No bars returned from API
+2026-04-09 14:29:06,833 [bot] WARNING: MNQM6: No bars returned from API
+2026-04-09 14:29:06,956 [bot] WARNING: MCLM6: No bars returned from API
+2026-04-09 14:29:07,080 [bot] WARNING: MGCM6: No bars returned from API
+2026-04-09 14:29:07,201 [bot] WARNING: MYMM6: No bars returned from API
+2026-04-09 14:29:07,323 [bot] WARNING: M2KM6: No bars returned from API
+2026-04-09 14:34:56,921 [bot] INFO: Stopping bot: Signal received
