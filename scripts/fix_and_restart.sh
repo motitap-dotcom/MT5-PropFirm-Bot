@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v6 - Enable trading on trend days ==="
+echo "=== Fix & Restart v7 - Relaxed signal thresholds ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 
