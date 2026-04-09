@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v5 - Deploy WebSocket chart fix ==="
+echo "=== Fix & Restart v6 - Enable trading on trend days ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 

@@ -105,9 +105,9 @@ class VWAPMeanReversion:
             return None
 
         # Check if trend day (VWAP never crossed after 11:00 ET)
+        # Disabled: still trade on trend days - strategy conditions are strict enough
         if self._trend_day_detected:
-            logger.info("Trend day detected, VWAP mean reversion paused")
-            return None
+            logger.debug("Trend day detected, but continuing to scan for signals")
 
         # Calculate indicators
         vwap_data = self._calc_vwap()
