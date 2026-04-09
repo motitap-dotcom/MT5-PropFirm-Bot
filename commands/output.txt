@@ -1,35 +1,15 @@
-=== TRADING CHECK v152 2026-04-09 14:08 UTC ===
+=== DIAGNOSTIC v153 2026-04-09 14:19 UTC ===
 
-Service: active
-PID: 1868863
-Uptime: Thu 2026-04-09 14:00:58 UTC
+Service: activating
+PID: 0
+Started: Thu 2026-04-09 14:19:03 UTC
 
---- Status JSON ---
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+--- Code on VPS ---
+Commit: 6c4e5cd Diagnostic log check v153
+Has bar logging: 1
+Has cycle logging: 1
 
---- Last 50 log lines ---
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-09 13:30:04,295 [tradovate_client] INFO: Token expiring in -527min, renewing...
-2026-04-09 13:30:04,407 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-09 13:30:04,407 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-09 13:30:04,520 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-09 13:30:05,900 [tradovate_client] INFO: Opening Tradovate login page...
-2026-04-09 13:30:27,261 [tradovate_client] ERROR: Browser auth error: Page.fill: Timeout 15000ms exceeded.
-Call log:
-  - waiting for locator("input[type=\"text\"]")
-
-2026-04-09 13:30:27,261 [bot] ERROR: Error processing MGCM6: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
-Traceback (most recent call last):
+--- Last 40 log lines ---
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 284, in _process_symbol
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 505, in _post
@@ -65,49 +45,22 @@ ConnectionError: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_
 2026-04-09 14:00:59,083 [bot] INFO: Timeframe: 5min
 2026-04-09 14:00:59,083 [bot] INFO: New trading day: 2026-04-09
 2026-04-09 14:05:44,633 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-09 14:10:45,872 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-09 14:15:17,973 [bot] INFO: Stopping bot: Signal received
+2026-04-09 14:15:18,511 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-09 14:15:18,511 [bot] INFO: Bot stopped
+2026-04-09 14:15:47,109 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 
---- Trading activity (signals/orders/trades) ---
-2026-04-07 19:15:05,827 [tradovate_client] INFO: Cancelled order 451715410021
-2026-04-07 19:15:05,949 [tradovate_client] INFO: Cancelled order 451715410063
-2026-04-07 19:15:06,069 [tradovate_client] INFO: Cancelled order 451715410041
-2026-04-07 19:15:06,188 [tradovate_client] INFO: Cancelled order 451715410030
-2026-04-07 19:15:06,308 [tradovate_client] INFO: Cancelled order 451715410149
-2026-04-07 19:15:06,429 [tradovate_client] INFO: Cancelled order 451715410047
-2026-04-07 19:15:06,550 [tradovate_client] INFO: Cancelled order 451715410024
-2026-04-07 19:15:06,671 [tradovate_client] INFO: Cancelled order 451715410018
-2026-04-07 19:15:06,791 [tradovate_client] INFO: Cancelled order 451715410050
-2026-04-08 18:11:21,048 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-08 18:11:22,201 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-08 18:11:22,445 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-08 18:11:52,600 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-08 18:29:36,453 [bot] INFO: Stopping bot: Signal received
-2026-04-08 18:40:30,467 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-08 19:08:14,567 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-08 19:26:23,132 [bot] INFO: Stopping bot: Signal received
-2026-04-09 13:30:03,566 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-09 13:30:27,261 [tradovate_client] ERROR: Browser auth error: Page.fill: Timeout 15000ms exceeded.
-2026-04-09 14:00:58,804 [bot] INFO: TradeDay Futures Bot Starting
-
---- Guardian state ---
-2026-03-31 14:29:33,178 [guardian] INFO: No saved guardian state, starting fresh
-2026-03-31 14:30:34,796 [guardian] INFO: No saved guardian state, starting fresh
-2026-03-31 14:32:36,519 [guardian] INFO: No saved guardian state, starting fresh
-2026-03-31 14:37:38,132 [guardian] INFO: No saved guardian state, starting fresh
-2026-03-31 14:39:05,401 [guardian] INFO: No saved guardian state, starting fresh
-2026-03-31 14:39:36,938 [guardian] INFO: No saved guardian state, starting fresh
-2026-03-31 14:40:38,577 [guardian] INFO: No saved guardian state, starting fresh
-2026-04-01 04:00:42,848 [guardian] INFO: New day started. Trading days: 0, Total PnL: $0.00
-2026-04-03 04:00:52,846 [guardian] INFO: New day started. Trading days: 0, Total PnL: $0.00
-2026-04-09 04:00:41,433 [guardian] INFO: New day started. Trading days: 0, Total PnL: $-215.39
-
---- Errors (last 10) ---
-2026-04-09 13:30:27,261 [bot] ERROR: Error processing MGCM6: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
-ConnectionError: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-09 13:30:36,145 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 13:35:37,373 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 13:40:38,560 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 13:45:39,785 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 13:50:41,042 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 13:55:42,222 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 14:00:43,418 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 14:05:44,633 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+--- Any bars received? ---
+2026-04-07 15:12:50,776 [bot] WARNING: No bars returned for MESM6
+2026-04-07 15:12:50,896 [bot] WARNING: No bars returned for MNQM6
+2026-04-07 15:12:51,017 [bot] WARNING: No bars returned for MCLM6
+2026-04-07 15:12:51,139 [bot] WARNING: No bars returned for MGCM6
+2026-04-07 15:12:51,261 [bot] WARNING: No bars returned for MYMM6
+2026-04-07 15:12:51,382 [bot] WARNING: No bars returned for M2KM6
+2026-04-07 15:31:21,787 [bot] WARNING: No bars returned for MESM6
+2026-04-07 15:31:21,904 [bot] WARNING: No bars returned for MNQM6
+2026-04-07 15:31:22,020 [bot] WARNING: No bars returned for MCLM6
+2026-04-07 15:31:22,137 [bot] WARNING: No bars returned for MGCM6
+2026-04-07 15:31:22,254 [bot] WARNING: No bars returned for MYMM6
+2026-04-07 15:31:22,371 [bot] WARNING: No bars returned for M2KM6
