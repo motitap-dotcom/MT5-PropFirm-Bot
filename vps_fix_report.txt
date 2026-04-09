@@ -1,6 +1,6 @@
-=== Fix & Restart v2 ===
-2026-04-09 14:00:57 UTC
-Current: 89e31dd Fix restart script - remove git reset to main, just restart with current code
+=== Fix & Restart v13 - Fix volume=0 breaking VWAP ===
+2026-04-09 18:20:17 UTC
+Current: 4299410 Fix VWAP=0 bug: WebSocket bars have upVolume/downVolume, not volume
 Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
 
 --- .env check ---
@@ -10,7 +10,7 @@ TELEGRAM_TOKEN: SET
 TELEGRAM_CHAT_ID: SET
 
 --- Token check ---
-Token file: exists (816 bytes)
+Token file: exists (813 bytes)
 Playwright: OK
 
 --- Code verification ---
@@ -20,21 +20,21 @@ mkdir in status_writer: 2
 
 --- Result ---
 Status: active
-PID: 1868863
+PID: 1933509
 
 --- First 15 log lines after restart ---
-2026-04-09 13:50:41,042 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 13:55:42,222 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 14:00:43,418 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 14:00:58,804 [bot] INFO: ============================================================
-2026-04-09 14:00:58,804 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-09 14:00:58,804 [bot] INFO: ============================================================
-2026-04-09 14:00:58,804 [news_filter] INFO: Loaded 26 restricted events
-2026-04-09 14:00:58,805 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-04-09 14:00:58,948 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-09 14:00:58,948 [tradovate_client] INFO: Saved token is still valid
-2026-04-09 14:00:58,949 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-09 14:00:59,083 [bot] INFO: Bot started successfully
-2026-04-09 14:00:59,083 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-09 14:00:59,083 [bot] INFO: Timeframe: 5min
-2026-04-09 14:00:59,083 [bot] INFO: New trading day: 2026-04-09
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.38SD RSI=66.7 entry=2656.70 sl=2662.35 tp=2641.11
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2660.20 VWAP=2641.40 dist=+1.64SD RSI=70.2 ATR=2.97
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.64SD RSI=70.2 entry=2660.20 sl=2665.92 tp=2641.40
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2658.90 VWAP=2641.61 dist=+1.50SD RSI=66.0 ATR=2.97
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.50SD RSI=66.0 entry=2658.90 sl=2664.67 tp=2641.61
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2659.50 VWAP=2641.86 dist=+1.51SD RSI=67.6 ATR=2.89
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.51SD RSI=67.6 entry=2659.50 sl=2665.32 tp=2641.86
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2658.50 VWAP=2642.00 dist=+1.41SD RSI=62.2 ATR=2.81
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2658.10 VWAP=2642.11 dist=+1.36SD RSI=67.2 ATR=2.74
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.36SD RSI=67.2 entry=2658.10 sl=2663.97 tp=2642.11
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2649.00 VWAP=2642.54 dist=+0.56SD RSI=38.2 ATR=3.27
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2651.10 VWAP=2642.76 dist=+0.72SD RSI=39.4 ATR=3.41
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2649.80 VWAP=2642.89 dist=+0.60SD RSI=32.7 ATR=3.46
+2026-04-09 18:20:21,529 [bot] INFO: M2KM6: New bar 2026-04-09T18:15Z | O=2649.5 H=2651.6 L=2648.6 C=2650.4 V=549
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2650.40 VWAP=2642.98 dist=+0.65SD RSI=32.1 ATR=3.41
