@@ -1,16 +1,14 @@
 #!/bin/bash
-# Trigger: v159 - check trading signals
+# Trigger: v160 - is the bot trading now?
 cd /root/MT5-PropFirm-Bot
-echo "=== TRADING SIGNALS CHECK v159 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== TRADING CHECK v160 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo ""
 echo "Service: $(systemctl is-active futures-bot)"
 echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
+echo "Started: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
 echo ""
-echo "--- Last 80 log lines ---"
-tail -80 logs/bot.log 2>/dev/null
+echo "--- Last 50 log lines ---"
+tail -50 logs/bot.log 2>/dev/null
 echo ""
-echo "--- Signals/Orders/Trades ---"
-grep -i -E "signal|LONG|SHORT|order|trade|fill|entry|placed|new bar|trading cycle" logs/bot.log 2>/dev/null | tail -30
-echo ""
-echo "--- Status JSON ---"
-cat status/status.json 2>/dev/null || echo "No status.json"
+echo "--- Signals/Trades ---"
+grep -i -E "SIGNAL|LONG|SHORT|order|placed|fill|execute|entry|new bar" logs/bot.log 2>/dev/null | tail -20
