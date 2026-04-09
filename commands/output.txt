@@ -1,46 +1,10 @@
-=== POST-FIX STATUS v150 2026-04-09 13:52 UTC ===
+=== VERIFY v151 2026-04-09 13:56 UTC ===
 
---- Service ---
 Service: activating
 PID: 0
-Started: Thu 2026-04-09 13:52:13 UTC
+Started: Thu 2026-04-09 13:56:14 UTC
 
---- Code on VPS ---
-Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
-Commit: 3291002 Post-fix status check v150
-Has auth cooldown: 3
-Has wait_for_selector: 1
-
---- Directories ---
-total 12
-drwxr-xr-x  2 root root 4096 Apr  9 13:52 .
-drwxr-xr-x 13 root root 4096 Apr  9 13:52 ..
--rw-r--r--  1 root root    0 Apr  9 13:52 .gitkeep
--rw-r--r--  1 root root  133 Apr  9 13:52 status.json
-total 3420
-drwxr-xr-x  2 root root    4096 Mar 27 08:11 .
-drwxr-xr-x 13 root root    4096 Apr  9 13:52 ..
--rw-r--r--  1 root root       0 Feb 22 12:15 .gitkeep
--rw-r--r--  1 root root 3486738 Apr  9 13:50 bot.log
-
---- .env check ---
-TRADOVATE_USER: SET
-TRADOVATE_PASS: SET
-TELEGRAM_TOKEN: SET
-TELEGRAM_CHAT_ID: SET
-
---- Last 30 log lines ---
-2026-04-09 13:30:04,407 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-09 13:30:04,407 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-09 13:30:04,520 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-09 13:30:05,900 [tradovate_client] INFO: Opening Tradovate login page...
-2026-04-09 13:30:27,261 [tradovate_client] ERROR: Browser auth error: Page.fill: Timeout 15000ms exceeded.
-Call log:
-  - waiting for locator("input[type=\"text\"]")
-
-2026-04-09 13:30:27,261 [bot] ERROR: Error processing MGCM6: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 284, in _process_symbol
+--- Last 20 log lines ---
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 505, in _post
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
@@ -60,3 +24,14 @@ ConnectionError: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_
 2026-04-09 13:40:38,560 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 2026-04-09 13:45:39,785 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 2026-04-09 13:50:41,042 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-09 13:55:42,222 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+
+--- Status JSON ---
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
