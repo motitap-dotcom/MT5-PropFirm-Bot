@@ -1,15 +1,11 @@
 #!/bin/bash
-# Trigger: v171
+# Trigger: v172
 cd /root/MT5-PropFirm-Bot
-echo "=== v171 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== v172 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo "Service: $(systemctl is-active futures-bot)"
-echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
 echo ""
-echo "--- VWAP values (should NOT be 0 now) ---"
-grep "dist=" logs/bot.log 2>/dev/null | tail -15
+echo "--- Signals + Orders + Trades ---"
+grep -i -E "SIGNAL|order|placed|fill|execute|position|trade|LONG|SHORT" logs/bot.log 2>/dev/null | tail -20
 echo ""
-echo "--- Signals? ---"
-grep -i -E "SIGNAL|LONG|SHORT|order|placed|fill|execute" logs/bot.log 2>/dev/null | tail -10
-echo ""
-echo "--- Last 15 log lines ---"
-tail -15 logs/bot.log 2>/dev/null
+echo "--- Last 30 log lines ---"
+tail -30 logs/bot.log 2>/dev/null
