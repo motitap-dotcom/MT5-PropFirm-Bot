@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v3 - with diagnostic logging ==="
+echo "=== Fix & Restart v4 - WebSocket chart data ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 
