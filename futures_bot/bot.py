@@ -570,13 +570,19 @@ class FuturesBot:
 
     def _to_bar(self, data: dict):
         """Convert API bar data to strategy Bar format."""
+        # WebSocket bars have upVolume/downVolume, not volume
+        volume = data.get("volume", 0)
+        if volume == 0:
+            volume = data.get("upVolume", 0) + data.get("downVolume", 0)
+        if volume == 0:
+            volume = 1  # Fallback: use 1 so VWAP still works (equal weight per bar)
         return VWAPBar(
             timestamp=data.get("timestamp", ""),
             open=data.get("open", 0),
             high=data.get("high", 0),
             low=data.get("low", 0),
             close=data.get("close", 0),
-            volume=data.get("volume", 0),
+            volume=volume,
         )
 
     def _get_sleep_seconds(self) -> int:
