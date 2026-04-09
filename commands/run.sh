@@ -1,57 +1,37 @@
 #!/bin/bash
-# Trigger: v154 - debug market data API
+# Trigger: v155 - test WebSocket chart data
 cd /root/MT5-PropFirm-Bot
-echo "=== MARKET DATA DEBUG v154 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== WEBSOCKET CHART TEST v155 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 
-# Run Python diagnostic against Tradovate API
 python3 << 'PYEOF'
-import json, os, sys
+import json, asyncio, sys
 sys.path.insert(0, '/root/MT5-PropFirm-Bot')
-
 from pathlib import Path
+import websockets
 
-# Load token
-token_file = Path("configs/.tradovate_token.json")
-if not token_file.exists():
-    print("ERROR: No token file!")
-    sys.exit(1)
+async def test_ws_chart():
+    # Load token
+    token_data = json.loads(Path("configs/.tradovate_token.json").read_text())
+    md_token = token_data.get("md_access_token") or token_data.get("access_token")
+    print(f"MD token loaded: {bool(md_token)}")
 
-token_data = json.loads(token_file.read_text())
-access_token = token_data.get("access_token")
-md_token = token_data.get("md_access_token", access_token)
-print(f"Token loaded: {bool(access_token)}, MD token: {bool(md_token)}")
+    # Connect to MD WebSocket
+    ws_url = "wss://md-demo.tradovateapi.com/v1/websocket"
+    ws = await websockets.connect(ws_url)
 
-import requests
+    # Wait for open frame
+    msg = await ws.recv()
+    print(f"Open frame: {msg}")
 
-# Test 1: Verify account access
-headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
-r = requests.get("https://demo.tradovateapi.com/v1/account/list", headers=headers)
-print(f"\nAccount API: {r.status_code}")
-if r.status_code == 200:
-    accounts = r.json()
-    for a in accounts[:2]:
-        print(f"  Account: {a.get('name')} id={a.get('id')}")
+    # Authenticate
+    auth_msg = f"authorize\n1\n\n{md_token}"
+    await ws.send(auth_msg)
+    response = await ws.recv()
+    print(f"Auth response: {response[:200]}")
 
-# Test 2: Search for contracts
-print("\n--- Contract Search ---")
-for sym in ["MESM6", "MES", "ESM6", "ES"]:
-    r = requests.get(f"https://demo.tradovateapi.com/v1/contract/suggest?t={sym}&l=3", headers=headers)
-    if r.status_code == 200:
-        results = r.json()
-        print(f"{sym}: {len(results)} results")
-        for c in results[:2]:
-            print(f"  -> {c.get('name')} id={c.get('id')} status={c.get('status')}")
-    else:
-        print(f"{sym}: HTTP {r.status_code}")
-
-# Test 3: Get chart data with different symbol formats
-print("\n--- Chart Data Test ---")
-md_headers = {"Authorization": f"Bearer {md_token}", "Content-Type": "application/json"}
-md_base = "https://md-demo.tradovateapi.com/v1"
-
-for sym in ["MESM6", "ESM6", "MES"]:
-    payload = {
-        "symbol": sym,
+    # Subscribe to chart data for MESM6
+    chart_req = {
+        "symbol": "MESM6",
         "chartDescription": {
             "underlyingType": "MinuteBar",
             "elementSize": 5,
@@ -59,42 +39,58 @@ for sym in ["MESM6", "ESM6", "MES"]:
             "withHistogram": False,
         },
         "timeRange": {
-            "asMuchAsElements": 5,
+            "asMuchAsElements": 10,
         },
     }
-    r = requests.post(f"{md_base}/md/getChart", headers=md_headers, json=payload)
-    if r.status_code == 200:
-        data = r.json()
-        bars = data.get("bars", [])
-        print(f"{sym}: {r.status_code} | {len(bars)} bars | keys={list(data.keys())[:5]}")
-        if bars:
-            print(f"  Latest: {bars[-1]}")
-        elif data:
-            # Show raw response (truncated)
-            raw = json.dumps(data)[:300]
-            print(f"  Raw: {raw}")
-    else:
-        text = r.text[:200]
-        print(f"{sym}: HTTP {r.status_code} | {text}")
+    req_id = 2
+    chart_msg = f"md/getChart\n{req_id}\n\n{json.dumps(chart_req)}"
+    await ws.send(chart_msg)
+    print(f"\nSent md/getChart for MESM6...")
 
-# Test 4: Try with contract ID
-print("\n--- Contract ID lookup ---")
-r = requests.get(f"https://demo.tradovateapi.com/v1/contract/find?name=MESM6", headers=headers)
-if r.status_code == 200:
-    contract = r.json()
-    print(f"MESM6 contract: {json.dumps(contract)[:300]}")
-    cid = contract.get("id")
-    if cid:
-        # Try chart with contract ID
-        payload["symbol"] = str(cid)
-        r2 = requests.post(f"{md_base}/md/getChart", headers=md_headers, json=payload)
-        if r2.status_code == 200:
-            data2 = r2.json()
-            bars2 = data2.get("bars", [])
-            print(f"By ID ({cid}): {len(bars2)} bars")
-            if bars2:
-                print(f"  Latest: {bars2[-1]}")
-else:
-    print(f"Contract find: HTTP {r.status_code}")
+    # Also try md/subscribeQuote
+    req_id2 = 3
+    quote_msg = f"md/subscribeQuote\n{req_id2}\n\n{json.dumps({'symbol': 'MESM6'})}"
+    await ws.send(quote_msg)
+    print(f"Sent md/subscribeQuote for MESM6...")
 
+    # Listen for responses (up to 15 seconds)
+    bars_found = False
+    for i in range(30):
+        try:
+            msg = await asyncio.wait_for(ws.recv(), timeout=0.5)
+            if msg == "h":
+                await ws.send("[]")
+                continue
+            if msg.startswith("a"):
+                data = json.loads(msg[1:])
+                for frame in (data if isinstance(data, list) else [data]):
+                    if isinstance(frame, dict):
+                        event = frame.get("e", "")
+                        s = frame.get("s", "")
+                        d = frame.get("d", {})
+                        if "bars" in d or "bars" in frame:
+                            bars = d.get("bars", frame.get("bars", []))
+                            print(f"\nGot {len(bars)} bars! Event={event}")
+                            if bars:
+                                print(f"  First: {bars[0]}")
+                                print(f"  Last: {bars[-1]}")
+                                bars_found = True
+                        elif "charts" in d or "id" in d:
+                            print(f"Chart response: {json.dumps(frame)[:300]}")
+                        elif event == "md" or "entries" in d:
+                            print(f"Quote data: {json.dumps(frame)[:300]}")
+                            bars_found = True
+                        else:
+                            print(f"Frame: {json.dumps(frame)[:300]}")
+            else:
+                print(f"Other: {msg[:200]}")
+        except asyncio.TimeoutError:
+            continue
+
+    if not bars_found:
+        print("\nNo bars/quotes received via WebSocket")
+
+    await ws.close()
+
+asyncio.run(test_ws_chart())
 PYEOF
