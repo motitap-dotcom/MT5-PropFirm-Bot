@@ -1,4 +1,40 @@
-=== Fix & Restart ===
-Timestamp: 2026-04-07 11:33:42 UTC
-Restarted
+=== Fix & Restart v2 ===
+2026-04-09 14:00:57 UTC
+Current: 89e31dd Fix restart script - remove git reset to main, just restart with current code
+Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
+
+--- .env check ---
+TRADOVATE_USER: SET
+TRADOVATE_PASS: SET
+TELEGRAM_TOKEN: SET
+TELEGRAM_CHAT_ID: SET
+
+--- Token check ---
+Token file: exists (816 bytes)
+Playwright: OK
+
+--- Code verification ---
+auth_cooldown: 3
+wait_for_selector: 1
+mkdir in status_writer: 2
+
+--- Result ---
 Status: active
+PID: 1868863
+
+--- First 15 log lines after restart ---
+2026-04-09 13:50:41,042 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-09 13:55:42,222 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-09 14:00:43,418 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-09 14:00:58,804 [bot] INFO: ============================================================
+2026-04-09 14:00:58,804 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-09 14:00:58,804 [bot] INFO: ============================================================
+2026-04-09 14:00:58,804 [news_filter] INFO: Loaded 26 restricted events
+2026-04-09 14:00:58,805 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-09 14:00:58,948 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-09 14:00:58,948 [tradovate_client] INFO: Saved token is still valid
+2026-04-09 14:00:58,949 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-09 14:00:59,083 [bot] INFO: Bot started successfully
+2026-04-09 14:00:59,083 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-09 14:00:59,083 [bot] INFO: Timeframe: 5min
+2026-04-09 14:00:59,083 [bot] INFO: New trading day: 2026-04-09
