@@ -104,40 +104,37 @@ class VWAPMeanReversion:
             logger.info(f"Max consecutive losses ({self.max_consecutive_losses}) reached, pausing")
             return None
 
-        # Check if trend day (VWAP never crossed after 11:00 ET)
-        # Disabled: still trade on trend days - strategy conditions are strict enough
-        if self._trend_day_detected:
-            logger.debug("Trend day detected, but continuing to scan for signals")
-
         # Calculate indicators
         vwap_data = self._calc_vwap()
         rsi = self._calc_rsi()
         atr = self._calc_atr()
 
-        if atr < self.min_atr or atr > self.max_atr:
-            logger.info(f"ATR filter: {atr:.2f} (range {self.min_atr}-{self.max_atr})")
-            return None  # Volatility filter
-
         current = self._bars[-1]
         prev = self._bars[-2]
 
-        # Log key values for debugging
-        logger.info(f"Price={current.close:.2f} VWAP={vwap_data.vwap:.2f} "
-                     f"-1SD={vwap_data.lower_1sd:.2f} +1SD={vwap_data.upper_1sd:.2f} "
-                     f"RSI={rsi:.1f} ATR={atr:.2f}")
+        # Calculate distance from VWAP in SD units
+        sd = vwap_data.upper_1sd - vwap_data.vwap  # 1 SD value
+        if sd == 0:
+            return None
+        dist_sd = (current.close - vwap_data.vwap) / sd  # Positive = above VWAP
 
-        # Track VWAP crosses for trend day detection
+        logger.info(f"Price={current.close:.2f} VWAP={vwap_data.vwap:.2f} "
+                     f"dist={dist_sd:+.2f}SD RSI={rsi:.1f} ATR={atr:.2f}")
+
+        # Track VWAP crosses
         if (prev.close < vwap_data.vwap and current.close > vwap_data.vwap) or \
            (prev.close > vwap_data.vwap and current.close < vwap_data.vwap):
             self._vwap_crossed = True
 
-        # LONG signal
-        if (current.low <= vwap_data.lower_1sd and
-                rsi < self.rsi_oversold and
-                current.close > current.open):  # Bullish candle
-            sl = vwap_data.lower_2sd - 2  # 2 points below -2SD
-            tp1 = vwap_data.vwap
-            tp2 = vwap_data.upper_1sd
+        # === LONG signal ===
+        # Price below VWAP (at least -0.3 SD) + RSI showing oversold tendency
+        if dist_sd <= -0.3 and rsi < self.rsi_oversold:
+            sl_distance = max(atr * 1.5, sd * 0.5)  # Dynamic SL based on ATR
+            sl = current.close - sl_distance
+            tp1 = vwap_data.vwap  # Target: back to VWAP
+            tp2 = vwap_data.upper_1sd  # Extended target
+            logger.info(f">>> LONG SIGNAL: dist={dist_sd:.2f}SD RSI={rsi:.1f} "
+                        f"entry={current.close:.2f} sl={sl:.2f} tp={tp1:.2f}")
             return TradeSetup(
                 signal=Signal.LONG,
                 entry_price=current.close,
@@ -146,13 +143,15 @@ class VWAPMeanReversion:
                 take_profit_2=tp2,
             )
 
-        # SHORT signal
-        if (current.high >= vwap_data.upper_1sd and
-                rsi > self.rsi_overbought and
-                current.close < current.open):  # Bearish candle
-            sl = vwap_data.upper_2sd + 2
+        # === SHORT signal ===
+        # Price above VWAP (at least +0.3 SD) + RSI showing overbought tendency
+        if dist_sd >= 0.3 and rsi > self.rsi_overbought:
+            sl_distance = max(atr * 1.5, sd * 0.5)
+            sl = current.close + sl_distance
             tp1 = vwap_data.vwap
             tp2 = vwap_data.lower_1sd
+            logger.info(f">>> SHORT SIGNAL: dist={dist_sd:.2f}SD RSI={rsi:.1f} "
+                        f"entry={current.close:.2f} sl={sl:.2f} tp={tp1:.2f}")
             return TradeSetup(
                 signal=Signal.SHORT,
                 entry_price=current.close,

@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v11 - Force restart with latest code ==="
+echo "=== Fix & Restart v12 - Practical VWAP signals ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 
