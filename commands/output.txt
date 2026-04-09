@@ -1,31 +1,11 @@
-=== WEBSOCKET VERIFY v156 2026-04-09 14:39 UTC ===
+=== WS CHART CHECK v157 2026-04-09 14:48 UTC ===
 
-Service: activating
-PID: 0
-Started: Thu 2026-04-09 14:39:08 UTC
+Service: active
+PID: 1880216
+Started: Thu 2026-04-09 14:44:34 UTC
+Commit: 4078e9e Check WebSocket chart v157
 
---- Code version ---
-Commit: 604a95e Verify WebSocket chart data v156
-Has _subscribe_chart: 3
-Has _chart_bars: 7
-
---- Last 40 log lines ---
-2026-04-09 14:24:04,783 [bot] INFO: ============================================================
-2026-04-09 14:24:04,783 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-09 14:24:04,783 [bot] INFO: ============================================================
-2026-04-09 14:24:04,783 [news_filter] INFO: Loaded 26 restricted events
-2026-04-09 14:24:04,783 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-04-09 14:24:04,931 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-09 14:24:04,931 [tradovate_client] INFO: Saved token is still valid
-2026-04-09 14:24:04,932 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-09 14:24:04,998 [bot] INFO: Bot started successfully
-2026-04-09 14:24:04,998 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-09 14:24:04,998 [bot] INFO: Timeframe: 5min
-2026-04-09 14:24:04,998 [bot] INFO: New trading day: 2026-04-09
-2026-04-09 14:24:05,000 [bot] INFO: === Trading cycle 10:24 ET | Guardian: ACTIVE ===
-2026-04-09 14:24:05,496 [bot] WARNING: MESM6: No bars returned from API
-2026-04-09 14:24:05,613 [bot] WARNING: MNQM6: No bars returned from API
-2026-04-09 14:24:05,730 [bot] WARNING: MCLM6: No bars returned from API
+--- Last 50 log lines ---
 2026-04-09 14:24:05,848 [bot] WARNING: MGCM6: No bars returned from API
 2026-04-09 14:24:05,966 [bot] WARNING: MYMM6: No bars returned from API
 2026-04-09 14:24:06,086 [bot] WARNING: M2KM6: No bars returned from API
@@ -50,25 +30,29 @@ Has _chart_bars: 7
 2026-04-09 14:36:51,833 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
 2026-04-09 14:37:52,202 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
 2026-04-09 14:38:52,534 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-
---- Chart/bars activity ---
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
-2026-04-09 14:15:17,973 [bot] INFO: Stopping bot: Signal received
-2026-04-09 14:24:05,000 [bot] INFO: === Trading cycle 10:24 ET | Guardian: ACTIVE ===
-2026-04-09 14:24:05,496 [bot] WARNING: MESM6: No bars returned from API
-2026-04-09 14:24:05,613 [bot] WARNING: MNQM6: No bars returned from API
-2026-04-09 14:24:05,730 [bot] WARNING: MCLM6: No bars returned from API
-2026-04-09 14:24:05,848 [bot] WARNING: MGCM6: No bars returned from API
-2026-04-09 14:24:05,966 [bot] WARNING: MYMM6: No bars returned from API
-2026-04-09 14:24:06,086 [bot] WARNING: M2KM6: No bars returned from API
-2026-04-09 14:29:06,186 [bot] INFO: === Trading cycle 10:29 ET | Guardian: ACTIVE ===
-2026-04-09 14:29:06,710 [bot] WARNING: MESM6: No bars returned from API
-2026-04-09 14:29:06,833 [bot] WARNING: MNQM6: No bars returned from API
-2026-04-09 14:29:06,956 [bot] WARNING: MCLM6: No bars returned from API
-2026-04-09 14:29:07,080 [bot] WARNING: MGCM6: No bars returned from API
-2026-04-09 14:29:07,201 [bot] WARNING: MYMM6: No bars returned from API
-2026-04-09 14:29:07,323 [bot] WARNING: M2KM6: No bars returned from API
-2026-04-09 14:34:56,921 [bot] INFO: Stopping bot: Signal received
+2026-04-09 14:39:52,904 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:40:53,324 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:41:53,664 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:42:54,306 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:43:54,777 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:44:35,006 [bot] INFO: ============================================================
+2026-04-09 14:44:35,006 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-09 14:44:35,006 [bot] INFO: ============================================================
+2026-04-09 14:44:35,007 [news_filter] INFO: Loaded 26 restricted events
+2026-04-09 14:44:35,007 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-09 14:44:35,152 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-09 14:44:35,152 [tradovate_client] INFO: Saved token is still valid
+2026-04-09 14:44:35,153 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-09 14:44:35,227 [bot] INFO: Bot started successfully
+2026-04-09 14:44:35,227 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-09 14:44:35,227 [bot] INFO: Timeframe: 5min
+2026-04-09 14:44:35,227 [bot] INFO: New trading day: 2026-04-09
+2026-04-09 14:44:35,229 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:44:55,147 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:45:35,532 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:45:55,549 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:46:35,894 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:46:55,971 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:47:36,247 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:47:56,356 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+2026-04-09 14:48:36,637 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
