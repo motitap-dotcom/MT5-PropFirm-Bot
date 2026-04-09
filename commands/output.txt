@@ -1,66 +1,29 @@
-=== DIAGNOSTIC v153 2026-04-09 14:19 UTC ===
+=== MARKET DATA DEBUG v154 2026-04-09 14:24 UTC ===
+Token loaded: True, MD token: True
 
-Service: activating
-PID: 0
-Started: Thu 2026-04-09 14:19:03 UTC
+Account API: 200
+  Account: ELTDER260326211630296397 id=45373493
 
---- Code on VPS ---
-Commit: 6c4e5cd Diagnostic log check v153
-Has bar logging: 1
-Has cycle logging: 1
+--- Contract Search ---
+MESM6: 1 results
+  -> MESM6 id=4327108 status=DefinitionChecked
+MES: 3 results
+  -> MESM6 id=4327108 status=DefinitionChecked
+  -> MESU6 id=4399631 status=DefinitionChecked
+ESM6: 1 results
+  -> ESM6 id=3570919 status=DefinitionChecked
+ES: 3 results
+  -> ESM6 id=3570919 status=DefinitionChecked
+  -> ESU6 id=3570926 status=DefinitionChecked
 
---- Last 40 log lines ---
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 284, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 505, in _post
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 247, in _authenticate
-ConnectionError: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-09 13:30:27,262 [tradovate_client] INFO: Token expiring in -527min, renewing...
-2026-04-09 13:30:27,417 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-09 13:30:27,417 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-09 13:30:27,541 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-09 13:30:28,289 [tradovate_client] INFO: Opening Tradovate login page...
-2026-04-09 13:30:34,765 [tradovate_client] INFO: Login submitted, waiting for token...
-2026-04-09 13:30:35,866 [tradovate_client] INFO: Browser auth: token captured successfully
-2026-04-09 13:30:35,869 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
-2026-04-09 13:30:36,145 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 13:35:37,373 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 13:40:38,560 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 13:45:39,785 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 13:50:41,042 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 13:55:42,222 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 14:00:43,418 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 14:00:58,804 [bot] INFO: ============================================================
-2026-04-09 14:00:58,804 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-09 14:00:58,804 [bot] INFO: ============================================================
-2026-04-09 14:00:58,804 [news_filter] INFO: Loaded 26 restricted events
-2026-04-09 14:00:58,805 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-04-09 14:00:58,948 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-09 14:00:58,948 [tradovate_client] INFO: Saved token is still valid
-2026-04-09 14:00:58,949 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-09 14:00:59,083 [bot] INFO: Bot started successfully
-2026-04-09 14:00:59,083 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-09 14:00:59,083 [bot] INFO: Timeframe: 5min
-2026-04-09 14:00:59,083 [bot] INFO: New trading day: 2026-04-09
-2026-04-09 14:05:44,633 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 14:10:45,872 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 14:15:17,973 [bot] INFO: Stopping bot: Signal received
-2026-04-09 14:15:18,511 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-09 14:15:18,511 [bot] INFO: Bot stopped
-2026-04-09 14:15:47,109 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+--- Chart Data Test ---
+MESM6: 200 | 0 bars | keys=['errorCode', 'mode']
+  Raw: {"errorCode": "OperationNotSupported", "mode": "None"}
+ESM6: 200 | 0 bars | keys=['errorCode', 'mode']
+  Raw: {"errorCode": "OperationNotSupported", "mode": "None"}
+MES: 200 | 0 bars | keys=['errorCode', 'mode']
+  Raw: {"errorCode": "OperationNotSupported", "mode": "None"}
 
---- Any bars received? ---
-2026-04-07 15:12:50,776 [bot] WARNING: No bars returned for MESM6
-2026-04-07 15:12:50,896 [bot] WARNING: No bars returned for MNQM6
-2026-04-07 15:12:51,017 [bot] WARNING: No bars returned for MCLM6
-2026-04-07 15:12:51,139 [bot] WARNING: No bars returned for MGCM6
-2026-04-07 15:12:51,261 [bot] WARNING: No bars returned for MYMM6
-2026-04-07 15:12:51,382 [bot] WARNING: No bars returned for M2KM6
-2026-04-07 15:31:21,787 [bot] WARNING: No bars returned for MESM6
-2026-04-07 15:31:21,904 [bot] WARNING: No bars returned for MNQM6
-2026-04-07 15:31:22,020 [bot] WARNING: No bars returned for MCLM6
-2026-04-07 15:31:22,137 [bot] WARNING: No bars returned for MGCM6
-2026-04-07 15:31:22,254 [bot] WARNING: No bars returned for MYMM6
-2026-04-07 15:31:22,371 [bot] WARNING: No bars returned for M2KM6
+--- Contract ID lookup ---
+MESM6 contract: {"id": 4327108, "name": "MESM6", "contractMaturityId": 61502, "timestamp": "2025-01-01T00:00Z", "status": "DefinitionChecked", "providerTickSize": 0.25}
+By ID (4327108): 0 bars
