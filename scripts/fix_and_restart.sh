@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v9 - VWAP only, no ORB switch ==="
+echo "=== Fix & Restart v10 - Debug VWAP values ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 

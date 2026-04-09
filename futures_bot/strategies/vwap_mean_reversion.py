@@ -115,10 +115,16 @@ class VWAPMeanReversion:
         atr = self._calc_atr()
 
         if atr < self.min_atr or atr > self.max_atr:
+            logger.info(f"ATR filter: {atr:.2f} (range {self.min_atr}-{self.max_atr})")
             return None  # Volatility filter
 
         current = self._bars[-1]
         prev = self._bars[-2]
+
+        # Log key values for debugging
+        logger.info(f"Price={current.close:.2f} VWAP={vwap_data.vwap:.2f} "
+                     f"-1SD={vwap_data.lower_1sd:.2f} +1SD={vwap_data.upper_1sd:.2f} "
+                     f"RSI={rsi:.1f} ATR={atr:.2f}")
 
         # Track VWAP crosses for trend day detection
         if (prev.close < vwap_data.vwap and current.close > vwap_data.vwap) or \
