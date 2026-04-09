@@ -1,128 +1,79 @@
-=== TRADING SIGNALS CHECK v159 2026-04-09 15:25 UTC ===
+=== TRADING CHECK v160 2026-04-09 16:15 UTC ===
 
 Service: active
-PID: 1880216
+PID: 1900319
+Started: Thu 2026-04-09 16:10:50 UTC
 
---- Last 80 log lines ---
-2026-04-09 15:02:23,613 [tradovate_client] INFO: Chart subscription active: MESM6 (id=555138)
-2026-04-09 15:02:23,749 [tradovate_client] INFO: Subscribing to chart data: MNQM6 (5min)
-2026-04-09 15:02:23,836 [tradovate_client] INFO: MESM6: Received 100 historical bars via WebSocket
-2026-04-09 15:02:23,865 [tradovate_client] INFO: Chart subscription active: MNQM6 (id=555142)
-2026-04-09 15:02:24,002 [tradovate_client] INFO: Subscribing to chart data: MCLM6 (5min)
-2026-04-09 15:02:24,119 [tradovate_client] INFO: Chart subscription active: MCLM6 (id=555144)
-2026-04-09 15:02:24,121 [tradovate_client] INFO: MNQM6: Received 100 historical bars via WebSocket
-2026-04-09 15:02:24,253 [tradovate_client] INFO: Subscribing to chart data: MGCM6 (5min)
-2026-04-09 15:02:24,367 [tradovate_client] INFO: Chart subscription active: MGCM6 (id=555148)
-2026-04-09 15:02:24,396 [tradovate_client] INFO: MCLM6: Received 100 historical bars via WebSocket
-2026-04-09 15:02:24,505 [tradovate_client] INFO: Subscribing to chart data: MYMM6 (5min)
-2026-04-09 15:02:24,619 [tradovate_client] INFO: Chart subscription active: MYMM6 (id=555154)
-2026-04-09 15:02:24,743 [tradovate_client] INFO: MGCM6: Received 100 historical bars via WebSocket
-2026-04-09 15:02:24,756 [tradovate_client] INFO: Subscribing to chart data: M2KM6 (5min)
-2026-04-09 15:02:24,870 [tradovate_client] INFO: Chart subscription active: M2KM6 (id=555158)
-2026-04-09 15:02:25,086 [tradovate_client] INFO: MYMM6: Received 100 historical bars via WebSocket
-2026-04-09 15:02:25,441 [tradovate_client] INFO: M2KM6: Received 100 historical bars via WebSocket
-2026-04-09 15:05:02,145 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:05:02,145 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:05:02,146 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:05:02,146 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:05:02,146 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:05:02,146 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:05:03,152 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 15:05:44,158 [bot] INFO: === Trading cycle 11:05 ET | Guardian: ACTIVE ===
-2026-04-09 15:05:44,304 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:05:44,304 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:05:44,304 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:05:44,304 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:05:44,304 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:05:44,304 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:05:44,540 [bot] INFO: MESM6: New bar 2026-04-09T15:00Z | O=6817.0 H=6817.5 L=6813.75 C=6814.25 V=0
-2026-04-09 15:05:44,540 [bot] INFO: MNQM6: New bar 2026-04-09T15:00Z | O=25041.0 H=25044.5 L=25026.0 C=25032.25 V=0
-2026-04-09 15:05:44,540 [bot] INFO: MCLM6: New bar 2026-04-09T15:00Z | O=92.52 H=92.81 L=92.51 C=92.72 V=0
-2026-04-09 15:05:44,540 [bot] INFO: MGCM6: New bar 2026-04-09T15:00Z | O=4794.1 H=4794.9 L=4788.3 C=4788.9 V=0
-2026-04-09 15:05:44,541 [bot] INFO: MYMM6: New bar 2026-04-09T15:00Z | O=48019.0 H=48027.0 L=47998.0 C=48000.0 V=0
-2026-04-09 15:05:44,541 [bot] INFO: M2KM6: New bar 2026-04-09T15:00Z | O=2632.5 H=2632.5 L=2629.7 C=2630.0 V=0
-2026-04-09 15:10:03,303 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:10:03,306 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:10:03,307 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:10:03,307 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:10:03,307 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:10:03,307 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:10:44,608 [bot] INFO: === Trading cycle 11:10 ET | Guardian: ACTIVE ===
-2026-04-09 15:10:44,761 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:10:44,761 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:10:44,761 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:10:44,761 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:10:44,761 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:10:44,761 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:15:04,380 [tradovate_client] INFO: Token expiring in 26min, renewing...
-2026-04-09 15:15:04,531 [tradovate_client] INFO: Token renewed successfully
-2026-04-09 15:15:04,655 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:15:04,655 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:15:04,655 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:15:04,655 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:15:04,655 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:15:04,655 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:15:45,102 [bot] INFO: === Trading cycle 11:15 ET | Guardian: ACTIVE ===
-2026-04-09 15:15:45,102 [tradovate_client] INFO: Token expiring in 25min, renewing...
-2026-04-09 15:15:45,242 [tradovate_client] INFO: Token renewed successfully
-2026-04-09 15:15:45,363 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:15:45,363 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:15:45,363 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:15:45,363 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:15:45,363 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:15:45,363 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:20:05,892 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:20:05,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:20:05,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:20:05,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:20:05,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:20:05,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:20:45,678 [bot] INFO: === Trading cycle 11:20 ET | Guardian: ACTIVE ===
-2026-04-09 15:20:45,840 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:20:45,840 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:20:45,840 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:20:45,840 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:20:45,840 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 15:20:45,840 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+--- Last 50 log lines ---
+2026-04-09 16:10:52,069 [tradovate_client] INFO: Chart subscription active: MESM6 (id=591490)
+2026-04-09 16:10:52,296 [tradovate_client] INFO: MESM6: Received 50 historical bars via WebSocket
+2026-04-09 16:10:52,296 [bot] INFO: MESM6: New bar 2026-04-09T16:05Z | O=6864.25 H=6867.5 L=6861.0 C=6862.75 V=0
+2026-04-09 16:10:52,296 [tradovate_client] INFO: Subscribing to chart data: MNQM6 (5min)
+2026-04-09 16:10:52,413 [tradovate_client] INFO: Chart subscription active: MNQM6 (id=591492)
+2026-04-09 16:10:52,654 [tradovate_client] INFO: MNQM6: Received 50 historical bars via WebSocket
+2026-04-09 16:10:52,654 [bot] INFO: MNQM6: New bar 2026-04-09T16:05Z | O=25236.5 H=25249.25 L=25217.5 C=25225.75 V=0
+2026-04-09 16:10:52,655 [tradovate_client] INFO: Subscribing to chart data: MCLM6 (5min)
+2026-04-09 16:10:52,773 [tradovate_client] INFO: Chart subscription active: MCLM6 (id=591498)
+2026-04-09 16:10:52,995 [tradovate_client] INFO: MCLM6: Received 50 historical bars via WebSocket
+2026-04-09 16:10:52,995 [bot] INFO: MCLM6: New bar 2026-04-09T16:05Z | O=89.53 H=89.69 L=89.0 C=89.46 V=0
+2026-04-09 16:10:52,995 [tradovate_client] INFO: Subscribing to chart data: MGCM6 (5min)
+2026-04-09 16:10:53,111 [tradovate_client] INFO: Chart subscription active: MGCM6 (id=591500)
+2026-04-09 16:10:53,350 [tradovate_client] INFO: MGCM6: Received 50 historical bars via WebSocket
+2026-04-09 16:10:53,351 [bot] INFO: MGCM6: New bar 2026-04-09T16:05Z | O=4821.4 H=4822.1 L=4816.6 C=4816.9 V=0
+2026-04-09 16:10:53,351 [tradovate_client] INFO: Subscribing to chart data: MYMM6 (5min)
+2026-04-09 16:10:53,467 [tradovate_client] INFO: Chart subscription active: MYMM6 (id=591504)
+2026-04-09 16:10:53,697 [tradovate_client] INFO: MYMM6: Received 50 historical bars via WebSocket
+2026-04-09 16:10:53,697 [bot] INFO: MYMM6: New bar 2026-04-09T16:05Z | O=48387.0 H=48416.0 L=48376.0 C=48390.0 V=0
+2026-04-09 16:10:53,698 [tradovate_client] INFO: Subscribing to chart data: M2KM6 (5min)
+2026-04-09 16:10:53,813 [tradovate_client] INFO: Chart subscription active: M2KM6 (id=591508)
+2026-04-09 16:10:54,045 [tradovate_client] INFO: M2KM6: Received 50 historical bars via WebSocket
+2026-04-09 16:10:54,046 [bot] INFO: M2KM6: New bar 2026-04-09T16:05Z | O=2652.3 H=2653.1 L=2650.1 C=2650.4 V=0
+2026-04-09 16:11:23,817 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-09 16:11:26,094 [tradovate_client] INFO: MD WebSocket connected
+2026-04-09 16:11:26,094 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-09 16:11:26,209 [tradovate_client] INFO: Chart subscription active: MESM6 (id=591758)
+2026-04-09 16:11:26,345 [tradovate_client] INFO: Subscribing to chart data: MNQM6 (5min)
+2026-04-09 16:11:26,435 [tradovate_client] INFO: MESM6: Received 100 historical bars via WebSocket
+2026-04-09 16:11:26,459 [tradovate_client] INFO: Chart subscription active: MNQM6 (id=591764)
+2026-04-09 16:11:26,596 [tradovate_client] INFO: Subscribing to chart data: MCLM6 (5min)
+2026-04-09 16:11:26,711 [tradovate_client] INFO: Chart subscription active: MCLM6 (id=591770)
+2026-04-09 16:11:26,762 [tradovate_client] INFO: MNQM6: Received 100 historical bars via WebSocket
+2026-04-09 16:11:26,848 [tradovate_client] INFO: Subscribing to chart data: MGCM6 (5min)
+2026-04-09 16:11:26,962 [tradovate_client] INFO: Chart subscription active: MGCM6 (id=591772)
+2026-04-09 16:11:27,099 [tradovate_client] INFO: Subscribing to chart data: MYMM6 (5min)
+2026-04-09 16:11:27,107 [tradovate_client] INFO: MCLM6: Received 100 historical bars via WebSocket
+2026-04-09 16:11:27,214 [tradovate_client] INFO: Chart subscription active: MYMM6 (id=591774)
+2026-04-09 16:11:27,350 [tradovate_client] INFO: Subscribing to chart data: M2KM6 (5min)
+2026-04-09 16:11:27,461 [tradovate_client] INFO: MGCM6: Received 100 historical bars via WebSocket
+2026-04-09 16:11:27,464 [tradovate_client] INFO: Chart subscription active: M2KM6 (id=591780)
+2026-04-09 16:11:27,816 [tradovate_client] INFO: MYMM6: Received 100 historical bars via WebSocket
+2026-04-09 16:11:28,165 [tradovate_client] INFO: M2KM6: Received 100 historical bars via WebSocket
+2026-04-09 16:15:19,444 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:15:19,444 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:15:19,444 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:15:19,444 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:15:19,444 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:15:19,444 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:15:20,425 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 
---- Signals/Orders/Trades ---
-2026-04-08 18:11:52,600 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-08 18:29:36,453 [bot] INFO: Stopping bot: Signal received
-2026-04-08 18:40:30,467 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-08 19:08:14,567 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-08 19:26:23,132 [bot] INFO: Stopping bot: Signal received
-2026-04-09 13:30:27,261 [tradovate_client] ERROR: Browser auth error: Page.fill: Timeout 15000ms exceeded.
-2026-04-09 14:00:58,804 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-09 14:15:17,973 [bot] INFO: Stopping bot: Signal received
-2026-04-09 14:24:04,783 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-09 14:24:05,000 [bot] INFO: === Trading cycle 10:24 ET | Guardian: ACTIVE ===
-2026-04-09 14:29:06,186 [bot] INFO: === Trading cycle 10:29 ET | Guardian: ACTIVE ===
+--- Signals/Trades ---
 2026-04-09 14:34:56,921 [bot] INFO: Stopping bot: Signal received
-2026-04-09 14:44:35,006 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-09 15:00:41,324 [bot] INFO: === Trading cycle 11:00 ET | Guardian: ACTIVE ===
 2026-04-09 15:00:42,347 [bot] INFO: MESM6: New bar 2026-04-09T14:55Z | O=6815.25 H=6819.0 L=6813.25 C=6816.75 V=0
 2026-04-09 15:00:42,703 [bot] INFO: MNQM6: New bar 2026-04-09T14:55Z | O=25035.5 H=25053.75 L=25023.5 C=25040.5 V=0
 2026-04-09 15:00:43,045 [bot] INFO: MCLM6: New bar 2026-04-09T14:55Z | O=92.62 H=92.7 L=92.26 C=92.5 V=0
 2026-04-09 15:00:43,415 [bot] INFO: MGCM6: New bar 2026-04-09T14:55Z | O=4788.8 H=4794.4 L=4788.0 C=4794.0 V=0
 2026-04-09 15:00:43,767 [bot] INFO: MYMM6: New bar 2026-04-09T14:55Z | O=48014.0 H=48041.0 L=47991.0 C=48016.0 V=0
 2026-04-09 15:00:44,117 [bot] INFO: M2KM6: New bar 2026-04-09T14:55Z | O=2631.4 H=2632.9 L=2629.9 C=2632.6 V=0
-2026-04-09 15:05:44,158 [bot] INFO: === Trading cycle 11:05 ET | Guardian: ACTIVE ===
 2026-04-09 15:05:44,540 [bot] INFO: MESM6: New bar 2026-04-09T15:00Z | O=6817.0 H=6817.5 L=6813.75 C=6814.25 V=0
 2026-04-09 15:05:44,540 [bot] INFO: MNQM6: New bar 2026-04-09T15:00Z | O=25041.0 H=25044.5 L=25026.0 C=25032.25 V=0
 2026-04-09 15:05:44,540 [bot] INFO: MCLM6: New bar 2026-04-09T15:00Z | O=92.52 H=92.81 L=92.51 C=92.72 V=0
 2026-04-09 15:05:44,540 [bot] INFO: MGCM6: New bar 2026-04-09T15:00Z | O=4794.1 H=4794.9 L=4788.3 C=4788.9 V=0
 2026-04-09 15:05:44,541 [bot] INFO: MYMM6: New bar 2026-04-09T15:00Z | O=48019.0 H=48027.0 L=47998.0 C=48000.0 V=0
 2026-04-09 15:05:44,541 [bot] INFO: M2KM6: New bar 2026-04-09T15:00Z | O=2632.5 H=2632.5 L=2629.7 C=2630.0 V=0
-2026-04-09 15:10:44,608 [bot] INFO: === Trading cycle 11:10 ET | Guardian: ACTIVE ===
-2026-04-09 15:15:45,102 [bot] INFO: === Trading cycle 11:15 ET | Guardian: ACTIVE ===
-2026-04-09 15:20:45,678 [bot] INFO: === Trading cycle 11:20 ET | Guardian: ACTIVE ===
-
---- Status JSON ---
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+2026-04-09 16:10:48,099 [bot] INFO: Stopping bot: Signal received
+2026-04-09 16:10:52,296 [bot] INFO: MESM6: New bar 2026-04-09T16:05Z | O=6864.25 H=6867.5 L=6861.0 C=6862.75 V=0
+2026-04-09 16:10:52,654 [bot] INFO: MNQM6: New bar 2026-04-09T16:05Z | O=25236.5 H=25249.25 L=25217.5 C=25225.75 V=0
+2026-04-09 16:10:52,995 [bot] INFO: MCLM6: New bar 2026-04-09T16:05Z | O=89.53 H=89.69 L=89.0 C=89.46 V=0
+2026-04-09 16:10:53,351 [bot] INFO: MGCM6: New bar 2026-04-09T16:05Z | O=4821.4 H=4822.1 L=4816.6 C=4816.9 V=0
+2026-04-09 16:10:53,697 [bot] INFO: MYMM6: New bar 2026-04-09T16:05Z | O=48387.0 H=48416.0 L=48376.0 C=48390.0 V=0
+2026-04-09 16:10:54,046 [bot] INFO: M2KM6: New bar 2026-04-09T16:05Z | O=2652.3 H=2653.1 L=2650.1 C=2650.4 V=0
