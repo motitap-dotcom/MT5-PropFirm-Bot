@@ -1,69 +1,66 @@
-=== CHECK v163 2026-04-09 17:03 UTC ===
+=== CHECK v164 2026-04-09 17:12 UTC ===
 
 Service: activating
 PID: 0
-Started: Thu 2026-04-09 17:02:38 UTC
 
---- Last 50 log lines ---
-2026-04-09 16:45:26,497 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:45:26,497 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:45:56,666 [bot] INFO: === Trading cycle 12:45 ET | Guardian: ACTIVE ===
-2026-04-09 16:45:56,803 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:45:56,803 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:45:56,803 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:45:56,803 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:45:56,804 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:45:56,804 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:50:27,724 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:50:27,724 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:50:27,724 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:50:27,724 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:50:27,724 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:50:27,724 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:50:57,051 [bot] INFO: === Trading cycle 12:50 ET | Guardian: ACTIVE ===
-2026-04-09 16:50:57,233 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:50:57,233 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:50:57,233 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:50:57,233 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:50:57,234 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:50:57,234 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:55:28,804 [tradovate_client] INFO: Token expiring in 30min, renewing...
-2026-04-09 16:55:28,946 [tradovate_client] INFO: Token renewed successfully
-2026-04-09 16:55:29,067 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:55:29,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:55:29,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:55:29,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:55:29,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:55:29,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:55:30,045 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 16:55:57,577 [bot] INFO: === Trading cycle 12:55 ET | Guardian: ACTIVE ===
-2026-04-09 16:55:57,577 [tradovate_client] INFO: Token expiring in 30min, renewing...
-2026-04-09 16:55:57,726 [tradovate_client] INFO: Token renewed successfully
-2026-04-09 16:55:57,851 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:55:57,851 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:55:57,851 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:55:57,851 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:55:57,851 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:55:57,851 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:58:07,914 [bot] INFO: Stopping bot: Signal received
-2026-04-09 16:58:08,311 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-09 16:58:08,311 [bot] INFO: Bot stopped
-2026-04-09 17:00:30,186 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:00:30,187 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:00:30,187 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:00:30,187 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:00:30,187 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:00:30,187 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:00:31,186 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-
---- Signals/Trades ---
-2026-04-07 19:15:06,550 [tradovate_client] INFO: Cancelled order 451715410024
-2026-04-07 19:15:06,671 [tradovate_client] INFO: Cancelled order 451715410018
-2026-04-07 19:15:06,791 [tradovate_client] INFO: Cancelled order 451715410050
-2026-04-08 18:29:36,453 [bot] INFO: Stopping bot: Signal received
-2026-04-08 19:26:23,132 [bot] INFO: Stopping bot: Signal received
-2026-04-09 13:30:27,261 [tradovate_client] ERROR: Browser auth error: Page.fill: Timeout 15000ms exceeded.
-2026-04-09 14:15:17,973 [bot] INFO: Stopping bot: Signal received
-2026-04-09 14:34:56,921 [bot] INFO: Stopping bot: Signal received
-2026-04-09 16:10:48,099 [bot] INFO: Stopping bot: Signal received
-2026-04-09 16:58:07,914 [bot] INFO: Stopping bot: Signal received
+--- Last 60 log lines ---
+2026-04-09 17:03:39,575 [tradovate_client] INFO: Saved token is still valid
+2026-04-09 17:03:39,576 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-09 17:03:39,645 [bot] INFO: Bot started successfully
+2026-04-09 17:03:39,645 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-09 17:03:39,645 [bot] INFO: Timeframe: 5min
+2026-04-09 17:03:39,645 [bot] INFO: New trading day: 2026-04-09
+2026-04-09 17:03:39,646 [bot] INFO: === Trading cycle 13:03 ET | Guardian: ACTIVE ===
+2026-04-09 17:03:39,768 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:03:39,769 [bot] INFO: Switching MESM6 to ORB strategy (trend day)
+2026-04-09 17:03:39,769 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:03:39,769 [bot] INFO: Switching MNQM6 to ORB strategy (trend day)
+2026-04-09 17:03:39,769 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:03:39,769 [bot] INFO: Switching MCLM6 to ORB strategy (trend day)
+2026-04-09 17:03:39,769 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:03:39,769 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
+2026-04-09 17:03:39,769 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:03:39,769 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
+2026-04-09 17:03:39,769 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:03:39,769 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
+2026-04-09 17:03:40,310 [tradovate_client] INFO: MD WebSocket connected
+2026-04-09 17:03:40,310 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-09 17:03:40,426 [tradovate_client] INFO: Chart subscription active: MESM6 (id=614482)
+2026-04-09 17:03:40,654 [tradovate_client] INFO: MESM6: Received 50 historical bars via WebSocket
+2026-04-09 17:03:40,655 [bot] INFO: MESM6: New bar 2026-04-09T17:00Z | O=6862.75 H=6864.75 L=6861.5 C=6862.75 V=0
+2026-04-09 17:03:40,655 [tradovate_client] INFO: Subscribing to chart data: MNQM6 (5min)
+2026-04-09 17:03:40,770 [tradovate_client] INFO: Chart subscription active: MNQM6 (id=614488)
+2026-04-09 17:03:41,011 [tradovate_client] INFO: MNQM6: Received 50 historical bars via WebSocket
+2026-04-09 17:03:41,011 [bot] INFO: MNQM6: New bar 2026-04-09T17:00Z | O=25196.75 H=25205.5 L=25180.5 C=25194.25 V=0
+2026-04-09 17:03:41,012 [tradovate_client] INFO: Subscribing to chart data: MCLM6 (5min)
+2026-04-09 17:03:41,128 [tradovate_client] INFO: Chart subscription active: MCLM6 (id=614492)
+2026-04-09 17:03:41,355 [tradovate_client] INFO: MCLM6: Received 50 historical bars via WebSocket
+2026-04-09 17:03:41,355 [bot] INFO: MCLM6: New bar 2026-04-09T17:00Z | O=89.5 H=89.67 L=89.37 C=89.67 V=0
+2026-04-09 17:03:41,355 [tradovate_client] INFO: Subscribing to chart data: MGCM6 (5min)
+2026-04-09 17:03:41,471 [tradovate_client] INFO: Chart subscription active: MGCM6 (id=614502)
+2026-04-09 17:03:41,712 [tradovate_client] INFO: MGCM6: Received 50 historical bars via WebSocket
+2026-04-09 17:03:41,712 [bot] INFO: MGCM6: New bar 2026-04-09T17:00Z | O=4813.3 H=4815.4 L=4811.2 C=4811.9 V=0
+2026-04-09 17:03:41,712 [tradovate_client] INFO: Subscribing to chart data: MYMM6 (5min)
+2026-04-09 17:03:41,828 [tradovate_client] INFO: Chart subscription active: MYMM6 (id=614516)
+2026-04-09 17:03:42,056 [tradovate_client] INFO: MYMM6: Received 50 historical bars via WebSocket
+2026-04-09 17:03:42,056 [bot] INFO: MYMM6: New bar 2026-04-09T17:00Z | O=48471.0 H=48488.0 L=48464.0 C=48478.0 V=0
+2026-04-09 17:03:42,056 [tradovate_client] INFO: Subscribing to chart data: M2KM6 (5min)
+2026-04-09 17:03:42,172 [tradovate_client] INFO: Chart subscription active: M2KM6 (id=614524)
+2026-04-09 17:03:42,404 [tradovate_client] INFO: M2KM6: Received 50 historical bars via WebSocket
+2026-04-09 17:03:42,405 [bot] INFO: M2KM6: New bar 2026-04-09T17:00Z | O=2656.5 H=2657.6 L=2655.4 C=2656.7 V=0
+2026-04-09 17:05:31,346 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:05:31,346 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:05:31,346 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:05:31,346 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:05:31,346 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:05:31,346 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:07:35,887 [bot] INFO: Stopping bot: Signal received
+2026-04-09 17:07:36,223 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-09 17:07:36,224 [bot] INFO: Bot stopped
+2026-04-09 17:10:32,580 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:10:32,580 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:10:32,580 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:10:32,580 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:10:32,580 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:10:32,580 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:10:33,554 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
