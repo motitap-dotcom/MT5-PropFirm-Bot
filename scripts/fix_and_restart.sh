@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v8 - Historical bar warmup ==="
+echo "=== Fix & Restart v9 - VWAP only, no ORB switch ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 

@@ -236,14 +236,9 @@ class FuturesBot:
                 except Exception as e:
                     logger.error(f"Error fetching balance: {e}")
 
-                # Check for trend day at 11:00 ET (per symbol)
-                if now_et.hour >= 11:
-                    for sym in self.symbols:
-                        vwap = self.vwap_strategies[sym]
-                        vwap.check_trend_day(now_et.hour)
-                        if vwap.is_trend_day() and self.active_strategy.get(sym) == "vwap":
-                            self.active_strategy[sym] = "orb"
-                            logger.info(f"Switching {sym} to ORB strategy (trend day)")
+                # Trend day detection disabled - VWAP strategy stays active
+                # ORB switching removed: ORB needs opening range data from 9:30-10:00
+                # which requires bot to be running from market open
 
                 # Sync positions and detect closed trades
                 try:
