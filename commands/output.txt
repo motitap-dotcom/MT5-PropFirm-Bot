@@ -1,58 +1,67 @@
-=== WS CHART CHECK v157 2026-04-09 14:48 UTC ===
+=== POST-NEWS CHECK v158 2026-04-09 15:04 UTC ===
 
 Service: active
 PID: 1880216
 Started: Thu 2026-04-09 14:44:34 UTC
-Commit: 4078e9e Check WebSocket chart v157
 
---- Last 50 log lines ---
-2026-04-09 14:24:05,848 [bot] WARNING: MGCM6: No bars returned from API
-2026-04-09 14:24:05,966 [bot] WARNING: MYMM6: No bars returned from API
-2026-04-09 14:24:06,086 [bot] WARNING: M2KM6: No bars returned from API
-2026-04-09 14:25:49,584 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 14:29:06,186 [bot] INFO: === Trading cycle 10:29 ET | Guardian: ACTIVE ===
-2026-04-09 14:29:06,710 [bot] WARNING: MESM6: No bars returned from API
-2026-04-09 14:29:06,833 [bot] WARNING: MNQM6: No bars returned from API
-2026-04-09 14:29:06,956 [bot] WARNING: MCLM6: No bars returned from API
-2026-04-09 14:29:07,080 [bot] WARNING: MGCM6: No bars returned from API
-2026-04-09 14:29:07,201 [bot] WARNING: MYMM6: No bars returned from API
-2026-04-09 14:29:07,323 [bot] WARNING: M2KM6: No bars returned from API
-2026-04-09 14:30:49,683 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:31:50,053 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:32:50,406 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:33:50,776 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:34:07,424 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:34:51,128 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:34:56,921 [bot] INFO: Stopping bot: Signal received
-2026-04-09 14:34:57,286 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-09 14:34:57,286 [bot] INFO: Bot stopped
-2026-04-09 14:35:51,478 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:36:51,833 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:37:52,202 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:38:52,534 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:39:52,904 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:40:53,324 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:41:53,664 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:42:54,306 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:43:54,777 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:44:35,006 [bot] INFO: ============================================================
-2026-04-09 14:44:35,006 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-09 14:44:35,006 [bot] INFO: ============================================================
-2026-04-09 14:44:35,007 [news_filter] INFO: Loaded 26 restricted events
-2026-04-09 14:44:35,007 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-04-09 14:44:35,152 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-09 14:44:35,152 [tradovate_client] INFO: Saved token is still valid
-2026-04-09 14:44:35,153 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-09 14:44:35,227 [bot] INFO: Bot started successfully
-2026-04-09 14:44:35,227 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-09 14:44:35,227 [bot] INFO: Timeframe: 5min
-2026-04-09 14:44:35,227 [bot] INFO: New trading day: 2026-04-09
-2026-04-09 14:44:35,229 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:44:55,147 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:45:35,532 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:45:55,549 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:46:35,894 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:46:55,971 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:47:36,247 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:47:56,356 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
-2026-04-09 14:48:36,637 [bot] WARNING: FLATTENING ALL: News event: Agricultural Reports
+--- Last 60 log lines ---
+2026-04-09 15:01:13,883 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-09 15:01:16,166 [tradovate_client] INFO: MD WebSocket connected
+2026-04-09 15:01:16,167 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-09 15:01:16,283 [tradovate_client] INFO: Chart subscription active: MESM6 (id=554358)
+2026-04-09 15:01:16,419 [tradovate_client] INFO: Subscribing to chart data: MNQM6 (5min)
+2026-04-09 15:01:16,509 [tradovate_client] INFO: MESM6: Received 100 historical bars via WebSocket
+2026-04-09 15:01:16,538 [tradovate_client] INFO: Chart subscription active: MNQM6 (id=554360)
+2026-04-09 15:01:16,670 [tradovate_client] INFO: Subscribing to chart data: MCLM6 (5min)
+2026-04-09 15:01:16,786 [tradovate_client] INFO: Chart subscription active: MCLM6 (id=554364)
+2026-04-09 15:01:16,862 [tradovate_client] INFO: MNQM6: Received 100 historical bars via WebSocket
+2026-04-09 15:01:16,923 [tradovate_client] INFO: Subscribing to chart data: MGCM6 (5min)
+2026-04-09 15:01:17,039 [tradovate_client] INFO: Chart subscription active: MGCM6 (id=554370)
+2026-04-09 15:01:17,174 [tradovate_client] INFO: Subscribing to chart data: MYMM6 (5min)
+2026-04-09 15:01:17,206 [tradovate_client] INFO: MCLM6: Received 100 historical bars via WebSocket
+2026-04-09 15:01:17,290 [tradovate_client] INFO: Chart subscription active: MYMM6 (id=554374)
+2026-04-09 15:01:17,424 [tradovate_client] INFO: Subscribing to chart data: M2KM6 (5min)
+2026-04-09 15:01:17,542 [tradovate_client] INFO: Chart subscription active: M2KM6 (id=554376)
+2026-04-09 15:01:17,561 [tradovate_client] INFO: MGCM6: Received 100 historical bars via WebSocket
+2026-04-09 15:01:17,907 [tradovate_client] INFO: MYMM6: Received 100 historical bars via WebSocket
+2026-04-09 15:01:18,185 [tradovate_client] INFO: M2KM6: Received 100 historical bars via WebSocket
+2026-04-09 15:01:47,540 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-09 15:01:49,841 [tradovate_client] INFO: MD WebSocket connected
+2026-04-09 15:01:49,841 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-09 15:01:49,955 [tradovate_client] INFO: Chart subscription active: MESM6 (id=554716)
+2026-04-09 15:01:50,092 [tradovate_client] INFO: Subscribing to chart data: MNQM6 (5min)
+2026-04-09 15:01:50,186 [tradovate_client] INFO: MESM6: Received 100 historical bars via WebSocket
+2026-04-09 15:01:50,207 [tradovate_client] INFO: Chart subscription active: MNQM6 (id=554720)
+2026-04-09 15:01:50,343 [tradovate_client] INFO: Subscribing to chart data: MCLM6 (5min)
+2026-04-09 15:01:50,458 [tradovate_client] INFO: Chart subscription active: MCLM6 (id=554724)
+2026-04-09 15:01:50,470 [tradovate_client] INFO: MNQM6: Received 100 historical bars via WebSocket
+2026-04-09 15:01:50,595 [tradovate_client] INFO: Subscribing to chart data: MGCM6 (5min)
+2026-04-09 15:01:50,710 [tradovate_client] INFO: Chart subscription active: MGCM6 (id=554728)
+2026-04-09 15:01:50,743 [tradovate_client] INFO: MCLM6: Received 100 historical bars via WebSocket
+2026-04-09 15:01:50,847 [tradovate_client] INFO: Subscribing to chart data: MYMM6 (5min)
+2026-04-09 15:01:50,961 [tradovate_client] INFO: Chart subscription active: MYMM6 (id=554730)
+2026-04-09 15:01:51,069 [tradovate_client] INFO: MGCM6: Received 100 historical bars via WebSocket
+2026-04-09 15:01:51,098 [tradovate_client] INFO: Subscribing to chart data: M2KM6 (5min)
+2026-04-09 15:01:51,212 [tradovate_client] INFO: Chart subscription active: M2KM6 (id=554736)
+2026-04-09 15:01:51,409 [tradovate_client] INFO: MYMM6: Received 100 historical bars via WebSocket
+2026-04-09 15:01:51,757 [tradovate_client] INFO: M2KM6: Received 100 historical bars via WebSocket
+2026-04-09 15:02:21,212 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-09 15:02:23,497 [tradovate_client] INFO: MD WebSocket connected
+2026-04-09 15:02:23,498 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-09 15:02:23,613 [tradovate_client] INFO: Chart subscription active: MESM6 (id=555138)
+2026-04-09 15:02:23,749 [tradovate_client] INFO: Subscribing to chart data: MNQM6 (5min)
+2026-04-09 15:02:23,836 [tradovate_client] INFO: MESM6: Received 100 historical bars via WebSocket
+2026-04-09 15:02:23,865 [tradovate_client] INFO: Chart subscription active: MNQM6 (id=555142)
+2026-04-09 15:02:24,002 [tradovate_client] INFO: Subscribing to chart data: MCLM6 (5min)
+2026-04-09 15:02:24,119 [tradovate_client] INFO: Chart subscription active: MCLM6 (id=555144)
+2026-04-09 15:02:24,121 [tradovate_client] INFO: MNQM6: Received 100 historical bars via WebSocket
+2026-04-09 15:02:24,253 [tradovate_client] INFO: Subscribing to chart data: MGCM6 (5min)
+2026-04-09 15:02:24,367 [tradovate_client] INFO: Chart subscription active: MGCM6 (id=555148)
+2026-04-09 15:02:24,396 [tradovate_client] INFO: MCLM6: Received 100 historical bars via WebSocket
+2026-04-09 15:02:24,505 [tradovate_client] INFO: Subscribing to chart data: MYMM6 (5min)
+2026-04-09 15:02:24,619 [tradovate_client] INFO: Chart subscription active: MYMM6 (id=555154)
+2026-04-09 15:02:24,743 [tradovate_client] INFO: MGCM6: Received 100 historical bars via WebSocket
+2026-04-09 15:02:24,756 [tradovate_client] INFO: Subscribing to chart data: M2KM6 (5min)
+2026-04-09 15:02:24,870 [tradovate_client] INFO: Chart subscription active: M2KM6 (id=555158)
+2026-04-09 15:02:25,086 [tradovate_client] INFO: MYMM6: Received 100 historical bars via WebSocket
+2026-04-09 15:02:25,441 [tradovate_client] INFO: M2KM6: Received 100 historical bars via WebSocket
