@@ -1,58 +1,49 @@
-=== v170 2026-04-09 18:16 UTC ===
-Service: activating
-PID: 0
-Started: Thu 2026-04-09 18:15:54 UTC
+=== v171 2026-04-09 18:26 UTC ===
+Service: active
+PID: 1933509
 
---- VWAP values + signals ---
-2026-04-09 18:03:58,327 [strategy.vwap] INFO: Price=2640.30 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=71.0 ATR=4.85
-2026-04-09 18:03:58,327 [strategy.vwap] INFO: Price=2642.80 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=75.8 ATR=4.79
-2026-04-09 18:03:58,327 [strategy.vwap] INFO: Price=2643.20 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=73.6 ATR=4.83
-2026-04-09 18:03:58,327 [strategy.vwap] INFO: Price=2645.80 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=76.1 ATR=4.92
-2026-04-09 18:03:58,327 [strategy.vwap] INFO: Price=2648.00 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=76.1 ATR=4.95
-2026-04-09 18:03:58,327 [strategy.vwap] INFO: Price=2652.30 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=77.7 ATR=5.33
-2026-04-09 18:03:58,327 [strategy.vwap] INFO: Price=2650.40 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=73.1 ATR=5.33
-2026-04-09 18:03:58,327 [strategy.vwap] INFO: Price=2650.20 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=79.0 ATR=5.24
-2026-04-09 18:03:58,327 [strategy.vwap] INFO: Price=2653.40 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=81.6 ATR=5.36
-2026-04-09 18:03:58,327 [strategy.vwap] INFO: Price=2651.10 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=75.4 ATR=5.31
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2652.60 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=73.7 ATR=5.21
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2652.50 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=74.1 ATR=5.25
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2652.30 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=77.6 ATR=5.25
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2653.60 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=70.3 ATR=4.50
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2651.70 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=73.2 ATR=4.03
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2654.80 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=73.8 ATR=4.10
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2656.40 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=75.0 ATR=3.83
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2658.30 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=74.3 ATR=3.79
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2659.10 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=72.8 ATR=3.81
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2658.80 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=66.0 ATR=3.39
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2659.80 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=74.2 ATR=3.34
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2659.40 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=73.5 ATR=3.17
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2658.20 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=63.6 ATR=2.96
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2656.70 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=66.7 ATR=2.94
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2660.20 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=70.2 ATR=2.97
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2658.90 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=66.0 ATR=2.97
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2659.50 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=67.6 ATR=2.89
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2658.50 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=62.2 ATR=2.81
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2658.10 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=67.2 ATR=2.74
-2026-04-09 18:03:58,328 [strategy.vwap] INFO: Price=2652.80 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=45.2 ATR=2.81
+--- VWAP values (should NOT be 0 now) ---
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.50SD RSI=66.0 entry=2658.90 sl=2664.67 tp=2641.61
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2659.50 VWAP=2641.86 dist=+1.51SD RSI=67.6 ATR=2.89
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.51SD RSI=67.6 entry=2659.50 sl=2665.32 tp=2641.86
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2658.50 VWAP=2642.00 dist=+1.41SD RSI=62.2 ATR=2.81
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2658.10 VWAP=2642.11 dist=+1.36SD RSI=67.2 ATR=2.74
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.36SD RSI=67.2 entry=2658.10 sl=2663.97 tp=2642.11
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2649.00 VWAP=2642.54 dist=+0.56SD RSI=38.2 ATR=3.27
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2651.10 VWAP=2642.76 dist=+0.72SD RSI=39.4 ATR=3.41
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2649.80 VWAP=2642.89 dist=+0.60SD RSI=32.7 ATR=3.46
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2650.40 VWAP=2642.98 dist=+0.65SD RSI=32.1 ATR=3.41
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=6857.50 VWAP=6841.45 dist=+0.71SD RSI=38.7 ATR=6.41
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=25179.00 VWAP=25123.15 dist=+0.62SD RSI=38.1 ATR=27.89
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=4810.70 VWAP=4807.02 dist=+0.29SD RSI=42.3 ATR=6.81
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=48449.00 VWAP=48246.54 dist=+1.03SD RSI=42.2 ATR=42.79
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=2650.80 VWAP=2642.99 dist=+0.68SD RSI=33.6 ATR=3.35
 
---- Last 20 log lines ---
-2026-04-09 18:05:45,943 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:05:45,943 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:08:58,426 [bot] INFO: === Trading cycle 14:08 ET | Guardian: ACTIVE ===
-2026-04-09 18:10:23,234 [bot] INFO: Stopping bot: Signal received
-2026-04-09 18:10:23,596 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-09 18:10:23,597 [bot] INFO: Bot stopped
-2026-04-09 18:10:47,114 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:10:47,114 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:10:47,114 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:10:47,114 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:10:47,115 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:10:47,115 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:10:48,093 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-09 18:15:48,338 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:15:48,338 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:15:48,338 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:15:48,338 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:15:48,338 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:15:48,338 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:15:49,340 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+--- Signals? ---
+2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.85SD RSI=74.3 entry=2658.30 sl=2663.98 tp=2639.26
+2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.84SD RSI=72.8 entry=2659.10 sl=2664.82 tp=2639.67
+2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.74SD RSI=66.0 entry=2658.80 sl=2664.18 tp=2640.03
+2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.78SD RSI=74.2 entry=2659.80 sl=2665.27 tp=2640.31
+2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.70SD RSI=73.5 entry=2659.40 sl=2664.94 tp=2640.56
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.38SD RSI=66.7 entry=2656.70 sl=2662.35 tp=2641.11
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.64SD RSI=70.2 entry=2660.20 sl=2665.92 tp=2641.40
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.50SD RSI=66.0 entry=2658.90 sl=2664.67 tp=2641.61
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.51SD RSI=67.6 entry=2659.50 sl=2665.32 tp=2641.86
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.36SD RSI=67.2 entry=2658.10 sl=2663.97 tp=2642.11
+
+--- Last 15 log lines ---
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=6857.50 VWAP=6841.45 dist=+0.71SD RSI=38.7 ATR=6.41
+2026-04-09 18:25:21,987 [bot] INFO: MNQM6: New bar 2026-04-09T18:20Z | O=25178.5 H=25186.0 L=25177.75 C=25179.0 V=1104
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=25179.00 VWAP=25123.15 dist=+0.62SD RSI=38.1 ATR=27.89
+2026-04-09 18:25:21,987 [bot] INFO: MGCM6: New bar 2026-04-09T18:20Z | O=4809.8 H=4811.1 L=4809.8 C=4810.7 V=109
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=4810.70 VWAP=4807.02 dist=+0.29SD RSI=42.3 ATR=6.81
+2026-04-09 18:25:21,987 [bot] INFO: MYMM6: New bar 2026-04-09T18:20Z | O=48443.0 H=48457.0 L=48443.0 C=48449.0 V=71
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=48449.00 VWAP=48246.54 dist=+1.03SD RSI=42.2 ATR=42.79
+2026-04-09 18:25:21,987 [bot] INFO: M2KM6: New bar 2026-04-09T18:20Z | O=2650.6 H=2651.7 L=2650.6 C=2650.8 V=79
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=2650.80 VWAP=2642.99 dist=+0.68SD RSI=33.6 ATR=3.35
+2026-04-09 18:25:50,790 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 18:25:50,790 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 18:25:50,790 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 18:25:50,790 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 18:25:50,790 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 18:25:50,790 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
