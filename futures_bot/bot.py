@@ -214,6 +214,7 @@ class FuturesBot:
                 # Check if trading session is active
                 in_session, session_msg = self.risk_mgr.is_trading_session()
                 if not in_session:
+                    logger.info(f"Outside session: {session_msg}")
                     await asyncio.sleep(30)
                     continue
 
@@ -222,6 +223,8 @@ class FuturesBot:
                     await self._flatten_all(f"Guardian: {self.guardian.reason}")
                     await asyncio.sleep(60)
                     continue
+
+                logger.info(f"=== Trading cycle {now_et.strftime('%H:%M ET')} | Guardian: {self.guardian.state.name if hasattr(self.guardian, 'state') else 'N/A'} ===")
 
                 # Update balance
                 try:
@@ -285,6 +288,7 @@ class FuturesBot:
                 symbol, self.timeframe, count=50
             )
             if not bars_data:
+                logger.warning(f"{symbol}: No bars returned from API")
                 return
 
             # Only process NEW bars (avoid re-feeding old data)
@@ -295,6 +299,7 @@ class FuturesBot:
             self._last_bar_time[symbol] = bar_time
 
             bar = self._to_bar(latest_bar)
+            logger.info(f"{symbol}: New bar {bar_time} | O={bar.open} H={bar.high} L={bar.low} C={bar.close} V={bar.volume}")
 
             # Get this symbol's strategy instances
             vwap = self.vwap_strategies[symbol]
@@ -326,7 +331,10 @@ class FuturesBot:
 
             # Execute trade if signal
             if setup and setup.signal.value != 0:
+                logger.info(f"{symbol}: SIGNAL {setup.signal.name} from {strategy_name} | entry={setup.entry_price:.2f} sl={setup.stop_loss:.2f}")
                 await self._execute_trade(symbol, setup, strategy_name)
+            else:
+                logger.debug(f"{symbol}: No signal from {strategy_name}")
 
         except Exception as e:
             logger.error(f"Error processing {symbol}: {e}", exc_info=True)
