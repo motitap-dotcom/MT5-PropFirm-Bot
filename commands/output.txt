@@ -1,43 +1,23 @@
-=== v167 2026-04-09 17:50 UTC ===
-Service: activating
+=== DEBUG v168 2026-04-09 17:54 UTC ===
+Commit: 6e42288 Debug code version v168
+Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
 
-2026-04-09 17:27:08,847 [bot] INFO: === Trading cycle 13:27 ET | Guardian: ACTIVE ===
-2026-04-09 17:30:37,301 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:30:37,302 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:30:37,302 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:30:37,302 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:30:37,302 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:30:37,302 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:32:09,321 [bot] INFO: === Trading cycle 13:32 ET | Guardian: ACTIVE ===
-2026-04-09 17:35:38,508 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:35:38,508 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:35:38,508 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:35:38,508 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:35:38,508 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:35:38,508 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:37:09,742 [bot] INFO: === Trading cycle 13:37 ET | Guardian: ACTIVE ===
-2026-04-09 17:40:39,637 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:40:39,638 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:40:39,638 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:40:39,638 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:40:39,638 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:40:39,638 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:42:10,176 [bot] INFO: === Trading cycle 13:42 ET | Guardian: ACTIVE ===
-2026-04-09 17:45:40,681 [tradovate_client] INFO: Token expiring in 30min, renewing...
-2026-04-09 17:45:40,829 [tradovate_client] INFO: Token renewed successfully
-2026-04-09 17:45:40,951 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:45:40,951 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:45:40,951 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:45:40,951 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:45:40,951 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:45:40,951 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:45:45,010 [bot] INFO: Stopping bot: Signal received
-2026-04-09 17:45:45,350 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-09 17:45:45,351 [bot] INFO: Bot stopped
-2026-04-09 17:50:42,284 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:50:42,285 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:50:42,285 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:50:42,285 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:50:42,285 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:50:42,285 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 17:50:43,315 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+--- check_trend_day call in bot.py ---
+239:                # Trend day detection disabled - VWAP strategy stays active
+240:                # ORB switching removed: ORB needs opening range data from 9:30-10:00
+
+--- VWAP on_bar trend check ---
+78:        self._trend_day_detected: bool = False
+89:        self._trend_day_detected = False
+109:        if self._trend_day_detected:
+118:            logger.info(f"ATR filter: {atr:.2f} (range {self.min_atr}-{self.max_atr})")
+125:        logger.info(f"Price={current.close:.2f} VWAP={vwap_data.vwap:.2f} "
+169:            self._trend_day_detected = True
+173:        return self._trend_day_detected
+
+--- RSI thresholds ---
+65:        self.rsi_oversold: float = config.get("rsi_oversold", 42)
+66:        self.rsi_overbought: float = config.get("rsi_overbought", 58)
+68:        self.min_atr: float = config.get("min_atr", 0.5)
+69:        self.max_atr: float = config.get("max_atr", 500.0)
+117:        if atr < self.min_atr or atr > self.max_atr:
