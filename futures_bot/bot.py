@@ -298,12 +298,18 @@ class FuturesBot:
                 return  # Already processed this bar
             self._last_bar_time[symbol] = bar_time
 
-            bar = self._to_bar(latest_bar)
-            logger.info(f"{symbol}: New bar {bar_time} | O={bar.open} H={bar.high} L={bar.low} C={bar.close} V={bar.volume}")
-
             # Get this symbol's strategy instances
             vwap = self.vwap_strategies[symbol]
             orb = self.orb_strategies[symbol]
+
+            # On first call, feed ALL historical bars to warm up the strategy
+            if len(vwap._bars) == 0 and len(bars_data) > 1:
+                logger.info(f"{symbol}: Warming up strategy with {len(bars_data)} historical bars")
+                for hist_bar in bars_data[:-1]:
+                    vwap.on_bar(self._to_bar(hist_bar))
+
+            bar = self._to_bar(latest_bar)
+            logger.info(f"{symbol}: New bar {bar_time} | O={bar.open} H={bar.high} L={bar.low} C={bar.close} V={bar.volume}")
 
             # Check ORB period (9:30-10:00 ET)
             is_orb_period = time(9, 30) <= now_et.time() < time(10, 0)

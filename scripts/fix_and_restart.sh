@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v7 - Relaxed signal thresholds ==="
+echo "=== Fix & Restart v8 - Historical bar warmup ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 
