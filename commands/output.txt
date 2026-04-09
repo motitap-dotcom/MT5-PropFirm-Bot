@@ -1,27 +1,10 @@
-=== STATUS v162 2026-04-09 16:52 UTC ===
+=== CHECK v163 2026-04-09 17:03 UTC ===
 
-Service: active
-PID: 1900319
+Service: activating
+PID: 0
+Started: Thu 2026-04-09 17:02:38 UTC
 
---- Last 40 log lines ---
-2026-04-09 16:35:55,995 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:40:25,323 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:40:25,323 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:40:25,323 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:40:25,323 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:40:25,323 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:40:25,323 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:40:56,266 [bot] INFO: === Trading cycle 12:40 ET | Guardian: ACTIVE ===
-2026-04-09 16:40:56,410 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:40:56,411 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:40:56,411 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:40:56,411 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:40:56,411 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:40:56,411 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:45:26,497 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:45:26,497 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:45:26,497 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 16:45:26,497 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+--- Last 50 log lines ---
 2026-04-09 16:45:26,497 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
 2026-04-09 16:45:26,497 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
 2026-04-09 16:45:56,666 [bot] INFO: === Trading cycle 12:45 ET | Guardian: ACTIVE ===
@@ -44,9 +27,36 @@ PID: 1900319
 2026-04-09 16:50:57,233 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
 2026-04-09 16:50:57,234 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
 2026-04-09 16:50:57,234 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:55:28,804 [tradovate_client] INFO: Token expiring in 30min, renewing...
+2026-04-09 16:55:28,946 [tradovate_client] INFO: Token renewed successfully
+2026-04-09 16:55:29,067 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:55:29,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:55:29,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:55:29,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:55:29,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:55:29,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:55:30,045 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-09 16:55:57,577 [bot] INFO: === Trading cycle 12:55 ET | Guardian: ACTIVE ===
+2026-04-09 16:55:57,577 [tradovate_client] INFO: Token expiring in 30min, renewing...
+2026-04-09 16:55:57,726 [tradovate_client] INFO: Token renewed successfully
+2026-04-09 16:55:57,851 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:55:57,851 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:55:57,851 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:55:57,851 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:55:57,851 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:55:57,851 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 16:58:07,914 [bot] INFO: Stopping bot: Signal received
+2026-04-09 16:58:08,311 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-09 16:58:08,311 [bot] INFO: Bot stopped
+2026-04-09 17:00:30,186 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:00:30,187 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:00:30,187 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:00:30,187 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:00:30,187 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:00:30,187 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-09 17:00:31,186 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 
---- Any signals or trades? ---
-2026-04-07 19:15:06,429 [tradovate_client] INFO: Cancelled order 451715410047
+--- Signals/Trades ---
 2026-04-07 19:15:06,550 [tradovate_client] INFO: Cancelled order 451715410024
 2026-04-07 19:15:06,671 [tradovate_client] INFO: Cancelled order 451715410018
 2026-04-07 19:15:06,791 [tradovate_client] INFO: Cancelled order 451715410050
@@ -56,3 +66,4 @@ PID: 1900319
 2026-04-09 14:15:17,973 [bot] INFO: Stopping bot: Signal received
 2026-04-09 14:34:56,921 [bot] INFO: Stopping bot: Signal received
 2026-04-09 16:10:48,099 [bot] INFO: Stopping bot: Signal received
+2026-04-09 16:58:07,914 [bot] INFO: Stopping bot: Signal received
