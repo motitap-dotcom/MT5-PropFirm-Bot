@@ -1,24 +1,29 @@
-=== v179 2026-04-10 13:51 UTC ===
+=== v180 2026-04-10 13:55 UTC ===
 Service: active
-PID: 2202673
 
---- Is new code running? (should see domcontentloaded, NOT networkidle) ---
-2026-04-10 13:45:04,093 [tradovate_client] ERROR: Browser auth error: Page.goto: Target page, context or browser has been closed
-2026-04-10 13:46:05,069 [tradovate_client] ERROR: Browser auth error: Page.goto: Timeout 60000ms exceeded.
-2026-04-10 13:46:05,252 [tradovate_client] ERROR: Browser auth error: Page.goto: Timeout 60000ms exceeded.
+--- Live bars + VWAP ---
+2026-04-10 13:47:35,868 [bot] INFO: MESM6: New bar 2026-04-10T13:45Z | O=6870.75 H=6872.0 L=6868.25 C=6869.25 V=6511
+2026-04-10 13:47:36,221 [bot] INFO: MNQM6: New bar 2026-04-10T13:45Z | O=25324.5 H=25342.75 L=25323.0 C=25335.0 V=10563
+2026-04-10 13:47:36,570 [bot] INFO: MCLM6: New bar 2026-04-10T13:45Z | O=90.3 H=90.31 L=90.2 C=90.26 V=9
+2026-04-10 13:47:36,922 [bot] INFO: MGCM6: New bar 2026-04-10T13:45Z | O=4793.7 H=4796.4 L=4790.0 C=4791.6 V=1028
+2026-04-10 13:47:37,268 [bot] INFO: MYMM6: New bar 2026-04-10T13:45Z | O=48278.0 H=48290.0 L=48245.0 C=48252.0 V=767
+2026-04-10 13:47:37,610 [bot] INFO: M2KM6: New bar 2026-04-10T13:45Z | O=2652.0 H=2652.7 L=2649.8 C=2650.7 V=673
 
---- Last 30 log ---
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2652.80 VWAP=2651.30 dist=+0.80SD RSI=48.9 ATR=1.42
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2652.20 VWAP=2651.33 dist=+0.47SD RSI=44.3 ATR=1.43
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2652.80 VWAP=2651.39 dist=+0.77SD RSI=46.5 ATR=1.46
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2652.60 VWAP=2651.42 dist=+0.65SD RSI=51.1 ATR=1.45
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2652.30 VWAP=2651.45 dist=+0.47SD RSI=42.9 ATR=1.42
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2653.60 VWAP=2651.58 dist=+1.12SD RSI=65.3 ATR=1.44
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.12SD RSI=65.3 entry=2653.60 sl=2655.76 tp=2651.58
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2651.40 VWAP=2651.61 dist=-0.12SD RSI=49.5 ATR=1.53
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2654.50 VWAP=2651.91 dist=+1.32SD RSI=58.6 ATR=2.04
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2657.30 VWAP=2654.45 dist=+0.61SD RSI=63.6 ATR=3.33
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2658.70 VWAP=2654.62 dist=+0.88SD RSI=69.5 ATR=3.42
+--- Live signals (not warmup) ---
+2026-04-10 13:47:36,570 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.80SD RSI=66.3 entry=90.21 sl=90.67 tp=89.96
+2026-04-10 13:47:36,570 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.34SD RSI=72.5 entry=90.39 sl=90.87 tp=89.97
+2026-04-10 13:47:36,921 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.15SD RSI=69.8 entry=4782.50 sl=4788.88 tp=4777.28
+2026-04-10 13:47:36,921 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.49SD RSI=70.8 entry=4784.90 sl=4791.35 tp=4777.84
+2026-04-10 13:47:36,921 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.52SD RSI=67.0 entry=4785.60 sl=4791.87 tp=4778.20
+2026-04-10 13:47:36,921 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.41SD RSI=65.3 entry=4787.40 sl=4793.74 tp=4779.62
+2026-04-10 13:47:36,921 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.51SD RSI=65.3 entry=4788.50 sl=4794.98 tp=4779.92
+2026-04-10 13:47:36,921 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.93SD RSI=66.1 entry=4792.00 sl=4798.61 tp=4780.43
+2026-04-10 13:47:36,921 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.47SD RSI=70.5 entry=4792.50 sl=4799.66 tp=4782.48
+2026-04-10 13:47:36,922 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.25SD RSI=68.2 entry=4804.80 sl=4814.59 tp=4785.70
+
+--- Orders/Trades ---
+
+--- Last 20 log ---
 2026-04-10 13:47:37,609 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.88SD RSI=69.5 entry=2658.70 sl=2663.83 tp=2654.62
 2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2658.60 VWAP=2654.86 dist=+0.81SD RSI=68.3 ATR=3.46
 2026-04-10 13:47:37,609 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.81SD RSI=68.3 entry=2658.60 sl=2663.79 tp=2654.86
@@ -38,3 +43,4 @@ PID: 2202673
 2026-04-10 13:47:37,610 [strategy.vwap] INFO: Price=2651.70 VWAP=2653.35 dist=-0.43SD RSI=35.6 ATR=2.96
 2026-04-10 13:47:37,610 [bot] INFO: M2KM6: New bar 2026-04-10T13:45Z | O=2652.0 H=2652.7 L=2649.8 C=2650.7 V=673
 2026-04-10 13:50:19,498 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-10 13:52:37,615 [bot] INFO: === Trading cycle 09:52 ET | Guardian: ACTIVE ===
