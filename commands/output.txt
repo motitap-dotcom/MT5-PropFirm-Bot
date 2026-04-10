@@ -1,16 +1,60 @@
-=== v183 2026-04-10 14:08 UTC ===
+=== FULL DIAGNOSTIC v184 2026-04-10 14:13 UTC ===
+=== 1. TOKEN ===
+Has access_token: True
+Has md_token: True
+Expiry: 1775832613.391
+Remaining: 37 min
+
+=== 2. REST API ===
+Account API: 200
+Account: ELTDER260326211630296397 id=45373493
+
+=== 3. WEBSOCKET ===
+Connected: o
+Auth: a[{"s":200,"i":1}]
+Subscription OK: {"s": 200, "i": 2, "d": {"mode": "RealTime", "historicalId": 901852, "realtimeId": 901852}}
+Got 3 bars!
+Latest: 2026-04-10T14:10Z C=6869.75 upVol=4762
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.5 upVol=7503
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.25 upVol=7503
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.5 upVol=7511
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.25 upVol=7514
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6871.75 upVol=7514
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.0 upVol=7516
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.0 upVol=7517
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.25 upVol=7527
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.75 upVol=7534
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.75 upVol=7535
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.5 upVol=7535
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.5 upVol=7535
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.5 upVol=7535
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.5 upVol=7537
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.25 upVol=7537
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.25 upVol=7537
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.25 upVol=7537
+Got 1 bars!
+Latest: 2026-04-10T14:10Z C=6872.5 upVol=7540
+
+=== 4. BOT PROCESS ===
 Service: active
 PID: 2202673
-Started: Fri 2026-04-10 13:47:34 UTC
-
---- Auth status ---
-
---- WebSocket status ---
-
---- Trading + VWAP ---
-2026-04-10 14:02:38,547 [bot] INFO: === Trading cycle 10:02 ET | Guardian: ACTIVE ===
-2026-04-10 14:07:38,921 [bot] INFO: === Trading cycle 10:07 ET | Guardian: ACTIVE ===
-
---- Errors ---
-2026-04-10 14:00:22,453 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-10 14:05:23,721 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+domcontentloaded: YES
+upVolume fix: YES
+dist_sd: YES
