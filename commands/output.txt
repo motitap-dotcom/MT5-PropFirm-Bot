@@ -1,56 +1,50 @@
-=== POST OPEN v175 2026-04-10 13:32 UTC ===
+=== v176 2026-04-10 13:36 UTC ===
 Service: active
 
---- Last 50 log lines ---
-2026-04-10 13:30:05,444 [tradovate_client] INFO: Token expiring in -68min, renewing...
-2026-04-10 13:30:05,564 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-10 13:30:05,564 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-10 13:30:05,686 [bot] ERROR: Error processing MNQM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 284, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 505, in _post
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-10 13:30:05,686 [tradovate_client] INFO: Token expiring in -68min, renewing...
-2026-04-10 13:30:05,806 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-10 13:30:05,807 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-10 13:30:05,929 [bot] ERROR: Error processing MCLM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 284, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 505, in _post
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-10 13:30:05,929 [tradovate_client] INFO: Token expiring in -68min, renewing...
-2026-04-10 13:30:06,049 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-10 13:30:06,050 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-10 13:30:06,173 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-10 13:30:06,971 [tradovate_client] INFO: Opening Tradovate login page...
-2026-04-10 13:30:13,179 [tradovate_client] INFO: Login submitted, waiting for token...
-2026-04-10 13:30:14,267 [tradovate_client] INFO: Browser auth: token captured successfully
-2026-04-10 13:30:14,268 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
-2026-04-10 13:30:14,680 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-10 13:30:29,188 [bot] INFO: === Trading cycle 09:30 ET | Guardian: ACTIVE ===
-2026-04-10 13:30:29,188 [tradovate_client] INFO: Token expiring in -533min, renewing...
-2026-04-10 13:30:29,328 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-10 13:30:29,328 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-10 13:30:29,448 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-10 13:30:30,143 [tradovate_client] INFO: Opening Tradovate login page...
-2026-04-10 13:31:30,201 [tradovate_client] ERROR: Browser auth error: Page.goto: Timeout 60000ms exceeded.
-Call log:
-  - navigating to "https://trader.tradovate.com/welcome", waiting until "networkidle"
-
-2026-04-10 13:31:30,201 [bot] ERROR: Error fetching balance: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-10 13:31:30,201 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-10 13:31:30,335 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-10 13:31:30,454 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-10 13:31:30,454 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-10 13:31:30,573 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-10 13:31:31,172 [tradovate_client] INFO: Opening Tradovate login page...
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.57SD RSI=73.8 entry=2654.80 sl=2660.95 tp=2639.18
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: Price=2656.40 VWAP=2639.40 dist=+1.69SD RSI=75.0 ATR=3.83
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.69SD RSI=75.0 entry=2656.40 sl=2662.14 tp=2639.40
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: Price=2658.30 VWAP=2639.71 dist=+1.81SD RSI=74.3 ATR=3.79
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.81SD RSI=74.3 entry=2658.30 sl=2663.98 tp=2639.71
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: Price=2659.10 VWAP=2640.13 dist=+1.80SD RSI=72.8 ATR=3.81
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.80SD RSI=72.8 entry=2659.10 sl=2664.82 tp=2640.13
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: Price=2658.80 VWAP=2640.50 dist=+1.70SD RSI=66.0 ATR=3.39
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.70SD RSI=66.0 entry=2658.80 sl=2664.17 tp=2640.50
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: Price=2659.80 VWAP=2640.78 dist=+1.74SD RSI=74.2 ATR=3.34
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.74SD RSI=74.2 entry=2659.80 sl=2665.25 tp=2640.78
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: Price=2659.40 VWAP=2641.03 dist=+1.66SD RSI=73.5 ATR=3.17
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.66SD RSI=73.5 entry=2659.40 sl=2664.92 tp=2641.03
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: Price=2658.20 VWAP=2641.28 dist=+1.52SD RSI=63.6 ATR=2.96
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: Price=2656.70 VWAP=2641.59 dist=+1.34SD RSI=66.7 ATR=2.94
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.34SD RSI=66.7 entry=2656.70 sl=2662.33 tp=2641.59
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2660.20 VWAP=2641.89 dist=+1.61SD RSI=70.2 ATR=2.97
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.61SD RSI=70.2 entry=2660.20 sl=2665.90 tp=2641.89
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2658.90 VWAP=2642.09 dist=+1.46SD RSI=66.0 ATR=2.97
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.46SD RSI=66.0 entry=2658.90 sl=2664.64 tp=2642.09
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2659.50 VWAP=2642.35 dist=+1.48SD RSI=67.6 ATR=2.89
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.48SD RSI=67.6 entry=2659.50 sl=2665.29 tp=2642.35
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2658.50 VWAP=2642.49 dist=+1.38SD RSI=62.2 ATR=2.81
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2658.10 VWAP=2642.60 dist=+1.33SD RSI=67.2 ATR=2.74
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.33SD RSI=67.2 entry=2658.10 sl=2663.93 tp=2642.60
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2649.00 VWAP=2643.02 dist=+0.52SD RSI=38.2 ATR=3.27
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2651.10 VWAP=2643.24 dist=+0.69SD RSI=39.4 ATR=3.41
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2649.80 VWAP=2643.36 dist=+0.57SD RSI=32.7 ATR=3.46
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2650.40 VWAP=2643.44 dist=+0.61SD RSI=32.1 ATR=3.41
+2026-04-10 13:32:31,255 [bot] INFO: M2KM6: New bar 2026-04-09T18:20Z | O=2650.6 H=2651.7 L=2650.6 C=2650.8 V=79
 
 --- Signals + Trades today ---
+2026-04-10 13:32:31,254 [strategy.vwap] INFO: Price=2656.70 VWAP=2641.59 dist=+1.34SD RSI=66.7 ATR=2.94
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.34SD RSI=66.7 entry=2656.70 sl=2662.33 tp=2641.59
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2660.20 VWAP=2641.89 dist=+1.61SD RSI=70.2 ATR=2.97
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.61SD RSI=70.2 entry=2660.20 sl=2665.90 tp=2641.89
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2658.90 VWAP=2642.09 dist=+1.46SD RSI=66.0 ATR=2.97
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.46SD RSI=66.0 entry=2658.90 sl=2664.64 tp=2642.09
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2659.50 VWAP=2642.35 dist=+1.48SD RSI=67.6 ATR=2.89
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.48SD RSI=67.6 entry=2659.50 sl=2665.29 tp=2642.35
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2658.50 VWAP=2642.49 dist=+1.38SD RSI=62.2 ATR=2.81
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2658.10 VWAP=2642.60 dist=+1.33SD RSI=67.2 ATR=2.74
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.33SD RSI=67.2 entry=2658.10 sl=2663.93 tp=2642.60
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2649.00 VWAP=2643.02 dist=+0.52SD RSI=38.2 ATR=3.27
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2651.10 VWAP=2643.24 dist=+0.69SD RSI=39.4 ATR=3.41
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2649.80 VWAP=2643.36 dist=+0.57SD RSI=32.7 ATR=3.46
+2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2650.40 VWAP=2643.44 dist=+0.61SD RSI=32.1 ATR=3.41
