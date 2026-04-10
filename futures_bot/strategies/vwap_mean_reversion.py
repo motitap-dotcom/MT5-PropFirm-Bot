@@ -62,8 +62,8 @@ class VWAPMeanReversion:
 
     def __init__(self, config: dict):
         self.rsi_period: int = config.get("rsi_period", 14)
-        self.rsi_oversold: float = config.get("rsi_oversold", 42)
-        self.rsi_overbought: float = config.get("rsi_overbought", 58)
+        self.rsi_oversold: float = config.get("rsi_oversold", 48)
+        self.rsi_overbought: float = config.get("rsi_overbought", 52)
         self.max_consecutive_losses: int = config.get("max_consecutive_losses", 3)
         self.min_atr: float = config.get("min_atr", 0.5)
         self.max_atr: float = config.get("max_atr", 500.0)

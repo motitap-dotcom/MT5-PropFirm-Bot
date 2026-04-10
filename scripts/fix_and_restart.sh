@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v18 - Fresh WS per request, no persistent connection ==="
+echo "=== Fix & Restart v19 - RSI 48/52 for more signals ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 
