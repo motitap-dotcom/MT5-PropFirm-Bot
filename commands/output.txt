@@ -1,53 +1,41 @@
-=== v177 2026-04-10 13:40 UTC ===
-Service: active
+=== v178 2026-04-10 13:47 UTC ===
+Service: activating
+PID: 0
+Started: Fri 2026-04-10 13:46:34 UTC
+Commit: b48aec6 Check auth fix v178
 
---- Live bars from today ---
-2026-04-10 13:32:31,245 [bot] INFO: MESM6: New bar 2026-04-09T18:20Z | O=6857.25 H=6859.0 L=6857.25 C=6857.5 V=801
-2026-04-10 13:32:31,246 [bot] INFO: MNQM6: New bar 2026-04-09T18:20Z | O=25178.5 H=25186.0 L=25177.75 C=25179.0 V=1104
-2026-04-10 13:32:31,249 [bot] INFO: MCLM6: New bar 2026-04-09T18:15Z | O=89.79 H=89.82 L=89.36 C=89.51 V=149
-2026-04-10 13:32:31,251 [bot] INFO: MGCM6: New bar 2026-04-09T18:20Z | O=4809.8 H=4811.1 L=4809.8 C=4810.7 V=109
-2026-04-10 13:32:31,253 [bot] INFO: MYMM6: New bar 2026-04-09T18:20Z | O=48443.0 H=48457.0 L=48443.0 C=48449.0 V=71
-2026-04-10 13:32:31,255 [bot] INFO: M2KM6: New bar 2026-04-09T18:20Z | O=2650.6 H=2651.7 L=2650.6 C=2650.8 V=79
+--- Playwright fix deployed? ---
+domcontentloaded: 1
+force 2h expiry: 1
 
---- VWAP values from today ---
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.46SD RSI=66.0 entry=2658.90 sl=2664.64 tp=2642.09
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2659.50 VWAP=2642.35 dist=+1.48SD RSI=67.6 ATR=2.89
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.48SD RSI=67.6 entry=2659.50 sl=2665.29 tp=2642.35
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2658.50 VWAP=2642.49 dist=+1.38SD RSI=62.2 ATR=2.81
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2658.10 VWAP=2642.60 dist=+1.33SD RSI=67.2 ATR=2.74
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.33SD RSI=67.2 entry=2658.10 sl=2663.93 tp=2642.60
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2649.00 VWAP=2643.02 dist=+0.52SD RSI=38.2 ATR=3.27
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2651.10 VWAP=2643.24 dist=+0.69SD RSI=39.4 ATR=3.41
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2649.80 VWAP=2643.36 dist=+0.57SD RSI=32.7 ATR=3.46
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: Price=2650.40 VWAP=2643.44 dist=+0.61SD RSI=32.1 ATR=3.41
-
---- Signals from today (live) ---
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.81SD RSI=74.3 entry=2658.30 sl=2663.98 tp=2639.71
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.80SD RSI=72.8 entry=2659.10 sl=2664.82 tp=2640.13
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.70SD RSI=66.0 entry=2658.80 sl=2664.17 tp=2640.50
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.74SD RSI=74.2 entry=2659.80 sl=2665.25 tp=2640.78
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.66SD RSI=73.5 entry=2659.40 sl=2664.92 tp=2641.03
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.34SD RSI=66.7 entry=2656.70 sl=2662.33 tp=2641.59
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.61SD RSI=70.2 entry=2660.20 sl=2665.90 tp=2641.89
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.46SD RSI=66.0 entry=2658.90 sl=2664.64 tp=2642.09
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.48SD RSI=67.6 entry=2659.50 sl=2665.29 tp=2642.35
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.33SD RSI=67.2 entry=2658.10 sl=2663.93 tp=2642.60
-
---- Orders/Trades ---
-
---- Last 15 log ---
+--- Last 30 log lines ---
+2026-04-10 13:44:34,302 [tradovate_client] INFO: Opening Tradovate login page...
+2026-04-10 13:45:04,023 [bot] INFO: Stopping bot: Signal received
+2026-04-10 13:45:04,025 [tradovate_client] INFO: Token expiring in -547min, renewing...
+2026-04-10 13:45:04,093 [tradovate_client] ERROR: Browser auth error: Page.goto: Target page, context or browser has been closed
 Call log:
   - navigating to "https://trader.tradovate.com/welcome", waiting until "networkidle"
 
-2026-04-10 13:38:32,279 [bot] ERROR: Error fetching balance: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-10 13:38:32,279 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-10 13:38:32,416 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-10 13:38:32,534 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-10 13:38:32,535 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-10 13:38:32,654 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-10 13:38:33,249 [tradovate_client] INFO: Opening Tradovate login page...
-2026-04-10 13:39:33,324 [tradovate_client] ERROR: Browser auth error: Page.goto: Timeout 60000ms exceeded.
+2026-04-10 13:45:04,093 [bot] ERROR: Error fetching balance: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-10 13:45:04,093 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
+2026-04-10 13:45:04,177 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-10 13:45:04,177 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-10 13:45:04,223 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-10 13:45:04,298 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+2026-04-10 13:45:04,344 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-10 13:45:04,344 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-10 13:45:04,465 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+2026-04-10 13:45:04,999 [tradovate_client] INFO: Opening Tradovate login page...
+2026-04-10 13:45:05,187 [tradovate_client] INFO: Opening Tradovate login page...
+2026-04-10 13:46:05,069 [tradovate_client] ERROR: Browser auth error: Page.goto: Timeout 60000ms exceeded.
 Call log:
   - navigating to "https://trader.tradovate.com/welcome", waiting until "networkidle"
 
-2026-04-10 13:39:33,324 [bot] ERROR: Position sync error: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-10 13:46:05,069 [bot] ERROR: Error closing positions: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-10 13:46:05,154 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-10 13:46:05,154 [bot] INFO: Bot stopped
+2026-04-10 13:46:05,252 [tradovate_client] ERROR: Browser auth error: Page.goto: Timeout 60000ms exceeded.
+Call log:
+  - navigating to "https://trader.tradovate.com/welcome", waiting until "networkidle"
+
+2026-04-10 13:46:05,252 [bot] ERROR: Position sync error: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
