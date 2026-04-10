@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v17 - Fix WS heartbeat + .closed attr ==="
+echo "=== Fix & Restart v18 - Fresh WS per request, no persistent connection ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 
