@@ -1,11 +1,19 @@
 #!/bin/bash
-# Trigger: v182 - after 10:00 ET
+# Trigger: v183
 cd /root/MT5-PropFirm-Bot
-echo "=== v182 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== v183 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo "Service: $(systemctl is-active futures-bot)"
+echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
+echo "Started: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
 echo ""
-echo "--- Live VWAP + signals after 14:00 UTC ---"
-grep -E "dist=|SIGNAL|order|placed|fill|execute" logs/bot.log 2>/dev/null | grep -E "2026-04-10 1[4-9]:" | tail -20
+echo "--- Auth status ---"
+grep -E "token valid|domcontentloaded|Authenticated|Token renewed|Auth cooldown|Browser auth" logs/bot.log 2>/dev/null | grep "2026-04-10 14:" | tail -10
 echo ""
-echo "--- Last 20 log ---"
-tail -20 logs/bot.log 2>/dev/null
+echo "--- WebSocket status ---"
+grep -E "WebSocket|Subscribing|chart|Received.*bars" logs/bot.log 2>/dev/null | grep "2026-04-10 14:" | tail -10
+echo ""
+echo "--- Trading + VWAP ---"
+grep -E "dist=|SIGNAL|New bar|Trading cycle" logs/bot.log 2>/dev/null | grep "2026-04-10 14:" | tail -10
+echo ""
+echo "--- Errors ---"
+grep "ERROR" logs/bot.log 2>/dev/null | grep "2026-04-10 14:" | tail -5
