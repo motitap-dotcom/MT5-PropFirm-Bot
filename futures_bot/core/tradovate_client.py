@@ -249,9 +249,10 @@ class TradovateClient:
                 if browser_result:
                     self.access_token = browser_result["accessToken"]
                     self.md_access_token = browser_result.get("mdAccessToken", self.access_token)
-                    self._parse_expiry(browser_result.get("expirationTime", ""))
+                    # Force 2-hour expiry - browser tokens may not include expirationTime
+                    self.token_expiry = time.time() + 7200
                     self._save_token()
-                    logger.info("Authenticated successfully via browser (CAPTCHA bypassed)")
+                    logger.info(f"Authenticated successfully via browser (CAPTCHA bypassed), token valid for 2h")
                     return
                 else:
                     raise ConnectionError(
@@ -317,7 +318,7 @@ class TradovateClient:
                 await page.goto(
                     "https://trader.tradovate.com/welcome",
                     timeout=60000,
-                    wait_until="networkidle",
+                    wait_until="domcontentloaded",
                 )
                 await asyncio.sleep(8)  # Extra wait for SPA to render
 
