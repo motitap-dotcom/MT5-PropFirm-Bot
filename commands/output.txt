@@ -1,57 +1,56 @@
-=== MARKET OPEN v174 2026-04-10 13:28 UTC ===
+=== POST OPEN v175 2026-04-10 13:32 UTC ===
 Service: active
-PID: 1933509
 
 --- Last 50 log lines ---
-2026-04-10 13:03:58,189 [bot] INFO: Outside session: Pre-market: 09:03 ET (opens 09:30:00)
-2026-04-10 13:04:28,215 [bot] INFO: Outside session: Pre-market: 09:04 ET (opens 09:30:00)
-2026-04-10 13:04:58,223 [bot] INFO: Outside session: Pre-market: 09:04 ET (opens 09:30:00)
-2026-04-10 13:05:28,243 [bot] INFO: Outside session: Pre-market: 09:05 ET (opens 09:30:00)
-2026-04-10 13:05:58,252 [bot] INFO: Outside session: Pre-market: 09:05 ET (opens 09:30:00)
-2026-04-10 13:06:28,260 [bot] INFO: Outside session: Pre-market: 09:06 ET (opens 09:30:00)
-2026-04-10 13:06:58,286 [bot] INFO: Outside session: Pre-market: 09:06 ET (opens 09:30:00)
-2026-04-10 13:07:28,287 [bot] INFO: Outside session: Pre-market: 09:07 ET (opens 09:30:00)
-2026-04-10 13:07:58,315 [bot] INFO: Outside session: Pre-market: 09:07 ET (opens 09:30:00)
-2026-04-10 13:08:28,325 [bot] INFO: Outside session: Pre-market: 09:08 ET (opens 09:30:00)
-2026-04-10 13:08:58,327 [bot] INFO: Outside session: Pre-market: 09:08 ET (opens 09:30:00)
-2026-04-10 13:09:28,335 [bot] INFO: Outside session: Pre-market: 09:09 ET (opens 09:30:00)
-2026-04-10 13:09:58,362 [bot] INFO: Outside session: Pre-market: 09:09 ET (opens 09:30:00)
-2026-04-10 13:10:28,365 [bot] INFO: Outside session: Pre-market: 09:10 ET (opens 09:30:00)
-2026-04-10 13:10:58,368 [bot] INFO: Outside session: Pre-market: 09:10 ET (opens 09:30:00)
-2026-04-10 13:11:28,369 [bot] INFO: Outside session: Pre-market: 09:11 ET (opens 09:30:00)
-2026-04-10 13:11:58,390 [bot] INFO: Outside session: Pre-market: 09:11 ET (opens 09:30:00)
-2026-04-10 13:12:28,402 [bot] INFO: Outside session: Pre-market: 09:12 ET (opens 09:30:00)
-2026-04-10 13:12:58,427 [bot] INFO: Outside session: Pre-market: 09:12 ET (opens 09:30:00)
-2026-04-10 13:13:28,444 [bot] INFO: Outside session: Pre-market: 09:13 ET (opens 09:30:00)
-2026-04-10 13:13:58,474 [bot] INFO: Outside session: Pre-market: 09:13 ET (opens 09:30:00)
-2026-04-10 13:14:28,502 [bot] INFO: Outside session: Pre-market: 09:14 ET (opens 09:30:00)
-2026-04-10 13:14:58,532 [bot] INFO: Outside session: Pre-market: 09:14 ET (opens 09:30:00)
-2026-04-10 13:15:28,560 [bot] INFO: Outside session: Pre-market: 09:15 ET (opens 09:30:00)
-2026-04-10 13:15:58,590 [bot] INFO: Outside session: Pre-market: 09:15 ET (opens 09:30:00)
-2026-04-10 13:16:28,605 [bot] INFO: Outside session: Pre-market: 09:16 ET (opens 09:30:00)
-2026-04-10 13:16:58,606 [bot] INFO: Outside session: Pre-market: 09:16 ET (opens 09:30:00)
-2026-04-10 13:17:28,609 [bot] INFO: Outside session: Pre-market: 09:17 ET (opens 09:30:00)
-2026-04-10 13:17:58,634 [bot] INFO: Outside session: Pre-market: 09:17 ET (opens 09:30:00)
-2026-04-10 13:18:28,664 [bot] INFO: Outside session: Pre-market: 09:18 ET (opens 09:30:00)
-2026-04-10 13:18:58,686 [bot] INFO: Outside session: Pre-market: 09:18 ET (opens 09:30:00)
-2026-04-10 13:19:28,704 [bot] INFO: Outside session: Pre-market: 09:19 ET (opens 09:30:00)
-2026-04-10 13:19:58,706 [bot] INFO: Outside session: Pre-market: 09:19 ET (opens 09:30:00)
-2026-04-10 13:20:28,717 [bot] INFO: Outside session: Pre-market: 09:20 ET (opens 09:30:00)
-2026-04-10 13:20:58,747 [bot] INFO: Outside session: Pre-market: 09:20 ET (opens 09:30:00)
-2026-04-10 13:21:28,778 [bot] INFO: Outside session: Pre-market: 09:21 ET (opens 09:30:00)
-2026-04-10 13:21:58,788 [bot] INFO: Outside session: Pre-market: 09:21 ET (opens 09:30:00)
-2026-04-10 13:22:28,818 [bot] INFO: Outside session: Pre-market: 09:22 ET (opens 09:30:00)
-2026-04-10 13:22:58,848 [bot] INFO: Outside session: Pre-market: 09:22 ET (opens 09:30:00)
-2026-04-10 13:23:28,856 [bot] INFO: Outside session: Pre-market: 09:23 ET (opens 09:30:00)
-2026-04-10 13:23:58,886 [bot] INFO: Outside session: Pre-market: 09:23 ET (opens 09:30:00)
-2026-04-10 13:24:28,916 [bot] INFO: Outside session: Pre-market: 09:24 ET (opens 09:30:00)
-2026-04-10 13:24:58,920 [bot] INFO: Outside session: Pre-market: 09:24 ET (opens 09:30:00)
-2026-04-10 13:25:28,933 [bot] INFO: Outside session: Pre-market: 09:25 ET (opens 09:30:00)
-2026-04-10 13:25:58,960 [bot] INFO: Outside session: Pre-market: 09:25 ET (opens 09:30:00)
-2026-04-10 13:26:28,990 [bot] INFO: Outside session: Pre-market: 09:26 ET (opens 09:30:00)
-2026-04-10 13:26:59,020 [bot] INFO: Outside session: Pre-market: 09:26 ET (opens 09:30:00)
-2026-04-10 13:27:29,050 [bot] INFO: Outside session: Pre-market: 09:27 ET (opens 09:30:00)
-2026-04-10 13:27:59,069 [bot] INFO: Outside session: Pre-market: 09:27 ET (opens 09:30:00)
-2026-04-10 13:28:29,094 [bot] INFO: Outside session: Pre-market: 09:28 ET (opens 09:30:00)
+2026-04-10 13:30:05,444 [tradovate_client] INFO: Token expiring in -68min, renewing...
+2026-04-10 13:30:05,564 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-10 13:30:05,564 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-10 13:30:05,686 [bot] ERROR: Error processing MNQM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 284, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 505, in _post
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-10 13:30:05,686 [tradovate_client] INFO: Token expiring in -68min, renewing...
+2026-04-10 13:30:05,806 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-10 13:30:05,807 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-10 13:30:05,929 [bot] ERROR: Error processing MCLM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 284, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 505, in _post
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-10 13:30:05,929 [tradovate_client] INFO: Token expiring in -68min, renewing...
+2026-04-10 13:30:06,049 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-10 13:30:06,050 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-10 13:30:06,173 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+2026-04-10 13:30:06,971 [tradovate_client] INFO: Opening Tradovate login page...
+2026-04-10 13:30:13,179 [tradovate_client] INFO: Login submitted, waiting for token...
+2026-04-10 13:30:14,267 [tradovate_client] INFO: Browser auth: token captured successfully
+2026-04-10 13:30:14,268 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
+2026-04-10 13:30:14,680 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-10 13:30:29,188 [bot] INFO: === Trading cycle 09:30 ET | Guardian: ACTIVE ===
+2026-04-10 13:30:29,188 [tradovate_client] INFO: Token expiring in -533min, renewing...
+2026-04-10 13:30:29,328 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-10 13:30:29,328 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-10 13:30:29,448 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+2026-04-10 13:30:30,143 [tradovate_client] INFO: Opening Tradovate login page...
+2026-04-10 13:31:30,201 [tradovate_client] ERROR: Browser auth error: Page.goto: Timeout 60000ms exceeded.
+Call log:
+  - navigating to "https://trader.tradovate.com/welcome", waiting until "networkidle"
 
---- Signals + Trades ---
+2026-04-10 13:31:30,201 [bot] ERROR: Error fetching balance: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-10 13:31:30,201 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
+2026-04-10 13:31:30,335 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-10 13:31:30,454 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-10 13:31:30,454 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-10 13:31:30,573 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+2026-04-10 13:31:31,172 [tradovate_client] INFO: Opening Tradovate login page...
+
+--- Signals + Trades today ---
