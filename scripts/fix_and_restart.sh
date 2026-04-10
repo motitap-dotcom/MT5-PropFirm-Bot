@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v14 - Fix Playwright timeout + token expiry ==="
+echo "=== Fix & Restart v15 - WebSocket dead, force restart ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 
