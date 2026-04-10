@@ -1,27 +1,5 @@
-=== v193 2026-04-10 15:20 UTC ===
+=== v194 2026-04-10 15:54 UTC ===
 Service: activating
 PID: 0
+Started: Fri 2026-04-10 15:54:29 UTC
 
---- ALL SIGNALS + TRADES + ORDERS ---
-
---- Last 20 ---
-2026-04-10 15:10:38,335 [tradovate_client] INFO: Token expiring in 30min, renewing...
-2026-04-10 15:10:38,480 [tradovate_client] INFO: Token renewed successfully
-2026-04-10 15:10:38,603 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:10:38,603 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:10:38,603 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:10:38,603 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:10:38,603 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:10:38,603 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:11:49,723 [bot] INFO: Stopping bot: Signal received
-2026-04-10 15:11:49,724 [tradovate_client] INFO: Token expiring in 29min, renewing...
-2026-04-10 15:11:49,864 [tradovate_client] INFO: Token renewed successfully
-2026-04-10 15:11:50,197 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-10 15:11:50,197 [bot] INFO: Bot stopped
-2026-04-10 15:15:39,989 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:15:39,989 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:15:39,989 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:15:39,989 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:15:39,989 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:15:39,989 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:15:40,976 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
