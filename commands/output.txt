@@ -1,60 +1,53 @@
-=== FULL DIAGNOSTIC v184 2026-04-10 14:13 UTC ===
-=== 1. TOKEN ===
-Has access_token: True
-Has md_token: True
-Expiry: 1775832613.391
-Remaining: 37 min
-
-=== 2. REST API ===
-Account API: 200
-Account: ELTDER260326211630296397 id=45373493
-
-=== 3. WEBSOCKET ===
-Connected: o
-Auth: a[{"s":200,"i":1}]
-Subscription OK: {"s": 200, "i": 2, "d": {"mode": "RealTime", "historicalId": 901852, "realtimeId": 901852}}
-Got 3 bars!
-Latest: 2026-04-10T14:10Z C=6869.75 upVol=4762
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.5 upVol=7503
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.25 upVol=7503
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.5 upVol=7511
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.25 upVol=7514
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6871.75 upVol=7514
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.0 upVol=7516
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.0 upVol=7517
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.25 upVol=7527
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.75 upVol=7534
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.75 upVol=7535
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.5 upVol=7535
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.5 upVol=7535
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.5 upVol=7535
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.5 upVol=7537
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.25 upVol=7537
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.25 upVol=7537
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.25 upVol=7537
-Got 1 bars!
-Latest: 2026-04-10T14:10Z C=6872.5 upVol=7540
-
-=== 4. BOT PROCESS ===
+=== v185 2026-04-10 14:28 UTC ===
 Service: active
-PID: 2202673
-domcontentloaded: YES
-upVolume fix: YES
-dist_sd: YES
+PID: 2211738
+Started: Fri 2026-04-10 14:23:10 UTC
+
+--- After 14:13 UTC ---
+2026-04-10 14:23:12,168 [strategy.vwap] INFO: Price=6875.00 VWAP=6870.42 dist=+1.04SD RSI=60.0 ATR=6.12
+2026-04-10 14:23:12,168 [strategy.vwap] INFO: Price=6871.75 VWAP=6871.54 dist=+0.05SD RSI=57.8 ATR=6.68
+2026-04-10 14:23:12,168 [strategy.vwap] INFO: Price=6869.75 VWAP=6871.29 dist=-0.40SD RSI=36.3 ATR=5.43
+2026-04-10 14:23:12,168 [strategy.vwap] INFO: Price=6870.50 VWAP=6871.13 dist=-0.17SD RSI=46.0 ATR=4.39
+2026-04-10 14:23:12,168 [strategy.vwap] INFO: Price=6867.25 VWAP=6870.83 dist=-1.00SD RSI=36.2 ATR=4.55
+2026-04-10 14:23:12,168 [strategy.vwap] INFO: Price=6870.50 VWAP=6870.62 dist=-0.03SD RSI=45.6 ATR=4.79
+2026-04-10 14:23:12,168 [strategy.vwap] INFO: Price=6870.25 VWAP=6870.59 dist=-0.10SD RSI=43.0 ATR=4.82
+2026-04-10 14:23:12,168 [strategy.vwap] INFO: Price=6868.00 VWAP=6870.26 dist=-0.66SD RSI=43.4 ATR=5.12
+2026-04-10 14:23:12,168 [strategy.vwap] INFO: Price=6867.75 VWAP=6870.11 dist=-0.70SD RSI=42.4 ATR=5.30
+2026-04-10 14:23:12,169 [strategy.vwap] INFO: Price=6874.50 VWAP=6870.20 dist=+1.34SD RSI=54.8 ATR=5.88
+2026-04-10 14:23:12,169 [strategy.vwap] INFO: Price=6875.75 VWAP=6870.47 dist=+1.61SD RSI=53.7 ATR=6.02
+2026-04-10 14:23:12,169 [bot] INFO: MESM6: New bar 2026-04-10T14:20Z | O=6875.75 H=6876.75 L=6873.25 C=6874.0 V=6020
+2026-04-10 14:23:12,169 [strategy.vwap] INFO: Price=6874.00 VWAP=6870.56 dist=+1.04SD RSI=49.6 ATR=5.98
+2026-04-10 14:23:12,169 [bot] ERROR: Error processing MNQM6: 'ClientConnection' object has no attribute 'open'
+2026-04-10 14:23:12,170 [bot] ERROR: Error processing MCLM6: 'ClientConnection' object has no attribute 'open'
+2026-04-10 14:23:12,170 [bot] ERROR: Error processing MGCM6: 'ClientConnection' object has no attribute 'open'
+2026-04-10 14:23:12,171 [bot] ERROR: Error processing MYMM6: 'ClientConnection' object has no attribute 'open'
+2026-04-10 14:23:12,171 [bot] ERROR: Error processing M2KM6: 'ClientConnection' object has no attribute 'open'
+2026-04-10 14:23:41,934 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-10 14:23:44,219 [tradovate_client] INFO: MD WebSocket connected
+2026-04-10 14:23:44,220 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-10 14:23:44,553 [tradovate_client] INFO: MESM6: Received 100 historical bars via WebSocket
+2026-04-10 14:24:14,327 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-10 14:24:16,607 [tradovate_client] INFO: MD WebSocket connected
+2026-04-10 14:24:16,608 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-10 14:24:16,948 [tradovate_client] INFO: MESM6: Received 100 historical bars via WebSocket
+2026-04-10 14:24:46,722 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-10 14:24:49,019 [tradovate_client] INFO: MD WebSocket connected
+2026-04-10 14:24:49,019 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-10 14:24:49,366 [tradovate_client] INFO: MESM6: Received 100 historical bars via WebSocket
+
+--- Last 15 ---
+2026-04-10 14:23:41,934 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-10 14:23:44,219 [tradovate_client] INFO: MD WebSocket connected
+2026-04-10 14:23:44,220 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-10 14:23:44,327 [tradovate_client] INFO: Chart subscription active: MESM6 (id=909126)
+2026-04-10 14:23:44,553 [tradovate_client] INFO: MESM6: Received 100 historical bars via WebSocket
+2026-04-10 14:24:14,327 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-10 14:24:16,607 [tradovate_client] INFO: MD WebSocket connected
+2026-04-10 14:24:16,608 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-10 14:24:16,723 [tradovate_client] INFO: Chart subscription active: MESM6 (id=909510)
+2026-04-10 14:24:16,948 [tradovate_client] INFO: MESM6: Received 100 historical bars via WebSocket
+2026-04-10 14:24:46,722 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-10 14:24:49,019 [tradovate_client] INFO: MD WebSocket connected
+2026-04-10 14:24:49,019 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-10 14:24:49,135 [tradovate_client] INFO: Chart subscription active: MESM6 (id=909806)
+2026-04-10 14:24:49,366 [tradovate_client] INFO: MESM6: Received 100 historical bars via WebSocket
