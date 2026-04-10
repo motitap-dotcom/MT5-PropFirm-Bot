@@ -1,12 +1,17 @@
 #!/bin/bash
-# Trigger: v179
+# Trigger: v180
 cd /root/MT5-PropFirm-Bot
-echo "=== v179 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== v180 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo "Service: $(systemctl is-active futures-bot)"
-echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
 echo ""
-echo "--- Is new code running? (should see domcontentloaded, NOT networkidle) ---"
-grep -E "domcontentloaded|networkidle|token valid for 2h|Browser auth" logs/bot.log 2>/dev/null | grep "2026-04-10 13:4" | tail -10
+echo "--- Live bars + VWAP ---"
+grep "2026-04-10.*New bar.*13:" logs/bot.log 2>/dev/null | tail -10
 echo ""
-echo "--- Last 30 log ---"
-tail -30 logs/bot.log 2>/dev/null
+echo "--- Live signals (not warmup) ---"
+grep "2026-04-10.*SIGNAL" logs/bot.log 2>/dev/null | grep -v "13:47:37" | tail -10
+echo ""
+echo "--- Orders/Trades ---"
+grep -i -E "order|placed|fill|execute_trade|Placing" logs/bot.log 2>/dev/null | grep "2026-04-10" | tail -10
+echo ""
+echo "--- Last 20 log ---"
+tail -20 logs/bot.log 2>/dev/null
