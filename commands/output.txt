@@ -1,56 +1,54 @@
-=== v172 2026-04-09 18:46 UTC ===
+=== PRE-MARKET v173 2026-04-10 13:24 UTC ===
 Service: active
+PID: 1933509
+Started: Thu 2026-04-09 18:20:17 UTC
+Commit: af0b718 Pre-market check v173
 
---- Signals + Orders + Trades ---
-2026-04-09 18:20:21,527 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.57SD RSI=79.0 entry=2650.20 sl=2658.05 tp=2636.38
-2026-04-09 18:20:21,527 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.83SD RSI=81.6 entry=2653.40 sl=2661.45 tp=2636.81
-2026-04-09 18:20:21,527 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.52SD RSI=75.4 entry=2651.10 sl=2659.07 tp=2637.10
-2026-04-09 18:20:21,527 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.63SD RSI=73.7 entry=2652.60 sl=2660.42 tp=2637.34
-2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.57SD RSI=74.1 entry=2652.50 sl=2660.38 tp=2637.62
-2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.51SD RSI=77.6 entry=2652.30 sl=2660.18 tp=2637.83
-2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.60SD RSI=70.3 entry=2653.60 sl=2660.35 tp=2638.12
-2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.37SD RSI=73.2 entry=2651.70 sl=2657.74 tp=2638.35
-2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.61SD RSI=73.8 entry=2654.80 sl=2660.95 tp=2638.74
-2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.73SD RSI=75.0 entry=2656.40 sl=2662.14 tp=2638.96
-2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.85SD RSI=74.3 entry=2658.30 sl=2663.98 tp=2639.26
-2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.84SD RSI=72.8 entry=2659.10 sl=2664.82 tp=2639.67
-2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.74SD RSI=66.0 entry=2658.80 sl=2664.18 tp=2640.03
-2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.78SD RSI=74.2 entry=2659.80 sl=2665.27 tp=2640.31
-2026-04-09 18:20:21,528 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.70SD RSI=73.5 entry=2659.40 sl=2664.94 tp=2640.56
-2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.38SD RSI=66.7 entry=2656.70 sl=2662.35 tp=2641.11
-2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.64SD RSI=70.2 entry=2660.20 sl=2665.92 tp=2641.40
-2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.50SD RSI=66.0 entry=2658.90 sl=2664.67 tp=2641.61
-2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.51SD RSI=67.6 entry=2659.50 sl=2665.32 tp=2641.86
-2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.36SD RSI=67.2 entry=2658.10 sl=2663.97 tp=2642.11
+--- Code check ---
+Volume fix: 2
+VWAP dist: 6
+ORB disabled: 1
 
 --- Last 30 log lines ---
-2026-04-09 18:30:51,947 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:30:51,947 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:30:51,947 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:30:51,947 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:30:51,947 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:35:22,474 [bot] INFO: === Trading cycle 14:35 ET | Guardian: ACTIVE ===
-2026-04-09 18:35:52,936 [tradovate_client] INFO: Token expiring in 30min, renewing...
-2026-04-09 18:35:53,095 [tradovate_client] INFO: Token renewed successfully
-2026-04-09 18:35:53,219 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:35:53,219 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:35:53,220 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:35:53,220 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:35:53,220 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:35:53,220 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:40:22,928 [bot] INFO: === Trading cycle 14:40 ET | Guardian: ACTIVE ===
-2026-04-09 18:40:22,928 [tradovate_client] INFO: Token expiring in 25min, renewing...
-2026-04-09 18:40:23,415 [tradovate_client] INFO: Token renewed successfully
-2026-04-09 18:40:54,468 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:40:54,468 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:40:54,468 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:40:54,468 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:40:54,468 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:40:54,468 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:45:23,788 [bot] INFO: === Trading cycle 14:45 ET | Guardian: ACTIVE ===
-2026-04-09 18:45:55,651 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:45:55,651 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:45:55,651 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:45:55,651 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:45:55,651 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-09 18:45:55,651 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 13:09:58,362 [bot] INFO: Outside session: Pre-market: 09:09 ET (opens 09:30:00)
+2026-04-10 13:10:28,365 [bot] INFO: Outside session: Pre-market: 09:10 ET (opens 09:30:00)
+2026-04-10 13:10:58,368 [bot] INFO: Outside session: Pre-market: 09:10 ET (opens 09:30:00)
+2026-04-10 13:11:28,369 [bot] INFO: Outside session: Pre-market: 09:11 ET (opens 09:30:00)
+2026-04-10 13:11:58,390 [bot] INFO: Outside session: Pre-market: 09:11 ET (opens 09:30:00)
+2026-04-10 13:12:28,402 [bot] INFO: Outside session: Pre-market: 09:12 ET (opens 09:30:00)
+2026-04-10 13:12:58,427 [bot] INFO: Outside session: Pre-market: 09:12 ET (opens 09:30:00)
+2026-04-10 13:13:28,444 [bot] INFO: Outside session: Pre-market: 09:13 ET (opens 09:30:00)
+2026-04-10 13:13:58,474 [bot] INFO: Outside session: Pre-market: 09:13 ET (opens 09:30:00)
+2026-04-10 13:14:28,502 [bot] INFO: Outside session: Pre-market: 09:14 ET (opens 09:30:00)
+2026-04-10 13:14:58,532 [bot] INFO: Outside session: Pre-market: 09:14 ET (opens 09:30:00)
+2026-04-10 13:15:28,560 [bot] INFO: Outside session: Pre-market: 09:15 ET (opens 09:30:00)
+2026-04-10 13:15:58,590 [bot] INFO: Outside session: Pre-market: 09:15 ET (opens 09:30:00)
+2026-04-10 13:16:28,605 [bot] INFO: Outside session: Pre-market: 09:16 ET (opens 09:30:00)
+2026-04-10 13:16:58,606 [bot] INFO: Outside session: Pre-market: 09:16 ET (opens 09:30:00)
+2026-04-10 13:17:28,609 [bot] INFO: Outside session: Pre-market: 09:17 ET (opens 09:30:00)
+2026-04-10 13:17:58,634 [bot] INFO: Outside session: Pre-market: 09:17 ET (opens 09:30:00)
+2026-04-10 13:18:28,664 [bot] INFO: Outside session: Pre-market: 09:18 ET (opens 09:30:00)
+2026-04-10 13:18:58,686 [bot] INFO: Outside session: Pre-market: 09:18 ET (opens 09:30:00)
+2026-04-10 13:19:28,704 [bot] INFO: Outside session: Pre-market: 09:19 ET (opens 09:30:00)
+2026-04-10 13:19:58,706 [bot] INFO: Outside session: Pre-market: 09:19 ET (opens 09:30:00)
+2026-04-10 13:20:28,717 [bot] INFO: Outside session: Pre-market: 09:20 ET (opens 09:30:00)
+2026-04-10 13:20:58,747 [bot] INFO: Outside session: Pre-market: 09:20 ET (opens 09:30:00)
+2026-04-10 13:21:28,778 [bot] INFO: Outside session: Pre-market: 09:21 ET (opens 09:30:00)
+2026-04-10 13:21:58,788 [bot] INFO: Outside session: Pre-market: 09:21 ET (opens 09:30:00)
+2026-04-10 13:22:28,818 [bot] INFO: Outside session: Pre-market: 09:22 ET (opens 09:30:00)
+2026-04-10 13:22:58,848 [bot] INFO: Outside session: Pre-market: 09:22 ET (opens 09:30:00)
+2026-04-10 13:23:28,856 [bot] INFO: Outside session: Pre-market: 09:23 ET (opens 09:30:00)
+2026-04-10 13:23:58,886 [bot] INFO: Outside session: Pre-market: 09:23 ET (opens 09:30:00)
+2026-04-10 13:24:28,916 [bot] INFO: Outside session: Pre-market: 09:24 ET (opens 09:30:00)
+
+--- Any VWAP values or signals? ---
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.36SD RSI=67.2 entry=2658.10 sl=2663.97 tp=2642.11
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2649.00 VWAP=2642.54 dist=+0.56SD RSI=38.2 ATR=3.27
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2651.10 VWAP=2642.76 dist=+0.72SD RSI=39.4 ATR=3.41
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2649.80 VWAP=2642.89 dist=+0.60SD RSI=32.7 ATR=3.46
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2650.40 VWAP=2642.98 dist=+0.65SD RSI=32.1 ATR=3.41
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=6857.50 VWAP=6841.45 dist=+0.71SD RSI=38.7 ATR=6.41
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=25179.00 VWAP=25123.15 dist=+0.62SD RSI=38.1 ATR=27.89
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=4810.70 VWAP=4807.02 dist=+0.29SD RSI=42.3 ATR=6.81
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=48449.00 VWAP=48246.54 dist=+1.03SD RSI=42.2 ATR=42.79
+2026-04-09 18:25:21,987 [strategy.vwap] INFO: Price=2650.80 VWAP=2642.99 dist=+0.68SD RSI=33.6 ATR=3.35
