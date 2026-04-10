@@ -214,6 +214,7 @@ class FuturesBot:
                 # Check if trading session is active
                 in_session, session_msg = self.risk_mgr.is_trading_session()
                 if not in_session:
+                    logger.info(f"Outside session: {session_msg}")
                     await asyncio.sleep(30)
                     continue
 
@@ -222,6 +223,8 @@ class FuturesBot:
                     await self._flatten_all(f"Guardian: {self.guardian.reason}")
                     await asyncio.sleep(60)
                     continue
+
+                logger.info(f"=== Trading cycle {now_et.strftime('%H:%M ET')} | Guardian: {self.guardian.state.name if hasattr(self.guardian, 'state') else 'N/A'} ===")
 
                 # Update balance
                 try:
@@ -233,14 +236,9 @@ class FuturesBot:
                 except Exception as e:
                     logger.error(f"Error fetching balance: {e}")
 
-                # Check for trend day at 11:00 ET (per symbol)
-                if now_et.hour >= 11:
-                    for sym in self.symbols:
-                        vwap = self.vwap_strategies[sym]
-                        vwap.check_trend_day(now_et.hour)
-                        if vwap.is_trend_day() and self.active_strategy.get(sym) == "vwap":
-                            self.active_strategy[sym] = "orb"
-                            logger.info(f"Switching {sym} to ORB strategy (trend day)")
+                # Trend day detection disabled - VWAP strategy stays active
+                # ORB switching removed: ORB needs opening range data from 9:30-10:00
+                # which requires bot to be running from market open
 
                 # Sync positions and detect closed trades
                 try:
@@ -285,6 +283,7 @@ class FuturesBot:
                 symbol, self.timeframe, count=50
             )
             if not bars_data:
+                logger.warning(f"{symbol}: No bars returned from API")
                 return
 
             # Only process NEW bars (avoid re-feeding old data)
@@ -294,23 +293,20 @@ class FuturesBot:
                 return  # Already processed this bar
             self._last_bar_time[symbol] = bar_time
 
-            bar = self._to_bar(latest_bar)
-
             # Get this symbol's strategy instances
             vwap = self.vwap_strategies[symbol]
             orb = self.orb_strategies[symbol]
 
-            # Check ORB period (9:30-10:00 ET)
-            is_orb_period = time(9, 30) <= now_et.time() < time(10, 0)
+            # On first call, feed ALL historical bars to warm up the strategy
+            if len(vwap._bars) == 0 and len(bars_data) > 1:
+                logger.info(f"{symbol}: Warming up strategy with {len(bars_data)} historical bars")
+                for hist_bar in bars_data[:-1]:
+                    vwap.on_bar(self._to_bar(hist_bar))
 
-            if is_orb_period:
-                orb.on_bar(bar, is_orb_period=True)
-                return  # Don't trade during ORB building
+            bar = self._to_bar(latest_bar)
+            logger.info(f"{symbol}: New bar {bar_time} | O={bar.open} H={bar.high} L={bar.low} C={bar.close} V={bar.volume}")
 
-            # Complete ORB at 10:00
-            if now_et.time() >= time(10, 0) and not orb._orb_complete:
-                orb.complete_range()
-
+            # ORB period disabled - VWAP runs from market open
             # Run active strategy for THIS symbol
             setup = None
             strategy_name = ""
@@ -326,7 +322,10 @@ class FuturesBot:
 
             # Execute trade if signal
             if setup and setup.signal.value != 0:
+                logger.info(f"{symbol}: SIGNAL {setup.signal.name} from {strategy_name} | entry={setup.entry_price:.2f} sl={setup.stop_loss:.2f}")
                 await self._execute_trade(symbol, setup, strategy_name)
+            else:
+                logger.debug(f"{symbol}: No signal from {strategy_name}")
 
         except Exception as e:
             logger.error(f"Error processing {symbol}: {e}", exc_info=True)
@@ -561,13 +560,19 @@ class FuturesBot:
 
     def _to_bar(self, data: dict):
         """Convert API bar data to strategy Bar format."""
+        # WebSocket bars have upVolume/downVolume, not volume
+        volume = data.get("volume", 0)
+        if volume == 0:
+            volume = data.get("upVolume", 0) + data.get("downVolume", 0)
+        if volume == 0:
+            volume = 1  # Fallback: use 1 so VWAP still works (equal weight per bar)
         return VWAPBar(
             timestamp=data.get("timestamp", ""),
             open=data.get("open", 0),
             high=data.get("high", 0),
             low=data.get("low", 0),
             close=data.get("close", 0),
-            volume=data.get("volume", 0),
+            volume=volume,
         )
 
     def _get_sleep_seconds(self) -> int:

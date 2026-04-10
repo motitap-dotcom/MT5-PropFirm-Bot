@@ -1,44 +1,56 @@
-=== v146 2026-04-07 14:31 UTC ===
-Service: active
-PID: 1204962
+=== v195 2026-04-10 15:58 UTC ===
+Service: activating
+PID: 0
 
-2026-04-07 14:21:25,058 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:21:25,183 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:26:25,227 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
-2026-04-07 14:26:25,378 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:25,497 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:25,620 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:25,742 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:25,869 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:25,986 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:26,111 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:26,263 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:26,381 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:26,505 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:26,624 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:26,742 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:26,863 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:26,979 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:27,107 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:27,224 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:26:27,343 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:26:27,460 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:31:27,558 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
-2026-04-07 14:31:27,720 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:27,843 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:27,973 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:28,095 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:28,223 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:28,348 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:28,476 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:28,628 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:28,753 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:28,870 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:28,999 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,122 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:29,251 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,375 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:29,502 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,620 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:29,745 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,864 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+44503 logs/bot.log
+
+2026-04-10 15:20:41,220 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:25:42,419 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:25:42,419 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:25:42,419 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:25:42,419 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:25:42,419 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:25:42,419 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:25:43,386 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-10 15:30:43,647 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:30:43,647 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:30:43,647 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:30:43,647 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:30:43,647 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:30:43,647 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:30:44,635 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-10 15:35:44,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:35:44,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:35:44,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:35:44,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:35:44,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:35:44,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:35:45,899 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-10 15:40:46,067 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:40:46,067 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:40:46,067 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:40:46,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:40:46,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:40:46,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:40:47,040 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-10 15:45:47,217 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:45:47,217 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:45:47,217 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:45:47,217 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:45:47,217 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:45:47,217 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:45:48,156 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-10 15:50:48,299 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:50:48,299 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:50:48,299 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:50:48,299 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:50:48,300 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:50:48,300 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:50:49,263 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-10 15:55:49,518 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:55:49,519 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:55:49,519 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:55:49,519 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:55:49,519 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:55:49,519 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:55:50,512 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
