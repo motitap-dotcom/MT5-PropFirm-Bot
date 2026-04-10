@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v16 - Auto-reconnect WS + no ORB block ==="
+echo "=== Fix & Restart v17 - Fix WS heartbeat + .closed attr ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 

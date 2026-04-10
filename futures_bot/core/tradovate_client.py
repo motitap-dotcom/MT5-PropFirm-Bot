@@ -817,11 +817,11 @@ class TradovateClient:
         asyncio.create_task(self._listen_md())
 
     async def _ws_heartbeat(self):
-        """Send heartbeat responses to keep WebSocket alive."""
+        """Send heartbeat to keep WebSocket alive. Tradovate closes idle connections after ~30s."""
         while True:
             try:
-                await asyncio.sleep(30)
-                if self._md_ws and self._md_ws.open:
+                await asyncio.sleep(2.5)
+                if self._md_ws and not getattr(self._md_ws, 'closed', True):
                     await self._md_ws.send("[]")
             except asyncio.CancelledError:
                 break
@@ -904,7 +904,7 @@ class TradovateClient:
         so we use WebSocket md/getChart which streams bars in real-time.
         """
         # Check if WebSocket is alive - if dead, force re-subscribe
-        if self._md_ws and not self._md_ws.open:
+        if self._md_ws and getattr(self._md_ws, 'closed', False):
             logger.warning("MD WebSocket is closed, clearing subscriptions for reconnect")
             self._chart_subs.clear()
             self._chart_id_to_symbol.clear()
