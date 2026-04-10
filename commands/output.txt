@@ -1,56 +1,56 @@
-=== v195 2026-04-10 15:58 UTC ===
-Service: activating
-PID: 0
+=== v195 2026-04-10 16:02 UTC ===
+Service: active
+PID: 2235073
 
-44503 logs/bot.log
+44810 logs/bot.log
 
-2026-04-10 15:20:41,220 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:25:42,419 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:25:42,419 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:25:42,419 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:25:42,419 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:25:42,419 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:25:42,419 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:25:43,386 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-10 15:30:43,647 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:30:43,647 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:30:43,647 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:30:43,647 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:30:43,647 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:30:43,647 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:30:44,635 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-10 15:35:44,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:35:44,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:35:44,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:35:44,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:35:44,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:35:44,894 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:35:45,899 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-10 15:40:46,067 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:40:46,067 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:40:46,067 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:40:46,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:40:46,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:40:46,068 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:40:47,040 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-10 15:45:47,217 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:45:47,217 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:45:47,217 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:45:47,217 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:45:47,217 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:45:47,217 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:45:48,156 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-10 15:50:48,299 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:50:48,299 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:50:48,299 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:50:48,299 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:50:48,300 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:50:48,300 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:50:49,263 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-10 15:55:49,518 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:55:49,519 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:55:49,519 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:55:49,519 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:55:49,519 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:55:49,519 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 15:55:50,512 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-10 15:58:56,120 [bot] WARNING: NO TAKE PROFIT found for MYMM6! Placing emergency TP...
+2026-04-10 15:58:56,236 [tradovate_client] INFO: Limit order: Sell 5 MYMM6 @ 48286.030983750905
+2026-04-10 15:58:56,236 [bot] INFO: Emergency TP placed at 48286.030983750905
+2026-04-10 15:58:56,914 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+2026-04-10 15:58:57,848 [bot] INFO: M2KM6: Warming up strategy with 50 historical bars
+2026-04-10 15:58:57,849 [strategy.vwap] INFO: Price=2654.80 VWAP=2657.00 dist=-0.66SD RSI=57.1 ATR=3.87
+2026-04-10 15:58:57,849 [strategy.vwap] INFO: Price=2655.30 VWAP=2656.82 dist=-0.46SD RSI=55.1 ATR=3.84
+2026-04-10 15:58:57,849 [strategy.vwap] INFO: Price=2649.50 VWAP=2655.51 dist=-1.79SD RSI=45.3 ATR=4.34
+2026-04-10 15:58:57,849 [strategy.vwap] INFO: Price=2648.10 VWAP=2654.32 dist=-1.56SD RSI=32.8 ATR=3.98
+2026-04-10 15:58:57,849 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.56SD RSI=32.8 entry=2648.10 sl=2642.13 tp=2654.32
+2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2651.70 VWAP=2653.85 dist=-0.54SD RSI=35.6 ATR=2.96
+2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2650.30 VWAP=2653.46 dist=-0.80SD RSI=28.4 ATR=3.19
+2026-04-10 15:58:57,850 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.80SD RSI=28.4 entry=2650.30 sl=2645.52 tp=2653.46
+2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2650.80 VWAP=2653.28 dist=-0.63SD RSI=30.3 ATR=3.29
+2026-04-10 15:58:57,850 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.63SD RSI=30.3 entry=2650.80 sl=2645.86 tp=2653.28
+2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2654.00 VWAP=2653.23 dist=+0.20SD RSI=40.9 ATR=3.52
+2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2649.70 VWAP=2652.99 dist=-0.88SD RSI=36.1 ATR=3.88
+2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2648.50 VWAP=2652.78 dist=-1.15SD RSI=35.9 ATR=3.92
+2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2649.40 VWAP=2652.34 dist=-0.77SD RSI=38.8 ATR=4.14
+2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2650.50 VWAP=2652.20 dist=-0.45SD RSI=42.6 ATR=4.26
+2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2652.80 VWAP=2652.19 dist=+0.17SD RSI=44.5 ATR=4.26
+2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2652.60 VWAP=2652.17 dist=+0.12SD RSI=45.8 ATR=4.39
+2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2652.50 VWAP=2652.22 dist=+0.08SD RSI=45.7 ATR=4.46
+2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2652.20 VWAP=2652.23 dist=-0.01SD RSI=44.1 ATR=4.49
+2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2648.20 VWAP=2652.03 dist=-1.10SD RSI=47.3 ATR=4.38
+2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2646.50 VWAP=2651.86 dist=-1.53SD RSI=46.8 ATR=4.49
+2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2648.10 VWAP=2651.75 dist=-1.04SD RSI=42.1 ATR=4.46
+2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2651.30 VWAP=2651.72 dist=-0.12SD RSI=52.0 ATR=4.36
+2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2649.40 VWAP=2651.69 dist=-0.66SD RSI=47.3 ATR=4.29
+2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2652.10 VWAP=2651.68 dist=+0.12SD RSI=46.3 ATR=4.16
+2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2651.00 VWAP=2651.68 dist=-0.20SD RSI=52.9 ATR=3.84
+2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2651.60 VWAP=2651.67 dist=-0.02SD RSI=57.1 ATR=3.81
+2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2654.00 VWAP=2651.70 dist=+0.69SD RSI=59.9 ATR=3.71
+2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2650.70 VWAP=2651.69 dist=-0.30SD RSI=50.4 ATR=3.75
+2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2649.00 VWAP=2651.64 dist=-0.80SD RSI=42.3 ATR=3.86
+2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2646.40 VWAP=2651.55 dist=-1.56SD RSI=38.6 ATR=3.86
+2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2645.30 VWAP=2651.32 dist=-1.74SD RSI=37.2 ATR=3.89
+2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2643.30 VWAP=2651.18 dist=-2.21SD RSI=35.1 ATR=3.95
+2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2642.10 VWAP=2651.05 dist=-2.43SD RSI=38.7 ATR=3.53
+2026-04-10 15:58:57,853 [bot] INFO: M2KM6: New bar 2026-04-10T15:55Z | O=2642.2 H=2642.2 L=2639.4 C=2640.1 V=786
+2026-04-10 15:58:57,853 [strategy.vwap] INFO: Price=2640.10 VWAP=2650.83 dist=-2.72SD RSI=38.3 ATR=3.39
+2026-04-10 16:00:50,613 [tradovate_client] INFO: Token expiring in 30min, renewing...
+2026-04-10 16:00:50,762 [tradovate_client] INFO: Token renewed successfully
+2026-04-10 16:00:50,877 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 16:00:50,878 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 16:00:50,878 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 16:00:50,878 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 16:00:50,878 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 16:00:50,878 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 16:00:50,989 [bot] INFO: Position sync: 0 -> 3
