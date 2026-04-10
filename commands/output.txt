@@ -1,46 +1,9 @@
-=== v181 2026-04-10 13:59 UTC ===
+=== v182 2026-04-10 14:03 UTC ===
 Service: active
 
---- Orders/Trades ---
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.47SD RSI=77.6 entry=2652.30 sl=2660.18 tp=2638.25
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.55SD RSI=70.3 entry=2653.60 sl=2660.35 tp=2638.56
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.32SD RSI=73.2 entry=2651.70 sl=2657.74 tp=2638.78
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.57SD RSI=73.8 entry=2654.80 sl=2660.95 tp=2639.18
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.69SD RSI=75.0 entry=2656.40 sl=2662.14 tp=2639.40
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.81SD RSI=74.3 entry=2658.30 sl=2663.98 tp=2639.71
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.80SD RSI=72.8 entry=2659.10 sl=2664.82 tp=2640.13
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.70SD RSI=66.0 entry=2658.80 sl=2664.17 tp=2640.50
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.74SD RSI=74.2 entry=2659.80 sl=2665.25 tp=2640.78
-2026-04-10 13:32:31,254 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.66SD RSI=73.5 entry=2659.40 sl=2664.92 tp=2641.03
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.34SD RSI=66.7 entry=2656.70 sl=2662.33 tp=2641.59
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.61SD RSI=70.2 entry=2660.20 sl=2665.90 tp=2641.89
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.46SD RSI=66.0 entry=2658.90 sl=2664.64 tp=2642.09
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.48SD RSI=67.6 entry=2659.50 sl=2665.29 tp=2642.35
-2026-04-10 13:32:31,255 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.33SD RSI=67.2 entry=2658.10 sl=2663.93 tp=2642.60
+--- Live VWAP + signals after 14:00 UTC ---
 
---- Last 40 log ---
-2026-04-10 13:47:37,608 [strategy.vwap] INFO: Price=2653.70 VWAP=2650.92 dist=+1.50SD RSI=74.4 ATR=1.73
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.50SD RSI=74.4 entry=2653.70 sl=2656.29 tp=2650.92
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2653.20 VWAP=2651.01 dist=+1.18SD RSI=66.7 ATR=1.62
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.18SD RSI=66.7 entry=2653.20 sl=2655.63 tp=2651.01
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2653.50 VWAP=2651.16 dist=+1.22SD RSI=61.0 ATR=1.51
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2653.10 VWAP=2651.19 dist=+0.99SD RSI=58.7 ATR=1.46
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2652.50 VWAP=2651.22 dist=+0.67SD RSI=56.0 ATR=1.49
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2652.50 VWAP=2651.26 dist=+0.65SD RSI=52.9 ATR=1.44
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2652.80 VWAP=2651.30 dist=+0.80SD RSI=48.9 ATR=1.42
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2652.20 VWAP=2651.33 dist=+0.47SD RSI=44.3 ATR=1.43
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2652.80 VWAP=2651.39 dist=+0.77SD RSI=46.5 ATR=1.46
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2652.60 VWAP=2651.42 dist=+0.65SD RSI=51.1 ATR=1.45
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2652.30 VWAP=2651.45 dist=+0.47SD RSI=42.9 ATR=1.42
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2653.60 VWAP=2651.58 dist=+1.12SD RSI=65.3 ATR=1.44
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.12SD RSI=65.3 entry=2653.60 sl=2655.76 tp=2651.58
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2651.40 VWAP=2651.61 dist=-0.12SD RSI=49.5 ATR=1.53
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2654.50 VWAP=2651.91 dist=+1.32SD RSI=58.6 ATR=2.04
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2657.30 VWAP=2654.45 dist=+0.61SD RSI=63.6 ATR=3.33
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2658.70 VWAP=2654.62 dist=+0.88SD RSI=69.5 ATR=3.42
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.88SD RSI=69.5 entry=2658.70 sl=2663.83 tp=2654.62
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2658.60 VWAP=2654.86 dist=+0.81SD RSI=68.3 ATR=3.46
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.81SD RSI=68.3 entry=2658.60 sl=2663.79 tp=2654.86
+--- Last 20 log ---
 2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2658.10 VWAP=2654.98 dist=+0.68SD RSI=67.9 ATR=3.56
 2026-04-10 13:47:37,609 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.68SD RSI=67.9 entry=2658.10 sl=2663.44 tp=2654.98
 2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2656.80 VWAP=2655.05 dist=+0.39SD RSI=64.6 ATR=3.61
@@ -59,3 +22,5 @@ Service: active
 2026-04-10 13:50:19,498 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 2026-04-10 13:52:37,615 [bot] INFO: === Trading cycle 09:52 ET | Guardian: ACTIVE ===
 2026-04-10 13:57:38,087 [bot] INFO: === Trading cycle 09:57 ET | Guardian: ACTIVE ===
+2026-04-10 14:00:22,453 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-10 14:02:38,547 [bot] INFO: === Trading cycle 10:02 ET | Guardian: ACTIVE ===
