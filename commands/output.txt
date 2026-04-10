@@ -1,14 +1,9 @@
-=== v187 2026-04-10 14:43 UTC ===
+=== v188 2026-04-10 14:47 UTC ===
 Service: activating
 PID: 0
-Started: Fri 2026-04-10 14:43:14 UTC
-Commit: 1a5a183 v187
+Commit: 0af1df3 v188
+Has .closed fix: 2
 
---- WS disconnects count (last hour) ---
-7
-
---- Last 30 ---
-2026-04-10 14:28:12,668 [bot] ERROR: Error processing MNQM6: 'ClientConnection' object has no attribute 'open'
 Traceback (most recent call last):
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 282, in _process_symbol
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
@@ -38,3 +33,4 @@ AttributeError: 'ClientConnection' object has no attribute 'open'
 2026-04-10 14:32:17,389 [bot] INFO: Bot stopped
 2026-04-10 14:35:31,138 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 2026-04-10 14:40:32,258 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-10 14:45:33,482 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
