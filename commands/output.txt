@@ -1,13 +1,15 @@
-=== v192 2026-04-10 15:16 UTC ===
+=== v193 2026-04-10 15:20 UTC ===
 Service: activating
 PID: 0
-Started: Fri 2026-04-10 15:16:20 UTC
-RSI thresholds:         self.rsi_oversold: float = config.get("rsi_oversold", 48)
-        self.rsi_overbought: float = config.get("rsi_overbought", 52)
 
---- TRADES / ORDERS / SIGNALS ---
+--- ALL SIGNALS + TRADES + ORDERS ---
 
---- Last 15 ---
+--- Last 20 ---
+2026-04-10 15:10:38,335 [tradovate_client] INFO: Token expiring in 30min, renewing...
+2026-04-10 15:10:38,480 [tradovate_client] INFO: Token renewed successfully
+2026-04-10 15:10:38,603 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:10:38,603 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-10 15:10:38,603 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
 2026-04-10 15:10:38,603 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
 2026-04-10 15:10:38,603 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
 2026-04-10 15:10:38,603 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
