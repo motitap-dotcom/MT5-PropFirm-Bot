@@ -903,24 +903,26 @@ class TradovateClient:
         REST /md/getChart returns OperationNotSupported on demo accounts,
         so we use WebSocket md/getChart which streams bars in real-time.
         """
-        # If already subscribed and have bars, return them
-        if symbol in self._chart_bars and self._chart_bars[symbol]:
-            bars = self._chart_bars[symbol]
-            return bars[-count:] if len(bars) > count else bars
+        # Check if WebSocket is alive - if dead, force re-subscribe
+        if self._md_ws and not self._md_ws.open:
+            logger.warning("MD WebSocket is closed, clearing subscriptions for reconnect")
+            self._chart_subs.clear()
+            self._chart_id_to_symbol.clear()
+            self._chart_events.clear()
+            self._md_ws = None
 
-        # Subscribe to chart data via WebSocket
+        # Subscribe if not subscribed yet (or after reconnect)
         if symbol not in self._chart_subs:
             await self._subscribe_chart(symbol, timeframe, count)
-
-        # Wait for initial data (up to 15 seconds)
-        sub_id = self._chart_subs.get(symbol)
-        if sub_id:
-            evt = self._chart_events.get(sub_id)
-            if evt:
-                try:
-                    await asyncio.wait_for(evt.wait(), timeout=15)
-                except asyncio.TimeoutError:
-                    logger.warning(f"{symbol}: Timeout waiting for chart data")
+            # Wait for initial data
+            sub_id = self._chart_subs.get(symbol)
+            if sub_id:
+                evt = self._chart_events.get(sub_id)
+                if evt:
+                    try:
+                        await asyncio.wait_for(evt.wait(), timeout=15)
+                    except asyncio.TimeoutError:
+                        logger.warning(f"{symbol}: Timeout waiting for chart data")
 
         bars = self._chart_bars.get(symbol, [])
         return bars[-count:] if len(bars) > count else bars

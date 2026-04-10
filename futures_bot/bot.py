@@ -306,17 +306,7 @@ class FuturesBot:
             bar = self._to_bar(latest_bar)
             logger.info(f"{symbol}: New bar {bar_time} | O={bar.open} H={bar.high} L={bar.low} C={bar.close} V={bar.volume}")
 
-            # Check ORB period (9:30-10:00 ET)
-            is_orb_period = time(9, 30) <= now_et.time() < time(10, 0)
-
-            if is_orb_period:
-                orb.on_bar(bar, is_orb_period=True)
-                return  # Don't trade during ORB building
-
-            # Complete ORB at 10:00
-            if now_et.time() >= time(10, 0) and not orb._orb_complete:
-                orb.complete_range()
-
+            # ORB period disabled - VWAP runs from market open
             # Run active strategy for THIS symbol
             setup = None
             strategy_name = ""
