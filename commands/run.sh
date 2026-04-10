@@ -1,10 +1,10 @@
 #!/bin/bash
-# Trigger: v188
+# Trigger: v189
 cd /root/MT5-PropFirm-Bot
-echo "=== v188 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== v189 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo "Service: $(systemctl is-active futures-bot)"
 echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
-echo "Commit: $(git log -1 --oneline)"
-echo "Has .closed fix: $(grep -c 'getattr.*closed' futures_bot/core/tradovate_client.py)"
+echo "Started: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
 echo ""
-tail -30 logs/bot.log 2>/dev/null
+echo "--- Key activity ---"
+grep -E "Got.*bars|New bar|dist=|SIGNAL|TRADE|order|placed|fill|Error|Trading cycle" logs/bot.log 2>/dev/null | grep "2026-04-10 1[4-9]:" | tail -30
