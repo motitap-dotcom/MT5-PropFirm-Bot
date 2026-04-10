@@ -1,19 +1,12 @@
 #!/bin/bash
-# Trigger: v173
+# Trigger: v174 - market open check
 cd /root/MT5-PropFirm-Bot
-echo "=== PRE-MARKET v173 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== MARKET OPEN v174 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo "Service: $(systemctl is-active futures-bot)"
 echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
-echo "Started: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
-echo "Commit: $(git log -1 --oneline)"
 echo ""
-echo "--- Code check ---"
-echo "Volume fix: $(grep -c 'upVolume' futures_bot/bot.py)"
-echo "VWAP dist: $(grep -c 'dist_sd' futures_bot/strategies/vwap_mean_reversion.py)"
-echo "ORB disabled: $(grep -c 'Trend day detection disabled' futures_bot/bot.py)"
+echo "--- Last 50 log lines ---"
+tail -50 logs/bot.log 2>/dev/null
 echo ""
-echo "--- Last 30 log lines ---"
-tail -30 logs/bot.log 2>/dev/null
-echo ""
-echo "--- Any VWAP values or signals? ---"
-grep -E "dist=|SIGNAL|order|placed|fill" logs/bot.log 2>/dev/null | tail -10
+echo "--- Signals + Trades ---"
+grep -i -E "SIGNAL|order|placed|fill|execute|trade|LONG|SHORT" logs/bot.log 2>/dev/null | grep "2026-04-10" | tail -15
