@@ -1,36 +1,36 @@
-=== v188 2026-04-10 14:47 UTC ===
-Service: activating
-PID: 0
-Commit: 0af1df3 v188
-Has .closed fix: 2
+=== v189 2026-04-10 15:02 UTC ===
+Service: active
+PID: 2220747
+Started: Fri 2026-04-10 14:58:15 UTC
 
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 282, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
-AttributeError: 'ClientConnection' object has no attribute 'open'
-2026-04-10 14:28:12,668 [bot] ERROR: Error processing MCLM6: 'ClientConnection' object has no attribute 'open'
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 282, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
-AttributeError: 'ClientConnection' object has no attribute 'open'
-2026-04-10 14:28:12,668 [bot] ERROR: Error processing MGCM6: 'ClientConnection' object has no attribute 'open'
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 282, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
-AttributeError: 'ClientConnection' object has no attribute 'open'
-2026-04-10 14:28:12,669 [bot] ERROR: Error processing MYMM6: 'ClientConnection' object has no attribute 'open'
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 282, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
-AttributeError: 'ClientConnection' object has no attribute 'open'
-2026-04-10 14:28:12,669 [bot] ERROR: Error processing M2KM6: 'ClientConnection' object has no attribute 'open'
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 282, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
-AttributeError: 'ClientConnection' object has no attribute 'open'
-2026-04-10 14:32:17,047 [bot] INFO: Stopping bot: Signal received
-2026-04-10 14:32:17,388 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-10 14:32:17,389 [bot] INFO: Bot stopped
-2026-04-10 14:35:31,138 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-10 14:40:32,258 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-10 14:45:33,482 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+--- Key activity ---
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2656.80 VWAP=2656.76 dist=+0.01SD RSI=64.6 ATR=3.61
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2655.70 VWAP=2656.73 dist=-0.27SD RSI=60.1 ATR=3.69
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2655.20 VWAP=2656.60 dist=-0.38SD RSI=57.5 ATR=3.72
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2654.40 VWAP=2656.52 dist=-0.59SD RSI=56.8 ATR=3.71
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2655.80 VWAP=2656.46 dist=-0.19SD RSI=58.8 ATR=3.80
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2654.80 VWAP=2656.39 dist=-0.46SD RSI=56.2 ATR=3.83
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2654.80 VWAP=2656.34 dist=-0.45SD RSI=57.1 ATR=3.87
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2655.30 VWAP=2656.22 dist=-0.28SD RSI=55.1 ATR=3.84
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2649.50 VWAP=2655.23 dist=-1.74SD RSI=45.3 ATR=4.34
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2648.10 VWAP=2654.19 dist=-1.59SD RSI=32.8 ATR=3.98
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.59SD RSI=32.8 entry=2648.10 sl=2642.13 tp=2654.19
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2651.70 VWAP=2653.77 dist=-0.54SD RSI=35.6 ATR=2.96
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2650.30 VWAP=2653.42 dist=-0.82SD RSI=28.4 ATR=3.19
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.82SD RSI=28.4 entry=2650.30 sl=2645.52 tp=2653.42
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2650.80 VWAP=2653.25 dist=-0.65SD RSI=30.3 ATR=3.29
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.65SD RSI=30.3 entry=2650.80 sl=2645.86 tp=2653.25
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2654.00 VWAP=2653.21 dist=+0.21SD RSI=40.9 ATR=3.52
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2649.70 VWAP=2652.98 dist=-0.90SD RSI=36.1 ATR=3.88
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2648.50 VWAP=2652.79 dist=-1.19SD RSI=35.9 ATR=3.92
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2649.40 VWAP=2652.38 dist=-0.80SD RSI=38.8 ATR=4.14
+2026-04-10 14:58:28,282 [strategy.vwap] INFO: Price=2650.50 VWAP=2652.24 dist=-0.47SD RSI=42.6 ATR=4.26
+2026-04-10 14:58:28,283 [strategy.vwap] INFO: Price=2652.80 VWAP=2652.22 dist=+0.16SD RSI=44.5 ATR=4.26
+2026-04-10 14:58:28,283 [strategy.vwap] INFO: Price=2652.60 VWAP=2652.21 dist=+0.11SD RSI=45.8 ATR=4.39
+2026-04-10 14:58:28,283 [strategy.vwap] INFO: Price=2652.50 VWAP=2652.25 dist=+0.07SD RSI=45.7 ATR=4.46
+2026-04-10 14:58:28,283 [strategy.vwap] INFO: Price=2652.20 VWAP=2652.26 dist=-0.02SD RSI=44.1 ATR=4.49
+2026-04-10 14:58:28,283 [strategy.vwap] INFO: Price=2648.20 VWAP=2652.06 dist=-1.13SD RSI=47.3 ATR=4.38
+2026-04-10 14:58:28,283 [strategy.vwap] INFO: Price=2646.50 VWAP=2651.91 dist=-1.57SD RSI=46.8 ATR=4.49
+2026-04-10 14:58:28,283 [strategy.vwap] INFO: Price=2648.10 VWAP=2651.80 dist=-1.07SD RSI=42.1 ATR=4.46
+2026-04-10 14:58:28,283 [bot] INFO: M2KM6: New bar 2026-04-10T14:55Z | O=2648.2 H=2651.0 L=2647.0 C=2650.6 V=398
+2026-04-10 14:58:28,283 [strategy.vwap] INFO: Price=2650.60 VWAP=2651.77 dist=-0.34SD RSI=50.6 ATR=4.34
