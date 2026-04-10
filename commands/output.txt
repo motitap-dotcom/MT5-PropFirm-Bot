@@ -1,26 +1,16 @@
-=== v182 2026-04-10 14:03 UTC ===
+=== v183 2026-04-10 14:08 UTC ===
 Service: active
+PID: 2202673
+Started: Fri 2026-04-10 13:47:34 UTC
 
---- Live VWAP + signals after 14:00 UTC ---
+--- Auth status ---
 
---- Last 20 log ---
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2658.10 VWAP=2654.98 dist=+0.68SD RSI=67.9 ATR=3.56
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.68SD RSI=67.9 entry=2658.10 sl=2663.44 tp=2654.98
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2656.80 VWAP=2655.05 dist=+0.39SD RSI=64.6 ATR=3.61
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2655.70 VWAP=2655.10 dist=+0.14SD RSI=60.1 ATR=3.69
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2655.20 VWAP=2655.11 dist=+0.02SD RSI=57.5 ATR=3.72
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2654.40 VWAP=2655.09 dist=-0.16SD RSI=56.8 ATR=3.71
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2655.80 VWAP=2655.10 dist=+0.17SD RSI=58.8 ATR=3.80
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2654.80 VWAP=2655.09 dist=-0.07SD RSI=56.2 ATR=3.83
-2026-04-10 13:47:37,609 [strategy.vwap] INFO: Price=2654.80 VWAP=2655.08 dist=-0.07SD RSI=57.1 ATR=3.87
-2026-04-10 13:47:37,610 [strategy.vwap] INFO: Price=2655.30 VWAP=2655.05 dist=+0.06SD RSI=55.1 ATR=3.84
-2026-04-10 13:47:37,610 [strategy.vwap] INFO: Price=2649.50 VWAP=2654.48 dist=-1.39SD RSI=45.3 ATR=4.34
-2026-04-10 13:47:37,610 [strategy.vwap] INFO: Price=2648.10 VWAP=2653.68 dist=-1.44SD RSI=32.8 ATR=3.98
-2026-04-10 13:47:37,610 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.44SD RSI=32.8 entry=2648.10 sl=2642.13 tp=2653.68
-2026-04-10 13:47:37,610 [strategy.vwap] INFO: Price=2651.70 VWAP=2653.35 dist=-0.43SD RSI=35.6 ATR=2.96
-2026-04-10 13:47:37,610 [bot] INFO: M2KM6: New bar 2026-04-10T13:45Z | O=2652.0 H=2652.7 L=2649.8 C=2650.7 V=673
-2026-04-10 13:50:19,498 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-10 13:52:37,615 [bot] INFO: === Trading cycle 09:52 ET | Guardian: ACTIVE ===
-2026-04-10 13:57:38,087 [bot] INFO: === Trading cycle 09:57 ET | Guardian: ACTIVE ===
-2026-04-10 14:00:22,453 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+--- WebSocket status ---
+
+--- Trading + VWAP ---
 2026-04-10 14:02:38,547 [bot] INFO: === Trading cycle 10:02 ET | Guardian: ACTIVE ===
+2026-04-10 14:07:38,921 [bot] INFO: === Trading cycle 10:07 ET | Guardian: ACTIVE ===
+
+--- Errors ---
+2026-04-10 14:00:22,453 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-10 14:05:23,721 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
