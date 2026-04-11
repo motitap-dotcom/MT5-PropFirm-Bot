@@ -1,18 +1,14 @@
 #!/bin/bash
-# Trigger: v197
+# Trigger: v198 - trade analysis
 cd /root/MT5-PropFirm-Bot
-echo "=== v197 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== v198 TRADE ANALYSIS $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo ""
+echo "--- ALL trade-related activity ---"
+grep -i -E "TRADE:|Market order|SIGNAL.*entry|blocked|Position size|SL|TP|Emergency|fill|position sync|cancel|flatten" logs/bot.log 2>/dev/null | grep "2026-04-10 15:5[5-9]\|2026-04-10 16:0" | head -40
+echo ""
+echo "--- Current positions ---"
 echo "Service: $(systemctl is-active futures-bot)"
 echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
-echo "Started: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
-echo "Commit: $(git log -1 --oneline)"
 echo ""
-echo "Code:"
-echo "  fresh WS: $(grep -c 'ws = await websockets.connect' futures_bot/core/tradovate_client.py)"
-echo "  RSI: $(grep 'rsi_over' futures_bot/strategies/vwap_mean_reversion.py | head -2)"
-echo "  upVolume: $(grep -c 'upVolume' futures_bot/bot.py)"
-echo ""
-echo "--- SIGNALS + TRADES ---"
-grep -i -E "SIGNAL.*entry|TRADE:|Market order|placed|fill|blocked" logs/bot.log 2>/dev/null | tail -10
-echo ""
-tail -25 logs/bot.log 2>/dev/null
+echo "--- Bot running now? ---"
+grep -E "Trading cycle|New bar|dist=|SIGNAL|TRADE" logs/bot.log 2>/dev/null | grep "2026-04-10 16:0[5-9]\|2026-04-10 16:1" | tail -15
