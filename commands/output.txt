@@ -1,49 +1,49 @@
-=== v197 2026-04-10 16:07 UTC ===
+=== v198 TRADE ANALYSIS 2026-04-11 19:30 UTC ===
+
+--- ALL trade-related activity ---
+2026-04-10 15:58:38,134 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.83SD RSI=66.9 entry=6878.75 sl=6888.12 tp=6872.38
+2026-04-10 15:58:38,134 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.46SD RSI=65.4 entry=6877.75 sl=6886.94 tp=6872.54
+2026-04-10 15:58:38,135 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-3.22SD RSI=34.8 entry=6855.50 sl=6846.12 tp=6871.53
+2026-04-10 15:58:38,135 [bot] INFO: MESM6: SIGNAL LONG from VWAP Mean Reversion | entry=6855.50 sl=6846.12
+2026-04-10 15:58:38,259 [tradovate_client] INFO: Market order placed: Buy 3 MESM6, orderId=451715410204
+2026-04-10 15:58:38,487 [bot] INFO: TRADE: Buy 3 MESM6 @ 6855.50 SL=6846.12 TP=6871.53 Risk=$140.62 Strategy=VWAP Mean Reversion
+2026-04-10 15:58:40,602 [bot] WARNING: NO STOP LOSS found for MESM6! Placing emergency SL...
+2026-04-10 15:58:40,717 [bot] INFO: Emergency SL placed at 6846.125
+2026-04-10 15:58:40,717 [bot] WARNING: NO TAKE PROFIT found for MESM6! Placing emergency TP...
+2026-04-10 15:58:40,832 [bot] INFO: Emergency TP placed at 6871.525936957644
+2026-04-10 15:58:45,248 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.11SD RSI=72.8 entry=25336.75 sl=25383.73 tp=25314.57
+2026-04-10 15:58:45,249 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.28SD RSI=70.9 entry=25369.00 sl=25420.27 tp=25324.61
+2026-04-10 15:58:45,249 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.11SD RSI=72.4 entry=25369.75 sl=25419.60 tp=25325.98
+2026-04-10 15:58:45,249 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.72SD RSI=69.5 entry=25388.50 sl=25435.08 tp=25327.52
+2026-04-10 15:58:46,602 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.22SD RSI=70.1 entry=89.98 sl=90.45 tp=89.72
+2026-04-10 15:58:46,603 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.30SD RSI=65.7 entry=90.03 sl=90.49 tp=89.74
+2026-04-10 15:58:46,603 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.67SD RSI=66.3 entry=90.21 sl=90.67 tp=89.79
+2026-04-10 15:58:46,603 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.09SD RSI=72.5 entry=90.39 sl=90.87 tp=89.82
+2026-04-10 15:58:46,603 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.79SD RSI=71.0 entry=90.32 sl=90.79 tp=89.82
+2026-04-10 15:58:46,603 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.34SD RSI=67.2 entry=90.23 sl=90.70 tp=89.85
+2026-04-10 15:58:46,604 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.10SD RSI=67.3 entry=90.75 sl=91.34 tp=90.02
+2026-04-10 15:58:46,604 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.53SD RSI=75.0 entry=91.00 sl=91.63 tp=90.05
+2026-04-10 15:58:46,604 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.68SD RSI=80.9 entry=91.27 sl=91.91 tp=90.10
+2026-04-10 15:58:46,604 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.16SD RSI=78.0 entry=91.19 sl=91.84 tp=90.15
+2026-04-10 15:58:46,604 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.97SD RSI=76.5 entry=91.14 sl=91.77 tp=90.16
+2026-04-10 15:58:46,604 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.72SD RSI=65.5 entry=91.04 sl=91.58 tp=90.18
+2026-04-10 15:58:46,604 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.11SD RSI=70.2 entry=91.25 sl=91.77 tp=90.18
+2026-04-10 15:58:46,604 [bot] INFO: MCLM6: SIGNAL SHORT from VWAP Mean Reversion | entry=91.25 sl=91.77
+2026-04-10 15:58:46,722 [tradovate_client] INFO: Market order placed: Sell 2 MCLM6, orderId=451715410227
+2026-04-10 15:58:46,953 [bot] INFO: TRADE: Sell 2 MCLM6 @ 91.25 SL=91.77 TP=90.18 Risk=$104.57 Strategy=VWAP Mean Reversion
+2026-04-10 15:58:49,066 [bot] WARNING: NO STOP LOSS found for MCLM6! Placing emergency SL...
+2026-04-10 15:58:49,183 [bot] INFO: Emergency SL placed at 91.77285714285713
+2026-04-10 15:58:49,183 [bot] WARNING: NO TAKE PROFIT found for MCLM6! Placing emergency TP...
+2026-04-10 15:58:49,299 [bot] INFO: Emergency TP placed at 90.18143913666893
+2026-04-10 15:58:52,074 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=3.07SD RSI=65.2 entry=4813.20 sl=4826.12 tp=4797.31
+2026-04-10 15:58:52,074 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.99SD RSI=69.1 entry=4815.20 sl=4828.25 tp=4797.81
+2026-04-10 15:58:52,074 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.56SD RSI=70.0 entry=4815.60 sl=4828.48 tp=4798.52
+2026-04-10 15:58:52,076 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-2.04SD RSI=24.3 entry=4785.00 sl=4771.07 tp=4799.78
+2026-04-10 15:58:52,077 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.24SD RSI=32.0 entry=4790.40 sl=4776.42 tp=4799.51
+2026-04-10 15:58:52,077 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.22SD RSI=32.6 entry=4790.30 sl=4776.08 tp=4799.35
+
+--- Current positions ---
 Service: activating
 PID: 0
-Started: Fri 2026-04-10 16:06:58 UTC
-Commit: 81a2cdf v197
 
-Code:
-  fresh WS: 2
-  RSI:         self.rsi_oversold: float = config.get("rsi_oversold", 48)
-        self.rsi_overbought: float = config.get("rsi_overbought", 52)
-  upVolume: 2
-
---- SIGNALS + TRADES ---
-2026-04-10 15:58:53,658 [tradovate_client] INFO: Market order placed: Buy 5 MYMM6, orderId=451715410247
-2026-04-10 15:58:53,890 [bot] INFO: TRADE: Buy 5 MYMM6 @ 48162.00 SL=48104.14 TP=48286.03 Risk=$144.64 Strategy=VWAP Mean Reversion
-2026-04-10 15:58:56,120 [bot] INFO: Emergency SL placed at 48104.142857142855
-2026-04-10 15:58:56,236 [bot] INFO: Emergency TP placed at 48286.030983750905
-2026-04-10 15:58:57,849 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.56SD RSI=32.8 entry=2648.10 sl=2642.13 tp=2654.32
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.80SD RSI=28.4 entry=2650.30 sl=2645.52 tp=2653.46
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.63SD RSI=30.3 entry=2650.80 sl=2645.86 tp=2653.28
-2026-04-10 16:02:32,695 [tradovate_client] INFO: Market order placed: Sell 3 MESM6, orderId=451715410269
-2026-04-10 16:02:32,942 [tradovate_client] INFO: Market order placed: Buy 2 MCLM6, orderId=451715410280
-2026-04-10 16:02:33,189 [tradovate_client] INFO: Market order placed: Sell 5 MYMM6, orderId=451715410289
-
-2026-04-10 16:02:33,792 [tradovate_client] INFO: Cancelled order 451715410247
-2026-04-10 16:02:33,913 [tradovate_client] INFO: Cancelled order 451715410266
-2026-04-10 16:02:34,034 [tradovate_client] INFO: Cancelled order 451715410221
-2026-04-10 16:02:34,154 [tradovate_client] INFO: Cancelled order 451715410227
-2026-04-10 16:02:34,274 [tradovate_client] INFO: Cancelled order 451715410280
-2026-04-10 16:02:34,395 [tradovate_client] INFO: Cancelled order 451715410238
-2026-04-10 16:02:34,516 [tradovate_client] INFO: Cancelled order 451715410260
-2026-04-10 16:02:34,637 [tradovate_client] INFO: Cancelled order 451715410218
-2026-04-10 16:02:34,758 [tradovate_client] INFO: Cancelled order 451715410244
-2026-04-10 16:02:34,878 [tradovate_client] INFO: Cancelled order 451715410224
-2026-04-10 16:02:35,000 [tradovate_client] INFO: Cancelled order 451715410289
-2026-04-10 16:02:35,121 [tradovate_client] INFO: Cancelled order 451715410241
-2026-04-10 16:02:35,241 [tradovate_client] INFO: Cancelled order 451715410204
-2026-04-10 16:02:35,361 [tradovate_client] INFO: Cancelled order 451715410263
-2026-04-10 16:02:35,482 [tradovate_client] INFO: Cancelled order 451715410269
-2026-04-10 16:02:35,607 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-10 16:02:35,607 [bot] INFO: Bot stopped
-2026-04-10 16:05:52,149 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 16:05:52,149 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 16:05:52,149 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 16:05:52,149 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 16:05:52,149 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 16:05:52,149 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 16:05:52,270 [bot] INFO: Position sync: 3 -> 0
-2026-04-10 16:05:53,097 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+--- Bot running now? ---
