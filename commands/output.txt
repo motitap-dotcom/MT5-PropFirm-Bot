@@ -1,73 +1,28 @@
-=== v149 post-audit 2026-04-13 20:07 UTC ===
+=== v150 post-deploy 2026-04-13 20:14 UTC ===
 
 --- SERVICE ---
 Service: activating
 PID:     0
-Uptime:  Mon 2026-04-13 20:07:33 UTC
+Uptime:  Mon 2026-04-13 20:13:35 UTC
 
 --- CODE ---
-Branch:  claude/claude-md-mm3qa8i9848jcovk-X3DTU
-Commit:  2f706d4 Merge audit branch: risk tightening + monitoring + learning loop
+Commit: 6363cdc v150: post-deploy verification status check
 
---- CONFIG VALIDATION (latest log match) ---
+--- CONFIG VALIDATION ---
 
---- NEW FILES CHECK ---
--rw-r--r-- 1 root root 2856 Apr 13 20:07 futures_bot/core/trade_logger.py
-  trade_logger.py: OK
--rwxr-xr-x 1 root root 3474 Apr 13 20:07 scripts/weekly_review.sh
-  weekly_review.sh: OK
+--- STARTUP LOG (after 20:00 UTC) ---
 
---- STATUS / DASHBOARD ---
-dashboard.txt: NOT YET RENDERED
+--- DASHBOARD ---
+dashboard.txt: NOT YET
 
-status.json (age: 0s):
+--- STATUS JSON ---
+age: 0s
   state: None
   balance: None
+  daily_pnl: None
+  daily_trades: None
   dd_used: None
 
 --- TRADE LOG ---
-trades_log.csv: NOT YET CREATED
 
---- RECENT BOT LOG (last 40 lines) ---
-2026-04-13 18:50:51,853 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-13 18:50:52,492 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
-2026-04-13 18:50:53,204 [bot] INFO: MGCM6: New bar 2026-04-13T18:45Z | O=4756.8 H=4759.8 L=4756.5 C=4758.9 V=683
-2026-04-13 18:50:53,204 [strategy.vwap] INFO: Price=4758.90 VWAP=4747.12 dist=+1.13SD RSI=36.7 ATR=5.16
-2026-04-13 18:50:53,819 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
-2026-04-13 18:50:54,551 [bot] INFO: MYMM6: New bar 2026-04-13T18:45Z | O=48207.0 H=48237.0 L=48203.0 C=48233.0 V=747
-2026-04-13 18:50:54,551 [strategy.vwap] INFO: Price=48233.00 VWAP=47896.63 dist=+2.36SD RSI=77.6 ATR=22.00
-2026-04-13 18:50:54,552 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.36SD RSI=77.6 entry=48233.00 sl=48304.35 tp=47896.63
-2026-04-13 18:50:54,552 [bot] INFO: MYMM6: SIGNAL SHORT from VWAP Mean Reversion | entry=48233.00 sl=48304.35
-2026-04-13 18:50:54,552 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-13 18:50:55,179 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
-2026-04-13 18:50:55,913 [bot] INFO: M2KM6: New bar 2026-04-13T18:45Z | O=2674.1 H=2676.8 L=2674.0 C=2676.4 V=986
-2026-04-13 18:50:55,913 [strategy.vwap] INFO: Price=2676.40 VWAP=2646.10 dist=+2.14SD RSI=79.2 ATR=1.80
-2026-04-13 18:50:55,913 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.14SD RSI=79.2 entry=2676.40 sl=2683.47 tp=2646.10
-2026-04-13 18:50:55,913 [bot] INFO: M2KM6: SIGNAL SHORT from VWAP Mean Reversion | entry=2676.40 sl=2683.47
-2026-04-13 18:50:55,913 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-13 18:51:46,459 [bot] INFO: Stopping bot: Signal received
-2026-04-13 18:51:46,837 [tradovate_client] INFO: Market order placed: Sell 2 MESM6, orderId=451715413241
-2026-04-13 18:51:47,080 [tradovate_client] INFO: Market order placed: Sell 1 MNQM6, orderId=451715413252
-2026-04-13 18:51:47,325 [tradovate_client] INFO: Market order placed: Buy 3 MCLM6, orderId=451715413263
-2026-04-13 18:51:47,565 [tradovate_client] INFO: Cancelled order 451715413147
-2026-04-13 18:51:47,687 [tradovate_client] INFO: Cancelled order 451715413183
-2026-04-13 18:51:47,807 [tradovate_client] INFO: Cancelled order 451715413141
-2026-04-13 18:51:47,927 [tradovate_client] INFO: Cancelled order 451715413172
-2026-04-13 18:51:48,048 [tradovate_client] INFO: Cancelled order 451715413181
-2026-04-13 18:51:48,171 [tradovate_client] INFO: Cancelled order 451715413241
-2026-04-13 18:51:48,291 [tradovate_client] INFO: Cancelled order 451715413166
-2026-04-13 18:51:48,412 [tradovate_client] INFO: Cancelled order 451715413252
-2026-04-13 18:51:48,532 [tradovate_client] INFO: Cancelled order 451715413153
-2026-04-13 18:51:48,652 [tradovate_client] INFO: Cancelled order 451715413175
-2026-04-13 18:51:48,774 [tradovate_client] INFO: Cancelled order 451715413144
-2026-04-13 18:51:48,895 [tradovate_client] INFO: Cancelled order 451715413169
-2026-04-13 18:51:49,016 [tradovate_client] INFO: Cancelled order 451715413179
-2026-04-13 18:51:49,138 [tradovate_client] INFO: Cancelled order 451715413263
-2026-04-13 18:51:49,258 [tradovate_client] INFO: Cancelled order 451715413163
-2026-04-13 18:51:49,378 [tradovate_client] INFO: Cancelled order 451715413130
-2026-04-13 18:51:49,498 [tradovate_client] INFO: Cancelled order 451715413150
-2026-04-13 18:51:49,619 [tradovate_client] INFO: Cancelled order 451715413177
-2026-04-13 18:51:49,698 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-13 18:51:49,699 [bot] INFO: Bot stopped
-
-=== END v149 ===
+=== END v150 ===
