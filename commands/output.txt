@@ -1,10 +1,10 @@
-=== v149 2026-04-13 13:44 UTC ===
+=== v150 2026-04-13 13:57 UTC ===
 Service: activating
 PID: 0
-Uptime: Mon 2026-04-13 13:44:12 UTC
-Code: c31fc42 check: v149 - verify bot is trading
+Started: Mon 2026-04-13 13:56:15 UTC
+Code: 636f601 check: v150 - verify bot trading after status fix
 
-=== STATUS.JSON ===
+=== STATUS.JSON (should have live timestamp) ===
 {
   "timestamp": "",
   "bot": "TradeDay Futures Bot",
@@ -14,12 +14,53 @@ Code: c31fc42 check: v149 - verify bot is trading
   "risk": {}
 }
 
-=== OPEN POSITIONS (tradovate) ===
-2026-04-10 22:24:23,319 [tradovate_client] INFO: Cancelled order 451715410260
-2026-04-10 22:24:23,439 [tradovate_client] INFO: Cancelled order 451715410218
-2026-04-10 22:24:23,559 [tradovate_client] INFO: Cancelled order 451715410244
-2026-04-10 22:24:23,679 [tradovate_client] INFO: Cancelled order 451715410224
-2026-04-10 22:24:23,799 [tradovate_client] INFO: Cancelled order 451715410289
+=== STATUS WRITER ERRORS (last 10) ===
+2026-04-12 18:41:37,727 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-12 18:46:38,959 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-12 18:51:40,143 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-12 18:56:41,352 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-13 13:30:36,812 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-13 13:35:38,023 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-13 13:40:39,224 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-13 13:45:40,368 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-13 13:50:41,589 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-13 13:55:42,801 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+
+=== AUTH EVENTS (last 10) ===
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-13 13:30:26,993 [tradovate_client] INFO: Token expiring in -533min, renewing...
+2026-04-13 13:30:27,111 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-13 13:30:27,112 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-13 13:30:27,232 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+2026-04-13 13:30:35,437 [tradovate_client] INFO: Login submitted, waiting for token...
+2026-04-13 13:30:36,515 [tradovate_client] INFO: Browser auth: token captured successfully
+2026-04-13 13:30:36,518 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
+
+=== STRATEGY / SIGNALS (last 20) ===
+2026-04-12 18:41:36,748 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:41:36,748 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:46:37,967 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:46:37,967 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:46:37,967 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:46:37,967 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:46:37,967 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:46:37,967 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:51:39,157 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:51:39,158 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:51:39,158 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:51:39,158 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:51:39,158 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:51:39,158 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:56:40,382 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:56:40,382 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:56:40,382 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:56:40,382 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:56:40,382 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-12 18:56:40,382 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+
+=== ORDERS & POSITIONS (last 15) ===
 2026-04-10 22:24:23,919 [tradovate_client] INFO: Cancelled order 451715410241
 2026-04-10 22:24:24,039 [tradovate_client] INFO: Cancelled order 451715410204
 2026-04-10 22:24:24,160 [tradovate_client] INFO: Cancelled order 451715410263
@@ -36,20 +77,24 @@ Code: c31fc42 check: v149 - verify bot is trading
 2026-04-12 13:30:10,006 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 2026-04-13 13:30:26,032 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 
-=== LAST 40 LOG LINES ===
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 505, in _post
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
+=== ERRORS (last 15 non-status) ===
 ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-13 13:30:26,514 [tradovate_client] INFO: Token expiring in -533min, renewing...
-2026-04-13 13:30:26,633 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-13 13:30:26,633 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-13 13:30:25,793 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-13 13:30:26,032 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-13 13:30:26,272 [bot] ERROR: Error processing MESM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Traceback (most recent call last):
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-13 13:30:26,513 [bot] ERROR: Error processing MNQM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Traceback (most recent call last):
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 2026-04-13 13:30:26,752 [bot] ERROR: Error processing MCLM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 284, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 505, in _post
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-13 13:30:26,992 [bot] ERROR: Error processing MGCM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Traceback (most recent call last):
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+
+=== LAST 30 LOG LINES ===
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
   File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
@@ -77,3 +122,6 @@ ConnectionError: Authentication failed: Incorrect username or password. Please t
 2026-04-13 13:30:36,812 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 2026-04-13 13:35:38,023 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 2026-04-13 13:40:39,224 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-13 13:45:40,368 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-13 13:50:41,589 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-13 13:55:42,801 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
