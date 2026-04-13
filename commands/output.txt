@@ -1,35 +1,79 @@
-=== v148 2026-04-07 14:45 UTC ===
+=== v149 2026-04-13 13:44 UTC ===
 Service: activating
 PID: 0
-Code: b6f06b2 v148
+Uptime: Mon 2026-04-13 13:44:12 UTC
+Code: c31fc42 check: v149 - verify bot is trading
 
-2026-04-07 14:31:29,502 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,620 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:29,745 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,864 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:36:29,932 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
-2026-04-07 14:36:30,083 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,214 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,343 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,465 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,591 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,714 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,840 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,990 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,119 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,252 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,382 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,509 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,636 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,757 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,884 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:32,013 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:32,141 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:32,265 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:41:04,915 [bot] INFO: Stopping bot: Signal received
-2026-04-07 14:41:04,915 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:41:05,059 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:41:05,179 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:41:05,306 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:41:05,546 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 14:41:05,546 [bot] INFO: Bot stopped
+=== STATUS.JSON ===
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
+
+=== OPEN POSITIONS (tradovate) ===
+2026-04-10 22:24:23,319 [tradovate_client] INFO: Cancelled order 451715410260
+2026-04-10 22:24:23,439 [tradovate_client] INFO: Cancelled order 451715410218
+2026-04-10 22:24:23,559 [tradovate_client] INFO: Cancelled order 451715410244
+2026-04-10 22:24:23,679 [tradovate_client] INFO: Cancelled order 451715410224
+2026-04-10 22:24:23,799 [tradovate_client] INFO: Cancelled order 451715410289
+2026-04-10 22:24:23,919 [tradovate_client] INFO: Cancelled order 451715410241
+2026-04-10 22:24:24,039 [tradovate_client] INFO: Cancelled order 451715410204
+2026-04-10 22:24:24,160 [tradovate_client] INFO: Cancelled order 451715410263
+2026-04-10 22:24:24,283 [tradovate_client] INFO: Cancelled order 451715410269
+2026-04-10 22:25:24,661 [tradovate_client] INFO: Cancelled order 451715410257
+2026-04-10 22:25:24,777 [tradovate_client] INFO: Cancelled order 451715410266
+2026-04-10 22:25:24,893 [tradovate_client] INFO: Cancelled order 451715410280
+2026-04-10 22:25:25,009 [tradovate_client] INFO: Cancelled order 451715410238
+2026-04-10 22:25:25,124 [tradovate_client] INFO: Cancelled order 451715410241
+2026-04-10 22:25:25,237 [tradovate_client] INFO: Cancelled order 451715410263
+2026-04-10 22:25:25,352 [tradovate_client] INFO: Cancelled order 451715410269
+2026-04-10 23:36:54,695 [bot] ERROR: Error flattening: GET /position/list failed (502): 
+2026-04-11 13:30:29,683 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-12 13:30:10,006 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-13 13:30:26,032 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+
+=== LAST 40 LOG LINES ===
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 505, in _post
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-13 13:30:26,514 [tradovate_client] INFO: Token expiring in -533min, renewing...
+2026-04-13 13:30:26,633 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-13 13:30:26,633 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-13 13:30:26,752 [bot] ERROR: Error processing MCLM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 284, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 505, in _post
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-13 13:30:26,753 [tradovate_client] INFO: Token expiring in -533min, renewing...
+2026-04-13 13:30:26,873 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-13 13:30:26,874 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-13 13:30:26,992 [bot] ERROR: Error processing MGCM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 284, in _process_symbol
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 505, in _post
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-13 13:30:26,993 [tradovate_client] INFO: Token expiring in -533min, renewing...
+2026-04-13 13:30:27,111 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-13 13:30:27,112 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-13 13:30:27,232 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+2026-04-13 13:30:28,871 [tradovate_client] INFO: Opening Tradovate login page...
+2026-04-13 13:30:35,437 [tradovate_client] INFO: Login submitted, waiting for token...
+2026-04-13 13:30:36,515 [tradovate_client] INFO: Browser auth: token captured successfully
+2026-04-13 13:30:36,518 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
+2026-04-13 13:30:36,812 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-13 13:35:38,023 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-13 13:40:39,224 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
