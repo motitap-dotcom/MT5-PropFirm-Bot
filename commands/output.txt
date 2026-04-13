@@ -1,10 +1,100 @@
-=== v150 2026-04-13 13:57 UTC ===
+=== v151 2026-04-13 14:13 UTC ===
 Service: activating
+SubState: auto-restart
 PID: 0
-Started: Mon 2026-04-13 13:56:15 UTC
-Code: 636f601 check: v150 - verify bot trading after status fix
+Started: Mon 2026-04-13 14:13:18 UTC
+ExitCode: 1
+Restarts: 65
+Code: bedbc7b check: v151 - deep diagnostic with journalctl
 
-=== STATUS.JSON (should have live timestamp) ===
+=== JOURNALCTL (last 80 lines) ===
+Apr 13 13:58:15 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 50.
+Apr 13 13:58:15 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 13:58:15 vmi3096165 python3[3195556]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 13:58:15 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 13:58:15 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 13:59:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 51.
+Apr 13 13:59:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 13:59:16 vmi3096165 python3[3195762]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 13:59:16 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 13:59:16 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:00:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 52.
+Apr 13 14:00:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:00:16 vmi3096165 python3[3196074]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:00:16 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:00:16 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:01:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 53.
+Apr 13 14:01:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:01:16 vmi3096165 python3[3196292]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:01:16 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:01:16 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:02:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 54.
+Apr 13 14:02:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:02:16 vmi3096165 python3[3196545]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:02:16 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:02:16 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:03:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 55.
+Apr 13 14:03:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:03:16 vmi3096165 python3[3196739]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:03:16 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:03:16 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:04:17 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 56.
+Apr 13 14:04:17 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:04:17 vmi3096165 python3[3197085]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:04:17 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:04:17 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:05:17 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 57.
+Apr 13 14:05:17 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:05:17 vmi3096165 python3[3197502]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:05:17 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:05:17 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:06:17 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 58.
+Apr 13 14:06:17 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:06:17 vmi3096165 python3[3197793]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:06:17 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:06:17 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:07:17 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 59.
+Apr 13 14:07:17 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:07:17 vmi3096165 python3[3198010]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:07:17 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:07:17 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:08:17 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 60.
+Apr 13 14:08:17 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:08:17 vmi3096165 python3[3198247]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:08:17 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:08:17 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:09:17 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 61.
+Apr 13 14:09:17 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:09:17 vmi3096165 python3[3198452]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:09:17 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:09:17 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:10:18 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 62.
+Apr 13 14:10:18 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:10:18 vmi3096165 python3[3198795]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:10:18 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:10:18 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:11:18 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 63.
+Apr 13 14:11:18 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:11:18 vmi3096165 python3[3198991]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:11:18 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:11:18 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:12:18 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 64.
+Apr 13 14:12:18 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:12:18 vmi3096165 python3[3199211]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:12:18 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:12:18 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 14:13:18 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 65.
+Apr 13 14:13:18 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 14:13:18 vmi3096165 python3[3199461]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 14:13:18 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 14:13:18 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+
+=== BOT LOG LINES SINCE 13:56 ===
+2026-04-13 14:00:44,018 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-13 14:05:45,255 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-13 14:10:46,476 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+
+=== STATUS.JSON ===
 {
   "timestamp": "",
   "bot": "TradeDay Futures Bot",
@@ -14,114 +104,9 @@ Code: 636f601 check: v150 - verify bot trading after status fix
   "risk": {}
 }
 
-=== STATUS WRITER ERRORS (last 10) ===
-2026-04-12 18:41:37,727 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-12 18:46:38,959 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-12 18:51:40,143 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-12 18:56:41,352 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-13 13:30:36,812 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-13 13:35:38,023 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-13 13:40:39,224 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-13 13:45:40,368 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-13 13:50:41,589 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-13 13:55:42,801 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-
-=== AUTH EVENTS (last 10) ===
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-13 13:30:26,993 [tradovate_client] INFO: Token expiring in -533min, renewing...
-2026-04-13 13:30:27,111 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-13 13:30:27,112 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-13 13:30:27,232 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-13 13:30:35,437 [tradovate_client] INFO: Login submitted, waiting for token...
-2026-04-13 13:30:36,515 [tradovate_client] INFO: Browser auth: token captured successfully
-2026-04-13 13:30:36,518 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
-
-=== STRATEGY / SIGNALS (last 20) ===
-2026-04-12 18:41:36,748 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:41:36,748 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:46:37,967 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:46:37,967 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:46:37,967 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:46:37,967 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:46:37,967 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:46:37,967 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:51:39,157 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:51:39,158 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:51:39,158 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:51:39,158 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:51:39,158 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:51:39,158 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:56:40,382 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:56:40,382 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:56:40,382 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:56:40,382 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:56:40,382 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-12 18:56:40,382 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-
-=== ORDERS & POSITIONS (last 15) ===
-2026-04-10 22:24:23,919 [tradovate_client] INFO: Cancelled order 451715410241
-2026-04-10 22:24:24,039 [tradovate_client] INFO: Cancelled order 451715410204
-2026-04-10 22:24:24,160 [tradovate_client] INFO: Cancelled order 451715410263
-2026-04-10 22:24:24,283 [tradovate_client] INFO: Cancelled order 451715410269
-2026-04-10 22:25:24,661 [tradovate_client] INFO: Cancelled order 451715410257
-2026-04-10 22:25:24,777 [tradovate_client] INFO: Cancelled order 451715410266
-2026-04-10 22:25:24,893 [tradovate_client] INFO: Cancelled order 451715410280
-2026-04-10 22:25:25,009 [tradovate_client] INFO: Cancelled order 451715410238
-2026-04-10 22:25:25,124 [tradovate_client] INFO: Cancelled order 451715410241
-2026-04-10 22:25:25,237 [tradovate_client] INFO: Cancelled order 451715410263
-2026-04-10 22:25:25,352 [tradovate_client] INFO: Cancelled order 451715410269
-2026-04-10 23:36:54,695 [bot] ERROR: Error flattening: GET /position/list failed (502): 
-2026-04-11 13:30:29,683 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-12 13:30:10,006 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-13 13:30:26,032 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-
-=== ERRORS (last 15 non-status) ===
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-13 13:30:25,793 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-13 13:30:26,032 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-13 13:30:26,272 [bot] ERROR: Error processing MESM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Traceback (most recent call last):
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-13 13:30:26,513 [bot] ERROR: Error processing MNQM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Traceback (most recent call last):
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-13 13:30:26,752 [bot] ERROR: Error processing MCLM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Traceback (most recent call last):
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-13 13:30:26,992 [bot] ERROR: Error processing MGCM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Traceback (most recent call last):
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-
-=== LAST 30 LOG LINES ===
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-13 13:30:26,753 [tradovate_client] INFO: Token expiring in -533min, renewing...
-2026-04-13 13:30:26,873 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-13 13:30:26,874 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-13 13:30:26,992 [bot] ERROR: Error processing MGCM6: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 284, in _process_symbol
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 874, in get_historical_bars
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 505, in _post
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 388, in _ensure_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 380, in _renew_token
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
-ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-13 13:30:26,993 [tradovate_client] INFO: Token expiring in -533min, renewing...
-2026-04-13 13:30:27,111 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-13 13:30:27,112 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-13 13:30:27,232 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-13 13:30:28,871 [tradovate_client] INFO: Opening Tradovate login page...
-2026-04-13 13:30:35,437 [tradovate_client] INFO: Login submitted, waiting for token...
-2026-04-13 13:30:36,515 [tradovate_client] INFO: Browser auth: token captured successfully
-2026-04-13 13:30:36,518 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
-2026-04-13 13:30:36,812 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-13 13:35:38,023 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-13 13:40:39,224 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-13 13:45:40,368 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-13 13:50:41,589 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-13 13:55:42,801 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+=== LS status/ ===
+total 12
+drwxr-xr-x  2 root root 4096 Apr 13 14:13 .
+drwxr-xr-x 13 root root 4096 Apr 13 14:13 ..
+-rw-r--r--  1 root root    0 Apr 13 14:13 .gitkeep
+-rw-r--r--  1 root root  133 Apr 13 14:13 status.json
