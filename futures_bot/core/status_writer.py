@@ -33,6 +33,7 @@ class StatusWriter:
             status.update(extra)
 
         try:
+            self.output_path.parent.mkdir(parents=True, exist_ok=True)
             with open(self.output_path, "w") as f:
                 json.dump(status, f, indent=2)
         except Exception as e:
