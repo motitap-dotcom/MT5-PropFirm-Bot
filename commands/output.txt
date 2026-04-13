@@ -1,28 +1,103 @@
-=== v150 post-deploy 2026-04-13 20:14 UTC ===
+=== v151 crash diagnosis 2026-04-13 20:18 UTC ===
 
 --- SERVICE ---
-Service: activating
-PID:     0
-Uptime:  Mon 2026-04-13 20:13:35 UTC
+● futures-bot.service - TradeDay Futures Trading Bot
+     Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Mon 2026-04-13 20:17:36 UTC; 55s ago
+    Process: 3284368 ExecStart=/usr/bin/python3 -m futures_bot.bot (code=exited, status=1/FAILURE)
+   Main PID: 3284368 (code=exited, status=1/FAILURE)
+        CPU: 24ms
 
---- CODE ---
-Commit: 6363cdc v150: post-deploy verification status check
+--- JOURNALCTL (last 60 lines - where stderr/Python errors go) ---
+Apr 13 20:06:33 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 73.
+Apr 13 20:06:33 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 20:06:33 vmi3096165 python3[3281636]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 20:06:33 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 20:06:33 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 20:07:33 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 74.
+Apr 13 20:07:33 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 20:07:33 vmi3096165 python3[3281841]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 20:07:33 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 20:07:33 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 20:08:33 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 75.
+Apr 13 20:08:33 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 20:08:33 vmi3096165 python3[3282178]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 20:08:33 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 20:08:33 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 20:09:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 76.
+Apr 13 20:09:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 20:09:34 vmi3096165 python3[3282384]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 20:09:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 20:09:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 20:10:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 77.
+Apr 13 20:10:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 20:10:34 vmi3096165 python3[3282693]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 20:10:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 20:10:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 20:11:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 78.
+Apr 13 20:11:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 20:11:34 vmi3096165 python3[3282864]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 20:11:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 20:11:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 20:12:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 79.
+Apr 13 20:12:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 20:12:34 vmi3096165 python3[3283094]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 20:12:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 20:12:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 20:13:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 80.
+Apr 13 20:13:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 20:13:35 vmi3096165 python3[3283296]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 20:13:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 20:13:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 20:14:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 81.
+Apr 13 20:14:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 20:14:35 vmi3096165 python3[3283660]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 20:14:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 20:14:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 20:15:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 82.
+Apr 13 20:15:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 20:15:35 vmi3096165 python3[3283919]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 20:15:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 20:15:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 20:16:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 83.
+Apr 13 20:16:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 20:16:35 vmi3096165 python3[3284153]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 20:16:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 20:16:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 13 20:17:36 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 84.
+Apr 13 20:17:36 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 13 20:17:36 vmi3096165 python3[3284368]: /usr/bin/python3: No module named futures_bot.bot
+Apr 13 20:17:36 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 13 20:17:36 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
 
---- CONFIG VALIDATION ---
+--- BOT LOG TAIL (last 20) ---
+2026-04-13 18:51:47,565 [tradovate_client] INFO: Cancelled order 451715413147
+2026-04-13 18:51:47,687 [tradovate_client] INFO: Cancelled order 451715413183
+2026-04-13 18:51:47,807 [tradovate_client] INFO: Cancelled order 451715413141
+2026-04-13 18:51:47,927 [tradovate_client] INFO: Cancelled order 451715413172
+2026-04-13 18:51:48,048 [tradovate_client] INFO: Cancelled order 451715413181
+2026-04-13 18:51:48,171 [tradovate_client] INFO: Cancelled order 451715413241
+2026-04-13 18:51:48,291 [tradovate_client] INFO: Cancelled order 451715413166
+2026-04-13 18:51:48,412 [tradovate_client] INFO: Cancelled order 451715413252
+2026-04-13 18:51:48,532 [tradovate_client] INFO: Cancelled order 451715413153
+2026-04-13 18:51:48,652 [tradovate_client] INFO: Cancelled order 451715413175
+2026-04-13 18:51:48,774 [tradovate_client] INFO: Cancelled order 451715413144
+2026-04-13 18:51:48,895 [tradovate_client] INFO: Cancelled order 451715413169
+2026-04-13 18:51:49,016 [tradovate_client] INFO: Cancelled order 451715413179
+2026-04-13 18:51:49,138 [tradovate_client] INFO: Cancelled order 451715413263
+2026-04-13 18:51:49,258 [tradovate_client] INFO: Cancelled order 451715413163
+2026-04-13 18:51:49,378 [tradovate_client] INFO: Cancelled order 451715413130
+2026-04-13 18:51:49,498 [tradovate_client] INFO: Cancelled order 451715413150
+2026-04-13 18:51:49,619 [tradovate_client] INFO: Cancelled order 451715413177
+2026-04-13 18:51:49,698 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-13 18:51:49,699 [bot] INFO: Bot stopped
 
---- STARTUP LOG (after 20:00 UTC) ---
+--- CONFIG JSON VALIDITY ---
+OK, keys: ['symbols', 'timeframe', 'live', 'organization', 'telegram_enabled', 'guardian', 'risk', 'session', 'vwap_per_symbol', 'vwap', 'orb_per_symbol', 'orb', 'news', 'monitoring', 'tradovate']
 
---- DASHBOARD ---
-dashboard.txt: NOT YET
+--- IMPORT TEST ---
+2026-04-13 20:18:32,926 [bot] INFO: Config validation passed
+Import OK
+Init OK, symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
 
---- STATUS JSON ---
-age: 0s
-  state: None
-  balance: None
-  daily_pnl: None
-  daily_trades: None
-  dd_used: None
-
---- TRADE LOG ---
-
-=== END v150 ===
+=== END v151 ===
