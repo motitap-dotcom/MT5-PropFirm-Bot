@@ -1,98 +1,34 @@
-=== v151 2026-04-13 14:13 UTC ===
-Service: activating
-SubState: auto-restart
-PID: 0
-Started: Mon 2026-04-13 14:13:18 UTC
-ExitCode: 1
-Restarts: 65
-Code: bedbc7b check: v151 - deep diagnostic with journalctl
+=== v152 2026-04-13 14:22 UTC ===
+Service: active
+SubState: running
+PID: 3200725
+Started: Mon 2026-04-13 14:18:05 UTC
+Restarts: 0
 
-=== JOURNALCTL (last 80 lines) ===
-Apr 13 13:58:15 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 50.
-Apr 13 13:58:15 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 13:58:15 vmi3096165 python3[3195556]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 13:58:15 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 13:58:15 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 13:59:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 51.
-Apr 13 13:59:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 13:59:16 vmi3096165 python3[3195762]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 13:59:16 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 13:59:16 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:00:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 52.
-Apr 13 14:00:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:00:16 vmi3096165 python3[3196074]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:00:16 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:00:16 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:01:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 53.
-Apr 13 14:01:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:01:16 vmi3096165 python3[3196292]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:01:16 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:01:16 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:02:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 54.
-Apr 13 14:02:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:02:16 vmi3096165 python3[3196545]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:02:16 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:02:16 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:03:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 55.
-Apr 13 14:03:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:03:16 vmi3096165 python3[3196739]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:03:16 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:03:16 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:04:17 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 56.
-Apr 13 14:04:17 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:04:17 vmi3096165 python3[3197085]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:04:17 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:04:17 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:05:17 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 57.
-Apr 13 14:05:17 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:05:17 vmi3096165 python3[3197502]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:05:17 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:05:17 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:06:17 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 58.
-Apr 13 14:06:17 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:06:17 vmi3096165 python3[3197793]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:06:17 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:06:17 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:07:17 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 59.
-Apr 13 14:07:17 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:07:17 vmi3096165 python3[3198010]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:07:17 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:07:17 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:08:17 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 60.
-Apr 13 14:08:17 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:08:17 vmi3096165 python3[3198247]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:08:17 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:08:17 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:09:17 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 61.
-Apr 13 14:09:17 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:09:17 vmi3096165 python3[3198452]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:09:17 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:09:17 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:10:18 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 62.
-Apr 13 14:10:18 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:10:18 vmi3096165 python3[3198795]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:10:18 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:10:18 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:11:18 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 63.
-Apr 13 14:11:18 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:11:18 vmi3096165 python3[3198991]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:11:18 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:11:18 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:12:18 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 64.
-Apr 13 14:12:18 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:12:18 vmi3096165 python3[3199211]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:12:18 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:12:18 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 13 14:13:18 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 65.
-Apr 13 14:13:18 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 13 14:13:18 vmi3096165 python3[3199461]: /usr/bin/python3: No module named futures_bot.bot
-Apr 13 14:13:18 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 13 14:13:18 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+=== Service file PYTHONPATH check ===
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
 
-=== BOT LOG LINES SINCE 13:56 ===
-2026-04-13 14:00:44,018 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-13 14:05:45,255 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-13 14:10:46,476 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+=== LAST 10 JOURNALCTL ===
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2645.10 VWAP=2634.23 dist=+1.53SD RSI=80.1 ATR=3.69
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.53SD RSI=80.1 entry=2645.10 sl=2650.64 tp=2634.23
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2652.90 VWAP=2635.48 dist=+2.17SD RSI=83.4 ATR=4.11
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.17SD RSI=83.4 entry=2652.90 sl=2659.07 tp=2635.48
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2649.20 VWAP=2636.71 dist=+1.43SD RSI=73.9 ATR=4.55
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.43SD RSI=73.9 entry=2649.20 sl=2656.02 tp=2636.71
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2649.00 VWAP=2637.03 dist=+1.35SD RSI=76.4 ATR=4.68
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.35SD RSI=76.4 entry=2649.00 sl=2656.02 tp=2637.03
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2649.20 VWAP=2637.22 dist=+1.34SD RSI=76.2 ATR=4.75
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.34SD RSI=76.2 entry=2649.20 sl=2656.32 tp=2637.22
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [bot] INFO: M2KM6: New bar 2026-04-13T14:15Z | O=2649.3 H=2649.7 L=2647.2 C=2648.8 V=409
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2648.80 VWAP=2637.34 dist=+1.28SD RSI=76.7 ATR=4.85
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,018 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.28SD RSI=76.7 entry=2648.80 sl=2656.08 tp=2637.34
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,018 [bot] INFO: M2KM6: SIGNAL SHORT from VWAP Mean Reversion | entry=2648.80 sl=2656.08
+Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,018 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+
+=== Python processes ===
+root     3200725  0.2  0.5 128692 44308 ?        Ssl  14:18   0:00 /usr/bin/python3 -m futures_bot.bot
 
 === STATUS.JSON ===
 {
@@ -104,9 +40,44 @@ Apr 13 14:13:18 vmi3096165 systemd[1]: futures-bot.service: Failed with result '
   "risk": {}
 }
 
-=== LS status/ ===
-total 12
-drwxr-xr-x  2 root root 4096 Apr 13 14:13 .
-drwxr-xr-x 13 root root 4096 Apr 13 14:13 ..
--rw-r--r--  1 root root    0 Apr 13 14:13 .gitkeep
--rw-r--r--  1 root root  133 Apr 13 14:13 status.json
+=== BOT LOG SINCE 14:15 ===
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.79SD RSI=81.2 entry=2629.60 sl=2633.22 tp=2622.98
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2631.80 VWAP=2623.47 dist=+2.05SD RSI=82.0 ATR=2.41
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.05SD RSI=82.0 entry=2631.80 sl=2635.42 tp=2623.47
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2630.40 VWAP=2623.81 dist=+1.55SD RSI=79.5 ATR=2.38
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.55SD RSI=79.5 entry=2630.40 sl=2633.97 tp=2623.81
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2630.90 VWAP=2624.05 dist=+1.57SD RSI=84.2 ATR=2.39
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.57SD RSI=84.2 entry=2630.90 sl=2634.48 tp=2624.05
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2630.30 VWAP=2624.16 dist=+1.39SD RSI=82.1 ATR=2.35
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.39SD RSI=82.1 entry=2630.30 sl=2633.83 tp=2624.16
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2631.70 VWAP=2624.35 dist=+1.63SD RSI=82.1 ATR=2.13
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.63SD RSI=82.1 entry=2631.70 sl=2634.89 tp=2624.35
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2631.60 VWAP=2624.57 dist=+1.53SD RSI=77.5 ATR=1.97
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.53SD RSI=77.5 entry=2631.60 sl=2634.56 tp=2624.57
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2632.10 VWAP=2624.78 dist=+1.56SD RSI=75.5 ATR=1.90
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.56SD RSI=75.5 entry=2632.10 sl=2634.95 tp=2624.78
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2633.60 VWAP=2625.39 dist=+1.64SD RSI=78.3 ATR=1.97
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.64SD RSI=78.3 entry=2633.60 sl=2636.56 tp=2625.39
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2637.20 VWAP=2628.77 dist=+1.28SD RSI=85.3 ATR=2.25
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.28SD RSI=85.3 entry=2637.20 sl=2640.57 tp=2628.77
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2635.60 VWAP=2630.45 dist=+0.82SD RSI=77.3 ATR=2.50
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.82SD RSI=77.3 entry=2635.60 sl=2639.35 tp=2630.45
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2633.50 VWAP=2631.13 dist=+0.40SD RSI=66.5 ATR=2.53
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.40SD RSI=66.5 entry=2633.50 sl=2637.29 tp=2631.13
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2643.10 VWAP=2632.61 dist=+1.67SD RSI=79.5 ATR=3.36
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.67SD RSI=79.5 entry=2643.10 sl=2648.14 tp=2632.61
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2645.10 VWAP=2634.23 dist=+1.53SD RSI=80.1 ATR=3.69
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.53SD RSI=80.1 entry=2645.10 sl=2650.64 tp=2634.23
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2652.90 VWAP=2635.48 dist=+2.17SD RSI=83.4 ATR=4.11
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.17SD RSI=83.4 entry=2652.90 sl=2659.07 tp=2635.48
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2649.20 VWAP=2636.71 dist=+1.43SD RSI=73.9 ATR=4.55
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.43SD RSI=73.9 entry=2649.20 sl=2656.02 tp=2636.71
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2649.00 VWAP=2637.03 dist=+1.35SD RSI=76.4 ATR=4.68
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.35SD RSI=76.4 entry=2649.00 sl=2656.02 tp=2637.03
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2649.20 VWAP=2637.22 dist=+1.34SD RSI=76.2 ATR=4.75
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.34SD RSI=76.2 entry=2649.20 sl=2656.32 tp=2637.22
+2026-04-13 14:18:29,017 [bot] INFO: M2KM6: New bar 2026-04-13T14:15Z | O=2649.3 H=2649.7 L=2647.2 C=2648.8 V=409
+2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2648.80 VWAP=2637.34 dist=+1.28SD RSI=76.7 ATR=4.85
+2026-04-13 14:18:29,018 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.28SD RSI=76.7 entry=2648.80 sl=2656.08 tp=2637.34
+2026-04-13 14:18:29,018 [bot] INFO: M2KM6: SIGNAL SHORT from VWAP Mean Reversion | entry=2648.80 sl=2656.08
+2026-04-13 14:18:29,018 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
