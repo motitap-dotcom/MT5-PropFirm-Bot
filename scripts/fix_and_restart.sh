@@ -1,7 +1,13 @@
 #!/bin/bash
-echo "=== Fix & Restart v19 - RSI 48/52 for more signals ==="
+echo "=== Fix & Restart v20 - post-audit PYTHONPATH fix ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
+
+# Ensure VPS is on latest main (may have drifted)
+cp configs/.tradovate_token.json /tmp/.tradovate_token_backup.json 2>/dev/null || true
+git fetch origin main 2>&1 | tail -3
+git reset --hard origin/main 2>&1 | tail -3
+cp /tmp/.tradovate_token_backup.json configs/.tradovate_token.json 2>/dev/null || true
 
 # Show current code version
 echo "Current: $(git log -1 --oneline)"
