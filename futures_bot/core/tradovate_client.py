@@ -66,12 +66,13 @@ class TradovateClient:
     WEB_SEC = ""
 
     def __init__(self, username: str, password: str, live: bool = False,
-                 organization: str = ""):
+                 organization: str = "", token_refresh_threshold_seconds: int = 3600):
         self.username = username
         self.password = password
         self.live = live
         self.organization = organization  # Empty for TradeDay
         self.device_id = str(uuid.uuid4())
+        self.token_refresh_threshold_seconds = token_refresh_threshold_seconds
 
         self.base_url = self.LIVE_URL if live else self.DEMO_URL
         self.md_base_url = self.LIVE_MD_URL if live else self.DEMO_MD_URL
@@ -395,7 +396,7 @@ class TradovateClient:
         """Refresh token proactively - renew when close to expiry."""
         remaining = self.token_expiry - time.time()
 
-        if remaining < 1800:  # Less than 30 minutes left
+        if remaining < self.token_refresh_threshold_seconds:
             # Check cooldown to avoid hammering Tradovate API
             since_last_failure = time.time() - self._last_auth_failure
             if self._last_auth_failure > 0 and since_last_failure < self._auth_cooldown:

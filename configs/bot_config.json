@@ -13,20 +13,33 @@
     "consistency_pct": 0.30,
     "max_contracts": 5,
     "max_micro_contracts": 50,
-    "dd_warning_pct": 0.60,
-    "dd_critical_pct": 0.80,
-    "dd_emergency_pct": 0.90,
-    "max_daily_loss": 400.0,
-    "max_daily_profit": 900.0,
-    "max_daily_trades": 10
+    "max_risk_base": 150.0,
+    "dd_warning_pct": 0.50,
+    "dd_critical_pct": 0.70,
+    "dd_emergency_pct": 0.85,
+    "max_daily_loss": 300.0,
+    "max_daily_profit": 750.0,
+    "max_daily_trades": 8
   },
 
   "risk": {
     "max_risk_per_trade": 150.0,
     "max_risk_pct": 0.003,
-    "max_positions": 3,
-    "max_contracts_per_trade": 5,
-    "reduce_in_dead_zone": true
+    "max_risk_base": 150.0,
+    "max_positions": 2,
+    "max_contracts_per_trade": 3,
+    "reduce_in_dead_zone": true,
+    "dead_zone_multiplier": 0.5
+  },
+
+  "session": {
+    "start": "09:30",
+    "end": "15:30",
+    "no_new_trades_after": "14:45",
+    "flatten_time": "15:45",
+    "dead_zone_start": "11:30",
+    "dead_zone_end": "13:30",
+    "trend_day_check": "11:00"
   },
 
   "vwap_per_symbol": {
@@ -40,12 +53,19 @@
 
   "vwap": {
     "rsi_period": 14,
-    "rsi_oversold": 35,
-    "rsi_overbought": 65,
+    "rsi_oversold": 30,
+    "rsi_overbought": 70,
     "max_consecutive_losses": 3,
     "min_atr": 2.0,
     "max_atr": 8.0,
-    "atr_period": 14
+    "atr_period": 14,
+    "sl_atr_multiplier": 0.5,
+    "tp2_sd_multiplier": 1.5,
+    "tp1_size_pct": 0.60,
+    "tp2_size_pct": 0.40,
+    "trailing_atr_after_tp1": 1.0,
+    "min_volume_ratio": 1.0,
+    "trend_day_check_hour": 11
   },
 
   "orb_per_symbol": {
@@ -58,11 +78,35 @@
   },
 
   "orb": {
-    "buffer_ticks": 2.0,
-    "tp_multiplier": 1.5,
+    "window_start": "09:30",
+    "window_end": "10:00",
+    "buffer_ticks": 3.0,
+    "tp_multiplier": 2.0,
     "max_range_points": 15.0,
     "min_range_points": 3.0,
-    "volume_threshold": 1.2,
-    "max_trades": 2
+    "volume_threshold": 1.5,
+    "max_trades": 2,
+    "trailing_after_1r": true
+  },
+
+  "news": {
+    "flatten_buffer_minutes": 30,
+    "no_trade_after_minutes": 15
+  },
+
+  "monitoring": {
+    "status_interval_seconds": 30,
+    "heartbeat_telegram_minutes": 60,
+    "dd_alert_levels": [0.50, 0.70, 0.85],
+    "trades_log_path": "logs/trades_log.csv",
+    "dashboard_path": "status/dashboard.txt",
+    "equity_curve_path": "logs/equity_curve.csv",
+    "telegram_rate_limit_per_minute": 10
+  },
+
+  "tradovate": {
+    "token_refresh_threshold_seconds": 3600,
+    "historical_bars": 100,
+    "max_bar_age_seconds": 60
   }
 }

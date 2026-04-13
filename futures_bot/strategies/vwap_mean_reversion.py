@@ -3,14 +3,14 @@ VWAP Mean Reversion Strategy
 Primary strategy - high win rate (60-70%), small consistent profits.
 
 Entry Logic:
-  LONG: Price touches VWAP -1SD + RSI < 35 + bullish candle
-  SHORT: Price touches VWAP +1SD + RSI > 65 + bearish candle
+  LONG: Price touches VWAP -1SD + RSI < oversold + bullish candle + volume filter
+  SHORT: Price touches VWAP +1SD + RSI > overbought + bearish candle + volume filter
 
 Exit Logic:
-  TP1 (50%): VWAP line
-  TP2 (50%): Opposite SD band
-  SL: Beyond 2SD band
-  Trailing: After TP1, move SL to breakeven
+  TP1 (default 60%): VWAP line
+  TP2 (default 40%): VWAP ± tp2_sd_multiplier × SD
+  SL: Beyond 2SD band by sl_atr_multiplier × ATR
+  Trailing: After TP1, trail stop at (entry ± trailing_atr_after_tp1 × ATR)
 """
 
 import logging
@@ -52,8 +52,11 @@ class TradeSetup:
     signal: Signal
     entry_price: float
     stop_loss: float
-    take_profit_1: float  # 50% of position
-    take_profit_2: float  # remaining 50%
+    take_profit_1: float  # first partial exit (tp1_size_pct of position)
+    take_profit_2: float  # remaining exit (tp2_size_pct of position)
+    tp1_size_pct: float = 0.6
+    tp2_size_pct: float = 0.4
+    trailing_atr: float = 0.0  # ATR value to use for post-TP1 trailing
     risk_dollars: float = 0.0
 
 
@@ -62,12 +65,21 @@ class VWAPMeanReversion:
 
     def __init__(self, config: dict):
         self.rsi_period: int = config.get("rsi_period", 14)
-        self.rsi_oversold: float = config.get("rsi_oversold", 48)
-        self.rsi_overbought: float = config.get("rsi_overbought", 52)
+        self.rsi_oversold: float = config.get("rsi_oversold", 30)
+        self.rsi_overbought: float = config.get("rsi_overbought", 70)
         self.max_consecutive_losses: int = config.get("max_consecutive_losses", 3)
         self.min_atr: float = config.get("min_atr", 0.5)
         self.max_atr: float = config.get("max_atr", 500.0)
         self.atr_period: int = config.get("atr_period", 14)
+
+        # Risk/reward tuning (previously hardcoded)
+        self.sl_atr_multiplier: float = config.get("sl_atr_multiplier", 0.5)
+        self.tp2_sd_multiplier: float = config.get("tp2_sd_multiplier", 1.5)
+        self.tp1_size_pct: float = config.get("tp1_size_pct", 0.6)
+        self.tp2_size_pct: float = config.get("tp2_size_pct", 0.4)
+        self.trailing_atr_after_tp1: float = config.get("trailing_atr_after_tp1", 1.0)
+        self.min_volume_ratio: float = config.get("min_volume_ratio", 1.0)
+        self.trend_day_check_hour: int = config.get("trend_day_check_hour", 11)
 
         # State
         self._bars: List[Bar] = []
@@ -126,47 +138,73 @@ class VWAPMeanReversion:
            (prev.close > vwap_data.vwap and current.close < vwap_data.vwap):
             self._vwap_crossed = True
 
-        # === LONG signal ===
-        # Price below VWAP (at least -0.3 SD) + RSI showing oversold tendency
-        if dist_sd <= -0.3 and rsi < self.rsi_oversold:
-            sl_distance = max(atr * 1.5, sd * 0.5)  # Dynamic SL based on ATR
-            sl = current.close - sl_distance
-            tp1 = vwap_data.vwap  # Target: back to VWAP
-            tp2 = vwap_data.upper_1sd  # Extended target
+        # ATR volatility filter
+        if atr < self.min_atr or atr > self.max_atr:
+            return None
+
+        # Volume filter: require current bar volume >= rolling avg * min_volume_ratio
+        avg_vol = self._recent_avg_volume()
+        if avg_vol > 0 and current.volume < avg_vol * self.min_volume_ratio:
+            return None
+
+        # LONG signal: price touches lower 1SD + RSI oversold + bullish candle
+        if (current.low <= vwap_data.lower_1sd and
+                rsi < self.rsi_oversold and
+                current.close > current.open):
+            sl = vwap_data.lower_2sd - (atr * self.sl_atr_multiplier)
+            tp1 = vwap_data.vwap
+            tp2 = vwap_data.vwap + (sd * self.tp2_sd_multiplier)
             logger.info(f">>> LONG SIGNAL: dist={dist_sd:.2f}SD RSI={rsi:.1f} "
-                        f"entry={current.close:.2f} sl={sl:.2f} tp={tp1:.2f}")
+                        f"entry={current.close:.2f} sl={sl:.2f} tp1={tp1:.2f} tp2={tp2:.2f}")
             return TradeSetup(
                 signal=Signal.LONG,
                 entry_price=current.close,
                 stop_loss=sl,
                 take_profit_1=tp1,
                 take_profit_2=tp2,
+                tp1_size_pct=self.tp1_size_pct,
+                tp2_size_pct=self.tp2_size_pct,
+                trailing_atr=atr * self.trailing_atr_after_tp1,
             )
 
-        # === SHORT signal ===
-        # Price above VWAP (at least +0.3 SD) + RSI showing overbought tendency
-        if dist_sd >= 0.3 and rsi > self.rsi_overbought:
-            sl_distance = max(atr * 1.5, sd * 0.5)
-            sl = current.close + sl_distance
+        # SHORT signal: price touches upper 1SD + RSI overbought + bearish candle
+        if (current.high >= vwap_data.upper_1sd and
+                rsi > self.rsi_overbought and
+                current.close < current.open):
+            sl = vwap_data.upper_2sd + (atr * self.sl_atr_multiplier)
             tp1 = vwap_data.vwap
-            tp2 = vwap_data.lower_1sd
+            tp2 = vwap_data.vwap - (sd * self.tp2_sd_multiplier)
             logger.info(f">>> SHORT SIGNAL: dist={dist_sd:.2f}SD RSI={rsi:.1f} "
-                        f"entry={current.close:.2f} sl={sl:.2f} tp={tp1:.2f}")
+                        f"entry={current.close:.2f} sl={sl:.2f} tp1={tp1:.2f} tp2={tp2:.2f}")
             return TradeSetup(
                 signal=Signal.SHORT,
                 entry_price=current.close,
                 stop_loss=sl,
                 take_profit_1=tp1,
                 take_profit_2=tp2,
+                tp1_size_pct=self.tp1_size_pct,
+                tp2_size_pct=self.tp2_size_pct,
+                trailing_atr=atr * self.trailing_atr_after_tp1,
             )
 
         return None
 
+    def _recent_avg_volume(self, lookback: int = 20) -> float:
+        """Rolling average volume of last `lookback` bars (excluding current)."""
+        if len(self._bars) < 2:
+            return 0.0
+        window = self._bars[-(lookback + 1):-1]
+        if not window:
+            return 0.0
+        return sum(b.volume for b in window) / len(window)
+
     def check_trend_day(self, current_hour_et: int):
-        """Call after 11:00 ET to check if this is a trend day."""
-        if current_hour_et >= 11 and not self._vwap_crossed:
+        """Call after the configured check hour to detect a trend day."""
+        if current_hour_et >= self.trend_day_check_hour and not self._vwap_crossed:
             self._trend_day_detected = True
-            logger.info("Trend day detected: VWAP not crossed by 11:00 ET")
+            logger.info(
+                f"Trend day detected: VWAP not crossed by {self.trend_day_check_hour:02d}:00 ET"
+            )
 
     def is_trend_day(self) -> bool:
         return self._trend_day_detected
