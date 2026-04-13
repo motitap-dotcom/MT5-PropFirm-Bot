@@ -24,10 +24,11 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from futures_bot.core.tradovate_client import TradovateClient
 from futures_bot.core.guardian import Guardian, GuardianState
-from futures_bot.core.risk_manager import RiskManager
+from futures_bot.core.risk_manager import RiskManager, CONTRACT_SPECS
 from futures_bot.core.news_filter import NewsFilter
 from futures_bot.core.notifier import TelegramNotifier
 from futures_bot.core.status_writer import StatusWriter
+from futures_bot.core.trade_logger import TradeLogger
 from futures_bot.strategies.vwap_mean_reversion import (
     VWAPMeanReversion, Bar as VWAPBar, Signal as VWAPSignal,
 )
@@ -62,6 +63,7 @@ class FuturesBot:
 
     def __init__(self, config_path: str = "configs/bot_config.json"):
         self.config = self._load_config(config_path)
+        self._validate_config()
         self.running = False
 
         # Core components
@@ -71,6 +73,7 @@ class FuturesBot:
         self.news_filter: Optional[NewsFilter] = None
         self.notifier: Optional[TelegramNotifier] = None
         self.status_writer: Optional[StatusWriter] = None
+        self.trade_logger: Optional[TradeLogger] = None
 
         # Strategies - one per symbol
         self.vwap_strategies: dict = {}
@@ -84,6 +87,85 @@ class FuturesBot:
         self.timeframe: str = self.config.get("timeframe", "5min")
         self.current_day: str = ""
         self.positions: list = []
+
+        # ORB window (parsed once from config)
+        orb_cfg = self.config.get("orb", {})
+        self._orb_start = self._parse_hhmm(orb_cfg.get("window_start", "09:30"), time(9, 30))
+        self._orb_end = self._parse_hhmm(orb_cfg.get("window_end", "10:00"), time(10, 0))
+
+        # Background monitoring task handle
+        self._monitor_task: Optional[asyncio.Task] = None
+        self._last_heartbeat_ts: float = 0.0
+
+    @staticmethod
+    def _parse_hhmm(value, default: time) -> time:
+        if isinstance(value, time):
+            return value
+        if isinstance(value, str) and ":" in value:
+            try:
+                h, m = value.split(":", 1)
+                return time(int(h), int(m))
+            except (ValueError, TypeError):
+                return default
+        return default
+
+    def _validate_config(self):
+        """Fail-fast sanity checks on config before we touch the market."""
+        cfg = self.config
+        guardian = cfg.get("guardian", {})
+        risk = cfg.get("risk", {})
+        session = cfg.get("session", {})
+        symbols = cfg.get("symbols", [])
+
+        errors = []
+
+        # Daily loss must cover at least 2 full-risk trades
+        max_risk = risk.get("max_risk_per_trade", 150.0)
+        max_daily_loss = guardian.get("max_daily_loss", 300.0)
+        if max_daily_loss < max_risk * 2:
+            errors.append(
+                f"max_daily_loss (${max_daily_loss}) < 2× max_risk_per_trade "
+                f"(${max_risk}); bot could block trades after a single loss."
+            )
+
+        # DD warning ladder must be monotonically increasing
+        w = guardian.get("dd_warning_pct", 0.5)
+        c = guardian.get("dd_critical_pct", 0.7)
+        e = guardian.get("dd_emergency_pct", 0.85)
+        if not (w < c < e):
+            errors.append(
+                f"DD levels must satisfy warning({w}) < critical({c}) < emergency({e})"
+            )
+
+        # Symbols must have contract specs
+        for sym in symbols:
+            base = sym
+            for spec_name in sorted(CONTRACT_SPECS.keys(), key=len, reverse=True):
+                if sym.startswith(spec_name):
+                    base = spec_name
+                    break
+            if base not in CONTRACT_SPECS:
+                errors.append(f"Symbol {sym!r} has no contract spec in CONTRACT_SPECS")
+
+        # Session ordering
+        try:
+            s_start = self._parse_hhmm(session.get("start", "09:30"), time(9, 30))
+            s_no_new = self._parse_hhmm(session.get("no_new_trades_after", "14:45"), time(14, 45))
+            s_flatten = self._parse_hhmm(session.get("flatten_time", "15:45"), time(15, 45))
+            if not (s_start < s_no_new < s_flatten):
+                errors.append(
+                    f"Session order invalid: start({s_start}) < no_new_trades({s_no_new}) "
+                    f"< flatten({s_flatten}) must hold"
+                )
+        except Exception as ex:
+            errors.append(f"Session time parsing failed: {ex}")
+
+        if errors:
+            msg = "Config validation failed:\n  - " + "\n  - ".join(errors)
+            logger.error(msg)
+            raise ValueError(msg)
+
+        logger.info("Config validation passed")
 
     def _load_config(self, path: str) -> dict:
         """Load bot configuration."""
@@ -100,25 +182,41 @@ class FuturesBot:
         logger.info("TradeDay Futures Bot Starting")
         logger.info("=" * 60)
 
+        tradovate_cfg = self.config.get("tradovate", {})
+        monitoring_cfg = self.config.get("monitoring", {})
+
         # Initialize Tradovate client (web-style auth, no API keys needed)
         self.client = TradovateClient(
             username=os.environ.get("TRADOVATE_USER", self.config.get("username", "")),
             password=os.environ.get("TRADOVATE_PASS", self.config.get("password", "")),
             live=self.config.get("live", False),
             organization=self.config.get("organization", ""),
+            token_refresh_threshold_seconds=tradovate_cfg.get(
+                "token_refresh_threshold_seconds", 3600
+            ),
         )
 
-        # Initialize modules
+        # Initialize modules — risk manager receives session config
         self.guardian = Guardian(self.config.get("guardian", {}))
-        self.risk_mgr = RiskManager(self.config.get("risk", {}))
+        self.risk_mgr = RiskManager(
+            self.config.get("risk", {}),
+            session_config=self.config.get("session", {}),
+        )
         self.news_filter = NewsFilter()
-        self.status_writer = StatusWriter()
+        self.status_writer = StatusWriter(
+            dashboard_path=monitoring_cfg.get("dashboard_path", "status/dashboard.txt"),
+        )
+        self.trade_logger = TradeLogger(
+            trades_path=monitoring_cfg.get("trades_log_path", "logs/trades_log.csv"),
+            equity_path=monitoring_cfg.get("equity_curve_path", "logs/equity_curve.csv"),
+        )
 
         # Telegram
         self.notifier = TelegramNotifier(
             token=os.environ.get("TELEGRAM_TOKEN", ""),
             chat_id=os.environ.get("TELEGRAM_CHAT_ID", ""),
             enabled=self.config.get("telegram_enabled", True),
+            rate_limit_per_minute=monitoring_cfg.get("telegram_rate_limit_per_minute", 10),
         )
 
         # Strategies - separate instance per symbol with per-symbol params
@@ -150,6 +248,9 @@ class FuturesBot:
         self.running = True
         logger.info("Bot started successfully")
 
+        # Spawn background monitoring/heartbeat task (independent of trading loop)
+        self._monitor_task = asyncio.create_task(self._monitor_loop())
+
         # Main loop
         await self._run()
 
@@ -157,6 +258,14 @@ class FuturesBot:
         """Stop the bot gracefully."""
         logger.info(f"Stopping bot: {reason}")
         self.running = False
+
+        # Stop background monitor
+        if self._monitor_task and not self._monitor_task.done():
+            self._monitor_task.cancel()
+            try:
+                await self._monitor_task
+            except (asyncio.CancelledError, Exception):
+                pass
 
         # Close all positions
         if self.client:
@@ -233,6 +342,17 @@ class FuturesBot:
                         balance["balance"],
                         balance.get("unrealized_pnl", 0),
                     )
+                    # Progressive DD alerts (each level fires once per day)
+                    dd_levels = self.config.get("monitoring", {}).get(
+                        "dd_alert_levels", [0.5, 0.7, 0.85]
+                    )
+                    fired = self.guardian.check_dd_alert(dd_levels)
+                    if fired is not None:
+                        await self.notifier.dd_warning(
+                            fired,
+                            self.guardian.get_status()["drawdown_used"],
+                            self.guardian.max_drawdown,
+                        )
                 except Exception as e:
                     logger.error(f"Error fetching balance: {e}")
 
@@ -373,7 +493,12 @@ class FuturesBot:
 
         # Determine TP based on strategy type
         if hasattr(setup, 'take_profit_1'):
-            tp = setup.take_profit_1  # VWAP has two TPs
+            tp = setup.take_profit_1  # VWAP has two TPs (partial exit handled post-fill)
+            tp1_pct = getattr(setup, "tp1_size_pct", 0.6)
+            # Round contracts at TP1 to the configured percentage.
+            # Note: the broker bracket here only carries one TP level; partial
+            # scale-out at TP2 is managed by the trailing / follow-up logic.
+            _ = tp1_pct  # reserved for future partial-order support
         else:
             tp = setup.take_profit
 
@@ -467,6 +592,25 @@ class FuturesBot:
                 contract_id = fill.get("contractId", "")
                 logger.info(f"FILL: {action} {qty} @ {price:.2f} PnL=${pnl:.2f}")
 
+                # Append to CSV trade log for later review
+                if self.trade_logger:
+                    g = self.guardian.get_status()
+                    self.trade_logger.log_trade({
+                        "symbol": str(contract_id),
+                        "strategy": "",
+                        "direction": action,
+                        "contracts": qty,
+                        "entry": "",
+                        "sl": "",
+                        "tp": "",
+                        "exit": f"{price:.2f}",
+                        "pnl": f"{pnl:.2f}",
+                        "r_multiple": "",
+                        "reason": "SL/TP hit",
+                        "daily_pnl_after": f"{g.get('daily_pnl', 0):.2f}",
+                        "balance_after": f"{g.get('balance', 0):.2f}",
+                    })
+
                 await self.notifier.trade_closed(
                     str(contract_id), action, pnl, "SL/TP hit"
                 )
@@ -557,6 +701,56 @@ class FuturesBot:
             self.orb_strategies[sym].reset_day()
             self.active_strategy[sym] = "vwap"
             self._last_bar_time[sym] = ""
+
+    async def _monitor_loop(self):
+        """
+        Background task: writes status/dashboard at a fast cadence and sends
+        a Telegram heartbeat every N minutes (configurable). Runs independently
+        of the trading loop so monitoring stays fresh even when the main loop
+        is sleeping between bars.
+        """
+        monitoring = self.config.get("monitoring", {}) or {}
+        status_interval = max(5, int(monitoring.get("status_interval_seconds", 30)))
+        heartbeat_min = max(1, int(monitoring.get("heartbeat_telegram_minutes", 60)))
+        heartbeat_interval = heartbeat_min * 60
+
+        import time as _time
+        while self.running:
+            try:
+                if self.guardian is not None:
+                    g_status = self.guardian.get_status()
+                    self.status_writer.write(
+                        guardian_status=g_status,
+                        positions=self.positions,
+                        extra={"active_strategy": self.active_strategy},
+                    )
+                    # Equity curve sample
+                    if self.trade_logger is not None:
+                        self.trade_logger.log_equity(
+                            balance=g_status.get("balance", 0.0),
+                            daily_pnl=g_status.get("daily_pnl", 0.0),
+                            total_pnl=g_status.get("total_pnl", 0.0),
+                            dd_used=g_status.get("drawdown_used", 0.0),
+                        )
+                    # Hourly heartbeat
+                    now_ts = _time.time()
+                    if now_ts - self._last_heartbeat_ts >= heartbeat_interval:
+                        await self.notifier.heartbeat({
+                            "state": g_status.get("state", "N/A"),
+                            "balance": g_status.get("balance", 0.0),
+                            "daily_pnl": g_status.get("daily_pnl", 0.0),
+                            "dd_used": g_status.get("drawdown_used", 0.0),
+                        })
+                        self._last_heartbeat_ts = now_ts
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logger.error(f"Monitor loop error: {e}")
+
+            try:
+                await asyncio.sleep(status_interval)
+            except asyncio.CancelledError:
+                break
 
     def _to_bar(self, data: dict):
         """Convert API bar data to strategy Bar format."""
