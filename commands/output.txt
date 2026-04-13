@@ -1,69 +1,115 @@
-=== v153 2026-04-13 14:24 UTC ===
+=== v154 2026-04-13 14:27 UTC ===
 Service: active (running)
-PID: 3200725
-Restarts: 0
 
-=== STATUS.JSON ===
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+=== Query DEMO Tradovate API ===
+Token keys: ['access_token', 'md_access_token', 'expiry', 'saved_at']
+Token first 20 chars: eyJraWQiOiIzMCIsImFs...
 
-=== Query Tradovate API directly for real positions ===
-Token expires: 
-Token present: yes
+--- DEMO /account/list ---
+[
+  {
+    "id": 45373493,
+    "name": "ELTDER260326211630296397",
+    "userId": 266203,
+    "accountType": "Customer",
+    "restricted": false,
+    "closed": false,
+    "clearingHouseId": 4,
+    "riskCategoryId": 122,
+    "autoLiqProfileId": 14,
+    "marginAccountType": "Speculator",
+    "legalStatus": "Individual",
+    "archived": false,
+    "timestamp": "2026-03-26T21:16:33Z",
+    "active": true
+  }
+]
 
---- /account/list ---
-[]
+--- DEMO /position/list ---
+[
+  {
+    "id": 451715413139,
+    "accountId": 45373493,
+    "contractId": 4327108,
+    "timestamp": "2026-04-13T14:18:10.153Z",
+    "tradeDate": {
+      "year": 2026,
+      "month": 4,
+      "day": 13
+    },
+    "netPos": -2,
+    "netPrice": 6847.25,
+    "bought": 0,
+    "boughtValue": 0.0,
+    "sold": 2,
+    "soldValue": 13694.5,
+    "archived": false,
+    "prevPos": 0
+  },
+  {
+    "id": 451715413161,
+    "accountId": 45373493,
+    "contractId": 4327110,
+    "timestamp": "2026-04-13T14:18:17.238Z",
+    "tradeDate": {
+      "year": 2026,
+      "month": 4,
+      "day": 13
+    },
+    "netPos": -1,
+    "netPrice": 25257.25,
+    "bought": 0,
+    "boughtValue": 0.0,
+    "sold": 1,
+    "soldValue": 25257.25,
+    "archived": false,
+    "prevPos": 0
+  },
+  {
+    "id": 451715413193,
+    "accountId": 45373493,
+    "contractId": 3643471,
+    "timestamp": "2026-04-13T14:18:25.127Z",
+    "tradeDate": {
+      "year": 2026,
+      "month": 4,
+      "day": 13
+    },
+    "netPos": 1,
+    "netPrice": 93.96,
+    "bought": 1,
+    "boughtValue": 93.96,
+    "sold": 0,
+    "soldValue": 0.0,
+    "archived": false,
+    "prevPos": 0
+  }
+]
 
---- /position/list ---
-[]
+>>> OPEN POSITIONS (netPos != 0): 3
+  id=451715413139 contract=4327108 netPos=-2 avgPrice=6847.25
+  id=451715413161 contract=4327110 netPos=-1 avgPrice=25257.25
+  id=451715413193 contract=3643471 netPos=1 avgPrice=93.96
 
---- /order/list ---
-Active orders: 0
-[]
+--- DEMO /order/list (active only) ---
+Active: 12
+  id=451715413147 action=Buy contract=4327108 status=Working
+  id=451715413144 action=Buy contract=4327108 status=Working
+  id=451715413169 action=Buy contract=4327110 status=Working
+  id=451715413183 action=Sell contract=3643471 status=Working
+  id=451715413141 action=Buy contract=4327108 status=Working
+  id=451715413172 action=Buy contract=4327110 status=Working
+  id=451715413179 action=Sell contract=3643471 status=Working
+  id=451715413181 action=Sell contract=3643471 status=Working
+  id=451715413163 action=Buy contract=4327110 status=Working
+  id=451715413166 action=Buy contract=4327110 status=Working
 
---- /contract/list (first 5) ---
+--- DEMO /fill/list (last 5) ---
+Total fills: 3
+  2026-04-13T14:18:25.127Z action=Buy qty=1 price=93.96
+  2026-04-13T14:18:10.153Z action=Sell qty=2 price=6847.25
+  2026-04-13T14:18:17.238Z action=Sell qty=1 price=25257.25
 
-=== Risk manager + bot state from logs ===
-2026-04-07 17:53:44,800 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-07 18:03:54,406 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-07 18:09:00,121 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-07 18:14:05,799 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-07 18:19:11,471 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-07 18:29:23,350 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-07 18:34:28,920 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-07 18:59:57,869 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-08 18:11:22,445 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-10 13:46:05,069 [bot] ERROR: Error closing positions: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-13 14:18:29,018 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-13 14:23:33,093 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-13 14:23:36,513 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-13 14:23:37,895 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-13 14:23:46,863 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+=== Position sync messages since 14:18 ===
 
-=== Last 20 bot.log lines ===
-2026-04-13 14:23:36,513 [bot] INFO: MNQM6: SIGNAL SHORT from VWAP Mean Reversion | entry=25286.00 sl=25352.35
-2026-04-13 14:23:36,513 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-13 14:23:37,164 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
-2026-04-13 14:23:37,895 [bot] INFO: MCLM6: New bar 2026-04-13T14:20Z | O=93.73 H=93.79 L=93.61 C=93.64 V=49
-2026-04-13 14:23:37,895 [strategy.vwap] INFO: Price=93.64 VWAP=94.67 dist=-1.02SD RSI=26.4 ATR=0.57
-2026-04-13 14:23:37,895 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.02SD RSI=26.4 entry=93.64 sl=92.78 tp=94.67
-2026-04-13 14:23:37,895 [bot] INFO: MCLM6: SIGNAL LONG from VWAP Mean Reversion | entry=93.64 sl=92.78
-2026-04-13 14:23:37,895 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-13 14:23:38,544 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
-2026-04-13 14:23:39,616 [bot] INFO: MGCM6: New bar 2026-04-13T14:20Z | O=4741.8 H=4744.9 L=4739.0 C=4739.4 V=1546
-2026-04-13 14:23:39,616 [strategy.vwap] INFO: Price=4739.40 VWAP=4745.66 dist=-0.69SD RSI=36.3 ATR=9.43
-2026-04-13 14:23:40,242 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
-2026-04-13 14:23:42,507 [bot] INFO: MYMM6: New bar 2026-04-13T14:20Z | O=47896.0 H=47923.0 L=47879.0 C=47902.0 V=1034
-2026-04-13 14:23:42,507 [strategy.vwap] INFO: Price=47902.00 VWAP=47808.71 dist=+1.11SD RSI=62.4 ATR=89.57
-2026-04-13 14:23:43,123 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
-2026-04-13 14:23:46,863 [bot] INFO: M2KM6: New bar 2026-04-13T14:20Z | O=2651.6 H=2655.3 L=2650.6 C=2653.1 V=966
-2026-04-13 14:23:46,863 [strategy.vwap] INFO: Price=2653.10 VWAP=2637.72 dist=+1.68SD RSI=78.5 ATR=5.17
-2026-04-13 14:23:46,863 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.68SD RSI=78.5 entry=2653.10 sl=2660.86 tp=2637.72
-2026-04-13 14:23:46,863 [bot] INFO: M2KM6: SIGNAL SHORT from VWAP Mean Reversion | entry=2653.10 sl=2660.86
-2026-04-13 14:23:46,863 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+=== Recent errors since 14:18 (non-status) ===
