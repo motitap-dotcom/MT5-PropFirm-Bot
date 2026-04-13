@@ -1,34 +1,7 @@
-=== v152 2026-04-13 14:22 UTC ===
-Service: active
-SubState: running
+=== v153 2026-04-13 14:24 UTC ===
+Service: active (running)
 PID: 3200725
-Started: Mon 2026-04-13 14:18:05 UTC
 Restarts: 0
-
-=== Service file PYTHONPATH check ===
-WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/usr/bin/python3 -m futures_bot.bot
-Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
-
-=== LAST 10 JOURNALCTL ===
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2645.10 VWAP=2634.23 dist=+1.53SD RSI=80.1 ATR=3.69
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.53SD RSI=80.1 entry=2645.10 sl=2650.64 tp=2634.23
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2652.90 VWAP=2635.48 dist=+2.17SD RSI=83.4 ATR=4.11
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.17SD RSI=83.4 entry=2652.90 sl=2659.07 tp=2635.48
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2649.20 VWAP=2636.71 dist=+1.43SD RSI=73.9 ATR=4.55
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.43SD RSI=73.9 entry=2649.20 sl=2656.02 tp=2636.71
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2649.00 VWAP=2637.03 dist=+1.35SD RSI=76.4 ATR=4.68
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.35SD RSI=76.4 entry=2649.00 sl=2656.02 tp=2637.03
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2649.20 VWAP=2637.22 dist=+1.34SD RSI=76.2 ATR=4.75
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.34SD RSI=76.2 entry=2649.20 sl=2656.32 tp=2637.22
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [bot] INFO: M2KM6: New bar 2026-04-13T14:15Z | O=2649.3 H=2649.7 L=2647.2 C=2648.8 V=409
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2648.80 VWAP=2637.34 dist=+1.28SD RSI=76.7 ATR=4.85
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,018 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.28SD RSI=76.7 entry=2648.80 sl=2656.08 tp=2637.34
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,018 [bot] INFO: M2KM6: SIGNAL SHORT from VWAP Mean Reversion | entry=2648.80 sl=2656.08
-Apr 13 14:18:29 vmi3096165 python3[3200725]: 2026-04-13 14:18:29,018 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-
-=== Python processes ===
-root     3200725  0.2  0.5 128692 44308 ?        Ssl  14:18   0:00 /usr/bin/python3 -m futures_bot.bot
 
 === STATUS.JSON ===
 {
@@ -40,44 +13,57 @@ root     3200725  0.2  0.5 128692 44308 ?        Ssl  14:18   0:00 /usr/bin/pyth
   "risk": {}
 }
 
-=== BOT LOG SINCE 14:15 ===
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.79SD RSI=81.2 entry=2629.60 sl=2633.22 tp=2622.98
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2631.80 VWAP=2623.47 dist=+2.05SD RSI=82.0 ATR=2.41
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.05SD RSI=82.0 entry=2631.80 sl=2635.42 tp=2623.47
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2630.40 VWAP=2623.81 dist=+1.55SD RSI=79.5 ATR=2.38
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.55SD RSI=79.5 entry=2630.40 sl=2633.97 tp=2623.81
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2630.90 VWAP=2624.05 dist=+1.57SD RSI=84.2 ATR=2.39
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.57SD RSI=84.2 entry=2630.90 sl=2634.48 tp=2624.05
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2630.30 VWAP=2624.16 dist=+1.39SD RSI=82.1 ATR=2.35
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.39SD RSI=82.1 entry=2630.30 sl=2633.83 tp=2624.16
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2631.70 VWAP=2624.35 dist=+1.63SD RSI=82.1 ATR=2.13
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.63SD RSI=82.1 entry=2631.70 sl=2634.89 tp=2624.35
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2631.60 VWAP=2624.57 dist=+1.53SD RSI=77.5 ATR=1.97
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.53SD RSI=77.5 entry=2631.60 sl=2634.56 tp=2624.57
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2632.10 VWAP=2624.78 dist=+1.56SD RSI=75.5 ATR=1.90
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.56SD RSI=75.5 entry=2632.10 sl=2634.95 tp=2624.78
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2633.60 VWAP=2625.39 dist=+1.64SD RSI=78.3 ATR=1.97
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.64SD RSI=78.3 entry=2633.60 sl=2636.56 tp=2625.39
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2637.20 VWAP=2628.77 dist=+1.28SD RSI=85.3 ATR=2.25
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.28SD RSI=85.3 entry=2637.20 sl=2640.57 tp=2628.77
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2635.60 VWAP=2630.45 dist=+0.82SD RSI=77.3 ATR=2.50
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.82SD RSI=77.3 entry=2635.60 sl=2639.35 tp=2630.45
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2633.50 VWAP=2631.13 dist=+0.40SD RSI=66.5 ATR=2.53
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.40SD RSI=66.5 entry=2633.50 sl=2637.29 tp=2631.13
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2643.10 VWAP=2632.61 dist=+1.67SD RSI=79.5 ATR=3.36
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.67SD RSI=79.5 entry=2643.10 sl=2648.14 tp=2632.61
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2645.10 VWAP=2634.23 dist=+1.53SD RSI=80.1 ATR=3.69
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.53SD RSI=80.1 entry=2645.10 sl=2650.64 tp=2634.23
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2652.90 VWAP=2635.48 dist=+2.17SD RSI=83.4 ATR=4.11
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.17SD RSI=83.4 entry=2652.90 sl=2659.07 tp=2635.48
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2649.20 VWAP=2636.71 dist=+1.43SD RSI=73.9 ATR=4.55
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.43SD RSI=73.9 entry=2649.20 sl=2656.02 tp=2636.71
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2649.00 VWAP=2637.03 dist=+1.35SD RSI=76.4 ATR=4.68
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.35SD RSI=76.4 entry=2649.00 sl=2656.02 tp=2637.03
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2649.20 VWAP=2637.22 dist=+1.34SD RSI=76.2 ATR=4.75
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.34SD RSI=76.2 entry=2649.20 sl=2656.32 tp=2637.22
-2026-04-13 14:18:29,017 [bot] INFO: M2KM6: New bar 2026-04-13T14:15Z | O=2649.3 H=2649.7 L=2647.2 C=2648.8 V=409
-2026-04-13 14:18:29,017 [strategy.vwap] INFO: Price=2648.80 VWAP=2637.34 dist=+1.28SD RSI=76.7 ATR=4.85
-2026-04-13 14:18:29,018 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.28SD RSI=76.7 entry=2648.80 sl=2656.08 tp=2637.34
-2026-04-13 14:18:29,018 [bot] INFO: M2KM6: SIGNAL SHORT from VWAP Mean Reversion | entry=2648.80 sl=2656.08
+=== Query Tradovate API directly for real positions ===
+Token expires: 
+Token present: yes
+
+--- /account/list ---
+[]
+
+--- /position/list ---
+[]
+
+--- /order/list ---
+Active orders: 0
+[]
+
+--- /contract/list (first 5) ---
+
+=== Risk manager + bot state from logs ===
+2026-04-07 17:53:44,800 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-07 18:03:54,406 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-07 18:09:00,121 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-07 18:14:05,799 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-07 18:19:11,471 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-07 18:29:23,350 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-07 18:34:28,920 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-07 18:59:57,869 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-08 18:11:22,445 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-10 13:46:05,069 [bot] ERROR: Error closing positions: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
 2026-04-13 14:18:29,018 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-13 14:23:33,093 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-13 14:23:36,513 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-13 14:23:37,895 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-13 14:23:46,863 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+
+=== Last 20 bot.log lines ===
+2026-04-13 14:23:36,513 [bot] INFO: MNQM6: SIGNAL SHORT from VWAP Mean Reversion | entry=25286.00 sl=25352.35
+2026-04-13 14:23:36,513 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-13 14:23:37,164 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
+2026-04-13 14:23:37,895 [bot] INFO: MCLM6: New bar 2026-04-13T14:20Z | O=93.73 H=93.79 L=93.61 C=93.64 V=49
+2026-04-13 14:23:37,895 [strategy.vwap] INFO: Price=93.64 VWAP=94.67 dist=-1.02SD RSI=26.4 ATR=0.57
+2026-04-13 14:23:37,895 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.02SD RSI=26.4 entry=93.64 sl=92.78 tp=94.67
+2026-04-13 14:23:37,895 [bot] INFO: MCLM6: SIGNAL LONG from VWAP Mean Reversion | entry=93.64 sl=92.78
+2026-04-13 14:23:37,895 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-13 14:23:38,544 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+2026-04-13 14:23:39,616 [bot] INFO: MGCM6: New bar 2026-04-13T14:20Z | O=4741.8 H=4744.9 L=4739.0 C=4739.4 V=1546
+2026-04-13 14:23:39,616 [strategy.vwap] INFO: Price=4739.40 VWAP=4745.66 dist=-0.69SD RSI=36.3 ATR=9.43
+2026-04-13 14:23:40,242 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+2026-04-13 14:23:42,507 [bot] INFO: MYMM6: New bar 2026-04-13T14:20Z | O=47896.0 H=47923.0 L=47879.0 C=47902.0 V=1034
+2026-04-13 14:23:42,507 [strategy.vwap] INFO: Price=47902.00 VWAP=47808.71 dist=+1.11SD RSI=62.4 ATR=89.57
+2026-04-13 14:23:43,123 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+2026-04-13 14:23:46,863 [bot] INFO: M2KM6: New bar 2026-04-13T14:20Z | O=2651.6 H=2655.3 L=2650.6 C=2653.1 V=966
+2026-04-13 14:23:46,863 [strategy.vwap] INFO: Price=2653.10 VWAP=2637.72 dist=+1.68SD RSI=78.5 ATR=5.17
+2026-04-13 14:23:46,863 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.68SD RSI=78.5 entry=2653.10 sl=2660.86 tp=2637.72
+2026-04-13 14:23:46,863 [bot] INFO: M2KM6: SIGNAL SHORT from VWAP Mean Reversion | entry=2653.10 sl=2660.86
+2026-04-13 14:23:46,863 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
