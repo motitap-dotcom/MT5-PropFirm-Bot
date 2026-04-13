@@ -1,56 +1,73 @@
-=== v195 2026-04-10 16:02 UTC ===
-Service: active
-PID: 2235073
+=== v149 post-audit 2026-04-13 20:07 UTC ===
 
-44810 logs/bot.log
+--- SERVICE ---
+Service: activating
+PID:     0
+Uptime:  Mon 2026-04-13 20:07:33 UTC
 
-2026-04-10 15:58:56,120 [bot] WARNING: NO TAKE PROFIT found for MYMM6! Placing emergency TP...
-2026-04-10 15:58:56,236 [tradovate_client] INFO: Limit order: Sell 5 MYMM6 @ 48286.030983750905
-2026-04-10 15:58:56,236 [bot] INFO: Emergency TP placed at 48286.030983750905
-2026-04-10 15:58:56,914 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
-2026-04-10 15:58:57,848 [bot] INFO: M2KM6: Warming up strategy with 50 historical bars
-2026-04-10 15:58:57,849 [strategy.vwap] INFO: Price=2654.80 VWAP=2657.00 dist=-0.66SD RSI=57.1 ATR=3.87
-2026-04-10 15:58:57,849 [strategy.vwap] INFO: Price=2655.30 VWAP=2656.82 dist=-0.46SD RSI=55.1 ATR=3.84
-2026-04-10 15:58:57,849 [strategy.vwap] INFO: Price=2649.50 VWAP=2655.51 dist=-1.79SD RSI=45.3 ATR=4.34
-2026-04-10 15:58:57,849 [strategy.vwap] INFO: Price=2648.10 VWAP=2654.32 dist=-1.56SD RSI=32.8 ATR=3.98
-2026-04-10 15:58:57,849 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.56SD RSI=32.8 entry=2648.10 sl=2642.13 tp=2654.32
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2651.70 VWAP=2653.85 dist=-0.54SD RSI=35.6 ATR=2.96
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2650.30 VWAP=2653.46 dist=-0.80SD RSI=28.4 ATR=3.19
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.80SD RSI=28.4 entry=2650.30 sl=2645.52 tp=2653.46
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2650.80 VWAP=2653.28 dist=-0.63SD RSI=30.3 ATR=3.29
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.63SD RSI=30.3 entry=2650.80 sl=2645.86 tp=2653.28
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2654.00 VWAP=2653.23 dist=+0.20SD RSI=40.9 ATR=3.52
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2649.70 VWAP=2652.99 dist=-0.88SD RSI=36.1 ATR=3.88
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2648.50 VWAP=2652.78 dist=-1.15SD RSI=35.9 ATR=3.92
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2649.40 VWAP=2652.34 dist=-0.77SD RSI=38.8 ATR=4.14
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2650.50 VWAP=2652.20 dist=-0.45SD RSI=42.6 ATR=4.26
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2652.80 VWAP=2652.19 dist=+0.17SD RSI=44.5 ATR=4.26
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2652.60 VWAP=2652.17 dist=+0.12SD RSI=45.8 ATR=4.39
-2026-04-10 15:58:57,850 [strategy.vwap] INFO: Price=2652.50 VWAP=2652.22 dist=+0.08SD RSI=45.7 ATR=4.46
-2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2652.20 VWAP=2652.23 dist=-0.01SD RSI=44.1 ATR=4.49
-2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2648.20 VWAP=2652.03 dist=-1.10SD RSI=47.3 ATR=4.38
-2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2646.50 VWAP=2651.86 dist=-1.53SD RSI=46.8 ATR=4.49
-2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2648.10 VWAP=2651.75 dist=-1.04SD RSI=42.1 ATR=4.46
-2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2651.30 VWAP=2651.72 dist=-0.12SD RSI=52.0 ATR=4.36
-2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2649.40 VWAP=2651.69 dist=-0.66SD RSI=47.3 ATR=4.29
-2026-04-10 15:58:57,851 [strategy.vwap] INFO: Price=2652.10 VWAP=2651.68 dist=+0.12SD RSI=46.3 ATR=4.16
-2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2651.00 VWAP=2651.68 dist=-0.20SD RSI=52.9 ATR=3.84
-2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2651.60 VWAP=2651.67 dist=-0.02SD RSI=57.1 ATR=3.81
-2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2654.00 VWAP=2651.70 dist=+0.69SD RSI=59.9 ATR=3.71
-2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2650.70 VWAP=2651.69 dist=-0.30SD RSI=50.4 ATR=3.75
-2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2649.00 VWAP=2651.64 dist=-0.80SD RSI=42.3 ATR=3.86
-2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2646.40 VWAP=2651.55 dist=-1.56SD RSI=38.6 ATR=3.86
-2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2645.30 VWAP=2651.32 dist=-1.74SD RSI=37.2 ATR=3.89
-2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2643.30 VWAP=2651.18 dist=-2.21SD RSI=35.1 ATR=3.95
-2026-04-10 15:58:57,852 [strategy.vwap] INFO: Price=2642.10 VWAP=2651.05 dist=-2.43SD RSI=38.7 ATR=3.53
-2026-04-10 15:58:57,853 [bot] INFO: M2KM6: New bar 2026-04-10T15:55Z | O=2642.2 H=2642.2 L=2639.4 C=2640.1 V=786
-2026-04-10 15:58:57,853 [strategy.vwap] INFO: Price=2640.10 VWAP=2650.83 dist=-2.72SD RSI=38.3 ATR=3.39
-2026-04-10 16:00:50,613 [tradovate_client] INFO: Token expiring in 30min, renewing...
-2026-04-10 16:00:50,762 [tradovate_client] INFO: Token renewed successfully
-2026-04-10 16:00:50,877 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 16:00:50,878 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 16:00:50,878 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 16:00:50,878 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 16:00:50,878 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 16:00:50,878 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-10 16:00:50,989 [bot] INFO: Position sync: 0 -> 3
+--- CODE ---
+Branch:  claude/claude-md-mm3qa8i9848jcovk-X3DTU
+Commit:  2f706d4 Merge audit branch: risk tightening + monitoring + learning loop
+
+--- CONFIG VALIDATION (latest log match) ---
+
+--- NEW FILES CHECK ---
+-rw-r--r-- 1 root root 2856 Apr 13 20:07 futures_bot/core/trade_logger.py
+  trade_logger.py: OK
+-rwxr-xr-x 1 root root 3474 Apr 13 20:07 scripts/weekly_review.sh
+  weekly_review.sh: OK
+
+--- STATUS / DASHBOARD ---
+dashboard.txt: NOT YET RENDERED
+
+status.json (age: 0s):
+  state: None
+  balance: None
+  dd_used: None
+
+--- TRADE LOG ---
+trades_log.csv: NOT YET CREATED
+
+--- RECENT BOT LOG (last 40 lines) ---
+2026-04-13 18:50:51,853 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-13 18:50:52,492 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+2026-04-13 18:50:53,204 [bot] INFO: MGCM6: New bar 2026-04-13T18:45Z | O=4756.8 H=4759.8 L=4756.5 C=4758.9 V=683
+2026-04-13 18:50:53,204 [strategy.vwap] INFO: Price=4758.90 VWAP=4747.12 dist=+1.13SD RSI=36.7 ATR=5.16
+2026-04-13 18:50:53,819 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+2026-04-13 18:50:54,551 [bot] INFO: MYMM6: New bar 2026-04-13T18:45Z | O=48207.0 H=48237.0 L=48203.0 C=48233.0 V=747
+2026-04-13 18:50:54,551 [strategy.vwap] INFO: Price=48233.00 VWAP=47896.63 dist=+2.36SD RSI=77.6 ATR=22.00
+2026-04-13 18:50:54,552 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.36SD RSI=77.6 entry=48233.00 sl=48304.35 tp=47896.63
+2026-04-13 18:50:54,552 [bot] INFO: MYMM6: SIGNAL SHORT from VWAP Mean Reversion | entry=48233.00 sl=48304.35
+2026-04-13 18:50:54,552 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-13 18:50:55,179 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+2026-04-13 18:50:55,913 [bot] INFO: M2KM6: New bar 2026-04-13T18:45Z | O=2674.1 H=2676.8 L=2674.0 C=2676.4 V=986
+2026-04-13 18:50:55,913 [strategy.vwap] INFO: Price=2676.40 VWAP=2646.10 dist=+2.14SD RSI=79.2 ATR=1.80
+2026-04-13 18:50:55,913 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.14SD RSI=79.2 entry=2676.40 sl=2683.47 tp=2646.10
+2026-04-13 18:50:55,913 [bot] INFO: M2KM6: SIGNAL SHORT from VWAP Mean Reversion | entry=2676.40 sl=2683.47
+2026-04-13 18:50:55,913 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
+2026-04-13 18:51:46,459 [bot] INFO: Stopping bot: Signal received
+2026-04-13 18:51:46,837 [tradovate_client] INFO: Market order placed: Sell 2 MESM6, orderId=451715413241
+2026-04-13 18:51:47,080 [tradovate_client] INFO: Market order placed: Sell 1 MNQM6, orderId=451715413252
+2026-04-13 18:51:47,325 [tradovate_client] INFO: Market order placed: Buy 3 MCLM6, orderId=451715413263
+2026-04-13 18:51:47,565 [tradovate_client] INFO: Cancelled order 451715413147
+2026-04-13 18:51:47,687 [tradovate_client] INFO: Cancelled order 451715413183
+2026-04-13 18:51:47,807 [tradovate_client] INFO: Cancelled order 451715413141
+2026-04-13 18:51:47,927 [tradovate_client] INFO: Cancelled order 451715413172
+2026-04-13 18:51:48,048 [tradovate_client] INFO: Cancelled order 451715413181
+2026-04-13 18:51:48,171 [tradovate_client] INFO: Cancelled order 451715413241
+2026-04-13 18:51:48,291 [tradovate_client] INFO: Cancelled order 451715413166
+2026-04-13 18:51:48,412 [tradovate_client] INFO: Cancelled order 451715413252
+2026-04-13 18:51:48,532 [tradovate_client] INFO: Cancelled order 451715413153
+2026-04-13 18:51:48,652 [tradovate_client] INFO: Cancelled order 451715413175
+2026-04-13 18:51:48,774 [tradovate_client] INFO: Cancelled order 451715413144
+2026-04-13 18:51:48,895 [tradovate_client] INFO: Cancelled order 451715413169
+2026-04-13 18:51:49,016 [tradovate_client] INFO: Cancelled order 451715413179
+2026-04-13 18:51:49,138 [tradovate_client] INFO: Cancelled order 451715413263
+2026-04-13 18:51:49,258 [tradovate_client] INFO: Cancelled order 451715413163
+2026-04-13 18:51:49,378 [tradovate_client] INFO: Cancelled order 451715413130
+2026-04-13 18:51:49,498 [tradovate_client] INFO: Cancelled order 451715413150
+2026-04-13 18:51:49,619 [tradovate_client] INFO: Cancelled order 451715413177
+2026-04-13 18:51:49,698 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-13 18:51:49,699 [bot] INFO: Bot stopped
+
+=== END v149 ===
