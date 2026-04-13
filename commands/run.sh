@@ -1,39 +1,30 @@
 #!/bin/bash
-# Trigger: v150 — post-deploy verification (READ-ONLY, bot should be active now)
+# Trigger: v151 — diagnose crash loop via journalctl
 cd /root/MT5-PropFirm-Bot
-echo "=== v150 post-deploy $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== v151 crash diagnosis $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo ""
 echo "--- SERVICE ---"
-echo "Service: $(systemctl is-active futures-bot)"
-echo "PID:     $(systemctl show futures-bot --property=MainPID --value)"
-echo "Uptime:  $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
+systemctl status futures-bot --no-pager 2>&1 | head -15
 echo ""
-echo "--- CODE ---"
-echo "Commit: $(git log -1 --oneline)"
+echo "--- JOURNALCTL (last 60 lines - where stderr/Python errors go) ---"
+journalctl -u futures-bot --no-pager -n 60 2>&1 | tail -60
 echo ""
-echo "--- CONFIG VALIDATION ---"
-grep -E "Config validation" logs/bot.log 2>/dev/null | tail -5
+echo "--- BOT LOG TAIL (last 20) ---"
+tail -20 logs/bot.log 2>/dev/null
 echo ""
-echo "--- STARTUP LOG (after 20:00 UTC) ---"
-awk '/2026-04-13 20:/' logs/bot.log 2>/dev/null | tail -30
+echo "--- CONFIG JSON VALIDITY ---"
+python3 -c "import json; c=json.load(open('configs/bot_config.json')); print('OK, keys:', list(c.keys()))" 2>&1
 echo ""
-echo "--- DASHBOARD ---"
-if [ -f status/dashboard.txt ]; then
-  echo "age: $(( $(date +%s) - $(stat -c %Y status/dashboard.txt) ))s"
-  cat status/dashboard.txt
-else
-  echo "dashboard.txt: NOT YET"
-fi
+echo "--- IMPORT TEST ---"
+PYTHONPATH=/root/MT5-PropFirm-Bot python3 -c "
+try:
+    from futures_bot.bot import FuturesBot
+    print('Import OK')
+    b = FuturesBot()
+    print('Init OK, symbols:', b.symbols)
+except Exception as e:
+    import traceback
+    traceback.print_exc()
+" 2>&1
 echo ""
-echo "--- STATUS JSON ---"
-if [ -f status/status.json ]; then
-  echo "age: $(( $(date +%s) - $(stat -c %Y status/status.json) ))s"
-  python3 -c "import json; d=json.load(open('status/status.json')); g=d.get('guardian',{}); print('  state:', g.get('state')); print('  balance:', g.get('balance')); print('  daily_pnl:', g.get('daily_pnl')); print('  daily_trades:', g.get('daily_trades')); print('  dd_used:', g.get('drawdown_used'))" 2>/dev/null
-fi
-echo ""
-echo "--- TRADE LOG ---"
-if [ -f logs/trades_log.csv ]; then
-  wc -l logs/trades_log.csv
-fi
-echo ""
-echo "=== END v150 ==="
+echo "=== END v151 ==="
