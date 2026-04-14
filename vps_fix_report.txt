@@ -1,4 +1,40 @@
-=== Fix & Restart ===
-Timestamp: 2026-04-07 11:33:42 UTC
-Restarted
+=== Fix & Restart v13 - Fix volume=0 breaking VWAP ===
+2026-04-09 18:20:17 UTC
+Current: 4299410 Fix VWAP=0 bug: WebSocket bars have upVolume/downVolume, not volume
+Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
+
+--- .env check ---
+TRADOVATE_USER: SET
+TRADOVATE_PASS: SET
+TELEGRAM_TOKEN: SET
+TELEGRAM_CHAT_ID: SET
+
+--- Token check ---
+Token file: exists (813 bytes)
+Playwright: OK
+
+--- Code verification ---
+auth_cooldown: 3
+wait_for_selector: 1
+mkdir in status_writer: 2
+
+--- Result ---
 Status: active
+PID: 1933509
+
+--- First 15 log lines after restart ---
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.38SD RSI=66.7 entry=2656.70 sl=2662.35 tp=2641.11
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2660.20 VWAP=2641.40 dist=+1.64SD RSI=70.2 ATR=2.97
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.64SD RSI=70.2 entry=2660.20 sl=2665.92 tp=2641.40
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2658.90 VWAP=2641.61 dist=+1.50SD RSI=66.0 ATR=2.97
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.50SD RSI=66.0 entry=2658.90 sl=2664.67 tp=2641.61
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2659.50 VWAP=2641.86 dist=+1.51SD RSI=67.6 ATR=2.89
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.51SD RSI=67.6 entry=2659.50 sl=2665.32 tp=2641.86
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2658.50 VWAP=2642.00 dist=+1.41SD RSI=62.2 ATR=2.81
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2658.10 VWAP=2642.11 dist=+1.36SD RSI=67.2 ATR=2.74
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.36SD RSI=67.2 entry=2658.10 sl=2663.97 tp=2642.11
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2649.00 VWAP=2642.54 dist=+0.56SD RSI=38.2 ATR=3.27
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2651.10 VWAP=2642.76 dist=+0.72SD RSI=39.4 ATR=3.41
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2649.80 VWAP=2642.89 dist=+0.60SD RSI=32.7 ATR=3.46
+2026-04-09 18:20:21,529 [bot] INFO: M2KM6: New bar 2026-04-09T18:15Z | O=2649.5 H=2651.6 L=2648.6 C=2650.4 V=549
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2650.40 VWAP=2642.98 dist=+0.65SD RSI=32.1 ATR=3.41

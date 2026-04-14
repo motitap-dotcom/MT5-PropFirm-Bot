@@ -58,9 +58,12 @@ class Guardian:
         self.dd_emergency_pct: float = config.get("dd_emergency_pct", 0.90)  # 90% of max DD
 
         # Daily limits
-        self.max_daily_loss: float = config.get("max_daily_loss", 400.0)
-        self.max_daily_profit: float = config.get("max_daily_profit", 900.0)
-        self.max_daily_trades: int = config.get("max_daily_trades", 6)
+        self.max_daily_loss: float = config.get("max_daily_loss", 300.0)
+        self.max_daily_profit: float = config.get("max_daily_profit", 750.0)
+        self.max_daily_trades: int = config.get("max_daily_trades", 8)
+
+        # Base max risk per trade (was hardcoded)
+        self.max_risk_base: float = config.get("max_risk_base", 150.0)
 
         # State
         self.state: GuardianState = GuardianState.ACTIVE
@@ -72,6 +75,9 @@ class Guardian:
         self.daily_history: list[DailyPnL] = []
         self.trading_days: int = 0
         self.reason: str = ""
+
+        # Track which DD alert levels have already been fired (prevent spam)
+        self._dd_alerts_fired: set = set()
 
     def update_balance(self, current_balance: float, unrealized_pnl: float = 0.0):
         """Update current balance and check all rules."""
@@ -152,6 +158,7 @@ class Guardian:
 
         self.daily_pnl = 0.0
         self.daily_trades = 0
+        self._dd_alerts_fired.clear()
 
         # Re-evaluate state
         if self.state != GuardianState.SHUTDOWN:
@@ -189,16 +196,34 @@ class Guardian:
 
     def get_max_risk_per_trade(self) -> float:
         """Get maximum allowed risk based on current state."""
-        base_risk = 150.0  # $150 max per trade normally
+        base_risk = self.max_risk_base
 
         if self.state == GuardianState.CAUTION:
-            return base_risk * 0.5  # $75
+            return base_risk * 0.5  # halved in caution state
         elif self.state == GuardianState.HALTED:
             return 0.0
         else:
             # Also limit based on remaining daily loss budget
             remaining = self.max_daily_loss + self.daily_pnl  # daily_pnl is negative when losing
             return min(base_risk, max(remaining, 0))
+
+    def get_dd_pct_used(self) -> float:
+        """Return fraction of max drawdown currently used (0..1+)."""
+        dd_used = max(0.0, self.initial_balance - self.current_balance)
+        return dd_used / self.max_drawdown if self.max_drawdown > 0 else 0.0
+
+    def check_dd_alert(self, levels: list) -> Optional[float]:
+        """
+        Check if a new DD alert level has been crossed.
+        Returns the level (float 0..1) if a fresh alert should fire, else None.
+        Fires each level at most once per day — reset on start_new_day().
+        """
+        dd_pct = self.get_dd_pct_used()
+        for lvl in sorted(levels):
+            if dd_pct >= lvl and lvl not in self._dd_alerts_fired:
+                self._dd_alerts_fired.add(lvl)
+                return lvl
+        return None
 
     def get_status(self) -> Dict:
         """Get full guardian status for logging/dashboard."""
