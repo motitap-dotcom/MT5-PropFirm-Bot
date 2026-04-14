@@ -1,119 +1,31 @@
-=== Open Trades Check 2026-04-14 18:44:45 UTC ===
-ET: 14:44 EDT
+=== Chromium Install Check 2026-04-14 19:09:34 UTC ===
 
---- Service ---
-State:  active
-PID:    3548483
+--- Bot status ---
+State: active
+PID:   3548483
 Uptime: Tue 2026-04-14 15:21:53 UTC
 
---- status.json (positions + guardian) ---
-status.json age: 0s ago
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+--- Chromium binary (BEFORE any action) ---
+ls: cannot access '/root/.cache/ms-playwright/chromium-*/chrome-linux/chrome': No such file or directory
+/root/.cache/ms-playwright
+/root/.cache/ms-playwright/.links
+/root/.cache/ms-playwright/chromium-1208
+/root/.cache/ms-playwright/chromium-1208/chrome-linux64
+/root/.cache/ms-playwright/chromium_headless_shell-1208
+/root/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64
+/root/.cache/ms-playwright/ffmpeg-1011
 
---- dashboard.txt (human readable) ---
-============================================================
-TradeDay Futures Bot — 2026-04-14T18:44:43.476795+00:00
-============================================================
-State            : ACTIVE
-Balance          : $50,438.89
-Total PnL        : $+438.89
-Daily PnL        : $+0.00   Trades today: 0
-Trading days     : 0/5
-DD used / left   : $0.00 / $2,000.00
-To profit target : $2,561.11
-Consistency OK   : True
-Reason           : —
-------------------------------------------------------------
-Active strategy  : {'MESM6': 'vwap', 'MNQM6': 'vwap', 'MCLM6': 'vwap', 'MGCM6': 'vwap', 'MYMM6': 'vwap', 'M2KM6': 'vwap'}
-Open positions   : 0
-============================================================
+--- Running: playwright install chromium (download only, no apt) ---
+Exit code: 0
 
---- Position sync events (last 10) ---
-2026-04-10 13:46:05,252 [bot] ERROR: Position sync error: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
-2026-04-10 16:00:50,989 [bot] INFO: Position sync: 0 -> 3
-2026-04-10 16:05:52,270 [bot] INFO: Position sync: 3 -> 0
-2026-04-11 13:30:29,683 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-12 13:30:10,006 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-13 13:30:26,032 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:30:20,810 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:35:21,786 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:40:22,706 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:45:23,621 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+--- Chromium binary (AFTER install) ---
+ls: cannot access '/root/.cache/ms-playwright/chromium-*/chrome-linux/chrome': No such file or directory
 
---- SIGNAL events today ---
-2026-04-14 15:22:11,526 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.25SD RSI=83.8 entry=6970.00 sl=6981.73 tp1=6955.44 tp2=6937.99
-2026-04-14 15:22:16,124 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.50SD RSI=70.0 entry=25746.75 sl=25774.28 tp1=25701.65 tp2=25656.60
-2026-04-14 15:22:16,124 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.41SD RSI=70.1 entry=25767.00 sl=25803.24 tp1=25718.33 tp2=25666.46
-2026-04-14 15:22:16,125 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.38SD RSI=76.3 entry=25789.25 sl=25832.26 tp1=25730.68 tp2=25667.15
-2026-04-14 15:22:21,348 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.78SD RSI=72.1 entry=48681.00 sl=48731.18 tp1=48534.92 tp2=48411.91
-2026-04-14 15:22:22,730 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.92SD RSI=71.6 entry=2714.10 sl=2716.89 tp1=2704.56 tp2=2697.10
-2026-04-14 15:22:22,730 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.58SD RSI=72.9 entry=2717.10 sl=2721.53 tp1=2706.51 tp2=2696.42
-2026-04-14 16:30:14,082 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.66SD RSI=71.3 entry=4839.40 sl=4847.06 tp1=4816.19 tp2=4795.16
-2026-04-14 16:30:14,082 [bot] INFO: MGCM6: SIGNAL SHORT from VWAP Mean Reversion | entry=4839.40 sl=4847.06
-2026-04-14 16:35:21,678 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.73SD RSI=75.0 entry=6995.00 sl=7001.28 tp1=6965.27 tp2=6939.55
-2026-04-14 16:35:21,678 [bot] INFO: MESM6: SIGNAL SHORT from VWAP Mean Reversion | entry=6995.00 sl=7001.28
-2026-04-14 16:35:29,343 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.10SD RSI=80.0 entry=25914.75 sl=25916.40 tp1=25769.36 tp2=25665.74
-2026-04-14 16:35:29,343 [bot] INFO: MNQM6: SIGNAL SHORT from VWAP Mean Reversion | entry=25914.75 sl=25916.40
-2026-04-14 16:45:52,632 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.07SD RSI=28.0 entry=88.67 sl=87.43 tp1=89.94 tp2=91.73
-2026-04-14 16:45:52,632 [bot] INFO: MCLM6: SIGNAL LONG from VWAP Mean Reversion | entry=88.67 sl=87.43
+--- Try launching chromium headless ---
+LAUNCH OK: chromium loaded about:blank
 
---- Order placements / fills today ---
-2026-04-14 14:33:30,931 [tradovate_client] INFO: Cancelled order 451715415506
-2026-04-14 14:33:31,051 [tradovate_client] INFO: Cancelled order 451715415494
-2026-04-14 14:33:31,169 [tradovate_client] INFO: Cancelled order 451715415476
-2026-04-14 14:33:31,287 [tradovate_client] INFO: Cancelled order 451715415485
-2026-04-14 14:33:31,405 [tradovate_client] INFO: Cancelled order 451715415479
-2026-04-14 14:33:31,523 [tradovate_client] INFO: Cancelled order 451715415482
-2026-04-14 14:33:31,641 [tradovate_client] INFO: Cancelled order 451715415497
-2026-04-14 14:33:31,760 [tradovate_client] INFO: Cancelled order 451715415500
-2026-04-14 14:33:31,879 [tradovate_client] INFO: Cancelled order 451715415473
-2026-04-14 14:33:31,998 [tradovate_client] INFO: Cancelled order 451715415503
-2026-04-14 16:30:14,209 [tradovate_client] INFO: Market order placed: Sell 1 MGCM6, orderId=451715415557
-2026-04-14 16:30:14,334 [tradovate_client] INFO: Stop order: Buy 1 MGCM6 @ stop=4847.06065312157
-2026-04-14 16:30:14,459 [tradovate_client] INFO: Limit order: Buy 1 MGCM6 @ 4816.185074869254
-2026-04-14 16:30:16,706 [tradovate_client] INFO: Stop order: Buy 1 MGCM6 @ stop=4847.06065312157
-2026-04-14 16:30:16,829 [tradovate_client] INFO: Limit order: Buy 1 MGCM6 @ 4816.185074869254
-2026-04-14 16:35:21,803 [tradovate_client] INFO: Market order placed: Sell 2 MESM6, orderId=451715415579
-2026-04-14 16:35:21,926 [tradovate_client] INFO: Stop order: Buy 2 MESM6 @ stop=7001.2845909351445
-2026-04-14 16:35:22,048 [tradovate_client] INFO: Limit order: Buy 2 MESM6 @ 6965.273533195682
-2026-04-14 16:35:24,292 [tradovate_client] INFO: Stop order: Buy 2 MESM6 @ stop=7001.2845909351445
-2026-04-14 16:35:24,414 [tradovate_client] INFO: Limit order: Buy 2 MESM6 @ 6965.273533195682
-
---- Balance / PnL lines today ---
-2026-04-14 04:00:33,124 [guardian] INFO: New day started. Trading days: 0, Total PnL: $0.00
-2026-04-14 13:30:20,457 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:35:21,432 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:40:22,348 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:45:23,257 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-
---- trades_log.csv ---
-Total lines: 1
-Header + last 10 rows:
-timestamp_utc,symbol,strategy,direction,contracts,entry,sl,tp,exit,pnl,r_multiple,reason,daily_pnl_after,balance_after
-timestamp_utc,symbol,strategy,direction,contracts,entry,sl,tp,exit,pnl,r_multiple,reason,daily_pnl_after,balance_after
-
---- Last 15 log lines ---
-2026-04-14 18:40:40,044 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
-2026-04-14 18:40:45,410 [bot] INFO: MNQM6: New bar 2026-04-14T18:35Z | O=25920.75 H=25931.5 L=25920.5 C=25927.25 V=7967
-2026-04-14 18:40:45,410 [strategy.vwap] INFO: Price=25927.25 VWAP=25796.55 dist=+1.49SD RSI=41.3 ATR=14.64
-2026-04-14 18:40:46,029 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
-2026-04-14 18:40:46,762 [bot] INFO: MCLM6: New bar 2026-04-14T18:35Z | O=88.41 H=88.51 L=88.36 C=88.4 V=76
-2026-04-14 18:40:46,763 [strategy.vwap] INFO: Price=88.40 VWAP=89.80 dist=-1.16SD RSI=36.8 ATR=0.28
-2026-04-14 18:40:47,384 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
-2026-04-14 18:40:48,342 [bot] INFO: MGCM6: New bar 2026-04-14T18:35Z | O=4861.7 H=4863.9 L=4861.4 C=4862.3 V=458
-2026-04-14 18:40:48,342 [strategy.vwap] INFO: Price=4862.30 VWAP=4821.69 dist=+2.15SD RSI=64.3 ATR=4.52
-2026-04-14 18:40:48,959 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
-2026-04-14 18:40:50,741 [bot] INFO: MYMM6: New bar 2026-04-14T18:35Z | O=48685.0 H=48720.0 L=48685.0 C=48713.0 V=665
-2026-04-14 18:40:50,741 [strategy.vwap] INFO: Price=48713.00 VWAP=48597.39 dist=+1.15SD RSI=52.5 ATR=29.79
-2026-04-14 18:40:51,358 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
-2026-04-14 18:40:52,092 [bot] INFO: M2KM6: New bar 2026-04-14T18:35Z | O=2711.1 H=2713.8 L=2711.1 C=2713.4 V=724
-2026-04-14 18:40:52,092 [strategy.vwap] INFO: Price=2713.40 VWAP=2710.04 dist=+0.43SD RSI=33.1 ATR=2.05
+--- Bot status (after install, should be untouched) ---
+State: active
+PID:   3548483
 
 === END ===
