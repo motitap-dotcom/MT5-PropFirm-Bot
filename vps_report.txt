@@ -1,124 +1,119 @@
-=== TradeDay Futures Bot - Diagnostic 2026-04-14 15:29:16 UTC ===
+=== Open Trades Check 2026-04-14 15:47:13 UTC ===
+ET: 11:47 EDT
 
 --- Service ---
-active
-MainPID=3548483
-Result=success
-NRestarts=0
-ExecMainStartTimestamp=Tue 2026-04-14 15:21:53 UTC
-ExecMainExitTimestamp=
-ActiveState=active
-SubState=running
-ActiveEnterTimestamp=Tue 2026-04-14 15:21:53 UTC
+State:  active
+PID:    3548483
+Uptime: Tue 2026-04-14 15:21:53 UTC
 
---- systemctl status (full) ---
-● futures-bot.service - TradeDay Futures Trading Bot
-     Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
-     Active: active (running) since Tue 2026-04-14 15:21:53 UTC; 7min ago
-   Main PID: 3548483 (python3)
-      Tasks: 2 (limit: 9483)
-     Memory: 270.5M (peak: 542.5M)
-        CPU: 6.842s
-     CGroup: /system.slice/futures-bot.service
-             └─3548483 /usr/bin/python3 -m futures_bot.bot
+--- status.json (positions + guardian) ---
+status.json age: 0s ago
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
 
-Apr 14 15:27:34 vmi3096165 python3[3548483]: 2026-04-14 15:27:34,508 [strategy.vwap] INFO: Price=89.50 VWAP=90.15 dist=-0.56SD RSI=62.2 ATR=0.37
-Apr 14 15:27:35 vmi3096165 python3[3548483]: 2026-04-14 15:27:35,171 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
-Apr 14 15:27:36 vmi3096165 python3[3548483]: 2026-04-14 15:27:36,269 [bot] INFO: MGCM6: New bar 2026-04-14T15:25Z | O=4827.2 H=4828.6 L=4824.1 C=4827.0 V=739
-Apr 14 15:27:36 vmi3096165 python3[3548483]: 2026-04-14 15:27:36,269 [strategy.vwap] INFO: Price=4827.00 VWAP=4813.89 dist=+1.00SD RSI=48.8 ATR=7.91
-Apr 14 15:27:36 vmi3096165 python3[3548483]: 2026-04-14 15:27:36,909 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
-Apr 14 15:27:38 vmi3096165 python3[3548483]: 2026-04-14 15:27:38,174 [bot] INFO: MYMM6: New bar 2026-04-14T15:25Z | O=48697.0 H=48742.0 L=48697.0 C=48740.0 V=785
-Apr 14 15:27:38 vmi3096165 python3[3548483]: 2026-04-14 15:27:38,174 [strategy.vwap] INFO: Price=48740.00 VWAP=48568.85 dist=+1.90SD RSI=58.7 ATR=42.29
-Apr 14 15:27:38 vmi3096165 python3[3548483]: 2026-04-14 15:27:38,811 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
-Apr 14 15:27:39 vmi3096165 python3[3548483]: 2026-04-14 15:27:39,518 [bot] INFO: M2KM6: New bar 2026-04-14T15:25Z | O=2718.8 H=2720.8 L=2718.7 C=2720.5 V=366
-Apr 14 15:27:39 vmi3096165 python3[3548483]: 2026-04-14 15:27:39,518 [strategy.vwap] INFO: Price=2720.50 VWAP=2707.54 dist=+1.83SD RSI=63.1 ATR=3.11
+--- dashboard.txt (human readable) ---
+============================================================
+TradeDay Futures Bot — 2026-04-14T15:47:06.739553+00:00
+============================================================
+State            : ACTIVE
+Balance          : $50,589.93
+Total PnL        : $+589.93
+Daily PnL        : $+0.00   Trades today: 0
+Trading days     : 0/5
+DD used / left   : $0.00 / $2,000.00
+To profit target : $2,410.07
+Consistency OK   : True
+Reason           : —
+------------------------------------------------------------
+Active strategy  : {'MESM6': 'vwap', 'MNQM6': 'vwap', 'MCLM6': 'vwap', 'MGCM6': 'vwap', 'MYMM6': 'vwap', 'M2KM6': 'vwap'}
+Open positions   : 0
+============================================================
 
---- journalctl last 50 lines (includes crash traces) ---
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,729 [strategy.vwap] INFO: Price=2702.20 VWAP=2701.28 dist=+0.44SD RSI=51.8 ATR=2.81
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,729 [strategy.vwap] INFO: Price=2701.90 VWAP=2701.31 dist=+0.29SD RSI=53.4 ATR=2.76
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,729 [strategy.vwap] INFO: Price=2702.10 VWAP=2701.35 dist=+0.37SD RSI=50.0 ATR=2.73
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,729 [strategy.vwap] INFO: Price=2701.10 VWAP=2701.35 dist=-0.13SD RSI=51.4 ATR=2.60
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,729 [strategy.vwap] INFO: Price=2702.20 VWAP=2701.34 dist=+0.45SD RSI=50.7 ATR=2.69
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,729 [strategy.vwap] INFO: Price=2697.70 VWAP=2700.86 dist=-1.82SD RSI=44.3 ATR=3.48
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2702.30 VWAP=2700.95 dist=+0.86SD RSI=45.6 ATR=3.89
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2702.90 VWAP=2701.12 dist=+1.14SD RSI=52.8 ATR=3.52
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2702.40 VWAP=2701.16 dist=+0.83SD RSI=53.5 ATR=3.73
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2704.80 VWAP=2701.36 dist=+2.15SD RSI=58.0 ATR=3.94
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2705.70 VWAP=2701.58 dist=+2.26SD RSI=60.4 ATR=4.00
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2705.10 VWAP=2701.73 dist=+1.74SD RSI=60.1 ATR=4.05
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2707.70 VWAP=2702.03 dist=+2.53SD RSI=63.7 ATR=4.16
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2712.40 VWAP=2702.55 dist=+3.30SD RSI=70.1 ATR=4.43
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2713.60 VWAP=2703.18 dist=+2.73SD RSI=72.6 ATR=4.54
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2711.50 VWAP=2703.61 dist=+1.90SD RSI=67.8 ATR=4.75
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2713.10 VWAP=2703.85 dist=+2.13SD RSI=69.4 ATR=4.77
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2714.20 VWAP=2704.14 dist=+2.18SD RSI=73.0 ATR=4.79
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2714.10 VWAP=2704.56 dist=+1.92SD RSI=71.6 ATR=4.79
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.92SD RSI=71.6 entry=2714.10 sl=2716.89 tp1=2704.56 tp2=2697.10
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2715.50 VWAP=2704.76 dist=+2.09SD RSI=86.5 ATR=4.00
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2718.60 VWAP=2705.25 dist=+2.38SD RSI=85.6 ATR=3.50
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2721.10 VWAP=2705.73 dist=+2.52SD RSI=86.7 ATR=3.43
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2721.60 VWAP=2706.03 dist=+2.43SD RSI=88.7 ATR=3.16
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2717.10 VWAP=2706.51 dist=+1.58SD RSI=72.9 ATR=3.16
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.58SD RSI=72.9 entry=2717.10 sl=2721.53 tp1=2706.51 tp2=2696.42
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2716.00 VWAP=2706.80 dist=+1.35SD RSI=69.0 ATR=3.26
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2714.10 VWAP=2707.03 dist=+1.03SD RSI=65.8 ATR=3.26
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2717.80 VWAP=2707.26 dist=+1.52SD RSI=67.1 ATR=3.36
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [bot] INFO: M2KM6: New bar 2026-04-14T15:20Z | O=2717.5 H=2719.8 L=2717.1 C=2719.2 V=476
-Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2719.20 VWAP=2707.41 dist=+1.68SD RSI=63.0 ATR=3.16
-Apr 14 15:27:22 vmi3096165 python3[3548483]: 2026-04-14 15:27:22,736 [bot] INFO: === Trading cycle 11:27 ET | Guardian: ACTIVE ===
-Apr 14 15:27:23 vmi3096165 python3[3548483]: 2026-04-14 15:27:23,739 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
-Apr 14 15:27:28 vmi3096165 python3[3548483]: 2026-04-14 15:27:28,616 [bot] INFO: MESM6: New bar 2026-04-14T15:25Z | O=6981.5 H=6986.75 L=6981.25 C=6986.25 V=7437
-Apr 14 15:27:28 vmi3096165 python3[3548483]: 2026-04-14 15:27:28,616 [strategy.vwap] INFO: Price=6986.25 VWAP=6960.25 dist=+1.94SD RSI=75.4 ATR=4.71
-Apr 14 15:27:29 vmi3096165 python3[3548483]: 2026-04-14 15:27:29,258 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
-Apr 14 15:27:33 vmi3096165 python3[3548483]: 2026-04-14 15:27:33,135 [bot] INFO: MNQM6: New bar 2026-04-14T15:25Z | O=25823.75 H=25846.0 L=25823.25 C=25844.5 V=9044
-Apr 14 15:27:33 vmi3096165 python3[3548483]: 2026-04-14 15:27:33,135 [strategy.vwap] INFO: Price=25844.50 VWAP=25746.87 dist=+2.05SD RSI=69.4 ATR=24.23
-Apr 14 15:27:33 vmi3096165 python3[3548483]: 2026-04-14 15:27:33,776 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
-Apr 14 15:27:34 vmi3096165 python3[3548483]: 2026-04-14 15:27:34,508 [bot] INFO: MCLM6: New bar 2026-04-14T15:25Z | O=89.35 H=89.55 L=89.27 C=89.5 V=43
-Apr 14 15:27:34 vmi3096165 python3[3548483]: 2026-04-14 15:27:34,508 [strategy.vwap] INFO: Price=89.50 VWAP=90.15 dist=-0.56SD RSI=62.2 ATR=0.37
-Apr 14 15:27:35 vmi3096165 python3[3548483]: 2026-04-14 15:27:35,171 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
-Apr 14 15:27:36 vmi3096165 python3[3548483]: 2026-04-14 15:27:36,269 [bot] INFO: MGCM6: New bar 2026-04-14T15:25Z | O=4827.2 H=4828.6 L=4824.1 C=4827.0 V=739
-Apr 14 15:27:36 vmi3096165 python3[3548483]: 2026-04-14 15:27:36,269 [strategy.vwap] INFO: Price=4827.00 VWAP=4813.89 dist=+1.00SD RSI=48.8 ATR=7.91
-Apr 14 15:27:36 vmi3096165 python3[3548483]: 2026-04-14 15:27:36,909 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
-Apr 14 15:27:38 vmi3096165 python3[3548483]: 2026-04-14 15:27:38,174 [bot] INFO: MYMM6: New bar 2026-04-14T15:25Z | O=48697.0 H=48742.0 L=48697.0 C=48740.0 V=785
-Apr 14 15:27:38 vmi3096165 python3[3548483]: 2026-04-14 15:27:38,174 [strategy.vwap] INFO: Price=48740.00 VWAP=48568.85 dist=+1.90SD RSI=58.7 ATR=42.29
-Apr 14 15:27:38 vmi3096165 python3[3548483]: 2026-04-14 15:27:38,811 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
-Apr 14 15:27:39 vmi3096165 python3[3548483]: 2026-04-14 15:27:39,518 [bot] INFO: M2KM6: New bar 2026-04-14T15:25Z | O=2718.8 H=2720.8 L=2718.7 C=2720.5 V=366
-Apr 14 15:27:39 vmi3096165 python3[3548483]: 2026-04-14 15:27:39,518 [strategy.vwap] INFO: Price=2720.50 VWAP=2707.54 dist=+1.83SD RSI=63.1 ATR=3.11
+--- Position sync events (last 10) ---
+2026-04-10 13:46:05,252 [bot] ERROR: Position sync error: CAPTCHA required and browser auth failed. Set TRADOVATE_ACCESS_TOKEN in .env
+2026-04-10 16:00:50,989 [bot] INFO: Position sync: 0 -> 3
+2026-04-10 16:05:52,270 [bot] INFO: Position sync: 3 -> 0
+2026-04-11 13:30:29,683 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-12 13:30:10,006 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-13 13:30:26,032 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:30:20,810 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:35:21,786 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:40:22,706 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:45:23,621 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 
---- Python import check (does the bot module load?) ---
-IMPORT OK: futures_bot.bot
-IMPORT OK: tradovate_client
+--- SIGNAL events today ---
+2026-04-14 14:16:21,625 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.14SD RSI=70.3 entry=6956.50 sl=6966.42 tp1=6946.49 tp2=6933.38
+2026-04-14 14:16:25,554 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.04SD RSI=74.6 entry=25673.00 sl=25696.84 tp1=25654.61 tp2=25628.08
+2026-04-14 14:16:25,555 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.49SD RSI=70.0 entry=25746.75 sl=25776.76 tp1=25695.65 tp2=25644.24
+2026-04-14 14:16:32,386 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.72SD RSI=80.4 entry=2700.70 sl=2706.79 tp1=2697.88 tp2=2691.98
+2026-04-14 15:22:11,524 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.63SD RSI=73.0 entry=6959.00 sl=6964.10 tp1=6946.75 tp2=6935.51
+2026-04-14 15:22:11,526 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.30SD RSI=71.6 entry=6957.50 sl=6965.30 tp1=6947.44 tp2=6935.84
+2026-04-14 15:22:11,526 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.10SD RSI=70.3 entry=6956.50 sl=6965.99 tp1=6947.90 tp2=6936.16
+2026-04-14 15:22:11,526 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.49SD RSI=80.1 entry=6968.25 sl=6976.47 tp1=6952.66 tp2=6936.97
+2026-04-14 15:22:11,526 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.25SD RSI=83.8 entry=6970.00 sl=6981.73 tp1=6955.44 tp2=6937.99
+2026-04-14 15:22:16,124 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.50SD RSI=70.0 entry=25746.75 sl=25774.28 tp1=25701.65 tp2=25656.60
+2026-04-14 15:22:16,124 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.41SD RSI=70.1 entry=25767.00 sl=25803.24 tp1=25718.33 tp2=25666.46
+2026-04-14 15:22:16,125 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.38SD RSI=76.3 entry=25789.25 sl=25832.26 tp1=25730.68 tp2=25667.15
+2026-04-14 15:22:21,348 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.78SD RSI=72.1 entry=48681.00 sl=48731.18 tp1=48534.92 tp2=48411.91
+2026-04-14 15:22:22,730 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.92SD RSI=71.6 entry=2714.10 sl=2716.89 tp1=2704.56 tp2=2697.10
+2026-04-14 15:22:22,730 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.58SD RSI=72.9 entry=2717.10 sl=2721.53 tp1=2706.51 tp2=2696.42
 
---- Token file ---
--rw-r--r-- 1 root root 819 Apr 14 15:29 configs/.tradovate_token.json
-  expiry: 1776187325.524424 (113min from now)
-  saved_at: 2026-04-14T15:22:05.649369+00:00
+--- Order placements / fills today ---
+2026-04-14 13:59:34,677 [tradovate_client] INFO: Cancelled order 451715415494
+2026-04-14 13:59:34,798 [tradovate_client] INFO: Cancelled order 451715415476
+2026-04-14 13:59:34,917 [tradovate_client] INFO: Cancelled order 451715415485
+2026-04-14 13:59:35,038 [tradovate_client] INFO: Cancelled order 451715415479
+2026-04-14 13:59:35,157 [tradovate_client] INFO: Cancelled order 451715415482
+2026-04-14 13:59:35,277 [tradovate_client] INFO: Cancelled order 451715415497
+2026-04-14 13:59:35,398 [tradovate_client] INFO: Cancelled order 451715415500
+2026-04-14 13:59:35,521 [tradovate_client] INFO: Cancelled order 451715415473
+2026-04-14 13:59:35,643 [tradovate_client] INFO: Cancelled order 451715415503
+2026-04-14 14:33:30,813 [tradovate_client] INFO: Cancelled order 451715415464
+2026-04-14 14:33:30,931 [tradovate_client] INFO: Cancelled order 451715415506
+2026-04-14 14:33:31,051 [tradovate_client] INFO: Cancelled order 451715415494
+2026-04-14 14:33:31,169 [tradovate_client] INFO: Cancelled order 451715415476
+2026-04-14 14:33:31,287 [tradovate_client] INFO: Cancelled order 451715415485
+2026-04-14 14:33:31,405 [tradovate_client] INFO: Cancelled order 451715415479
+2026-04-14 14:33:31,523 [tradovate_client] INFO: Cancelled order 451715415482
+2026-04-14 14:33:31,641 [tradovate_client] INFO: Cancelled order 451715415497
+2026-04-14 14:33:31,760 [tradovate_client] INFO: Cancelled order 451715415500
+2026-04-14 14:33:31,879 [tradovate_client] INFO: Cancelled order 451715415473
+2026-04-14 14:33:31,998 [tradovate_client] INFO: Cancelled order 451715415503
 
---- .env check ---
-  TRADOVATE_USER: SET (len=10)
-  TRADOVATE_PASS: SET (len=9)
-  TELEGRAM_TOKEN: SET (len=46)
-  TELEGRAM_CHAT_ID: SET (len=10)
+--- Balance / PnL lines today ---
+2026-04-14 04:00:33,124 [guardian] INFO: New day started. Trading days: 0, Total PnL: $0.00
+2026-04-14 13:30:20,457 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:35:21,432 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:40:22,348 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:45:23,257 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 
---- Playwright install check ---
-playwright: OK
-ls: cannot access '/root/.cache/ms-playwright/chromium-*/chrome-linux/chrome': No such file or directory
+--- trades_log.csv ---
+Total lines: 1
+Header + last 10 rows:
+timestamp_utc,symbol,strategy,direction,contracts,entry,sl,tp,exit,pnl,r_multiple,reason,daily_pnl_after,balance_after
+timestamp_utc,symbol,strategy,direction,contracts,entry,sl,tp,exit,pnl,r_multiple,reason,daily_pnl_after,balance_after
 
---- Recent bot.log (last 15 lines) ---
-2026-04-14 15:27:29,258 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
-2026-04-14 15:27:33,135 [bot] INFO: MNQM6: New bar 2026-04-14T15:25Z | O=25823.75 H=25846.0 L=25823.25 C=25844.5 V=9044
-2026-04-14 15:27:33,135 [strategy.vwap] INFO: Price=25844.50 VWAP=25746.87 dist=+2.05SD RSI=69.4 ATR=24.23
-2026-04-14 15:27:33,776 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
-2026-04-14 15:27:34,508 [bot] INFO: MCLM6: New bar 2026-04-14T15:25Z | O=89.35 H=89.55 L=89.27 C=89.5 V=43
-2026-04-14 15:27:34,508 [strategy.vwap] INFO: Price=89.50 VWAP=90.15 dist=-0.56SD RSI=62.2 ATR=0.37
-2026-04-14 15:27:35,171 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
-2026-04-14 15:27:36,269 [bot] INFO: MGCM6: New bar 2026-04-14T15:25Z | O=4827.2 H=4828.6 L=4824.1 C=4827.0 V=739
-2026-04-14 15:27:36,269 [strategy.vwap] INFO: Price=4827.00 VWAP=4813.89 dist=+1.00SD RSI=48.8 ATR=7.91
-2026-04-14 15:27:36,909 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
-2026-04-14 15:27:38,174 [bot] INFO: MYMM6: New bar 2026-04-14T15:25Z | O=48697.0 H=48742.0 L=48697.0 C=48740.0 V=785
-2026-04-14 15:27:38,174 [strategy.vwap] INFO: Price=48740.00 VWAP=48568.85 dist=+1.90SD RSI=58.7 ATR=42.29
-2026-04-14 15:27:38,811 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
-2026-04-14 15:27:39,518 [bot] INFO: M2KM6: New bar 2026-04-14T15:25Z | O=2718.8 H=2720.8 L=2718.7 C=2720.5 V=366
-2026-04-14 15:27:39,518 [strategy.vwap] INFO: Price=2720.50 VWAP=2707.54 dist=+1.83SD RSI=63.1 ATR=3.11
+--- Last 15 log lines ---
+2026-04-14 15:43:09,070 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
+2026-04-14 15:43:13,610 [bot] INFO: MNQM6: New bar 2026-04-14T15:40Z | O=25855.25 H=25858.25 L=25849.0 C=25856.0 V=5526
+2026-04-14 15:43:13,610 [strategy.vwap] INFO: Price=25856.00 VWAP=25749.37 dist=+2.15SD RSI=67.4 ATR=21.95
+2026-04-14 15:43:14,231 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
+2026-04-14 15:43:14,964 [bot] INFO: MCLM6: New bar 2026-04-14T15:40Z | O=89.14 H=89.24 L=89.07 C=89.12 V=58
+2026-04-14 15:43:14,964 [strategy.vwap] INFO: Price=89.12 VWAP=90.14 dist=-0.89SD RSI=50.2 ATR=0.37
+2026-04-14 15:43:15,616 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+2026-04-14 15:43:16,836 [bot] INFO: MGCM6: New bar 2026-04-14T15:40Z | O=4835.2 H=4835.7 L=4830.5 C=4832.6 V=872
+2026-04-14 15:43:16,836 [strategy.vwap] INFO: Price=4832.60 VWAP=4814.41 dist=+1.37SD RSI=45.6 ATR=7.16
+2026-04-14 15:43:17,471 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+2026-04-14 15:43:20,024 [bot] INFO: MYMM6: New bar 2026-04-14T15:40Z | O=48743.0 H=48746.0 L=48724.0 C=48739.0 V=414
+2026-04-14 15:43:20,025 [strategy.vwap] INFO: Price=48739.00 VWAP=48572.24 dist=+1.80SD RSI=70.7 ATR=37.43
+2026-04-14 15:43:20,652 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+2026-04-14 15:43:21,384 [bot] INFO: M2KM6: New bar 2026-04-14T15:40Z | O=2724.2 H=2724.3 L=2721.4 C=2723.1 V=501
+2026-04-14 15:43:21,384 [strategy.vwap] INFO: Price=2723.10 VWAP=2708.05 dist=+2.01SD RSI=67.7 ATR=3.06
 
-=== END DIAGNOSTIC ===
+=== END ===
