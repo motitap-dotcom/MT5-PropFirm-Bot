@@ -1,1 +1,1 @@
-Trigger VPS check - open trades check
+Trigger VPS check - fresh status
