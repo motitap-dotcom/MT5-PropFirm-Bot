@@ -1,0 +1,67 @@
+=== TradeDay Futures Bot - Status Check ===
+Timestamp: 2026-04-14 15:18:12 UTC
+
+--- System ---
+ 15:18:12 up 23 days,  7:42,  1 user,  load average: 0.34, 0.27, 0.27
+               total        used        free      shared  buff/cache   available
+Mem:           7.8Gi       1.1Gi       6.4Gi        14Mi       547Mi       6.7Gi
+Swap:          4.0Gi       1.0Mi       4.0Gi
+
+--- Bot Process ---
+Bot service: NOT RUNNING
+No bot process found
+
+--- Python ---
+Python 3.12.3
+Name: aiohttp
+Version: 3.13.3
+Name: websockets
+Version: 16.0
+
+--- Bot Logs (last 30 lines) ---
+2026-04-14 14:32:08,430 [strategy.vwap] INFO: Price=6971.25 VWAP=6950.84 dist=+1.83SD RSI=80.6 ATR=5.50
+2026-04-14 14:32:09,054 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
+2026-04-14 14:32:09,714 [bot] INFO: MNQM6: New bar 2026-04-14T14:30Z | O=25803.5 H=25809.0 L=25793.75 C=25803.0 V=7916
+2026-04-14 14:32:09,715 [strategy.vwap] INFO: Price=25803.00 VWAP=25713.77 dist=+2.23SD RSI=78.1 ATR=31.75
+2026-04-14 14:32:10,346 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
+2026-04-14 14:32:11,072 [bot] INFO: MCLM6: New bar 2026-04-14T14:30Z | O=89.15 H=89.3 L=89.09 C=89.18 V=48
+2026-04-14 14:32:11,072 [strategy.vwap] INFO: Price=89.18 VWAP=90.76 dist=-1.29SD RSI=28.4 ATR=0.46
+2026-04-14 14:32:11,695 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+2026-04-14 14:32:14,163 [bot] INFO: MGCM6: New bar 2026-04-14T14:30Z | O=4833.0 H=4835.3 L=4830.0 C=4834.4 V=1290
+2026-04-14 14:32:14,163 [strategy.vwap] INFO: Price=4834.40 VWAP=4805.41 dist=+2.30SD RSI=65.7 ATR=8.69
+2026-04-14 14:32:14,780 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+2026-04-14 14:32:16,282 [bot] INFO: MYMM6: New bar 2026-04-14T14:30Z | O=48611.0 H=48617.0 L=48594.0 C=48604.0 V=729
+2026-04-14 14:32:16,282 [strategy.vwap] INFO: Price=48604.00 VWAP=48521.67 dist=+0.98SD RSI=60.3 ATR=65.57
+2026-04-14 14:32:16,898 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+2026-04-14 14:32:17,631 [bot] INFO: M2KM6: New bar 2026-04-14T14:30Z | O=2713.0 H=2714.6 L=2712.9 C=2713.8 V=423
+2026-04-14 14:32:17,632 [strategy.vwap] INFO: Price=2713.80 VWAP=2702.45 dist=+2.58SD RSI=73.6 ATR=4.54
+2026-04-14 14:33:30,439 [bot] INFO: Stopping bot: Signal received
+2026-04-14 14:33:30,813 [tradovate_client] INFO: Cancelled order 451715415464
+2026-04-14 14:33:30,931 [tradovate_client] INFO: Cancelled order 451715415506
+2026-04-14 14:33:31,051 [tradovate_client] INFO: Cancelled order 451715415494
+2026-04-14 14:33:31,169 [tradovate_client] INFO: Cancelled order 451715415476
+2026-04-14 14:33:31,287 [tradovate_client] INFO: Cancelled order 451715415485
+2026-04-14 14:33:31,405 [tradovate_client] INFO: Cancelled order 451715415479
+2026-04-14 14:33:31,523 [tradovate_client] INFO: Cancelled order 451715415482
+2026-04-14 14:33:31,641 [tradovate_client] INFO: Cancelled order 451715415497
+2026-04-14 14:33:31,760 [tradovate_client] INFO: Cancelled order 451715415500
+2026-04-14 14:33:31,879 [tradovate_client] INFO: Cancelled order 451715415473
+2026-04-14 14:33:31,998 [tradovate_client] INFO: Cancelled order 451715415503
+2026-04-14 14:33:32,110 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-14 14:33:32,110 [bot] INFO: Bot stopped
+
+--- Status JSON ---
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
+
+--- Network Check ---
+Tradovate API: 404
+Telegram API: 302
+
+=== Check Complete ===
