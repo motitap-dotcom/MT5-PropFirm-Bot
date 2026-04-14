@@ -1,33 +1,38 @@
-=== Post-Restart Verify 2026-04-14 14:34 UTC ===
-ET time: 2026-04-14 10:34 EDT
-Commit: 8e91ac3 Post-restart verification check
+=== Final Verify 2026-04-14 14:36 UTC ===
+ET: 10:36 EDT
 
 --- Service ---
-State:  deactivating
-PID:    3530724
-Uptime: Tue 2026-04-14 14:16:17 UTC
+State:  activating
+PID:    0
+Uptime: Tue 2026-04-14 14:36:00 UTC
 
---- Auth / token signals in last log lines ---
-2026-04-14 13:35:21,157 [tradovate_client] INFO: Token expiring in -507min, renewing...
-2026-04-14 13:35:21,313 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-14 13:35:21,432 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:35:21,668 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-14 13:35:21,786 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:40:22,065 [tradovate_client] INFO: Token expiring in -512min, renewing...
-2026-04-14 13:40:22,204 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-14 13:40:22,348 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:40:22,586 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-14 13:40:22,706 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:45:22,998 [tradovate_client] INFO: Token expiring in -517min, renewing...
-2026-04-14 13:45:23,137 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+--- Fix verification (must be 1,1) ---
+bot.py keepalive: 1
+client.py browser fallback: 1
+
+--- Last 5 auth events ---
 2026-04-14 13:45:23,257 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:45:23,499 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
 2026-04-14 13:45:23,621 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:50:23,907 [tradovate_client] INFO: Token expiring in -522min, renewing...
-2026-04-14 13:50:24,061 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
 2026-04-14 13:50:24,181 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
 2026-04-14 13:50:36,425 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed), token valid for 2h
 2026-04-14 14:16:17,535 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+
+--- Last 5 trading cycles / signals ---
+2026-04-14 14:16:21,625 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.05SD RSI=80.3 entry=6940.50 sl=6945.91 tp1=6936.26 tp2=6930.24
+2026-04-14 14:16:21,625 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.63SD RSI=73.0 entry=6959.00 sl=6964.42 tp1=6945.31 tp2=6932.75
+2026-04-14 14:16:21,625 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.33SD RSI=71.6 entry=6957.50 sl=6965.67 tp1=6946.02 tp2=6933.07
+2026-04-14 14:16:21,625 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.14SD RSI=70.3 entry=6956.50 sl=6966.42 tp1=6946.49 tp2=6933.38
+2026-04-14 14:16:25,554 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.04SD RSI=74.6 entry=25673.00 sl=25696.84 tp1=25654.61 tp2=25628.08
+2026-04-14 14:16:25,555 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.49SD RSI=70.0 entry=25746.75 sl=25776.76 tp1=25695.65 tp2=25644.24
+2026-04-14 14:16:32,386 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.72SD RSI=80.4 entry=2700.70 sl=2706.79 tp1=2697.88 tp2=2691.98
+2026-04-14 14:21:32,389 [bot] INFO: === Trading cycle 10:21 ET | Guardian: ACTIVE ===
+2026-04-14 14:26:49,654 [bot] INFO: === Trading cycle 10:26 ET | Guardian: ACTIVE ===
+2026-04-14 14:32:06,570 [bot] INFO: === Trading cycle 10:32 ET | Guardian: ACTIVE ===
+
+--- Last 3 errors (if any) ---
+2026-04-14 13:45:23,257 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:45:23,621 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:45:23,903 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
 
 --- status.json ---
 {
@@ -38,47 +43,3 @@ Uptime: Tue 2026-04-14 14:16:17 UTC
   "positions": [],
   "risk": {}
 }
-
---- Last 25 log lines ---
-2026-04-14 14:32:11,072 [bot] INFO: MCLM6: New bar 2026-04-14T14:30Z | O=89.15 H=89.3 L=89.09 C=89.18 V=48
-2026-04-14 14:32:11,072 [strategy.vwap] INFO: Price=89.18 VWAP=90.76 dist=-1.29SD RSI=28.4 ATR=0.46
-2026-04-14 14:32:11,695 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
-2026-04-14 14:32:14,163 [bot] INFO: MGCM6: New bar 2026-04-14T14:30Z | O=4833.0 H=4835.3 L=4830.0 C=4834.4 V=1290
-2026-04-14 14:32:14,163 [strategy.vwap] INFO: Price=4834.40 VWAP=4805.41 dist=+2.30SD RSI=65.7 ATR=8.69
-2026-04-14 14:32:14,780 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
-2026-04-14 14:32:16,282 [bot] INFO: MYMM6: New bar 2026-04-14T14:30Z | O=48611.0 H=48617.0 L=48594.0 C=48604.0 V=729
-2026-04-14 14:32:16,282 [strategy.vwap] INFO: Price=48604.00 VWAP=48521.67 dist=+0.98SD RSI=60.3 ATR=65.57
-2026-04-14 14:32:16,898 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
-2026-04-14 14:32:17,631 [bot] INFO: M2KM6: New bar 2026-04-14T14:30Z | O=2713.0 H=2714.6 L=2712.9 C=2713.8 V=423
-2026-04-14 14:32:17,632 [strategy.vwap] INFO: Price=2713.80 VWAP=2702.45 dist=+2.58SD RSI=73.6 ATR=4.54
-2026-04-14 14:33:30,439 [bot] INFO: Stopping bot: Signal received
-2026-04-14 14:33:30,813 [tradovate_client] INFO: Cancelled order 451715415464
-2026-04-14 14:33:30,931 [tradovate_client] INFO: Cancelled order 451715415506
-2026-04-14 14:33:31,051 [tradovate_client] INFO: Cancelled order 451715415494
-2026-04-14 14:33:31,169 [tradovate_client] INFO: Cancelled order 451715415476
-2026-04-14 14:33:31,287 [tradovate_client] INFO: Cancelled order 451715415485
-2026-04-14 14:33:31,405 [tradovate_client] INFO: Cancelled order 451715415479
-2026-04-14 14:33:31,523 [tradovate_client] INFO: Cancelled order 451715415482
-2026-04-14 14:33:31,641 [tradovate_client] INFO: Cancelled order 451715415497
-2026-04-14 14:33:31,760 [tradovate_client] INFO: Cancelled order 451715415500
-2026-04-14 14:33:31,879 [tradovate_client] INFO: Cancelled order 451715415473
-2026-04-14 14:33:31,998 [tradovate_client] INFO: Cancelled order 451715415503
-2026-04-14 14:33:32,110 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-14 14:33:32,110 [bot] INFO: Bot stopped
-
---- Position list (if auth works) ---
-2026-04-14 13:40:22,706 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:45:23,257 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:45:23,621 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:50:38,845 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.18SD RSI=80.3 entry=6940.50 sl=6945.29 tp1=6935.97 tp2=6930.19
-2026-04-14 13:50:38,847 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.66SD RSI=73.0 entry=6959.00 sl=6964.26 tp1=6944.91 tp2=6932.17
-2026-04-14 13:50:38,847 [bot] INFO: MESM6: SIGNAL SHORT from VWAP Mean Reversion | entry=6959.00 sl=6964.26
-2026-04-14 13:55:46,401 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.36SD RSI=71.6 entry=6957.50 sl=6965.53 tp1=6945.61 tp2=6932.47
-2026-04-14 13:55:46,401 [bot] INFO: MESM6: SIGNAL SHORT from VWAP Mean Reversion | entry=6957.50 sl=6965.53
-2026-04-14 14:16:21,625 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.05SD RSI=80.3 entry=6940.50 sl=6945.91 tp1=6936.26 tp2=6930.24
-2026-04-14 14:16:21,625 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.63SD RSI=73.0 entry=6959.00 sl=6964.42 tp1=6945.31 tp2=6932.75
-2026-04-14 14:16:21,625 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.33SD RSI=71.6 entry=6957.50 sl=6965.67 tp1=6946.02 tp2=6933.07
-2026-04-14 14:16:21,625 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.14SD RSI=70.3 entry=6956.50 sl=6966.42 tp1=6946.49 tp2=6933.38
-2026-04-14 14:16:25,554 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.04SD RSI=74.6 entry=25673.00 sl=25696.84 tp1=25654.61 tp2=25628.08
-2026-04-14 14:16:25,555 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.49SD RSI=70.0 entry=25746.75 sl=25776.76 tp1=25695.65 tp2=25644.24
-2026-04-14 14:16:32,386 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.72SD RSI=80.4 entry=2700.70 sl=2706.79 tp1=2697.88 tp2=2691.98
