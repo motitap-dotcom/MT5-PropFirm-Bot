@@ -306,6 +306,15 @@ class FuturesBot:
                 if today != self.current_day:
                     await self._handle_new_day(today)
 
+                # Keep Tradovate token alive even during Outside Session.
+                # Without this, the token expires overnight (no API calls
+                # during off-hours) and the morning session starts with a
+                # dead token that refuses to renew.
+                try:
+                    await self.client._ensure_token()
+                except Exception as e:
+                    logger.warning(f"Token keepalive failed: {e}")
+
                 # Check if we must flatten (end of day)
                 if self.risk_mgr.must_flatten():
                     await self._flatten_all("End of day flatten")

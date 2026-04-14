@@ -276,8 +276,22 @@ class TradovateClient:
                     logger.info("Authenticated successfully (after wait)")
                     return
 
-        # Auth failed
+        # Auth failed with credential error (no p-captcha flag, no accessToken).
+        # This often means Tradovate rate-limited the API endpoint, credentials
+        # drifted, or the account is temporarily locked. The web login page
+        # goes through a different path and usually still works — so try
+        # Playwright as a last resort before giving up.
         error = data.get("errorText", str(data))
+        logger.warning(f"Direct auth failed: {error}. Trying browser auth as last resort...")
+        browser_result = await self._try_browser_auth()
+        if browser_result:
+            self.access_token = browser_result["accessToken"]
+            self.md_access_token = browser_result.get("mdAccessToken", self.access_token)
+            # Force 2-hour expiry - browser tokens may not include expirationTime
+            self.token_expiry = time.time() + 7200
+            self._save_token()
+            logger.info("Authenticated successfully via browser (credential fallback)")
+            return
         raise ConnectionError(f"Authentication failed: {error}")
 
     async def _try_browser_auth(self) -> Optional[Dict]:
