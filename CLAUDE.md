@@ -240,7 +240,6 @@ fi
 | `configs/.tradovate_token.json` | Saved auth token (in .gitignore!) |
 | `commands/run.sh` | Script to execute on VPS (trigger for vps-command) |
 | `commands/output.txt` | Output from last VPS command |
-| `commands/check_status.sh` | Reusable status check script |
 | `scripts/check_bot.sh` | Bot diagnostic script |
 | `scripts/fix_and_restart.sh` | Fix + restart script |
 | `scripts/install_bot.sh` | Install bot as systemd service |
