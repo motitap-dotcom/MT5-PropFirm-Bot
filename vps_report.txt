@@ -1,84 +1,98 @@
-=== TradeDay Futures Bot - Diagnostic 2026-04-14 15:20:11 UTC ===
+=== TradeDay Futures Bot - Diagnostic 2026-04-14 15:29:16 UTC ===
 
 --- Service ---
-activating
-MainPID=0
-Result=exit-code
-NRestarts=45
-ExecMainStartTimestamp=Tue 2026-04-14 15:20:11 UTC
-ExecMainExitTimestamp=Tue 2026-04-14 15:20:11 UTC
-ActiveState=activating
-SubState=auto-restart
-ActiveEnterTimestamp=Tue 2026-04-14 15:20:11 UTC
+active
+MainPID=3548483
+Result=success
+NRestarts=0
+ExecMainStartTimestamp=Tue 2026-04-14 15:21:53 UTC
+ExecMainExitTimestamp=
+ActiveState=active
+SubState=running
+ActiveEnterTimestamp=Tue 2026-04-14 15:21:53 UTC
 
 --- systemctl status (full) ---
 ● futures-bot.service - TradeDay Futures Trading Bot
      Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
-     Active: activating (auto-restart) (Result: exit-code) since Tue 2026-04-14 15:20:11 UTC; 485ms ago
-    Process: 3547900 ExecStart=/usr/bin/python3 -m futures_bot.bot (code=exited, status=1/FAILURE)
-   Main PID: 3547900 (code=exited, status=1/FAILURE)
-        CPU: 28ms
+     Active: active (running) since Tue 2026-04-14 15:21:53 UTC; 7min ago
+   Main PID: 3548483 (python3)
+      Tasks: 2 (limit: 9483)
+     Memory: 270.5M (peak: 542.5M)
+        CPU: 6.842s
+     CGroup: /system.slice/futures-bot.service
+             └─3548483 /usr/bin/python3 -m futures_bot.bot
+
+Apr 14 15:27:34 vmi3096165 python3[3548483]: 2026-04-14 15:27:34,508 [strategy.vwap] INFO: Price=89.50 VWAP=90.15 dist=-0.56SD RSI=62.2 ATR=0.37
+Apr 14 15:27:35 vmi3096165 python3[3548483]: 2026-04-14 15:27:35,171 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+Apr 14 15:27:36 vmi3096165 python3[3548483]: 2026-04-14 15:27:36,269 [bot] INFO: MGCM6: New bar 2026-04-14T15:25Z | O=4827.2 H=4828.6 L=4824.1 C=4827.0 V=739
+Apr 14 15:27:36 vmi3096165 python3[3548483]: 2026-04-14 15:27:36,269 [strategy.vwap] INFO: Price=4827.00 VWAP=4813.89 dist=+1.00SD RSI=48.8 ATR=7.91
+Apr 14 15:27:36 vmi3096165 python3[3548483]: 2026-04-14 15:27:36,909 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+Apr 14 15:27:38 vmi3096165 python3[3548483]: 2026-04-14 15:27:38,174 [bot] INFO: MYMM6: New bar 2026-04-14T15:25Z | O=48697.0 H=48742.0 L=48697.0 C=48740.0 V=785
+Apr 14 15:27:38 vmi3096165 python3[3548483]: 2026-04-14 15:27:38,174 [strategy.vwap] INFO: Price=48740.00 VWAP=48568.85 dist=+1.90SD RSI=58.7 ATR=42.29
+Apr 14 15:27:38 vmi3096165 python3[3548483]: 2026-04-14 15:27:38,811 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+Apr 14 15:27:39 vmi3096165 python3[3548483]: 2026-04-14 15:27:39,518 [bot] INFO: M2KM6: New bar 2026-04-14T15:25Z | O=2718.8 H=2720.8 L=2718.7 C=2720.5 V=366
+Apr 14 15:27:39 vmi3096165 python3[3548483]: 2026-04-14 15:27:39,518 [strategy.vwap] INFO: Price=2720.50 VWAP=2707.54 dist=+1.83SD RSI=63.1 ATR=3.11
 
 --- journalctl last 50 lines (includes crash traces) ---
-Apr 14 15:11:09 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 36.
-Apr 14 15:11:09 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 14 15:11:09 vmi3096165 python3[3545390]: /usr/bin/python3: No module named futures_bot.bot
-Apr 14 15:11:09 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 14 15:11:09 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 14 15:12:09 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 37.
-Apr 14 15:12:09 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 14 15:12:09 vmi3096165 python3[3545649]: /usr/bin/python3: No module named futures_bot.bot
-Apr 14 15:12:09 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 14 15:12:09 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 14 15:13:09 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 38.
-Apr 14 15:13:09 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 14 15:13:09 vmi3096165 python3[3545825]: /usr/bin/python3: No module named futures_bot.bot
-Apr 14 15:13:09 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 14 15:13:09 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 14 15:14:09 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 39.
-Apr 14 15:14:09 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 14 15:14:09 vmi3096165 python3[3546066]: /usr/bin/python3: No module named futures_bot.bot
-Apr 14 15:14:09 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 14 15:14:09 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 14 15:15:10 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 40.
-Apr 14 15:15:10 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 14 15:15:10 vmi3096165 python3[3546376]: /usr/bin/python3: No module named futures_bot.bot
-Apr 14 15:15:10 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 14 15:15:10 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 14 15:16:10 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 41.
-Apr 14 15:16:10 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 14 15:16:10 vmi3096165 python3[3546680]: /usr/bin/python3: No module named futures_bot.bot
-Apr 14 15:16:10 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 14 15:16:10 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 14 15:17:10 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 42.
-Apr 14 15:17:10 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 14 15:17:10 vmi3096165 python3[3546907]: /usr/bin/python3: No module named futures_bot.bot
-Apr 14 15:17:10 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 14 15:17:10 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 14 15:18:10 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 43.
-Apr 14 15:18:10 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 14 15:18:10 vmi3096165 python3[3547156]: /usr/bin/python3: No module named futures_bot.bot
-Apr 14 15:18:10 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 14 15:18:10 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 14 15:19:11 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 44.
-Apr 14 15:19:11 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 14 15:19:11 vmi3096165 python3[3547476]: /usr/bin/python3: No module named futures_bot.bot
-Apr 14 15:19:11 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 14 15:19:11 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 14 15:20:11 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 45.
-Apr 14 15:20:11 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 14 15:20:11 vmi3096165 python3[3547900]: /usr/bin/python3: No module named futures_bot.bot
-Apr 14 15:20:11 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 14 15:20:11 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,729 [strategy.vwap] INFO: Price=2702.20 VWAP=2701.28 dist=+0.44SD RSI=51.8 ATR=2.81
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,729 [strategy.vwap] INFO: Price=2701.90 VWAP=2701.31 dist=+0.29SD RSI=53.4 ATR=2.76
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,729 [strategy.vwap] INFO: Price=2702.10 VWAP=2701.35 dist=+0.37SD RSI=50.0 ATR=2.73
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,729 [strategy.vwap] INFO: Price=2701.10 VWAP=2701.35 dist=-0.13SD RSI=51.4 ATR=2.60
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,729 [strategy.vwap] INFO: Price=2702.20 VWAP=2701.34 dist=+0.45SD RSI=50.7 ATR=2.69
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,729 [strategy.vwap] INFO: Price=2697.70 VWAP=2700.86 dist=-1.82SD RSI=44.3 ATR=3.48
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2702.30 VWAP=2700.95 dist=+0.86SD RSI=45.6 ATR=3.89
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2702.90 VWAP=2701.12 dist=+1.14SD RSI=52.8 ATR=3.52
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2702.40 VWAP=2701.16 dist=+0.83SD RSI=53.5 ATR=3.73
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2704.80 VWAP=2701.36 dist=+2.15SD RSI=58.0 ATR=3.94
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2705.70 VWAP=2701.58 dist=+2.26SD RSI=60.4 ATR=4.00
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2705.10 VWAP=2701.73 dist=+1.74SD RSI=60.1 ATR=4.05
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2707.70 VWAP=2702.03 dist=+2.53SD RSI=63.7 ATR=4.16
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2712.40 VWAP=2702.55 dist=+3.30SD RSI=70.1 ATR=4.43
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2713.60 VWAP=2703.18 dist=+2.73SD RSI=72.6 ATR=4.54
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2711.50 VWAP=2703.61 dist=+1.90SD RSI=67.8 ATR=4.75
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2713.10 VWAP=2703.85 dist=+2.13SD RSI=69.4 ATR=4.77
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2714.20 VWAP=2704.14 dist=+2.18SD RSI=73.0 ATR=4.79
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2714.10 VWAP=2704.56 dist=+1.92SD RSI=71.6 ATR=4.79
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.92SD RSI=71.6 entry=2714.10 sl=2716.89 tp1=2704.56 tp2=2697.10
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2715.50 VWAP=2704.76 dist=+2.09SD RSI=86.5 ATR=4.00
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2718.60 VWAP=2705.25 dist=+2.38SD RSI=85.6 ATR=3.50
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2721.10 VWAP=2705.73 dist=+2.52SD RSI=86.7 ATR=3.43
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2721.60 VWAP=2706.03 dist=+2.43SD RSI=88.7 ATR=3.16
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2717.10 VWAP=2706.51 dist=+1.58SD RSI=72.9 ATR=3.16
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.58SD RSI=72.9 entry=2717.10 sl=2721.53 tp1=2706.51 tp2=2696.42
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2716.00 VWAP=2706.80 dist=+1.35SD RSI=69.0 ATR=3.26
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2714.10 VWAP=2707.03 dist=+1.03SD RSI=65.8 ATR=3.26
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2717.80 VWAP=2707.26 dist=+1.52SD RSI=67.1 ATR=3.36
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [bot] INFO: M2KM6: New bar 2026-04-14T15:20Z | O=2717.5 H=2719.8 L=2717.1 C=2719.2 V=476
+Apr 14 15:22:22 vmi3096165 python3[3548483]: 2026-04-14 15:22:22,730 [strategy.vwap] INFO: Price=2719.20 VWAP=2707.41 dist=+1.68SD RSI=63.0 ATR=3.16
+Apr 14 15:27:22 vmi3096165 python3[3548483]: 2026-04-14 15:27:22,736 [bot] INFO: === Trading cycle 11:27 ET | Guardian: ACTIVE ===
+Apr 14 15:27:23 vmi3096165 python3[3548483]: 2026-04-14 15:27:23,739 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+Apr 14 15:27:28 vmi3096165 python3[3548483]: 2026-04-14 15:27:28,616 [bot] INFO: MESM6: New bar 2026-04-14T15:25Z | O=6981.5 H=6986.75 L=6981.25 C=6986.25 V=7437
+Apr 14 15:27:28 vmi3096165 python3[3548483]: 2026-04-14 15:27:28,616 [strategy.vwap] INFO: Price=6986.25 VWAP=6960.25 dist=+1.94SD RSI=75.4 ATR=4.71
+Apr 14 15:27:29 vmi3096165 python3[3548483]: 2026-04-14 15:27:29,258 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
+Apr 14 15:27:33 vmi3096165 python3[3548483]: 2026-04-14 15:27:33,135 [bot] INFO: MNQM6: New bar 2026-04-14T15:25Z | O=25823.75 H=25846.0 L=25823.25 C=25844.5 V=9044
+Apr 14 15:27:33 vmi3096165 python3[3548483]: 2026-04-14 15:27:33,135 [strategy.vwap] INFO: Price=25844.50 VWAP=25746.87 dist=+2.05SD RSI=69.4 ATR=24.23
+Apr 14 15:27:33 vmi3096165 python3[3548483]: 2026-04-14 15:27:33,776 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
+Apr 14 15:27:34 vmi3096165 python3[3548483]: 2026-04-14 15:27:34,508 [bot] INFO: MCLM6: New bar 2026-04-14T15:25Z | O=89.35 H=89.55 L=89.27 C=89.5 V=43
+Apr 14 15:27:34 vmi3096165 python3[3548483]: 2026-04-14 15:27:34,508 [strategy.vwap] INFO: Price=89.50 VWAP=90.15 dist=-0.56SD RSI=62.2 ATR=0.37
+Apr 14 15:27:35 vmi3096165 python3[3548483]: 2026-04-14 15:27:35,171 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+Apr 14 15:27:36 vmi3096165 python3[3548483]: 2026-04-14 15:27:36,269 [bot] INFO: MGCM6: New bar 2026-04-14T15:25Z | O=4827.2 H=4828.6 L=4824.1 C=4827.0 V=739
+Apr 14 15:27:36 vmi3096165 python3[3548483]: 2026-04-14 15:27:36,269 [strategy.vwap] INFO: Price=4827.00 VWAP=4813.89 dist=+1.00SD RSI=48.8 ATR=7.91
+Apr 14 15:27:36 vmi3096165 python3[3548483]: 2026-04-14 15:27:36,909 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+Apr 14 15:27:38 vmi3096165 python3[3548483]: 2026-04-14 15:27:38,174 [bot] INFO: MYMM6: New bar 2026-04-14T15:25Z | O=48697.0 H=48742.0 L=48697.0 C=48740.0 V=785
+Apr 14 15:27:38 vmi3096165 python3[3548483]: 2026-04-14 15:27:38,174 [strategy.vwap] INFO: Price=48740.00 VWAP=48568.85 dist=+1.90SD RSI=58.7 ATR=42.29
+Apr 14 15:27:38 vmi3096165 python3[3548483]: 2026-04-14 15:27:38,811 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+Apr 14 15:27:39 vmi3096165 python3[3548483]: 2026-04-14 15:27:39,518 [bot] INFO: M2KM6: New bar 2026-04-14T15:25Z | O=2718.8 H=2720.8 L=2718.7 C=2720.5 V=366
+Apr 14 15:27:39 vmi3096165 python3[3548483]: 2026-04-14 15:27:39,518 [strategy.vwap] INFO: Price=2720.50 VWAP=2707.54 dist=+1.83SD RSI=63.1 ATR=3.11
 
 --- Python import check (does the bot module load?) ---
 IMPORT OK: futures_bot.bot
 IMPORT OK: tradovate_client
 
 --- Token file ---
--rw-r--r-- 1 root root 819 Apr 14 15:20 configs/.tradovate_token.json
-  expiry: 1776181836.4239926 (30min from now)
-  saved_at: 2026-04-14T14:16:17.535404+00:00
+-rw-r--r-- 1 root root 819 Apr 14 15:29 configs/.tradovate_token.json
+  expiry: 1776187325.524424 (113min from now)
+  saved_at: 2026-04-14T15:22:05.649369+00:00
 
 --- .env check ---
   TRADOVATE_USER: SET (len=10)
@@ -91,20 +105,20 @@ playwright: OK
 ls: cannot access '/root/.cache/ms-playwright/chromium-*/chrome-linux/chrome': No such file or directory
 
 --- Recent bot.log (last 15 lines) ---
-2026-04-14 14:32:17,632 [strategy.vwap] INFO: Price=2713.80 VWAP=2702.45 dist=+2.58SD RSI=73.6 ATR=4.54
-2026-04-14 14:33:30,439 [bot] INFO: Stopping bot: Signal received
-2026-04-14 14:33:30,813 [tradovate_client] INFO: Cancelled order 451715415464
-2026-04-14 14:33:30,931 [tradovate_client] INFO: Cancelled order 451715415506
-2026-04-14 14:33:31,051 [tradovate_client] INFO: Cancelled order 451715415494
-2026-04-14 14:33:31,169 [tradovate_client] INFO: Cancelled order 451715415476
-2026-04-14 14:33:31,287 [tradovate_client] INFO: Cancelled order 451715415485
-2026-04-14 14:33:31,405 [tradovate_client] INFO: Cancelled order 451715415479
-2026-04-14 14:33:31,523 [tradovate_client] INFO: Cancelled order 451715415482
-2026-04-14 14:33:31,641 [tradovate_client] INFO: Cancelled order 451715415497
-2026-04-14 14:33:31,760 [tradovate_client] INFO: Cancelled order 451715415500
-2026-04-14 14:33:31,879 [tradovate_client] INFO: Cancelled order 451715415473
-2026-04-14 14:33:31,998 [tradovate_client] INFO: Cancelled order 451715415503
-2026-04-14 14:33:32,110 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-14 14:33:32,110 [bot] INFO: Bot stopped
+2026-04-14 15:27:29,258 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
+2026-04-14 15:27:33,135 [bot] INFO: MNQM6: New bar 2026-04-14T15:25Z | O=25823.75 H=25846.0 L=25823.25 C=25844.5 V=9044
+2026-04-14 15:27:33,135 [strategy.vwap] INFO: Price=25844.50 VWAP=25746.87 dist=+2.05SD RSI=69.4 ATR=24.23
+2026-04-14 15:27:33,776 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
+2026-04-14 15:27:34,508 [bot] INFO: MCLM6: New bar 2026-04-14T15:25Z | O=89.35 H=89.55 L=89.27 C=89.5 V=43
+2026-04-14 15:27:34,508 [strategy.vwap] INFO: Price=89.50 VWAP=90.15 dist=-0.56SD RSI=62.2 ATR=0.37
+2026-04-14 15:27:35,171 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+2026-04-14 15:27:36,269 [bot] INFO: MGCM6: New bar 2026-04-14T15:25Z | O=4827.2 H=4828.6 L=4824.1 C=4827.0 V=739
+2026-04-14 15:27:36,269 [strategy.vwap] INFO: Price=4827.00 VWAP=4813.89 dist=+1.00SD RSI=48.8 ATR=7.91
+2026-04-14 15:27:36,909 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+2026-04-14 15:27:38,174 [bot] INFO: MYMM6: New bar 2026-04-14T15:25Z | O=48697.0 H=48742.0 L=48697.0 C=48740.0 V=785
+2026-04-14 15:27:38,174 [strategy.vwap] INFO: Price=48740.00 VWAP=48568.85 dist=+1.90SD RSI=58.7 ATR=42.29
+2026-04-14 15:27:38,811 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+2026-04-14 15:27:39,518 [bot] INFO: M2KM6: New bar 2026-04-14T15:25Z | O=2718.8 H=2720.8 L=2718.7 C=2720.5 V=366
+2026-04-14 15:27:39,518 [strategy.vwap] INFO: Price=2720.50 VWAP=2707.54 dist=+1.83SD RSI=63.1 ATR=3.11
 
 === END DIAGNOSTIC ===
