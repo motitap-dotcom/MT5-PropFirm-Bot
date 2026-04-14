@@ -1,8 +1,7 @@
-=== Status 2026-04-14 13:38 UTC ===
+=== Trading Check 2026-04-14 13:50 UTC ===
+ET time: 2026-04-14 09:50 EDT
 Service: active
 PID: 3285949
-Uptime: Mon 2026-04-13 20:23:18 UTC
-Code: ab30c27 Status check 2026-04-14
 
 --- status.json ---
 {
@@ -14,34 +13,76 @@ Code: ab30c27 Status check 2026-04-14
   "risk": {}
 }
 
---- last 30 log lines ---
-2026-04-14 13:27:20,100 [bot] INFO: Outside session: Pre-market: 09:27 ET (opens 09:30:00)
-2026-04-14 13:27:50,101 [bot] INFO: Outside session: Pre-market: 09:27 ET (opens 09:30:00)
-2026-04-14 13:28:20,103 [bot] INFO: Outside session: Pre-market: 09:28 ET (opens 09:30:00)
-2026-04-14 13:28:50,118 [bot] INFO: Outside session: Pre-market: 09:28 ET (opens 09:30:00)
-2026-04-14 13:29:20,139 [bot] INFO: Outside session: Pre-market: 09:29 ET (opens 09:30:00)
-2026-04-14 13:29:50,162 [bot] INFO: Outside session: Pre-market: 09:29 ET (opens 09:30:00)
+--- Last 'Trading cycle' lines (trading activity) ---
+2026-04-13 18:14:27,503 [bot] INFO: MCLM6: SIGNAL LONG from VWAP Mean Reversion | entry=92.61 sl=92.11
+2026-04-13 18:14:30,244 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.40SD RSI=70.3 entry=48199.00 sl=48264.51 tp=47884.20
+2026-04-13 18:14:30,244 [bot] INFO: MYMM6: SIGNAL SHORT from VWAP Mean Reversion | entry=48199.00 sl=48264.51
+2026-04-13 18:19:32,016 [bot] INFO: === Trading cycle 14:19 ET | Guardian: ACTIVE ===
+2026-04-13 18:19:39,982 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.41SD RSI=70.3 entry=48204.00 sl=48270.18 tp=47885.53
+2026-04-13 18:19:39,982 [bot] INFO: MYMM6: SIGNAL SHORT from VWAP Mean Reversion | entry=48204.00 sl=48270.18
+2026-04-13 18:24:41,424 [bot] INFO: === Trading cycle 14:24 ET | Guardian: ACTIVE ===
+2026-04-13 18:24:50,593 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.67SD RSI=25.3 entry=92.64 sl=92.14 tp=94.33
+2026-04-13 18:24:50,593 [bot] INFO: MCLM6: SIGNAL LONG from VWAP Mean Reversion | entry=92.64 sl=92.14
+2026-04-13 18:24:53,294 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.40SD RSI=67.6 entry=48208.00 sl=48274.92 tp=47886.98
+2026-04-13 18:24:53,294 [bot] INFO: MYMM6: SIGNAL SHORT from VWAP Mean Reversion | entry=48208.00 sl=48274.92
+2026-04-13 18:29:54,694 [bot] INFO: === Trading cycle 14:29 ET | Guardian: ACTIVE ===
+2026-04-13 18:35:03,687 [bot] INFO: === Trading cycle 14:35 ET | Guardian: ACTIVE ===
+2026-04-13 18:40:13,282 [bot] INFO: === Trading cycle 14:40 ET | Guardian: ACTIVE ===
+2026-04-13 18:40:27,203 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.23SD RSI=67.6 entry=48204.00 sl=48273.69 tp=47893.07
+2026-04-13 18:40:27,203 [bot] INFO: MYMM6: SIGNAL SHORT from VWAP Mean Reversion | entry=48204.00 sl=48273.69
+2026-04-13 18:45:28,855 [bot] INFO: === Trading cycle 14:45 ET | Guardian: ACTIVE ===
+2026-04-13 18:45:44,155 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.21SD RSI=65.1 entry=48204.00 sl=48274.10 tp=47894.00
+2026-04-13 18:45:44,155 [bot] INFO: MYMM6: SIGNAL SHORT from VWAP Mean Reversion | entry=48204.00 sl=48274.10
+2026-04-13 18:50:45,531 [bot] INFO: === Trading cycle 14:50 ET | Guardian: ACTIVE ===
+2026-04-13 18:50:49,143 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.83SD RSI=77.1 entry=6893.00 sl=6903.76 tp=6853.70
+2026-04-13 18:50:49,143 [bot] INFO: MESM6: SIGNAL SHORT from VWAP Mean Reversion | entry=6893.00 sl=6903.76
+2026-04-13 18:50:51,853 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.83SD RSI=29.6 entry=92.31 sl=91.78 tp=94.24
+2026-04-13 18:50:51,853 [bot] INFO: MCLM6: SIGNAL LONG from VWAP Mean Reversion | entry=92.31 sl=91.78
+2026-04-13 18:50:54,552 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.36SD RSI=77.6 entry=48233.00 sl=48304.35 tp=47896.63
+2026-04-13 18:50:54,552 [bot] INFO: MYMM6: SIGNAL SHORT from VWAP Mean Reversion | entry=48233.00 sl=48304.35
+2026-04-13 18:50:55,913 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.14SD RSI=79.2 entry=2676.40 sl=2683.47 tp=2646.10
+2026-04-13 18:50:55,913 [bot] INFO: M2KM6: SIGNAL SHORT from VWAP Mean Reversion | entry=2676.40 sl=2683.47
 2026-04-14 13:30:20,192 [bot] INFO: === Trading cycle 09:30 ET | Guardian: ACTIVE ===
-2026-04-14 13:30:20,192 [tradovate_client] INFO: Token expiring in -502min, renewing...
-2026-04-14 13:30:20,337 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-14 13:30:20,337 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
 2026-04-14 13:30:20,457 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:30:20,458 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-14 13:30:20,575 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-14 13:30:20,692 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-14 13:30:20,692 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
 2026-04-14 13:30:20,810 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:30:21,124 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-14 13:30:21,125 [bot] WARNING: MESM6: No bars returned from API
 2026-04-14 13:35:21,157 [bot] INFO: === Trading cycle 09:35 ET | Guardian: ACTIVE ===
-2026-04-14 13:35:21,157 [tradovate_client] INFO: Token expiring in -507min, renewing...
-2026-04-14 13:35:21,313 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-14 13:35:21,313 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
 2026-04-14 13:35:21,432 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:35:21,432 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-14 13:35:21,550 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-14 13:35:21,668 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-14 13:35:21,668 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
 2026-04-14 13:35:21,786 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:35:22,063 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-14 13:35:22,063 [bot] WARNING: MESM6: No bars returned from API
+2026-04-14 13:40:22,065 [bot] INFO: === Trading cycle 09:40 ET | Guardian: ACTIVE ===
+2026-04-14 13:40:22,348 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:40:22,706 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:45:22,998 [bot] INFO: === Trading cycle 09:45 ET | Guardian: ACTIVE ===
+2026-04-14 13:45:23,257 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:45:23,621 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+
+--- Last 15 log lines ---
+2026-04-14 13:40:22,706 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:40:22,996 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: no close frame received or sent
+2026-04-14 13:40:22,996 [bot] WARNING: MESM6: No bars returned from API
+2026-04-14 13:45:22,998 [bot] INFO: === Trading cycle 09:45 ET | Guardian: ACTIVE ===
+2026-04-14 13:45:22,998 [tradovate_client] INFO: Token expiring in -517min, renewing...
+2026-04-14 13:45:23,137 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-14 13:45:23,137 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-14 13:45:23,257 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:45:23,257 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
+2026-04-14 13:45:23,376 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-14 13:45:23,499 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-14 13:45:23,499 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-14 13:45:23,621 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:45:23,903 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
+2026-04-14 13:45:23,903 [bot] WARNING: MESM6: No bars returned from API
+
+--- Error count last hour ---
+5045
+
+--- Auth status ---
+2026-04-14 13:40:22,065 [tradovate_client] INFO: Token expiring in -512min, renewing...
+2026-04-14 13:40:22,204 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-14 13:40:22,205 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-14 13:40:22,586 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-14 13:40:22,587 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-14 13:45:22,998 [tradovate_client] INFO: Token expiring in -517min, renewing...
+2026-04-14 13:45:23,137 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-14 13:45:23,137 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-14 13:45:23,499 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-14 13:45:23,499 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
