@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v20 - token keepalive + Playwright credential fallback ==="
+echo "=== Fix & Restart v21 - rewrite service file with PYTHONPATH (fix NRestarts=45 loop) ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 
