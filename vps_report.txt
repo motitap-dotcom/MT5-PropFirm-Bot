@@ -1,5 +1,5 @@
-=== Open Trades Check 2026-04-14 18:25:55 UTC ===
-ET: 14:25 EDT
+=== Open Trades Check 2026-04-14 18:44:45 UTC ===
+ET: 14:44 EDT
 
 --- Service ---
 State:  active
@@ -19,7 +19,7 @@ status.json age: 0s ago
 
 --- dashboard.txt (human readable) ---
 ============================================================
-TradeDay Futures Bot — 2026-04-14T18:25:42.780820+00:00
+TradeDay Futures Bot — 2026-04-14T18:44:43.476795+00:00
 ============================================================
 State            : ACTIVE
 Balance          : $50,438.89
@@ -100,20 +100,20 @@ timestamp_utc,symbol,strategy,direction,contracts,entry,sl,tp,exit,pnl,r_multipl
 timestamp_utc,symbol,strategy,direction,contracts,entry,sl,tp,exit,pnl,r_multiple,reason,daily_pnl_after,balance_after
 
 --- Last 15 log lines ---
-2026-04-14 18:24:56,287 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
-2026-04-14 18:24:59,553 [bot] INFO: MNQM6: New bar 2026-04-14T18:20Z | O=25912.25 H=25919.75 L=25891.75 C=25901.25 V=17081
-2026-04-14 18:24:59,553 [strategy.vwap] INFO: Price=25901.25 VWAP=25792.02 dist=+1.27SD RSI=44.0 ATR=13.82
-2026-04-14 18:25:00,189 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
-2026-04-14 18:25:00,854 [bot] INFO: MCLM6: New bar 2026-04-14T18:20Z | O=88.58 H=88.74 L=88.2 C=88.32 V=165
-2026-04-14 18:25:00,854 [strategy.vwap] INFO: Price=88.32 VWAP=89.85 dist=-1.28SD RSI=36.1 ATR=0.26
-2026-04-14 18:25:01,517 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
-2026-04-14 18:25:02,288 [bot] INFO: MGCM6: New bar 2026-04-14T18:20Z | O=4860.3 H=4862.0 L=4857.5 C=4859.7 V=1399
-2026-04-14 18:25:02,296 [strategy.vwap] INFO: Price=4859.70 VWAP=4821.09 dist=+2.10SD RSI=53.7 ATR=4.81
-2026-04-14 18:25:02,980 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
-2026-04-14 18:25:03,711 [bot] INFO: MYMM6: New bar 2026-04-14T18:20Z | O=48708.0 H=48721.0 L=48648.0 C=48654.0 V=1583
-2026-04-14 18:25:03,711 [strategy.vwap] INFO: Price=48654.00 VWAP=48595.19 dist=+0.58SD RSI=43.0 ATR=25.43
-2026-04-14 18:25:04,337 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
-2026-04-14 18:25:05,072 [bot] INFO: M2KM6: New bar 2026-04-14T18:20Z | O=2711.4 H=2712.2 L=2708.3 C=2709.4 V=1876
-2026-04-14 18:25:05,072 [strategy.vwap] INFO: Price=2709.40 VWAP=2709.99 dist=-0.07SD RSI=28.7 ATR=1.84
+2026-04-14 18:40:40,044 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
+2026-04-14 18:40:45,410 [bot] INFO: MNQM6: New bar 2026-04-14T18:35Z | O=25920.75 H=25931.5 L=25920.5 C=25927.25 V=7967
+2026-04-14 18:40:45,410 [strategy.vwap] INFO: Price=25927.25 VWAP=25796.55 dist=+1.49SD RSI=41.3 ATR=14.64
+2026-04-14 18:40:46,029 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
+2026-04-14 18:40:46,762 [bot] INFO: MCLM6: New bar 2026-04-14T18:35Z | O=88.41 H=88.51 L=88.36 C=88.4 V=76
+2026-04-14 18:40:46,763 [strategy.vwap] INFO: Price=88.40 VWAP=89.80 dist=-1.16SD RSI=36.8 ATR=0.28
+2026-04-14 18:40:47,384 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+2026-04-14 18:40:48,342 [bot] INFO: MGCM6: New bar 2026-04-14T18:35Z | O=4861.7 H=4863.9 L=4861.4 C=4862.3 V=458
+2026-04-14 18:40:48,342 [strategy.vwap] INFO: Price=4862.30 VWAP=4821.69 dist=+2.15SD RSI=64.3 ATR=4.52
+2026-04-14 18:40:48,959 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+2026-04-14 18:40:50,741 [bot] INFO: MYMM6: New bar 2026-04-14T18:35Z | O=48685.0 H=48720.0 L=48685.0 C=48713.0 V=665
+2026-04-14 18:40:50,741 [strategy.vwap] INFO: Price=48713.00 VWAP=48597.39 dist=+1.15SD RSI=52.5 ATR=29.79
+2026-04-14 18:40:51,358 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+2026-04-14 18:40:52,092 [bot] INFO: M2KM6: New bar 2026-04-14T18:35Z | O=2711.1 H=2713.8 L=2711.1 C=2713.4 V=724
+2026-04-14 18:40:52,092 [strategy.vwap] INFO: Price=2713.40 VWAP=2710.04 dist=+0.43SD RSI=33.1 ATR=2.05
 
 === END ===
