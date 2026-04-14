@@ -1,29 +1,23 @@
 #!/bin/bash
-# Trigger: deploy-v20-keepalive-fix
+# Trigger: post-restart-verify-v20
 cd /root/MT5-PropFirm-Bot
-echo "=== Deploy + Restart $(date -u '+%Y-%m-%d %H:%M UTC') ==="
-echo "Branch: $(git rev-parse --abbrev-ref HEAD)"
+echo "=== Post-Restart Verify $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "ET time: $(TZ='America/New_York' date '+%Y-%m-%d %H:%M %Z')"
 echo "Commit: $(git log -1 --oneline)"
 echo ""
-
-echo "--- Verify keepalive fix is in code ---"
-grep -c "Token keepalive failed" futures_bot/bot.py || echo "MISSING keepalive in bot.py"
-grep -c "browser auth as last resort" futures_bot/core/tradovate_client.py || echo "MISSING Playwright fallback"
+echo "--- Service ---"
+echo "State:  $(systemctl is-active futures-bot)"
+echo "PID:    $(systemctl show futures-bot --property=MainPID --value)"
+echo "Uptime: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
 echo ""
-
-echo "--- Service before restart ---"
-echo "State: $(systemctl is-active futures-bot)"
-echo "PID:   $(systemctl show futures-bot --property=MainPID --value)"
+echo "--- Auth / token signals in last log lines ---"
+grep -E "Authenticated|Token|renewed|browser auth|CAPTCHA|Playwright|Connected to Tradovate|Incorrect username" logs/bot.log 2>/dev/null | tail -20
 echo ""
-
-# Restart in background so SSH session can still return output.
-# Rule: systemctl restart inside run.sh normally breaks output return,
-# so we detach it behind sleep + nohup + disown.
-echo "--- Scheduling restart in 6s (detached) ---"
-nohup bash -c 'sleep 6 && systemctl daemon-reload && systemctl restart futures-bot' \
-    > /tmp/restart_$(date +%s).log 2>&1 < /dev/null &
-disown
-echo "Restart job pid: $!"
+echo "--- status.json ---"
+cat status/status.json 2>/dev/null || echo "no status.json"
 echo ""
-
-echo "=== END (VPS output will commit before restart fires) ==="
+echo "--- Last 25 log lines ---"
+tail -25 logs/bot.log 2>/dev/null
+echo ""
+echo "--- Position list (if auth works) ---"
+grep -E "Position sync|SIGNAL|ENTRY|Filled|Error fetching balance|Authentication failed" logs/bot.log 2>/dev/null | tail -15
