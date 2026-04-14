@@ -1,9 +1,14 @@
 #!/bin/bash
-# Trigger: v148
+# Trigger: status-check-2026-04-14
 cd /root/MT5-PropFirm-Bot
-echo "=== v148 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== Status $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo "Service: $(systemctl is-active futures-bot)"
 echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
+echo "Uptime: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
 echo "Code: $(git log -1 --oneline)"
 echo ""
-tail -30 logs/bot.log 2>/dev/null
+echo "--- status.json ---"
+cat status/status.json 2>/dev/null || echo "no status.json"
+echo ""
+echo "--- last 30 log lines ---"
+tail -30 logs/bot.log 2>/dev/null || echo "no bot.log"
