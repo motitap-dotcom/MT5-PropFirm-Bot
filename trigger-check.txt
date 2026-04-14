@@ -1,1 +1,1 @@
-Trigger VPS check - post cleanup verify
+Trigger VPS check - verify chromium install
