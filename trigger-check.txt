@@ -1,1 +1,1 @@
-Trigger VPS check - fresh status
+Trigger VPS check - post cleanup verify
