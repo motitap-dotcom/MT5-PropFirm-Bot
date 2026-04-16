@@ -129,7 +129,10 @@ class VWAPMeanReversion:
         if (current.low <= vwap_data.lower_1sd and
                 rsi < self.rsi_oversold and
                 current.close > current.open):  # Bullish candle
-            sl = vwap_data.lower_2sd - 2  # 2 points below -2SD
+            sl = vwap_data.lower_2sd - atr * 0.3  # ATR-scaled buffer below -2SD
+            # Safety: if price already below -2SD, SL must still be below entry
+            if sl >= current.close:
+                sl = current.close - atr * 1.0
             tp1 = vwap_data.vwap
             tp2 = vwap_data.upper_1sd
             return TradeSetup(
@@ -144,7 +147,10 @@ class VWAPMeanReversion:
         if (current.high >= vwap_data.upper_1sd and
                 rsi > self.rsi_overbought and
                 current.close < current.open):  # Bearish candle
-            sl = vwap_data.upper_2sd + 2
+            sl = vwap_data.upper_2sd + atr * 0.3  # ATR-scaled buffer above +2SD
+            # Safety: if price already above +2SD, SL must still be above entry
+            if sl <= current.close:
+                sl = current.close + atr * 1.0
             tp1 = vwap_data.vwap
             tp2 = vwap_data.lower_1sd
             return TradeSetup(
