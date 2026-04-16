@@ -1,9 +1,25 @@
 #!/bin/bash
-# Trigger: v148
+# Trigger: v149
 cd /root/MT5-PropFirm-Bot
-echo "=== v148 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== Bot Status Check $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo ""
+echo "=== Service Status ==="
 echo "Service: $(systemctl is-active futures-bot)"
 echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
 echo "Code: $(git log -1 --oneline)"
 echo ""
-tail -30 logs/bot.log 2>/dev/null
+echo "=== Last 40 lines of bot.log ==="
+tail -40 logs/bot.log 2>/dev/null || echo "No log file found"
+echo ""
+echo "=== Status JSON ==="
+cat status/status.json 2>/dev/null || echo "No status.json found"
+echo ""
+echo "=== Recent Trades/Positions ==="
+grep -iE "position|trade|order|fill|entry|exit|P&L|pnl|signal" logs/bot.log 2>/dev/null | tail -20 || echo "No trade info"
+echo ""
+echo "=== Account/Balance ==="
+grep -iE "balance|equity|drawdown|account" logs/bot.log 2>/dev/null | tail -10 || echo "No balance info"
+echo ""
+echo "=== Uptime ==="
+systemctl show futures-bot --property=ActiveEnterTimestamp --no-pager
+echo "=== End ==="
