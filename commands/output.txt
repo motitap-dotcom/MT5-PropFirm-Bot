@@ -1,96 +1,101 @@
-=== Bot Status Check 2026-04-16 14:31 UTC ===
+=== Post-Fix Status Check 2026-04-16 15:23 UTC ===
 
 === Service Status ===
 Service: active
 PID: 3548483
-Code: 823e667 Status check v149 - full bot status with trades and balance
+Code: af776d3 Status check v150 - verify SL fix deployed and bot trading
 
-=== Last 40 lines of bot.log ===
-2026-04-16 14:23:15,252 [bot] INFO: === Trading cycle 10:23 ET | Guardian: ACTIVE ===
-2026-04-16 14:23:17,261 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
-2026-04-16 14:23:23,588 [bot] INFO: MESM6: New bar 2026-04-16T14:20Z | O=7050.5 H=7053.0 L=7048.25 C=7050.0 V=9692
-2026-04-16 14:23:23,588 [strategy.vwap] INFO: Price=7050.00 VWAP=7064.04 dist=-1.86SD RSI=24.0 ATR=6.07
-2026-04-16 14:23:24,217 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
-2026-04-16 14:23:27,917 [bot] INFO: MNQM6: New bar 2026-04-16T14:20Z | O=26322.75 H=26350.0 L=26314.25 C=26326.25 V=15868
-2026-04-16 14:23:27,917 [strategy.vwap] INFO: Price=26326.25 VWAP=26385.28 dist=-1.44SD RSI=33.3 ATR=40.02
-2026-04-16 14:23:28,560 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
-2026-04-16 14:23:29,288 [bot] INFO: MCLM6: New bar 2026-04-16T14:20Z | O=90.24 H=90.5 L=90.17 C=90.46 V=326
-2026-04-16 14:23:29,289 [strategy.vwap] INFO: Price=90.46 VWAP=89.11 dist=+2.52SD RSI=71.5 ATR=0.28
-2026-04-16 14:23:29,925 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
-2026-04-16 14:23:31,334 [bot] INFO: MGCM6: New bar 2026-04-16T14:20Z | O=4817.1 H=4819.8 L=4814.3 C=4816.5 V=1254
-2026-04-16 14:23:31,334 [strategy.vwap] INFO: Price=4816.50 VWAP=4832.40 dist=-1.65SD RSI=36.2 ATR=8.86
-2026-04-16 14:23:31,977 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
-2026-04-16 14:23:33,583 [bot] INFO: MYMM6: New bar 2026-04-16T14:20Z | O=48562.0 H=48587.0 L=48553.0 C=48556.0 V=1152
-2026-04-16 14:23:33,583 [strategy.vwap] INFO: Price=48556.00 VWAP=48731.93 dist=-2.39SD RSI=8.4 ATR=53.50
-2026-04-16 14:23:34,222 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
-2026-04-16 14:23:34,954 [bot] INFO: M2KM6: New bar 2026-04-16T14:20Z | O=2714.9 H=2715.8 L=2713.0 C=2714.4 V=835
-2026-04-16 14:23:34,954 [strategy.vwap] INFO: Price=2714.40 VWAP=2724.70 dist=-2.09SD RSI=31.3 ATR=4.29
-2026-04-16 14:28:34,959 [tradovate_client] INFO: Token expiring in 59min, renewing...
-2026-04-16 14:28:35,117 [tradovate_client] INFO: Token renewed successfully
-2026-04-16 14:28:35,118 [bot] INFO: === Trading cycle 10:28 ET | Guardian: ACTIVE ===
-2026-04-16 14:28:36,128 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
-2026-04-16 14:28:37,528 [bot] INFO: MESM6: New bar 2026-04-16T14:25Z | O=7051.25 H=7054.5 L=7049.25 C=7051.0 V=9090
-2026-04-16 14:28:37,529 [strategy.vwap] INFO: Price=7051.00 VWAP=7063.44 dist=-1.59SD RSI=26.4 ATR=6.29
-2026-04-16 14:28:38,166 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
-2026-04-16 14:28:41,734 [bot] INFO: MNQM6: New bar 2026-04-16T14:25Z | O=26335.75 H=26380.0 L=26327.75 C=26349.0 V=19143
-2026-04-16 14:28:41,734 [strategy.vwap] INFO: Price=26349.00 VWAP=26383.30 dist=-0.85SD RSI=39.5 ATR=42.52
-2026-04-16 14:28:42,371 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
-2026-04-16 14:28:43,275 [bot] INFO: MCLM6: New bar 2026-04-16T14:25Z | O=90.51 H=90.58 L=90.44 C=90.47 V=184
-2026-04-16 14:28:43,275 [strategy.vwap] INFO: Price=90.47 VWAP=89.14 dist=+2.38SD RSI=71.6 ATR=0.28
-2026-04-16 14:28:43,906 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
-2026-04-16 14:28:44,635 [bot] INFO: MGCM6: New bar 2026-04-16T14:25Z | O=4817.9 H=4821.2 L=4815.7 C=4818.4 V=898
-2026-04-16 14:28:44,635 [strategy.vwap] INFO: Price=4818.40 VWAP=4832.19 dist=-1.42SD RSI=36.5 ATR=8.89
-2026-04-16 14:28:45,274 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
-2026-04-16 14:28:46,010 [bot] INFO: MYMM6: New bar 2026-04-16T14:25Z | O=48562.0 H=48566.0 L=48529.0 C=48538.0 V=1164
-2026-04-16 14:28:46,011 [strategy.vwap] INFO: Price=48538.00 VWAP=48724.66 dist=-2.31SD RSI=7.3 ATR=55.36
-2026-04-16 14:28:46,626 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
-2026-04-16 14:28:47,686 [bot] INFO: M2KM6: New bar 2026-04-16T14:25Z | O=2714.1 H=2715.8 L=2712.8 C=2714.0 V=445
-2026-04-16 14:28:47,687 [strategy.vwap] INFO: Price=2714.00 VWAP=2724.40 dist=-2.01SD RSI=31.7 ATR=4.41
+=== Last 50 lines of bot.log ===
+2026-04-16 15:11:09,110 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
+2026-04-16 15:11:09,777 [bot] INFO: MCLM6: New bar 2026-04-16T15:10Z | O=89.92 H=89.92 L=89.76 C=89.81 V=191
+2026-04-16 15:11:09,777 [strategy.vwap] INFO: Price=89.81 VWAP=89.39 dist=+0.61SD RSI=37.6 ATR=0.28
+2026-04-16 15:11:10,418 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+2026-04-16 15:11:12,514 [bot] INFO: MGCM6: New bar 2026-04-16T15:10Z | O=4830.1 H=4834.9 L=4830.1 C=4832.6 V=786
+2026-04-16 15:11:12,514 [strategy.vwap] INFO: Price=4832.60 VWAP=4827.11 dist=+0.43SD RSI=61.2 ATR=9.96
+2026-04-16 15:11:13,123 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+2026-04-16 15:11:13,834 [bot] INFO: MYMM6: New bar 2026-04-16T15:10Z | O=48669.0 H=48690.0 L=48669.0 C=48680.0 V=431
+2026-04-16 15:11:13,834 [strategy.vwap] INFO: Price=48680.00 VWAP=48694.62 dist=-0.16SD RSI=59.4 ATR=40.71
+2026-04-16 15:11:14,478 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+2026-04-16 15:11:15,213 [bot] INFO: M2KM6: New bar 2026-04-16T15:10Z | O=2726.7 H=2728.9 L=2726.5 C=2728.4 V=378
+2026-04-16 15:11:15,213 [strategy.vwap] INFO: Price=2728.40 VWAP=2722.85 dist=+1.01SD RSI=69.4 ATR=3.96
+2026-04-16 15:16:15,227 [bot] INFO: === Trading cycle 11:16 ET | Guardian: ACTIVE ===
+2026-04-16 15:16:16,240 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-16 15:16:21,378 [bot] INFO: MESM6: New bar 2026-04-16T15:15Z | O=7075.75 H=7081.75 L=7075.75 C=7079.0 V=9965
+2026-04-16 15:16:21,378 [strategy.vwap] INFO: Price=7079.00 VWAP=7062.72 dist=+2.06SD RSI=80.0 ATR=5.93
+2026-04-16 15:16:22,005 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
+2026-04-16 15:16:25,676 [bot] INFO: MNQM6: New bar 2026-04-16T15:15Z | O=26469.0 H=26495.25 L=26468.75 C=26483.5 V=9633
+2026-04-16 15:16:25,676 [strategy.vwap] INFO: Price=26483.50 VWAP=26390.84 dist=+2.34SD RSI=85.2 ATR=36.11
+2026-04-16 15:16:26,305 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
+2026-04-16 15:16:27,035 [bot] INFO: MCLM6: New bar 2026-04-16T15:15Z | O=90.0 H=90.0 L=89.83 C=89.83 V=69
+2026-04-16 15:16:27,035 [strategy.vwap] INFO: Price=89.83 VWAP=89.39 dist=+0.64SD RSI=41.7 ATR=0.28
+2026-04-16 15:16:27,662 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+2026-04-16 15:16:28,831 [bot] INFO: MGCM6: New bar 2026-04-16T15:15Z | O=4828.5 H=4831.5 L=4828.4 C=4829.4 V=506
+2026-04-16 15:16:28,832 [strategy.vwap] INFO: Price=4829.40 VWAP=4827.12 dist=+0.18SD RSI=56.9 ATR=9.84
+2026-04-16 15:16:29,451 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+2026-04-16 15:16:30,211 [bot] INFO: MYMM6: New bar 2026-04-16T15:15Z | O=48728.0 H=48773.0 L=48728.0 C=48746.0 V=873
+2026-04-16 15:16:30,211 [strategy.vwap] INFO: Price=48746.00 VWAP=48695.80 dist=+0.56SD RSI=71.6 ATR=42.43
+2026-04-16 15:16:30,836 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+2026-04-16 15:16:31,673 [bot] INFO: M2KM6: New bar 2026-04-16T15:15Z | O=2727.8 H=2730.8 L=2727.7 C=2729.3 V=399
+2026-04-16 15:16:31,674 [strategy.vwap] INFO: Price=2729.30 VWAP=2722.97 dist=+1.15SD RSI=70.5 ATR=3.70
+2026-04-16 15:21:31,704 [bot] INFO: === Trading cycle 11:21 ET | Guardian: ACTIVE ===
+2026-04-16 15:21:32,718 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-16 15:21:34,162 [bot] INFO: MESM6: New bar 2026-04-16T15:20Z | O=7075.0 H=7077.25 L=7075.0 C=7077.25 V=2427
+2026-04-16 15:21:34,162 [strategy.vwap] INFO: Price=7077.25 VWAP=7062.83 dist=+1.81SD RSI=74.3 ATR=5.77
+2026-04-16 15:21:34,809 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
+2026-04-16 15:21:36,303 [bot] INFO: MNQM6: New bar 2026-04-16T15:20Z | O=26470.75 H=26481.0 L=26470.5 C=26480.25 V=3046
+2026-04-16 15:21:36,303 [strategy.vwap] INFO: Price=26480.25 VWAP=26391.38 dist=+2.22SD RSI=81.2 ATR=33.93
+2026-04-16 15:21:36,925 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
+2026-04-16 15:21:37,652 [bot] INFO: MCLM6: New bar 2026-04-16T15:20Z | O=90.22 H=90.24 L=90.11 C=90.13 V=137
+2026-04-16 15:21:37,653 [strategy.vwap] INFO: Price=90.13 VWAP=89.40 dist=+1.06SD RSI=48.6 ATR=0.29
+2026-04-16 15:21:38,282 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+2026-04-16 15:21:38,992 [bot] INFO: MGCM6: New bar 2026-04-16T15:20Z | O=4825.1 H=4827.6 L=4824.8 C=4826.7 V=282
+2026-04-16 15:21:38,993 [strategy.vwap] INFO: Price=4826.70 VWAP=4827.12 dist=-0.03SD RSI=61.0 ATR=9.29
+2026-04-16 15:21:39,617 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+2026-04-16 15:21:40,884 [bot] INFO: MYMM6: New bar 2026-04-16T15:20Z | O=48707.0 H=48723.0 L=48701.0 C=48722.0 V=299
+2026-04-16 15:21:40,884 [strategy.vwap] INFO: Price=48722.00 VWAP=48695.94 dist=+0.29SD RSI=67.5 ATR=42.64
+2026-04-16 15:21:41,524 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+2026-04-16 15:21:42,249 [bot] INFO: M2KM6: New bar 2026-04-16T15:20Z | O=2729.1 H=2730.4 L=2728.5 C=2730.1 V=108
+2026-04-16 15:21:42,249 [strategy.vwap] INFO: Price=2730.10 VWAP=2723.00 dist=+1.29SD RSI=73.1 ATR=3.61
 
-=== Status JSON ===
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+=== BLOCKED trades (should be zero after fix) ===
+3
 
-=== Recent Trades/Positions ===
-2026-04-15 22:32:31,902 [tradovate_client] INFO: Cancelled order 451715418703
-2026-04-15 22:32:32,019 [tradovate_client] INFO: Cancelled order 451715418691
-2026-04-15 22:32:32,138 [tradovate_client] INFO: Cancelled order 451715418668
-2026-04-15 22:32:32,255 [tradovate_client] INFO: Cancelled order 451715418727
-2026-04-16 04:00:05,968 [guardian] INFO: New day started. Trading days: 0, Total PnL: $1121.70
-2026-04-16 13:30:38,403 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.42SD RSI=21.6 entry=88.61 sl=88.33 tp1=89.08 tp2=89.57
-2026-04-16 13:30:38,404 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.99SD RSI=23.7 entry=88.53 sl=88.05 tp1=88.90 tp2=89.45
-2026-04-16 13:30:38,405 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.98SD RSI=77.4 entry=89.21 sl=89.67 tp1=88.87 tp2=88.35
-2026-04-16 13:30:38,405 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.15SD RSI=86.2 entry=89.33 sl=89.74 tp1=88.92 tp2=88.38
-2026-04-16 13:30:38,405 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.62SD RSI=78.1 entry=89.15 sl=89.74 tp1=88.93 tp2=88.40
-2026-04-16 13:30:43,799 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.95SD RSI=91.1 entry=48789.00 sl=48801.30 tp1=48724.81 tp2=48675.54
-2026-04-16 13:56:57,144 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-2.84SD RSI=23.3 entry=7051.50 sl=7053.70 tp1=7067.25 tp2=7075.56
-2026-04-16 13:56:57,144 [bot] INFO: MESM6: SIGNAL LONG from VWAP Mean Reversion | entry=7051.50 sl=7053.70
-2026-04-16 13:56:57,144 [bot] ERROR: BLOCKED: SL (7053.704690292535) >= entry (7051.5) for LONG
-2026-04-16 13:57:00,776 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-3.19SD RSI=29.7 entry=26305.75 sl=26325.37 tp1=26403.22 tp2=26449.10
-2026-04-16 13:57:00,776 [bot] INFO: MNQM6: SIGNAL LONG from VWAP Mean Reversion | entry=26305.75 sl=26325.37
-2026-04-16 13:57:00,776 [bot] ERROR: BLOCKED: SL (26325.3710224469) >= entry (26305.75) for LONG
+=== Recent SIGNALS and TRADES ===
 2026-04-16 14:02:18,925 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.65SD RSI=70.9 entry=90.14 sl=90.00 tp1=89.01 tp2=88.37
 2026-04-16 14:02:18,925 [bot] INFO: MCLM6: SIGNAL SHORT from VWAP Mean Reversion | entry=90.14 sl=90.00
 2026-04-16 14:02:18,925 [bot] ERROR: BLOCKED: SL (89.9990937692226) <= entry (90.14) for SHORT
+2026-04-16 14:44:37,024 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.05SD RSI=27.0 entry=7053.50 sl=7042.53 tp1=7062.10 tp2=7074.33
+2026-04-16 14:44:37,024 [bot] INFO: MESM6: SIGNAL LONG from VWAP Mean Reversion | entry=7053.50 sl=7042.53
+2026-04-16 14:44:37,153 [tradovate_client] INFO: Market order placed: Buy 2 MESM6, orderId=472310961535
+2026-04-16 14:44:37,277 [tradovate_client] INFO: Stop order: Sell 2 MESM6 @ stop=7042.525793556717
+2026-04-16 14:44:37,400 [tradovate_client] INFO: Limit order: Sell 2 MESM6 @ 7062.0992684555995
+2026-04-16 14:44:37,400 [bot] INFO: TRADE: Buy 2 MESM6 @ 7053.50 SL=7042.53 TP=7062.10 Risk=$109.74 Strategy=VWAP Mean Reversion
+2026-04-16 14:44:39,643 [tradovate_client] INFO: Stop order: Sell 2 MESM6 @ stop=7042.525793556717
+2026-04-16 14:44:39,769 [tradovate_client] INFO: Limit order: Sell 2 MESM6 @ 7062.0992684555995
+2026-04-16 14:50:09,129 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.26SD RSI=19.1 entry=48588.00 sl=48495.17 tp1=48704.52 tp2=48843.17
+2026-04-16 14:50:09,129 [bot] INFO: MYMM6: SIGNAL LONG from VWAP Mean Reversion | entry=48588.00 sl=48495.17
+2026-04-16 14:50:09,276 [tradovate_client] INFO: Market order placed: Buy 3 MYMM6, orderId=472310961556
+2026-04-16 14:50:09,399 [tradovate_client] INFO: Stop order: Sell 3 MYMM6 @ stop=48495.17315957525
+2026-04-16 14:50:09,523 [tradovate_client] INFO: Limit order: Sell 3 MYMM6 @ 48704.515173564614
+2026-04-16 14:50:09,523 [bot] INFO: TRADE: Buy 3 MYMM6 @ 48588.00 SL=48495.17 TP=48704.52 Risk=$139.24 Strategy=VWAP Mean Reversion
+2026-04-16 14:50:11,767 [tradovate_client] INFO: Stop order: Sell 3 MYMM6 @ stop=48495.17315957525
+2026-04-16 14:50:11,898 [tradovate_client] INFO: Limit order: Sell 3 MYMM6 @ 48704.515173564614
+2026-04-16 14:50:13,453 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.57SD RSI=25.2 entry=2719.60 sl=2709.04 tp1=2722.93 tp2=2731.65
+2026-04-16 14:50:13,453 [bot] INFO: M2KM6: SIGNAL LONG from VWAP Mean Reversion | entry=2719.60 sl=2709.04
+2026-04-16 14:50:13,453 [bot] INFO: Trade blocked by risk manager: Max positions reached: 2/2
+2026-04-16 14:55:23,948 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.81SD RSI=25.6 entry=48625.00 sl=48491.08 tp1=48699.30 tp2=48837.60
+2026-04-16 14:55:23,948 [bot] INFO: MYMM6: SIGNAL LONG from VWAP Mean Reversion | entry=48625.00 sl=48491.08
+2026-04-16 14:55:23,948 [bot] INFO: Trade blocked by risk manager: Max positions reached: 2/2
 
-=== Account/Balance ===
-2026-04-13 20:24:03,706 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-13 20:24:03,707 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-14 13:30:20,457 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:35:21,432 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:40:22,348 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 13:45:23,257 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-14 14:16:17,535 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-14 14:16:17,535 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-14 15:22:05,649 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-14 15:22:05,649 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-
-=== Uptime ===
-ActiveEnterTimestamp=Tue 2026-04-14 15:21:53 UTC
+=== Open Positions ===
+2026-04-14 16:35:21,803 [tradovate_client] INFO: Market order placed: Sell 2 MESM6, orderId=451715415579
+2026-04-14 19:45:23,718 [tradovate_client] INFO: Market order placed: Sell 2 MESM6, orderId=451715415628
+2026-04-14 19:45:23,952 [tradovate_client] INFO: Market order placed: Sell 1 MGCM6, orderId=451715415639
+2026-04-15 14:07:43,080 [tradovate_client] INFO: Market order placed: Buy 3 MYMM6, orderId=451715418655
+2026-04-15 14:18:14,700 [tradovate_client] INFO: Market order placed: Sell 3 MGCM6, orderId=451715418691
+2026-04-15 15:10:47,307 [tradovate_client] INFO: Market order placed: Sell 2 MESM6, orderId=451715418718
+2026-04-15 19:45:03,788 [tradovate_client] INFO: Market order placed: Sell 2 MESM6, orderId=451715418753
+2026-04-15 19:45:04,032 [tradovate_client] INFO: Market order placed: Buy 3 MYMM6, orderId=451715418764
+2026-04-16 14:44:37,153 [tradovate_client] INFO: Market order placed: Buy 2 MESM6, orderId=472310961535
+2026-04-16 14:50:09,276 [tradovate_client] INFO: Market order placed: Buy 3 MYMM6, orderId=472310961556
 === End ===
