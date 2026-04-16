@@ -1,35 +1,96 @@
-=== v148 2026-04-07 14:45 UTC ===
-Service: activating
-PID: 0
-Code: b6f06b2 v148
+=== Bot Status Check 2026-04-16 14:31 UTC ===
 
-2026-04-07 14:31:29,502 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,620 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:29,745 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,864 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:36:29,932 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
-2026-04-07 14:36:30,083 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,214 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,343 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,465 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,591 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,714 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,840 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,990 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,119 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,252 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,382 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,509 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,636 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,757 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,884 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:32,013 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:32,141 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:32,265 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:41:04,915 [bot] INFO: Stopping bot: Signal received
-2026-04-07 14:41:04,915 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:41:05,059 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:41:05,179 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:41:05,306 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:41:05,546 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 14:41:05,546 [bot] INFO: Bot stopped
+=== Service Status ===
+Service: active
+PID: 3548483
+Code: 823e667 Status check v149 - full bot status with trades and balance
+
+=== Last 40 lines of bot.log ===
+2026-04-16 14:23:15,252 [bot] INFO: === Trading cycle 10:23 ET | Guardian: ACTIVE ===
+2026-04-16 14:23:17,261 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-16 14:23:23,588 [bot] INFO: MESM6: New bar 2026-04-16T14:20Z | O=7050.5 H=7053.0 L=7048.25 C=7050.0 V=9692
+2026-04-16 14:23:23,588 [strategy.vwap] INFO: Price=7050.00 VWAP=7064.04 dist=-1.86SD RSI=24.0 ATR=6.07
+2026-04-16 14:23:24,217 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
+2026-04-16 14:23:27,917 [bot] INFO: MNQM6: New bar 2026-04-16T14:20Z | O=26322.75 H=26350.0 L=26314.25 C=26326.25 V=15868
+2026-04-16 14:23:27,917 [strategy.vwap] INFO: Price=26326.25 VWAP=26385.28 dist=-1.44SD RSI=33.3 ATR=40.02
+2026-04-16 14:23:28,560 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
+2026-04-16 14:23:29,288 [bot] INFO: MCLM6: New bar 2026-04-16T14:20Z | O=90.24 H=90.5 L=90.17 C=90.46 V=326
+2026-04-16 14:23:29,289 [strategy.vwap] INFO: Price=90.46 VWAP=89.11 dist=+2.52SD RSI=71.5 ATR=0.28
+2026-04-16 14:23:29,925 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+2026-04-16 14:23:31,334 [bot] INFO: MGCM6: New bar 2026-04-16T14:20Z | O=4817.1 H=4819.8 L=4814.3 C=4816.5 V=1254
+2026-04-16 14:23:31,334 [strategy.vwap] INFO: Price=4816.50 VWAP=4832.40 dist=-1.65SD RSI=36.2 ATR=8.86
+2026-04-16 14:23:31,977 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+2026-04-16 14:23:33,583 [bot] INFO: MYMM6: New bar 2026-04-16T14:20Z | O=48562.0 H=48587.0 L=48553.0 C=48556.0 V=1152
+2026-04-16 14:23:33,583 [strategy.vwap] INFO: Price=48556.00 VWAP=48731.93 dist=-2.39SD RSI=8.4 ATR=53.50
+2026-04-16 14:23:34,222 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+2026-04-16 14:23:34,954 [bot] INFO: M2KM6: New bar 2026-04-16T14:20Z | O=2714.9 H=2715.8 L=2713.0 C=2714.4 V=835
+2026-04-16 14:23:34,954 [strategy.vwap] INFO: Price=2714.40 VWAP=2724.70 dist=-2.09SD RSI=31.3 ATR=4.29
+2026-04-16 14:28:34,959 [tradovate_client] INFO: Token expiring in 59min, renewing...
+2026-04-16 14:28:35,117 [tradovate_client] INFO: Token renewed successfully
+2026-04-16 14:28:35,118 [bot] INFO: === Trading cycle 10:28 ET | Guardian: ACTIVE ===
+2026-04-16 14:28:36,128 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-16 14:28:37,528 [bot] INFO: MESM6: New bar 2026-04-16T14:25Z | O=7051.25 H=7054.5 L=7049.25 C=7051.0 V=9090
+2026-04-16 14:28:37,529 [strategy.vwap] INFO: Price=7051.00 VWAP=7063.44 dist=-1.59SD RSI=26.4 ATR=6.29
+2026-04-16 14:28:38,166 [tradovate_client] INFO: MNQM6: Got 50 bars via WebSocket
+2026-04-16 14:28:41,734 [bot] INFO: MNQM6: New bar 2026-04-16T14:25Z | O=26335.75 H=26380.0 L=26327.75 C=26349.0 V=19143
+2026-04-16 14:28:41,734 [strategy.vwap] INFO: Price=26349.00 VWAP=26383.30 dist=-0.85SD RSI=39.5 ATR=42.52
+2026-04-16 14:28:42,371 [tradovate_client] INFO: MCLM6: Got 50 bars via WebSocket
+2026-04-16 14:28:43,275 [bot] INFO: MCLM6: New bar 2026-04-16T14:25Z | O=90.51 H=90.58 L=90.44 C=90.47 V=184
+2026-04-16 14:28:43,275 [strategy.vwap] INFO: Price=90.47 VWAP=89.14 dist=+2.38SD RSI=71.6 ATR=0.28
+2026-04-16 14:28:43,906 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+2026-04-16 14:28:44,635 [bot] INFO: MGCM6: New bar 2026-04-16T14:25Z | O=4817.9 H=4821.2 L=4815.7 C=4818.4 V=898
+2026-04-16 14:28:44,635 [strategy.vwap] INFO: Price=4818.40 VWAP=4832.19 dist=-1.42SD RSI=36.5 ATR=8.89
+2026-04-16 14:28:45,274 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+2026-04-16 14:28:46,010 [bot] INFO: MYMM6: New bar 2026-04-16T14:25Z | O=48562.0 H=48566.0 L=48529.0 C=48538.0 V=1164
+2026-04-16 14:28:46,011 [strategy.vwap] INFO: Price=48538.00 VWAP=48724.66 dist=-2.31SD RSI=7.3 ATR=55.36
+2026-04-16 14:28:46,626 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+2026-04-16 14:28:47,686 [bot] INFO: M2KM6: New bar 2026-04-16T14:25Z | O=2714.1 H=2715.8 L=2712.8 C=2714.0 V=445
+2026-04-16 14:28:47,687 [strategy.vwap] INFO: Price=2714.00 VWAP=2724.40 dist=-2.01SD RSI=31.7 ATR=4.41
+
+=== Status JSON ===
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
+
+=== Recent Trades/Positions ===
+2026-04-15 22:32:31,902 [tradovate_client] INFO: Cancelled order 451715418703
+2026-04-15 22:32:32,019 [tradovate_client] INFO: Cancelled order 451715418691
+2026-04-15 22:32:32,138 [tradovate_client] INFO: Cancelled order 451715418668
+2026-04-15 22:32:32,255 [tradovate_client] INFO: Cancelled order 451715418727
+2026-04-16 04:00:05,968 [guardian] INFO: New day started. Trading days: 0, Total PnL: $1121.70
+2026-04-16 13:30:38,403 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.42SD RSI=21.6 entry=88.61 sl=88.33 tp1=89.08 tp2=89.57
+2026-04-16 13:30:38,404 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.99SD RSI=23.7 entry=88.53 sl=88.05 tp1=88.90 tp2=89.45
+2026-04-16 13:30:38,405 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.98SD RSI=77.4 entry=89.21 sl=89.67 tp1=88.87 tp2=88.35
+2026-04-16 13:30:38,405 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.15SD RSI=86.2 entry=89.33 sl=89.74 tp1=88.92 tp2=88.38
+2026-04-16 13:30:38,405 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.62SD RSI=78.1 entry=89.15 sl=89.74 tp1=88.93 tp2=88.40
+2026-04-16 13:30:43,799 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.95SD RSI=91.1 entry=48789.00 sl=48801.30 tp1=48724.81 tp2=48675.54
+2026-04-16 13:56:57,144 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-2.84SD RSI=23.3 entry=7051.50 sl=7053.70 tp1=7067.25 tp2=7075.56
+2026-04-16 13:56:57,144 [bot] INFO: MESM6: SIGNAL LONG from VWAP Mean Reversion | entry=7051.50 sl=7053.70
+2026-04-16 13:56:57,144 [bot] ERROR: BLOCKED: SL (7053.704690292535) >= entry (7051.5) for LONG
+2026-04-16 13:57:00,776 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-3.19SD RSI=29.7 entry=26305.75 sl=26325.37 tp1=26403.22 tp2=26449.10
+2026-04-16 13:57:00,776 [bot] INFO: MNQM6: SIGNAL LONG from VWAP Mean Reversion | entry=26305.75 sl=26325.37
+2026-04-16 13:57:00,776 [bot] ERROR: BLOCKED: SL (26325.3710224469) >= entry (26305.75) for LONG
+2026-04-16 14:02:18,925 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.65SD RSI=70.9 entry=90.14 sl=90.00 tp1=89.01 tp2=88.37
+2026-04-16 14:02:18,925 [bot] INFO: MCLM6: SIGNAL SHORT from VWAP Mean Reversion | entry=90.14 sl=90.00
+2026-04-16 14:02:18,925 [bot] ERROR: BLOCKED: SL (89.9990937692226) <= entry (90.14) for SHORT
+
+=== Account/Balance ===
+2026-04-13 20:24:03,706 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-13 20:24:03,707 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-14 13:30:20,457 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:35:21,432 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:40:22,348 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 13:45:23,257 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-14 14:16:17,535 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-14 14:16:17,535 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-14 15:22:05,649 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-14 15:22:05,649 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+
+=== Uptime ===
+ActiveEnterTimestamp=Tue 2026-04-14 15:21:53 UTC
+=== End ===
