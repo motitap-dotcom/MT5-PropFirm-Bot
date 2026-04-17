@@ -1,45 +1,53 @@
-=== Directory Check 2026-04-17 14:26 UTC ===
---- Current branch ---
-claude/claude-md-mm3qa8i9848jcovk-X3DTU
-707c196 Check if futures_bot directory exists on VPS
+=== Direct Service Write 2026-04-17 15:51 UTC ===
+Service file written.
+daemon-reload done.
+reset-failed done.
 
---- Top-level files ---
-total 112
-drwxr-xr-x 13 root root  4096 Apr 17 14:26 .
-drwx------ 20 root root  4096 Apr 17 14:26 ..
--rw-r--r--  1 root root   459 Apr 17 14:14 .env
-drwxr-xr-x  9 root root  4096 Apr 17 14:26 .git
-drwxr-xr-x  3 root root  4096 Feb 23 12:13 .github
--rw-r--r--  1 root root    54 Apr 17 14:26 .gitignore
--rw-r--r--  1 root root 18135 Apr 17 14:26 CLAUDE.md
--rw-r--r--  1 root root  1634 Apr 17 14:26 README.md
-drwxr-xr-x  3 root root  4096 Mar  7 18:07 bridge
-drwxr-xr-x  2 root root  4096 Apr 17 14:26 commands
-drwxr-xr-x  2 1001 1001  4096 Apr 17 14:26 configs
-drwxr-xr-x  5 1001 1001  4096 Apr 17 14:26 futures_bot
--rw-r--r--  1 root root  5451 Apr 17 14:26 get_token.py
-drwxr-xr-x  2 root root  4096 Apr 13 20:23 logs
--rw-r--r--  1 root root    86 Apr 17 14:26 requirements.txt
-drwxr-xr-x  2 root root  4096 Apr 17 14:26 scripts
--rw-r--r--  1 root root  6100 Apr 17 14:26 server_cron.sh
-drwxr-xr-x  2 root root  4096 Apr 17 14:26 status
--rw-r--r--  1 root root    41 Apr 17 14:26 trigger-check.txt
-drwxr-xr-x  5 root root  4096 Mar 30 20:34 venv
--rw-r--r--  1 root root    82 Apr 17 14:26 vps_fix_report.txt
-drwxr-xr-x  2 root root  4096 Mar  2 10:53 whatsapp-service
+--- Current service file (verify) ---
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
 
---- futures_bot dir ---
-total 48
-drwxr-xr-x  5 1001 1001  4096 Apr 17 14:26 .
-drwxr-xr-x 13 root root  4096 Apr 17 14:26 ..
--rw-r--r--  1 root root   114 Apr 17 14:26 __init__.py
-drwxr-xr-x  2 root root  4096 Apr 17 14:14 __pycache__
--rw-r--r--  1 root root 24016 Apr 17 14:26 bot.py
-drwxr-xr-x  3 1001 1001  4096 Apr 17 14:26 core
-drwxr-xr-x  3 1001 1001  4096 Apr 17 14:26 strategies
+[Service]
+Type=simple
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/bin/bash -c 'cd /root/MT5-PropFirm-Bot && PYTHONPATH=/root/MT5-PropFirm-Bot PYTHONUNBUFFERED=1 /usr/bin/python3 -m futures_bot.bot'
+Restart=on-failure
+RestartSec=30
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 
---- Test import manually ---
-OK
+[Install]
+WantedBy=multi-user.target
 
---- Find any bot.py ---
-/root/MT5-PropFirm-Bot/futures_bot/bot.py
+--- systemd view (systemctl cat) ---
+# /etc/systemd/system/futures-bot.service
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/bin/bash -c 'cd /root/MT5-PropFirm-Bot && PYTHONPATH=/root/MT5-PropFirm-Bot PYTHONUNBUFFERED=1 /usr/bin/python3 -m futures_bot.bot'
+Restart=on-failure
+RestartSec=30
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+
+[Install]
+WantedBy=multi-user.target
+
+--- Status now ---
+Service: active
+PID: 347145
+
+--- journalctl last 10 ---
+Apr 17 15:50:04 vmi3096165 bash[347145]: 2026-04-17 15:50:04,115 [strategy.vwap] INFO: Price=81.36 VWAP=82.67 dist=-0.62SD RSI=60.3 ATR=0.48
+Apr 17 15:50:04 vmi3096165 bash[347145]: 2026-04-17 15:50:04,783 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
+Apr 17 15:50:05 vmi3096165 bash[347145]: 2026-04-17 15:50:05,906 [bot] INFO: MGCM6: New bar 2026-04-17T15:45Z | O=4881.2 H=4886.8 L=4880.2 C=4885.7 V=1953
+Apr 17 15:50:05 vmi3096165 bash[347145]: 2026-04-17 15:50:05,906 [strategy.vwap] INFO: Price=4885.70 VWAP=4873.05 dist=+0.46SD RSI=40.6 ATR=7.46
+Apr 17 15:50:06 vmi3096165 bash[347145]: 2026-04-17 15:50:06,551 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
+Apr 17 15:50:07 vmi3096165 bash[347145]: 2026-04-17 15:50:07,417 [bot] INFO: MYMM6: New bar 2026-04-17T15:45Z | O=49745.0 H=49812.0 L=49745.0 C=49781.0 V=2185
+Apr 17 15:50:07 vmi3096165 bash[347145]: 2026-04-17 15:50:07,417 [strategy.vwap] INFO: Price=49781.00 VWAP=49440.20 dist=+1.62SD RSI=54.8 ATR=43.79
+Apr 17 15:50:08 vmi3096165 bash[347145]: 2026-04-17 15:50:08,035 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
+Apr 17 15:50:08 vmi3096165 bash[347145]: 2026-04-17 15:50:08,738 [bot] INFO: M2KM6: New bar 2026-04-17T15:45Z | O=2788.0 H=2793.4 L=2788.0 C=2791.5 V=1825
+Apr 17 15:50:08 vmi3096165 bash[347145]: 2026-04-17 15:50:08,738 [strategy.vwap] INFO: Price=2791.50 VWAP=2774.19 dist=+1.28SD RSI=49.1 ATR=4.73
