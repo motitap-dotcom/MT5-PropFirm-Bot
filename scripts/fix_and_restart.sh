@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart ==="
+echo "=== Fix & Restart (v2 - deploy PnL/trading-days/flatten fixes) ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 
