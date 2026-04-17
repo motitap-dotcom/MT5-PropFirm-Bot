@@ -1,35 +1,79 @@
-=== v148 2026-04-07 14:45 UTC ===
+=== Trades Status 2026-04-17 13:39 UTC ===
 Service: activating
 PID: 0
-Code: b6f06b2 v148
+Uptime: Fri 2026-04-17 13:39:11 UTC
+Code: 9f14732 Check trades status
 
-2026-04-07 14:31:29,502 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,620 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:29,745 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,864 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:36:29,932 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
-2026-04-07 14:36:30,083 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,214 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,343 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,465 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,591 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,714 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,840 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,990 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,119 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,252 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,382 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,509 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,636 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,757 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,884 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:32,013 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:32,141 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:32,265 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:41:04,915 [bot] INFO: Stopping bot: Signal received
-2026-04-07 14:41:04,915 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:41:05,059 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:41:05,179 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:41:05,306 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:41:05,546 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 14:41:05,546 [bot] INFO: Bot stopped
+--- status.json ---
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
+
+--- Last 40 log lines ---
+2026-04-17 05:47:54,004 [tradovate_client] INFO: Token expiring in 60min, renewing...
+2026-04-17 05:47:54,163 [tradovate_client] INFO: Token renewed successfully
+2026-04-17 05:47:54,164 [bot] INFO: Outside session: Pre-market: 01:47 ET (opens 09:30:00)
+2026-04-17 05:48:24,165 [bot] INFO: Outside session: Pre-market: 01:48 ET (opens 09:30:00)
+2026-04-17 05:48:54,166 [bot] INFO: Outside session: Pre-market: 01:48 ET (opens 09:30:00)
+2026-04-17 05:49:24,168 [bot] INFO: Outside session: Pre-market: 01:49 ET (opens 09:30:00)
+2026-04-17 05:49:54,170 [bot] INFO: Outside session: Pre-market: 01:49 ET (opens 09:30:00)
+2026-04-17 05:50:24,171 [bot] INFO: Outside session: Pre-market: 01:50 ET (opens 09:30:00)
+2026-04-17 05:50:54,173 [bot] INFO: Outside session: Pre-market: 01:50 ET (opens 09:30:00)
+2026-04-17 05:51:24,174 [bot] INFO: Outside session: Pre-market: 01:51 ET (opens 09:30:00)
+2026-04-17 05:51:54,176 [bot] INFO: Outside session: Pre-market: 01:51 ET (opens 09:30:00)
+2026-04-17 05:52:24,177 [bot] INFO: Outside session: Pre-market: 01:52 ET (opens 09:30:00)
+2026-04-17 05:52:54,201 [bot] INFO: Outside session: Pre-market: 01:52 ET (opens 09:30:00)
+2026-04-17 05:53:24,232 [bot] INFO: Outside session: Pre-market: 01:53 ET (opens 09:30:00)
+2026-04-17 05:53:54,262 [bot] INFO: Outside session: Pre-market: 01:53 ET (opens 09:30:00)
+2026-04-17 05:54:24,269 [bot] INFO: Outside session: Pre-market: 01:54 ET (opens 09:30:00)
+2026-04-17 05:54:54,280 [bot] INFO: Outside session: Pre-market: 01:54 ET (opens 09:30:00)
+2026-04-17 05:55:24,302 [bot] INFO: Outside session: Pre-market: 01:55 ET (opens 09:30:00)
+2026-04-17 05:55:54,306 [bot] INFO: Outside session: Pre-market: 01:55 ET (opens 09:30:00)
+2026-04-17 05:56:24,337 [bot] INFO: Outside session: Pre-market: 01:56 ET (opens 09:30:00)
+2026-04-17 05:56:54,367 [bot] INFO: Outside session: Pre-market: 01:56 ET (opens 09:30:00)
+2026-04-17 05:57:24,375 [bot] INFO: Outside session: Pre-market: 01:57 ET (opens 09:30:00)
+2026-04-17 05:57:54,405 [bot] INFO: Outside session: Pre-market: 01:57 ET (opens 09:30:00)
+2026-04-17 05:58:24,421 [bot] INFO: Outside session: Pre-market: 01:58 ET (opens 09:30:00)
+2026-04-17 05:58:54,424 [bot] INFO: Outside session: Pre-market: 01:58 ET (opens 09:30:00)
+2026-04-17 05:59:24,429 [bot] INFO: Outside session: Pre-market: 01:59 ET (opens 09:30:00)
+2026-04-17 05:59:54,460 [bot] INFO: Outside session: Pre-market: 01:59 ET (opens 09:30:00)
+2026-04-17 06:00:24,466 [bot] INFO: Outside session: Pre-market: 02:00 ET (opens 09:30:00)
+2026-04-17 06:00:54,468 [bot] INFO: Outside session: Pre-market: 02:00 ET (opens 09:30:00)
+2026-04-17 06:01:24,472 [bot] INFO: Outside session: Pre-market: 02:01 ET (opens 09:30:00)
+2026-04-17 06:01:54,494 [bot] INFO: Outside session: Pre-market: 02:01 ET (opens 09:30:00)
+2026-04-17 06:02:24,518 [bot] INFO: Outside session: Pre-market: 02:02 ET (opens 09:30:00)
+2026-04-17 06:02:54,534 [bot] INFO: Outside session: Pre-market: 02:02 ET (opens 09:30:00)
+2026-04-17 06:03:24,542 [bot] INFO: Outside session: Pre-market: 02:03 ET (opens 09:30:00)
+2026-04-17 06:03:54,574 [bot] INFO: Outside session: Pre-market: 02:03 ET (opens 09:30:00)
+2026-04-17 06:04:24,603 [bot] INFO: Outside session: Pre-market: 02:04 ET (opens 09:30:00)
+2026-04-17 06:04:54,608 [bot] INFO: Outside session: Pre-market: 02:04 ET (opens 09:30:00)
+2026-04-17 06:05:17,453 [bot] INFO: Stopping bot: Signal received
+2026-04-17 06:05:17,850 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-17 06:05:17,850 [bot] INFO: Bot stopped
+
+--- Trade/Position mentions in recent log ---
+2026-04-16 22:33:15,045 [tradovate_client] INFO: Cancelled order 472310961547
+2026-04-16 22:33:15,161 [tradovate_client] INFO: Cancelled order 472310961565
+2026-04-16 22:33:15,277 [tradovate_client] INFO: Cancelled order 472310961535
+2026-04-16 22:34:15,689 [tradovate_client] INFO: Cancelled order 472310961568
+2026-04-16 22:34:15,809 [tradovate_client] INFO: Cancelled order 472310961553
+2026-04-16 22:34:15,930 [tradovate_client] INFO: Cancelled order 472310961550
+2026-04-16 22:34:16,049 [tradovate_client] INFO: Cancelled order 472310961556
+2026-04-16 22:34:16,168 [tradovate_client] INFO: Cancelled order 472310961616
+2026-04-16 22:34:16,288 [tradovate_client] INFO: Cancelled order 472310961544
+2026-04-16 22:34:16,407 [tradovate_client] INFO: Cancelled order 472310961574
+2026-04-16 22:34:16,527 [tradovate_client] INFO: Cancelled order 472310961605
+2026-04-16 22:34:16,646 [tradovate_client] INFO: Cancelled order 472310961571
+2026-04-16 22:34:16,766 [tradovate_client] INFO: Cancelled order 472310961547
+2026-04-16 22:34:16,885 [tradovate_client] INFO: Cancelled order 472310961565
+2026-04-16 22:34:17,005 [tradovate_client] INFO: Cancelled order 472310961535
+2026-04-16 22:35:17,387 [tradovate_client] INFO: Cancelled order 472310961568
+2026-04-16 22:35:17,508 [tradovate_client] INFO: Cancelled order 472310961553
+2026-04-16 22:35:17,627 [tradovate_client] INFO: Cancelled order 472310961556
+2026-04-16 22:35:17,747 [tradovate_client] INFO: Cancelled order 472310961605
+2026-04-17 04:00:49,601 [guardian] INFO: New day started. Trading days: 0, Total PnL: $1409.00
