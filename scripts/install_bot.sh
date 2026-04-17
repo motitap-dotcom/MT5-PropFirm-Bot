@@ -20,6 +20,7 @@ ExecStart=/usr/bin/python3 -m futures_bot.bot
 Restart=on-failure
 RestartSec=30
 Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
 
 # Load secrets from environment file
 EnvironmentFile=/root/MT5-PropFirm-Bot/.env

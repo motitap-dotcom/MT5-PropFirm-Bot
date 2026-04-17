@@ -50,6 +50,12 @@
 - `auto-merge-deploy.yml` has `paths-ignore: commands/**` so pushing ONLY `commands/run.sh` won't trigger it.
 - If you change code files + `commands/run.sh` in the same push, both workflows trigger and race.
 
+### 9. Proactively fix any issue that could harm bot operation.
+- When investigating a problem and a secondary issue is spotted (buggy script, missing config, inconsistency between scripts, wrong service file, missing PYTHONPATH, auth mismatch, silent failure path, etc.) — fix it immediately in the same session.
+- Don't just report it. Patch it. Don't wait for Noa to notice it later.
+- Applies to: scripts that contradict each other, workflows with missing safeguards, configs that could silently revert critical settings, missing PYTHONPATH in any service file, etc.
+- If the fix is destructive or risky — explain first and ask. Default to fixing.
+
 ---
 
 ## Architecture: How This Bot Works
