@@ -1,65 +1,44 @@
-=== Quick Check 2026-04-17 14:01 UTC ===
+=== Post-Fix Status 2026-04-17 14:26 UTC ===
 Service: activating
 PID: 0
+Uptime: Fri 2026-04-17 14:25:53 UTC
 
---- journalctl last 60 lines ---
-Apr 17 13:49:13 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 79.
-Apr 17 13:49:13 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 17 13:49:13 vmi3096165 python3[334586]: /usr/bin/python3: No module named futures_bot.bot
-Apr 17 13:49:13 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 17 13:49:13 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 17 13:50:13 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 80.
-Apr 17 13:50:13 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 17 13:50:13 vmi3096165 python3[334867]: /usr/bin/python3: No module named futures_bot.bot
-Apr 17 13:50:13 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 17 13:50:13 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 17 13:51:14 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 81.
-Apr 17 13:51:14 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 17 13:51:14 vmi3096165 python3[335060]: /usr/bin/python3: No module named futures_bot.bot
-Apr 17 13:51:14 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 17 13:51:14 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 17 13:52:14 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 82.
-Apr 17 13:52:14 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 17 13:52:14 vmi3096165 python3[335277]: /usr/bin/python3: No module named futures_bot.bot
-Apr 17 13:52:14 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 17 13:52:14 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 17 13:53:14 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 83.
-Apr 17 13:53:14 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 17 13:53:14 vmi3096165 python3[335444]: /usr/bin/python3: No module named futures_bot.bot
-Apr 17 13:53:14 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 17 13:53:14 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 17 13:54:14 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 84.
-Apr 17 13:54:14 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 17 13:54:14 vmi3096165 python3[335676]: /usr/bin/python3: No module named futures_bot.bot
-Apr 17 13:54:14 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 17 13:54:14 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 17 13:55:15 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 85.
-Apr 17 13:55:15 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 17 13:55:15 vmi3096165 python3[335950]: /usr/bin/python3: No module named futures_bot.bot
-Apr 17 13:55:15 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 17 13:55:15 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 17 13:56:15 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 86.
-Apr 17 13:56:15 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 17 13:56:15 vmi3096165 python3[336170]: /usr/bin/python3: No module named futures_bot.bot
-Apr 17 13:56:15 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 17 13:56:15 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 17 13:57:15 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 87.
-Apr 17 13:57:15 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 17 13:57:15 vmi3096165 python3[336342]: /usr/bin/python3: No module named futures_bot.bot
-Apr 17 13:57:15 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 17 13:57:15 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 17 13:58:15 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 88.
-Apr 17 13:58:15 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 17 13:58:15 vmi3096165 python3[336544]: /usr/bin/python3: No module named futures_bot.bot
-Apr 17 13:58:15 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 17 13:58:15 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 17 13:59:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 89.
-Apr 17 13:59:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 17 13:59:16 vmi3096165 python3[336743]: /usr/bin/python3: No module named futures_bot.bot
-Apr 17 13:59:16 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 17 13:59:16 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 17 14:00:16 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 90.
-Apr 17 14:00:16 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 17 14:00:16 vmi3096165 python3[337030]: /usr/bin/python3: No module named futures_bot.bot
-Apr 17 14:00:16 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 17 14:00:16 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+--- systemd service file (check PYTHONPATH) ---
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+Restart=on-failure
+RestartSec=60
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+
+[Install]
+WantedBy=multi-user.target
+
+--- journalctl last 20 lines ---
+Apr 17 14:22:53 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 3.
+Apr 17 14:22:53 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 17 14:22:53 vmi3096165 python3[343285]: /usr/bin/python3: No module named futures_bot.bot
+Apr 17 14:22:53 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 17 14:22:53 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 17 14:23:53 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 4.
+Apr 17 14:23:53 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 17 14:23:53 vmi3096165 python3[343432]: /usr/bin/python3: No module named futures_bot.bot
+Apr 17 14:23:53 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 17 14:23:53 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 17 14:24:53 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 5.
+Apr 17 14:24:53 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 17 14:24:53 vmi3096165 python3[343667]: /usr/bin/python3: No module named futures_bot.bot
+Apr 17 14:24:53 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 17 14:24:53 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 17 14:25:53 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 6.
+Apr 17 14:25:53 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 17 14:25:53 vmi3096165 python3[343939]: /usr/bin/python3: No module named futures_bot.bot
+Apr 17 14:25:53 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 17 14:25:53 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
