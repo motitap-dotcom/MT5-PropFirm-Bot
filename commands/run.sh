@@ -1,20 +1,23 @@
 #!/bin/bash
-# Trigger: check-code-exists
+# Trigger: systemd-env-check
 cd /root/MT5-PropFirm-Bot
-echo "=== Directory Check $(date -u '+%Y-%m-%d %H:%M UTC') ==="
-echo "--- Current branch ---"
-git branch --show-current
-git log -1 --oneline
+echo "=== Systemd Env Check $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo ""
-echo "--- Top-level files ---"
-ls -la /root/MT5-PropFirm-Bot/ | head -30
+echo "--- systemctl cat (what systemd sees) ---"
+systemctl cat futures-bot 2>&1
 echo ""
-echo "--- futures_bot dir ---"
-ls -la /root/MT5-PropFirm-Bot/futures_bot/ 2>&1 | head -20
+echo "--- Effective environment systemd passes to service ---"
+systemctl show futures-bot --property=Environment --value
+systemctl show futures-bot --property=EnvironmentFiles --value
 echo ""
-echo "--- Test import manually ---"
+echo "--- .env content (masked) ---"
+cat .env 2>&1 | sed 's/\(=.\{1,5\}\).*/\1***/' || echo "No .env"
+echo ""
+echo "--- Try exact systemd command manually ---"
 cd /root/MT5-PropFirm-Bot
-PYTHONPATH=/root/MT5-PropFirm-Bot /usr/bin/python3 -c "import futures_bot.bot; print('OK')" 2>&1
-echo ""
-echo "--- Find any bot.py ---"
-find /root/MT5-PropFirm-Bot -name "bot.py" -not -path "*/\.*" 2>/dev/null
+set -a
+. /root/MT5-PropFirm-Bot/.env 2>/dev/null
+set +a
+export PYTHONPATH=/root/MT5-PropFirm-Bot
+export PYTHONUNBUFFERED=1
+timeout 5 /usr/bin/python3 -m futures_bot.bot 2>&1 | head -30 || echo "[exit: $?]"
