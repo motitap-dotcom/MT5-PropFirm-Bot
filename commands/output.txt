@@ -1,8 +1,8 @@
-=== Trades Status 2026-04-17 13:39 UTC ===
+=== Trades Status 2026-04-17 13:41 UTC ===
 Service: activating
 PID: 0
-Uptime: Fri 2026-04-17 13:39:11 UTC
-Code: 9f14732 Check trades status
+Uptime: Fri 2026-04-17 13:41:11 UTC
+Code: e8b7ceb Re-check trades status
 
 --- status.json ---
 {
@@ -14,7 +14,17 @@ Code: 9f14732 Check trades status
   "risk": {}
 }
 
---- Last 40 log lines ---
+--- Last 50 log lines ---
+2026-04-17 05:42:53,809 [bot] INFO: Outside session: Pre-market: 01:42 ET (opens 09:30:00)
+2026-04-17 05:43:23,832 [bot] INFO: Outside session: Pre-market: 01:43 ET (opens 09:30:00)
+2026-04-17 05:43:53,862 [bot] INFO: Outside session: Pre-market: 01:43 ET (opens 09:30:00)
+2026-04-17 05:44:23,890 [bot] INFO: Outside session: Pre-market: 01:44 ET (opens 09:30:00)
+2026-04-17 05:44:53,912 [bot] INFO: Outside session: Pre-market: 01:44 ET (opens 09:30:00)
+2026-04-17 05:45:23,915 [bot] INFO: Outside session: Pre-market: 01:45 ET (opens 09:30:00)
+2026-04-17 05:45:53,945 [bot] INFO: Outside session: Pre-market: 01:45 ET (opens 09:30:00)
+2026-04-17 05:46:23,946 [bot] INFO: Outside session: Pre-market: 01:46 ET (opens 09:30:00)
+2026-04-17 05:46:53,972 [bot] INFO: Outside session: Pre-market: 01:46 ET (opens 09:30:00)
+2026-04-17 05:47:24,001 [bot] INFO: Outside session: Pre-market: 01:47 ET (opens 09:30:00)
 2026-04-17 05:47:54,004 [tradovate_client] INFO: Token expiring in 60min, renewing...
 2026-04-17 05:47:54,163 [tradovate_client] INFO: Token renewed successfully
 2026-04-17 05:47:54,164 [bot] INFO: Outside session: Pre-market: 01:47 ET (opens 09:30:00)
@@ -56,7 +66,17 @@ Code: 9f14732 Check trades status
 2026-04-17 06:05:17,850 [tradovate_client] INFO: Disconnected from Tradovate
 2026-04-17 06:05:17,850 [bot] INFO: Bot stopped
 
---- Trade/Position mentions in recent log ---
+--- Trade/Position mentions (last 30) ---
+2026-04-16 22:32:11,290 [tradovate_client] INFO: Cancelled order 472310961535
+2026-04-16 22:33:13,970 [tradovate_client] INFO: Cancelled order 472310961568
+2026-04-16 22:33:14,087 [tradovate_client] INFO: Cancelled order 472310961553
+2026-04-16 22:33:14,204 [tradovate_client] INFO: Cancelled order 472310961550
+2026-04-16 22:33:14,319 [tradovate_client] INFO: Cancelled order 472310961556
+2026-04-16 22:33:14,435 [tradovate_client] INFO: Cancelled order 472310961616
+2026-04-16 22:33:14,551 [tradovate_client] INFO: Cancelled order 472310961544
+2026-04-16 22:33:14,667 [tradovate_client] INFO: Cancelled order 472310961574
+2026-04-16 22:33:14,782 [tradovate_client] INFO: Cancelled order 472310961605
+2026-04-16 22:33:14,929 [tradovate_client] INFO: Cancelled order 472310961571
 2026-04-16 22:33:15,045 [tradovate_client] INFO: Cancelled order 472310961547
 2026-04-16 22:33:15,161 [tradovate_client] INFO: Cancelled order 472310961565
 2026-04-16 22:33:15,277 [tradovate_client] INFO: Cancelled order 472310961535
