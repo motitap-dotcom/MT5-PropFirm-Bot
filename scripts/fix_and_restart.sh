@@ -1,4 +1,5 @@
 #!/bin/bash
+# Trigger: fix-pythonpath 2026-04-17
 echo "=== Fix & Restart ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
