@@ -72,12 +72,17 @@ class Guardian:
         self.daily_history: list[DailyPnL] = []
         self.trading_days: int = 0
         self.reason: str = ""
+        self._day_start_balance: float = None
 
     def update_balance(self, current_balance: float, unrealized_pnl: float = 0.0):
         """Update current balance and check all rules."""
         self.current_balance = current_balance
         effective_balance = current_balance + unrealized_pnl
         self.total_pnl = effective_balance - self.initial_balance
+
+        if self._day_start_balance is None:
+            self._day_start_balance = current_balance
+        self.daily_pnl = effective_balance - self._day_start_balance
 
         dd_used = self.initial_balance - effective_balance
         dd_pct = dd_used / self.max_drawdown if self.max_drawdown > 0 else 0
@@ -134,11 +139,13 @@ class Guardian:
 
         return True, "OK"
 
-    def record_trade(self, pnl: float):
-        """Record a completed trade's PnL."""
-        self.daily_pnl += pnl
+    def record_trade_opened(self):
+        """Record that a new trade was executed."""
         self.daily_trades += 1
-        self.total_pnl += pnl
+
+    def record_trade(self, pnl: float):
+        """Record a completed trade's PnL for logging."""
+        logger.info(f"Trade closed with PnL: ${pnl:.2f}")
 
     def start_new_day(self, date_str: str):
         """Reset daily counters for a new trading day."""
@@ -150,6 +157,7 @@ class Guardian:
             ))
             self.trading_days += 1
 
+        self._day_start_balance = self.current_balance
         self.daily_pnl = 0.0
         self.daily_trades = 0
 

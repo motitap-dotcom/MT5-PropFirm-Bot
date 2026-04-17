@@ -84,6 +84,7 @@ class FuturesBot:
         self.timeframe: str = self.config.get("timeframe", "5min")
         self.current_day: str = ""
         self.positions: list = []
+        self._flattened_today: bool = False
 
     def _load_config(self, path: str) -> dict:
         """Load bot configuration."""
@@ -197,9 +198,11 @@ class FuturesBot:
                 if today != self.current_day:
                     await self._handle_new_day(today)
 
-                # Check if we must flatten (end of day)
+                # Check if we must flatten (end of day) - only once per day
                 if self.risk_mgr.must_flatten():
-                    await self._flatten_all("End of day flatten")
+                    if not self._flattened_today:
+                        await self._flatten_all("End of day flatten")
+                        self._flattened_today = True
                     await asyncio.sleep(60)
                     continue
 
@@ -245,10 +248,12 @@ class FuturesBot:
                 # Sync positions and detect closed trades
                 try:
                     positions = await self.client.get_positions()
-                    actual_open = sum(1 for p in positions if p.get("netPos", 0) != 0)
+                    active_positions = [p for p in positions if p.get("netPos", 0) != 0]
+                    actual_open = len(active_positions)
                     if actual_open != self.risk_mgr.open_positions:
                         logger.info(f"Position sync: {self.risk_mgr.open_positions} -> {actual_open}")
                         self.risk_mgr.open_positions = actual_open
+                    self.positions = active_positions
 
                     # Detect closed trades via fills
                     fills = await self.client.get_fills()
@@ -425,6 +430,7 @@ class FuturesBot:
 
             self.risk_mgr.open_positions += 1
             self.risk_mgr.open_contracts += contracts
+            self.guardian.record_trade_opened()
 
         except Exception as e:
             logger.error(f"Failed to execute trade: {e}")
@@ -457,15 +463,12 @@ class FuturesBot:
             pnl = fill.get("pnl", 0)
 
             if pnl != 0:
-                # This is a closing fill (has PnL)
-                self.guardian.record_trade(pnl)
                 is_win = pnl > 0
 
-                # Record result in strategies
+                # Record win/loss in strategies (for consecutive loss counter)
                 for sym in self.symbols:
                     self.vwap_strategies[sym].record_trade_result(is_win)
 
-                contract_id = fill.get("contractId", "")
                 logger.info(f"FILL: {action} {qty} @ {price:.2f} PnL=${pnl:.2f}")
 
                 await self.notifier.trade_closed(
@@ -533,6 +536,7 @@ class FuturesBot:
     async def _handle_new_day(self, today: str):
         """Handle the start of a new trading day."""
         logger.info(f"New trading day: {today}")
+        self._flattened_today = False
 
         # End previous day
         if self.current_day:
