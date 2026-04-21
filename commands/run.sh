@@ -1,10 +1,11 @@
 #!/bin/bash
 cd /root/MT5-PropFirm-Bot
-echo "=== Quick Status $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== Status $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo "Service: $(systemctl is-active futures-bot)"
-echo "Enabled: $(systemctl is-enabled futures-bot 2>/dev/null)"
-echo "Code: $(git log -1 --oneline)"
-echo "start_bot.sh: $(ls -la scripts/start_bot.sh 2>/dev/null || echo 'MISSING')"
+echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
 echo ""
-echo "--- Journal last 6 ---"
-journalctl -u futures-bot --no-pager -n 6
+echo "--- Status JSON ---"
+cat status/status.json 2>/dev/null || echo "No status.json"
+echo ""
+echo "--- Last 30 log lines ---"
+tail -30 logs/bot.log 2>/dev/null
