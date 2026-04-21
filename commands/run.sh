@@ -1,11 +1,12 @@
 #!/bin/bash
 cd /root/MT5-PropFirm-Bot
-echo "=== Status $(date -u '+%Y-%m-%d %H:%M UTC') ==="
-echo "Service: $(systemctl is-active futures-bot)"
-echo "Uptime since: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
+echo "=== Deep Check $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo ""
+echo "--- Config symbols ---"
+python3 -c "import json; c=json.load(open('configs/bot_config.json')); print('symbols:', c.get('symbols')); v=c.get('vwap',{}); print('rsi_oversold:', v.get('rsi_oversold')); print('rsi_overbought:', v.get('rsi_overbought')); print('min_atr:', v.get('min_atr')); print('max_atr:', v.get('max_atr'))"
+echo ""
+echo "--- Last 25 log lines ---"
+tail -25 logs/bot.log 2>/dev/null
 echo ""
 echo "--- Status JSON ---"
-cat status/status.json 2>/dev/null || echo "No status.json yet"
-echo ""
-echo "--- Last 15 log lines ---"
-tail -15 logs/bot.log 2>/dev/null
+cat status/status.json 2>/dev/null | python3 -m json.tool 2>/dev/null || cat status/status.json 2>/dev/null
