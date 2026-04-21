@@ -64,6 +64,8 @@ class VWAPMeanReversion:
         self.rsi_period: int = config.get("rsi_period", 14)
         self.rsi_oversold: float = config.get("rsi_oversold", 35)
         self.rsi_overbought: float = config.get("rsi_overbought", 65)
+        self.rsi_extreme_oversold: float = config.get("rsi_extreme_oversold", 20)
+        self.rsi_extreme_overbought: float = config.get("rsi_extreme_overbought", 80)
         self.max_consecutive_losses: int = config.get("max_consecutive_losses", 3)
         self.min_atr: float = config.get("min_atr", 2.0)  # MES points
         self.max_atr: float = config.get("max_atr", 8.0)
@@ -125,13 +127,17 @@ class VWAPMeanReversion:
            (prev.close > vwap_data.vwap and current.close < vwap_data.vwap):
             self._vwap_crossed = True
 
-        # LONG signal
+        # LONG signal — skip candle filter if RSI is extreme (< rsi_extreme_oversold)
         if (current.low <= vwap_data.lower_1sd and
                 rsi < self.rsi_oversold and
-                current.close > current.open):  # Bullish candle
+                (current.close > current.open or rsi < self.rsi_extreme_oversold)):
             sl = vwap_data.lower_2sd - 2  # 2 points below -2SD
             tp1 = vwap_data.vwap
             tp2 = vwap_data.upper_1sd
+            logger.info(
+                f">>> LONG SIGNAL: dist={((current.close - vwap_data.vwap) / max((vwap_data.vwap - vwap_data.lower_1sd), 0.01)):.2f}SD "
+                f"RSI={rsi:.1f} entry={current.close} sl={sl:.2f} tp1={tp1:.2f} tp2={tp2:.2f}"
+            )
             return TradeSetup(
                 signal=Signal.LONG,
                 entry_price=current.close,
@@ -140,13 +146,16 @@ class VWAPMeanReversion:
                 take_profit_2=tp2,
             )
 
-        # SHORT signal
+        # SHORT signal — skip candle filter if RSI is extreme (> rsi_extreme_overbought)
         if (current.high >= vwap_data.upper_1sd and
                 rsi > self.rsi_overbought and
-                current.close < current.open):  # Bearish candle
+                (current.close < current.open or rsi > self.rsi_extreme_overbought)):
             sl = vwap_data.upper_2sd + 2
             tp1 = vwap_data.vwap
             tp2 = vwap_data.lower_1sd
+            logger.info(
+                f">>> SHORT SIGNAL: RSI={rsi:.1f} entry={current.close} sl={sl:.2f} tp1={tp1:.2f} tp2={tp2:.2f}"
+            )
             return TradeSetup(
                 signal=Signal.SHORT,
                 entry_price=current.close,
