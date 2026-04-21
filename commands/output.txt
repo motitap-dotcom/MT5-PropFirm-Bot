@@ -1,6 +1,5 @@
-=== Status 2026-04-21 14:33 UTC ===
+=== Status 2026-04-21 14:45 UTC ===
 Service: active
-PID: 10285
 
 --- Status JSON ---
 {
@@ -12,7 +11,9 @@ PID: 10285
   "risk": {}
 }
 
---- Last 30 log lines ---
+--- Last 40 log lines ---
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7160.50 VWAP=7171.34 dist=-2.00SD RSI=31.7 ATR=5.20
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7161.25 VWAP=7171.12 dist=-1.79SD RSI=33.7 ATR=5.18
 2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7162.00 VWAP=7170.96 dist=-1.60SD RSI=30.3 ATR=5.09
 2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7161.25 VWAP=7170.49 dist=-1.57SD RSI=34.1 ATR=5.23
 2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7162.50 VWAP=7170.17 dist=-1.28SD RSI=42.6 ATR=5.00
@@ -43,3 +44,11 @@ PID: 10285
 2026-04-21 14:32:28,949 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
 2026-04-21 14:32:33,980 [bot] INFO: MESM6: New bar 2026-04-21T14:30Z | O=7165.5 H=7167.75 L=7163.0 C=7163.5 V=6757
 2026-04-21 14:32:33,980 [strategy.vwap] INFO: Price=7163.50 VWAP=7164.41 dist=-0.12SD RSI=52.4 ATR=6.29
+2026-04-21 14:37:34,001 [bot] INFO: === Trading cycle 10:37 ET | Guardian: ACTIVE ===
+2026-04-21 14:37:35,003 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-21 14:37:39,333 [bot] INFO: MESM6: New bar 2026-04-21T14:35Z | O=7161.5 H=7162.75 L=7160.0 C=7161.0 V=4313
+2026-04-21 14:37:39,334 [strategy.vwap] INFO: Price=7161.00 VWAP=7164.36 dist=-0.44SD RSI=48.5 ATR=6.32
+2026-04-21 14:42:39,364 [bot] INFO: === Trading cycle 10:42 ET | Guardian: ACTIVE ===
+2026-04-21 14:42:40,391 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-21 14:42:48,237 [bot] INFO: MESM6: New bar 2026-04-21T14:40Z | O=7159.0 H=7165.0 L=7156.75 C=7159.75 V=13633
+2026-04-21 14:42:48,238 [strategy.vwap] INFO: Price=7159.75 VWAP=7164.18 dist=-0.60SD RSI=57.7 ATR=5.93
