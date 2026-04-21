@@ -1,172 +1,18 @@
-=== Full Trade Diagnosis 2026-04-21 14:00 UTC ===
+=== Post-Deploy Check 2026-04-21 14:08 UTC ===
 
---- Service Status ---
+--- Service ---
 activating
-0
-activating
-auto-restart
+enabled
+PID: 0
 
---- Config ---
-{
-  "symbols": ["MESM6", "MNQM6", "MCLM6", "MGCM6", "MYMM6", "M2KM6"],
-  "timeframe": "5min",
-  "live": false,
-  "organization": "",
-  "telegram_enabled": true,
+--- Service File ExecStart ---
+ExecStart=/bin/bash /root/MT5-PropFirm-Bot/scripts/start_bot.sh
+Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
 
-  "guardian": {
-    "initial_balance": 50000.0,
-    "max_drawdown": 2000.0,
-    "profit_target": 3000.0,
-    "min_trading_days": 5,
-    "consistency_pct": 0.30,
-    "max_contracts": 5,
-    "max_micro_contracts": 50,
-    "dd_warning_pct": 0.60,
-    "dd_critical_pct": 0.80,
-    "dd_emergency_pct": 0.90,
-    "max_daily_loss": 400.0,
-    "max_daily_profit": 900.0,
-    "max_daily_trades": 10
-  },
+--- Code ---
+c3d9612 Post-deploy status check
 
-  "risk": {
-    "max_risk_per_trade": 150.0,
-    "max_risk_pct": 0.003,
-    "max_positions": 3,
-    "max_contracts_per_trade": 5,
-    "reduce_in_dead_zone": true
-  },
-
-  "vwap_per_symbol": {
-    "MES": {"min_atr": 2.0, "max_atr": 8.0},
-    "MNQ": {"min_atr": 10.0, "max_atr": 50.0},
-    "MCL": {"min_atr": 0.05, "max_atr": 0.30},
-    "MGC": {"min_atr": 1.0, "max_atr": 6.0},
-    "MYM": {"min_atr": 20.0, "max_atr": 80.0},
-    "M2K": {"min_atr": 2.0, "max_atr": 10.0}
-  },
-
-  "vwap": {
-    "rsi_period": 14,
-    "rsi_oversold": 35,
-    "rsi_overbought": 65,
-    "max_consecutive_losses": 3,
-    "min_atr": 2.0,
-    "max_atr": 8.0,
-    "atr_period": 14
-  },
-
-  "orb_per_symbol": {
-    "MES": {"max_range_points": 15.0, "min_range_points": 3.0, "buffer_ticks": 2.0},
-    "MNQ": {"max_range_points": 60.0, "min_range_points": 10.0, "buffer_ticks": 5.0},
-    "MCL": {"max_range_points": 0.50, "min_range_points": 0.05, "buffer_ticks": 0.03},
-    "MGC": {"max_range_points": 10.0, "min_range_points": 1.0, "buffer_ticks": 0.5},
-    "MYM": {"max_range_points": 100.0, "min_range_points": 20.0, "buffer_ticks": 10.0},
-    "M2K": {"max_range_points": 15.0, "min_range_points": 3.0, "buffer_ticks": 2.0}
-  },
-
-  "orb": {
-    "buffer_ticks": 2.0,
-    "tp_multiplier": 1.5,
-    "max_range_points": 15.0,
-    "min_range_points": 3.0,
-    "volume_threshold": 1.2,
-    "max_trades": 2
-  }
-}
-
---- Status JSON ---
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
-
---- Full Log (last 100 lines) ---
-2026-04-21 07:56:12,129 [bot] INFO: Outside session: Pre-market: 03:56 ET (opens 09:30:00)
-2026-04-21 07:56:42,148 [bot] INFO: Outside session: Pre-market: 03:56 ET (opens 09:30:00)
-2026-04-21 07:57:12,166 [bot] INFO: Outside session: Pre-market: 03:57 ET (opens 09:30:00)
-2026-04-21 07:57:42,168 [bot] INFO: Outside session: Pre-market: 03:57 ET (opens 09:30:00)
-2026-04-21 07:58:12,184 [bot] INFO: Outside session: Pre-market: 03:58 ET (opens 09:30:00)
-2026-04-21 07:58:42,187 [bot] INFO: Outside session: Pre-market: 03:58 ET (opens 09:30:00)
-2026-04-21 07:59:12,194 [bot] INFO: Outside session: Pre-market: 03:59 ET (opens 09:30:00)
-2026-04-21 07:59:42,196 [bot] INFO: Outside session: Pre-market: 03:59 ET (opens 09:30:00)
-2026-04-21 08:00:12,213 [bot] INFO: Outside session: Pre-market: 04:00 ET (opens 09:30:00)
-2026-04-21 08:00:42,231 [bot] INFO: Outside session: Pre-market: 04:00 ET (opens 09:30:00)
-2026-04-21 08:01:12,250 [bot] INFO: Outside session: Pre-market: 04:01 ET (opens 09:30:00)
-2026-04-21 08:01:42,251 [bot] INFO: Outside session: Pre-market: 04:01 ET (opens 09:30:00)
-2026-04-21 08:02:12,269 [bot] INFO: Outside session: Pre-market: 04:02 ET (opens 09:30:00)
-2026-04-21 08:02:42,286 [bot] INFO: Outside session: Pre-market: 04:02 ET (opens 09:30:00)
-2026-04-21 08:03:12,300 [bot] INFO: Outside session: Pre-market: 04:03 ET (opens 09:30:00)
-2026-04-21 08:03:42,317 [bot] INFO: Outside session: Pre-market: 04:03 ET (opens 09:30:00)
-2026-04-21 08:04:12,330 [bot] INFO: Outside session: Pre-market: 04:04 ET (opens 09:30:00)
-2026-04-21 08:04:42,336 [bot] INFO: Outside session: Pre-market: 04:04 ET (opens 09:30:00)
-2026-04-21 08:05:12,355 [bot] INFO: Outside session: Pre-market: 04:05 ET (opens 09:30:00)
-2026-04-21 08:05:42,359 [bot] INFO: Outside session: Pre-market: 04:05 ET (opens 09:30:00)
-2026-04-21 08:06:12,378 [bot] INFO: Outside session: Pre-market: 04:06 ET (opens 09:30:00)
-2026-04-21 08:06:42,385 [bot] INFO: Outside session: Pre-market: 04:06 ET (opens 09:30:00)
-2026-04-21 08:07:12,404 [bot] INFO: Outside session: Pre-market: 04:07 ET (opens 09:30:00)
-2026-04-21 08:07:42,419 [bot] INFO: Outside session: Pre-market: 04:07 ET (opens 09:30:00)
-2026-04-21 08:08:12,438 [bot] INFO: Outside session: Pre-market: 04:08 ET (opens 09:30:00)
-2026-04-21 08:08:42,447 [bot] INFO: Outside session: Pre-market: 04:08 ET (opens 09:30:00)
-2026-04-21 08:09:12,451 [bot] INFO: Outside session: Pre-market: 04:09 ET (opens 09:30:00)
-2026-04-21 08:09:42,455 [bot] INFO: Outside session: Pre-market: 04:09 ET (opens 09:30:00)
-2026-04-21 08:10:12,465 [bot] INFO: Outside session: Pre-market: 04:10 ET (opens 09:30:00)
-2026-04-21 08:10:42,481 [bot] INFO: Outside session: Pre-market: 04:10 ET (opens 09:30:00)
-2026-04-21 08:11:12,492 [bot] INFO: Outside session: Pre-market: 04:11 ET (opens 09:30:00)
-2026-04-21 08:11:42,498 [bot] INFO: Outside session: Pre-market: 04:11 ET (opens 09:30:00)
-2026-04-21 08:12:12,516 [bot] INFO: Outside session: Pre-market: 04:12 ET (opens 09:30:00)
-2026-04-21 08:12:42,523 [bot] INFO: Outside session: Pre-market: 04:12 ET (opens 09:30:00)
-2026-04-21 08:13:12,542 [bot] INFO: Outside session: Pre-market: 04:13 ET (opens 09:30:00)
-2026-04-21 08:13:42,559 [bot] INFO: Outside session: Pre-market: 04:13 ET (opens 09:30:00)
-2026-04-21 08:14:12,577 [bot] INFO: Outside session: Pre-market: 04:14 ET (opens 09:30:00)
-2026-04-21 08:14:42,595 [bot] INFO: Outside session: Pre-market: 04:14 ET (opens 09:30:00)
-2026-04-21 08:15:12,605 [bot] INFO: Outside session: Pre-market: 04:15 ET (opens 09:30:00)
-2026-04-21 08:15:42,616 [bot] INFO: Outside session: Pre-market: 04:15 ET (opens 09:30:00)
-2026-04-21 08:16:12,628 [bot] INFO: Outside session: Pre-market: 04:16 ET (opens 09:30:00)
-2026-04-21 08:16:42,648 [bot] INFO: Outside session: Pre-market: 04:16 ET (opens 09:30:00)
-2026-04-21 08:17:12,665 [bot] INFO: Outside session: Pre-market: 04:17 ET (opens 09:30:00)
-2026-04-21 08:17:42,670 [bot] INFO: Outside session: Pre-market: 04:17 ET (opens 09:30:00)
-2026-04-21 08:18:12,688 [bot] INFO: Outside session: Pre-market: 04:18 ET (opens 09:30:00)
-2026-04-21 08:18:42,708 [bot] INFO: Outside session: Pre-market: 04:18 ET (opens 09:30:00)
-2026-04-21 08:19:12,722 [bot] INFO: Outside session: Pre-market: 04:19 ET (opens 09:30:00)
-2026-04-21 08:19:42,740 [bot] INFO: Outside session: Pre-market: 04:19 ET (opens 09:30:00)
-2026-04-21 08:20:12,757 [bot] INFO: Outside session: Pre-market: 04:20 ET (opens 09:30:00)
-2026-04-21 08:20:42,769 [bot] INFO: Outside session: Pre-market: 04:20 ET (opens 09:30:00)
-2026-04-21 08:21:12,784 [bot] INFO: Outside session: Pre-market: 04:21 ET (opens 09:30:00)
-2026-04-21 08:21:42,803 [bot] INFO: Outside session: Pre-market: 04:21 ET (opens 09:30:00)
-2026-04-21 08:22:12,814 [bot] INFO: Outside session: Pre-market: 04:22 ET (opens 09:30:00)
-2026-04-21 08:22:42,825 [bot] INFO: Outside session: Pre-market: 04:22 ET (opens 09:30:00)
-2026-04-21 08:23:12,835 [bot] INFO: Outside session: Pre-market: 04:23 ET (opens 09:30:00)
-2026-04-21 08:23:42,853 [bot] INFO: Outside session: Pre-market: 04:23 ET (opens 09:30:00)
-2026-04-21 08:24:12,872 [bot] INFO: Outside session: Pre-market: 04:24 ET (opens 09:30:00)
-2026-04-21 08:24:42,891 [bot] INFO: Outside session: Pre-market: 04:24 ET (opens 09:30:00)
-2026-04-21 08:25:12,898 [bot] INFO: Outside session: Pre-market: 04:25 ET (opens 09:30:00)
-2026-04-21 08:25:42,903 [bot] INFO: Outside session: Pre-market: 04:25 ET (opens 09:30:00)
-2026-04-21 08:26:12,922 [bot] INFO: Outside session: Pre-market: 04:26 ET (opens 09:30:00)
-2026-04-21 08:26:42,932 [bot] INFO: Outside session: Pre-market: 04:26 ET (opens 09:30:00)
-2026-04-21 08:27:12,941 [bot] INFO: Outside session: Pre-market: 04:27 ET (opens 09:30:00)
-2026-04-21 08:27:42,960 [bot] INFO: Outside session: Pre-market: 04:27 ET (opens 09:30:00)
-2026-04-21 08:28:12,969 [bot] INFO: Outside session: Pre-market: 04:28 ET (opens 09:30:00)
-2026-04-21 08:28:42,988 [bot] INFO: Outside session: Pre-market: 04:28 ET (opens 09:30:00)
-2026-04-21 08:29:12,995 [bot] INFO: Outside session: Pre-market: 04:29 ET (opens 09:30:00)
-2026-04-21 08:29:43,011 [bot] INFO: Outside session: Pre-market: 04:29 ET (opens 09:30:00)
-2026-04-21 08:30:13,027 [bot] INFO: Outside session: Pre-market: 04:30 ET (opens 09:30:00)
-2026-04-21 08:30:43,033 [bot] INFO: Outside session: Pre-market: 04:30 ET (opens 09:30:00)
-2026-04-21 08:31:13,051 [bot] INFO: Outside session: Pre-market: 04:31 ET (opens 09:30:00)
-2026-04-21 08:31:43,069 [bot] INFO: Outside session: Pre-market: 04:31 ET (opens 09:30:00)
-2026-04-21 08:32:13,070 [bot] INFO: Outside session: Pre-market: 04:32 ET (opens 09:30:00)
-2026-04-21 08:32:43,087 [bot] INFO: Outside session: Pre-market: 04:32 ET (opens 09:30:00)
-2026-04-21 08:33:13,106 [bot] INFO: Outside session: Pre-market: 04:33 ET (opens 09:30:00)
-2026-04-21 08:33:43,112 [bot] INFO: Outside session: Pre-market: 04:33 ET (opens 09:30:00)
-2026-04-21 08:34:13,117 [bot] INFO: Outside session: Pre-market: 04:34 ET (opens 09:30:00)
-2026-04-21 08:34:43,135 [bot] INFO: Outside session: Pre-market: 04:34 ET (opens 09:30:00)
-2026-04-21 08:35:13,142 [bot] INFO: Outside session: Pre-market: 04:35 ET (opens 09:30:00)
-2026-04-21 08:35:43,162 [bot] INFO: Outside session: Pre-market: 04:35 ET (opens 09:30:00)
+--- Last 20 log lines ---
 2026-04-21 08:36:13,179 [bot] INFO: Outside session: Pre-market: 04:36 ET (opens 09:30:00)
 2026-04-21 08:36:43,196 [bot] INFO: Outside session: Pre-market: 04:36 ET (opens 09:30:00)
 2026-04-21 08:37:13,211 [bot] INFO: Outside session: Pre-market: 04:37 ET (opens 09:30:00)
@@ -188,34 +34,14 @@ auto-restart
 2026-04-21 08:45:13,394 [bot] INFO: Outside session: Pre-market: 04:45 ET (opens 09:30:00)
 2026-04-21 08:45:43,409 [bot] INFO: Outside session: Pre-market: 04:45 ET (opens 09:30:00)
 
---- Journal (last 30 lines) ---
-Apr 21 13:57:59 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 34.
-Apr 21 13:57:59 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 21 13:57:59 vmi3096165 bash[6471]: /usr/bin/python3: No module named futures_bot.bot
-Apr 21 13:57:59 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 21 13:57:59 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 21 13:58:30 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 35.
-Apr 21 13:58:30 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 21 13:58:30 vmi3096165 bash[6592]: /usr/bin/python3: No module named futures_bot.bot
-Apr 21 13:58:30 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 21 13:58:30 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 21 13:59:00 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 36.
-Apr 21 13:59:00 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 21 13:59:00 vmi3096165 bash[6692]: /usr/bin/python3: No module named futures_bot.bot
-Apr 21 13:59:00 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 21 13:59:00 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 21 13:59:30 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 37.
-Apr 21 13:59:30 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 21 13:59:30 vmi3096165 bash[6788]: /usr/bin/python3: No module named futures_bot.bot
-Apr 21 13:59:30 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 21 13:59:30 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 21 14:00:00 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 38.
-Apr 21 14:00:00 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 21 14:00:00 vmi3096165 bash[6878]: /usr/bin/python3: No module named futures_bot.bot
-Apr 21 14:00:00 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 21 14:00:00 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 21 14:00:31 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 39.
-Apr 21 14:00:31 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 21 14:00:31 vmi3096165 bash[7105]: /usr/bin/python3: No module named futures_bot.bot
-Apr 21 14:00:31 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 21 14:00:31 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+--- Journal (last 10) ---
+Apr 21 14:08:09 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
+Apr 21 14:08:09 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 21 14:08:09 vmi3096165 bash[9190]: /bin/bash: /root/MT5-PropFirm-Bot/scripts/start_bot.sh: No such file or directory
+Apr 21 14:08:09 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=127/n/a
+Apr 21 14:08:09 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 21 14:08:39 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
+Apr 21 14:08:39 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 21 14:08:39 vmi3096165 bash[9356]: /bin/bash: /root/MT5-PropFirm-Bot/scripts/start_bot.sh: No such file or directory
+Apr 21 14:08:39 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=127/n/a
+Apr 21 14:08:39 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
