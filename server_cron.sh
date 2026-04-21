@@ -69,9 +69,45 @@ if ! systemctl is-active --quiet "$SERVICE" 2>/dev/null; then
     fi
 
     if [ "$RECENT_RESTARTS" -ge 5 ]; then
-        echo "[$(date)] CRASH LOOP: $RECENT_RESTARTS restarts in 30 min. Skipping."
+        # Crash loop — check if it's the known PYTHONPATH error and self-heal
+        LAST_ERROR=$(journalctl -u "$SERVICE" --no-pager -n 5 2>/dev/null | grep -o "No module named.*" | head -1)
+        if echo "$LAST_ERROR" | grep -q "No module named"; then
+            echo "[$(date)] PYTHONPATH crash loop detected ('$LAST_ERROR') — self-healing service file..."
+            chmod +x "$BOT_DIR/scripts/start_bot.sh" 2>/dev/null || true
+            cat > /etc/systemd/system/${SERVICE}.service << SVCEOF
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=$BOT_DIR
+ExecStart=/bin/bash $BOT_DIR/scripts/start_bot.sh
+Restart=on-failure
+RestartSec=30
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=$BOT_DIR
+EnvironmentFile=$BOT_DIR/.env
+
+[Install]
+WantedBy=multi-user.target
+SVCEOF
+            systemctl daemon-reload
+            systemctl enable "$SERVICE" 2>/dev/null
+            systemctl reset-failed "$SERVICE" 2>/dev/null
+            systemctl restart "$SERVICE" 2>/dev/null
+            sleep 5
+            if systemctl is-active --quiet "$SERVICE" 2>/dev/null; then
+                echo "[$(date)] Self-heal SUCCEEDED."
+            else
+                echo "[$(date)] Self-heal FAILED — manual intervention needed."
+            fi
+        else
+            echo "[$(date)] CRASH LOOP: $RECENT_RESTARTS restarts in 30 min. Skipping."
+        fi
     else
         echo "[$(date)] Bot is DOWN (restart #$RECENT_RESTARTS) — auto-restarting..."
+        systemctl reset-failed "$SERVICE" 2>/dev/null
         systemctl restart "$SERVICE" 2>/dev/null
         sleep 5
         if systemctl is-active --quiet "$SERVICE" 2>/dev/null; then
