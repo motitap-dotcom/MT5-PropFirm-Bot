@@ -1,47 +1,45 @@
-=== Post-Deploy Check 2026-04-21 14:08 UTC ===
+=== Status 2026-04-21 14:33 UTC ===
+Service: active
+PID: 10285
 
---- Service ---
-activating
-enabled
-PID: 0
+--- Status JSON ---
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
 
---- Service File ExecStart ---
-ExecStart=/bin/bash /root/MT5-PropFirm-Bot/scripts/start_bot.sh
-Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
-
---- Code ---
-c3d9612 Post-deploy status check
-
---- Last 20 log lines ---
-2026-04-21 08:36:13,179 [bot] INFO: Outside session: Pre-market: 04:36 ET (opens 09:30:00)
-2026-04-21 08:36:43,196 [bot] INFO: Outside session: Pre-market: 04:36 ET (opens 09:30:00)
-2026-04-21 08:37:13,211 [bot] INFO: Outside session: Pre-market: 04:37 ET (opens 09:30:00)
-2026-04-21 08:37:43,215 [bot] INFO: Outside session: Pre-market: 04:37 ET (opens 09:30:00)
-2026-04-21 08:38:13,230 [bot] INFO: Outside session: Pre-market: 04:38 ET (opens 09:30:00)
-2026-04-21 08:38:43,232 [bot] INFO: Outside session: Pre-market: 04:38 ET (opens 09:30:00)
-2026-04-21 08:39:13,251 [bot] INFO: Outside session: Pre-market: 04:39 ET (opens 09:30:00)
-2026-04-21 08:39:43,270 [bot] INFO: Outside session: Pre-market: 04:39 ET (opens 09:30:00)
-2026-04-21 08:40:13,271 [bot] INFO: Outside session: Pre-market: 04:40 ET (opens 09:30:00)
-2026-04-21 08:40:43,288 [bot] INFO: Outside session: Pre-market: 04:40 ET (opens 09:30:00)
-2026-04-21 08:41:13,293 [bot] INFO: Outside session: Pre-market: 04:41 ET (opens 09:30:00)
-2026-04-21 08:41:43,309 [bot] INFO: Outside session: Pre-market: 04:41 ET (opens 09:30:00)
-2026-04-21 08:42:13,326 [bot] INFO: Outside session: Pre-market: 04:42 ET (opens 09:30:00)
-2026-04-21 08:42:43,344 [bot] INFO: Outside session: Pre-market: 04:42 ET (opens 09:30:00)
-2026-04-21 08:43:13,357 [bot] INFO: Outside session: Pre-market: 04:43 ET (opens 09:30:00)
-2026-04-21 08:43:43,363 [bot] INFO: Outside session: Pre-market: 04:43 ET (opens 09:30:00)
-2026-04-21 08:44:13,374 [bot] INFO: Outside session: Pre-market: 04:44 ET (opens 09:30:00)
-2026-04-21 08:44:43,375 [bot] INFO: Outside session: Pre-market: 04:44 ET (opens 09:30:00)
-2026-04-21 08:45:13,394 [bot] INFO: Outside session: Pre-market: 04:45 ET (opens 09:30:00)
-2026-04-21 08:45:43,409 [bot] INFO: Outside session: Pre-market: 04:45 ET (opens 09:30:00)
-
---- Journal (last 10) ---
-Apr 21 14:08:09 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
-Apr 21 14:08:09 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 21 14:08:09 vmi3096165 bash[9190]: /bin/bash: /root/MT5-PropFirm-Bot/scripts/start_bot.sh: No such file or directory
-Apr 21 14:08:09 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=127/n/a
-Apr 21 14:08:09 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 21 14:08:39 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
-Apr 21 14:08:39 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 21 14:08:39 vmi3096165 bash[9356]: /bin/bash: /root/MT5-PropFirm-Bot/scripts/start_bot.sh: No such file or directory
-Apr 21 14:08:39 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=127/n/a
-Apr 21 14:08:39 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+--- Last 30 log lines ---
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7162.00 VWAP=7170.96 dist=-1.60SD RSI=30.3 ATR=5.09
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7161.25 VWAP=7170.49 dist=-1.57SD RSI=34.1 ATR=5.23
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7162.50 VWAP=7170.17 dist=-1.28SD RSI=42.6 ATR=5.00
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7153.50 VWAP=7167.08 dist=-1.72SD RSI=25.4 ATR=5.59
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7150.00 VWAP=7164.89 dist=-1.60SD RSI=16.7 ATR=5.77
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7156.50 VWAP=7163.73 dist=-0.77SD RSI=29.4 ATR=5.89
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.77SD RSI=29.4 entry=7156.50 sl=7142.03 tp1=7163.73 tp2=7177.80
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7162.00 VWAP=7163.27 dist=-0.14SD RSI=46.5 ATR=5.89
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7166.25 VWAP=7163.43 dist=+0.33SD RSI=51.5 ATR=6.04
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7167.75 VWAP=7163.61 dist=+0.50SD RSI=56.3 ATR=5.84
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7165.75 VWAP=7163.80 dist=+0.24SD RSI=50.3 ATR=5.86
+2026-04-21 14:12:11,877 [strategy.vwap] INFO: Price=7170.00 VWAP=7164.06 dist=+0.74SD RSI=56.9 ATR=5.95
+2026-04-21 14:12:11,877 [bot] INFO: MESM6: New bar 2026-04-21T14:10Z | O=7170.0 H=7171.75 L=7166.75 C=7171.5 V=7211
+2026-04-21 14:12:11,878 [strategy.vwap] INFO: Price=7171.50 VWAP=7164.24 dist=+0.91SD RSI=61.4 ATR=6.00
+2026-04-21 14:17:11,880 [bot] INFO: === Trading cycle 10:17 ET | Guardian: ACTIVE ===
+2026-04-21 14:17:12,893 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-21 14:17:17,996 [bot] INFO: MESM6: New bar 2026-04-21T14:15Z | O=7170.25 H=7172.5 L=7170.0 C=7171.0 V=4327
+2026-04-21 14:17:17,996 [strategy.vwap] INFO: Price=7171.00 VWAP=7164.35 dist=+0.84SD RSI=62.5 ATR=5.98
+2026-04-21 14:22:18,006 [bot] INFO: === Trading cycle 10:22 ET | Guardian: ACTIVE ===
+2026-04-21 14:22:19,014 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-21 14:22:23,195 [bot] INFO: MESM6: New bar 2026-04-21T14:20Z | O=7167.75 H=7168.5 L=7163.25 C=7165.0 V=9979
+2026-04-21 14:22:23,196 [strategy.vwap] INFO: Price=7165.00 VWAP=7164.40 dist=+0.08SD RSI=54.0 ATR=6.32
+2026-04-21 14:27:23,215 [bot] INFO: === Trading cycle 10:27 ET | Guardian: ACTIVE ===
+2026-04-21 14:27:24,247 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-21 14:27:27,946 [bot] INFO: MESM6: New bar 2026-04-21T14:25Z | O=7162.75 H=7165.75 L=7162.25 C=7165.0 V=5022
+2026-04-21 14:27:27,946 [strategy.vwap] INFO: Price=7165.00 VWAP=7164.40 dist=+0.08SD RSI=53.2 ATR=6.45
+2026-04-21 14:32:27,948 [bot] INFO: === Trading cycle 10:32 ET | Guardian: ACTIVE ===
+2026-04-21 14:32:28,949 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-21 14:32:33,980 [bot] INFO: MESM6: New bar 2026-04-21T14:30Z | O=7165.5 H=7167.75 L=7163.0 C=7163.5 V=6757
+2026-04-21 14:32:33,980 [strategy.vwap] INFO: Price=7163.50 VWAP=7164.41 dist=-0.12SD RSI=52.4 ATR=6.29
