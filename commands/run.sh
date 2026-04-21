@@ -1,17 +1,20 @@
 #!/bin/bash
-# Trigger: check-trades-v1
+# Check why bot is not trading
 cd /root/MT5-PropFirm-Bot
-echo "=== Trade Check $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== Full Trade Diagnosis $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo ""
 echo "--- Service Status ---"
-echo "Service: $(systemctl is-active futures-bot)"
-echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
+systemctl is-active futures-bot
+systemctl show futures-bot --property=MainPID,ActiveState,SubState --value 2>/dev/null
+echo ""
+echo "--- Config ---"
+cat configs/bot_config.json 2>/dev/null || echo "NO CONFIG FILE"
 echo ""
 echo "--- Status JSON ---"
-cat status/status.json 2>/dev/null || echo "No status.json found"
+cat status/status.json 2>/dev/null || echo "NO STATUS FILE"
 echo ""
-echo "--- Recent Trade Activity (last 50 log lines) ---"
-tail -50 logs/bot.log 2>/dev/null | grep -iE "trade|order|position|entry|exit|buy|sell|long|short|signal|placed|filled|open|close|contract|MES|MNQ|MES|NQ|ES|rejected|denied|guardian|blocked|no.*signal|waiting" || echo "No trade-related lines found"
+echo "--- Full Log (last 100 lines) ---"
+tail -100 logs/bot.log 2>/dev/null || echo "NO LOG FILE"
 echo ""
-echo "--- Last 20 Log Lines (raw) ---"
-tail -20 logs/bot.log 2>/dev/null
+echo "--- Journal (last 30 lines) ---"
+journalctl -u futures-bot --no-pager -n 30 2>/dev/null || echo "No journal"
