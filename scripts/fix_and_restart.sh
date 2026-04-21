@@ -15,9 +15,7 @@ else
     if [ -n "$CURRENT_BRANCH" ]; then
         git fetch origin "$CURRENT_BRANCH" 2>/dev/null || true
         git reset --hard "origin/$CURRENT_BRANCH" 2>/dev/null || true
-        echo "Code: $(git log -1 --oneline) [from $CURRENT_BRANCH — no main branch yet]"
-    else
-        echo "Warning: could not determine branch, skipping git reset"
+        echo "Code: $(git log -1 --oneline) [from $CURRENT_BRANCH]"
     fi
 fi
 
@@ -25,12 +23,19 @@ fi
 cp /tmp/.tradovate_token_backup.json configs/.tradovate_token.json 2>/dev/null || true
 
 # Ensure dirs
-mkdir -p status logs
+mkdir -p status logs scripts
 
-# Make wrapper executable
-chmod +x /root/MT5-PropFirm-Bot/scripts/start_bot.sh 2>/dev/null || true
+# Always (re)create start_bot.sh — self-contained, no dependency on git having it
+cat > /root/MT5-PropFirm-Bot/scripts/start_bot.sh << 'WRAPEOF'
+#!/bin/bash
+export PYTHONPATH=/root/MT5-PropFirm-Bot
+cd /root/MT5-PropFirm-Bot
+exec /usr/bin/python3 -m futures_bot.bot
+WRAPEOF
+chmod +x /root/MT5-PropFirm-Bot/scripts/start_bot.sh
+echo "start_bot.sh written."
 
-# Write service file — uses start_bot.sh wrapper so PYTHONPATH is always set
+# Write service file
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -57,4 +62,4 @@ systemctl restart futures-bot
 sleep 5
 echo "Status: $(systemctl is-active futures-bot)"
 echo "Journal:"
-journalctl -u futures-bot --no-pager -n 5
+journalctl -u futures-bot --no-pager -n 8
