@@ -1,33 +1,14 @@
-=== Status 2026-04-21 14:54 UTC ===
-Service: active
-Uptime since: Tue 2026-04-21 14:11:24 UTC
+=== Deep Check 2026-04-21 15:08 UTC ===
 
---- Status JSON ---
-{
-  "timestamp": "2026-04-21T14:53:39.753286+00:00",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {
-    "state": "ACTIVE",
-    "balance": 50832.41,
-    "total_pnl": 832.4100000000035,
-    "daily_pnl": 0.0,
-    "daily_trades": 0,
-    "trading_days": 0,
-    "drawdown_used": 0,
-    "drawdown_remaining": 2000.0,
-    "profit_target_remaining": 2167.5899999999965,
-    "consistency_ok": true,
-    "reason": "",
-    "timestamp": "2026-04-21T14:53:39.753264+00:00"
-  },
-  "positions": [],
-  "risk": {},
-  "active_strategy": {
-    "MESM6": "vwap"
-  }
-}
---- Last 15 log lines ---
+--- Config symbols ---
+symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+rsi_oversold: 35
+rsi_overbought: 65
+min_atr: 2.0
+max_atr: 8.0
+
+--- Last 25 log lines ---
+2026-04-21 14:37:34,001 [bot] INFO: === Trading cycle 10:37 ET | Guardian: ACTIVE ===
 2026-04-21 14:37:35,003 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
 2026-04-21 14:37:39,333 [bot] INFO: MESM6: New bar 2026-04-21T14:35Z | O=7161.5 H=7162.75 L=7160.0 C=7161.0 V=4313
 2026-04-21 14:37:39,334 [strategy.vwap] INFO: Price=7161.00 VWAP=7164.36 dist=-0.44SD RSI=48.5 ATR=6.32
@@ -43,3 +24,38 @@ Uptime since: Tue 2026-04-21 14:11:24 UTC
 2026-04-21 14:52:54,459 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
 2026-04-21 14:52:56,439 [bot] INFO: MESM6: New bar 2026-04-21T14:50Z | O=7151.25 H=7152.5 L=7145.5 C=7149.0 V=9867
 2026-04-21 14:52:56,439 [strategy.vwap] INFO: Price=7149.00 VWAP=7163.32 dist=-1.83SD RSI=41.0 ATR=6.16
+2026-04-21 14:57:56,456 [bot] INFO: === Trading cycle 10:57 ET | Guardian: ACTIVE ===
+2026-04-21 14:57:57,469 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-21 14:58:01,116 [bot] INFO: MESM6: New bar 2026-04-21T14:55Z | O=7149.75 H=7149.75 L=7146.25 C=7147.25 V=5434
+2026-04-21 14:58:01,116 [strategy.vwap] INFO: Price=7147.25 VWAP=7163.06 dist=-1.97SD RSI=30.5 ATR=5.64
+2026-04-21 15:03:01,134 [bot] INFO: === Trading cycle 11:03 ET | Guardian: ACTIVE ===
+2026-04-21 15:03:02,193 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-21 15:03:05,307 [bot] INFO: MESM6: New bar 2026-04-21T15:00Z | O=7135.25 H=7138.5 L=7125.5 C=7126.0 V=27555
+2026-04-21 15:03:05,307 [strategy.vwap] INFO: Price=7126.00 VWAP=7160.46 dist=-2.93SD RSI=13.2 ATR=6.64
+2026-04-21 15:08:05,310 [bot] INFO: === Trading cycle 11:08 ET | Guardian: ACTIVE ===
+
+--- Status JSON ---
+{
+    "timestamp": "2026-04-21T15:07:40.307651+00:00",
+    "bot": "TradeDay Futures Bot",
+    "platform": "Tradovate",
+    "guardian": {
+        "state": "ACTIVE",
+        "balance": 50832.41,
+        "total_pnl": 832.4100000000035,
+        "daily_pnl": 0.0,
+        "daily_trades": 0,
+        "trading_days": 0,
+        "drawdown_used": 0,
+        "drawdown_remaining": 2000.0,
+        "profit_target_remaining": 2167.5899999999965,
+        "consistency_ok": true,
+        "reason": "",
+        "timestamp": "2026-04-21T15:07:40.307606+00:00"
+    },
+    "positions": [],
+    "risk": {},
+    "active_strategy": {
+        "MESM6": "vwap"
+    }
+}
