@@ -139,7 +139,14 @@ TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
 TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
 ENVEOF
 
-            # Make wrapper executable
+            # Always (re)create start_bot.sh inline — no dependency on git having it
+            mkdir -p ${{ env.BOT_DIR }}/scripts
+            cat > ${{ env.BOT_DIR }}/scripts/start_bot.sh << 'WRAPEOF'
+#!/bin/bash
+export PYTHONPATH=/root/MT5-PropFirm-Bot
+cd /root/MT5-PropFirm-Bot
+exec /usr/bin/python3 -m futures_bot.bot
+WRAPEOF
             chmod +x ${{ env.BOT_DIR }}/scripts/start_bot.sh
 
             # Service file — uses start_bot.sh wrapper so PYTHONPATH is always set
