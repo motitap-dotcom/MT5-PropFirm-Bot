@@ -1,0 +1,67 @@
+=== TradeDay Futures Bot - Status Check ===
+Timestamp: 2026-04-21 13:51:20 UTC
+
+--- System ---
+ 13:51:20 up 10 min,  1 user,  load average: 0.22, 0.23, 0.15
+               total        used        free      shared  buff/cache   available
+Mem:           7.8Gi       990Mi       5.6Gi        11Mi       1.4Gi       6.8Gi
+Swap:          4.0Gi          0B       4.0Gi
+
+--- Bot Process ---
+Bot service: NOT RUNNING
+No bot process found
+
+--- Python ---
+Python 3.12.3
+Name: aiohttp
+Version: 3.13.3
+Name: websockets
+Version: 16.0
+
+--- Bot Logs (last 30 lines) ---
+2026-04-21 08:31:13,051 [bot] INFO: Outside session: Pre-market: 04:31 ET (opens 09:30:00)
+2026-04-21 08:31:43,069 [bot] INFO: Outside session: Pre-market: 04:31 ET (opens 09:30:00)
+2026-04-21 08:32:13,070 [bot] INFO: Outside session: Pre-market: 04:32 ET (opens 09:30:00)
+2026-04-21 08:32:43,087 [bot] INFO: Outside session: Pre-market: 04:32 ET (opens 09:30:00)
+2026-04-21 08:33:13,106 [bot] INFO: Outside session: Pre-market: 04:33 ET (opens 09:30:00)
+2026-04-21 08:33:43,112 [bot] INFO: Outside session: Pre-market: 04:33 ET (opens 09:30:00)
+2026-04-21 08:34:13,117 [bot] INFO: Outside session: Pre-market: 04:34 ET (opens 09:30:00)
+2026-04-21 08:34:43,135 [bot] INFO: Outside session: Pre-market: 04:34 ET (opens 09:30:00)
+2026-04-21 08:35:13,142 [bot] INFO: Outside session: Pre-market: 04:35 ET (opens 09:30:00)
+2026-04-21 08:35:43,162 [bot] INFO: Outside session: Pre-market: 04:35 ET (opens 09:30:00)
+2026-04-21 08:36:13,179 [bot] INFO: Outside session: Pre-market: 04:36 ET (opens 09:30:00)
+2026-04-21 08:36:43,196 [bot] INFO: Outside session: Pre-market: 04:36 ET (opens 09:30:00)
+2026-04-21 08:37:13,211 [bot] INFO: Outside session: Pre-market: 04:37 ET (opens 09:30:00)
+2026-04-21 08:37:43,215 [bot] INFO: Outside session: Pre-market: 04:37 ET (opens 09:30:00)
+2026-04-21 08:38:13,230 [bot] INFO: Outside session: Pre-market: 04:38 ET (opens 09:30:00)
+2026-04-21 08:38:43,232 [bot] INFO: Outside session: Pre-market: 04:38 ET (opens 09:30:00)
+2026-04-21 08:39:13,251 [bot] INFO: Outside session: Pre-market: 04:39 ET (opens 09:30:00)
+2026-04-21 08:39:43,270 [bot] INFO: Outside session: Pre-market: 04:39 ET (opens 09:30:00)
+2026-04-21 08:40:13,271 [bot] INFO: Outside session: Pre-market: 04:40 ET (opens 09:30:00)
+2026-04-21 08:40:43,288 [bot] INFO: Outside session: Pre-market: 04:40 ET (opens 09:30:00)
+2026-04-21 08:41:13,293 [bot] INFO: Outside session: Pre-market: 04:41 ET (opens 09:30:00)
+2026-04-21 08:41:43,309 [bot] INFO: Outside session: Pre-market: 04:41 ET (opens 09:30:00)
+2026-04-21 08:42:13,326 [bot] INFO: Outside session: Pre-market: 04:42 ET (opens 09:30:00)
+2026-04-21 08:42:43,344 [bot] INFO: Outside session: Pre-market: 04:42 ET (opens 09:30:00)
+2026-04-21 08:43:13,357 [bot] INFO: Outside session: Pre-market: 04:43 ET (opens 09:30:00)
+2026-04-21 08:43:43,363 [bot] INFO: Outside session: Pre-market: 04:43 ET (opens 09:30:00)
+2026-04-21 08:44:13,374 [bot] INFO: Outside session: Pre-market: 04:44 ET (opens 09:30:00)
+2026-04-21 08:44:43,375 [bot] INFO: Outside session: Pre-market: 04:44 ET (opens 09:30:00)
+2026-04-21 08:45:13,394 [bot] INFO: Outside session: Pre-market: 04:45 ET (opens 09:30:00)
+2026-04-21 08:45:43,409 [bot] INFO: Outside session: Pre-market: 04:45 ET (opens 09:30:00)
+
+--- Status JSON ---
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
+
+--- Network Check ---
+Tradovate API: 404
+Telegram API: 302
+
+=== Check Complete ===
