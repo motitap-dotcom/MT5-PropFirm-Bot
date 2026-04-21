@@ -1,20 +1,21 @@
 #!/bin/bash
-# Check why bot is not trading
+# Post-deploy status check
 cd /root/MT5-PropFirm-Bot
-echo "=== Full Trade Diagnosis $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== Post-Deploy Check $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo ""
-echo "--- Service Status ---"
+echo "--- Service ---"
 systemctl is-active futures-bot
-systemctl show futures-bot --property=MainPID,ActiveState,SubState --value 2>/dev/null
+systemctl is-enabled futures-bot
+echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
 echo ""
-echo "--- Config ---"
-cat configs/bot_config.json 2>/dev/null || echo "NO CONFIG FILE"
+echo "--- Service File ExecStart ---"
+grep "ExecStart\|PYTHONPATH" /etc/systemd/system/futures-bot.service 2>/dev/null || echo "Service file not found"
 echo ""
-echo "--- Status JSON ---"
-cat status/status.json 2>/dev/null || echo "NO STATUS FILE"
+echo "--- Code ---"
+git log -1 --oneline
 echo ""
-echo "--- Full Log (last 100 lines) ---"
-tail -100 logs/bot.log 2>/dev/null || echo "NO LOG FILE"
+echo "--- Last 20 log lines ---"
+tail -20 logs/bot.log 2>/dev/null || echo "No log yet"
 echo ""
-echo "--- Journal (last 30 lines) ---"
-journalctl -u futures-bot --no-pager -n 30 2>/dev/null || echo "No journal"
+echo "--- Journal (last 10) ---"
+journalctl -u futures-bot --no-pager -n 10
