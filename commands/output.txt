@@ -1,51 +1,206 @@
-=== 16:04 UTC ===
-Service: activating  PID: 0  Since: Wed 2026-04-22 16:04:15 UTC
+=== 16:05 UTC inspect 2-min crons ===
 
---- journalctl last 20 ---
-Apr 22 16:02:53 vmi3096165 bash[385892]: 2026-04-22 16:02:53,176 [bot] INFO: Bot stopped
-Apr 22 16:03:12 vmi3096165 systemd[1]: futures-bot.service: State 'stop-sigterm' timed out. Killing.
-Apr 22 16:03:12 vmi3096165 systemd[1]: futures-bot.service: Killing process 385892 (python3) with signal SIGKILL.
-Apr 22 16:03:12 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=killed, status=9/KILL
-Apr 22 16:03:12 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'timeout'.
-Apr 22 16:03:12 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 16:03:15 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 16:03:15 vmi3096165 bash[386476]: /bin/bash: /root/MT5-PropFirm-Bot/scripts/run_bot.sh: No such file or directory
-Apr 22 16:03:15 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=127/n/a
-Apr 22 16:03:15 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 16:03:45 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
-Apr 22 16:03:45 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 16:03:45 vmi3096165 bash[386594]: /bin/bash: /root/MT5-PropFirm-Bot/scripts/run_bot.sh: No such file or directory
-Apr 22 16:03:45 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=127/n/a
-Apr 22 16:03:45 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 16:04:15 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
-Apr 22 16:04:15 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 16:04:15 vmi3096165 bash[386721]: /bin/bash: /root/MT5-PropFirm-Bot/scripts/run_bot.sh: No such file or directory
-Apr 22 16:04:15 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=127/n/a
-Apr 22 16:04:15 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+--- /opt/hyrotrader-bot/scripts/auto_deploy.sh ---
+#!/bin/bash
+# Auto-deploy script for HyroTrader-Bot
+# Pulls latest code from main, installs deps, restarts bot
+# Called by cron every 2 minutes
 
---- bot log tail 25 ---
-2026-04-22 15:28:09,644 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-22 15:28:09,644 [tradovate_client] INFO: Environment token is valid
-2026-04-22 15:28:09,646 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-22 15:28:09,726 [bot] INFO: Bot started successfully
-2026-04-22 15:28:09,727 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-22 15:28:09,727 [bot] INFO: Timeframe: 5min
-2026-04-22 15:28:09,728 [bot] INFO: New trading day: 2026-04-22
-2026-04-22 15:45:18,604 [bot] INFO: Stopping bot: Signal received
-2026-04-22 15:45:19,027 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-22 15:45:19,028 [bot] INFO: Bot stopped
-2026-04-22 16:01:15,455 [bot] INFO: ============================================================
-2026-04-22 16:01:15,456 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-22 16:01:15,456 [bot] INFO: ============================================================
-2026-04-22 16:01:15,457 [news_filter] INFO: Loaded 26 restricted events
-2026-04-22 16:01:15,457 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-04-22 16:01:15,602 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-22 16:01:15,602 [tradovate_client] INFO: Saved token is still valid
-2026-04-22 16:01:15,604 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-22 16:01:15,735 [bot] INFO: Bot started successfully
-2026-04-22 16:01:15,736 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-22 16:01:15,741 [bot] INFO: Timeframe: 5min
-2026-04-22 16:01:15,742 [bot] INFO: New trading day: 2026-04-22
-2026-04-22 16:02:52,811 [bot] INFO: Stopping bot: Signal received
-2026-04-22 16:02:53,176 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-22 16:02:53,176 [bot] INFO: Bot stopped
+set -e
+
+REPO_DIR="/opt/hyrotrader-bot"
+LOG_FILE="$REPO_DIR/logs/deploy.log"
+LOCK_FILE="/tmp/hyrotrader-deploy.lock"
+
+# Prevent concurrent deploys
+if [ -f "$LOCK_FILE" ]; then
+    exit 0
+fi
+trap "rm -f $LOCK_FILE" EXIT
+touch "$LOCK_FILE"
+
+cd "$REPO_DIR"
+
+# Fetch latest
+git fetch origin -q 2>/dev/null || exit 0
+LOCAL=$(git rev-parse HEAD)
+REMOTE=$(git rev-parse origin/main 2>/dev/null || echo "")
+
+if [ -z "$REMOTE" ] || [ "$LOCAL" = "$REMOTE" ]; then
+    exit 0  # No changes
+fi
+
+echo "$(date -u '+%Y-%m-%d %H:%M:%S') Deploy: $LOCAL -> $REMOTE" >> "$LOG_FILE"
+
+# Reset to origin/main (clean, no merge conflicts)
+git reset --hard origin/main -q
+source venv/bin/activate
+pip install -r requirements.txt -q 2>/dev/null
+
+# Verify config
+python -c "from bot.config import Config; print('Config OK')" || {
+    echo "$(date -u '+%Y-%m-%d %H:%M:%S') Deploy FAILED: config error" >> "$LOG_FILE"
+    exit 1
+}
+
+# Restart bot
+sudo supervisorctl restart hyrotrader-bot
+sleep 5
+
+# Verify running
+if sudo supervisorctl status hyrotrader-bot | grep -q RUNNING; then
+    echo "$(date -u '+%Y-%m-%d %H:%M:%S') Deploy OK — bot running" >> "$LOG_FILE"
+else
+    echo "$(date -u '+%Y-%m-%d %H:%M:%S') Deploy FAILED: bot not running" >> "$LOG_FILE"
+    exit 1
+fi
+
+# Ensure push_logs cron is installed
+chmod +x "$REPO_DIR/scripts/push_logs.sh" 2>/dev/null || true
+if ! crontab -l 2>/dev/null | grep -q push_logs; then
+    (crontab -l 2>/dev/null; echo "*/5 * * * * $REPO_DIR/scripts/push_logs.sh") | crontab -
+    echo "$(date -u '+%Y-%m-%d %H:%M:%S') Installed push_logs cron" >> "$LOG_FILE"
+fi
+
+--- /root/PropFirmBot/scripts/watchdog.sh ---
+#!/bin/bash
+TELEGRAM_TOKEN="8452836462:AAEVGDT5JrxOHAcB8Nd8ayObU1iMQUCRk2g"
+TELEGRAM_CHAT_ID="7013213983"
+LOG_FILE="$HOME/PropFirmBot/logs/watchdog.log"
+STATE_FILE="$HOME/PropFirmBot/state/mt5_status"
+RESTART_COUNT_FILE="$HOME/PropFirmBot/state/restart_count"
+TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+mkdir -p "$HOME/PropFirmBot/logs" "$HOME/PropFirmBot/state"
+
+send_telegram() {
+    curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+        -d "chat_id=${TELEGRAM_CHAT_ID}" -d "text=${1}" -d "parse_mode=HTML" > /dev/null 2>&1 || true
+}
+
+PREV_STATE="unknown"
+[ -f "$STATE_FILE" ] && PREV_STATE=$(cat "$STATE_FILE")
+RESTART_COUNT=0
+[ -f "$RESTART_COUNT_FILE" ] && RESTART_COUNT=$(cat "$RESTART_COUNT_FILE")
+
+# Check VNC
+if ! pgrep -f x11vnc > /dev/null 2>&1; then
+    echo "$TIMESTAMP [WARN] VNC not running, restarting..." >> "$LOG_FILE"
+    systemctl restart x11vnc.service 2>/dev/null || \
+        (export DISPLAY=:99 && x11vnc -display :99 -forever -shared -rfbport 5900 -nopw -bg 2>/dev/null || true)
+fi
+
+# Check MT5
+MT5_PID=$(pgrep -f "terminal64.exe" 2>/dev/null || true)
+
+if [ -n "$MT5_PID" ]; then
+    if [ "$PREV_STATE" = "down" ]; then
+        send_telegram "<b>PropFirmBot - MT5 RECOVERED</b>
+MT5 is back online! PID: ${MT5_PID}
+Time: $(date '+%d/%m %H:%M')"
+        echo "$TIMESTAMP [RECOVERED] MT5 back online (PID: $MT5_PID)" >> "$LOG_FILE"
+    fi
+    echo "up" > "$STATE_FILE"
+    MINUTE=$(date '+%M')
+    if [ "$((MINUTE % 15))" -lt 2 ]; then
+        echo "$TIMESTAMP [OK] MT5 running (PID: $MT5_PID)" >> "$LOG_FILE"
+    fi
+else
+    echo "$TIMESTAMP [ALERT] MT5 not running! Restarting..." >> "$LOG_FILE"
+    systemctl restart mt5.service 2>/dev/null || true
+    sleep 15
+    NEW_PID=$(pgrep -f "terminal64.exe" 2>/dev/null || true)
+    if [ -z "$NEW_PID" ]; then
+        export DISPLAY=:99
+        export WINEPREFIX=/root/.wine
+        cd "/root/.wine/drive_c/Program Files/MetaTrader 5"
+        nohup wine terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server > /tmp/mt5_wine.log 2>&1 &
+        disown
+        sleep 20
+        NEW_PID=$(pgrep -f "terminal64.exe" 2>/dev/null || true)
+    fi
+    RESTART_COUNT=$((RESTART_COUNT + 1))
+    echo "$RESTART_COUNT" > "$RESTART_COUNT_FILE"
+    if [ -n "$NEW_PID" ]; then
+        echo "up" > "$STATE_FILE"
+        send_telegram "<b>PropFirmBot - MT5 RESTARTED</b>
+
+--- /root/mt5_watchdog.sh ---
+#!/bin/bash
+# MT5 Watchdog - Auto-restart MT5 if it crashes
+# Installed by PropFirmBot deployment
+# Runs every 2 minutes via cron
+
+LOG="/var/log/mt5_watchdog.log"
+MT5="/root/.wine/drive_c/Program Files/MetaTrader 5"
+MAX_LOG_SIZE=1048576  # 1MB
+
+# Rotate log if too big
+if [ -f "$LOG" ] && [ $(stat -c%s "$LOG" 2>/dev/null || echo 0) -gt $MAX_LOG_SIZE ]; then
+    tail -100 "$LOG" > "$LOG.tmp" && mv "$LOG.tmp" "$LOG"
+fi
+
+# Check if MT5 is running
+if pgrep -f terminal64 > /dev/null 2>&1; then
+    # MT5 is running - just log heartbeat every 10th check (every 20 min)
+    COUNTER_FILE="/tmp/watchdog_counter"
+    COUNT=$(cat "$COUNTER_FILE" 2>/dev/null || echo 0)
+    COUNT=$((COUNT + 1))
+    if [ $COUNT -ge 10 ]; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') [OK] MT5 running (heartbeat)" >> "$LOG"
+        COUNT=0
+    fi
+    echo $COUNT > "$COUNTER_FILE"
+    exit 0
+fi
+
+# MT5 is NOT running - restart it!
+echo "$(date '+%Y-%m-%d %H:%M:%S') [ALERT] MT5 not running! Restarting..." >> "$LOG"
+
+# Ensure display
+if ! pgrep -x Xvfb > /dev/null 2>&1; then
+    Xvfb :99 -screen 0 1280x1024x24 &
+    sleep 2
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [FIX] Started Xvfb" >> "$LOG"
+fi
+
+# Ensure VNC
+if ! pgrep -x x11vnc > /dev/null 2>&1; then
+    x11vnc -display :99 -forever -shared -rfbport 5900 -bg -nopw 2>/dev/null
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [FIX] Started VNC" >> "$LOG"
+fi
+
+# Fix DNS (in case it was reset)
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+
+# Kill any zombie wine processes
+wineserver -k 2>/dev/null
+sleep 2
+
+# Start MT5
+export DISPLAY=:99
+export WINEPREFIX=/root/.wine
+cd "$MT5"
+nohup wine terminal64.exe /portable /login:11797849 /password:gazDE62## /server:FundedNext-Server > /tmp/mt5_wine.log 2>&1 &
+disown
+
+sleep 20
+
+--- any script doing systemctl on *bot* ---
+
+--- /var/log/auth.log last systemctl by who (last 30 min) ---
+2026-04-22T12:54:45.010626+00:00 vmi3096165 sudo: pam_unix(sudo:session): session opened for user root(uid=0) by root(uid=0)
+2026-04-22T12:54:45.261013+00:00 vmi3096165 sudo: pam_unix(sudo:session): session closed for user root
+2026-04-22T12:54:51.049774+00:00 vmi3096165 sudo: pam_unix(sudo:session): session closed for user root
+2026-04-22T12:55:01.068717+00:00 vmi3096165 sudo:     root : PWD=/opt/hyrotrader-bot ; USER=root ; COMMAND=/usr/bin/supervisorctl status hyrotrader-bot
+2026-04-22T12:55:01.069279+00:00 vmi3096165 sudo: pam_unix(sudo:session): session opened for user root(uid=0) by root(uid=0)
+2026-04-22T12:55:01.404739+00:00 vmi3096165 sudo: pam_unix(sudo:session): session closed for user root
+2026-04-22T12:55:02.750320+00:00 vmi3096165 sudo:     root : PWD=/opt/hyrotrader-bot ; USER=root ; COMMAND=/usr/bin/supervisorctl status hyrotrader-bot
+2026-04-22T12:55:02.750488+00:00 vmi3096165 sudo: pam_unix(sudo:session): session opened for user root(uid=0) by root(uid=0)
+2026-04-22T12:55:03.164498+00:00 vmi3096165 sudo: pam_unix(sudo:session): session closed for user root
+2026-04-22T14:21:29.472177+00:00 vmi3096165 sudo:     root : PWD=/root ; USER=root ; COMMAND=/usr/bin/supervisorctl status hyrotrader-bot
+2026-04-22T14:21:29.472560+00:00 vmi3096165 sudo: pam_unix(sudo:session): session opened for user root(uid=0) by root(uid=0)
+2026-04-22T14:21:29.910736+00:00 vmi3096165 sudo: pam_unix(sudo:session): session closed for user root
+2026-04-22T15:47:08.599353+00:00 vmi3096165 sudo:     root : PWD=/root ; USER=root ; COMMAND=/usr/bin/supervisorctl status hyrotrader-bot
+2026-04-22T15:47:08.599816+00:00 vmi3096165 sudo: pam_unix(sudo:session): session opened for user root(uid=0) by root(uid=0)
+2026-04-22T15:47:09.021567+00:00 vmi3096165 sudo: pam_unix(sudo:session): session closed for user root
