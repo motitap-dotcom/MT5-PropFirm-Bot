@@ -1,35 +1,61 @@
-=== 15:55 UTC disable server_cron.sh ===
+=== 16:01 UTC quick killer search ===
 
---- crontab BEFORE ---
+--- scripts that mention futures-bot ---
 
-*/5 * * * * cd /root/Tradovate-Bot && bash /root/tradovate-bot/server_cron.sh >> /var/log/tradovate-cron.log 2>&1
-*/2 * * * * /opt/hyrotrader-bot/scripts/auto_deploy.sh
-@reboot nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &
-*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
-0 6 * * * /root/PropFirmBot/scripts/daily_report.sh  # PropFirmBot daily report
-@reboot /root/start_mt5_screen.sh
-@reboot sleep 30 && /bin/bash /root/mt5_startup.sh > /dev/null 2>&1
-# MT5 Watchdog - auto-restart if MT5 crashes
-*/2 * * * * /bin/bash /root/mt5_watchdog.sh
+--- /etc/cron.d contents ---
+=== /etc/cron.d/e2scrub_all ===
+30 3 * * 0 root test -e /run/systemd/system || SERVICE_MODE=1 /usr/lib/x86_64-linux-gnu/e2fsprogs/e2scrub_all_cron
+10 3 * * * root test -e /run/systemd/system || SERVICE_MODE=1 /sbin/e2scrub_all -A -r
+=== /etc/cron.d/futures-bot-cleanup ===
+0 4 * * 0 root find /root/MT5-PropFirm-Bot/logs -name "*.log.*.gz" -mtime +14 -delete 2>/dev/null; journalctl --vacuum-time=7d 2>/dev/null
+=== /etc/cron.d/futures-bot-token-backup ===
+0 * * * * root cp -f /root/MT5-PropFirm-Bot/configs/.tradovate_token.json /root/.tradovate_token_safe.json 2>/dev/null
+=== /etc/cron.d/staticroute ===
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+@reboot root ip route replace $(ip route list dev eth0 scope link | head -n1 | awk '{ print $1 }') via $(ip route list dev eth0 | awk '/default/{ print $3 }') dev eth0 &>/dev/null
+=== /etc/cron.d/sysstat ===
+# The first element of the path is a directory where the debian-sa1
+# script is located
+PATH=/usr/lib/sysstat:/usr/sbin:/usr/sbin:/usr/bin:/sbin:/bin
 
---- crontab AFTER ---
-
-# DISABLED_BY_CLAUDE */5 * * * * cd /root/Tradovate-Bot && bash /root/tradovate-bot/server_cron.sh >> /var/log/tradovate-cron.log 2>&1
-*/2 * * * * /opt/hyrotrader-bot/scripts/auto_deploy.sh
-@reboot nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &
-*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
-0 6 * * * /root/PropFirmBot/scripts/daily_report.sh  # PropFirmBot daily report
-@reboot /root/start_mt5_screen.sh
-@reboot sleep 30 && /bin/bash /root/mt5_startup.sh > /dev/null 2>&1
-# MT5 Watchdog - auto-restart if MT5 crashes
-*/2 * * * * /bin/bash /root/mt5_watchdog.sh
+# Activity reports every 10 minutes everyday
 
 --- service state ---
 activating
 PID: 0
+ActiveEnterTimestamp=Wed 2026-04-22 16:00:44 UTC
 
---- run_bot.sh on disk ---
--rwxr-xr-x 1 root root 751 Apr 22 15:55 scripts/run_bot.sh
+--- last 15 journalctl ---
+Apr 22 15:59:44 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 28.
+Apr 22 15:59:44 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 15:59:44 vmi3096165 bash[385363]: /bin/bash: /root/MT5-PropFirm-Bot/scripts/run_bot.sh: No such file or directory
+Apr 22 15:59:44 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=127/n/a
+Apr 22 15:59:44 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 16:00:14 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 29.
+Apr 22 16:00:14 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 16:00:14 vmi3096165 bash[385582]: /bin/bash: /root/MT5-PropFirm-Bot/scripts/run_bot.sh: No such file or directory
+Apr 22 16:00:14 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=127/n/a
+Apr 22 16:00:14 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 16:00:44 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 30.
+Apr 22 16:00:44 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 16:00:44 vmi3096165 bash[385653]: /bin/bash: /root/MT5-PropFirm-Bot/scripts/run_bot.sh: No such file or directory
+Apr 22 16:00:44 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=127/n/a
+Apr 22 16:00:44 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
 
---- current git HEAD ---
-b46ee4c disable server_cron.sh: it was reverting VPS to main every 5min, killing bot
+--- bot log last 15 ---
+2026-04-22 15:28:09,479 [bot] INFO: ============================================================
+2026-04-22 15:28:09,480 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-22 15:28:09,480 [bot] INFO: ============================================================
+2026-04-22 15:28:09,480 [news_filter] INFO: Loaded 26 restricted events
+2026-04-22 15:28:09,481 [tradovate_client] INFO: Trying pre-set access token from environment...
+2026-04-22 15:28:09,644 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-22 15:28:09,644 [tradovate_client] INFO: Environment token is valid
+2026-04-22 15:28:09,646 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-22 15:28:09,726 [bot] INFO: Bot started successfully
+2026-04-22 15:28:09,727 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-22 15:28:09,727 [bot] INFO: Timeframe: 5min
+2026-04-22 15:28:09,728 [bot] INFO: New trading day: 2026-04-22
+2026-04-22 15:45:18,604 [bot] INFO: Stopping bot: Signal received
+2026-04-22 15:45:19,027 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 15:45:19,028 [bot] INFO: Bot stopped
