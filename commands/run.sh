@@ -1,37 +1,59 @@
 #!/bin/bash
-# Trigger: v150 - find WHO is killing the bot
+# Trigger: v151 - understand paths and find killer
 cd /root/MT5-PropFirm-Bot
-echo "=== v150 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== v151 $(date -u '+%Y-%m-%d %H:%M UTC') ==="
 echo ""
-echo "--- Service summary ---"
-systemctl status futures-bot --no-pager -n 0 | head -12
+echo "--- Service file ---"
+cat /etc/systemd/system/futures-bot.service 2>/dev/null
 echo ""
-echo "--- Journalctl: WHO stopped/started service (last 2h) ---"
-journalctl -u futures-bot --no-pager --since "2 hours ago" | grep -iE "started|stopped|deactivated|activate|killed|main process" | tail -40
+echo "--- futures-bot-wrapper.sh ---"
+find / -name "futures-bot-wrapper.sh" 2>/dev/null | head -5
+for f in $(find / -name "futures-bot-wrapper.sh" 2>/dev/null); do
+  echo "=== $f ==="
+  cat "$f"
+done
 echo ""
-echo "--- Cron log (last 60 lines) ---"
-tail -60 /var/log/futures-bot-cron.log 2>/dev/null || echo "no cron log"
+echo "--- /opt/futures_bot_stable contents ---"
+ls -la /opt/futures_bot_stable/ 2>/dev/null | head -20
 echo ""
-echo "--- crontab for root ---"
-crontab -l 2>/dev/null | grep -v '^#' | grep -v '^$'
+echo "--- Compare bot.py: /opt vs /root ---"
+if [ -f /opt/futures_bot_stable/futures_bot/bot.py ] && [ -f /root/MT5-PropFirm-Bot/futures_bot/bot.py ]; then
+  OPT_HASH=$(md5sum /opt/futures_bot_stable/futures_bot/bot.py | awk '{print $1}')
+  REPO_HASH=$(md5sum /root/MT5-PropFirm-Bot/futures_bot/bot.py | awk '{print $1}')
+  echo "/opt/futures_bot_stable/futures_bot/bot.py: $OPT_HASH"
+  echo "/root/MT5-PropFirm-Bot/futures_bot/bot.py: $REPO_HASH"
+  if [ "$OPT_HASH" = "$REPO_HASH" ]; then
+    echo "SAME CONTENT"
+  else
+    echo "DIFFERENT! /opt is stale or different"
+  fi
+  echo ""
+  echo "/opt bot.py mtime: $(stat -c '%y' /opt/futures_bot_stable/futures_bot/bot.py)"
+  echo "/root bot.py mtime: $(stat -c '%y' /root/MT5-PropFirm-Bot/futures_bot/bot.py)"
+fi
 echo ""
-echo "--- Recent GitHub workflow activity (from .git ref updates) ---"
-git reflog --date=iso | head -15
+echo "--- Who sent SIGKILL to bot PIDs (audit from kernel log) ---"
+dmesg 2>/dev/null | tail -40 | grep -iE "kill|oom|python" || echo "no dmesg matches"
 echo ""
-echo "--- Restart history from server_cron ---"
-tail -20 .restart_history 2>/dev/null | while read ts; do date -u -d "@$ts" '+%Y-%m-%d %H:%M:%S UTC'; done
+echo "--- journalctl for 'futures-bot' kill events ---"
+journalctl --no-pager --since "1 hour ago" 2>/dev/null | grep -iE "futures-bot|systemctl.*futures" | grep -iE "kill|stop|restart|signal" | tail -30
 echo ""
-echo "--- Current running bot log (last 60 lines) ---"
-tail -60 logs/bot.log 2>/dev/null
+echo "--- Any scripts that reference futures-bot systemctl ---"
+grep -rls "systemctl.*futures-bot\|futures-bot.service" /root /opt /etc 2>/dev/null | grep -v "\.git/" | head -20
 echo ""
-echo "--- Processes referencing futures_bot ---"
-ps -ef | grep -E "futures_bot|MT5-PropFirm" | grep -v grep
+echo "--- Hyrotrader auto_deploy.sh (read-only check) ---"
+[ -f /opt/hyrotrader-bot/scripts/auto_deploy.sh ] && grep -iE "futures-bot|MT5-PropFirm" /opt/hyrotrader-bot/scripts/auto_deploy.sh | head -10 || echo "no file"
 echo ""
-echo "--- Who ran systemctl recently (audit) ---"
-journalctl --no-pager --since "1 hour ago" _COMM=systemctl 2>/dev/null | tail -20 || echo "no systemctl audit"
+echo "--- PropFirmBot watchdog (read-only) ---"
+[ -f /root/PropFirmBot/scripts/watchdog.sh ] && grep -iE "futures-bot|MT5-PropFirm|kill" /root/PropFirmBot/scripts/watchdog.sh | head -10 || echo "no file"
 echo ""
-echo "--- Token file ---"
-ls -la configs/.tradovate_token.json 2>/dev/null || echo "MISSING"
+echo "--- mt5_watchdog.sh (read-only) ---"
+[ -f /root/mt5_watchdog.sh ] && grep -iE "futures-bot|MT5-PropFirm|kill" /root/mt5_watchdog.sh | head -10 || echo "no file"
+echo ""
+echo "--- Status now ---"
+echo "Service: $(systemctl is-active futures-bot)"
+echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
+echo "Since: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
 echo ""
 echo "--- Time ---"
 date -u
