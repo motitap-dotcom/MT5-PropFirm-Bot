@@ -1,99 +1,35 @@
-=== 15:53 UTC  NY=11:53 ===
-Service: activating  PID: 0  Since: Wed 2026-04-22 15:53:11 UTC
+=== 15:55 UTC disable server_cron.sh ===
 
---- bot log tail 80 ---
-2026-04-22 15:04:27,569 [bot] INFO: ============================================================
-2026-04-22 15:04:27,569 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-22 15:04:27,569 [bot] INFO: ============================================================
-2026-04-22 15:04:27,569 [news_filter] INFO: Loaded 26 restricted events
-2026-04-22 15:04:27,569 [tradovate_client] INFO: Trying pre-set access token from environment...
-2026-04-22 15:04:27,719 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-22 15:04:27,719 [tradovate_client] INFO: Environment token is valid
-2026-04-22 15:04:27,720 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-22 15:04:27,823 [bot] INFO: Bot started successfully
-2026-04-22 15:04:27,824 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-22 15:04:27,824 [bot] INFO: Timeframe: 5min
-2026-04-22 15:04:27,824 [bot] INFO: New trading day: 2026-04-22
-2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-22 15:04:27,941 [bot] INFO: Switching MESM6 to ORB strategy (trend day)
-2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-22 15:04:27,941 [bot] INFO: Switching MNQM6 to ORB strategy (trend day)
-2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-22 15:04:27,941 [bot] INFO: Switching MCLM6 to ORB strategy (trend day)
-2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-22 15:04:27,941 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
-2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-22 15:04:27,941 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
-2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-22 15:04:27,941 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
-2026-04-22 15:08:43,817 [bot] INFO: Stopping bot: Signal received
-2026-04-22 15:08:43,952 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-22 15:08:44,066 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 15:08:44,067 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 15:08:44,204 [tradovate_client] WARNING: API auth failed (Incorrect username or password. Please try again, noting that passwords are case-sensitive.); trying Playwright browser auth as fallback...
-2026-04-22 15:08:45,050 [tradovate_client] INFO: Opening Tradovate login page...
-2026-04-22 15:08:51,309 [tradovate_client] INFO: Login submitted, waiting for token...
-2026-04-22 15:08:52,415 [tradovate_client] INFO: Browser auth: token captured successfully
-2026-04-22 15:08:52,416 [tradovate_client] INFO: Authenticated successfully via browser (API fallback)
-2026-04-22 15:08:52,787 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-22 15:08:52,787 [bot] INFO: Bot stopped
-2026-04-22 15:14:33,066 [bot] INFO: ============================================================
-2026-04-22 15:14:33,066 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-22 15:14:33,066 [bot] INFO: ============================================================
-2026-04-22 15:14:33,067 [news_filter] INFO: Loaded 26 restricted events
-2026-04-22 15:14:33,067 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-04-22 15:14:33,210 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-22 15:14:33,210 [tradovate_client] INFO: Saved token is still valid
-2026-04-22 15:14:33,210 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-22 15:14:33,296 [bot] INFO: Bot started successfully
-2026-04-22 15:14:33,296 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-22 15:14:33,296 [bot] INFO: Timeframe: 5min
-2026-04-22 15:14:33,296 [bot] INFO: New trading day: 2026-04-22
-2026-04-22 15:14:37,757 [bot] INFO: Stopping bot: Signal received
-2026-04-22 15:14:38,051 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-22 15:14:38,051 [bot] INFO: Bot stopped
-2026-04-22 15:14:38,345 [bot] INFO: ============================================================
-2026-04-22 15:14:38,345 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-22 15:14:38,346 [bot] INFO: ============================================================
-2026-04-22 15:14:38,346 [news_filter] INFO: Loaded 26 restricted events
-2026-04-22 15:14:38,346 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-04-22 15:14:38,486 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-22 15:14:38,486 [tradovate_client] INFO: Saved token is still valid
-2026-04-22 15:14:38,487 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-22 15:14:38,576 [bot] INFO: Bot started successfully
-2026-04-22 15:14:38,577 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-22 15:14:38,577 [bot] INFO: Timeframe: 5min
-2026-04-22 15:14:38,577 [bot] INFO: New trading day: 2026-04-22
-2026-04-22 15:20:17,532 [bot] INFO: Stopping bot: Signal received
-2026-04-22 15:20:17,897 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-22 15:20:17,897 [bot] INFO: Bot stopped
-2026-04-22 15:28:09,479 [bot] INFO: ============================================================
-2026-04-22 15:28:09,480 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-22 15:28:09,480 [bot] INFO: ============================================================
-2026-04-22 15:28:09,480 [news_filter] INFO: Loaded 26 restricted events
-2026-04-22 15:28:09,481 [tradovate_client] INFO: Trying pre-set access token from environment...
-2026-04-22 15:28:09,644 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-22 15:28:09,644 [tradovate_client] INFO: Environment token is valid
-2026-04-22 15:28:09,646 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-22 15:28:09,726 [bot] INFO: Bot started successfully
-2026-04-22 15:28:09,727 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-22 15:28:09,727 [bot] INFO: Timeframe: 5min
-2026-04-22 15:28:09,728 [bot] INFO: New trading day: 2026-04-22
-2026-04-22 15:45:18,604 [bot] INFO: Stopping bot: Signal received
-2026-04-22 15:45:19,027 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-22 15:45:19,028 [bot] INFO: Bot stopped
+--- crontab BEFORE ---
 
---- trend day / strategy ---
-1972
-703
-22
+*/5 * * * * cd /root/Tradovate-Bot && bash /root/tradovate-bot/server_cron.sh >> /var/log/tradovate-cron.log 2>&1
+*/2 * * * * /opt/hyrotrader-bot/scripts/auto_deploy.sh
+@reboot nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &
+*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
+0 6 * * * /root/PropFirmBot/scripts/daily_report.sh  # PropFirmBot daily report
+@reboot /root/start_mt5_screen.sh
+@reboot sleep 30 && /bin/bash /root/mt5_startup.sh > /dev/null 2>&1
+# MT5 Watchdog - auto-restart if MT5 crashes
+*/2 * * * * /bin/bash /root/mt5_watchdog.sh
 
---- status.json ---
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+--- crontab AFTER ---
+
+# DISABLED_BY_CLAUDE */5 * * * * cd /root/Tradovate-Bot && bash /root/tradovate-bot/server_cron.sh >> /var/log/tradovate-cron.log 2>&1
+*/2 * * * * /opt/hyrotrader-bot/scripts/auto_deploy.sh
+@reboot nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &
+*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
+0 6 * * * /root/PropFirmBot/scripts/daily_report.sh  # PropFirmBot daily report
+@reboot /root/start_mt5_screen.sh
+@reboot sleep 30 && /bin/bash /root/mt5_startup.sh > /dev/null 2>&1
+# MT5 Watchdog - auto-restart if MT5 crashes
+*/2 * * * * /bin/bash /root/mt5_watchdog.sh
+
+--- service state ---
+activating
+PID: 0
+
+--- run_bot.sh on disk ---
+-rwxr-xr-x 1 root root 751 Apr 22 15:55 scripts/run_bot.sh
+
+--- current git HEAD ---
+b46ee4c disable server_cron.sh: it was reverting VPS to main every 5min, killing bot
