@@ -1,18 +1,7 @@
-=== 14:47 UTC  NY=10:47 ===
+=== 14:48 UTC  NY=10:48 ===
 Service: active  PID: 363816
-Since: Wed 2026-04-22 14:39:34 UTC
 
---- last 50 bot log ---
-2026-04-22 14:18:01,169 [bot] ERROR: Failed to connect: integer modulo by zero
-2026-04-22 14:18:01,169 [bot] ERROR: Fatal error (attempt 4/5): integer modulo by zero
-Traceback (most recent call last):
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
-  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 188, in _authenticate
-  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 30, in _encrypt_password
-ZeroDivisionError: integer modulo by zero
-2026-04-22 14:18:01,170 [bot] INFO: Stopping bot: Fatal: integer modulo by zero
+--- last 40 bot log lines (live) ---
 2026-04-22 14:18:01,170 [tradovate_client] INFO: Token expiring in -29614458min, renewing...
 2026-04-22 14:18:01,170 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
 2026-04-22 14:18:01,170 [bot] ERROR: Error closing positions: integer modulo by zero
@@ -54,7 +43,7 @@ ZeroDivisionError: integer modulo by zero
 2026-04-22 14:39:35,758 [bot] INFO: Timeframe: 5min
 2026-04-22 14:39:35,758 [bot] INFO: New trading day: 2026-04-22
 
---- positions ---
+--- status ---
 {
   "timestamp": "",
   "bot": "TradeDay Futures Bot",
