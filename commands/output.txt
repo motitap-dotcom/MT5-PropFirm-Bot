@@ -1,84 +1,26 @@
-=== Debug No Trades 2026-04-22 13:41 UTC ===
+=== Post-fix verify 2026-04-22 14:08 UTC ===
 
 === SERVICE ===
-Service: active
-PID: 294144
-Since: Wed 2026-04-22 10:03:08 UTC
-Code: cd08e80 debug: comprehensive no-trades diagnostic
+Service: activating
+PID: 0
+Since: Wed 2026-04-22 14:08:35 UTC
+Code on disk: 473bc4b verify: post-fix status check (auth, playwright, trades)
 
-=== TIME (ET = UTC-4 EDT) ===
-UTC:     2026-04-22 13:41:17
-NY:      2026-04-22 09:41:17 EDT
-Weekday: Wednesday
+=== CODE CHECK (Playwright fallback in tree?) ===
+277:            f"API auth failed ({error}); trying Playwright browser auth as fallback..."
 
-=== STATUS.JSON ===
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+=== TOKEN FILE ===
+no token file (expected - new fresh auth)
+
+=== PLAYWRIGHT ===
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+AttributeError: module 'playwright' has no attribute '__version__'
+chromium-1208
+chromium_headless_shell-1208
+ffmpeg-1011
 
 === LAST 80 LOG LINES ===
-2026-04-22 13:08:00,837 [bot] INFO: Outside session: Pre-market: 09:08 ET (opens 09:30:00)
-2026-04-22 13:08:30,852 [bot] INFO: Outside session: Pre-market: 09:08 ET (opens 09:30:00)
-2026-04-22 13:09:00,873 [bot] INFO: Outside session: Pre-market: 09:09 ET (opens 09:30:00)
-2026-04-22 13:09:30,883 [bot] INFO: Outside session: Pre-market: 09:09 ET (opens 09:30:00)
-2026-04-22 13:10:00,914 [bot] INFO: Outside session: Pre-market: 09:10 ET (opens 09:30:00)
-2026-04-22 13:10:30,926 [bot] INFO: Outside session: Pre-market: 09:10 ET (opens 09:30:00)
-2026-04-22 13:11:00,957 [bot] INFO: Outside session: Pre-market: 09:11 ET (opens 09:30:00)
-2026-04-22 13:11:30,978 [bot] INFO: Outside session: Pre-market: 09:11 ET (opens 09:30:00)
-2026-04-22 13:12:00,980 [bot] INFO: Outside session: Pre-market: 09:12 ET (opens 09:30:00)
-2026-04-22 13:12:31,005 [bot] INFO: Outside session: Pre-market: 09:12 ET (opens 09:30:00)
-2026-04-22 13:13:01,035 [bot] INFO: Outside session: Pre-market: 09:13 ET (opens 09:30:00)
-2026-04-22 13:13:31,052 [bot] INFO: Outside session: Pre-market: 09:13 ET (opens 09:30:00)
-2026-04-22 13:14:01,058 [bot] INFO: Outside session: Pre-market: 09:14 ET (opens 09:30:00)
-2026-04-22 13:14:31,065 [bot] INFO: Outside session: Pre-market: 09:14 ET (opens 09:30:00)
-2026-04-22 13:15:01,068 [bot] INFO: Outside session: Pre-market: 09:15 ET (opens 09:30:00)
-2026-04-22 13:15:31,069 [bot] INFO: Outside session: Pre-market: 09:15 ET (opens 09:30:00)
-2026-04-22 13:16:01,074 [bot] INFO: Outside session: Pre-market: 09:16 ET (opens 09:30:00)
-2026-04-22 13:16:31,088 [bot] INFO: Outside session: Pre-market: 09:16 ET (opens 09:30:00)
-2026-04-22 13:17:01,101 [bot] INFO: Outside session: Pre-market: 09:17 ET (opens 09:30:00)
-2026-04-22 13:17:31,119 [bot] INFO: Outside session: Pre-market: 09:17 ET (opens 09:30:00)
-2026-04-22 13:18:01,147 [bot] INFO: Outside session: Pre-market: 09:18 ET (opens 09:30:00)
-2026-04-22 13:18:31,153 [bot] INFO: Outside session: Pre-market: 09:18 ET (opens 09:30:00)
-2026-04-22 13:19:01,161 [bot] INFO: Outside session: Pre-market: 09:19 ET (opens 09:30:00)
-2026-04-22 13:19:31,163 [bot] INFO: Outside session: Pre-market: 09:19 ET (opens 09:30:00)
-2026-04-22 13:20:01,195 [bot] INFO: Outside session: Pre-market: 09:20 ET (opens 09:30:00)
-2026-04-22 13:20:31,233 [bot] INFO: Outside session: Pre-market: 09:20 ET (opens 09:30:00)
-2026-04-22 13:21:01,244 [bot] INFO: Outside session: Pre-market: 09:21 ET (opens 09:30:00)
-2026-04-22 13:21:31,313 [bot] INFO: Outside session: Pre-market: 09:21 ET (opens 09:30:00)
-2026-04-22 13:22:01,326 [bot] INFO: Outside session: Pre-market: 09:22 ET (opens 09:30:00)
-2026-04-22 13:22:31,349 [bot] INFO: Outside session: Pre-market: 09:22 ET (opens 09:30:00)
-2026-04-22 13:23:01,388 [bot] INFO: Outside session: Pre-market: 09:23 ET (opens 09:30:00)
-2026-04-22 13:23:31,406 [bot] INFO: Outside session: Pre-market: 09:23 ET (opens 09:30:00)
-2026-04-22 13:24:01,440 [bot] INFO: Outside session: Pre-market: 09:24 ET (opens 09:30:00)
-2026-04-22 13:24:31,441 [bot] INFO: Outside session: Pre-market: 09:24 ET (opens 09:30:00)
-2026-04-22 13:25:01,449 [bot] INFO: Outside session: Pre-market: 09:25 ET (opens 09:30:00)
-2026-04-22 13:25:31,458 [bot] INFO: Outside session: Pre-market: 09:25 ET (opens 09:30:00)
-2026-04-22 13:26:01,468 [bot] INFO: Outside session: Pre-market: 09:26 ET (opens 09:30:00)
-2026-04-22 13:26:31,469 [bot] INFO: Outside session: Pre-market: 09:26 ET (opens 09:30:00)
-2026-04-22 13:27:01,487 [bot] INFO: Outside session: Pre-market: 09:27 ET (opens 09:30:00)
-2026-04-22 13:27:31,518 [bot] INFO: Outside session: Pre-market: 09:27 ET (opens 09:30:00)
-2026-04-22 13:28:01,593 [bot] INFO: Outside session: Pre-market: 09:28 ET (opens 09:30:00)
-2026-04-22 13:28:31,607 [bot] INFO: Outside session: Pre-market: 09:28 ET (opens 09:30:00)
-2026-04-22 13:29:01,645 [bot] INFO: Outside session: Pre-market: 09:29 ET (opens 09:30:00)
-2026-04-22 13:29:31,647 [bot] INFO: Outside session: Pre-market: 09:29 ET (opens 09:30:00)
-2026-04-22 13:30:01,663 [bot] INFO: === Trading cycle 09:30 ET | Guardian: ACTIVE ===
-2026-04-22 13:30:01,663 [tradovate_client] INFO: Token expiring in -86min, renewing...
-2026-04-22 13:30:01,865 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 13:30:01,871 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:30:02,026 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:30:02,026 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-22 13:30:02,153 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-22 13:30:02,270 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 13:30:02,270 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:30:02,406 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:30:03,056 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: no close frame received or sent
-2026-04-22 13:30:03,062 [bot] WARNING: MESM6: No bars returned from API
-2026-04-22 13:35:03,064 [bot] INFO: === Trading cycle 09:35 ET | Guardian: ACTIVE ===
 2026-04-22 13:35:03,065 [tradovate_client] INFO: Token expiring in -91min, renewing...
 2026-04-22 13:35:03,222 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
 2026-04-22 13:35:03,222 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
@@ -102,67 +44,124 @@ Weekday: Wednesday
 2026-04-22 13:40:04,755 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 2026-04-22 13:40:05,048 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
 2026-04-22 13:40:05,049 [bot] WARNING: MESM6: No bars returned from API
+2026-04-22 13:45:05,052 [bot] INFO: === Trading cycle 09:45 ET | Guardian: ACTIVE ===
+2026-04-22 13:45:05,052 [tradovate_client] INFO: Token expiring in -101min, renewing...
+2026-04-22 13:45:05,234 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-22 13:45:05,234 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 13:45:05,350 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+2026-04-22 13:45:09,320 [tradovate_client] INFO: Opening Tradovate login page...
+2026-04-22 13:45:18,965 [tradovate_client] INFO: Login submitted, waiting for token...
+2026-04-22 13:45:20,078 [tradovate_client] INFO: Browser auth: token captured successfully
+2026-04-22 13:45:20,085 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed), token valid for 2h
+2026-04-22 13:45:21,093 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-22 13:45:23,990 [bot] INFO: MESM6: Warming up strategy with 50 historical bars
+2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7137.00 VWAP=7138.90 dist=-0.76SD RSI=46.7 ATR=3.70
+2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7136.75 VWAP=7138.86 dist=-0.85SD RSI=51.5 ATR=3.38
+2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7138.75 VWAP=7138.82 dist=-0.03SD RSI=56.0 ATR=3.27
+2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7136.25 VWAP=7138.75 dist=-1.05SD RSI=53.2 ATR=3.14
+2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7137.00 VWAP=7138.71 dist=-0.72SD RSI=49.3 ATR=3.05
+2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7138.25 VWAP=7138.70 dist=-0.19SD RSI=51.9 ATR=3.00
+2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7139.00 VWAP=7138.69 dist=+0.14SD RSI=47.9 ATR=2.98
+2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7136.75 VWAP=7138.60 dist=-0.82SD RSI=34.3 ATR=3.00
+2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7141.75 VWAP=7138.70 dist=+1.38SD RSI=55.0 ATR=3.14
+2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7142.50 VWAP=7138.83 dist=+1.62SD RSI=59.5 ATR=3.09
+2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7142.00 VWAP=7138.91 dist=+1.34SD RSI=58.0 ATR=3.07
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7148.25 VWAP=7139.74 dist=+2.65SD RSI=66.3 ATR=3.43
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7150.25 VWAP=7140.59 dist=+2.34SD RSI=71.4 ATR=3.55
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7155.50 VWAP=7141.96 dist=+2.42SD RSI=78.0 ATR=3.77
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7153.75 VWAP=7142.75 dist=+1.78SD RSI=76.8 ATR=3.84
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.78SD RSI=76.8 entry=7153.75 sl=7157.04 tp1=7142.75 tp2=7133.47
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7153.25 VWAP=7143.15 dist=+1.58SD RSI=76.2 ATR=3.82
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.58SD RSI=76.2 entry=7153.25 sl=7157.81 tp1=7143.15 tp2=7133.58
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.00 VWAP=7144.12 dist=+0.74SD RSI=65.2 ATR=4.16
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.25 VWAP=7144.46 dist=+0.75SD RSI=70.6 ATR=4.20
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7145.25 VWAP=7144.54 dist=+0.11SD RSI=61.9 ATR=4.54
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7143.50 VWAP=7144.54 dist=-0.17SD RSI=57.4 ATR=4.66
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7140.50 VWAP=7144.41 dist=-0.66SD RSI=52.0 ATR=4.89
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7141.75 VWAP=7144.28 dist=-0.44SD RSI=56.8 ATR=4.82
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7139.00 VWAP=7144.09 dist=-0.88SD RSI=46.0 ATR=4.73
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7140.25 VWAP=7143.89 dist=-0.64SD RSI=46.8 ATR=4.88
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7143.25 VWAP=7143.95 dist=-0.13SD RSI=51.7 ATR=5.59
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7142.00 VWAP=7143.85 dist=-0.36SD RSI=40.3 ATR=5.38
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.50 VWAP=7144.14 dist=+1.06SD RSI=49.0 ATR=5.96
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.00 VWAP=7144.49 dist=+0.91SD RSI=40.2 ATR=6.09
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7150.25 VWAP=7144.71 dist=+1.12SD RSI=44.6 ATR=6.12
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7144.00 VWAP=7144.96 dist=-0.21SD RSI=37.9 ATR=6.62
+2026-04-22 13:45:23,992 [strategy.vwap] INFO: Price=7147.75 VWAP=7145.04 dist=+0.62SD RSI=48.3 ATR=6.57
+2026-04-22 13:45:23,992 [bot] INFO: MESM6: New bar 2026-04-22T13:40Z | O=7147.75 H=7151.0 L=7144.5 C=7145.5 V=13830
+2026-04-22 13:45:23,992 [strategy.vwap] INFO: Price=7145.50 VWAP=7145.20 dist=+0.07SD RSI=45.3 ATR=6.70
+2026-04-22 13:50:24,013 [bot] INFO: === Trading cycle 09:50 ET | Guardian: ACTIVE ===
+2026-04-22 13:50:25,003 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-22 13:50:28,504 [bot] INFO: MESM6: New bar 2026-04-22T13:45Z | O=7145.75 H=7153.75 L=7143.0 C=7145.0 V=18647
+2026-04-22 13:50:28,504 [strategy.vwap] INFO: Price=7145.00 VWAP=7145.41 dist=-0.10SD RSI=49.7 ATR=7.00
+2026-04-22 13:55:28,530 [bot] INFO: === Trading cycle 09:55 ET | Guardian: ACTIVE ===
+2026-04-22 13:55:29,521 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+2026-04-22 13:55:33,122 [bot] INFO: MESM6: New bar 2026-04-22T13:50Z | O=7145.0 H=7151.0 L=7140.0 C=7150.75 V=16957
+2026-04-22 13:55:33,123 [strategy.vwap] INFO: Price=7150.75 VWAP=7145.57 dist=+1.32SD RSI=59.0 ATR=7.46
+2026-04-22 13:58:03,363 [bot] INFO: Stopping bot: Signal received
+2026-04-22 13:58:03,728 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 13:58:03,728 [bot] INFO: Bot stopped
 
-=== GREP: signals / setups / trades / blocks ===
-2026-04-22 13:13:01,035 [bot] INFO: Outside session: Pre-market: 09:13 ET (opens 09:30:00)
-2026-04-22 13:13:31,052 [bot] INFO: Outside session: Pre-market: 09:13 ET (opens 09:30:00)
-2026-04-22 13:14:01,058 [bot] INFO: Outside session: Pre-market: 09:14 ET (opens 09:30:00)
-2026-04-22 13:14:31,065 [bot] INFO: Outside session: Pre-market: 09:14 ET (opens 09:30:00)
-2026-04-22 13:15:01,068 [bot] INFO: Outside session: Pre-market: 09:15 ET (opens 09:30:00)
-2026-04-22 13:15:31,069 [bot] INFO: Outside session: Pre-market: 09:15 ET (opens 09:30:00)
-2026-04-22 13:16:01,074 [bot] INFO: Outside session: Pre-market: 09:16 ET (opens 09:30:00)
-2026-04-22 13:16:31,088 [bot] INFO: Outside session: Pre-market: 09:16 ET (opens 09:30:00)
-2026-04-22 13:17:01,101 [bot] INFO: Outside session: Pre-market: 09:17 ET (opens 09:30:00)
-2026-04-22 13:17:31,119 [bot] INFO: Outside session: Pre-market: 09:17 ET (opens 09:30:00)
-2026-04-22 13:18:01,147 [bot] INFO: Outside session: Pre-market: 09:18 ET (opens 09:30:00)
-2026-04-22 13:18:31,153 [bot] INFO: Outside session: Pre-market: 09:18 ET (opens 09:30:00)
-2026-04-22 13:19:01,161 [bot] INFO: Outside session: Pre-market: 09:19 ET (opens 09:30:00)
-2026-04-22 13:19:31,163 [bot] INFO: Outside session: Pre-market: 09:19 ET (opens 09:30:00)
-2026-04-22 13:20:01,195 [bot] INFO: Outside session: Pre-market: 09:20 ET (opens 09:30:00)
-2026-04-22 13:20:31,233 [bot] INFO: Outside session: Pre-market: 09:20 ET (opens 09:30:00)
-2026-04-22 13:21:01,244 [bot] INFO: Outside session: Pre-market: 09:21 ET (opens 09:30:00)
-2026-04-22 13:21:31,313 [bot] INFO: Outside session: Pre-market: 09:21 ET (opens 09:30:00)
-2026-04-22 13:22:01,326 [bot] INFO: Outside session: Pre-market: 09:22 ET (opens 09:30:00)
-2026-04-22 13:22:31,349 [bot] INFO: Outside session: Pre-market: 09:22 ET (opens 09:30:00)
-2026-04-22 13:23:01,388 [bot] INFO: Outside session: Pre-market: 09:23 ET (opens 09:30:00)
-2026-04-22 13:23:31,406 [bot] INFO: Outside session: Pre-market: 09:23 ET (opens 09:30:00)
-2026-04-22 13:24:01,440 [bot] INFO: Outside session: Pre-market: 09:24 ET (opens 09:30:00)
-2026-04-22 13:24:31,441 [bot] INFO: Outside session: Pre-market: 09:24 ET (opens 09:30:00)
-2026-04-22 13:25:01,449 [bot] INFO: Outside session: Pre-market: 09:25 ET (opens 09:30:00)
-2026-04-22 13:25:31,458 [bot] INFO: Outside session: Pre-market: 09:25 ET (opens 09:30:00)
-2026-04-22 13:26:01,468 [bot] INFO: Outside session: Pre-market: 09:26 ET (opens 09:30:00)
-2026-04-22 13:26:31,469 [bot] INFO: Outside session: Pre-market: 09:26 ET (opens 09:30:00)
-2026-04-22 13:27:01,487 [bot] INFO: Outside session: Pre-market: 09:27 ET (opens 09:30:00)
-2026-04-22 13:27:31,518 [bot] INFO: Outside session: Pre-market: 09:27 ET (opens 09:30:00)
-2026-04-22 13:28:01,593 [bot] INFO: Outside session: Pre-market: 09:28 ET (opens 09:30:00)
-2026-04-22 13:28:31,607 [bot] INFO: Outside session: Pre-market: 09:28 ET (opens 09:30:00)
-2026-04-22 13:29:01,645 [bot] INFO: Outside session: Pre-market: 09:29 ET (opens 09:30:00)
-2026-04-22 13:29:31,647 [bot] INFO: Outside session: Pre-market: 09:29 ET (opens 09:30:00)
-2026-04-22 13:30:01,663 [bot] INFO: === Trading cycle 09:30 ET | Guardian: ACTIVE ===
+=== AUTH / PLAYWRIGHT / TRADE events ===
+2026-04-22 10:03:10,865 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-22 10:03:11,062 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 10:03:41,274 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 10:03:41,391 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+2026-04-22 10:03:53,131 [tradovate_client] INFO: Browser auth: token captured successfully
+2026-04-22 10:03:53,133 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed), token valid for 2h
+2026-04-22 10:03:53,256 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-22 13:30:01,871 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 13:30:02,026 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 2026-04-22 13:30:02,026 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-22 13:35:03,064 [bot] INFO: === Trading cycle 09:35 ET | Guardian: ACTIVE ===
-2026-04-22 13:35:03,366 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-22 13:40:04,138 [bot] INFO: === Trading cycle 09:40 ET | Guardian: ACTIVE ===
-2026-04-22 13:40:04,405 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-
-=== GREP: errors / warnings ===
-2026-04-22 13:35:03,222 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-22 13:30:02,270 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 13:30:02,406 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 2026-04-22 13:35:03,222 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
 2026-04-22 13:35:03,348 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 2026-04-22 13:35:03,366 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-22 13:35:03,508 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-22 13:35:03,645 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 13:35:03,762 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-22 13:40:04,287 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 13:40:04,404 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-22 13:40:04,405 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
+2026-04-22 13:40:04,639 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 13:40:04,755 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-22 13:45:05,234 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 13:45:05,350 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+2026-04-22 13:45:20,078 [tradovate_client] INFO: Browser auth: token captured successfully
+2026-04-22 13:45:20,085 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed), token valid for 2h
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.78SD RSI=76.8 entry=7153.75 sl=7157.04 tp1=7142.75 tp2=7133.47
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.58SD RSI=76.2 entry=7153.25 sl=7157.81 tp1=7143.15 tp2=7133.58
+2026-04-22 13:58:03,363 [bot] INFO: Stopping bot: Signal received
+2026-04-22 13:58:03,728 [tradovate_client] INFO: Disconnected from Tradovate
+
+=== ERRORS ===
+2026-04-22 13:30:02,270 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-22 13:30:02,270 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 13:30:02,406 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-22 13:30:03,056 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: no close frame received or sent
+2026-04-22 13:35:03,222 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-22 13:35:03,222 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 13:35:03,348 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 2026-04-22 13:35:03,645 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
 2026-04-22 13:35:03,645 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
 2026-04-22 13:35:03,762 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 2026-04-22 13:35:04,134 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: no close frame received or sent
-2026-04-22 13:35:04,134 [bot] WARNING: MESM6: No bars returned from API
 2026-04-22 13:40:04,287 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
 2026-04-22 13:40:04,287 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
 2026-04-22 13:40:04,404 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:40:04,405 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-22 13:40:04,522 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
 2026-04-22 13:40:04,639 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
 2026-04-22 13:40:04,639 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
 2026-04-22 13:40:04,755 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 2026-04-22 13:40:05,048 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-22 13:40:05,049 [bot] WARNING: MESM6: No bars returned from API
+2026-04-22 13:45:05,234 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-22 13:45:05,234 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+
+=== POSITIONS / STATUS ===
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
