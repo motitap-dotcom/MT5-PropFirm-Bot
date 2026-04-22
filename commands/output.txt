@@ -1,46 +1,34 @@
-=== 16:16 UTC  NY=12:16 ===
-Service: activating  PID: 0  NRestarts: 2  Since: Wed 2026-04-22 16:16:06 UTC
+=== 16:23 UTC status ===
+active
+MainPID=391329
+NRestarts=0
+ActiveEnterTimestamp=Wed 2026-04-22 16:18:54 UTC
+
+--- bot.py locations ---
+-rw-r--r-- 1 root root 24016 Apr 22 16:18 /opt/futures_bot_stable/futures_bot/bot.py
+-rw-r--r-- 1 root root 24016 Apr 22 16:23 /root/MT5-PropFirm-Bot/futures_bot/bot.py
+
+--- wrapper ---
+-rwxr-xr-x 1 root root 1231 Apr 22 16:18 /usr/local/sbin/futures-bot-wrapper.sh
 
 --- journalctl last 20 ---
-Apr 22 16:15:03 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=killed, status=9/KILL
-Apr 22 16:15:03 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'timeout'.
-Apr 22 16:15:03 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 16:15:06 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 16:15:06 vmi3096165 futures-bot-wrapper.sh[390190]: [wrapper] cwd=/root/MT5-PropFirm-Bot TRADOVATE_PASS_set=yes bot.py=MISSINGB
-Apr 22 16:15:06 vmi3096165 futures-bot-wrapper.sh[390190]: /usr/bin/python3: can't open file '/root/MT5-PropFirm-Bot/futures_bot/bot.py': [Errno 2] No such file or directory
-Apr 22 16:15:06 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=2/INVALIDARGUMENT
-Apr 22 16:15:06 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 16:15:36 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
-Apr 22 16:15:36 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 16:15:36 vmi3096165 futures-bot-wrapper.sh[390298]: [wrapper] cwd=/root/MT5-PropFirm-Bot TRADOVATE_PASS_set=yes bot.py=MISSINGB
-Apr 22 16:15:36 vmi3096165 futures-bot-wrapper.sh[390298]: /usr/bin/python3: can't open file '/root/MT5-PropFirm-Bot/futures_bot/bot.py': [Errno 2] No such file or directory
-Apr 22 16:15:36 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=2/INVALIDARGUMENT
-Apr 22 16:15:36 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 16:16:06 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
-Apr 22 16:16:06 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 16:16:06 vmi3096165 futures-bot-wrapper.sh[390449]: [wrapper] cwd=/root/MT5-PropFirm-Bot TRADOVATE_PASS_set=yes bot.py=MISSINGB
-Apr 22 16:16:06 vmi3096165 futures-bot-wrapper.sh[390449]: /usr/bin/python3: can't open file '/root/MT5-PropFirm-Bot/futures_bot/bot.py': [Errno 2] No such file or directory
-Apr 22 16:16:06 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=2/INVALIDARGUMENT
-Apr 22 16:16:06 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-
---- bot log last 20 ---
-2026-04-22 16:05:46,856 [bot] INFO: Timeframe: 5min
-2026-04-22 16:05:46,857 [bot] INFO: New trading day: 2026-04-22
-2026-04-22 16:08:10,820 [bot] INFO: Stopping bot: Signal received
-2026-04-22 16:08:11,169 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-22 16:08:11,169 [bot] INFO: Bot stopped
-2026-04-22 16:10:34,944 [bot] INFO: ============================================================
-2026-04-22 16:10:34,944 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-22 16:10:34,944 [bot] INFO: ============================================================
-2026-04-22 16:10:34,945 [news_filter] INFO: Loaded 26 restricted events
-2026-04-22 16:10:34,945 [tradovate_client] INFO: Trying pre-set access token from environment...
-2026-04-22 16:10:35,086 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-22 16:10:35,091 [tradovate_client] INFO: Environment token is valid
-2026-04-22 16:10:35,102 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-22 16:10:35,238 [bot] INFO: Bot started successfully
-2026-04-22 16:10:35,239 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-22 16:10:35,239 [bot] INFO: Timeframe: 5min
-2026-04-22 16:10:35,239 [bot] INFO: New trading day: 2026-04-22
-2026-04-22 16:14:33,761 [bot] INFO: Stopping bot: Signal received
-2026-04-22 16:14:34,124 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-22 16:14:34,124 [bot] INFO: Bot stopped
+Apr 22 16:18:52 vmi3096165 systemd[1]: futures-bot.service: State 'stop-sigterm' timed out. Killing.
+Apr 22 16:18:52 vmi3096165 systemd[1]: futures-bot.service: Killing process 390662 (python3) with signal SIGKILL.
+Apr 22 16:18:52 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=killed, status=9/KILL
+Apr 22 16:18:52 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'timeout'.
+Apr 22 16:18:52 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 16:18:54 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 16:18:54 vmi3096165 futures-bot-wrapper.sh[391329]: [wrapper] repo copy missing, falling back to /opt/futures_bot_stable
+Apr 22 16:18:54 vmi3096165 futures-bot-wrapper.sh[391329]: [wrapper] BOT_DIR=/opt/futures_bot_stable TRADOVATE_PASS_set=yes bot.py=24016B
+Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,327 [bot] INFO: ============================================================
+Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,327 [bot] INFO: TradeDay Futures Bot Starting
+Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,327 [bot] INFO: ============================================================
+Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,328 [news_filter] INFO: Loaded 26 restricted events
+Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,329 [tradovate_client] INFO: Trying pre-set access token from environment...
+Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,474 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,474 [tradovate_client] INFO: Environment token is valid
+Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,475 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,559 [bot] INFO: Bot started successfully
+Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,559 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,559 [bot] INFO: Timeframe: 5min
+Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,560 [bot] INFO: New trading day: 2026-04-22
