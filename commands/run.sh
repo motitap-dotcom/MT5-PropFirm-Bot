@@ -1,20 +1,14 @@
 #!/bin/bash
-# Trigger: check-after-bash-wrap-fix
+# Final check
 cd /root/MT5-PropFirm-Bot
-echo "=== After bash-wrap fix $(date -u '+%Y-%m-%d %H:%M:%S UTC') ==="
+echo "=== $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "Service: $(systemctl is-active futures-bot)  PID: $(systemctl show futures-bot --property=MainPID --value)  NRestarts: $(systemctl show futures-bot --property=NRestarts --value)"
 echo ""
-echo "=== service state ==="
-systemctl is-active futures-bot
-systemctl show futures-bot --property=MainPID --property=ExecStart --property=SubState --property=ActiveEnterTimestamp --property=Restart --property=NRestarts 2>&1
+echo "--- journalctl last 20 ---"
+journalctl -u futures-bot --no-pager -n 20 2>&1 | tail -20
 echo ""
-echo "=== service file on disk ==="
-cat /etc/systemd/system/futures-bot.service
+echo "--- bot.log last 30 ---"
+tail -30 logs/bot.log 2>/dev/null
 echo ""
-echo "=== last 30 journalctl lines ==="
-journalctl -u futures-bot --no-pager -n 30 2>&1 | tail -30
-echo ""
-echo "=== last 30 bot log lines ==="
-tail -30 logs/bot.log 2>/dev/null || echo "no log"
-echo ""
-echo "=== status.json ==="
-cat status/status.json 2>/dev/null | head -30
+echo "--- status.json ---"
+cat status/status.json 2>/dev/null
