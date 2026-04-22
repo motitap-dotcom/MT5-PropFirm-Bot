@@ -45,8 +45,13 @@ jobs:
             python -m py_compile "$f" && echo "  OK: $f" || echo "  FAIL: $f"
           done
 
-      - name: Run pytest suite
-        run: python -m pytest tests/ -q --tb=short
+      - name: Run pytest suite with coverage
+        run: |
+          python -m pytest tests/ -q --tb=short \
+            --cov=futures_bot --cov-report=term-missing --cov-report=json
+
+      - name: Enforce per-module coverage floors
+        run: python scripts/check_coverage.py coverage.json
 
   merge-and-deploy:
     needs: test
