@@ -1,35 +1,69 @@
-=== v148 2026-04-07 14:45 UTC ===
-Service: activating
-PID: 0
-Code: b6f06b2 v148
+=== Post-DST-fix health check 2026-04-22 09:34 UTC ===
 
-2026-04-07 14:31:29,502 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,620 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:29,745 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,864 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:36:29,932 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
-2026-04-07 14:36:30,083 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,214 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,343 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,465 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,591 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,714 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,840 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,990 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,119 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,252 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,382 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,509 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,636 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,757 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,884 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:32,013 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:32,141 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:32,265 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:41:04,915 [bot] INFO: Stopping bot: Signal received
-2026-04-07 14:41:04,915 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:41:05,059 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:41:05,179 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:41:05,306 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:41:05,546 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 14:41:05,546 [bot] INFO: Bot stopped
+--- Service ---
+Status:  active
+PID:     10285
+Uptime:  Tue 2026-04-21 14:11:24 UTC
+
+--- Deployed code ---
+Head:    a29d4be Status: verify DST fix deployment (read-only)
+
+DST fix present in risk_manager.py:
+  YES
+17:    from zoneinfo import ZoneInfo
+18:    _ET_TZ = ZoneInfo("America/New_York")
+20:    _ET_TZ = None
+188:        """Get current time in US Eastern (DST-aware via zoneinfo)."""
+
+DST fix present in news_filter.py:
+  YES
+
+--- Import + ET time sanity (does zoneinfo load cleanly?) ---
+RiskManager _get_et_time(): 05:34:52.224886
+is_trading_session: ok=False msg='Pre-market: 05:34 ET (opens 09:30:00)'
+must_flatten(): False
+NewsFilter loaded 26 events
+
+--- Bot log tail (last 30 lines) ---
+2026-04-22 09:20:05,660 [bot] INFO: Outside session: Pre-market: 05:20 ET (opens 09:30:00)
+2026-04-22 09:20:35,667 [bot] INFO: Outside session: Pre-market: 05:20 ET (opens 09:30:00)
+2026-04-22 09:21:05,696 [bot] INFO: Outside session: Pre-market: 05:21 ET (opens 09:30:00)
+2026-04-22 09:21:35,699 [bot] INFO: Outside session: Pre-market: 05:21 ET (opens 09:30:00)
+2026-04-22 09:22:05,729 [bot] INFO: Outside session: Pre-market: 05:22 ET (opens 09:30:00)
+2026-04-22 09:22:35,765 [bot] INFO: Outside session: Pre-market: 05:22 ET (opens 09:30:00)
+2026-04-22 09:23:05,800 [bot] INFO: Outside session: Pre-market: 05:23 ET (opens 09:30:00)
+2026-04-22 09:23:35,830 [bot] INFO: Outside session: Pre-market: 05:23 ET (opens 09:30:00)
+2026-04-22 09:24:05,856 [bot] INFO: Outside session: Pre-market: 05:24 ET (opens 09:30:00)
+2026-04-22 09:24:35,885 [bot] INFO: Outside session: Pre-market: 05:24 ET (opens 09:30:00)
+2026-04-22 09:25:05,915 [bot] INFO: Outside session: Pre-market: 05:25 ET (opens 09:30:00)
+2026-04-22 09:25:35,937 [bot] INFO: Outside session: Pre-market: 05:25 ET (opens 09:30:00)
+2026-04-22 09:26:05,955 [bot] INFO: Outside session: Pre-market: 05:26 ET (opens 09:30:00)
+2026-04-22 09:26:35,975 [bot] INFO: Outside session: Pre-market: 05:26 ET (opens 09:30:00)
+2026-04-22 09:27:06,006 [bot] INFO: Outside session: Pre-market: 05:27 ET (opens 09:30:00)
+2026-04-22 09:27:36,016 [bot] INFO: Outside session: Pre-market: 05:27 ET (opens 09:30:00)
+2026-04-22 09:28:06,044 [bot] INFO: Outside session: Pre-market: 05:28 ET (opens 09:30:00)
+2026-04-22 09:28:36,050 [bot] INFO: Outside session: Pre-market: 05:28 ET (opens 09:30:00)
+2026-04-22 09:29:06,094 [bot] INFO: Outside session: Pre-market: 05:29 ET (opens 09:30:00)
+2026-04-22 09:29:36,110 [bot] INFO: Outside session: Pre-market: 05:29 ET (opens 09:30:00)
+2026-04-22 09:30:06,172 [bot] INFO: Outside session: Pre-market: 05:30 ET (opens 09:30:00)
+2026-04-22 09:30:36,202 [bot] INFO: Outside session: Pre-market: 05:30 ET (opens 09:30:00)
+2026-04-22 09:31:06,225 [bot] INFO: Outside session: Pre-market: 05:31 ET (opens 09:30:00)
+2026-04-22 09:31:36,252 [bot] INFO: Outside session: Pre-market: 05:31 ET (opens 09:30:00)
+2026-04-22 09:32:06,277 [bot] INFO: Outside session: Pre-market: 05:32 ET (opens 09:30:00)
+2026-04-22 09:32:36,308 [bot] INFO: Outside session: Pre-market: 05:32 ET (opens 09:30:00)
+2026-04-22 09:33:06,318 [bot] INFO: Outside session: Pre-market: 05:33 ET (opens 09:30:00)
+2026-04-22 09:33:36,350 [bot] INFO: Outside session: Pre-market: 05:33 ET (opens 09:30:00)
+2026-04-22 09:34:06,381 [bot] INFO: Outside session: Pre-market: 05:34 ET (opens 09:30:00)
+2026-04-22 09:34:36,387 [bot] INFO: Outside session: Pre-market: 05:34 ET (opens 09:30:00)
+
+--- Recent errors (if any) ---
+2026-04-20 13:35:30,417 [tradovate_client] ERROR: MCLM6: WebSocket chart fetch failed: no close frame received or sent
+2026-04-20 13:35:30,715 [tradovate_client] ERROR: MGCM6: WebSocket chart fetch failed: no close frame received or sent
+2026-04-20 13:35:31,006 [tradovate_client] ERROR: MYMM6: WebSocket chart fetch failed: no close frame received or sent
+2026-04-20 13:35:31,297 [tradovate_client] ERROR: M2KM6: WebSocket chart fetch failed: no close frame received or sent
+2026-04-21 14:11:26,227 [bot] ERROR: Failed to connect: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-21 14:11:26,227 [bot] ERROR: Fatal error (attempt 1/5): Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Traceback (most recent call last):
+    raise ConnectionError(f"Authentication failed: {error}")
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-21 14:11:26,588 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
