@@ -1,35 +1,191 @@
-=== v148 2026-04-07 14:45 UTC ===
-Service: activating
-PID: 0
-Code: b6f06b2 v148
+=== v149 2026-04-22 16:43 UTC ===
 
-2026-04-07 14:31:29,502 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,620 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:31:29,745 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:31:29,864 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:36:29,932 [tradovate_client] INFO: Token expiring in 1.2h, renewing...
-2026-04-07 14:36:30,083 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,214 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,343 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,465 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,591 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,714 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:30,840 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:30,990 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,119 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,252 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,382 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,509 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,636 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:31,757 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:31,884 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:32,013 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:36:32,141 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:36:32,265 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-07 14:41:04,915 [bot] INFO: Stopping bot: Signal received
-2026-04-07 14:41:04,915 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:41:05,059 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:41:05,179 [tradovate_client] INFO: Token expiring in 1.3h, renewing...
-2026-04-07 14:41:05,306 [tradovate_client] INFO: Token renewed successfully
-2026-04-07 14:41:05,546 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-07 14:41:05,546 [bot] INFO: Bot stopped
+--- Service ---
+Service: active
+PID: 397001
+Uptime: Wed 2026-04-22 16:41:01 UTC
+Code: c16e09a v149: deep diagnostic - why bot not trading
+
+--- Status JSON ---
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
+
+--- Positions on account ---
+No token file
+
+
+--- Last 80 log lines ---
+2026-04-22 15:14:38,577 [bot] INFO: Timeframe: 5min
+2026-04-22 15:14:38,577 [bot] INFO: New trading day: 2026-04-22
+2026-04-22 15:20:17,532 [bot] INFO: Stopping bot: Signal received
+2026-04-22 15:20:17,897 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 15:20:17,897 [bot] INFO: Bot stopped
+2026-04-22 15:28:09,479 [bot] INFO: ============================================================
+2026-04-22 15:28:09,480 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-22 15:28:09,480 [bot] INFO: ============================================================
+2026-04-22 15:28:09,480 [news_filter] INFO: Loaded 26 restricted events
+2026-04-22 15:28:09,481 [tradovate_client] INFO: Trying pre-set access token from environment...
+2026-04-22 15:28:09,644 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-22 15:28:09,644 [tradovate_client] INFO: Environment token is valid
+2026-04-22 15:28:09,646 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-22 15:28:09,726 [bot] INFO: Bot started successfully
+2026-04-22 15:28:09,727 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-22 15:28:09,727 [bot] INFO: Timeframe: 5min
+2026-04-22 15:28:09,728 [bot] INFO: New trading day: 2026-04-22
+2026-04-22 15:45:18,604 [bot] INFO: Stopping bot: Signal received
+2026-04-22 15:45:19,027 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 15:45:19,028 [bot] INFO: Bot stopped
+2026-04-22 16:01:15,455 [bot] INFO: ============================================================
+2026-04-22 16:01:15,456 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-22 16:01:15,456 [bot] INFO: ============================================================
+2026-04-22 16:01:15,457 [news_filter] INFO: Loaded 26 restricted events
+2026-04-22 16:01:15,457 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-22 16:01:15,602 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-22 16:01:15,602 [tradovate_client] INFO: Saved token is still valid
+2026-04-22 16:01:15,604 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-22 16:01:15,735 [bot] INFO: Bot started successfully
+2026-04-22 16:01:15,736 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-22 16:01:15,741 [bot] INFO: Timeframe: 5min
+2026-04-22 16:01:15,742 [bot] INFO: New trading day: 2026-04-22
+2026-04-22 16:02:52,811 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:02:53,176 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 16:02:53,176 [bot] INFO: Bot stopped
+2026-04-22 16:05:46,617 [bot] INFO: ============================================================
+2026-04-22 16:05:46,617 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-22 16:05:46,617 [bot] INFO: ============================================================
+2026-04-22 16:05:46,617 [news_filter] INFO: Loaded 26 restricted events
+2026-04-22 16:05:46,617 [tradovate_client] INFO: Trying pre-set access token from environment...
+2026-04-22 16:05:46,758 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-22 16:05:46,758 [tradovate_client] INFO: Environment token is valid
+2026-04-22 16:05:46,759 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-22 16:05:46,856 [bot] INFO: Bot started successfully
+2026-04-22 16:05:46,856 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-22 16:05:46,856 [bot] INFO: Timeframe: 5min
+2026-04-22 16:05:46,857 [bot] INFO: New trading day: 2026-04-22
+2026-04-22 16:08:10,820 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:08:11,169 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 16:08:11,169 [bot] INFO: Bot stopped
+2026-04-22 16:10:34,944 [bot] INFO: ============================================================
+2026-04-22 16:10:34,944 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-22 16:10:34,944 [bot] INFO: ============================================================
+2026-04-22 16:10:34,945 [news_filter] INFO: Loaded 26 restricted events
+2026-04-22 16:10:34,945 [tradovate_client] INFO: Trying pre-set access token from environment...
+2026-04-22 16:10:35,086 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-22 16:10:35,091 [tradovate_client] INFO: Environment token is valid
+2026-04-22 16:10:35,102 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-22 16:10:35,238 [bot] INFO: Bot started successfully
+2026-04-22 16:10:35,239 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-22 16:10:35,239 [bot] INFO: Timeframe: 5min
+2026-04-22 16:10:35,239 [bot] INFO: New trading day: 2026-04-22
+2026-04-22 16:14:33,761 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:14:34,124 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 16:14:34,124 [bot] INFO: Bot stopped
+2026-04-22 16:16:37,378 [bot] INFO: ============================================================
+2026-04-22 16:16:37,378 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-22 16:16:37,378 [bot] INFO: ============================================================
+2026-04-22 16:16:37,378 [news_filter] INFO: Loaded 26 restricted events
+2026-04-22 16:16:37,379 [tradovate_client] INFO: Trying pre-set access token from environment...
+2026-04-22 16:16:37,531 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-22 16:16:37,531 [tradovate_client] INFO: Environment token is valid
+2026-04-22 16:16:37,532 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-22 16:16:37,632 [bot] INFO: Bot started successfully
+2026-04-22 16:16:37,632 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-22 16:16:37,632 [bot] INFO: Timeframe: 5min
+2026-04-22 16:16:37,632 [bot] INFO: New trading day: 2026-04-22
+2026-04-22 16:18:22,173 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:18:22,529 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 16:18:22,529 [bot] INFO: Bot stopped
+
+--- Trade-related log lines (last 200 matching) ---
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.00 VWAP=7144.12 dist=+0.74SD RSI=65.2 ATR=4.16
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.25 VWAP=7144.46 dist=+0.75SD RSI=70.6 ATR=4.20
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7145.25 VWAP=7144.54 dist=+0.11SD RSI=61.9 ATR=4.54
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7143.50 VWAP=7144.54 dist=-0.17SD RSI=57.4 ATR=4.66
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7140.50 VWAP=7144.41 dist=-0.66SD RSI=52.0 ATR=4.89
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7141.75 VWAP=7144.28 dist=-0.44SD RSI=56.8 ATR=4.82
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7139.00 VWAP=7144.09 dist=-0.88SD RSI=46.0 ATR=4.73
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7140.25 VWAP=7143.89 dist=-0.64SD RSI=46.8 ATR=4.88
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7143.25 VWAP=7143.95 dist=-0.13SD RSI=51.7 ATR=5.59
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7142.00 VWAP=7143.85 dist=-0.36SD RSI=40.3 ATR=5.38
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.50 VWAP=7144.14 dist=+1.06SD RSI=49.0 ATR=5.96
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.00 VWAP=7144.49 dist=+0.91SD RSI=40.2 ATR=6.09
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7150.25 VWAP=7144.71 dist=+1.12SD RSI=44.6 ATR=6.12
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7144.00 VWAP=7144.96 dist=-0.21SD RSI=37.9 ATR=6.62
+2026-04-22 13:45:23,992 [strategy.vwap] INFO: Price=7147.75 VWAP=7145.04 dist=+0.62SD RSI=48.3 ATR=6.57
+2026-04-22 13:45:23,992 [strategy.vwap] INFO: Price=7145.50 VWAP=7145.20 dist=+0.07SD RSI=45.3 ATR=6.70
+2026-04-22 13:50:28,504 [strategy.vwap] INFO: Price=7145.00 VWAP=7145.41 dist=-0.10SD RSI=49.7 ATR=7.00
+2026-04-22 13:55:33,123 [strategy.vwap] INFO: Price=7150.75 VWAP=7145.57 dist=+1.32SD RSI=59.0 ATR=7.46
+2026-04-22 13:58:03,363 [bot] INFO: Stopping bot: Signal received
+2026-04-22 14:55:03,325 [bot] INFO: Stopping bot: Signal received
+2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-22 15:04:27,941 [bot] INFO: Switching MESM6 to ORB strategy (trend day)
+2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-22 15:04:27,941 [bot] INFO: Switching MNQM6 to ORB strategy (trend day)
+2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-22 15:04:27,941 [bot] INFO: Switching MCLM6 to ORB strategy (trend day)
+2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-22 15:04:27,941 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
+2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-22 15:04:27,941 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
+2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-22 15:04:27,941 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
+2026-04-22 15:08:43,817 [bot] INFO: Stopping bot: Signal received
+2026-04-22 15:14:37,757 [bot] INFO: Stopping bot: Signal received
+2026-04-22 15:20:17,532 [bot] INFO: Stopping bot: Signal received
+2026-04-22 15:45:18,604 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:02:52,811 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:08:10,820 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:14:33,761 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:18:22,173 [bot] INFO: Stopping bot: Signal received
+
+--- Config ---
+{
+  "symbols": ["MESM6", "MNQM6", "MCLM6", "MGCM6", "MYMM6", "M2KM6"],
+  "timeframe": "5min",
+  "live": false,
+  "organization": "",
+  "telegram_enabled": true,
+
+  "guardian": {
+    "initial_balance": 50000.0,
+    "max_drawdown": 2000.0,
+    "profit_target": 3000.0,
+    "min_trading_days": 5,
+    "consistency_pct": 0.30,
+    "max_contracts": 5,
+    "max_micro_contracts": 50,
+    "dd_warning_pct": 0.60,
+    "dd_critical_pct": 0.80,
+    "dd_emergency_pct": 0.90,
+    "max_daily_loss": 400.0,
+    "max_daily_profit": 900.0,
+    "max_daily_trades": 10
+  },
+
+  "risk": {
+    "max_risk_per_trade": 150.0,
+    "max_risk_pct": 0.003,
+    "max_positions": 3,
+    "max_contracts_per_trade": 5,
+    "reduce_in_dead_zone": true
+  },
+
+  "vwap_per_symbol": {
+    "MES": {"min_atr": 2.0, "max_atr": 8.0},
+    "MNQ": {"min_atr": 10.0, "max_atr": 50.0},
+    "MCL": {"min_atr": 0.05, "max_atr": 0.30},
+    "MGC": {"min_atr": 1.0, "max_atr": 6.0},
+    "MYM": {"min_atr": 20.0, "max_atr": 80.0},
+    "M2K": {"min_atr": 2.0, "max_atr": 10.0}
+  },
+
+
+--- Time info ---
+UTC: Wed Apr 22 16:43:29 UTC 2026
+NY:  Wed Apr 22 12:43:29 EDT 2026
