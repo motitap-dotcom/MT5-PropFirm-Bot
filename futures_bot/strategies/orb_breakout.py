@@ -48,12 +48,15 @@ class ORBBreakout:
     """Opening Range Breakout strategy for micro futures."""
 
     def __init__(self, config: dict):
-        self.buffer_ticks: float = config.get("buffer_ticks", 2.0)
-        self.tp_multiplier: float = config.get("tp_multiplier", 1.5)
+        self.buffer_ticks: float = config.get("buffer_ticks", 3.0)
+        self.tp_multiplier: float = config.get("tp_multiplier", 2.0)
         self.max_range_points: float = config.get("max_range_points", 15.0)  # MES
         self.min_range_points: float = config.get("min_range_points", 3.0)
-        self.volume_threshold: float = config.get("volume_threshold", 1.2)  # 120%
+        self.volume_threshold: float = config.get("volume_threshold", 1.5)  # 150%
         self.max_trades: int = config.get("max_trades", 2)
+        self.window_start: str = config.get("window_start", "09:30")
+        self.window_end: str = config.get("window_end", "10:00")
+        self.trailing_after_1r: bool = config.get("trailing_after_1r", True)
 
         # State
         self._orb_bars: List[Bar] = []

@@ -48,25 +48,46 @@ CONTRACT_SPECS = {
 }
 
 
+def _parse_hhmm(value, default: time) -> time:
+    """Parse a 'HH:MM' string into a time object; fall back to default."""
+    if isinstance(value, time):
+        return value
+    if isinstance(value, str) and ":" in value:
+        try:
+            h, m = value.split(":", 1)
+            return time(int(h), int(m))
+        except (ValueError, TypeError):
+            return default
+    return default
+
+
 class RiskManager:
     """Manages position sizing, session timing, and trade validation."""
 
-    def __init__(self, config: dict):
+    def __init__(self, config: dict, session_config: Optional[dict] = None):
         self.max_risk_per_trade: float = config.get("max_risk_per_trade", 150.0)
         self.max_risk_pct: float = config.get("max_risk_pct", 0.003)  # 0.3% of account
-        self.max_positions: int = config.get("max_positions", 3)
-        self.max_contracts_per_trade: int = config.get("max_contracts_per_trade", 5)
+        self.max_positions: int = config.get("max_positions", 2)
+        self.max_contracts_per_trade: int = config.get("max_contracts_per_trade", 3)
 
-        # Session times (ET)
-        self.session_start: time = time(9, 30)   # 9:30 AM ET
-        self.session_end: time = time(15, 30)     # 3:30 PM ET
-        self.flatten_time: time = time(15, 45)    # 3:45 PM ET - force close
-        self.no_new_trades_after: time = time(15, 0)  # 3:00 PM ET
+        # Session times (ET) — sourced from session config block when provided
+        session_config = session_config or {}
+        self.session_start: time = _parse_hhmm(session_config.get("start"), time(9, 30))
+        self.session_end: time = _parse_hhmm(session_config.get("end"), time(15, 30))
+        self.flatten_time: time = _parse_hhmm(session_config.get("flatten_time"), time(15, 45))
+        self.no_new_trades_after: time = _parse_hhmm(
+            session_config.get("no_new_trades_after"), time(14, 45)
+        )
 
-        # Dead zone (low volume lunch)
-        self.dead_zone_start: time = time(12, 0)
-        self.dead_zone_end: time = time(13, 30)
+        # Dead zone (low volume lunch) — from session config
+        self.dead_zone_start: time = _parse_hhmm(
+            session_config.get("dead_zone_start"), time(11, 30)
+        )
+        self.dead_zone_end: time = _parse_hhmm(
+            session_config.get("dead_zone_end"), time(13, 30)
+        )
         self.reduce_in_dead_zone: bool = config.get("reduce_in_dead_zone", True)
+        self.dead_zone_multiplier: float = config.get("dead_zone_multiplier", 0.5)
 
         # Current state
         self.open_positions: int = 0
@@ -122,7 +143,7 @@ class RiskManager:
             return False, "Session closed"
 
         if self.reduce_in_dead_zone and self.dead_zone_start <= now_et < self.dead_zone_end:
-            return True, "DEAD ZONE: Reduce position size by 50%"
+            return True, f"DEAD ZONE: risk x{self.dead_zone_multiplier}"
 
         return True, "Session active"
 
@@ -151,8 +172,8 @@ class RiskManager:
         """Get risk multiplier based on current conditions."""
         multiplier = 1.0
 
-        if self.is_dead_zone():
-            multiplier *= 0.5  # Half risk during dead zone
+        if self.reduce_in_dead_zone and self.is_dead_zone():
+            multiplier *= self.dead_zone_multiplier
 
         return multiplier
 

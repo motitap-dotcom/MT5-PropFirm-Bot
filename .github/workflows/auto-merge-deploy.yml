@@ -9,6 +9,7 @@ on:
       - 'server_status.json'
       - 'system_status.json'
       - 'commands/**'
+      - 'scripts/**'
       - 'trigger-check.txt'
 
 env:

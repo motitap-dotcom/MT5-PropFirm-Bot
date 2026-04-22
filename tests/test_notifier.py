@@ -22,7 +22,7 @@ class _RecordingNotifier(TelegramNotifier):
         super().__init__(token="TOKEN", chat_id="CHAT", enabled=True)
         self.sent: List[str] = []
 
-    async def send(self, message: str, parse_mode: str = "HTML"):
+    async def send(self, message: str, parse_mode: str = "HTML", **kwargs):
         self.sent.append(message)
 
 

@@ -92,6 +92,7 @@ def _make_bot_with_fakes(guardian_config, risk_config) -> FuturesBot:
     bot.news_filter.is_restricted = MagicMock(return_value=(False, None))
     bot.news_filter.must_flatten_for_event = MagicMock(return_value=(False, None))
     bot.status_writer = MagicMock()
+    bot.trade_logger = None  # CSV logging disabled in tests
     return bot
 
 
@@ -133,7 +134,13 @@ class TestPureHelpers:
         assert bar.open == 0
         assert bar.high == 0
         assert bar.close == 0
-        assert bar.volume == 0
+        # Volume defaults to 1 (not 0) so the VWAP accumulator still weights the bar.
+        assert bar.volume == 1
+
+    def test_to_bar_uses_up_down_volume_when_volume_missing(self):
+        bot = FuturesBot.__new__(FuturesBot)
+        bar = bot._to_bar({"upVolume": 300, "downVolume": 200})
+        assert bar.volume == 500
 
     def test_get_sleep_seconds_maps_timeframes(self):
         bot = FuturesBot.__new__(FuturesBot)
