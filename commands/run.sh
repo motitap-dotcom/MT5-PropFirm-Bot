@@ -1,10 +1,22 @@
 #!/bin/bash
 cd /root/MT5-PropFirm-Bot
-echo "=== $(date -u '+%H:%M UTC')  NY=$(TZ=America/New_York date '+%H:%M') ==="
-echo "Service: $(systemctl is-active futures-bot)  PID: $(systemctl show futures-bot --property=MainPID --value)  NRestarts: $(systemctl show futures-bot --property=NRestarts --value)"
+echo "=== $(date -u '+%H:%M UTC') ==="
 echo ""
-echo "--- journalctl last 60 ---"
-journalctl -u futures-bot --no-pager -n 60 2>&1 | tail -60
+echo "--- run_bot.sh on disk ---"
+ls -la /root/MT5-PropFirm-Bot/scripts/run_bot.sh 2>&1
 echo ""
-echo "--- bot log tail 40 ---"
-tail -40 logs/bot.log 2>/dev/null
+echo "--- first 5 lines ---"
+head -5 /root/MT5-PropFirm-Bot/scripts/run_bot.sh 2>&1
+echo ""
+echo "--- can root execute it? ---"
+bash -c "file /root/MT5-PropFirm-Bot/scripts/run_bot.sh"
+echo ""
+echo "--- try running it (timeout 5s) ---"
+timeout 5 /root/MT5-PropFirm-Bot/scripts/run_bot.sh 2>&1 | head -20
+echo "exit=$?"
+echo ""
+echo "--- current service ExecStart ---"
+systemctl show futures-bot --property=ExecStart --property=ExecStartPre
+echo ""
+echo "--- cat service file ---"
+cat /etc/systemd/system/futures-bot.service
