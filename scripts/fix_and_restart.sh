@@ -1,4 +1,5 @@
 #!/bin/bash
+# v2 - retrigger restart to unstick hung bot loop
 echo "=== Fix & Restart ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
