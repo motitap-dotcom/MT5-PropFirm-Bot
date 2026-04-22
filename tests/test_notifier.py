@@ -128,3 +128,91 @@ class TestMessageBuilders:
         await n.news_alert("FOMC Meeting")
         assert "NEWS ALERT" in n.sent[0]
         assert "FOMC Meeting" in n.sent[0]
+
+    async def test_dd_warning_formats_correctly(self):
+        n = _RecordingNotifier()
+        await n.dd_warning(0.80, 1600.0, 2000.0)
+        msg = n.sent[0]
+        assert "DRAWDOWN WARNING" in msg
+        assert "80%" in msg
+        assert "$1600.00" in msg
+        assert "$2000.00" in msg
+
+    async def test_heartbeat_is_non_critical(self):
+        """Heartbeats should be droppable when rate-limited."""
+        n = _RecordingNotifier()
+        await n.heartbeat({"state": "ACTIVE", "balance": 50000.0, "daily_pnl": 20.0, "dd_used": 0.0})
+        assert "HEARTBEAT" in n.sent[0]
+
+
+# ── Rate limiter ──
+
+class _MockSession:
+    """Stand-in for aiohttp.ClientSession that records posts and returns 200."""
+
+    def __init__(self):
+        self.calls = 0
+
+    def post(self, url, json=None):  # noqa: D401
+        self.calls += 1
+        return _MockResponse()
+
+    async def close(self):
+        pass
+
+
+class _MockResponse:
+    status = 200
+
+    async def text(self):
+        return "ok"
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, *args):
+        return None
+
+
+class TestRateLimiter:
+
+    async def test_under_budget_non_critical_sends(self):
+        n = TelegramNotifier(token="T", chat_id="C", rate_limit_per_minute=5)
+        n._session = _MockSession()
+        await n.send("hello", critical=False)
+        assert n._session.calls == 1
+
+    async def test_over_budget_non_critical_dropped(self):
+        """Once rate budget is exhausted, non-critical messages are dropped."""
+        n = TelegramNotifier(token="T", chat_id="C", rate_limit_per_minute=2)
+        n._session = _MockSession()
+        await n.send("m1", critical=False)
+        await n.send("m2", critical=False)
+        await n.send("m3", critical=False)
+        assert n._session.calls == 2
+
+    async def test_over_budget_critical_still_sends(self):
+        """Critical messages must always go through."""
+        n = TelegramNotifier(token="T", chat_id="C", rate_limit_per_minute=1)
+        n._session = _MockSession()
+        await n.send("m1", critical=False)  # fills budget
+        await n.send("m2", critical=True)   # must still send
+        assert n._session.calls == 2
+
+    async def test_old_timestamps_expire(self):
+        """After 60s, stale timestamps should be pruned and budget refreshed."""
+        n = TelegramNotifier(token="T", chat_id="C", rate_limit_per_minute=1)
+        n._session = _MockSession()
+        # Inject a stale timestamp
+        n._sent_timestamps.append(0.0)  # from epoch
+        assert n._under_rate_limit() is True  # should be pruned
+
+
+# ── start() / stop() lifecycle ──
+
+class TestLifecycle:
+
+    async def test_stop_without_start_is_safe(self):
+        n = TelegramNotifier(token="T", chat_id="C")
+        # Should not raise even though _session is None
+        await n.stop()

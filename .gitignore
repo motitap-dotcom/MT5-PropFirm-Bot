@@ -3,6 +3,8 @@ __pycache__/
 .env
 configs/.tradovate_token.json
 .coverage
+coverage.json
 .pytest_cache/
 htmlcov/
 logs/
+status/

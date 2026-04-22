@@ -1,0 +1,15 @@
+[run]
+source = futures_bot
+omit =
+    futures_bot/__init__.py
+    futures_bot/*/__init__.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    raise NotImplementedError
+    if __name__ == .__main__.:
+
+# Overall project coverage must not drop below this floor.
+# Raise this number as coverage improves.
+fail_under = 62

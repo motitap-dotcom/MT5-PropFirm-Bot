@@ -7,7 +7,12 @@ from datetime import datetime, time, timezone
 import pytest
 from freezegun import freeze_time
 
-from futures_bot.core.risk_manager import CONTRACT_SPECS, ContractSpec, RiskManager
+from futures_bot.core.risk_manager import (
+    CONTRACT_SPECS,
+    ContractSpec,
+    RiskManager,
+    _parse_hhmm,
+)
 
 
 # ── Contract specs & symbol parsing ──
@@ -270,3 +275,44 @@ class TestCanOpenPosition:
         rm = RiskManager(risk_config)
         ok, _ = rm.can_open_position()
         assert ok is False
+
+
+# ── Module-level helpers ──
+
+from datetime import time as _time
+
+
+class TestParseHHMM:
+    def test_valid_string(self):
+        assert _parse_hhmm("09:30", _time(0, 0)) == _time(9, 30)
+
+    def test_invalid_string_returns_default(self):
+        default = _time(9, 30)
+        assert _parse_hhmm("not-a-time", default) == default
+        assert _parse_hhmm("25:99", default) == default
+
+    def test_empty_and_none_return_default(self):
+        default = _time(9, 30)
+        assert _parse_hhmm("", default) == default
+        assert _parse_hhmm(None, default) == default
+
+    def test_time_instance_passthrough(self):
+        t = _time(10, 15)
+        assert _parse_hhmm(t, _time(0, 0)) is t
+
+
+class TestGetCurrentETHour:
+
+    @freeze_time("2026-06-15 15:00:00")  # 11:00 ET
+    def test_returns_hour_only(self, risk_config):
+        rm = RiskManager(risk_config)
+        assert rm.get_current_et_hour() == 11
+
+
+class TestDeadZoneMessage:
+
+    @freeze_time("2026-06-15 16:30:00")  # 12:30 ET - dead zone
+    def test_dead_zone_message_includes_multiplier(self, risk_config):
+        rm = RiskManager(risk_config)
+        _, msg = rm.is_trading_session()
+        assert "x" in msg  # e.g., "risk x0.5"

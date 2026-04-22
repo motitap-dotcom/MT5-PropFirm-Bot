@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v19 - RSI 48/52 for more signals ==="
+echo "=== Fix & Restart v20 - DST fix (zoneinfo) + test suite ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 

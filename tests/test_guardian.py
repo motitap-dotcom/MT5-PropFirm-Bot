@@ -340,3 +340,49 @@ class TestGetStatus:
         s = g.get_status()
         assert s["drawdown_used"] == pytest.approx(1000.0)
         assert s["drawdown_remaining"] == pytest.approx(1000.0)
+
+
+# ── DD alert ladder (get_dd_pct_used + check_dd_alert) ──
+
+class TestDDAlertLadder:
+    """The alert ladder must fire each threshold exactly once per day, in order."""
+
+    def test_pct_used_zero_at_start(self, guardian_config):
+        g = Guardian(guardian_config)
+        assert g.get_dd_pct_used() == 0.0
+
+    def test_pct_used_on_loss(self, guardian_config):
+        g = Guardian(guardian_config)
+        g.update_balance(49000.0)  # -$1000 loss = 50% of $2000 max DD
+        assert g.get_dd_pct_used() == pytest.approx(0.5)
+
+    def test_pct_used_clamped_at_zero_when_in_profit(self, guardian_config):
+        """Gains must not produce a negative DD percentage."""
+        g = Guardian(guardian_config)
+        g.update_balance(51000.0)
+        assert g.get_dd_pct_used() == 0.0
+
+    def test_alert_fires_only_once_per_level(self, guardian_config):
+        g = Guardian(guardian_config)
+        g.update_balance(49000.0)  # 50%
+        assert g.check_dd_alert([0.25, 0.50, 0.75]) == 0.25
+        assert g.check_dd_alert([0.25, 0.50, 0.75]) == 0.50
+        # 75% not yet reached
+        assert g.check_dd_alert([0.25, 0.50, 0.75]) is None
+
+    def test_alert_sorted_ascending(self, guardian_config):
+        """Even if levels are unsorted, alerts must fire lowest-first."""
+        g = Guardian(guardian_config)
+        g.update_balance(48500.0)  # 75%
+        assert g.check_dd_alert([0.75, 0.25, 0.50]) == 0.25
+
+    def test_alert_cleared_on_new_day(self, guardian_config):
+        g = Guardian(guardian_config)
+        g.update_balance(49000.0)
+        g.check_dd_alert([0.25, 0.50])
+        g.check_dd_alert([0.25, 0.50])  # drains both
+        g.record_trade(1.0)  # so day counts
+        g.start_new_day("2026-04-23")
+        # After reset, balance is still at -1000 -> alerts should fire again
+        g.update_balance(49000.0)
+        assert g.check_dd_alert([0.25, 0.50]) == 0.25
