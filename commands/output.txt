@@ -1,7 +1,46 @@
-=== 2026-04-22 14:43 UTC  NY=10:43  Wk=Wednesday ===
+=== 14:47 UTC  NY=10:47 ===
 Service: active  PID: 363816
+Since: Wed 2026-04-22 14:39:34 UTC
 
---- last 60 bot log lines since restart ---
+--- last 50 bot log ---
+2026-04-22 14:18:01,169 [bot] ERROR: Failed to connect: integer modulo by zero
+2026-04-22 14:18:01,169 [bot] ERROR: Fatal error (attempt 4/5): integer modulo by zero
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 188, in _authenticate
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 30, in _encrypt_password
+ZeroDivisionError: integer modulo by zero
+2026-04-22 14:18:01,170 [bot] INFO: Stopping bot: Fatal: integer modulo by zero
+2026-04-22 14:18:01,170 [tradovate_client] INFO: Token expiring in -29614458min, renewing...
+2026-04-22 14:18:01,170 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 14:18:01,170 [bot] ERROR: Error closing positions: integer modulo by zero
+2026-04-22 14:18:01,170 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 14:18:01,170 [bot] INFO: Bot stopped
+2026-04-22 14:18:01,171 [bot] INFO: Retrying in 300s...
+2026-04-22 14:23:01,243 [bot] WARNING: Config not found at configs/bot_config.json, using defaults
+2026-04-22 14:23:01,244 [bot] INFO: ============================================================
+2026-04-22 14:23:01,244 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-22 14:23:01,244 [bot] INFO: ============================================================
+2026-04-22 14:23:01,244 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
+2026-04-22 14:23:01,244 [tradovate_client] INFO: All tokens failed, attempting user/password authentication...
+2026-04-22 14:23:01,244 [bot] ERROR: Failed to connect: integer modulo by zero
+2026-04-22 14:23:01,244 [bot] ERROR: Fatal error (attempt 5/5): integer modulo by zero
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 188, in _authenticate
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 30, in _encrypt_password
+ZeroDivisionError: integer modulo by zero
+2026-04-22 14:23:01,245 [bot] INFO: Stopping bot: Fatal: integer modulo by zero
+2026-04-22 14:23:01,245 [tradovate_client] INFO: Token expiring in -29614463min, renewing...
+2026-04-22 14:23:01,245 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 14:23:01,245 [bot] ERROR: Error closing positions: integer modulo by zero
+2026-04-22 14:23:01,245 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 14:23:01,245 [bot] INFO: Bot stopped
+2026-04-22 14:23:01,245 [bot] ERROR: Max retries reached. Bot shutting down permanently.
 2026-04-22 14:39:35,471 [bot] INFO: ============================================================
 2026-04-22 14:39:35,471 [bot] INFO: TradeDay Futures Bot Starting
 2026-04-22 14:39:35,471 [bot] INFO: ============================================================
@@ -15,46 +54,7 @@ Service: active  PID: 363816
 2026-04-22 14:39:35,758 [bot] INFO: Timeframe: 5min
 2026-04-22 14:39:35,758 [bot] INFO: New trading day: 2026-04-22
 
---- any TRADE attempts? ---
-2026-04-20 13:40:55,681 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.12SD RSI=70.5 entry=26755.50 sl=26762.25 tp1=26715.16 tp2=26686.66
-2026-04-20 13:40:55,681 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.26SD RSI=76.1 entry=26766.25 sl=26798.26 tp1=26729.97 tp2=26686.65
-2026-04-20 13:41:05,082 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.37SD RSI=82.7 entry=4834.50 sl=4843.41 tp1=4821.42 tp2=4807.14
-2026-04-20 13:41:06,797 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.93SD RSI=75.5 entry=49409.00 sl=49451.66 tp1=49384.13 tp2=49343.82
-2026-04-20 13:41:06,797 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.84SD RSI=75.6 entry=49411.00 sl=49457.65 tp1=49387.73 tp2=49346.36
-2026-04-20 13:41:06,798 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.53SD RSI=72.5 entry=49448.00 sl=49478.45 tp1=49396.98 tp2=49346.86
-2026-04-20 13:41:08,833 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.22SD RSI=76.1 entry=2772.60 sl=2776.98 tp1=2767.82 tp2=2761.92
-2026-04-20 14:33:48,150 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.37SD RSI=75.3 entry=2793.60 sl=2802.84 tp1=2778.74 tp2=2762.47
-2026-04-20 14:33:48,150 [bot] INFO: M2KM6: SIGNAL SHORT from VWAP Mean Reversion | entry=2793.60 sl=2802.84
-2026-04-20 14:33:48,524 [bot] INFO: TRADE: Sell 3 M2KM6 @ 2793.60 SL=2802.84 TP=2778.74 Risk=$138.55 Strategy=VWAP Mean Reversion
-2026-04-20 15:15:58,370 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.50SD RSI=18.8 entry=26622.25 sl=26570.40 tp1=26711.84 tp2=26801.63
-2026-04-20 15:15:58,370 [bot] INFO: MNQM6: SIGNAL LONG from VWAP Mean Reversion | entry=26622.25 sl=26570.40
-2026-04-20 15:15:58,370 [bot] INFO: Trade blocked by risk manager: Max positions reached: 2/2
-2026-04-21 14:12:11,877 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.89SD RSI=29.6 entry=7165.00 sl=7162.20 tp1=7173.10 tp2=7179.54
-2026-04-21 14:12:11,877 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.77SD RSI=29.4 entry=7156.50 sl=7142.03 tp1=7163.73 tp2=7177.80
-2026-04-21 15:08:09,812 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.94SD RSI=20.5 entry=7132.50 sl=7127.95 tp1=7158.69 tp2=7178.99
-2026-04-21 15:08:09,812 [bot] INFO: MESM6: SIGNAL LONG from VWAP Mean Reversion | entry=7132.50 sl=7127.95
-2026-04-21 15:08:10,175 [bot] INFO: TRADE: Buy 3 MESM6 @ 7132.50 SL=7127.95 TP=7158.69 Risk=$68.18 Strategy=VWAP Mean Reversion
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.78SD RSI=76.8 entry=7153.75 sl=7157.04 tp1=7142.75 tp2=7133.47
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.58SD RSI=76.2 entry=7153.25 sl=7157.81 tp1=7143.15 tp2=7133.58
-
---- current bar & indicator snapshots ---
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7143.50 VWAP=7144.54 dist=-0.17SD RSI=57.4 ATR=4.66
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7140.50 VWAP=7144.41 dist=-0.66SD RSI=52.0 ATR=4.89
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7141.75 VWAP=7144.28 dist=-0.44SD RSI=56.8 ATR=4.82
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7139.00 VWAP=7144.09 dist=-0.88SD RSI=46.0 ATR=4.73
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7140.25 VWAP=7143.89 dist=-0.64SD RSI=46.8 ATR=4.88
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7143.25 VWAP=7143.95 dist=-0.13SD RSI=51.7 ATR=5.59
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7142.00 VWAP=7143.85 dist=-0.36SD RSI=40.3 ATR=5.38
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.50 VWAP=7144.14 dist=+1.06SD RSI=49.0 ATR=5.96
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.00 VWAP=7144.49 dist=+0.91SD RSI=40.2 ATR=6.09
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7150.25 VWAP=7144.71 dist=+1.12SD RSI=44.6 ATR=6.12
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7144.00 VWAP=7144.96 dist=-0.21SD RSI=37.9 ATR=6.62
-2026-04-22 13:45:23,992 [strategy.vwap] INFO: Price=7147.75 VWAP=7145.04 dist=+0.62SD RSI=48.3 ATR=6.57
-2026-04-22 13:45:23,992 [strategy.vwap] INFO: Price=7145.50 VWAP=7145.20 dist=+0.07SD RSI=45.3 ATR=6.70
-2026-04-22 13:50:28,504 [strategy.vwap] INFO: Price=7145.00 VWAP=7145.41 dist=-0.10SD RSI=49.7 ATR=7.00
-2026-04-22 13:55:33,123 [strategy.vwap] INFO: Price=7150.75 VWAP=7145.57 dist=+1.32SD RSI=59.0 ATR=7.46
-
---- status.json ---
+--- positions ---
 {
   "timestamp": "",
   "bot": "TradeDay Futures Bot",
