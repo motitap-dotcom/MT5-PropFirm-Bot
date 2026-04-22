@@ -1,181 +1,75 @@
-=== Service state 2026-04-22 14:10:46 UTC ===
+=== Module error diag 2026-04-22 14:12:09 UTC ===
 
-=== systemctl status ===
-● futures-bot.service - TradeDay Futures Trading Bot
-     Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
-     Active: activating (auto-restart) (Result: exit-code) since Wed 2026-04-22 14:10:36 UTC; 10s ago
-    Process: 356453 ExecStart=/usr/bin/python3 -m futures_bot.bot (code=exited, status=1/FAILURE)
-   Main PID: 356453 (code=exited, status=1/FAILURE)
-        CPU: 28ms
+=== service file ===
+[Unit]
+Description=TradeDay Futures Trading Bot
+After=network.target
 
-=== journalctl last 80 lines ===
-Apr 22 13:45:23 vmi3096165 python3[294144]: 2026-04-22 13:45:23,992 [bot] INFO: MESM6: New bar 2026-04-22T13:40Z | O=7147.75 H=7151.0 L=7144.5 C=7145.5 V=13830
-Apr 22 13:45:23 vmi3096165 python3[294144]: 2026-04-22 13:45:23,992 [strategy.vwap] INFO: Price=7145.50 VWAP=7145.20 dist=+0.07SD RSI=45.3 ATR=6.70
-Apr 22 13:50:24 vmi3096165 python3[294144]: 2026-04-22 13:50:24,013 [bot] INFO: === Trading cycle 09:50 ET | Guardian: ACTIVE ===
-Apr 22 13:50:25 vmi3096165 python3[294144]: 2026-04-22 13:50:25,003 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
-Apr 22 13:50:28 vmi3096165 python3[294144]: 2026-04-22 13:50:28,504 [bot] INFO: MESM6: New bar 2026-04-22T13:45Z | O=7145.75 H=7153.75 L=7143.0 C=7145.0 V=18647
-Apr 22 13:50:28 vmi3096165 python3[294144]: 2026-04-22 13:50:28,504 [strategy.vwap] INFO: Price=7145.00 VWAP=7145.41 dist=-0.10SD RSI=49.7 ATR=7.00
-Apr 22 13:55:28 vmi3096165 python3[294144]: 2026-04-22 13:55:28,530 [bot] INFO: === Trading cycle 09:55 ET | Guardian: ACTIVE ===
-Apr 22 13:55:29 vmi3096165 python3[294144]: 2026-04-22 13:55:29,521 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
-Apr 22 13:55:33 vmi3096165 python3[294144]: 2026-04-22 13:55:33,122 [bot] INFO: MESM6: New bar 2026-04-22T13:50Z | O=7145.0 H=7151.0 L=7140.0 C=7150.75 V=16957
-Apr 22 13:55:33 vmi3096165 python3[294144]: 2026-04-22 13:55:33,123 [strategy.vwap] INFO: Price=7150.75 VWAP=7145.57 dist=+1.32SD RSI=59.0 ATR=7.46
-Apr 22 13:58:03 vmi3096165 python3[294144]: 2026-04-22 13:58:03,363 [bot] INFO: Stopping bot: Signal received
-Apr 22 13:58:03 vmi3096165 systemd[1]: Stopping futures-bot.service - TradeDay Futures Trading Bot...
-Apr 22 13:58:03 vmi3096165 python3[294144]: 2026-04-22 13:58:03,728 [tradovate_client] INFO: Disconnected from Tradovate
-Apr 22 13:58:03 vmi3096165 python3[294144]: 2026-04-22 13:58:03,728 [bot] INFO: Bot stopped
-Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: State 'stop-sigterm' timed out. Killing.
-Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Killing process 294144 (python3) with signal SIGKILL.
-Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Failed to kill control group /system.slice/futures-bot.service, ignoring: Invalid argument
-Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=killed, status=9/KILL
-Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'timeout'.
-Apr 22 13:59:33 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Consumed 21.125s CPU time, 561.6M memory peak, 0B memory swap peak.
-Apr 22 13:59:33 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 13:59:33 vmi3096165 python3[353736]: /usr/bin/python3: No module named futures_bot.bot
-Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 14:00:33 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
-Apr 22 14:00:33 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 14:00:33 vmi3096165 python3[354065]: /usr/bin/python3: No module named futures_bot.bot
-Apr 22 14:00:33 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 22 14:00:33 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 14:01:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
-Apr 22 14:01:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 14:01:34 vmi3096165 python3[354271]: /usr/bin/python3: No module named futures_bot.bot
-Apr 22 14:01:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 22 14:01:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 14:02:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 3.
-Apr 22 14:02:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 14:02:34 vmi3096165 python3[354501]: /usr/bin/python3: No module named futures_bot.bot
-Apr 22 14:02:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 22 14:02:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 14:03:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 4.
-Apr 22 14:03:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 14:03:34 vmi3096165 python3[354691]: /usr/bin/python3: No module named futures_bot.bot
-Apr 22 14:03:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 22 14:03:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 14:04:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 5.
-Apr 22 14:04:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 14:04:34 vmi3096165 python3[354918]: /usr/bin/python3: No module named futures_bot.bot
-Apr 22 14:04:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 22 14:04:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 14:05:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 6.
-Apr 22 14:05:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 14:05:35 vmi3096165 python3[355199]: /usr/bin/python3: No module named futures_bot.bot
-Apr 22 14:05:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 22 14:05:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 14:06:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 7.
-Apr 22 14:06:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 14:06:35 vmi3096165 python3[355435]: /usr/bin/python3: No module named futures_bot.bot
-Apr 22 14:06:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 22 14:06:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 14:07:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 8.
-Apr 22 14:07:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 14:07:35 vmi3096165 python3[355608]: /usr/bin/python3: No module named futures_bot.bot
-Apr 22 14:07:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 22 14:07:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 14:08:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 9.
-Apr 22 14:08:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 14:08:35 vmi3096165 python3[355814]: /usr/bin/python3: No module named futures_bot.bot
-Apr 22 14:08:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 22 14:08:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 14:09:36 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 10.
-Apr 22 14:09:36 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 14:09:36 vmi3096165 python3[356143]: /usr/bin/python3: No module named futures_bot.bot
-Apr 22 14:09:36 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 22 14:09:36 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 22 14:10:36 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 11.
-Apr 22 14:10:36 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 22 14:10:36 vmi3096165 python3[356453]: /usr/bin/python3: No module named futures_bot.bot
-Apr 22 14:10:36 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 22 14:10:36 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+[Service]
+Type=simple
+WorkingDirectory=/root/MT5-PropFirm-Bot
+ExecStart=/usr/bin/python3 -m futures_bot.bot
+Restart=on-failure
+RestartSec=60
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
+EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 
-=== last 60 log lines ===
-2026-04-22 13:40:04,755 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:40:05,048 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-22 13:40:05,049 [bot] WARNING: MESM6: No bars returned from API
-2026-04-22 13:45:05,052 [bot] INFO: === Trading cycle 09:45 ET | Guardian: ACTIVE ===
-2026-04-22 13:45:05,052 [tradovate_client] INFO: Token expiring in -101min, renewing...
-2026-04-22 13:45:05,234 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 13:45:05,234 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:45:05,350 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-22 13:45:09,320 [tradovate_client] INFO: Opening Tradovate login page...
-2026-04-22 13:45:18,965 [tradovate_client] INFO: Login submitted, waiting for token...
-2026-04-22 13:45:20,078 [tradovate_client] INFO: Browser auth: token captured successfully
-2026-04-22 13:45:20,085 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed), token valid for 2h
-2026-04-22 13:45:21,093 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
-2026-04-22 13:45:23,990 [bot] INFO: MESM6: Warming up strategy with 50 historical bars
-2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7137.00 VWAP=7138.90 dist=-0.76SD RSI=46.7 ATR=3.70
-2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7136.75 VWAP=7138.86 dist=-0.85SD RSI=51.5 ATR=3.38
-2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7138.75 VWAP=7138.82 dist=-0.03SD RSI=56.0 ATR=3.27
-2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7136.25 VWAP=7138.75 dist=-1.05SD RSI=53.2 ATR=3.14
-2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7137.00 VWAP=7138.71 dist=-0.72SD RSI=49.3 ATR=3.05
-2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7138.25 VWAP=7138.70 dist=-0.19SD RSI=51.9 ATR=3.00
-2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7139.00 VWAP=7138.69 dist=+0.14SD RSI=47.9 ATR=2.98
-2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7136.75 VWAP=7138.60 dist=-0.82SD RSI=34.3 ATR=3.00
-2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7141.75 VWAP=7138.70 dist=+1.38SD RSI=55.0 ATR=3.14
-2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7142.50 VWAP=7138.83 dist=+1.62SD RSI=59.5 ATR=3.09
-2026-04-22 13:45:23,990 [strategy.vwap] INFO: Price=7142.00 VWAP=7138.91 dist=+1.34SD RSI=58.0 ATR=3.07
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7148.25 VWAP=7139.74 dist=+2.65SD RSI=66.3 ATR=3.43
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7150.25 VWAP=7140.59 dist=+2.34SD RSI=71.4 ATR=3.55
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7155.50 VWAP=7141.96 dist=+2.42SD RSI=78.0 ATR=3.77
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7153.75 VWAP=7142.75 dist=+1.78SD RSI=76.8 ATR=3.84
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.78SD RSI=76.8 entry=7153.75 sl=7157.04 tp1=7142.75 tp2=7133.47
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7153.25 VWAP=7143.15 dist=+1.58SD RSI=76.2 ATR=3.82
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.58SD RSI=76.2 entry=7153.25 sl=7157.81 tp1=7143.15 tp2=7133.58
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.00 VWAP=7144.12 dist=+0.74SD RSI=65.2 ATR=4.16
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.25 VWAP=7144.46 dist=+0.75SD RSI=70.6 ATR=4.20
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7145.25 VWAP=7144.54 dist=+0.11SD RSI=61.9 ATR=4.54
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7143.50 VWAP=7144.54 dist=-0.17SD RSI=57.4 ATR=4.66
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7140.50 VWAP=7144.41 dist=-0.66SD RSI=52.0 ATR=4.89
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7141.75 VWAP=7144.28 dist=-0.44SD RSI=56.8 ATR=4.82
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7139.00 VWAP=7144.09 dist=-0.88SD RSI=46.0 ATR=4.73
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7140.25 VWAP=7143.89 dist=-0.64SD RSI=46.8 ATR=4.88
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7143.25 VWAP=7143.95 dist=-0.13SD RSI=51.7 ATR=5.59
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7142.00 VWAP=7143.85 dist=-0.36SD RSI=40.3 ATR=5.38
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.50 VWAP=7144.14 dist=+1.06SD RSI=49.0 ATR=5.96
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.00 VWAP=7144.49 dist=+0.91SD RSI=40.2 ATR=6.09
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7150.25 VWAP=7144.71 dist=+1.12SD RSI=44.6 ATR=6.12
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7144.00 VWAP=7144.96 dist=-0.21SD RSI=37.9 ATR=6.62
-2026-04-22 13:45:23,992 [strategy.vwap] INFO: Price=7147.75 VWAP=7145.04 dist=+0.62SD RSI=48.3 ATR=6.57
-2026-04-22 13:45:23,992 [bot] INFO: MESM6: New bar 2026-04-22T13:40Z | O=7147.75 H=7151.0 L=7144.5 C=7145.5 V=13830
-2026-04-22 13:45:23,992 [strategy.vwap] INFO: Price=7145.50 VWAP=7145.20 dist=+0.07SD RSI=45.3 ATR=6.70
-2026-04-22 13:50:24,013 [bot] INFO: === Trading cycle 09:50 ET | Guardian: ACTIVE ===
-2026-04-22 13:50:25,003 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
-2026-04-22 13:50:28,504 [bot] INFO: MESM6: New bar 2026-04-22T13:45Z | O=7145.75 H=7153.75 L=7143.0 C=7145.0 V=18647
-2026-04-22 13:50:28,504 [strategy.vwap] INFO: Price=7145.00 VWAP=7145.41 dist=-0.10SD RSI=49.7 ATR=7.00
-2026-04-22 13:55:28,530 [bot] INFO: === Trading cycle 09:55 ET | Guardian: ACTIVE ===
-2026-04-22 13:55:29,521 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
-2026-04-22 13:55:33,122 [bot] INFO: MESM6: New bar 2026-04-22T13:50Z | O=7145.0 H=7151.0 L=7140.0 C=7150.75 V=16957
-2026-04-22 13:55:33,123 [strategy.vwap] INFO: Price=7150.75 VWAP=7145.57 dist=+1.32SD RSI=59.0 ATR=7.46
-2026-04-22 13:58:03,363 [bot] INFO: Stopping bot: Signal received
-2026-04-22 13:58:03,728 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-22 13:58:03,728 [bot] INFO: Bot stopped
+[Install]
+WantedBy=multi-user.target
 
-=== status.json ===
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+=== .env (without secrets) ===
+TRADOVATE_USER=TD_***
+TRADOVATE_PASS=Myt***
+TRADOVATE_ACCESS_TOKEN=eyJ***
+TELEGRAM_TOKEN=845***
+TELEGRAM_CHAT_ID=701***
 
-=== positions via service ===
-logs/:
-total 9088
-drwxr-xr-x  2 root root    4096 Apr 13 20:23 .
-drwxr-xr-x 13 root root    4096 Apr 22 14:10 ..
--rw-r--r--  1 root root       0 Feb 22 12:15 .gitkeep
--rw-r--r--  1 root root 7871670 Apr 22 13:58 bot.log
--rw-r--r--  1 root root 1409813 Apr 22 13:58 equity_curve.csv
--rw-r--r--  1 root root     120 Apr 13 20:23 trades_log.csv
+=== .env has PYTHONPATH? ===
+no PYTHONPATH override in .env (good)
 
-status/:
-total 16
-drwxr-xr-x  2 root root 4096 Apr 22 14:10 .
-drwxr-xr-x 13 root root 4096 Apr 22 14:10 ..
--rw-r--r--  1 root root    0 Apr 22 14:10 .gitkeep
--rw-r--r--  1 root root  626 Apr 22 13:58 dashboard.txt
--rw-r--r--  1 root root  133 Apr 22 14:10 status.json
+=== working tree root ===
+total 112
+drwxr-xr-x 13 root root  4096 Apr 22 14:12 .
+drwx------ 20 root root  4096 Apr 22 14:12 ..
+-rw-r--r--  1 root root   459 Apr 22 13:45 .env
+drwxr-xr-x  9 root root  4096 Apr 22 14:12 .git
+drwxr-xr-x  3 root root  4096 Feb 23 12:13 .github
+-rw-r--r--  1 root root    54 Apr 22 14:12 .gitignore
+-rw-r--r--  1 root root 17478 Apr 22 14:12 CLAUDE.md
+-rw-r--r--  1 root root  1634 Apr 22 14:12 README.md
+drwxr-xr-x  3 root root  4096 Mar  7 18:07 bridge
+drwxr-xr-x  2 root root  4096 Apr 22 14:12 commands
+drwxr-xr-x  2 1001 1001  4096 Apr 22 14:12 configs
+drwxr-xr-x  5 1001 1001  4096 Apr 22 14:12 futures_bot
+-rw-r--r--  1 root root  5451 Apr 22 14:12 get_token.py
+drwxr-xr-x  2 root root  4096 Apr 13 20:23 logs
+-rw-r--r--  1 root root    86 Apr 22 14:12 requirements.txt
+drwxr-xr-x  2 root root  4096 Apr 22 14:12 scripts
+-rw-r--r--  1 root root  6100 Apr 22 14:12 server_cron.sh
+drwxr-xr-x  2 root root  4096 Apr 22 14:12 status
+-rw-r--r--  1 root root    41 Apr 22 14:12 trigger-check.txt
+
+=== futures_bot dir ===
+total 48
+drwxr-xr-x  5 1001 1001  4096 Apr 22 14:12 .
+drwxr-xr-x 13 root root  4096 Apr 22 14:12 ..
+-rw-r--r--  1 root root   114 Apr 22 14:12 __init__.py
+drwxr-xr-x  2 root root  4096 Apr 22 10:03 __pycache__
+-rw-r--r--  1 root root 24016 Apr 22 14:12 bot.py
+drwxr-xr-x  3 1001 1001  4096 Apr 22 14:12 core
+drwxr-xr-x  3 1001 1001  4096 Apr 22 14:12 strategies
+
+=== try importing manually ===
+import OK
+
+=== systemd env dump ===
+Environment=PYTHONUNBUFFERED=1 PYTHONPATH=/root/MT5-PropFirm-Bot
+EnvironmentFiles=/root/MT5-PropFirm-Bot/.env (ignore_errors=no)
+
+=== which python3 + version ===
+/usr/bin/python3
+Python 3.12.3
+
+=== pip packages playwright/aiohttp ===
+aiohttp 3.13.3 | websockets 16.0 | playwright: OK
