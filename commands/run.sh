@@ -1,15 +1,21 @@
 #!/bin/bash
 cd /root/MT5-PropFirm-Bot
-echo "=== $(date -u '+%H:%M UTC')  NY=$(TZ=America/New_York date '+%H:%M') ==="
-echo "Service: $(systemctl is-active futures-bot)  PID: $(systemctl show futures-bot --property=MainPID --value)  Since: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
+echo "=== $(date -u '+%H:%M UTC') disable server_cron.sh ==="
 echo ""
-echo "--- bot log tail 80 ---"
-tail -80 logs/bot.log
+echo "--- crontab BEFORE ---"
+crontab -l 2>&1
 echo ""
-echo "--- trend day / strategy ---"
-grep -c "Trend day" logs/bot.log
-grep -c "SHORT SIGNAL\|LONG SIGNAL" logs/bot.log
-grep -c "TRADE:" logs/bot.log
+# Comment out any line that invokes server_cron.sh
+crontab -l 2>/dev/null | sed 's|^\([^#].*server_cron.sh.*\)$|# DISABLED_BY_CLAUDE \1|' | crontab -
+echo "--- crontab AFTER ---"
+crontab -l 2>&1
 echo ""
-echo "--- status.json ---"
-cat status/status.json
+echo "--- service state ---"
+systemctl is-active futures-bot
+echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
+echo ""
+echo "--- run_bot.sh on disk ---"
+ls -la scripts/run_bot.sh 2>&1 | head -3
+echo ""
+echo "--- current git HEAD ---"
+git log -1 --oneline
