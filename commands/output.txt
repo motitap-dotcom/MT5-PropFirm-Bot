@@ -1,17 +1,106 @@
-=== 15:12 UTC  NY=11:12 ===
-Service: activating  Since: Wed 2026-04-22 15:12:07 UTC
+=== 15:13 UTC  NY=11:13 ===
+Service: activating  PID: 0  NRestarts: 8
 
---- bot log lines since 15:09 ---
+--- journalctl last 60 ---
+Apr 22 15:04:27 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 22 15:04:27 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:04:27,941 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
+Apr 22 15:04:27 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 22 15:04:27 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:04:27,941 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
+Apr 22 15:04:27 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+Apr 22 15:04:27 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:04:27,941 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
+Apr 22 15:08:43 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:08:43,817 [bot] INFO: Stopping bot: Signal received
+Apr 22 15:08:43 vmi3096165 systemd[1]: Stopping futures-bot.service - TradeDay Futures Trading Bot...
+Apr 22 15:08:43 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:08:43,952 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+Apr 22 15:08:44 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:08:44,066 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+Apr 22 15:08:44 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:08:44,067 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+Apr 22 15:08:44 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:08:44,204 [tradovate_client] WARNING: API auth failed (Incorrect username or password. Please try again, noting that passwords are case-sensitive.); trying Playwright browser auth as fallback...
+Apr 22 15:08:45 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:08:45,050 [tradovate_client] INFO: Opening Tradovate login page...
+Apr 22 15:08:51 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:08:51,309 [tradovate_client] INFO: Login submitted, waiting for token...
+Apr 22 15:08:52 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:08:52,415 [tradovate_client] INFO: Browser auth: token captured successfully
+Apr 22 15:08:52 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:08:52,416 [tradovate_client] INFO: Authenticated successfully via browser (API fallback)
+Apr 22 15:08:52 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:08:52,787 [tradovate_client] INFO: Disconnected from Tradovate
+Apr 22 15:08:52 vmi3096165 run_bot.sh[370331]: 2026-04-22 15:08:52,787 [bot] INFO: Bot stopped
+Apr 22 15:09:03 vmi3096165 systemd[1]: futures-bot.service: State 'stop-sigterm' timed out. Killing.
+Apr 22 15:09:03 vmi3096165 systemd[1]: futures-bot.service: Killing process 370331 (python3) with signal SIGKILL.
+Apr 22 15:09:03 vmi3096165 systemd[1]: futures-bot.service: Failed to kill control group /system.slice/futures-bot.service, ignoring: Invalid argument
+Apr 22 15:09:03 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=killed, status=9/KILL
+Apr 22 15:09:03 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'timeout'.
+Apr 22 15:09:03 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 15:09:03 vmi3096165 systemd[1]: futures-bot.service: Consumed 7.627s CPU time, 23.7M memory peak, 0B memory swap peak.
+Apr 22 15:09:06 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 15:09:06 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=203/EXEC
+Apr 22 15:09:06 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 15:09:36 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
+Apr 22 15:09:36 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 15:09:36 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=203/EXEC
+Apr 22 15:09:36 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 15:10:06 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
+Apr 22 15:10:06 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 15:10:06 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=203/EXEC
+Apr 22 15:10:06 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 15:10:36 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 3.
+Apr 22 15:10:36 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 15:10:36 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=203/EXEC
+Apr 22 15:10:36 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 15:11:06 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 4.
+Apr 22 15:11:06 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 15:11:06 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=203/EXEC
+Apr 22 15:11:06 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 15:11:36 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 5.
+Apr 22 15:11:36 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 15:11:36 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=203/EXEC
+Apr 22 15:11:36 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 15:12:07 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 6.
+Apr 22 15:12:07 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 15:12:07 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=203/EXEC
+Apr 22 15:12:07 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 15:12:37 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 7.
+Apr 22 15:12:37 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 15:12:37 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=203/EXEC
+Apr 22 15:12:37 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 15:13:07 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 8.
+Apr 22 15:13:07 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 15:13:07 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=203/EXEC
+Apr 22 15:13:07 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
 
---- trend day mentions today ---
-1972
-
---- status.json ---
-{
-  "timestamp": "",
-  "bot": "TradeDay Futures Bot",
-  "platform": "Tradovate",
-  "guardian": {},
-  "positions": [],
-  "risk": {}
-}
+--- bot log tail 40 ---
+2026-04-22 14:39:35,758 [bot] INFO: Timeframe: 5min
+2026-04-22 14:39:35,758 [bot] INFO: New trading day: 2026-04-22
+2026-04-22 14:55:03,325 [bot] INFO: Stopping bot: Signal received
+2026-04-22 14:55:03,659 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 14:55:03,659 [bot] INFO: Bot stopped
+2026-04-22 15:04:27,569 [bot] INFO: ============================================================
+2026-04-22 15:04:27,569 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-22 15:04:27,569 [bot] INFO: ============================================================
+2026-04-22 15:04:27,569 [news_filter] INFO: Loaded 26 restricted events
+2026-04-22 15:04:27,569 [tradovate_client] INFO: Trying pre-set access token from environment...
+2026-04-22 15:04:27,719 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-22 15:04:27,719 [tradovate_client] INFO: Environment token is valid
+2026-04-22 15:04:27,720 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-22 15:04:27,823 [bot] INFO: Bot started successfully
+2026-04-22 15:04:27,824 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-22 15:04:27,824 [bot] INFO: Timeframe: 5min
+2026-04-22 15:04:27,824 [bot] INFO: New trading day: 2026-04-22
+2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-22 15:04:27,941 [bot] INFO: Switching MESM6 to ORB strategy (trend day)
+2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-22 15:04:27,941 [bot] INFO: Switching MNQM6 to ORB strategy (trend day)
+2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-22 15:04:27,941 [bot] INFO: Switching MCLM6 to ORB strategy (trend day)
+2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-22 15:04:27,941 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
+2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-22 15:04:27,941 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
+2026-04-22 15:04:27,941 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-22 15:04:27,941 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
+2026-04-22 15:08:43,817 [bot] INFO: Stopping bot: Signal received
+2026-04-22 15:08:43,952 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-22 15:08:44,066 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-22 15:08:44,067 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 15:08:44,204 [tradovate_client] WARNING: API auth failed (Incorrect username or password. Please try again, noting that passwords are case-sensitive.); trying Playwright browser auth as fallback...
+2026-04-22 15:08:45,050 [tradovate_client] INFO: Opening Tradovate login page...
+2026-04-22 15:08:51,309 [tradovate_client] INFO: Login submitted, waiting for token...
+2026-04-22 15:08:52,415 [tradovate_client] INFO: Browser auth: token captured successfully
+2026-04-22 15:08:52,416 [tradovate_client] INFO: Authenticated successfully via browser (API fallback)
+2026-04-22 15:08:52,787 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 15:08:52,787 [bot] INFO: Bot stopped
