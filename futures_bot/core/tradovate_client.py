@@ -268,8 +268,22 @@ class TradovateClient:
                     logger.info("Authenticated successfully (after wait)")
                     return
 
-        # Auth failed
+        # Auth failed via API. Tradovate sometimes returns "Incorrect username or
+        # password" as a catch-all when a CAPTCHA is actually required (without
+        # setting the p-captcha flag). Try Playwright as a last resort before
+        # giving up — a real browser session bypasses the CAPTCHA wall.
         error = data.get("errorText", str(data))
+        logger.warning(
+            f"API auth failed ({error}); trying Playwright browser auth as fallback..."
+        )
+        browser_result = await self._try_browser_auth()
+        if browser_result:
+            self.access_token = browser_result["accessToken"]
+            self.md_access_token = browser_result.get("mdAccessToken", self.access_token)
+            self._parse_expiry(browser_result.get("expirationTime", ""))
+            self._save_token()
+            logger.info("Authenticated successfully via browser (API fallback)")
+            return
         raise ConnectionError(f"Authentication failed: {error}")
 
     async def _try_browser_auth(self) -> Optional[Dict]:
