@@ -1,13 +1,10 @@
 #!/bin/bash
 cd /root/MT5-PropFirm-Bot
-echo "=== $(date -u '+%H:%M UTC') ==="
+echo "=== $(date -u '+%H:%M UTC')  NY=$(TZ=America/New_York date '+%H:%M') ==="
+echo "Service: $(systemctl is-active futures-bot)  PID: $(systemctl show futures-bot --property=MainPID --value)"
 echo ""
-echo "--- git state ---"
-git log -1 --oneline 2>&1
+echo "--- journalctl last 15 ---"
+journalctl -u futures-bot --no-pager -n 15 2>&1 | tail -15
 echo ""
-echo "--- scripts/ listing ---"
-ls -la /root/MT5-PropFirm-Bot/scripts/ 2>&1
-echo ""
-echo "--- run_bot.sh exists? ---"
-test -e scripts/run_bot.sh && echo YES || echo NO
-cat scripts/run_bot.sh 2>&1 | head -3
+echo "--- bot log tail 20 ---"
+tail -20 logs/bot.log 2>/dev/null
