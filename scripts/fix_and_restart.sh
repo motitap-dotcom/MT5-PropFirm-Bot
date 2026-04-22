@@ -34,11 +34,12 @@ if [ ! -d /root/.cache/ms-playwright ] || [ -z "$(ls -A /root/.cache/ms-playwrig
   python3 -m playwright install chromium 2>&1 | tail -5
 fi
 
-# Service with bash wrapper. We saw systemd reporting `No module named
-# futures_bot.bot` even though running the same command by hand with
-# PYTHONPATH=/root/MT5-PropFirm-Bot worked. Wrapping ExecStart in bash with an
-# explicit `cd` + `exec` forces the Python import to happen from the right
-# working directory, regardless of any env inheritance weirdness.
+# Use a dedicated wrapper script that sources .env ourselves and sets
+# PYTHONPATH/cwd explicitly. This sidesteps the systemd env quirk that was
+# making TRADOVATE_PASS arrive empty (ZeroDivisionError in _encrypt_password)
+# and occasionally causing "No module named futures_bot.bot".
+chmod +x /root/MT5-PropFirm-Bot/scripts/run_bot.sh
+
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -47,15 +48,14 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/bin/bash -c 'cd /root/MT5-PropFirm-Bot && exec /usr/bin/python3 -m futures_bot.bot'
+ExecStart=/root/MT5-PropFirm-Bot/scripts/run_bot.sh
 Restart=on-failure
 RestartSec=30
 TimeoutStopSec=20
 KillSignal=SIGINT
 KillMode=mixed
-Environment=PYTHONUNBUFFERED=1
-Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
-EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
