@@ -1,5 +1,5 @@
 #!/bin/bash
-# v3 - restart after false trend-day fix
+# v4 - inline ExecStart to escape EXEC 203
 echo "=== Fix & Restart ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
@@ -35,12 +35,9 @@ if [ ! -d /root/.cache/ms-playwright ] || [ -z "$(ls -A /root/.cache/ms-playwrig
   python3 -m playwright install chromium 2>&1 | tail -5
 fi
 
-# Use a dedicated wrapper script that sources .env ourselves and sets
-# PYTHONPATH/cwd explicitly. This sidesteps the systemd env quirk that was
-# making TRADOVATE_PASS arrive empty (ZeroDivisionError in _encrypt_password)
-# and occasionally causing "No module named futures_bot.bot".
-chmod +x /root/MT5-PropFirm-Bot/scripts/run_bot.sh
-
+# Inline wrapper in ExecStart so we don't depend on any external script file
+# that could go missing / lose its exec bit (we were hitting status=203/EXEC
+# repeatedly). /bin/bash always exists and -c runs the snippet we supply.
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -49,7 +46,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/root/MT5-PropFirm-Bot/scripts/run_bot.sh
+ExecStart=/bin/bash -c 'cd /root/MT5-PropFirm-Bot && set -a && [ -f .env ] && . ./.env; set +a; export PYTHONPATH=/root/MT5-PropFirm-Bot PYTHONUNBUFFERED=1; exec /usr/bin/python3 -m futures_bot.bot'
 Restart=on-failure
 RestartSec=30
 TimeoutStopSec=20
