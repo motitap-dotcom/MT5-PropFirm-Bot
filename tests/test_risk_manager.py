@@ -210,34 +210,41 @@ class TestTradingSessionEST:
         assert ok is False
 
 
-class TestDSTBoundaryKnownBugs:
-    """Documents the simplified-DST bug in `_get_et_time()`.
+class TestDSTBoundaryRegression:
+    """Regression tests for the DST handling in `_get_et_time()`.
 
-    US DST starts on the 2nd Sunday of March and ends on the 1st Sunday of
-    November. The module uses `3 <= month <= 11 -> EDT`, which is wrong for:
-      - Early March before the switch (should be EST, code says EDT)
-      - Late November after the switch (should be EST, code says EDT)
-
-    These xfail tests will start passing once _get_et_time() uses zoneinfo —
-    at which point the xfail markers should be removed.
+    US DST starts on the 2nd Sunday of March (Mar 8, 2026) and ends on the
+    1st Sunday of November (Nov 1, 2026). These cases would previously fail
+    with the old "month 3..11 = EDT" shortcut; they now pass because the
+    module delegates to `zoneinfo.ZoneInfo('America/New_York')`.
     """
 
-    @pytest.mark.xfail(reason="Simplified DST: March always EDT per code")
-    @freeze_time("2026-03-02 19:45:00")
-    def test_early_march_flatten_only_under_buggy_edt(self, risk_config):
-        """On Mar 2 2026 (pre-DST), 19:45 UTC is 14:45 ET — no flatten yet.
-        Buggy code treats it as 15:45 ET and triggers must_flatten=True.
-        When the bug is fixed, must_flatten() should return False."""
+    @freeze_time("2026-03-02 19:45:00")  # Pre-DST; EST (UTC-5) -> 14:45 ET
+    def test_early_march_is_est_not_edt(self, risk_config):
+        rm = RiskManager(risk_config)
+        assert rm.must_flatten() is False  # 14:45 ET, flatten is 15:45 ET
+
+    @freeze_time("2026-03-02 20:45:00")  # Pre-DST; EST -> 15:45 ET
+    def test_early_march_flatten_triggers_correctly(self, risk_config):
+        rm = RiskManager(risk_config)
+        assert rm.must_flatten() is True
+
+    @freeze_time("2026-11-30 19:45:00")  # Post-DST; EST -> 14:45 ET
+    def test_late_november_is_est_not_edt(self, risk_config):
         rm = RiskManager(risk_config)
         assert rm.must_flatten() is False
 
-    @pytest.mark.xfail(reason="Simplified DST: November always EDT per code")
-    @freeze_time("2026-11-30 19:45:00")
-    def test_late_november_flatten_only_under_buggy_edt(self, risk_config):
-        """Nov 30 2026 is post-DST (EST). 19:45 UTC = 14:45 ET — no flatten.
-        Buggy code treats it as 15:45 ET and flattens prematurely."""
+    @freeze_time("2026-03-09 13:30:00")  # Day after DST start; EDT (UTC-4) -> 09:30 ET
+    def test_day_after_dst_start_session_opens_on_time(self, risk_config):
         rm = RiskManager(risk_config)
-        assert rm.must_flatten() is False
+        ok, _ = rm.is_trading_session()
+        assert ok is True
+
+    @freeze_time("2026-11-01 14:30:00")  # DST end day; ET-wall-clock 09:30 (EST, UTC-5)
+    def test_day_of_dst_end_session_opens_on_time(self, risk_config):
+        rm = RiskManager(risk_config)
+        ok, _ = rm.is_trading_session()
+        assert ok is True
 
 
 # ── can_open_position ──

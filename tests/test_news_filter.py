@@ -133,6 +133,29 @@ class TestIsRestricted:
         restricted, _ = nf.is_restricted(symbols=["MESM6"])
         assert restricted is True
 
+    @freeze_time("2026-03-02 13:10:00")  # Pre-DST; EST (UTC-5) -> 08:10 ET
+    def test_early_march_uses_est_not_edt(self, events_file):
+        """Regression: early March is EST. 08:30 ET event = 13:30 UTC.
+        With buggy month-based DST this would be computed as 12:30 UTC and
+        the window would not match at 13:10 UTC."""
+        path = events_file([
+            {"date": "2026-03-02", "time": "8:30", "name": "CPI",
+             "applies_to": "all"},
+        ])
+        nf = NewsFilter(path)
+        restricted, _ = nf.is_restricted(symbols=["MESM6"])
+        assert restricted is True
+
+    @freeze_time("2026-11-30 13:10:00")  # Post-DST; EST (UTC-5) -> 08:10 ET
+    def test_late_november_uses_est_not_edt(self, events_file):
+        path = events_file([
+            {"date": "2026-11-30", "time": "8:30", "name": "CPI",
+             "applies_to": "all"},
+        ])
+        nf = NewsFilter(path)
+        restricted, _ = nf.is_restricted(symbols=["MESM6"])
+        assert restricted is True
+
 
 # ── must_flatten_for_event ──
 
