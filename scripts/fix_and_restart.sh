@@ -1,7 +1,16 @@
 #!/bin/bash
-echo "=== Fix & Restart ==="
+# v154 - fix path + restart
+echo "=== Fix & Restart v154 ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
+
+echo ""
+echo "--- BEFORE: current service config ---"
+systemctl cat futures-bot 2>/dev/null | grep -E "ExecStart|WorkingDir" || echo "no service"
+
+echo ""
+echo "--- BEFORE: running processes ---"
+ps -ef | grep -E "futures_bot|bot\.py" | grep -v grep | head -5
 
 # Preserve token
 cp configs/.tradovate_token.json /tmp/.tradovate_token_backup.json 2>/dev/null || true
@@ -17,7 +26,16 @@ cp /tmp/.tradovate_token_backup.json configs/.tradovate_token.json 2>/dev/null |
 # Ensure dirs
 mkdir -p status logs
 
-# Service with PYTHONPATH
+# Stop service first to release any stale /opt/ binaries
+systemctl stop futures-bot 2>/dev/null || true
+sleep 2
+
+# Kill any stragglers from /opt/futures_bot_stable
+pkill -9 -f "/opt/futures_bot_stable" 2>/dev/null || true
+pkill -9 -f "futures-bot-wrapper" 2>/dev/null || true
+sleep 1
+
+# Write CORRECT service file: runs from /root/MT5-PropFirm-Bot
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -39,6 +57,28 @@ SVCEOF
 
 systemctl daemon-reload
 systemctl reset-failed futures-bot 2>/dev/null
-systemctl restart futures-bot
-sleep 3
-echo "Status: $(systemctl is-active futures-bot)"
+systemctl enable futures-bot 2>/dev/null
+systemctl start futures-bot
+
+sleep 5
+
+echo ""
+echo "--- AFTER: service config ---"
+systemctl cat futures-bot 2>/dev/null | grep -E "ExecStart|WorkingDir"
+
+echo ""
+echo "--- AFTER: status ---"
+echo "Active: $(systemctl is-active futures-bot)"
+echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
+echo "Since: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
+
+echo ""
+echo "--- AFTER: running process ---"
+ps -ef | grep -E "futures_bot|bot\.py" | grep -v grep | head -3
+
+echo ""
+echo "--- Recent bot log ---"
+tail -25 logs/bot.log 2>/dev/null
+
+echo ""
+echo "=== Done at $(date -u +'%Y-%m-%d %H:%M:%S UTC') ==="
