@@ -1,46 +1,96 @@
-=== Post-fix verify 2026-04-22 14:08 UTC ===
+=== Service state 2026-04-22 14:10:46 UTC ===
 
-=== SERVICE ===
-Service: activating
-PID: 0
-Since: Wed 2026-04-22 14:08:35 UTC
-Code on disk: 473bc4b verify: post-fix status check (auth, playwright, trades)
+=== systemctl status ===
+● futures-bot.service - TradeDay Futures Trading Bot
+     Loaded: loaded (/etc/systemd/system/futures-bot.service; enabled; preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Wed 2026-04-22 14:10:36 UTC; 10s ago
+    Process: 356453 ExecStart=/usr/bin/python3 -m futures_bot.bot (code=exited, status=1/FAILURE)
+   Main PID: 356453 (code=exited, status=1/FAILURE)
+        CPU: 28ms
 
-=== CODE CHECK (Playwright fallback in tree?) ===
-277:            f"API auth failed ({error}); trying Playwright browser auth as fallback..."
+=== journalctl last 80 lines ===
+Apr 22 13:45:23 vmi3096165 python3[294144]: 2026-04-22 13:45:23,992 [bot] INFO: MESM6: New bar 2026-04-22T13:40Z | O=7147.75 H=7151.0 L=7144.5 C=7145.5 V=13830
+Apr 22 13:45:23 vmi3096165 python3[294144]: 2026-04-22 13:45:23,992 [strategy.vwap] INFO: Price=7145.50 VWAP=7145.20 dist=+0.07SD RSI=45.3 ATR=6.70
+Apr 22 13:50:24 vmi3096165 python3[294144]: 2026-04-22 13:50:24,013 [bot] INFO: === Trading cycle 09:50 ET | Guardian: ACTIVE ===
+Apr 22 13:50:25 vmi3096165 python3[294144]: 2026-04-22 13:50:25,003 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+Apr 22 13:50:28 vmi3096165 python3[294144]: 2026-04-22 13:50:28,504 [bot] INFO: MESM6: New bar 2026-04-22T13:45Z | O=7145.75 H=7153.75 L=7143.0 C=7145.0 V=18647
+Apr 22 13:50:28 vmi3096165 python3[294144]: 2026-04-22 13:50:28,504 [strategy.vwap] INFO: Price=7145.00 VWAP=7145.41 dist=-0.10SD RSI=49.7 ATR=7.00
+Apr 22 13:55:28 vmi3096165 python3[294144]: 2026-04-22 13:55:28,530 [bot] INFO: === Trading cycle 09:55 ET | Guardian: ACTIVE ===
+Apr 22 13:55:29 vmi3096165 python3[294144]: 2026-04-22 13:55:29,521 [tradovate_client] INFO: MESM6: Got 50 bars via WebSocket
+Apr 22 13:55:33 vmi3096165 python3[294144]: 2026-04-22 13:55:33,122 [bot] INFO: MESM6: New bar 2026-04-22T13:50Z | O=7145.0 H=7151.0 L=7140.0 C=7150.75 V=16957
+Apr 22 13:55:33 vmi3096165 python3[294144]: 2026-04-22 13:55:33,123 [strategy.vwap] INFO: Price=7150.75 VWAP=7145.57 dist=+1.32SD RSI=59.0 ATR=7.46
+Apr 22 13:58:03 vmi3096165 python3[294144]: 2026-04-22 13:58:03,363 [bot] INFO: Stopping bot: Signal received
+Apr 22 13:58:03 vmi3096165 systemd[1]: Stopping futures-bot.service - TradeDay Futures Trading Bot...
+Apr 22 13:58:03 vmi3096165 python3[294144]: 2026-04-22 13:58:03,728 [tradovate_client] INFO: Disconnected from Tradovate
+Apr 22 13:58:03 vmi3096165 python3[294144]: 2026-04-22 13:58:03,728 [bot] INFO: Bot stopped
+Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: State 'stop-sigterm' timed out. Killing.
+Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Killing process 294144 (python3) with signal SIGKILL.
+Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Failed to kill control group /system.slice/futures-bot.service, ignoring: Invalid argument
+Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=killed, status=9/KILL
+Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'timeout'.
+Apr 22 13:59:33 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Consumed 21.125s CPU time, 561.6M memory peak, 0B memory swap peak.
+Apr 22 13:59:33 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 13:59:33 vmi3096165 python3[353736]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 13:59:33 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:00:33 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 1.
+Apr 22 14:00:33 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:00:33 vmi3096165 python3[354065]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:00:33 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:00:33 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:01:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 2.
+Apr 22 14:01:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:01:34 vmi3096165 python3[354271]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:01:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:01:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:02:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 3.
+Apr 22 14:02:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:02:34 vmi3096165 python3[354501]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:02:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:02:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:03:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 4.
+Apr 22 14:03:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:03:34 vmi3096165 python3[354691]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:03:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:03:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:04:34 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 5.
+Apr 22 14:04:34 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:04:34 vmi3096165 python3[354918]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:04:34 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:04:34 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:05:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 6.
+Apr 22 14:05:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:05:35 vmi3096165 python3[355199]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:05:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:05:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:06:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 7.
+Apr 22 14:06:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:06:35 vmi3096165 python3[355435]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:06:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:06:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:07:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 8.
+Apr 22 14:07:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:07:35 vmi3096165 python3[355608]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:07:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:07:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:08:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 9.
+Apr 22 14:08:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:08:35 vmi3096165 python3[355814]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:08:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:08:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:09:36 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 10.
+Apr 22 14:09:36 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:09:36 vmi3096165 python3[356143]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:09:36 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:09:36 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:10:36 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 11.
+Apr 22 14:10:36 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:10:36 vmi3096165 python3[356453]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:10:36 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:10:36 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
 
-=== TOKEN FILE ===
-no token file (expected - new fresh auth)
-
-=== PLAYWRIGHT ===
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-AttributeError: module 'playwright' has no attribute '__version__'
-chromium-1208
-chromium_headless_shell-1208
-ffmpeg-1011
-
-=== LAST 80 LOG LINES ===
-2026-04-22 13:35:03,065 [tradovate_client] INFO: Token expiring in -91min, renewing...
-2026-04-22 13:35:03,222 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 13:35:03,222 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:35:03,348 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:35:03,366 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-22 13:35:03,508 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-22 13:35:03,645 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 13:35:03,645 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:35:03,762 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:35:04,134 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: no close frame received or sent
-2026-04-22 13:35:04,134 [bot] WARNING: MESM6: No bars returned from API
-2026-04-22 13:40:04,138 [bot] INFO: === Trading cycle 09:40 ET | Guardian: ACTIVE ===
-2026-04-22 13:40:04,138 [tradovate_client] INFO: Token expiring in -96min, renewing...
-2026-04-22 13:40:04,287 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 13:40:04,287 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:40:04,404 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:40:04,405 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-22 13:40:04,522 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-22 13:40:04,639 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 13:40:04,639 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+=== last 60 log lines ===
 2026-04-22 13:40:04,755 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 2026-04-22 13:40:05,048 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
 2026-04-22 13:40:05,049 [bot] WARNING: MESM6: No bars returned from API
@@ -102,61 +152,7 @@ ffmpeg-1011
 2026-04-22 13:58:03,728 [tradovate_client] INFO: Disconnected from Tradovate
 2026-04-22 13:58:03,728 [bot] INFO: Bot stopped
 
-=== AUTH / PLAYWRIGHT / TRADE events ===
-2026-04-22 10:03:10,865 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 10:03:11,062 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-22 10:03:41,274 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 10:03:41,391 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-22 10:03:53,131 [tradovate_client] INFO: Browser auth: token captured successfully
-2026-04-22 10:03:53,133 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed), token valid for 2h
-2026-04-22 10:03:53,256 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-22 13:30:01,871 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:30:02,026 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:30:02,026 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-22 13:30:02,270 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:30:02,406 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:35:03,222 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:35:03,348 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:35:03,366 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-22 13:35:03,645 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:35:03,762 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:40:04,287 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:40:04,404 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:40:04,405 [tradovate_client] WARNING: Auth cooldown active, 120s remaining. Skipping renewal.
-2026-04-22 13:40:04,639 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:40:04,755 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:45:05,234 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:45:05,350 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-22 13:45:20,078 [tradovate_client] INFO: Browser auth: token captured successfully
-2026-04-22 13:45:20,085 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed), token valid for 2h
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.78SD RSI=76.8 entry=7153.75 sl=7157.04 tp1=7142.75 tp2=7133.47
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.58SD RSI=76.2 entry=7153.25 sl=7157.81 tp1=7143.15 tp2=7133.58
-2026-04-22 13:58:03,363 [bot] INFO: Stopping bot: Signal received
-2026-04-22 13:58:03,728 [tradovate_client] INFO: Disconnected from Tradovate
-
-=== ERRORS ===
-2026-04-22 13:30:02,270 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 13:30:02,270 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:30:02,406 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:30:03,056 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: no close frame received or sent
-2026-04-22 13:35:03,222 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 13:35:03,222 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:35:03,348 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:35:03,645 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 13:35:03,645 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:35:03,762 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:35:04,134 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: no close frame received or sent
-2026-04-22 13:40:04,287 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 13:40:04,287 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:40:04,404 [bot] ERROR: Error fetching balance: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:40:04,639 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 13:40:04,639 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-22 13:40:04,755 [bot] ERROR: Position sync error: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-22 13:40:05,048 [tradovate_client] ERROR: MESM6: WebSocket chart fetch failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-22 13:45:05,234 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-22 13:45:05,234 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-
-=== POSITIONS / STATUS ===
+=== status.json ===
 {
   "timestamp": "",
   "bot": "TradeDay Futures Bot",
@@ -165,3 +161,21 @@ ffmpeg-1011
   "positions": [],
   "risk": {}
 }
+
+=== positions via service ===
+logs/:
+total 9088
+drwxr-xr-x  2 root root    4096 Apr 13 20:23 .
+drwxr-xr-x 13 root root    4096 Apr 22 14:10 ..
+-rw-r--r--  1 root root       0 Feb 22 12:15 .gitkeep
+-rw-r--r--  1 root root 7871670 Apr 22 13:58 bot.log
+-rw-r--r--  1 root root 1409813 Apr 22 13:58 equity_curve.csv
+-rw-r--r--  1 root root     120 Apr 13 20:23 trades_log.csv
+
+status/:
+total 16
+drwxr-xr-x  2 root root 4096 Apr 22 14:10 .
+drwxr-xr-x 13 root root 4096 Apr 22 14:10 ..
+-rw-r--r--  1 root root    0 Apr 22 14:10 .gitkeep
+-rw-r--r--  1 root root  626 Apr 22 13:58 dashboard.txt
+-rw-r--r--  1 root root  133 Apr 22 14:10 status.json
