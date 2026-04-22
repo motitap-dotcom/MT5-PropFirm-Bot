@@ -1,5 +1,5 @@
 #!/bin/bash
-# v4 - inline ExecStart to escape EXEC 203
+# v5 - revert to wrapper script (run_bot.sh) that was working at 15:14
 echo "=== Fix & Restart ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
@@ -35,9 +35,11 @@ if [ ! -d /root/.cache/ms-playwright ] || [ -z "$(ls -A /root/.cache/ms-playwrig
   python3 -m playwright install chromium 2>&1 | tail -5
 fi
 
-# Inline wrapper in ExecStart so we don't depend on any external script file
-# that could go missing / lose its exec bit (we were hitting status=203/EXEC
-# repeatedly). /bin/bash always exists and -c runs the snippet we supply.
+# Back to the external wrapper (run_bot.sh). This was confirmed working at
+# 15:14 UTC — the inline bash -c version regressed to "No module named
+# futures_bot.bot" for reasons I still can't explain.
+# Invoke via `/bin/bash /path/to/script` so we don't depend on the exec bit
+# of the file itself (avoids status=203/EXEC).
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -46,7 +48,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/bin/bash -c 'cd /root/MT5-PropFirm-Bot && set -a && [ -f .env ] && . ./.env; set +a; export PYTHONPATH=/root/MT5-PropFirm-Bot PYTHONUNBUFFERED=1; exec /usr/bin/python3 -m futures_bot.bot'
+ExecStart=/bin/bash /root/MT5-PropFirm-Bot/scripts/run_bot.sh
 Restart=on-failure
 RestartSec=30
 TimeoutStopSec=20
@@ -58,6 +60,8 @@ StandardError=journal
 [Install]
 WantedBy=multi-user.target
 SVCEOF
+
+chmod +x /root/MT5-PropFirm-Bot/scripts/run_bot.sh 2>/dev/null || true
 
 # Stop hard + clear failure counter so auto-restart loop doesn't keep firing
 systemctl stop futures-bot 2>/dev/null
