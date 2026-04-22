@@ -1,6 +1,15 @@
-=== Module error diag 2026-04-22 14:12:09 UTC ===
+=== After bash-wrap fix 2026-04-22 14:36:16 UTC ===
 
-=== service file ===
+=== service state ===
+activating
+Restart=on-failure
+MainPID=0
+NRestarts=17
+ExecStart={ path=/bin/bash ; argv[]=/bin/bash -c cd /root/MT5-PropFirm-Bot && exec /usr/bin/python3 -m futures_bot.bot ; ignore_errors=no ; start_time=[Wed 2026-04-22 14:36:14 UTC] ; stop_time=[Wed 2026-04-22 14:36:14 UTC] ; pid=362841 ; code=exited ; status=1 }
+SubState=auto-restart
+ActiveEnterTimestamp=Wed 2026-04-22 14:36:14 UTC
+
+=== service file on disk ===
 [Unit]
 Description=TradeDay Futures Trading Bot
 After=network.target
@@ -8,9 +17,12 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/usr/bin/python3 -m futures_bot.bot
+ExecStart=/bin/bash -c 'cd /root/MT5-PropFirm-Bot && exec /usr/bin/python3 -m futures_bot.bot'
 Restart=on-failure
-RestartSec=60
+RestartSec=30
+TimeoutStopSec=20
+KillSignal=SIGINT
+KillMode=mixed
 Environment=PYTHONUNBUFFERED=1
 Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
 EnvironmentFile=/root/MT5-PropFirm-Bot/.env
@@ -18,58 +30,76 @@ EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 [Install]
 WantedBy=multi-user.target
 
-=== .env (without secrets) ===
-TRADOVATE_USER=TD_***
-TRADOVATE_PASS=Myt***
-TRADOVATE_ACCESS_TOKEN=eyJ***
-TELEGRAM_TOKEN=845***
-TELEGRAM_CHAT_ID=701***
+=== last 30 journalctl lines ===
+Apr 22 14:33:42 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 12.
+Apr 22 14:33:42 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:33:42 vmi3096165 bash[362206]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:33:42 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:33:42 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:34:13 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 13.
+Apr 22 14:34:13 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:34:13 vmi3096165 bash[362325]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:34:13 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:34:13 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:34:43 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 14.
+Apr 22 14:34:43 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:34:43 vmi3096165 bash[362414]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:34:43 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:34:43 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:35:13 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 15.
+Apr 22 14:35:13 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:35:13 vmi3096165 bash[362609]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:35:13 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:35:13 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:35:43 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 16.
+Apr 22 14:35:43 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:35:43 vmi3096165 bash[362698]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:35:43 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:35:43 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 22 14:36:14 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 17.
+Apr 22 14:36:14 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
+Apr 22 14:36:14 vmi3096165 bash[362841]: /usr/bin/python3: No module named futures_bot.bot
+Apr 22 14:36:14 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
+Apr 22 14:36:14 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
 
-=== .env has PYTHONPATH? ===
-no PYTHONPATH override in .env (good)
+=== last 30 bot log lines ===
+ZeroDivisionError: integer modulo by zero
+2026-04-22 14:18:01,170 [bot] INFO: Stopping bot: Fatal: integer modulo by zero
+2026-04-22 14:18:01,170 [tradovate_client] INFO: Token expiring in -29614458min, renewing...
+2026-04-22 14:18:01,170 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 14:18:01,170 [bot] ERROR: Error closing positions: integer modulo by zero
+2026-04-22 14:18:01,170 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 14:18:01,170 [bot] INFO: Bot stopped
+2026-04-22 14:18:01,171 [bot] INFO: Retrying in 300s...
+2026-04-22 14:23:01,243 [bot] WARNING: Config not found at configs/bot_config.json, using defaults
+2026-04-22 14:23:01,244 [bot] INFO: ============================================================
+2026-04-22 14:23:01,244 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-22 14:23:01,244 [bot] INFO: ============================================================
+2026-04-22 14:23:01,244 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
+2026-04-22 14:23:01,244 [tradovate_client] INFO: All tokens failed, attempting user/password authentication...
+2026-04-22 14:23:01,244 [bot] ERROR: Failed to connect: integer modulo by zero
+2026-04-22 14:23:01,244 [bot] ERROR: Fatal error (attempt 5/5): integer modulo by zero
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 188, in _authenticate
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 30, in _encrypt_password
+ZeroDivisionError: integer modulo by zero
+2026-04-22 14:23:01,245 [bot] INFO: Stopping bot: Fatal: integer modulo by zero
+2026-04-22 14:23:01,245 [tradovate_client] INFO: Token expiring in -29614463min, renewing...
+2026-04-22 14:23:01,245 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 14:23:01,245 [bot] ERROR: Error closing positions: integer modulo by zero
+2026-04-22 14:23:01,245 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 14:23:01,245 [bot] INFO: Bot stopped
+2026-04-22 14:23:01,245 [bot] ERROR: Max retries reached. Bot shutting down permanently.
 
-=== working tree root ===
-total 112
-drwxr-xr-x 13 root root  4096 Apr 22 14:12 .
-drwx------ 20 root root  4096 Apr 22 14:12 ..
--rw-r--r--  1 root root   459 Apr 22 13:45 .env
-drwxr-xr-x  9 root root  4096 Apr 22 14:12 .git
-drwxr-xr-x  3 root root  4096 Feb 23 12:13 .github
--rw-r--r--  1 root root    54 Apr 22 14:12 .gitignore
--rw-r--r--  1 root root 17478 Apr 22 14:12 CLAUDE.md
--rw-r--r--  1 root root  1634 Apr 22 14:12 README.md
-drwxr-xr-x  3 root root  4096 Mar  7 18:07 bridge
-drwxr-xr-x  2 root root  4096 Apr 22 14:12 commands
-drwxr-xr-x  2 1001 1001  4096 Apr 22 14:12 configs
-drwxr-xr-x  5 1001 1001  4096 Apr 22 14:12 futures_bot
--rw-r--r--  1 root root  5451 Apr 22 14:12 get_token.py
-drwxr-xr-x  2 root root  4096 Apr 13 20:23 logs
--rw-r--r--  1 root root    86 Apr 22 14:12 requirements.txt
-drwxr-xr-x  2 root root  4096 Apr 22 14:12 scripts
--rw-r--r--  1 root root  6100 Apr 22 14:12 server_cron.sh
-drwxr-xr-x  2 root root  4096 Apr 22 14:12 status
--rw-r--r--  1 root root    41 Apr 22 14:12 trigger-check.txt
-
-=== futures_bot dir ===
-total 48
-drwxr-xr-x  5 1001 1001  4096 Apr 22 14:12 .
-drwxr-xr-x 13 root root  4096 Apr 22 14:12 ..
--rw-r--r--  1 root root   114 Apr 22 14:12 __init__.py
-drwxr-xr-x  2 root root  4096 Apr 22 10:03 __pycache__
--rw-r--r--  1 root root 24016 Apr 22 14:12 bot.py
-drwxr-xr-x  3 1001 1001  4096 Apr 22 14:12 core
-drwxr-xr-x  3 1001 1001  4096 Apr 22 14:12 strategies
-
-=== try importing manually ===
-import OK
-
-=== systemd env dump ===
-Environment=PYTHONUNBUFFERED=1 PYTHONPATH=/root/MT5-PropFirm-Bot
-EnvironmentFiles=/root/MT5-PropFirm-Bot/.env (ignore_errors=no)
-
-=== which python3 + version ===
-/usr/bin/python3
-Python 3.12.3
-
-=== pip packages playwright/aiohttp ===
-aiohttp 3.13.3 | websockets 16.0 | playwright: OK
+=== status.json ===
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
