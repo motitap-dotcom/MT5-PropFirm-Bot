@@ -1,100 +1,83 @@
-=== v149 post-audit 2026-04-22 09:52 UTC ===
+=== Post-restart check 2026-04-22 10:09 UTC ===
 
 --- SERVICE ---
 Service: active
-PID:     10285
-Uptime:  Tue 2026-04-21 14:11:24 UTC
+PID:     294144
+Uptime:  Wed 2026-04-22 10:03:08 UTC
 
 --- CODE ---
 Branch:  claude/claude-md-mm3qa8i9848jcovk-X3DTU
-Commit:  86d821c Merge main: align tests with post-audit refactor
+Commit:  ea33175 Status check: post-restart verification
 
---- CONFIG VALIDATION (latest log match) ---
-2026-04-13 20:18:32,926 [bot] INFO: Config validation passed
-2026-04-13 20:23:18,947 [bot] INFO: Config validation passed
-2026-04-13 20:23:50,431 [bot] INFO: Config validation passed
-2026-04-14 14:16:17,388 [bot] INFO: Config validation passed
-2026-04-14 15:21:53,732 [bot] INFO: Config validation passed
-2026-04-17 14:14:14,146 [bot] INFO: Config validation passed
-2026-04-17 14:14:45,616 [bot] INFO: Config validation passed
-2026-04-17 14:35:52,323 [bot] INFO: Config validation passed
-2026-04-21 14:11:25,203 [bot] INFO: Config validation passed
-2026-04-21 14:11:56,693 [bot] INFO: Config validation passed
+--- DST fix present? ---
+2
+DST fix IN DEPLOYED CODE
 
---- NEW FILES CHECK ---
--rw-r--r-- 1 root root 2856 Apr 22 09:52 futures_bot/core/trade_logger.py
-  trade_logger.py: OK
--rwxr-xr-x 1 root root 3474 Apr 22 09:52 scripts/weekly_review.sh
-  weekly_review.sh: OK
+--- Which Python process is actually running? ---
+Running since: Wed Apr 22 10:03:08 2026
+Command: /usr/bin/python3 -m futures_bot.bot 
 
---- STATUS / DASHBOARD ---
-dashboard.txt (age: 0s):
-============================================================
-TradeDay Futures Bot — 2026-04-22T09:52:03.355081+00:00
-============================================================
-State            : CAUTION
-Balance          : $0.00
-Total PnL        : $+0.00
-Daily PnL        : $+0.00   Trades today: 0
-Trading days     : 0/5
-DD used / left   : $0.00 / $0.00
-To profit target : $0.00
-Consistency OK   : True
-Reason           : —
-------------------------------------------------------------
-Active strategy  : {}
-Open positions   : 0
-============================================================
+--- Last 20 log lines ---
+2026-04-22 10:03:53,131 [tradovate_client] INFO: Browser auth: token captured successfully
+2026-04-22 10:03:53,133 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed), token valid for 2h
+2026-04-22 10:03:53,255 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-22 10:03:53,255 [tradovate_client] INFO: Saved token is still valid
+2026-04-22 10:03:53,256 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-22 10:03:53,348 [bot] INFO: Bot started successfully
+2026-04-22 10:03:53,350 [bot] INFO: Trading symbols: ['MESM6']
+2026-04-22 10:03:53,350 [bot] INFO: Timeframe: 5min
+2026-04-22 10:03:53,350 [bot] INFO: New trading day: 2026-04-22
+2026-04-22 10:03:53,350 [bot] INFO: Outside session: Pre-market: 06:03 ET (opens 09:30:00)
+2026-04-22 10:04:23,363 [bot] INFO: Outside session: Pre-market: 06:04 ET (opens 09:30:00)
+2026-04-22 10:04:53,375 [bot] INFO: Outside session: Pre-market: 06:04 ET (opens 09:30:00)
+2026-04-22 10:05:23,427 [bot] INFO: Outside session: Pre-market: 06:05 ET (opens 09:30:00)
+2026-04-22 10:05:53,438 [bot] INFO: Outside session: Pre-market: 06:05 ET (opens 09:30:00)
+2026-04-22 10:06:23,466 [bot] INFO: Outside session: Pre-market: 06:06 ET (opens 09:30:00)
+2026-04-22 10:06:53,476 [bot] INFO: Outside session: Pre-market: 06:06 ET (opens 09:30:00)
+2026-04-22 10:07:23,484 [bot] INFO: Outside session: Pre-market: 06:07 ET (opens 09:30:00)
+2026-04-22 10:07:53,515 [bot] INFO: Outside session: Pre-market: 06:07 ET (opens 09:30:00)
+2026-04-22 10:08:23,522 [bot] INFO: Outside session: Pre-market: 06:08 ET (opens 09:30:00)
+2026-04-22 10:08:53,554 [bot] INFO: Outside session: Pre-market: 06:08 ET (opens 09:30:00)
 
-status.json (age: 0s):
-  state: None
-  balance: None
-  dd_used: None
+--- vps_fix_report.txt (if exists) ---
+(file age: 0s)
+=== Fix & Restart v13 - Fix volume=0 breaking VWAP ===
+2026-04-09 18:20:17 UTC
+Current: 4299410 Fix VWAP=0 bug: WebSocket bars have upVolume/downVolume, not volume
+Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
 
---- TRADE LOG ---
-1 logs/trades_log.csv
-timestamp_utc,symbol,strategy,direction,contracts,entry,sl,tp,exit,pnl,r_multiple,reason,daily_pnl_after,balance_after
+--- .env check ---
+TRADOVATE_USER: SET
+TRADOVATE_PASS: SET
+TELEGRAM_TOKEN: SET
+TELEGRAM_CHAT_ID: SET
 
---- RECENT BOT LOG (last 40 lines) ---
-2026-04-22 09:33:06,318 [bot] INFO: Outside session: Pre-market: 05:33 ET (opens 09:30:00)
-2026-04-22 09:33:36,350 [bot] INFO: Outside session: Pre-market: 05:33 ET (opens 09:30:00)
-2026-04-22 09:34:06,381 [bot] INFO: Outside session: Pre-market: 05:34 ET (opens 09:30:00)
-2026-04-22 09:34:36,387 [bot] INFO: Outside session: Pre-market: 05:34 ET (opens 09:30:00)
-2026-04-22 09:35:06,403 [bot] INFO: Outside session: Pre-market: 05:35 ET (opens 09:30:00)
-2026-04-22 09:35:36,435 [bot] INFO: Outside session: Pre-market: 05:35 ET (opens 09:30:00)
-2026-04-22 09:36:06,439 [bot] INFO: Outside session: Pre-market: 05:36 ET (opens 09:30:00)
-2026-04-22 09:36:36,443 [bot] INFO: Outside session: Pre-market: 05:36 ET (opens 09:30:00)
-2026-04-22 09:37:06,449 [bot] INFO: Outside session: Pre-market: 05:37 ET (opens 09:30:00)
-2026-04-22 09:37:36,479 [bot] INFO: Outside session: Pre-market: 05:37 ET (opens 09:30:00)
-2026-04-22 09:38:06,510 [bot] INFO: Outside session: Pre-market: 05:38 ET (opens 09:30:00)
-2026-04-22 09:38:36,520 [bot] INFO: Outside session: Pre-market: 05:38 ET (opens 09:30:00)
-2026-04-22 09:39:06,544 [bot] INFO: Outside session: Pre-market: 05:39 ET (opens 09:30:00)
-2026-04-22 09:39:36,575 [bot] INFO: Outside session: Pre-market: 05:39 ET (opens 09:30:00)
-2026-04-22 09:40:06,592 [bot] INFO: Outside session: Pre-market: 05:40 ET (opens 09:30:00)
-2026-04-22 09:40:36,617 [bot] INFO: Outside session: Pre-market: 05:40 ET (opens 09:30:00)
-2026-04-22 09:41:06,646 [bot] INFO: Outside session: Pre-market: 05:41 ET (opens 09:30:00)
-2026-04-22 09:41:36,677 [bot] INFO: Outside session: Pre-market: 05:41 ET (opens 09:30:00)
-2026-04-22 09:42:06,707 [bot] INFO: Outside session: Pre-market: 05:42 ET (opens 09:30:00)
-2026-04-22 09:42:36,741 [bot] INFO: Outside session: Pre-market: 05:42 ET (opens 09:30:00)
-2026-04-22 09:43:06,764 [bot] INFO: Outside session: Pre-market: 05:43 ET (opens 09:30:00)
-2026-04-22 09:43:36,784 [bot] INFO: Outside session: Pre-market: 05:43 ET (opens 09:30:00)
-2026-04-22 09:44:06,792 [bot] INFO: Outside session: Pre-market: 05:44 ET (opens 09:30:00)
-2026-04-22 09:44:36,796 [bot] INFO: Outside session: Pre-market: 05:44 ET (opens 09:30:00)
-2026-04-22 09:45:06,808 [bot] INFO: Outside session: Pre-market: 05:45 ET (opens 09:30:00)
-2026-04-22 09:45:36,837 [bot] INFO: Outside session: Pre-market: 05:45 ET (opens 09:30:00)
-2026-04-22 09:46:06,868 [bot] INFO: Outside session: Pre-market: 05:46 ET (opens 09:30:00)
-2026-04-22 09:46:36,877 [bot] INFO: Outside session: Pre-market: 05:46 ET (opens 09:30:00)
-2026-04-22 09:47:06,879 [bot] INFO: Outside session: Pre-market: 05:47 ET (opens 09:30:00)
-2026-04-22 09:47:36,909 [bot] INFO: Outside session: Pre-market: 05:47 ET (opens 09:30:00)
-2026-04-22 09:48:06,930 [bot] INFO: Outside session: Pre-market: 05:48 ET (opens 09:30:00)
-2026-04-22 09:48:36,964 [bot] INFO: Outside session: Pre-market: 05:48 ET (opens 09:30:00)
-2026-04-22 09:49:06,967 [bot] INFO: Outside session: Pre-market: 05:49 ET (opens 09:30:00)
-2026-04-22 09:49:36,978 [bot] INFO: Outside session: Pre-market: 05:49 ET (opens 09:30:00)
-2026-04-22 09:50:06,986 [bot] INFO: Outside session: Pre-market: 05:50 ET (opens 09:30:00)
-2026-04-22 09:50:36,993 [bot] INFO: Outside session: Pre-market: 05:50 ET (opens 09:30:00)
-2026-04-22 09:51:07,023 [bot] INFO: Outside session: Pre-market: 05:51 ET (opens 09:30:00)
-2026-04-22 09:51:37,054 [bot] INFO: Outside session: Pre-market: 05:51 ET (opens 09:30:00)
-2026-04-22 09:52:07,084 [bot] INFO: Outside session: Pre-market: 05:52 ET (opens 09:30:00)
-2026-04-22 09:52:37,106 [bot] INFO: Outside session: Pre-market: 05:52 ET (opens 09:30:00)
+--- Token check ---
+Token file: exists (813 bytes)
+Playwright: OK
 
-=== END v149 ===
+--- Code verification ---
+auth_cooldown: 3
+wait_for_selector: 1
+mkdir in status_writer: 2
+
+--- Result ---
+Status: active
+PID: 1933509
+
+--- First 15 log lines after restart ---
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.38SD RSI=66.7 entry=2656.70 sl=2662.35 tp=2641.11
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2660.20 VWAP=2641.40 dist=+1.64SD RSI=70.2 ATR=2.97
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.64SD RSI=70.2 entry=2660.20 sl=2665.92 tp=2641.40
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2658.90 VWAP=2641.61 dist=+1.50SD RSI=66.0 ATR=2.97
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.50SD RSI=66.0 entry=2658.90 sl=2664.67 tp=2641.61
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2659.50 VWAP=2641.86 dist=+1.51SD RSI=67.6 ATR=2.89
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.51SD RSI=67.6 entry=2659.50 sl=2665.32 tp=2641.86
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2658.50 VWAP=2642.00 dist=+1.41SD RSI=62.2 ATR=2.81
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2658.10 VWAP=2642.11 dist=+1.36SD RSI=67.2 ATR=2.74
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.36SD RSI=67.2 entry=2658.10 sl=2663.97 tp=2642.11
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2649.00 VWAP=2642.54 dist=+0.56SD RSI=38.2 ATR=3.27
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2651.10 VWAP=2642.76 dist=+0.72SD RSI=39.4 ATR=3.41
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2649.80 VWAP=2642.89 dist=+0.60SD RSI=32.7 ATR=3.46
+2026-04-09 18:20:21,529 [bot] INFO: M2KM6: New bar 2026-04-09T18:15Z | O=2649.5 H=2651.6 L=2648.6 C=2650.4 V=549
+2026-04-09 18:20:21,529 [strategy.vwap] INFO: Price=2650.40 VWAP=2642.98 dist=+0.65SD RSI=32.1 ATR=3.41
