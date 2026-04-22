@@ -1,5 +1,5 @@
 #!/bin/bash
-# v7 - wrapper in /usr/local/sbin (outside the git repo, can't be wiped)
+# v8 - run bot.py as a script (not -m), bypass package resolution
 echo "=== Fix & Restart ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
@@ -43,6 +43,8 @@ install -m 755 /dev/stdin /usr/local/sbin/futures-bot-wrapper.sh << 'RUNEOF'
 #!/bin/bash
 # Wrapper invoked by systemd's ExecStart. Lives in /usr/local/sbin to survive
 # anything that might wipe /root/MT5-PropFirm-Bot.
+# Run bot.py as a SCRIPT (not -m) so Python's package resolution isn't needed
+# at startup — bot.py does sys.path.insert on line 23 to wire its own imports.
 set -e
 cd /root/MT5-PropFirm-Bot
 if [ -f .env ]; then
@@ -51,10 +53,9 @@ if [ -f .env ]; then
   source .env
   set +a
 fi
-export PYTHONPATH=/root/MT5-PropFirm-Bot
 export PYTHONUNBUFFERED=1
-echo "[wrapper] cwd=$(pwd) PYTHONPATH=$PYTHONPATH TRADOVATE_PASS_set=${TRADOVATE_PASS:+yes} futures_bot=$(ls -d futures_bot/ 2>/dev/null || echo MISSING)"
-exec /usr/bin/python3 -m futures_bot.bot
+echo "[wrapper] cwd=$(pwd) TRADOVATE_PASS_set=${TRADOVATE_PASS:+yes} bot.py=$(stat -c %s futures_bot/bot.py 2>/dev/null || echo MISSING)B"
+exec /usr/bin/python3 /root/MT5-PropFirm-Bot/futures_bot/bot.py
 RUNEOF
 
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
