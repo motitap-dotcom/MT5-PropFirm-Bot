@@ -12,7 +12,7 @@ Focus:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import time
+from datetime import datetime, time
 from enum import Enum
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock
@@ -530,4 +530,77 @@ class TestExecuteTradeExceptionPath:
         setup = _VWAPSetup(_Sig.LONG, 4500.0, 4490.0, 4505.0, 4510.0)
         await bot._execute_trade("MESM6", setup, "VWAP")
         bot.client.close_position.assert_not_called()
+
+
+# ── _process_symbol: bar gating and strategy dispatch ──
+
+@freeze_time("2026-06-15 15:00:00")  # 11:00 ET - in session, past ORB
+class TestProcessSymbol:
+
+    def _setup_bot(self, guardian_config, risk_config):
+        """Bot with mock VWAP and ORB strategies — no real math."""
+        bot = _make_bot_with_fakes(guardian_config, risk_config)
+        vwap = MagicMock()
+        vwap._bars = [1] * 50  # already warmed up
+        vwap.on_bar = MagicMock(return_value=None)  # no signal by default
+        orb = MagicMock()
+        orb.on_bar = MagicMock(return_value=None)
+        bot.vwap_strategies = {"MESM6": vwap}
+        bot.orb_strategies = {"MESM6": orb}
+        return bot, vwap, orb
+
+    async def test_skips_when_no_bars(self, guardian_config, risk_config):
+        bot, vwap, _ = self._setup_bot(guardian_config, risk_config)
+        bot.client.get_historical_bars = AsyncMock(return_value=[])
+        await bot._process_symbol("MESM6", datetime(2026, 6, 15, 11, 0))
+        vwap.on_bar.assert_not_called()
+
+    async def test_dedupes_by_timestamp(self, guardian_config, risk_config):
+        """If the latest bar timestamp equals the last-processed one, skip."""
+        bot, vwap, _ = self._setup_bot(guardian_config, risk_config)
+        bars = [{"timestamp": "t1", "open": 1, "high": 2, "low": 0, "close": 1, "volume": 10}]
+        bot.client.get_historical_bars = AsyncMock(return_value=bars)
+        bot._last_bar_time = {"MESM6": "t1"}  # already seen
+        await bot._process_symbol("MESM6", datetime(2026, 6, 15, 11, 0))
+        vwap.on_bar.assert_not_called()
+
+    async def test_vwap_receives_new_bar(self, guardian_config, risk_config):
+        bot, vwap, _ = self._setup_bot(guardian_config, risk_config)
+        bars = [
+            {"timestamp": "t1", "open": 1, "high": 2, "low": 0, "close": 1, "volume": 10},
+            {"timestamp": "t2", "open": 1, "high": 2, "low": 0, "close": 1, "volume": 10},
+        ]
+        bot.client.get_historical_bars = AsyncMock(return_value=bars)
+        bot._last_bar_time = {"MESM6": "t1"}  # t2 is new
+        await bot._process_symbol("MESM6", datetime(2026, 6, 15, 11, 0))
+        vwap.on_bar.assert_called_once()
+        assert bot._last_bar_time["MESM6"] == "t2"
+
+    async def test_orb_strategy_used_when_active(self, guardian_config, risk_config):
+        bot, vwap, orb = self._setup_bot(guardian_config, risk_config)
+        bot.active_strategy["MESM6"] = "orb"
+        bars = [{"timestamp": "t1", "open": 1, "high": 2, "low": 0, "close": 1, "volume": 10}]
+        bot.client.get_historical_bars = AsyncMock(return_value=bars)
+        await bot._process_symbol("MESM6", datetime(2026, 6, 15, 11, 0))
+        orb.on_bar.assert_called_once()
+        vwap.on_bar.assert_not_called()
+
+    async def test_warmup_feeds_historical_bars(self, guardian_config, risk_config):
+        """On first call with empty VWAP buffer, all but the last bar should warm it up."""
+        bot, vwap, _ = self._setup_bot(guardian_config, risk_config)
+        vwap._bars = []  # empty
+        bars = [
+            {"timestamp": f"t{i}", "open": 1, "high": 2, "low": 0, "close": 1, "volume": 10}
+            for i in range(5)
+        ]
+        bot.client.get_historical_bars = AsyncMock(return_value=bars)
+        await bot._process_symbol("MESM6", datetime(2026, 6, 15, 11, 0))
+        # 4 warmup bars + 1 current = 5 total calls
+        assert vwap.on_bar.call_count == 5
+
+    async def test_client_exception_swallowed(self, guardian_config, risk_config):
+        """If get_historical_bars raises, the method must not crash the bot."""
+        bot, _, _ = self._setup_bot(guardian_config, risk_config)
+        bot.client.get_historical_bars = AsyncMock(side_effect=RuntimeError("api down"))
+        await bot._process_symbol("MESM6", datetime(2026, 6, 15, 11, 0))  # no raise
 

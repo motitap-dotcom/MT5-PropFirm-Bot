@@ -7,3 +7,4 @@ coverage.json
 .pytest_cache/
 htmlcov/
 logs/
+status/

@@ -17,12 +17,18 @@ from pathlib import Path
 # (relative path, minimum percent). Only modules that contain rule
 # enforcement or strategy math — NOT network, I/O, or orchestration.
 FLOORS = {
+    # Safety-critical rule enforcement and strategy math — must stay very high.
     "futures_bot/core/guardian.py":                   95.0,
-    "futures_bot/core/risk_manager.py":               90.0,
-    "futures_bot/core/news_filter.py":                85.0,
-    "futures_bot/strategies/orb_breakout.py":         95.0,
-    "futures_bot/strategies/vwap_mean_reversion.py":  90.0,
-    "futures_bot/core/status_writer.py":              85.0,
+    "futures_bot/core/risk_manager.py":               94.0,
+    "futures_bot/core/news_filter.py":                87.0,
+    "futures_bot/strategies/orb_breakout.py":        100.0,
+    "futures_bot/strategies/vwap_mean_reversion.py":  95.0,
+    "futures_bot/core/status_writer.py":              88.0,
+    # Messaging + orchestration — moderate floor; network paths excluded.
+    "futures_bot/core/notifier.py":                   88.0,
+    "futures_bot/bot.py":                             50.0,
+    # Tradovate REST/WS client — pure functions + renew logic only.
+    "futures_bot/core/tradovate_client.py":           32.0,
 }
 
 

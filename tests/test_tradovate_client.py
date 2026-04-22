@@ -281,3 +281,133 @@ class TestProcessMdMessage:
         msg = json.dumps({"e": "md", "d": {"contractId": 1, "bid": 4500.0}})
         c._process_md_message(msg)
         assert len(received) == 1
+
+
+# ── _renew_token_safe (with mocked HTTP) ──
+
+import aiohttp
+from aioresponses import aioresponses
+
+
+async def _new_client_with_session(access_token: str = "old_token"):
+    c = _make_client()
+    c.access_token = access_token
+    c.md_access_token = access_token
+    c.token_expiry = time.time() + 1000
+    c.session = aiohttp.ClientSession()
+    return c
+
+
+class TestRenewTokenSafe:
+
+    async def test_success_updates_tokens_and_returns_true(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(tc_mod, "TOKEN_FILE", tmp_path / ".tok.json")
+        monkeypatch.setenv("BOT_ROOT", str(tmp_path))
+        c = await _new_client_with_session("old_access")
+        try:
+            with aioresponses() as m:
+                m.post(
+                    f"{c.base_url}/auth/renewaccesstoken",
+                    status=200,
+                    payload={
+                        "accessToken": "NEW",
+                        "mdAccessToken": "NEW_MD",
+                        "expirationTime": "2026-12-31T00:00:00Z",
+                    },
+                )
+                ok = await c._renew_token_safe()
+            assert ok is True
+            assert c.access_token == "NEW"
+            assert c.md_access_token == "NEW_MD"
+        finally:
+            await c.session.close()
+
+    async def test_no_token_returns_false_without_call(self):
+        c = _make_client()
+        c.access_token = None  # no saved token
+        c.session = None  # should not even get used
+        assert (await c._renew_token_safe()) is False
+
+    async def test_http_error_returns_false(self):
+        c = await _new_client_with_session("old")
+        try:
+            with aioresponses() as m:
+                m.post(f"{c.base_url}/auth/renewaccesstoken", status=401, body="Unauthorized")
+                ok = await c._renew_token_safe()
+            assert ok is False
+            assert c.access_token == "old"  # unchanged
+        finally:
+            await c.session.close()
+
+    async def test_missing_access_token_field_returns_false(self):
+        c = await _new_client_with_session("old")
+        try:
+            with aioresponses() as m:
+                m.post(
+                    f"{c.base_url}/auth/renewaccesstoken",
+                    status=200,
+                    payload={"errorText": "bad"},
+                )
+                ok = await c._renew_token_safe()
+            assert ok is False
+            assert c.access_token == "old"
+        finally:
+            await c.session.close()
+
+    async def test_network_exception_returns_false(self):
+        c = await _new_client_with_session("old")
+        try:
+            with aioresponses() as m:
+                m.post(
+                    f"{c.base_url}/auth/renewaccesstoken",
+                    exception=aiohttp.ClientError("network down"),
+                )
+                ok = await c._renew_token_safe()
+            assert ok is False
+        finally:
+            await c.session.close()
+
+
+class TestEnsureToken:
+
+    async def test_no_renewal_when_token_is_fresh(self):
+        c = _make_client()
+        c.token_expiry = time.time() + 10000  # 10000s > threshold 3600
+        c.session = None  # should not be used
+        await c._ensure_token()  # must not raise
+
+    async def test_cooldown_blocks_renewal_after_failure(self):
+        c = await _new_client_with_session("old")
+        try:
+            c.token_expiry = time.time() + 60  # expiring soon
+            c._last_auth_failure = time.time()  # just failed
+            # Must not issue any HTTP call during cooldown.
+            with aioresponses() as m:
+                await c._ensure_token()
+                # No calls should have been made
+                assert m.requests == {}
+        finally:
+            await c.session.close()
+
+    async def test_successful_ensure_clears_failure_timestamp(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(tc_mod, "TOKEN_FILE", tmp_path / ".tok.json")
+        monkeypatch.setenv("BOT_ROOT", str(tmp_path))
+        c = await _new_client_with_session("old")
+        try:
+            c.token_expiry = time.time() + 60  # close to expiry
+            c._last_auth_failure = 0  # no pending failure
+            with aioresponses() as m:
+                m.post(
+                    f"{c.base_url}/auth/renewaccesstoken",
+                    status=200,
+                    payload={
+                        "accessToken": "FRESH",
+                        "mdAccessToken": "FRESH_MD",
+                        "expirationTime": "2026-12-31T00:00:00Z",
+                    },
+                )
+                await c._ensure_token()
+            assert c.access_token == "FRESH"
+            assert c._last_auth_failure == 0  # cleared on success
+        finally:
+            await c.session.close()

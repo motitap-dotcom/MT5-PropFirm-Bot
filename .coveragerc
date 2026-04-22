@@ -12,4 +12,4 @@ exclude_lines =
 
 # Overall project coverage must not drop below this floor.
 # Raise this number as coverage improves.
-fail_under = 55
+fail_under = 62
