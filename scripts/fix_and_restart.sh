@@ -1,5 +1,5 @@
 #!/bin/bash
-# v5 - revert to wrapper script (run_bot.sh) that was working at 15:14
+# v6 - write run_bot.sh inline so it can't go missing
 echo "=== Fix & Restart ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
@@ -38,8 +38,34 @@ fi
 # Back to the external wrapper (run_bot.sh). This was confirmed working at
 # 15:14 UTC — the inline bash -c version regressed to "No module named
 # futures_bot.bot" for reasons I still can't explain.
-# Invoke via `/bin/bash /path/to/script` so we don't depend on the exec bit
-# of the file itself (avoids status=203/EXEC).
+# v6: write run_bot.sh OURSELVES so it can't go missing. The systemd service
+# keeps ending up in a restart loop with status=127 "No such file or
+# directory" whenever the file isn't on disk after a reset — creating it here
+# guarantees it exists the moment systemctl start runs.
+mkdir -p /root/MT5-PropFirm-Bot/scripts
+cat > /root/MT5-PropFirm-Bot/scripts/run_bot.sh << 'RUNEOF'
+#!/bin/bash
+# Wrapper invoked by systemd's ExecStart.
+# Loads the .env file ourselves (so we don't rely on systemd's EnvironmentFile
+# parser) and sets PYTHONPATH + cwd explicitly before exec'ing python.
+set -e
+cd /root/MT5-PropFirm-Bot
+if [ -f .env ]; then
+  set -a
+  # shellcheck disable=SC1091
+  source .env
+  set +a
+fi
+export PYTHONPATH=/root/MT5-PropFirm-Bot
+export PYTHONUNBUFFERED=1
+echo "[run_bot.sh] cwd=$(pwd)"
+echo "[run_bot.sh] TRADOVATE_USER=${TRADOVATE_USER:0:3}*** TRADOVATE_PASS set=${TRADOVATE_PASS:+yes}"
+echo "[run_bot.sh] PYTHONPATH=$PYTHONPATH"
+echo "[run_bot.sh] futures_bot present: $(ls -d futures_bot/ 2>/dev/null || echo MISSING)"
+exec /usr/bin/python3 -m futures_bot.bot
+RUNEOF
+chmod +x /root/MT5-PropFirm-Bot/scripts/run_bot.sh
+
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -60,8 +86,6 @@ StandardError=journal
 [Install]
 WantedBy=multi-user.target
 SVCEOF
-
-chmod +x /root/MT5-PropFirm-Bot/scripts/run_bot.sh 2>/dev/null || true
 
 # Stop hard + clear failure counter so auto-restart loop doesn't keep firing
 systemctl stop futures-bot 2>/dev/null
