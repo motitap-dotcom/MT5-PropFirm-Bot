@@ -1,13 +1,15 @@
 #!/bin/bash
-echo "=== $(date -u '+%H:%M UTC') status ==="
+echo "=== $(date -u '+%H:%M UTC')  NY=$(TZ=America/New_York date '+%H:%M') ==="
 systemctl is-active futures-bot
-systemctl show futures-bot --property=MainPID --property=NRestarts --property=ActiveEnterTimestamp 2>&1
+systemctl show futures-bot --property=MainPID --property=NRestarts --property=ActiveEnterTimestamp
 echo ""
-echo "--- bot.py locations ---"
-ls -la /opt/futures_bot_stable/futures_bot/bot.py /root/MT5-PropFirm-Bot/futures_bot/bot.py 2>&1
+echo "--- where is wrapper reading bot.py from ---"
+journalctl -u futures-bot --no-pager -n 80 2>&1 | grep -E "BOT_DIR|wrapper|SIGTERM|Stopping|Signal|TRADE|SIGNAL|bar|Got.*bars|No module|can't open" | tail -25
 echo ""
-echo "--- wrapper ---"
-ls -la /usr/local/sbin/futures-bot-wrapper.sh 2>&1
+echo "--- bot log last 40 (whichever location it uses) ---"
+tail -40 /opt/futures_bot_stable/logs/bot.log 2>/dev/null || tail -40 /root/MT5-PropFirm-Bot/logs/bot.log 2>/dev/null
 echo ""
-echo "--- journalctl last 20 ---"
-journalctl -u futures-bot --no-pager -n 20 2>&1 | tail -20
+echo "--- recent logs from /opt ---"
+ls -la /opt/futures_bot_stable/logs/ 2>&1
+echo "--- recent logs from /root ---"
+ls -la /root/MT5-PropFirm-Bot/logs/ 2>&1
