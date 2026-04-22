@@ -1,13 +1,10 @@
 #!/bin/bash
 cd /root/MT5-PropFirm-Bot
 echo "=== $(date -u '+%H:%M UTC')  NY=$(TZ=America/New_York date '+%H:%M') ==="
-echo "Service: $(systemctl is-active futures-bot)  Since: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
+echo "Service: $(systemctl is-active futures-bot)  PID: $(systemctl show futures-bot --property=MainPID --value)  NRestarts: $(systemctl show futures-bot --property=NRestarts --value)"
 echo ""
-echo "--- bot log lines since 15:09 ---"
-awk '/2026-04-22 15:09:/,0' logs/bot.log | tail -40
+echo "--- journalctl last 60 ---"
+journalctl -u futures-bot --no-pager -n 60 2>&1 | tail -60
 echo ""
-echo "--- trend day mentions today ---"
-grep -c "Trend day detected" logs/bot.log
-echo ""
-echo "--- status.json ---"
-cat status/status.json
+echo "--- bot log tail 40 ---"
+tail -40 logs/bot.log 2>/dev/null
