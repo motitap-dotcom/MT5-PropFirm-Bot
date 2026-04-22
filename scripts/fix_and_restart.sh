@@ -1,5 +1,5 @@
 #!/bin/bash
-# v8 - run bot.py as a script (not -m), bypass package resolution
+# v9 - copy futures_bot/ to /opt/ so concurrent branch resets can't wipe it
 echo "=== Fix & Restart ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
@@ -35,27 +35,54 @@ if [ ! -d /root/.cache/ms-playwright ] || [ -z "$(ls -A /root/.cache/ms-playwrig
   python3 -m playwright install chromium 2>&1 | tail -5
 fi
 
-# v7: put the wrapper in /usr/local/sbin so it lives OUTSIDE the git repo and
-# cannot be wiped by any `git reset --hard`, `git clean`, or rogue cron doing
-# something in /root/MT5-PropFirm-Bot. We also install an ExecStartPre that
-# re-materialises the file on every start as a belt-and-braces defense.
+# Maintain a copy of the bot package at /opt/futures_bot_stable so it survives
+# any `git reset --hard` on /root/MT5-PropFirm-Bot caused by concurrent Claude
+# sessions pushing to other branches. The wrapper also self-heals the copy
+# from whichever source is present, so we're never stuck when one side is
+# wiped.
+mkdir -p /opt/futures_bot_stable
+if [ -f /root/MT5-PropFirm-Bot/futures_bot/bot.py ]; then
+  rsync -a --delete /root/MT5-PropFirm-Bot/futures_bot/ /opt/futures_bot_stable/futures_bot/
+  cp /root/MT5-PropFirm-Bot/requirements.txt /opt/futures_bot_stable/ 2>/dev/null || true
+  [ -d /root/MT5-PropFirm-Bot/configs ] && rsync -a /root/MT5-PropFirm-Bot/configs/ /opt/futures_bot_stable/configs/
+  echo "  Seeded /opt/futures_bot_stable from /root/MT5-PropFirm-Bot"
+fi
+
 install -m 755 /dev/stdin /usr/local/sbin/futures-bot-wrapper.sh << 'RUNEOF'
 #!/bin/bash
 # Wrapper invoked by systemd's ExecStart. Lives in /usr/local/sbin to survive
-# anything that might wipe /root/MT5-PropFirm-Bot.
-# Run bot.py as a SCRIPT (not -m) so Python's package resolution isn't needed
-# at startup — bot.py does sys.path.insert on line 23 to wire its own imports.
+# wipes of /root/MT5-PropFirm-Bot. If the repo copy is present it takes
+# precedence; otherwise we fall back to the stable copy at /opt.
 set -e
-cd /root/MT5-PropFirm-Bot
-if [ -f .env ]; then
-  set -a
-  # shellcheck disable=SC1091
-  source .env
-  set +a
+STABLE=/opt/futures_bot_stable
+REPO=/root/MT5-PropFirm-Bot
+
+# Pick the side that still has bot.py
+if [ -f "$REPO/futures_bot/bot.py" ]; then
+  BOT_DIR="$REPO"
+elif [ -f "$STABLE/futures_bot/bot.py" ]; then
+  BOT_DIR="$STABLE"
+  echo "[wrapper] repo copy missing, falling back to $STABLE"
+else
+  echo "[wrapper] FATAL: no bot.py found in $REPO or $STABLE" >&2
+  exit 1
 fi
+
+cd "$BOT_DIR"
+# Load .env: prefer repo copy (has fresh tokens written by workflows)
+if [ -f "$REPO/.env" ]; then
+  set -a; source "$REPO/.env"; set +a
+elif [ -f "$STABLE/.env" ]; then
+  set -a; source "$STABLE/.env"; set +a
+fi
+# Configs too — fall back to stable copy if the repo one was wiped
+if [ ! -d "$BOT_DIR/configs" ] && [ -d "$STABLE/configs" ]; then
+  cp -r "$STABLE/configs" "$BOT_DIR/configs"
+fi
+mkdir -p logs status
 export PYTHONUNBUFFERED=1
-echo "[wrapper] cwd=$(pwd) TRADOVATE_PASS_set=${TRADOVATE_PASS:+yes} bot.py=$(stat -c %s futures_bot/bot.py 2>/dev/null || echo MISSING)B"
-exec /usr/bin/python3 /root/MT5-PropFirm-Bot/futures_bot/bot.py
+echo "[wrapper] BOT_DIR=$BOT_DIR TRADOVATE_PASS_set=${TRADOVATE_PASS:+yes} bot.py=$(stat -c %s futures_bot/bot.py)B"
+exec /usr/bin/python3 "$BOT_DIR/futures_bot/bot.py"
 RUNEOF
 
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
