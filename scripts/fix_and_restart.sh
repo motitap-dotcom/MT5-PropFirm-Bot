@@ -34,7 +34,11 @@ if [ ! -d /root/.cache/ms-playwright ] || [ -z "$(ls -A /root/.cache/ms-playwrig
   python3 -m playwright install chromium 2>&1 | tail -5
 fi
 
-# Service with PYTHONPATH
+# Service with bash wrapper. We saw systemd reporting `No module named
+# futures_bot.bot` even though running the same command by hand with
+# PYTHONPATH=/root/MT5-PropFirm-Bot worked. Wrapping ExecStart in bash with an
+# explicit `cd` + `exec` forces the Python import to happen from the right
+# working directory, regardless of any env inheritance weirdness.
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -43,9 +47,12 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/usr/bin/python3 -m futures_bot.bot
+ExecStart=/bin/bash -c 'cd /root/MT5-PropFirm-Bot && exec /usr/bin/python3 -m futures_bot.bot'
 Restart=on-failure
-RestartSec=60
+RestartSec=30
+TimeoutStopSec=20
+KillSignal=SIGINT
+KillMode=mixed
 Environment=PYTHONUNBUFFERED=1
 Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
 EnvironmentFile=/root/MT5-PropFirm-Bot/.env
@@ -54,9 +61,13 @@ EnvironmentFile=/root/MT5-PropFirm-Bot/.env
 WantedBy=multi-user.target
 SVCEOF
 
+# Stop hard + clear failure counter so auto-restart loop doesn't keep firing
+systemctl stop futures-bot 2>/dev/null
+pkill -f "python3 -m futures_bot.bot" 2>/dev/null || true
+sleep 2
 systemctl daemon-reload
 systemctl reset-failed futures-bot 2>/dev/null
-systemctl restart futures-bot
+systemctl start futures-bot
 echo "Waiting 20s for bot to boot + authenticate..."
 sleep 20
 
