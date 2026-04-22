@@ -1,24 +1,50 @@
-=== v149 post-audit 2026-04-13 20:07 UTC ===
+=== v149 post-audit 2026-04-22 09:52 UTC ===
 
 --- SERVICE ---
-Service: activating
-PID:     0
-Uptime:  Mon 2026-04-13 20:07:33 UTC
+Service: active
+PID:     10285
+Uptime:  Tue 2026-04-21 14:11:24 UTC
 
 --- CODE ---
 Branch:  claude/claude-md-mm3qa8i9848jcovk-X3DTU
-Commit:  2f706d4 Merge audit branch: risk tightening + monitoring + learning loop
+Commit:  86d821c Merge main: align tests with post-audit refactor
 
 --- CONFIG VALIDATION (latest log match) ---
+2026-04-13 20:18:32,926 [bot] INFO: Config validation passed
+2026-04-13 20:23:18,947 [bot] INFO: Config validation passed
+2026-04-13 20:23:50,431 [bot] INFO: Config validation passed
+2026-04-14 14:16:17,388 [bot] INFO: Config validation passed
+2026-04-14 15:21:53,732 [bot] INFO: Config validation passed
+2026-04-17 14:14:14,146 [bot] INFO: Config validation passed
+2026-04-17 14:14:45,616 [bot] INFO: Config validation passed
+2026-04-17 14:35:52,323 [bot] INFO: Config validation passed
+2026-04-21 14:11:25,203 [bot] INFO: Config validation passed
+2026-04-21 14:11:56,693 [bot] INFO: Config validation passed
 
 --- NEW FILES CHECK ---
--rw-r--r-- 1 root root 2856 Apr 13 20:07 futures_bot/core/trade_logger.py
+-rw-r--r-- 1 root root 2856 Apr 22 09:52 futures_bot/core/trade_logger.py
   trade_logger.py: OK
--rwxr-xr-x 1 root root 3474 Apr 13 20:07 scripts/weekly_review.sh
+-rwxr-xr-x 1 root root 3474 Apr 22 09:52 scripts/weekly_review.sh
   weekly_review.sh: OK
 
 --- STATUS / DASHBOARD ---
-dashboard.txt: NOT YET RENDERED
+dashboard.txt (age: 0s):
+============================================================
+TradeDay Futures Bot — 2026-04-22T09:52:03.355081+00:00
+============================================================
+State            : CAUTION
+Balance          : $0.00
+Total PnL        : $+0.00
+Daily PnL        : $+0.00   Trades today: 0
+Trading days     : 0/5
+DD used / left   : $0.00 / $0.00
+To profit target : $0.00
+Consistency OK   : True
+Reason           : —
+------------------------------------------------------------
+Active strategy  : {}
+Open positions   : 0
+============================================================
 
 status.json (age: 0s):
   state: None
@@ -26,48 +52,49 @@ status.json (age: 0s):
   dd_used: None
 
 --- TRADE LOG ---
-trades_log.csv: NOT YET CREATED
+1 logs/trades_log.csv
+timestamp_utc,symbol,strategy,direction,contracts,entry,sl,tp,exit,pnl,r_multiple,reason,daily_pnl_after,balance_after
 
 --- RECENT BOT LOG (last 40 lines) ---
-2026-04-13 18:50:51,853 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-13 18:50:52,492 [tradovate_client] INFO: MGCM6: Got 50 bars via WebSocket
-2026-04-13 18:50:53,204 [bot] INFO: MGCM6: New bar 2026-04-13T18:45Z | O=4756.8 H=4759.8 L=4756.5 C=4758.9 V=683
-2026-04-13 18:50:53,204 [strategy.vwap] INFO: Price=4758.90 VWAP=4747.12 dist=+1.13SD RSI=36.7 ATR=5.16
-2026-04-13 18:50:53,819 [tradovate_client] INFO: MYMM6: Got 50 bars via WebSocket
-2026-04-13 18:50:54,551 [bot] INFO: MYMM6: New bar 2026-04-13T18:45Z | O=48207.0 H=48237.0 L=48203.0 C=48233.0 V=747
-2026-04-13 18:50:54,551 [strategy.vwap] INFO: Price=48233.00 VWAP=47896.63 dist=+2.36SD RSI=77.6 ATR=22.00
-2026-04-13 18:50:54,552 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.36SD RSI=77.6 entry=48233.00 sl=48304.35 tp=47896.63
-2026-04-13 18:50:54,552 [bot] INFO: MYMM6: SIGNAL SHORT from VWAP Mean Reversion | entry=48233.00 sl=48304.35
-2026-04-13 18:50:54,552 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-13 18:50:55,179 [tradovate_client] INFO: M2KM6: Got 50 bars via WebSocket
-2026-04-13 18:50:55,913 [bot] INFO: M2KM6: New bar 2026-04-13T18:45Z | O=2674.1 H=2676.8 L=2674.0 C=2676.4 V=986
-2026-04-13 18:50:55,913 [strategy.vwap] INFO: Price=2676.40 VWAP=2646.10 dist=+2.14SD RSI=79.2 ATR=1.80
-2026-04-13 18:50:55,913 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=2.14SD RSI=79.2 entry=2676.40 sl=2683.47 tp=2646.10
-2026-04-13 18:50:55,913 [bot] INFO: M2KM6: SIGNAL SHORT from VWAP Mean Reversion | entry=2676.40 sl=2683.47
-2026-04-13 18:50:55,913 [bot] INFO: Trade blocked by risk manager: Max positions reached: 3/3
-2026-04-13 18:51:46,459 [bot] INFO: Stopping bot: Signal received
-2026-04-13 18:51:46,837 [tradovate_client] INFO: Market order placed: Sell 2 MESM6, orderId=451715413241
-2026-04-13 18:51:47,080 [tradovate_client] INFO: Market order placed: Sell 1 MNQM6, orderId=451715413252
-2026-04-13 18:51:47,325 [tradovate_client] INFO: Market order placed: Buy 3 MCLM6, orderId=451715413263
-2026-04-13 18:51:47,565 [tradovate_client] INFO: Cancelled order 451715413147
-2026-04-13 18:51:47,687 [tradovate_client] INFO: Cancelled order 451715413183
-2026-04-13 18:51:47,807 [tradovate_client] INFO: Cancelled order 451715413141
-2026-04-13 18:51:47,927 [tradovate_client] INFO: Cancelled order 451715413172
-2026-04-13 18:51:48,048 [tradovate_client] INFO: Cancelled order 451715413181
-2026-04-13 18:51:48,171 [tradovate_client] INFO: Cancelled order 451715413241
-2026-04-13 18:51:48,291 [tradovate_client] INFO: Cancelled order 451715413166
-2026-04-13 18:51:48,412 [tradovate_client] INFO: Cancelled order 451715413252
-2026-04-13 18:51:48,532 [tradovate_client] INFO: Cancelled order 451715413153
-2026-04-13 18:51:48,652 [tradovate_client] INFO: Cancelled order 451715413175
-2026-04-13 18:51:48,774 [tradovate_client] INFO: Cancelled order 451715413144
-2026-04-13 18:51:48,895 [tradovate_client] INFO: Cancelled order 451715413169
-2026-04-13 18:51:49,016 [tradovate_client] INFO: Cancelled order 451715413179
-2026-04-13 18:51:49,138 [tradovate_client] INFO: Cancelled order 451715413263
-2026-04-13 18:51:49,258 [tradovate_client] INFO: Cancelled order 451715413163
-2026-04-13 18:51:49,378 [tradovate_client] INFO: Cancelled order 451715413130
-2026-04-13 18:51:49,498 [tradovate_client] INFO: Cancelled order 451715413150
-2026-04-13 18:51:49,619 [tradovate_client] INFO: Cancelled order 451715413177
-2026-04-13 18:51:49,698 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-13 18:51:49,699 [bot] INFO: Bot stopped
+2026-04-22 09:33:06,318 [bot] INFO: Outside session: Pre-market: 05:33 ET (opens 09:30:00)
+2026-04-22 09:33:36,350 [bot] INFO: Outside session: Pre-market: 05:33 ET (opens 09:30:00)
+2026-04-22 09:34:06,381 [bot] INFO: Outside session: Pre-market: 05:34 ET (opens 09:30:00)
+2026-04-22 09:34:36,387 [bot] INFO: Outside session: Pre-market: 05:34 ET (opens 09:30:00)
+2026-04-22 09:35:06,403 [bot] INFO: Outside session: Pre-market: 05:35 ET (opens 09:30:00)
+2026-04-22 09:35:36,435 [bot] INFO: Outside session: Pre-market: 05:35 ET (opens 09:30:00)
+2026-04-22 09:36:06,439 [bot] INFO: Outside session: Pre-market: 05:36 ET (opens 09:30:00)
+2026-04-22 09:36:36,443 [bot] INFO: Outside session: Pre-market: 05:36 ET (opens 09:30:00)
+2026-04-22 09:37:06,449 [bot] INFO: Outside session: Pre-market: 05:37 ET (opens 09:30:00)
+2026-04-22 09:37:36,479 [bot] INFO: Outside session: Pre-market: 05:37 ET (opens 09:30:00)
+2026-04-22 09:38:06,510 [bot] INFO: Outside session: Pre-market: 05:38 ET (opens 09:30:00)
+2026-04-22 09:38:36,520 [bot] INFO: Outside session: Pre-market: 05:38 ET (opens 09:30:00)
+2026-04-22 09:39:06,544 [bot] INFO: Outside session: Pre-market: 05:39 ET (opens 09:30:00)
+2026-04-22 09:39:36,575 [bot] INFO: Outside session: Pre-market: 05:39 ET (opens 09:30:00)
+2026-04-22 09:40:06,592 [bot] INFO: Outside session: Pre-market: 05:40 ET (opens 09:30:00)
+2026-04-22 09:40:36,617 [bot] INFO: Outside session: Pre-market: 05:40 ET (opens 09:30:00)
+2026-04-22 09:41:06,646 [bot] INFO: Outside session: Pre-market: 05:41 ET (opens 09:30:00)
+2026-04-22 09:41:36,677 [bot] INFO: Outside session: Pre-market: 05:41 ET (opens 09:30:00)
+2026-04-22 09:42:06,707 [bot] INFO: Outside session: Pre-market: 05:42 ET (opens 09:30:00)
+2026-04-22 09:42:36,741 [bot] INFO: Outside session: Pre-market: 05:42 ET (opens 09:30:00)
+2026-04-22 09:43:06,764 [bot] INFO: Outside session: Pre-market: 05:43 ET (opens 09:30:00)
+2026-04-22 09:43:36,784 [bot] INFO: Outside session: Pre-market: 05:43 ET (opens 09:30:00)
+2026-04-22 09:44:06,792 [bot] INFO: Outside session: Pre-market: 05:44 ET (opens 09:30:00)
+2026-04-22 09:44:36,796 [bot] INFO: Outside session: Pre-market: 05:44 ET (opens 09:30:00)
+2026-04-22 09:45:06,808 [bot] INFO: Outside session: Pre-market: 05:45 ET (opens 09:30:00)
+2026-04-22 09:45:36,837 [bot] INFO: Outside session: Pre-market: 05:45 ET (opens 09:30:00)
+2026-04-22 09:46:06,868 [bot] INFO: Outside session: Pre-market: 05:46 ET (opens 09:30:00)
+2026-04-22 09:46:36,877 [bot] INFO: Outside session: Pre-market: 05:46 ET (opens 09:30:00)
+2026-04-22 09:47:06,879 [bot] INFO: Outside session: Pre-market: 05:47 ET (opens 09:30:00)
+2026-04-22 09:47:36,909 [bot] INFO: Outside session: Pre-market: 05:47 ET (opens 09:30:00)
+2026-04-22 09:48:06,930 [bot] INFO: Outside session: Pre-market: 05:48 ET (opens 09:30:00)
+2026-04-22 09:48:36,964 [bot] INFO: Outside session: Pre-market: 05:48 ET (opens 09:30:00)
+2026-04-22 09:49:06,967 [bot] INFO: Outside session: Pre-market: 05:49 ET (opens 09:30:00)
+2026-04-22 09:49:36,978 [bot] INFO: Outside session: Pre-market: 05:49 ET (opens 09:30:00)
+2026-04-22 09:50:06,986 [bot] INFO: Outside session: Pre-market: 05:50 ET (opens 09:30:00)
+2026-04-22 09:50:36,993 [bot] INFO: Outside session: Pre-market: 05:50 ET (opens 09:30:00)
+2026-04-22 09:51:07,023 [bot] INFO: Outside session: Pre-market: 05:51 ET (opens 09:30:00)
+2026-04-22 09:51:37,054 [bot] INFO: Outside session: Pre-market: 05:51 ET (opens 09:30:00)
+2026-04-22 09:52:07,084 [bot] INFO: Outside session: Pre-market: 05:52 ET (opens 09:30:00)
+2026-04-22 09:52:37,106 [bot] INFO: Outside session: Pre-market: 05:52 ET (opens 09:30:00)
 
 === END v149 ===

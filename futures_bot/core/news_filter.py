@@ -13,10 +13,31 @@ from datetime import datetime, time, timedelta, timezone
 from typing import List, Optional
 from pathlib import Path
 
+try:
+    from zoneinfo import ZoneInfo
+    _ET_TZ = ZoneInfo("America/New_York")
+except ImportError:
+    _ET_TZ = None
+
 logger = logging.getLogger("news_filter")
 
-EDT_OFFSET = timedelta(hours=-4)
-EST_OFFSET = timedelta(hours=-5)
+
+def _event_time_utc(date_str: str, time_et: str) -> datetime:
+    """Convert an event's (date, ET-clock-time) to a UTC datetime.
+
+    Uses zoneinfo so that DST is applied correctly for the event's actual
+    date. Falls back to a month-based approximation on Python < 3.9.
+    """
+    hour, minute = map(int, time_et.split(":"))
+    if _ET_TZ is not None:
+        naive = datetime.strptime(date_str, "%Y-%m-%d").replace(hour=hour, minute=minute)
+        return naive.replace(tzinfo=_ET_TZ).astimezone(timezone.utc)
+    # Fallback (approximate, month-based)
+    event_dt = datetime.strptime(date_str, "%Y-%m-%d").replace(
+        hour=hour, minute=minute, tzinfo=timezone.utc
+    )
+    offset = timedelta(hours=-4) if 3 <= event_dt.month <= 11 else timedelta(hours=-5)
+    return event_dt - offset
 
 
 @dataclass
@@ -84,18 +105,8 @@ class NewsFilter:
             if event.applies_to == "energy" and not is_energy:
                 continue
 
-            # Parse event time
             try:
-                hour, minute = map(int, event.time_et.split(":"))
-                event_dt = datetime.strptime(event.date, "%Y-%m-%d")
-                # Assume EDT for simplicity (March-November)
-                month = event_dt.month
-                offset = EDT_OFFSET if 3 <= month <= 11 else EST_OFFSET
-                event_utc = event_dt.replace(
-                    hour=hour, minute=minute,
-                    tzinfo=timezone.utc
-                ) - offset
-
+                event_utc = _event_time_utc(event.date, event.time_et)
                 buffer_before = timedelta(minutes=event.buffer_minutes_before)
                 buffer_after = timedelta(minutes=event.buffer_minutes_after)
 
@@ -129,15 +140,7 @@ class NewsFilter:
                 continue
 
             try:
-                hour, minute = map(int, event.time_et.split(":"))
-                event_dt = datetime.strptime(event.date, "%Y-%m-%d")
-                month = event_dt.month
-                offset = EDT_OFFSET if 3 <= month <= 11 else EST_OFFSET
-                event_utc = event_dt.replace(
-                    hour=hour, minute=minute,
-                    tzinfo=timezone.utc
-                ) - offset
-
+                event_utc = _event_time_utc(event.date, event.time_et)
                 flatten_time = event_utc - timedelta(minutes=self.flatten_buffer_minutes)
                 if flatten_time <= now_utc < event_utc:
                     return True, event.name

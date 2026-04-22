@@ -13,11 +13,13 @@ from dataclasses import dataclass
 from typing import Dict, Optional, Tuple
 from datetime import datetime, time, timezone, timedelta
 
-logger = logging.getLogger("risk_manager")
+try:
+    from zoneinfo import ZoneInfo
+    _ET_TZ = ZoneInfo("America/New_York")
+except ImportError:  # Python < 3.9 fallback
+    _ET_TZ = None
 
-# US Eastern timezone offset (simplified - doesn't handle DST perfectly)
-ET_OFFSET = timedelta(hours=-5)  # EST
-EDT_OFFSET = timedelta(hours=-4)  # EDT
+logger = logging.getLogger("risk_manager")
 
 
 @dataclass
@@ -204,15 +206,14 @@ class RiskManager:
         return CONTRACT_SPECS.get(base)
 
     def _get_et_time(self) -> time:
-        """Get current time in US Eastern."""
+        """Get current time in US Eastern (DST-aware via zoneinfo)."""
         now_utc = datetime.now(timezone.utc)
-        # Simple DST check: March-November is EDT
+        if _ET_TZ is not None:
+            return now_utc.astimezone(_ET_TZ).time()
+        # Fallback for ancient Python: approximate with month-based DST
         month = now_utc.month
-        if 3 <= month <= 11:
-            now_et = now_utc + EDT_OFFSET
-        else:
-            now_et = now_utc + ET_OFFSET
-        return now_et.time()
+        offset = timedelta(hours=-4) if 3 <= month <= 11 else timedelta(hours=-5)
+        return (now_utc + offset).time()
 
     def get_current_et_hour(self) -> int:
         """Get current hour in ET."""
