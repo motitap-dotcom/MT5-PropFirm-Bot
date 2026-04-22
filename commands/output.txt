@@ -1,37 +1,37 @@
-=== 16:31 UTC  NY=12:31 ===
+=== 16:32 UTC  NY=12:32 ===
 active
-MainPID=391329
-NRestarts=0
-ActiveEnterTimestamp=Wed 2026-04-22 16:18:54 UTC
 
---- where is wrapper reading bot.py from ---
-Apr 22 16:18:22 vmi3096165 futures-bot-wrapper.sh[390662]: 2026-04-22 16:18:22,173 [bot] INFO: Stopping bot: Signal received
-Apr 22 16:18:22 vmi3096165 futures-bot-wrapper.sh[390662]: 2026-04-22 16:18:22,529 [tradovate_client] INFO: Disconnected from Tradovate
-Apr 22 16:18:22 vmi3096165 futures-bot-wrapper.sh[390662]: 2026-04-22 16:18:22,529 [bot] INFO: Bot stopped
-Apr 22 16:18:54 vmi3096165 futures-bot-wrapper.sh[391329]: [wrapper] repo copy missing, falling back to /opt/futures_bot_stable
-Apr 22 16:18:54 vmi3096165 futures-bot-wrapper.sh[391329]: [wrapper] BOT_DIR=/opt/futures_bot_stable TRADOVATE_PASS_set=yes bot.py=24016B
-Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,327 [bot] INFO: ============================================================
-Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,327 [bot] INFO: TradeDay Futures Bot Starting
-Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,327 [bot] INFO: ============================================================
-Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,328 [news_filter] INFO: Loaded 26 restricted events
-Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,329 [tradovate_client] INFO: Trying pre-set access token from environment...
-Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,474 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,474 [tradovate_client] INFO: Environment token is valid
-Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,475 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,559 [bot] INFO: Bot started successfully
-Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,559 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,559 [bot] INFO: Timeframe: 5min
-Apr 22 16:18:55 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:18:55,560 [bot] INFO: New trading day: 2026-04-22
-Apr 22 16:28:57 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:28:57,947 [tradovate_client] WARNING: POST /cashBalance/getcashbalancesnapshot got 401, renewing token and retrying...
-Apr 22 16:28:58 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:28:58,063 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Apr 22 16:28:58 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:28:58,064 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-Apr 22 16:28:58 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:28:58,202 [tradovate_client] WARNING: API auth failed (Incorrect username or password. Please try again, noting that passwords are case-sensitive.); trying Playwright browser auth as fallback...
-Apr 22 16:28:59 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:28:59,273 [tradovate_client] INFO: Opening Tradovate login page...
-Apr 22 16:29:05 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:29:05,792 [tradovate_client] INFO: Login submitted, waiting for token...
-Apr 22 16:29:06 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:29:06,975 [tradovate_client] INFO: Browser auth: token captured successfully
-Apr 22 16:29:06 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:29:06,977 [tradovate_client] INFO: Authenticated successfully via browser (API fallback)
-
---- bot log last 40 (whichever location it uses) ---
+--- /opt/futures_bot_stable/status/status.json ---
+{
+  "timestamp": "2026-04-22T16:29:08.073596+00:00",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {
+    "state": "ACTIVE",
+    "balance": 51291.44,
+    "total_pnl": 1291.4400000000023,
+    "daily_pnl": 0.0,
+    "daily_trades": 0,
+    "trading_days": 0,
+    "drawdown_used": 0,
+    "drawdown_remaining": 2000.0,
+    "profit_target_remaining": 1708.5599999999977,
+    "consistency_ok": true,
+    "reason": "",
+    "timestamp": "2026-04-22T16:29:08.073575+00:00"
+  },
+  "positions": [],
+  "risk": {},
+  "active_strategy": {
+    "MESM6": "vwap",
+    "MNQM6": "vwap",
+    "MCLM6": "vwap",
+    "MGCM6": "vwap",
+    "MYMM6": "vwap",
+    "M2KM6": "vwap"
+  }
+}
+--- /opt/futures_bot_stable/logs/bot.log (full) ---
 2026-04-22 16:18:55,327 [bot] INFO: ============================================================
 2026-04-22 16:18:55,327 [bot] INFO: TradeDay Futures Bot Starting
 2026-04-22 16:18:55,327 [bot] INFO: ============================================================
@@ -53,16 +53,12 @@ Apr 22 16:29:06 vmi3096165 futures-bot-wrapper.sh[391329]: 2026-04-22 16:29:06,9
 2026-04-22 16:29:06,975 [tradovate_client] INFO: Browser auth: token captured successfully
 2026-04-22 16:29:06,977 [tradovate_client] INFO: Authenticated successfully via browser (API fallback)
 
---- recent logs from /opt ---
-total 12
-drwxr-xr-x 2 root root 4096 Apr 22 16:18 .
+--- configs in /opt? ---
+total 28
+drwxr-xr-x 2 1001 1001 4096 Apr 22 16:18 .
 drwxr-xr-x 6 root root 4096 Apr 22 16:18 ..
--rw-r--r-- 1 root root 1913 Apr 22 16:29 bot.log
---- recent logs from /root ---
-total 9112
-drwxr-xr-x  2 root root    4096 Apr 13 20:23 .
-drwxr-xr-x 13 root root    4096 Apr 22 16:31 ..
--rw-r--r--  1 root root       0 Feb 22 12:15 .gitkeep
--rw-r--r--  1 root root 7893516 Apr 22 16:18 bot.log
--rw-r--r--  1 root root 1409813 Apr 22 13:58 equity_curve.csv
--rw-r--r--  1 root root     120 Apr 13 20:23 trades_log.csv
+-rw-r--r-- 1 root root  487 Mar 31 16:25 .browser_auth_result.txt
+-rw-r--r-- 1 root root  814 Apr 22 16:29 .tradovate_token.json
+-rw-r--r-- 1 root root  715 Mar 31 06:46 .tradovate_token_backup.json
+-rw-r--r-- 1 root root 1934 Apr 22 16:18 bot_config.json
+-rw-r--r-- 1 root root 3573 Apr 22 16:18 restricted_events.json
