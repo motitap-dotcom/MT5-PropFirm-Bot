@@ -788,11 +788,14 @@ class TradovateClient:
         if msg == "o":
             logger.debug("MD WebSocket open frame received")
 
-        # Authenticate
-        auth_msg = f"authorize\n1\n\n{token}"
+        # Authenticate (body must be JSON {"token": "..."} per Tradovate WS protocol)
+        auth_msg = f"authorize\n1\n\n{json.dumps({'token': token})}"
         await self._md_ws.send(auth_msg)
         response = await self._md_ws.recv()
-        logger.info(f"MD WebSocket connected")
+        if '"s":200' not in response and '"i":1' in response:
+            logger.warning(f"MD WebSocket authorize returned non-200: {response[:200]}")
+        else:
+            logger.info(f"MD WebSocket connected (auth OK)")
 
         # Start heartbeat and listener
         self._heartbeat_task = asyncio.create_task(self._ws_heartbeat())
