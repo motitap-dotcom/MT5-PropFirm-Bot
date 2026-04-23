@@ -1,16 +1,15 @@
 === Live strategy check ===
-2026-04-23 16:04:06 UTC
+2026-04-23 16:13:07 UTC
 
 Active: active
-PID: 724104  CWD: /root/MT5-PropFirm-Bot
-Uptime: Thu 2026-04-23 15:57:36 UTC
+PID: 726396  CWD: /root/MT5-PropFirm-Bot
+Uptime: Thu 2026-04-23 16:06:02 UTC
 
 --- config RSI thresholds ---
 rsi_oversold: 40
 rsi_overbought: 60
 
 --- diagnostic log lines (what strategy sees) ---
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7140.50 VWAP=7144.41 dist=-0.66SD RSI=52.0 ATR=4.89
 2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7141.75 VWAP=7144.28 dist=-0.44SD RSI=56.8 ATR=4.82
 2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7139.00 VWAP=7144.09 dist=-0.88SD RSI=46.0 ATR=4.73
 2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7140.25 VWAP=7143.89 dist=-0.64SD RSI=46.8 ATR=4.88
@@ -40,25 +39,9 @@ rsi_overbought: 60
 2026-04-23 14:31:33,107 [bot] INFO: Stopping bot: Signal received
 2026-04-23 15:27:07,302 [bot] INFO: Stopping bot: Signal received
 2026-04-23 15:57:31,194 [bot] INFO: Stopping bot: Signal received
+2026-04-23 16:05:57,292 [bot] INFO: Stopping bot: Signal received
 
 --- Last 30 lines overall ---
-2026-04-23 15:27:13,517 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-23 15:27:13,518 [bot] INFO: Timeframe: 5min
-2026-04-23 15:27:13,518 [bot] INFO: New trading day: 2026-04-23
-2026-04-23 15:32:15,843 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-23 15:37:16,961 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-23 15:42:18,074 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-23 15:43:56,203 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
-2026-04-23 15:43:58,493 [tradovate_client] INFO: MD WebSocket connected
-2026-04-23 15:47:19,178 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-23 15:52:20,278 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-23 15:57:21,384 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-23 15:57:31,194 [bot] INFO: Stopping bot: Signal received
-2026-04-23 15:57:31,702 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-23 15:57:31,703 [bot] INFO: Bot stopped
-2026-04-23 15:57:36,724 [bot] INFO: ============================================================
-2026-04-23 15:57:36,724 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 15:57:36,724 [bot] INFO: ============================================================
 2026-04-23 15:57:36,724 [news_filter] INFO: Loaded 26 restricted events
 2026-04-23 15:57:36,725 [tradovate_client] INFO: Loaded saved token from file, verifying...
 2026-04-23 15:57:36,868 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
@@ -72,6 +55,23 @@ rsi_overbought: 60
 2026-04-23 16:02:38,339 [tradovate_client] INFO: Token expiring in 26min, renewing...
 2026-04-23 16:02:38,517 [tradovate_client] INFO: Token renewed successfully
 2026-04-23 16:02:39,640 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-23 16:05:57,292 [bot] INFO: Stopping bot: Signal received
+2026-04-23 16:05:57,749 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-23 16:05:57,749 [bot] INFO: Bot stopped
+2026-04-23 16:06:02,883 [bot] INFO: ============================================================
+2026-04-23 16:06:02,883 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 16:06:02,883 [bot] INFO: ============================================================
+2026-04-23 16:06:02,884 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 16:06:02,884 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 16:06:03,092 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 16:06:03,092 [tradovate_client] INFO: Saved token is still valid
+2026-04-23 16:06:03,093 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 16:06:03,589 [tradovate_client] INFO: MD WebSocket connected
+2026-04-23 16:06:03,675 [bot] INFO: Bot started successfully
+2026-04-23 16:06:03,675 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 16:06:03,675 [bot] INFO: Timeframe: 5min
+2026-04-23 16:06:03,676 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 16:11:05,959 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 
 --- Positions + fills ---
 Open positions: 0
