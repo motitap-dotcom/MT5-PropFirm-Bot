@@ -1,130 +1,66 @@
-=== Examine WORKING Tradovate-Bot - how does IT get market data? ===
-2026-04-23 18:03:29 UTC
+=== v169 verify ===
+2026-04-23 18:16:35 UTC
+Active: active  PID: 755824  CWD: /opt/futures_bot_stable
+Uptime: Thu 2026-04-23 18:07:03 UTC
 
---- our bot status ---
-Active: active
-PID: 752617
-Uptime: Thu 2026-04-23 17:54:19 UTC
+--- Does running code have WS getChart? ---
+1
+YES
 
---- Other bot source files ---
-/root/tradovate-bot/alerts.py
-/root/tradovate-bot/auto_tuner.py
-/root/tradovate-bot/bot.py
-/root/tradovate-bot/bot_commands.py
-/root/tradovate-bot/bot_health_check.py
-/root/tradovate-bot/bot_state.py
-/root/tradovate-bot/browser_bot.py
-/root/tradovate-bot/check_account.py
-/root/tradovate-bot/check_server.py
-/root/tradovate-bot/config.py
-/root/tradovate-bot/connection_check.py
-/root/tradovate-bot/continuous_learner.py
-/root/tradovate-bot/dashboard.py
-/root/tradovate-bot/get_token.py
-/root/tradovate-bot/monitor.py
+--- Log: last 50 lines (look for 'Subscribing to chart', 'got X bars', 'Price=') ---
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/futures_bot_stable/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
+    if self._md_ws and not self._md_ws.open:
+                           ^^^^^^^^^^^^^^^^
+AttributeError: 'ClientConnection' object has no attribute 'open'
+2026-04-23 18:12:17,093 [bot] ERROR: Error processing MNQM6: 'ClientConnection' object has no attribute 'open'
+Traceback (most recent call last):
+  File "/opt/futures_bot_stable/futures_bot/bot.py", line 294, in _process_symbol
+    bars_data = await self.client.get_historical_bars(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/futures_bot_stable/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
+    if self._md_ws and not self._md_ws.open:
+                           ^^^^^^^^^^^^^^^^
+AttributeError: 'ClientConnection' object has no attribute 'open'
+2026-04-23 18:12:17,093 [bot] ERROR: Error processing MCLM6: 'ClientConnection' object has no attribute 'open'
+Traceback (most recent call last):
+  File "/opt/futures_bot_stable/futures_bot/bot.py", line 294, in _process_symbol
+    bars_data = await self.client.get_historical_bars(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/futures_bot_stable/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
+    if self._md_ws and not self._md_ws.open:
+                           ^^^^^^^^^^^^^^^^
+AttributeError: 'ClientConnection' object has no attribute 'open'
+2026-04-23 18:12:17,094 [bot] ERROR: Error processing MGCM6: 'ClientConnection' object has no attribute 'open'
+Traceback (most recent call last):
+  File "/opt/futures_bot_stable/futures_bot/bot.py", line 294, in _process_symbol
+    bars_data = await self.client.get_historical_bars(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/futures_bot_stable/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
+    if self._md_ws and not self._md_ws.open:
+                           ^^^^^^^^^^^^^^^^
+AttributeError: 'ClientConnection' object has no attribute 'open'
+2026-04-23 18:12:17,095 [bot] ERROR: Error processing MYMM6: 'ClientConnection' object has no attribute 'open'
+Traceback (most recent call last):
+  File "/opt/futures_bot_stable/futures_bot/bot.py", line 294, in _process_symbol
+    bars_data = await self.client.get_historical_bars(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/futures_bot_stable/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
+    if self._md_ws and not self._md_ws.open:
+                           ^^^^^^^^^^^^^^^^
+AttributeError: 'ClientConnection' object has no attribute 'open'
+2026-04-23 18:12:17,095 [bot] ERROR: Error processing M2KM6: 'ClientConnection' object has no attribute 'open'
+Traceback (most recent call last):
+  File "/opt/futures_bot_stable/futures_bot/bot.py", line 294, in _process_symbol
+    bars_data = await self.client.get_historical_bars(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/futures_bot_stable/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
+    if self._md_ws and not self._md_ws.open:
+                           ^^^^^^^^^^^^^^^^
+AttributeError: 'ClientConnection' object has no attribute 'open'
 
---- How does the OTHER bot fetch market data? (grep for chart/getChart/md) ---
-/root/tradovate-bot/bot.py
-/root/tradovate-bot/bot_commands.py
-/root/tradovate-bot/bot_health_check.py
-/root/tradovate-bot/dashboard.py
-/root/tradovate-bot/test_all.py
-/root/tradovate-bot/tradovate_api.py
-
---- Show getChart usage in other bot ---
-
---- Show how other bot sets up websocket ---
-/root/tradovate-bot/bot.py-
-/root/tradovate-bot/bot.py-        # Symbols auto-blocked at runtime after prop-firm rejections (e.g. "Limit: 0")
-/root/tradovate-bot/bot.py:        # Prevents wasting signals on contracts the account isn't authorized to trade.
-/root/tradovate-bot/bot.py-        # Cleared on restart — user must fix config or dashboard to permanently enable.
-/root/tradovate-bot/bot.py-        self._runtime_blocked_symbols: set[str] = set()
-/root/tradovate-bot/bot.py-
-/root/tradovate-bot/bot.py-        # Last candle timestamp per contract from warmup (to avoid replaying in poller)
-/root/tradovate-bot/bot.py-        self._warmup_last_ts: dict[str, int] = {}
-/root/tradovate-bot/bot.py-
-/root/tradovate-bot/bot.py-        # Contract rollover: check every 10 minutes (not every 30s loop)
-/root/tradovate-bot/bot.py-        self._last_rollover_check: float = 0
-/root/tradovate-bot/bot.py-        self._rollover_check_interval: int = 600  # seconds
-/root/tradovate-bot/bot.py-
-/root/tradovate-bot/bot.py-    # ─────────────────────────────────────────
-/root/tradovate-bot/bot.py-    # Lifecycle
-/root/tradovate-bot/bot.py-    # ─────────────────────────────────────────
-/root/tradovate-bot/bot.py-
-/root/tradovate-bot/bot.py-    def start(self):
-/root/tradovate-bot/bot.py-        """Initialize connections, resolve contracts, and start trading."""
-/root/tradovate-bot/bot.py-        logger.info("=" * 60)
-/root/tradovate-bot/bot.py-        logger.info("Tradovate Bot starting | env=%s | dry_run=%s", config.ENVIRONMENT, self.dry_run)
-/root/tradovate-bot/bot.py-        logger.info("Prop firm: %s | Account size: %s", config.PROP_FIRM, config.ACTIVE_CHALLENGE["account_size"])
-/root/tradovate-bot/bot.py-        logger.info("=" * 60)
---
-/root/tradovate-bot/bot_health_check.py-
-/root/tradovate-bot/bot_health_check.py-        # Authenticate
-/root/tradovate-bot/bot_health_check.py:        auth_msg = f"authorize\n1\n{json.dumps({'token': token})}"
-/root/tradovate-bot/bot_health_check.py-        ws.send(auth_msg)
-/root/tradovate-bot/bot_health_check.py-        auth_resp = ws.recv()
-/root/tradovate-bot/bot_health_check.py-
-/root/tradovate-bot/bot_health_check.py-        latency = int((time.time() - t0) * 1000)
-/root/tradovate-bot/bot_health_check.py-        result["ws_latency_ms"] = latency
-/root/tradovate-bot/bot_health_check.py-
-/root/tradovate-bot/bot_health_check.py-        if auth_resp and '"s":200' in auth_resp:
-/root/tradovate-bot/bot_health_check.py-            result["ws_auth_ok"] = True
-/root/tradovate-bot/bot_health_check.py-
-/root/tradovate-bot/bot_health_check.py-        ws.close()
-/root/tradovate-bot/bot_health_check.py-    except ImportError:
-/root/tradovate-bot/bot_health_check.py-        result["error"] = "websocket-client not installed"
-/root/tradovate-bot/bot_health_check.py-    except Exception as e:
-/root/tradovate-bot/bot_health_check.py-        result["error"] = str(e)
-/root/tradovate-bot/bot_health_check.py-
-/root/tradovate-bot/bot_health_check.py-    return result
-/root/tradovate-bot/bot_health_check.py-
-/root/tradovate-bot/bot_health_check.py-
-/root/tradovate-bot/bot_health_check.py-def check_bot_log() -> dict:
-/root/tradovate-bot/bot_health_check.py-    """Analyze bot.log for recent activity and health indicators."""
---
-/root/tradovate-bot/test_all.py-    # Simulate receiving 'o' (connection open)
-/root/tradovate-bot/test_all.py-    stream._on_message(ws, "o")
-/root/tradovate-bot/test_all.py:    # Should send authorize message
-/root/tradovate-bot/test_all.py-    ws.send.assert_called_once()
-/root/tradovate-bot/test_all.py-    msg = ws.send.call_args[0][0]
-/root/tradovate-bot/test_all.py:    assert msg.startswith("authorize\n"), f"Auth msg should start with 'authorize\\n', got: {msg[:30]}"
-/root/tradovate-bot/test_all.py-    assert "test-md-token-123" in msg
-/root/tradovate-bot/test_all.py-
-/root/tradovate-bot/test_all.py-
-/root/tradovate-bot/test_all.py-@test("WS heartbeat replies with keepalive")
-/root/tradovate-bot/test_all.py-def test_ws_heartbeat():
-/root/tradovate-bot/test_all.py-    from tradovate_api import MarketDataStream
-
---- Our bot log tail (did v166 fresh auth work?) ---
-2026-04-23 17:54:28,077 [tradovate_client] INFO: Login submitted, waiting for token...
-2026-04-23 17:54:29,247 [tradovate_client] INFO: Browser auth: token captured successfully
-2026-04-23 17:54:29,249 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
-2026-04-23 17:54:29,371 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-23 17:54:29,373 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-23 17:54:29,895 [tradovate_client] WARNING: MD WebSocket connect failed (REST bars may not work): no close frame received or sent
-2026-04-23 17:54:30,038 [bot] WARNING: MD subscribe MESM6 failed: no close frame received or sent
-2026-04-23 17:54:30,040 [bot] WARNING: MD subscribe MNQM6 failed: no close frame received or sent
-2026-04-23 17:54:30,040 [bot] WARNING: MD subscribe MCLM6 failed: no close frame received or sent
-2026-04-23 17:54:30,041 [bot] WARNING: MD subscribe MGCM6 failed: no close frame received or sent
-2026-04-23 17:54:30,041 [bot] WARNING: MD subscribe MYMM6 failed: no close frame received or sent
-2026-04-23 17:54:30,041 [bot] WARNING: MD subscribe M2KM6 failed: no close frame received or sent
-2026-04-23 17:54:30,041 [bot] INFO: Bot started successfully
-2026-04-23 17:54:30,041 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-23 17:54:30,041 [bot] INFO: Timeframe: 5min
-2026-04-23 17:54:30,041 [bot] INFO: New trading day: 2026-04-23
-2026-04-23 17:54:30,583 [bot] INFO: MESM6: got 0 bars from /md/getChart
-2026-04-23 17:54:30,706 [bot] INFO: MNQM6: got 0 bars from /md/getChart
-2026-04-23 17:54:30,820 [bot] INFO: MCLM6: got 0 bars from /md/getChart
-2026-04-23 17:54:30,934 [bot] INFO: MGCM6: got 0 bars from /md/getChart
-2026-04-23 17:54:31,056 [bot] INFO: MYMM6: got 0 bars from /md/getChart
-2026-04-23 17:54:31,182 [bot] INFO: M2KM6: got 0 bars from /md/getChart
-2026-04-23 17:54:31,183 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-23 17:59:31,831 [bot] INFO: MESM6: got 0 bars from /md/getChart
-2026-04-23 17:59:31,944 [bot] INFO: MNQM6: got 0 bars from /md/getChart
-2026-04-23 17:59:32,058 [bot] INFO: MCLM6: got 0 bars from /md/getChart
-2026-04-23 17:59:32,178 [bot] INFO: MGCM6: got 0 bars from /md/getChart
-2026-04-23 17:59:32,293 [bot] INFO: MYMM6: got 0 bars from /md/getChart
-2026-04-23 17:59:32,410 [bot] INFO: M2KM6: got 0 bars from /md/getChart
-2026-04-23 17:59:32,410 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+--- Positions ---
+Open positions: 0
+Fills today: 0
 
 === Done ===
