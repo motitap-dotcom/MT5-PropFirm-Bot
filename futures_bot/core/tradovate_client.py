@@ -44,6 +44,22 @@ def _compute_hmac(payload: dict) -> str:
 TOKEN_FILE = Path("configs/.tradovate_token.json")
 
 
+def _ws_closed(ws) -> bool:
+    """Is this websocket closed? Works across websockets library versions.
+    Older versions expose .open/.closed attrs; newer ones expose .state
+    (websockets.protocol.State enum)."""
+    if ws is None:
+        return True
+    if hasattr(ws, "closed"):
+        return bool(ws.closed)
+    if hasattr(ws, "state"):
+        try:
+            return ws.state.name in ("CLOSING", "CLOSED")
+        except AttributeError:
+            return int(ws.state) >= 2  # OPEN=1, CLOSING=2, CLOSED=3
+    return False
+
+
 class TradovateClient:
     """Client for Tradovate REST and WebSocket APIs."""
 
@@ -821,7 +837,7 @@ class TradovateClient:
         while True:
             try:
                 await asyncio.sleep(30)
-                if self._md_ws and self._md_ws.open:
+                if self._md_ws and not _ws_closed(self._md_ws):
                     await self._md_ws.send("[]")
             except asyncio.CancelledError:
                 break
@@ -904,7 +920,7 @@ class TradovateClient:
         so we use WebSocket md/getChart which streams bars in real-time.
         """
         # Check if WebSocket is alive - if dead, force re-subscribe
-        if self._md_ws and not self._md_ws.open:
+        if self._md_ws and _ws_closed(self._md_ws):
             logger.warning("MD WebSocket is closed, clearing subscriptions for reconnect")
             self._chart_subs.clear()
             self._chart_id_to_symbol.clear()
