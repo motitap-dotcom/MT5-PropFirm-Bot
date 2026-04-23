@@ -1,70 +1,52 @@
-=== Status Check v2 (READ-ONLY) ===
-Timestamp: 2026-04-23 11:52:59 UTC
+=== Check v3: full startup log ===
+Timestamp: 2026-04-23 11:55:19 UTC
 
---- Service ---
-Active: active
 PID: 663621
-
---- Bot process working directory ---
 CWD: /root/MT5-PropFirm-Bot
-Cmd: /usr/bin/python3 /root/MT5-PropFirm-Bot/futures_bot/bot.py 
+Started: Thu Apr 23 11:45:54 2026
 
---- /root/MT5-PropFirm-Bot/configs/ contents ---
-total 28
-drwxr-xr-x  2 1001 1001 4096 Apr 23 11:52 .
-drwxr-xr-x 13 root root 4096 Apr 23 11:52 ..
--rw-r--r--  1 root root  487 Mar 31 16:25 .browser_auth_result.txt
--rw-r--r--  1 root root  815 Apr 23 11:52 .tradovate_token.json
--rw-r--r--  1 root root  715 Mar 31 06:46 .tradovate_token_backup.json
--rw-r--r--  1 root root 1934 Apr 23 11:52 bot_config.json
--rw-r--r--  1 root root 3573 Apr 23 11:52 restricted_events.json
-
---- bot_config.json exists? ---
-YES (1934 bytes)
-restricted_events.json: YES
-
---- Full wrapper ---
-#!/bin/bash
-# Wrapper invoked by systemd's ExecStart. Lives in /usr/local/sbin to survive
-# wipes of /root/MT5-PropFirm-Bot. If the repo copy is present it takes
-# precedence; otherwise we fall back to the stable copy at /opt.
-set -e
-STABLE=/opt/futures_bot_stable
-REPO=/root/MT5-PropFirm-Bot
-
-# Pick the side that still has bot.py
-if [ -f "$REPO/futures_bot/bot.py" ]; then
-  BOT_DIR="$REPO"
-elif [ -f "$STABLE/futures_bot/bot.py" ]; then
-  BOT_DIR="$STABLE"
-  echo "[wrapper] repo copy missing, falling back to $STABLE"
-else
-  echo "[wrapper] FATAL: no bot.py found in $REPO or $STABLE" >&2
-  exit 1
-fi
-
-cd "$BOT_DIR"
-# Load .env: prefer repo copy (has fresh tokens written by workflows)
-if [ -f "$REPO/.env" ]; then
-  set -a; source "$REPO/.env"; set +a
-elif [ -f "$STABLE/.env" ]; then
-  set -a; source "$STABLE/.env"; set +a
-fi
-# Configs too — fall back to stable copy if the repo one was wiped
-if [ ! -d "$BOT_DIR/configs" ] && [ -d "$STABLE/configs" ]; then
-  cp -r "$STABLE/configs" "$BOT_DIR/configs"
-fi
-mkdir -p logs status
-export PYTHONUNBUFFERED=1
-echo "[wrapper] BOT_DIR=$BOT_DIR TRADOVATE_PASS_set=${TRADOVATE_PASS:+yes} bot.py=$(stat -c %s futures_bot/bot.py)B"
-exec /usr/bin/python3 "$BOT_DIR/futures_bot/bot.py"
-
---- Git state on VPS ---
-Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
-HEAD: 31d5d42 Verify bot state after v156
-configs in this commit:
-
---- Running bot log (last 20) ---
+--- Current bot log: last 60 lines ---
+Log file: /root/MT5-PropFirm-Bot/logs/bot.log
+2026-04-23 11:45:55,246 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 11:45:55,246 [tradovate_client] INFO: Token expiring in -41min, renewing...
+2026-04-23 11:45:55,401 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-23 11:45:55,401 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-23 11:45:55,538 [tradovate_client] INFO: Saved token invalid, attempting renewal...
+2026-04-23 11:45:55,652 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-23 11:45:55,652 [tradovate_client] INFO: Trying pre-set access token from environment...
+2026-04-23 11:45:55,767 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
+2026-04-23 11:45:55,885 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-23 11:45:55,885 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-23 11:45:56,000 [tradovate_client] INFO: Environment token invalid, attempting renewal...
+2026-04-23 11:45:56,118 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-23 11:45:56,118 [tradovate_client] INFO: All tokens failed, attempting user/password authentication...
+2026-04-23 11:45:56,232 [bot] ERROR: Failed to connect: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-23 11:45:56,233 [bot] ERROR: Fatal error (attempt 1/5): Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
+    await bot.start()
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 143, in start
+    await self.client.connect()
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 160, in connect
+    await self._authenticate()
+  File "/root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py", line 273, in _authenticate
+    raise ConnectionError(f"Authentication failed: {error}")
+ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-23 11:45:56,240 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-23 11:45:56,355 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-23 11:45:56,471 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-23 11:45:56,471 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-23 11:45:56,585 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-23 11:45:56,666 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-23 11:45:56,666 [bot] INFO: Bot stopped
+2026-04-23 11:45:56,666 [bot] INFO: Retrying in 30s...
+2026-04-23 11:46:26,669 [bot] WARNING: Config not found at configs/bot_config.json, using defaults
+2026-04-23 11:46:26,669 [bot] INFO: ============================================================
+2026-04-23 11:46:26,669 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 11:46:26,669 [bot] INFO: ============================================================
+2026-04-23 11:46:26,669 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
+2026-04-23 11:46:26,670 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 11:46:26,670 [tradovate_client] INFO: Token expiring in -42min, renewing...
 2026-04-23 11:46:26,807 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
 2026-04-23 11:46:26,807 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
 2026-04-23 11:46:26,943 [tradovate_client] INFO: Saved token invalid, attempting renewal...
@@ -86,6 +68,33 @@ configs in this commit:
 2026-04-23 11:46:39,067 [bot] INFO: Timeframe: 5min
 2026-04-23 11:46:39,067 [bot] INFO: New trading day: 2026-04-23
 
---- Current positions on account ---
+--- Grep: config loading + symbols in this log ---
+2026-04-22 16:10:35,239 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-22 16:10:35,239 [bot] INFO: New trading day: 2026-04-22
+2026-04-22 16:16:37,378 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-22 16:16:37,632 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-22 16:16:37,632 [bot] INFO: New trading day: 2026-04-22
+2026-04-23 09:43:11,495 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 09:43:42,671 [bot] WARNING: Config not found at configs/bot_config.json, using defaults
+2026-04-23 09:43:42,672 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 09:43:42,672 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
+2026-04-23 09:44:44,151 [bot] WARNING: Config not found at configs/bot_config.json, using defaults
+2026-04-23 09:44:44,153 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 09:44:44,153 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
+2026-04-23 09:44:55,240 [bot] INFO: Trading symbols: ['MESM6']
+2026-04-23 09:44:55,240 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 11:45:55,245 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 11:46:26,669 [bot] WARNING: Config not found at configs/bot_config.json, using defaults
+2026-04-23 11:46:26,669 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 11:46:26,669 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
+2026-04-23 11:46:39,067 [bot] INFO: Trading symbols: ['MESM6']
+2026-04-23 11:46:39,067 [bot] INFO: New trading day: 2026-04-23
+
+--- Config file content (first 5 lines) ---
+{
+  "symbols": ["MESM6", "MNQM6", "MCLM6", "MGCM6", "MYMM6", "M2KM6"],
+  "timeframe": "5min",
+  "live": false,
+  "organization": "",
 
 === Done ===
