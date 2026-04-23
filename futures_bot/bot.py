@@ -292,13 +292,23 @@ class FuturesBot:
             bar_time = latest_bar.get("timestamp", "")
             if bar_time == self._last_bar_time.get(symbol, ""):
                 return  # Already processed this bar
-            self._last_bar_time[symbol] = bar_time
 
             bar = self._to_bar(latest_bar)
 
             # Get this symbol's strategy instances
             vwap = self.vwap_strategies[symbol]
             orb = self.orb_strategies[symbol]
+
+            # On first pass (no prior bar seen), backfill strategy state with
+            # historical bars so indicators (VWAP, RSI, ATR) and trend-day
+            # detection have real data instead of starting cold.
+            if not self._last_bar_time.get(symbol):
+                for hist in bars_data[:-1]:
+                    try:
+                        vwap.on_bar(self._to_bar(hist))
+                    except Exception:
+                        pass
+            self._last_bar_time[symbol] = bar_time
 
             # Check ORB period (9:30-10:00 ET)
             is_orb_period = time(9, 30) <= now_et.time() < time(10, 0)

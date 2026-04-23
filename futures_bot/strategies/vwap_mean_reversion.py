@@ -159,7 +159,10 @@ class VWAPMeanReversion:
 
     def check_trend_day(self, current_hour_et: int):
         """Call after 11:00 ET to check if this is a trend day."""
-        if current_hour_et >= 11 and not self._vwap_crossed:
+        # Only flag trend day if we've actually observed enough bars to judge
+        # whether VWAP was crossed. A freshly started bot with no bars must
+        # not be treated as a trend day.
+        if current_hour_et >= 11 and len(self._bars) >= 6 and not self._vwap_crossed:
             self._trend_day_detected = True
             logger.info("Trend day detected: VWAP not crossed by 11:00 ET")
 
