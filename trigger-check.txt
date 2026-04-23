@@ -1,1 +1,1 @@
-Verify MD WebSocket fix - post v160
+Verify v161 trend-day fix took effect
