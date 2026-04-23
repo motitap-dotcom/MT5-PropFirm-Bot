@@ -165,6 +165,15 @@ class TradovateClient:
         logger.info(f"Connected to Tradovate ({'LIVE' if self.live else 'DEMO'}) "
                      f"as {self.username}, account_id={self.account_id}")
 
+        # Market data REST endpoints (/md/getChart etc) require an active MD
+        # WebSocket session. Without this, the server returns
+        # "OperationNotSupported mode: None" and historical bar fetches
+        # silently return empty, so no strategy ever runs.
+        try:
+            await self._connect_md_websocket()
+        except Exception as e:
+            logger.warning(f"MD WebSocket connect failed (REST bars may not work): {e}")
+
     async def disconnect(self):
         """Clean up connections."""
         if self._heartbeat_task:
