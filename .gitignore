@@ -2,3 +2,7 @@ __pycache__/
 *.pyc
 .env
 configs/.tradovate_token.json
+.coverage
+.pytest_cache/
+htmlcov/
+logs/

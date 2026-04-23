@@ -24,10 +24,11 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from futures_bot.core.tradovate_client import TradovateClient
 from futures_bot.core.guardian import Guardian, GuardianState
-from futures_bot.core.risk_manager import RiskManager
+from futures_bot.core.risk_manager import RiskManager, CONTRACT_SPECS
 from futures_bot.core.news_filter import NewsFilter
 from futures_bot.core.notifier import TelegramNotifier
 from futures_bot.core.status_writer import StatusWriter
+from futures_bot.core.trade_logger import TradeLogger
 from futures_bot.strategies.vwap_mean_reversion import (
     VWAPMeanReversion, Bar as VWAPBar, Signal as VWAPSignal,
 )
@@ -62,6 +63,7 @@ class FuturesBot:
 
     def __init__(self, config_path: str = "configs/bot_config.json"):
         self.config = self._load_config(config_path)
+        self._validate_config()
         self.running = False
 
         # Core components
@@ -71,6 +73,7 @@ class FuturesBot:
         self.news_filter: Optional[NewsFilter] = None
         self.notifier: Optional[TelegramNotifier] = None
         self.status_writer: Optional[StatusWriter] = None
+        self.trade_logger: Optional[TradeLogger] = None
 
         # Strategies - one per symbol
         self.vwap_strategies: dict = {}
@@ -78,7 +81,7 @@ class FuturesBot:
         self.active_strategy: dict = {}  # per symbol: "vwap" or "orb"
         self._last_bar_time: dict = {}  # track last processed bar per symbol
         self._processed_fills: set = set()  # track processed fill IDs
-        self._empty_bars_streak: dict = {}  # per-symbol counter of empty /md/getChart
+        self._empty_bars_streak: dict = {}  # per-symbol consecutive empty /md/getChart
         self._data_stale_alerted: bool = False  # dedupe stale-data alerts
 
         # Trading state
@@ -86,6 +89,85 @@ class FuturesBot:
         self.timeframe: str = self.config.get("timeframe", "5min")
         self.current_day: str = ""
         self.positions: list = []
+
+        # ORB window (parsed once from config)
+        orb_cfg = self.config.get("orb", {})
+        self._orb_start = self._parse_hhmm(orb_cfg.get("window_start", "09:30"), time(9, 30))
+        self._orb_end = self._parse_hhmm(orb_cfg.get("window_end", "10:00"), time(10, 0))
+
+        # Background monitoring task handle
+        self._monitor_task: Optional[asyncio.Task] = None
+        self._last_heartbeat_ts: float = 0.0
+
+    @staticmethod
+    def _parse_hhmm(value, default: time) -> time:
+        if isinstance(value, time):
+            return value
+        if isinstance(value, str) and ":" in value:
+            try:
+                h, m = value.split(":", 1)
+                return time(int(h), int(m))
+            except (ValueError, TypeError):
+                return default
+        return default
+
+    def _validate_config(self):
+        """Fail-fast sanity checks on config before we touch the market."""
+        cfg = self.config
+        guardian = cfg.get("guardian", {})
+        risk = cfg.get("risk", {})
+        session = cfg.get("session", {})
+        symbols = cfg.get("symbols", [])
+
+        errors = []
+
+        # Daily loss must cover at least 2 full-risk trades
+        max_risk = risk.get("max_risk_per_trade", 150.0)
+        max_daily_loss = guardian.get("max_daily_loss", 300.0)
+        if max_daily_loss < max_risk * 2:
+            errors.append(
+                f"max_daily_loss (${max_daily_loss}) < 2× max_risk_per_trade "
+                f"(${max_risk}); bot could block trades after a single loss."
+            )
+
+        # DD warning ladder must be monotonically increasing
+        w = guardian.get("dd_warning_pct", 0.5)
+        c = guardian.get("dd_critical_pct", 0.7)
+        e = guardian.get("dd_emergency_pct", 0.85)
+        if not (w < c < e):
+            errors.append(
+                f"DD levels must satisfy warning({w}) < critical({c}) < emergency({e})"
+            )
+
+        # Symbols must have contract specs
+        for sym in symbols:
+            base = sym
+            for spec_name in sorted(CONTRACT_SPECS.keys(), key=len, reverse=True):
+                if sym.startswith(spec_name):
+                    base = spec_name
+                    break
+            if base not in CONTRACT_SPECS:
+                errors.append(f"Symbol {sym!r} has no contract spec in CONTRACT_SPECS")
+
+        # Session ordering
+        try:
+            s_start = self._parse_hhmm(session.get("start", "09:30"), time(9, 30))
+            s_no_new = self._parse_hhmm(session.get("no_new_trades_after", "14:45"), time(14, 45))
+            s_flatten = self._parse_hhmm(session.get("flatten_time", "15:45"), time(15, 45))
+            if not (s_start < s_no_new < s_flatten):
+                errors.append(
+                    f"Session order invalid: start({s_start}) < no_new_trades({s_no_new}) "
+                    f"< flatten({s_flatten}) must hold"
+                )
+        except Exception as ex:
+            errors.append(f"Session time parsing failed: {ex}")
+
+        if errors:
+            msg = "Config validation failed:\n  - " + "\n  - ".join(errors)
+            logger.error(msg)
+            raise ValueError(msg)
+
+        logger.info("Config validation passed")
 
     def _load_config(self, path: str) -> dict:
         """Load bot configuration."""
@@ -102,25 +184,41 @@ class FuturesBot:
         logger.info("TradeDay Futures Bot Starting")
         logger.info("=" * 60)
 
+        tradovate_cfg = self.config.get("tradovate", {})
+        monitoring_cfg = self.config.get("monitoring", {})
+
         # Initialize Tradovate client (web-style auth, no API keys needed)
         self.client = TradovateClient(
             username=os.environ.get("TRADOVATE_USER", self.config.get("username", "")),
             password=os.environ.get("TRADOVATE_PASS", self.config.get("password", "")),
             live=self.config.get("live", False),
             organization=self.config.get("organization", ""),
+            token_refresh_threshold_seconds=tradovate_cfg.get(
+                "token_refresh_threshold_seconds", 3600
+            ),
         )
 
-        # Initialize modules
+        # Initialize modules — risk manager receives session config
         self.guardian = Guardian(self.config.get("guardian", {}))
-        self.risk_mgr = RiskManager(self.config.get("risk", {}))
+        self.risk_mgr = RiskManager(
+            self.config.get("risk", {}),
+            session_config=self.config.get("session", {}),
+        )
         self.news_filter = NewsFilter()
-        self.status_writer = StatusWriter()
+        self.status_writer = StatusWriter(
+            dashboard_path=monitoring_cfg.get("dashboard_path", "status/dashboard.txt"),
+        )
+        self.trade_logger = TradeLogger(
+            trades_path=monitoring_cfg.get("trades_log_path", "logs/trades_log.csv"),
+            equity_path=monitoring_cfg.get("equity_curve_path", "logs/equity_curve.csv"),
+        )
 
         # Telegram
         self.notifier = TelegramNotifier(
             token=os.environ.get("TELEGRAM_TOKEN", ""),
             chat_id=os.environ.get("TELEGRAM_CHAT_ID", ""),
             enabled=self.config.get("telegram_enabled", True),
+            rate_limit_per_minute=monitoring_cfg.get("telegram_rate_limit_per_minute", 10),
         )
 
         # Strategies - separate instance per symbol with per-symbol params
@@ -149,18 +247,11 @@ class FuturesBot:
             logger.error(f"Failed to connect: {e}")
             raise
 
-        # Subscribe to each symbol on the MD WebSocket so the server activates
-        # MD mode. Without this, /md/getChart returns OperationNotSupported
-        # with mode=None. A no-op callback is enough — we just need the
-        # subscription to exist.
-        for sym in self.symbols:
-            try:
-                await self.client.subscribe_market_data(sym, lambda _: None)
-            except Exception as e:
-                logger.warning(f"MD subscribe {sym} failed: {e}")
-
         self.running = True
         logger.info("Bot started successfully")
+
+        # Spawn background monitoring/heartbeat task (independent of trading loop)
+        self._monitor_task = asyncio.create_task(self._monitor_loop())
 
         # Main loop
         await self._run()
@@ -169,6 +260,14 @@ class FuturesBot:
         """Stop the bot gracefully."""
         logger.info(f"Stopping bot: {reason}")
         self.running = False
+
+        # Stop background monitor
+        if self._monitor_task and not self._monitor_task.done():
+            self._monitor_task.cancel()
+            try:
+                await self._monitor_task
+            except (asyncio.CancelledError, Exception):
+                pass
 
         # Close all positions
         if self.client:
@@ -226,6 +325,7 @@ class FuturesBot:
                 # Check if trading session is active
                 in_session, session_msg = self.risk_mgr.is_trading_session()
                 if not in_session:
+                    logger.info(f"Outside session: {session_msg}")
                     await asyncio.sleep(30)
                     continue
 
@@ -235,6 +335,8 @@ class FuturesBot:
                     await asyncio.sleep(60)
                     continue
 
+                logger.info(f"=== Trading cycle {now_et.strftime('%H:%M ET')} | Guardian: {self.guardian.state.name if hasattr(self.guardian, 'state') else 'N/A'} ===")
+
                 # Update balance
                 try:
                     balance = await self.client.get_account_balance()
@@ -242,17 +344,23 @@ class FuturesBot:
                         balance["balance"],
                         balance.get("unrealized_pnl", 0),
                     )
+                    # Progressive DD alerts (each level fires once per day)
+                    dd_levels = self.config.get("monitoring", {}).get(
+                        "dd_alert_levels", [0.5, 0.7, 0.85]
+                    )
+                    fired = self.guardian.check_dd_alert(dd_levels)
+                    if fired is not None:
+                        await self.notifier.dd_warning(
+                            fired,
+                            self.guardian.get_status()["drawdown_used"],
+                            self.guardian.max_drawdown,
+                        )
                 except Exception as e:
                     logger.error(f"Error fetching balance: {e}")
 
-                # Check for trend day at 11:00 ET (per symbol)
-                if now_et.hour >= 11:
-                    for sym in self.symbols:
-                        vwap = self.vwap_strategies[sym]
-                        vwap.check_trend_day(now_et.hour)
-                        if vwap.is_trend_day() and self.active_strategy.get(sym) == "vwap":
-                            self.active_strategy[sym] = "orb"
-                            logger.info(f"Switching {sym} to ORB strategy (trend day)")
+                # Trend day detection disabled - VWAP strategy stays active
+                # ORB switching removed: ORB needs opening range data from 9:30-10:00
+                # which requires bot to be running from market open
 
                 # Sync positions and detect closed trades
                 try:
@@ -296,11 +404,9 @@ class FuturesBot:
             bars_data = await self.client.get_historical_bars(
                 symbol, self.timeframe, count=50
             )
-            n = len(bars_data) if bars_data else 0
-            logger.info(f"{symbol}: got {n} bars from /md/getChart")
             if not bars_data:
+                logger.warning(f"{symbol}: No bars returned from API")
                 self._empty_bars_streak[symbol] = self._empty_bars_streak.get(symbol, 0) + 1
-                # After 3 consecutive empty fetches (~15 min on 5min TF) alert once.
                 stale = [s for s, c in self._empty_bars_streak.items() if c >= 3]
                 if stale and not self._data_stale_alerted and self.notifier:
                     self._data_stale_alerted = True
@@ -309,7 +415,6 @@ class FuturesBot:
                     except Exception as e:
                         logger.warning(f"Stale data alert failed: {e}")
                 return
-            # Got data — reset counters
             self._empty_bars_streak[symbol] = 0
             if self._data_stale_alerted and all(
                 v == 0 for v in self._empty_bars_streak.values()
@@ -321,35 +426,22 @@ class FuturesBot:
             bar_time = latest_bar.get("timestamp", "")
             if bar_time == self._last_bar_time.get(symbol, ""):
                 return  # Already processed this bar
-
-            bar = self._to_bar(latest_bar)
+            self._last_bar_time[symbol] = bar_time
 
             # Get this symbol's strategy instances
             vwap = self.vwap_strategies[symbol]
             orb = self.orb_strategies[symbol]
 
-            # On first pass (no prior bar seen), backfill strategy state with
-            # historical bars so indicators (VWAP, RSI, ATR) and trend-day
-            # detection have real data instead of starting cold.
-            if not self._last_bar_time.get(symbol):
-                for hist in bars_data[:-1]:
-                    try:
-                        vwap.on_bar(self._to_bar(hist))
-                    except Exception:
-                        pass
-            self._last_bar_time[symbol] = bar_time
+            # On first call, feed ALL historical bars to warm up the strategy
+            if len(vwap._bars) == 0 and len(bars_data) > 1:
+                logger.info(f"{symbol}: Warming up strategy with {len(bars_data)} historical bars")
+                for hist_bar in bars_data[:-1]:
+                    vwap.on_bar(self._to_bar(hist_bar))
 
-            # Check ORB period (9:30-10:00 ET)
-            is_orb_period = time(9, 30) <= now_et.time() < time(10, 0)
+            bar = self._to_bar(latest_bar)
+            logger.info(f"{symbol}: New bar {bar_time} | O={bar.open} H={bar.high} L={bar.low} C={bar.close} V={bar.volume}")
 
-            if is_orb_period:
-                orb.on_bar(bar, is_orb_period=True)
-                return  # Don't trade during ORB building
-
-            # Complete ORB at 10:00
-            if now_et.time() >= time(10, 0) and not orb._orb_complete:
-                orb.complete_range()
-
+            # ORB period disabled - VWAP runs from market open
             # Run active strategy for THIS symbol
             setup = None
             strategy_name = ""
@@ -365,7 +457,10 @@ class FuturesBot:
 
             # Execute trade if signal
             if setup and setup.signal.value != 0:
+                logger.info(f"{symbol}: SIGNAL {setup.signal.name} from {strategy_name} | entry={setup.entry_price:.2f} sl={setup.stop_loss:.2f}")
                 await self._execute_trade(symbol, setup, strategy_name)
+            else:
+                logger.debug(f"{symbol}: No signal from {strategy_name}")
 
         except Exception as e:
             logger.error(f"Error processing {symbol}: {e}", exc_info=True)
@@ -413,7 +508,12 @@ class FuturesBot:
 
         # Determine TP based on strategy type
         if hasattr(setup, 'take_profit_1'):
-            tp = setup.take_profit_1  # VWAP has two TPs
+            tp = setup.take_profit_1  # VWAP has two TPs (partial exit handled post-fill)
+            tp1_pct = getattr(setup, "tp1_size_pct", 0.6)
+            # Round contracts at TP1 to the configured percentage.
+            # Note: the broker bracket here only carries one TP level; partial
+            # scale-out at TP2 is managed by the trailing / follow-up logic.
+            _ = tp1_pct  # reserved for future partial-order support
         else:
             tp = setup.take_profit
 
@@ -507,6 +607,25 @@ class FuturesBot:
                 contract_id = fill.get("contractId", "")
                 logger.info(f"FILL: {action} {qty} @ {price:.2f} PnL=${pnl:.2f}")
 
+                # Append to CSV trade log for later review
+                if self.trade_logger:
+                    g = self.guardian.get_status()
+                    self.trade_logger.log_trade({
+                        "symbol": str(contract_id),
+                        "strategy": "",
+                        "direction": action,
+                        "contracts": qty,
+                        "entry": "",
+                        "sl": "",
+                        "tp": "",
+                        "exit": f"{price:.2f}",
+                        "pnl": f"{pnl:.2f}",
+                        "r_multiple": "",
+                        "reason": "SL/TP hit",
+                        "daily_pnl_after": f"{g.get('daily_pnl', 0):.2f}",
+                        "balance_after": f"{g.get('balance', 0):.2f}",
+                    })
+
                 await self.notifier.trade_closed(
                     str(contract_id), action, pnl, "SL/TP hit"
                 )
@@ -598,27 +717,71 @@ class FuturesBot:
             self.active_strategy[sym] = "vwap"
             self._last_bar_time[sym] = ""
 
-    def _to_bar(self, data: dict):
-        """Convert API bar data to strategy Bar format.
-        Tradovate WS chart bars expose volume as upVolume + downVolume
-        (plus bidVolume + offerVolume); REST bars may have a plain "volume".
-        Sum whatever is present so VWAP can actually be computed.
+    async def _monitor_loop(self):
         """
-        volume = data.get("volume")
-        if volume in (None, 0):
-            volume = (
-                (data.get("upVolume") or 0)
-                + (data.get("downVolume") or 0)
-                + (data.get("bidVolume") or 0)
-                + (data.get("offerVolume") or 0)
-            )
+        Background task: writes status/dashboard at a fast cadence and sends
+        a Telegram heartbeat every N minutes (configurable). Runs independently
+        of the trading loop so monitoring stays fresh even when the main loop
+        is sleeping between bars.
+        """
+        monitoring = self.config.get("monitoring", {}) or {}
+        status_interval = max(5, int(monitoring.get("status_interval_seconds", 30)))
+        heartbeat_min = max(1, int(monitoring.get("heartbeat_telegram_minutes", 60)))
+        heartbeat_interval = heartbeat_min * 60
+
+        import time as _time
+        while self.running:
+            try:
+                if self.guardian is not None:
+                    g_status = self.guardian.get_status()
+                    self.status_writer.write(
+                        guardian_status=g_status,
+                        positions=self.positions,
+                        extra={"active_strategy": self.active_strategy},
+                    )
+                    # Equity curve sample
+                    if self.trade_logger is not None:
+                        self.trade_logger.log_equity(
+                            balance=g_status.get("balance", 0.0),
+                            daily_pnl=g_status.get("daily_pnl", 0.0),
+                            total_pnl=g_status.get("total_pnl", 0.0),
+                            dd_used=g_status.get("drawdown_used", 0.0),
+                        )
+                    # Hourly heartbeat
+                    now_ts = _time.time()
+                    if now_ts - self._last_heartbeat_ts >= heartbeat_interval:
+                        await self.notifier.heartbeat({
+                            "state": g_status.get("state", "N/A"),
+                            "balance": g_status.get("balance", 0.0),
+                            "daily_pnl": g_status.get("daily_pnl", 0.0),
+                            "dd_used": g_status.get("drawdown_used", 0.0),
+                        })
+                        self._last_heartbeat_ts = now_ts
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logger.error(f"Monitor loop error: {e}")
+
+            try:
+                await asyncio.sleep(status_interval)
+            except asyncio.CancelledError:
+                break
+
+    def _to_bar(self, data: dict):
+        """Convert API bar data to strategy Bar format."""
+        # WebSocket bars have upVolume/downVolume, not volume
+        volume = data.get("volume", 0)
+        if volume == 0:
+            volume = data.get("upVolume", 0) + data.get("downVolume", 0)
+        if volume == 0:
+            volume = 1  # Fallback: use 1 so VWAP still works (equal weight per bar)
         return VWAPBar(
             timestamp=data.get("timestamp", ""),
             open=data.get("open", 0),
             high=data.get("high", 0),
             low=data.get("low", 0),
             close=data.get("close", 0),
-            volume=volume or 1,
+            volume=volume,
         )
 
     def _get_sleep_seconds(self) -> int:
