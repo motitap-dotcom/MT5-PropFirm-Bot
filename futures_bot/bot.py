@@ -147,6 +147,16 @@ class FuturesBot:
             logger.error(f"Failed to connect: {e}")
             raise
 
+        # Subscribe to each symbol on the MD WebSocket so the server activates
+        # MD mode. Without this, /md/getChart returns OperationNotSupported
+        # with mode=None. A no-op callback is enough — we just need the
+        # subscription to exist.
+        for sym in self.symbols:
+            try:
+                await self.client.subscribe_market_data(sym, lambda _: None)
+            except Exception as e:
+                logger.warning(f"MD subscribe {sym} failed: {e}")
+
         self.running = True
         logger.info("Bot started successfully")
 
