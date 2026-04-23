@@ -50,6 +50,15 @@
 - `auto-merge-deploy.yml` has `paths-ignore: commands/**` so pushing ONLY `commands/run.sh` won't trigger it.
 - If you change code files + `commands/run.sh` in the same push, both workflows trigger and race.
 
+### 9. CRITICAL: Don't break market data (learned the hard way on 2026-04-23).
+- **Market data path MUST be WebSocket.** The REST `/md/getChart` endpoint returns `OperationNotSupported mode: None` on this account. `get_historical_bars` in `futures_bot/core/tradovate_client.py` MUST use WebSocket (`md/getChart` via the MD WS after authorize). If you see REST bars code, you are regressing — stop.
+- **The MD WS `authorize` body is JSON:** `f"authorize\n1\n\n{json.dumps({'token': token})}"`. NOT raw token. The server replies `{"s":401,"d":"Access is denied"}` for bad format.
+- **`mdAccessToken` is required for MD WS.** Playwright browser auth only captures `accessToken`. After browser auth you MUST call `_renew_token_safe()` once — the `/auth/renewaccesstoken` response contains both `accessToken` AND `mdAccessToken`. Without this, MD WS returns 401.
+- **Bar volume is `upVolume + downVolume` (+ bid/offerVolume), NOT `volume`.** Tradovate chart frames don't have a `volume` key. `_to_bar` in `bot.py` MUST sum these, else VWAP=0 forever.
+- **Systemd ExecStart is `/usr/local/sbin/futures-bot-wrapper.sh`, NOT `python3 -m futures_bot.bot` directly.** The wrapper chooses between `/root/MT5-PropFirm-Bot` (repo copy) and `/opt/futures_bot_stable` (stable fallback). If you rewrite the service file to call python directly, the bot will fail with `No module named futures_bot.bot` and loop.
+- **`/opt/futures_bot_stable/` is the intentional stable copy** used when `git reset --hard` wipes `/root/MT5-PropFirm-Bot/`. `scripts/fix_and_restart.sh` MUST `rsync` `/root/MT5-PropFirm-Bot/futures_bot/` to `/opt/futures_bot_stable/futures_bot/` on every run. Don't delete /opt.
+- **Newer `websockets` library removed `.open`.** Use the `_ws_closed(ws)` helper in `tradovate_client.py` (checks `.closed` or `.state`).
+
 ---
 
 ## Architecture: How This Bot Works
