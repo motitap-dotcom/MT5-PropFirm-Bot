@@ -1,10 +1,10 @@
 === TradeDay Futures Bot - Status Check (READ-ONLY) ===
-Timestamp: 2026-04-23 08:28:11 UTC
+Timestamp: 2026-04-23 09:50:32 UTC
 
 --- Service state ---
-Active: activating
+Active: active
 Enabled: enabled
-Failed: activating
+Failed: active
 
 --- Current service file ---
 [Unit]
@@ -13,13 +13,10 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/usr/bin/python3 -m futures_bot.bot
+ExecStart=/usr/local/sbin/futures-bot-wrapper.sh
 Restart=on-failure
 RestartSec=60
-Environment=PYTHONUNBUFFERED=1
-Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
-EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+StartLimitBurst=0
 
 [Install]
 WantedBy=multi-user.target
@@ -58,48 +55,49 @@ fi
 cd "$BOT_DIR"
 
 --- /root/MT5-PropFirm-Bot/futures_bot/bot.py exists? ---
--rw-r--r-- 1 root root 24016 Apr 23 08:28 /root/MT5-PropFirm-Bot/futures_bot/bot.py
+-rw-r--r-- 1 root root 24016 Apr 23 09:50 /root/MT5-PropFirm-Bot/futures_bot/bot.py
 
 --- Recent systemd events for futures-bot (last 2h) ---
-Apr 23 08:22:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 288.
-Apr 23 08:22:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 23 08:22:35 vmi3096165 python3[615993]: /usr/bin/python3: No module named futures_bot.bot
-Apr 23 08:22:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 23 08:22:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 23 08:23:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 289.
-Apr 23 08:23:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 23 08:23:35 vmi3096165 python3[616171]: /usr/bin/python3: No module named futures_bot.bot
-Apr 23 08:23:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 23 08:23:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 23 08:24:35 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 290.
-Apr 23 08:24:35 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 23 08:24:35 vmi3096165 python3[616394]: /usr/bin/python3: No module named futures_bot.bot
-Apr 23 08:24:35 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 23 08:24:35 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 23 08:25:36 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 291.
-Apr 23 08:25:36 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 23 08:25:36 vmi3096165 python3[616654]: /usr/bin/python3: No module named futures_bot.bot
-Apr 23 08:25:36 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 23 08:25:36 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 23 08:26:36 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 292.
-Apr 23 08:26:36 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 23 08:26:36 vmi3096165 python3[616882]: /usr/bin/python3: No module named futures_bot.bot
-Apr 23 08:26:36 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 23 08:26:36 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
-Apr 23 08:27:36 vmi3096165 systemd[1]: futures-bot.service: Scheduled restart job, restart counter is at 293.
-Apr 23 08:27:36 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 23 08:27:36 vmi3096165 python3[617240]: /usr/bin/python3: No module named futures_bot.bot
-Apr 23 08:27:36 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=exited, status=1/FAILURE
-Apr 23 08:27:36 vmi3096165 systemd[1]: futures-bot.service: Failed with result 'exit-code'.
+Apr 23 09:43:43 vmi3096165 futures-bot-wrapper.sh[635273]: ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Apr 23 09:43:43 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:43,326 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Apr 23 09:43:43 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:43,449 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+Apr 23 09:43:43 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:43,564 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+Apr 23 09:43:43 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:43,565 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+Apr 23 09:43:43 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:43,682 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+Apr 23 09:43:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:44,100 [tradovate_client] INFO: Disconnected from Tradovate
+Apr 23 09:43:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:44,101 [bot] INFO: Bot stopped
+Apr 23 09:43:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:44,101 [bot] INFO: Retrying in 60s...
+Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,151 [bot] WARNING: Config not found at configs/bot_config.json, using defaults
+Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,153 [bot] INFO: ============================================================
+Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,153 [bot] INFO: TradeDay Futures Bot Starting
+Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,153 [bot] INFO: ============================================================
+Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,153 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
+Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,153 [tradovate_client] INFO: Trying pre-set access token from environment...
+Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,296 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
+Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,411 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,412 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,526 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+Apr 23 09:44:47 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:47,035 [tradovate_client] INFO: Opening Tradovate login page...
+Apr 23 09:44:53 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:53,898 [tradovate_client] INFO: Login submitted, waiting for token...
+Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,016 [tradovate_client] INFO: Browser auth: token captured successfully
+Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,017 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
+Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,144 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,145 [tradovate_client] INFO: Environment token is valid
+Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,147 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,240 [bot] INFO: Bot started successfully
+Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,240 [bot] INFO: Trading symbols: ['MESM6']
+Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,240 [bot] INFO: Timeframe: 5min
+Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,240 [bot] INFO: New trading day: 2026-04-23
 
 --- Any bot process running anywhere? ---
 root      353509       1  2 Apr22 ?        00:24:51 /root/tradovate-bot/venv/bin/python bot.py
+root      635273       1  0 09:43 ?        00:00:00 /usr/bin/python3 /root/MT5-PropFirm-Bot/futures_bot/bot.py
 
 --- Token file ---
-MISSING
+-rw-r--r-- 1 root root 815 Apr 23 09:50 /root/MT5-PropFirm-Bot/configs/.tradovate_token.json
 
 --- Git state on VPS ---
 Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
-HEAD: b166a27 Enhanced read-only status check
+HEAD: 263c8d3 Check bot state after v155
 
 === Check Complete ===
