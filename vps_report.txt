@@ -1,23 +1,23 @@
 === Status Check v2 (READ-ONLY) ===
-Timestamp: 2026-04-23 11:37:49 UTC
+Timestamp: 2026-04-23 11:52:59 UTC
 
 --- Service ---
 Active: active
-PID: 660933
+PID: 663621
 
 --- Bot process working directory ---
-CWD: /opt/futures_bot_stable
-Cmd: /usr/bin/python3 /opt/futures_bot_stable/futures_bot/bot.py 
+CWD: /root/MT5-PropFirm-Bot
+Cmd: /usr/bin/python3 /root/MT5-PropFirm-Bot/futures_bot/bot.py 
 
 --- /root/MT5-PropFirm-Bot/configs/ contents ---
 total 28
-drwxr-xr-x  2 1001 1001 4096 Apr 23 11:37 .
-drwxr-xr-x 13 root root 4096 Apr 23 11:37 ..
+drwxr-xr-x  2 1001 1001 4096 Apr 23 11:52 .
+drwxr-xr-x 13 root root 4096 Apr 23 11:52 ..
 -rw-r--r--  1 root root  487 Mar 31 16:25 .browser_auth_result.txt
--rw-r--r--  1 root root  815 Apr 23 11:37 .tradovate_token.json
+-rw-r--r--  1 root root  815 Apr 23 11:52 .tradovate_token.json
 -rw-r--r--  1 root root  715 Mar 31 06:46 .tradovate_token_backup.json
--rw-r--r--  1 root root 1934 Apr 23 11:37 bot_config.json
--rw-r--r--  1 root root 3573 Apr 23 11:37 restricted_events.json
+-rw-r--r--  1 root root 1934 Apr 23 11:52 bot_config.json
+-rw-r--r--  1 root root 3573 Apr 23 11:52 restricted_events.json
 
 --- bot_config.json exists? ---
 YES (1934 bytes)
@@ -61,30 +61,30 @@ exec /usr/bin/python3 "$BOT_DIR/futures_bot/bot.py"
 
 --- Git state on VPS ---
 Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
-HEAD: 7714e89 Check cwd, configs, wrapper content
+HEAD: 31d5d42 Verify bot state after v156
 configs in this commit:
 
 --- Running bot log (last 20) ---
-2026-04-23 09:44:44,153 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
-2026-04-23 09:44:44,153 [tradovate_client] INFO: Trying pre-set access token from environment...
-2026-04-23 09:44:44,296 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
-2026-04-23 09:44:44,411 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-23 09:44:44,412 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-23 09:44:44,526 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-2026-04-23 09:44:47,035 [tradovate_client] INFO: Opening Tradovate login page...
-2026-04-23 09:44:53,898 [tradovate_client] INFO: Login submitted, waiting for token...
-2026-04-23 09:44:55,016 [tradovate_client] INFO: Browser auth: token captured successfully
-2026-04-23 09:44:55,017 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
-2026-04-23 09:44:55,144 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-23 09:44:55,145 [tradovate_client] INFO: Environment token is valid
-2026-04-23 09:44:55,147 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-23 09:44:55,240 [bot] INFO: Bot started successfully
-2026-04-23 09:44:55,240 [bot] INFO: Trading symbols: ['MESM6']
-2026-04-23 09:44:55,240 [bot] INFO: Timeframe: 5min
-2026-04-23 09:44:55,240 [bot] INFO: New trading day: 2026-04-23
-2026-04-23 10:00:01,490 [bot] INFO: Stopping bot: Signal received
-2026-04-23 10:00:02,352 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-23 10:00:02,353 [bot] INFO: Bot stopped
+2026-04-23 11:46:26,807 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-23 11:46:26,807 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-23 11:46:26,943 [tradovate_client] INFO: Saved token invalid, attempting renewal...
+2026-04-23 11:46:27,058 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-23 11:46:27,059 [tradovate_client] INFO: Trying pre-set access token from environment...
+2026-04-23 11:46:27,175 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
+2026-04-23 11:46:27,295 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-23 11:46:27,295 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-23 11:46:27,410 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+2026-04-23 11:46:30,237 [tradovate_client] INFO: Opening Tradovate login page...
+2026-04-23 11:46:37,399 [tradovate_client] INFO: Login submitted, waiting for token...
+2026-04-23 11:46:38,847 [tradovate_client] INFO: Browser auth: token captured successfully
+2026-04-23 11:46:38,850 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
+2026-04-23 11:46:38,971 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 11:46:38,971 [tradovate_client] INFO: Environment token is valid
+2026-04-23 11:46:38,975 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 11:46:39,067 [bot] INFO: Bot started successfully
+2026-04-23 11:46:39,067 [bot] INFO: Trading symbols: ['MESM6']
+2026-04-23 11:46:39,067 [bot] INFO: Timeframe: 5min
+2026-04-23 11:46:39,067 [bot] INFO: New trading day: 2026-04-23
 
 --- Current positions on account ---
 
