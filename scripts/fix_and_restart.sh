@@ -1,6 +1,6 @@
 #!/bin/bash
-# v160 - restart with new MD WS code + sync to /opt stable copy
-echo "=== Fix & Restart v160 ==="
+# v161 - restart with trend-day threshold fix + historical backfill
+echo "=== Fix & Restart v161 ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
 echo ""
