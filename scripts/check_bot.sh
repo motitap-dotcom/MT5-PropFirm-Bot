@@ -1,56 +1,48 @@
 #!/bin/bash
-echo "=== Deep kill investigation ==="
+echo "=== Quick kill source check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 echo ""
 
-echo "--- /etc/cron.d/ files ---"
+echo "--- /etc/cron.d/ ---"
 ls -la /etc/cron.d/ 2>/dev/null
+echo ""
 for f in /etc/cron.d/*; do
-  [ -f "$f" ] && echo "=== $f ===" && cat "$f"
+  [ -f "$f" ] && { echo "=== $f ==="; grep -iE "futures|MT5|bot\.py" "$f" 2>/dev/null && echo "MATCH!" || echo "no match"; }
 done
 echo ""
 
-echo "--- /etc/cron.hourly/ /etc/cron.daily/ /etc/cron.weekly/ ---"
-ls /etc/cron.hourly/ /etc/cron.daily/ /etc/cron.weekly/ 2>/dev/null
+echo "--- systemd timers ---"
+systemctl list-timers --all --no-pager 2>/dev/null | grep -iE "futures|bot" | head -10
 echo ""
 
-echo "--- All user crontabs ---"
-for user in root $(cut -d: -f1 /etc/passwd 2>/dev/null); do
+echo "--- ALL crontabs on the system ---"
+for user in $(cut -d: -f1 /etc/passwd 2>/dev/null); do
   ct=$(crontab -u "$user" -l 2>/dev/null)
-  if [ -n "$ct" ]; then
-    echo "=== $user ==="
-    echo "$ct"
-  fi
+  [ -n "$ct" ] && echo "=== $user ===" && echo "$ct" | grep -vE '^#|^$' | head -15
 done
 echo ""
 
-echo "--- Systemd timers ---"
-systemctl list-timers --all --no-pager 2>/dev/null | head -20
+echo "--- What shells had systemctl recently? ---"
+ls -la /var/log/auth.log /var/log/syslog 2>/dev/null | head -5
+journalctl --since "30 min ago" --no-pager 2>/dev/null | grep -iE "systemctl.*futures|restart futures-bot|stop futures-bot" | head -10
 echo ""
 
-echo "--- Search for ALL files that reference futures-bot or futures_bot ---"
-for loc in /root /opt /etc /usr/local; do
-  grep -rlEs "futures-bot|futures_bot\.service|MT5-PropFirm|bot\.py" "$loc" 2>/dev/null | grep -v "\.git/" | grep -v "\.log$" | grep -v "\.json$" | head -30
+echo "--- /root/*.sh files (look for kill patterns) ---"
+for f in /root/*.sh; do
+  [ -f "$f" ] && grep -lE "futures-bot|futures_bot|MT5-PropFirm" "$f" 2>/dev/null
 done
 echo ""
 
-echo "--- Journalctl _PID=1 for futures-bot (who called systemctl?) ---"
-journalctl _PID=1 --no-pager --since "30 min ago" 2>/dev/null | grep -i futures-bot | tail -20
+echo "--- /root directory scripts containing futures-bot ---"
+grep -rl "futures-bot" /root 2>/dev/null | grep -v "\.git/" | grep -v "\.log$" | grep -v "\.json$" | head -10
 echo ""
 
-echo "--- Last 30 min of ALL systemd journal mentioning futures-bot ---"
-journalctl --no-pager --since "30 min ago" 2>/dev/null | grep -i "futures-bot\.service" | tail -30
-echo ""
-
-echo "--- Is /root/MT5-PropFirm-Bot/futures_bot/bot.py still there? ---"
-ls -la /root/MT5-PropFirm-Bot/futures_bot/bot.py 2>/dev/null || echo "MISSING"
-echo ""
-
-echo "--- Is bot still running? ---"
-systemctl is-active futures-bot
-echo "PID: $(systemctl show futures-bot --property=MainPID --value)"
-BOTPID=$(systemctl show futures-bot --property=MainPID --value 2>/dev/null)
-[ -n "$BOTPID" ] && [ "$BOTPID" != "0" ] && echo "CWD: $(readlink /proc/$BOTPID/cwd 2>/dev/null)"
+echo "--- Current bot state ---"
+echo "Service: $(systemctl is-active futures-bot)"
+PID=$(systemctl show futures-bot --property=MainPID --value 2>/dev/null)
+echo "PID: $PID"
+[ -n "$PID" ] && [ "$PID" != "0" ] && echo "CWD: $(readlink /proc/$PID/cwd 2>/dev/null)"
+echo "ActiveEnterTimestamp: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value 2>/dev/null)"
 echo ""
 
 echo "=== Done ==="
