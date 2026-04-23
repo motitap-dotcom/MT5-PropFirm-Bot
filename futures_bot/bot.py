@@ -284,6 +284,7 @@ class FuturesBot:
             bars_data = await self.client.get_historical_bars(
                 symbol, self.timeframe, count=50
             )
+            logger.info(f"{symbol}: got {len(bars_data) if bars_data else 0} bars from /md/getChart")
             if not bars_data:
                 return
 
