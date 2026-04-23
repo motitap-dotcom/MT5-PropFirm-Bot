@@ -90,9 +90,19 @@ class TradovateClient:
         self._ws_request_id: int = 10
         self._heartbeat_task: Optional[asyncio.Task] = None
 
+        # Chart subscriptions via WebSocket
+        self._chart_subs: Dict[str, int] = {}  # symbol -> chart subscription ID
+        self._chart_bars: Dict[str, List[Dict]] = {}  # symbol -> accumulated bars
+        self._chart_events: Dict[int, asyncio.Event] = {}  # sub_id -> initial data event
+        self._chart_id_to_symbol: Dict[int, str] = {}  # chart ID -> symbol
+
         # Account info
         self.account_id: Optional[int] = None
         self.account_spec: Optional[str] = None
+
+        # Auth cooldown - prevent hammering Tradovate when auth fails
+        self._last_auth_failure: float = 0
+        self._auth_cooldown: float = 120  # Wait 2 min between auth attempts
 
     async def connect(self):
         """Initialize session and authenticate with robust multi-step fallback."""
@@ -164,15 +174,6 @@ class TradovateClient:
         self._save_token()
         logger.info(f"Connected to Tradovate ({'LIVE' if self.live else 'DEMO'}) "
                      f"as {self.username}, account_id={self.account_id}")
-
-        # Market data REST endpoints (/md/getChart etc) require an active MD
-        # WebSocket session. Without this, the server returns
-        # "OperationNotSupported mode: None" and historical bar fetches
-        # silently return empty, so no strategy ever runs.
-        try:
-            await self._connect_md_websocket()
-        except Exception as e:
-            logger.warning(f"MD WebSocket connect failed (REST bars may not work): {e}")
 
     async def disconnect(self):
         """Clean up connections."""
@@ -248,17 +249,10 @@ class TradovateClient:
                 if browser_result:
                     self.access_token = browser_result["accessToken"]
                     self.md_access_token = browser_result.get("mdAccessToken", self.access_token)
-                    self._parse_expiry(browser_result.get("expirationTime", ""))
+                    # Force 2-hour expiry - browser tokens may not include expirationTime
+                    self.token_expiry = time.time() + 7200
                     self._save_token()
-                    logger.info("Authenticated successfully via browser (CAPTCHA bypassed)")
-                    # Browser auth often only returns accessToken (no mdAccessToken)
-                    # so force a renew call which always returns both tokens.
-                    if self.md_access_token == self.access_token:
-                        logger.info("Exchanging browser token for MD-scoped token pair...")
-                        try:
-                            await self._renew_token_safe()
-                        except Exception as e:
-                            logger.warning(f"Post-browser token exchange failed: {e}")
+                    logger.info(f"Authenticated successfully via browser (CAPTCHA bypassed), token valid for 2h")
                     return
                 else:
                     raise ConnectionError(
@@ -322,18 +316,23 @@ class TradovateClient:
 
                 logger.info("Opening Tradovate login page...")
                 await page.goto(
-                    "https://trader.tradovate.com/welcome", timeout=60000
+                    "https://trader.tradovate.com/welcome",
+                    timeout=60000,
+                    wait_until="domcontentloaded",
                 )
-                await asyncio.sleep(5)
+                await asyncio.sleep(8)  # Extra wait for SPA to render
 
-                await page.fill(
-                    'input[type="text"]', self.username, timeout=15000
+                await page.wait_for_selector(
+                    'input[type="text"]', state="visible", timeout=30000
                 )
                 await page.fill(
-                    'input[type="password"]', self.password, timeout=15000
+                    'input[type="text"]', self.username, timeout=30000
+                )
+                await page.fill(
+                    'input[type="password"]', self.password, timeout=30000
                 )
                 await page.click(
-                    'button:has-text("Log")', timeout=15000
+                    'button:has-text("Log")', timeout=30000
                 )
 
                 logger.info("Login submitted, waiting for token...")
@@ -401,9 +400,20 @@ class TradovateClient:
         remaining = self.token_expiry - time.time()
 
         if remaining < 1800:  # Less than 30 minutes left
+            # Check cooldown to avoid hammering Tradovate API
+            since_last_failure = time.time() - self._last_auth_failure
+            if self._last_auth_failure > 0 and since_last_failure < self._auth_cooldown:
+                wait_left = self._auth_cooldown - since_last_failure
+                logger.warning(f"Auth cooldown active, {wait_left:.0f}s remaining. Skipping renewal.")
+                return
             logger.info(f"Token expiring in {remaining/60:.0f}min, renewing...")
-            await self._renew_token()
-            self._token_obtained_at = time.time()
+            try:
+                await self._renew_token()
+                self._token_obtained_at = time.time()
+                self._last_auth_failure = 0  # Reset on success
+            except Exception as e:
+                self._last_auth_failure = time.time()
+                raise
 
     def _parse_expiry(self, expiry_str: str):
         """Parse token expiration time."""
@@ -796,14 +806,11 @@ class TradovateClient:
         if msg == "o":
             logger.debug("MD WebSocket open frame received")
 
-        # Authenticate (body must be JSON {"token": "..."} per Tradovate WS protocol)
-        auth_msg = f"authorize\n1\n\n{json.dumps({'token': token})}"
+        # Authenticate
+        auth_msg = f"authorize\n1\n\n{token}"
         await self._md_ws.send(auth_msg)
         response = await self._md_ws.recv()
-        if '"s":200' not in response and '"i":1' in response:
-            logger.warning(f"MD WebSocket authorize returned non-200: {response[:200]}")
-        else:
-            logger.info(f"MD WebSocket connected (auth OK)")
+        logger.info(f"MD WebSocket connected")
 
         # Start heartbeat and listener
         self._heartbeat_task = asyncio.create_task(self._ws_heartbeat())
@@ -819,6 +826,152 @@ class TradovateClient:
             except asyncio.CancelledError:
                 break
             except Exception:
+                break
+
+    def _process_md_message(self, message: str):
+        """Parse and dispatch market data messages."""
+        try:
+            frames = json.loads(message)
+        except json.JSONDecodeError:
+            return
+
+        if not isinstance(frames, list):
+            frames = [frames]
+
+        for frame in frames:
+            if not isinstance(frame, dict):
+                continue
+
+            event = frame.get("e", "")
+            data = frame.get("d", frame)
+
+            # Handle subscription responses (no 'e' field, has 's' and 'i')
+            if not event and "s" in frame and "i" in frame:
+                self._handle_sub_response(frame)
+                continue
+
+            # Handle chart data events
+            if event == "chart":
+                self._handle_chart_event(data)
+                continue
+
+            if event == "md" or "bid" in data or "trade" in data:
+                contract_id = data.get("contractId", "")
+                # Dispatch to all callbacks
+                for symbol, cbs in self._callbacks.items():
+                    for cb in cbs:
+                        try:
+                            cb(data)
+                        except Exception as e:
+                            logger.error(f"Callback error for {symbol}: {e}")
+
+    def _handle_chart_event(self, data: Dict):
+        """Process chart bar data from WebSocket."""
+        charts = data.get("charts", [])
+        for chart in charts:
+            chart_id = chart.get("id")
+            status = chart.get("s", "")  # "db" = data batch, "s" = snapshot
+            bars = chart.get("bars", [])
+
+            symbol = self._chart_id_to_symbol.get(chart_id)
+            if not symbol:
+                continue
+
+            if status == "db":
+                # Initial data batch - replace bars
+                self._chart_bars[symbol] = bars
+                logger.info(f"{symbol}: Received {len(bars)} historical bars via WebSocket")
+                # Signal that initial data is ready
+                evt = self._chart_events.get(chart_id)
+                if evt:
+                    evt.set()
+            elif bars:
+                # Real-time update - update or append last bar
+                existing = self._chart_bars.get(symbol, [])
+                if existing and bars[0].get("timestamp") == existing[-1].get("timestamp"):
+                    existing[-1] = bars[0]  # Update current bar
+                else:
+                    existing.extend(bars)  # New bar(s)
+                self._chart_bars[symbol] = existing
+
+    # ── Historical Data ──
+
+    async def get_historical_bars(self, symbol: str, timeframe: str = "5min",
+                                   count: int = 100) -> List[Dict]:
+        """
+        Get historical OHLCV bars via WebSocket chart subscription.
+        REST /md/getChart returns OperationNotSupported on demo accounts,
+        so we use WebSocket md/getChart which streams bars in real-time.
+        """
+        # Check if WebSocket is alive - if dead, force re-subscribe
+        if self._md_ws and not self._md_ws.open:
+            logger.warning("MD WebSocket is closed, clearing subscriptions for reconnect")
+            self._chart_subs.clear()
+            self._chart_id_to_symbol.clear()
+            self._chart_events.clear()
+            self._md_ws = None
+
+        # Subscribe if not subscribed yet (or after reconnect)
+        if symbol not in self._chart_subs:
+            await self._subscribe_chart(symbol, timeframe, count)
+            # Wait for initial data
+            sub_id = self._chart_subs.get(symbol)
+            if sub_id:
+                evt = self._chart_events.get(sub_id)
+                if evt:
+                    try:
+                        await asyncio.wait_for(evt.wait(), timeout=15)
+                    except asyncio.TimeoutError:
+                        logger.warning(f"{symbol}: Timeout waiting for chart data")
+
+        bars = self._chart_bars.get(symbol, [])
+        return bars[-count:] if len(bars) > count else bars
+
+    async def _subscribe_chart(self, symbol: str, timeframe: str = "5min",
+                                count: int = 100):
+        """Subscribe to chart data for a symbol via WebSocket."""
+        if not self._md_ws:
+            await self._connect_md_websocket()
+
+        tf_map = {
+            "1min": (1, "MinuteBar"),
+            "5min": (5, "MinuteBar"),
+            "15min": (15, "MinuteBar"),
+            "30min": (30, "MinuteBar"),
+            "1hour": (60, "MinuteBar"),
+            "1day": (1, "DailyBar"),
+        }
+        size, underlying = tf_map.get(timeframe, (5, "MinuteBar"))
+
+        self._ws_request_id += 1
+        req_id = self._ws_request_id
+
+        chart_req = {
+            "symbol": symbol,
+            "chartDescription": {
+                "underlyingType": underlying,
+                "elementSize": size,
+                "elementSizeUnit": "UnderlyingUnits",
+                "withHistogram": False,
+            },
+            "timeRange": {
+                "asMuchAsElements": count,
+            },
+        }
+
+        # Track pending request so we can map the response to this symbol
+        if not hasattr(self, '_pending_chart_reqs'):
+            self._pending_chart_reqs = {}
+        self._pending_chart_reqs[req_id] = symbol
+
+        msg = f"md/getChart\n{req_id}\n\n{json.dumps(chart_req)}"
+        await self._md_ws.send(msg)
+        logger.info(f"Subscribing to chart data: {symbol} ({timeframe})")
+
+        # Wait briefly for the subscription response to get chart ID
+        for _ in range(20):
+            await asyncio.sleep(0.25)
+            if symbol in self._chart_subs:
                 break
 
     async def _listen_md(self):
@@ -840,67 +993,30 @@ class TradovateClient:
             await asyncio.sleep(2)
             self._md_ws = None
             await self._connect_md_websocket()
-            # Re-subscribe
+            # Re-subscribe to charts
+            old_subs = dict(self._chart_subs)
+            self._chart_subs.clear()
+            for symbol in old_subs:
+                await self._subscribe_chart(symbol)
+            # Re-subscribe to quotes
             for symbol in self._callbacks:
                 self._ws_request_id += 1
                 sub_msg = f"md/subscribeQuote\n{self._ws_request_id}\n\n{json.dumps({'symbol': symbol})}"
                 await self._md_ws.send(sub_msg)
 
-    def _process_md_message(self, message: str):
-        """Parse and dispatch market data messages."""
-        try:
-            frames = json.loads(message)
-        except json.JSONDecodeError:
+    def _handle_sub_response(self, item: Dict):
+        """Handle a subscription response (chart ID assignment)."""
+        if not isinstance(item, dict):
             return
+        req_id = item.get("i")
+        status = item.get("s")
+        data = item.get("d", {})
 
-        if not isinstance(frames, list):
-            frames = [frames]
-
-        for frame in frames:
-            if not isinstance(frame, dict):
-                continue
-
-            event = frame.get("e", "")
-            data = frame.get("d", frame)
-
-            if event == "md" or "bid" in data or "trade" in data:
-                contract_id = data.get("contractId", "")
-                # Dispatch to all callbacks
-                for symbol, cbs in self._callbacks.items():
-                    for cb in cbs:
-                        try:
-                            cb(data)
-                        except Exception as e:
-                            logger.error(f"Callback error for {symbol}: {e}")
-
-    # ── Historical Data ──
-
-    async def get_historical_bars(self, symbol: str, timeframe: str = "5min",
-                                   count: int = 100) -> List[Dict]:
-        """
-        Get historical OHLCV bars.
-        timeframe: '1min', '5min', '15min', '30min', '1hour', '1day'
-        """
-        tf_map = {
-            "1min": (1, "MinuteBar"),
-            "5min": (5, "MinuteBar"),
-            "15min": (15, "MinuteBar"),
-            "30min": (30, "MinuteBar"),
-            "1hour": (60, "MinuteBar"),
-            "1day": (1, "DailyBar"),
-        }
-        size, underlying = tf_map.get(timeframe, (5, "MinuteBar"))
-
-        result = await self._post("/md/getChart", {
-            "symbol": symbol,
-            "chartDescription": {
-                "underlyingType": underlying,
-                "elementSize": size,
-                "elementSizeUnit": "UnderlyingUnits",
-                "withHistogram": False,
-            },
-            "timeRange": {
-                "asMuchAsElements": count,
-            },
-        })
-        return result.get("bars", [])
+        if status == 200 and "realtimeId" in data:
+            chart_id = data["realtimeId"]
+            if hasattr(self, '_pending_chart_reqs') and req_id in self._pending_chart_reqs:
+                symbol = self._pending_chart_reqs.pop(req_id)
+                self._chart_subs[symbol] = chart_id
+                self._chart_id_to_symbol[chart_id] = symbol
+                self._chart_events[chart_id] = asyncio.Event()
+                logger.info(f"Chart subscription active: {symbol} (id={chart_id})")
