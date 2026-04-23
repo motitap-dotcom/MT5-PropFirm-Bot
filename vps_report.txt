@@ -1,38 +1,29 @@
-=== TradeDay Futures Bot - Status Check (READ-ONLY) ===
-Timestamp: 2026-04-23 09:50:32 UTC
+=== Status Check v2 (READ-ONLY) ===
+Timestamp: 2026-04-23 11:37:49 UTC
 
---- Service state ---
+--- Service ---
 Active: active
-Enabled: enabled
-Failed: active
+PID: 660933
 
---- Current service file ---
-[Unit]
-Description=TradeDay Futures Trading Bot
-After=network.target
+--- Bot process working directory ---
+CWD: /opt/futures_bot_stable
+Cmd: /usr/bin/python3 /opt/futures_bot_stable/futures_bot/bot.py 
 
-[Service]
-Type=simple
-ExecStart=/usr/local/sbin/futures-bot-wrapper.sh
-Restart=on-failure
-RestartSec=60
-StartLimitBurst=0
-
-[Install]
-WantedBy=multi-user.target
-
---- /opt/futures_bot_stable/ exists? ---
+--- /root/MT5-PropFirm-Bot/configs/ contents ---
 total 28
-drwxr-xr-x 6 root root 4096 Apr 22 16:18 .
-drwxr-xr-x 6 root root 4096 Apr 22 16:18 ..
-drwxr-xr-x 2 1001 1001 4096 Apr 22 16:18 configs
-drwxr-xr-x 5 1001 1001 4096 Apr 22 16:18 futures_bot
-drwxr-xr-x 2 root root 4096 Apr 22 16:18 logs
--rw-r--r-- 1 root root   86 Apr 22 16:18 requirements.txt
-drwxr-xr-x 2 root root 4096 Apr 22 16:18 status
+drwxr-xr-x  2 1001 1001 4096 Apr 23 11:37 .
+drwxr-xr-x 13 root root 4096 Apr 23 11:37 ..
+-rw-r--r--  1 root root  487 Mar 31 16:25 .browser_auth_result.txt
+-rw-r--r--  1 root root  815 Apr 23 11:37 .tradovate_token.json
+-rw-r--r--  1 root root  715 Mar 31 06:46 .tradovate_token_backup.json
+-rw-r--r--  1 root root 1934 Apr 23 11:37 bot_config.json
+-rw-r--r--  1 root root 3573 Apr 23 11:37 restricted_events.json
 
---- /usr/local/sbin/futures-bot-wrapper.sh exists? ---
--rwxr-xr-x 1 root root 1231 Apr 22 16:18 /usr/local/sbin/futures-bot-wrapper.sh
+--- bot_config.json exists? ---
+YES (1934 bytes)
+restricted_events.json: YES
+
+--- Full wrapper ---
 #!/bin/bash
 # Wrapper invoked by systemd's ExecStart. Lives in /usr/local/sbin to survive
 # wipes of /root/MT5-PropFirm-Bot. If the repo copy is present it takes
@@ -53,51 +44,48 @@ else
 fi
 
 cd "$BOT_DIR"
-
---- /root/MT5-PropFirm-Bot/futures_bot/bot.py exists? ---
--rw-r--r-- 1 root root 24016 Apr 23 09:50 /root/MT5-PropFirm-Bot/futures_bot/bot.py
-
---- Recent systemd events for futures-bot (last 2h) ---
-Apr 23 09:43:43 vmi3096165 futures-bot-wrapper.sh[635273]: ConnectionError: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Apr 23 09:43:43 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:43,326 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Apr 23 09:43:43 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:43,449 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-Apr 23 09:43:43 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:43,564 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Apr 23 09:43:43 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:43,565 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-Apr 23 09:43:43 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:43,682 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-Apr 23 09:43:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:44,100 [tradovate_client] INFO: Disconnected from Tradovate
-Apr 23 09:43:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:44,101 [bot] INFO: Bot stopped
-Apr 23 09:43:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:43:44,101 [bot] INFO: Retrying in 60s...
-Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,151 [bot] WARNING: Config not found at configs/bot_config.json, using defaults
-Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,153 [bot] INFO: ============================================================
-Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,153 [bot] INFO: TradeDay Futures Bot Starting
-Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,153 [bot] INFO: ============================================================
-Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,153 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
-Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,153 [tradovate_client] INFO: Trying pre-set access token from environment...
-Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,296 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
-Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,411 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,412 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-Apr 23 09:44:44 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:44,526 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
-Apr 23 09:44:47 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:47,035 [tradovate_client] INFO: Opening Tradovate login page...
-Apr 23 09:44:53 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:53,898 [tradovate_client] INFO: Login submitted, waiting for token...
-Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,016 [tradovate_client] INFO: Browser auth: token captured successfully
-Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,017 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
-Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,144 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,145 [tradovate_client] INFO: Environment token is valid
-Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,147 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,240 [bot] INFO: Bot started successfully
-Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,240 [bot] INFO: Trading symbols: ['MESM6']
-Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,240 [bot] INFO: Timeframe: 5min
-Apr 23 09:44:55 vmi3096165 futures-bot-wrapper.sh[635273]: 2026-04-23 09:44:55,240 [bot] INFO: New trading day: 2026-04-23
-
---- Any bot process running anywhere? ---
-root      353509       1  2 Apr22 ?        00:24:51 /root/tradovate-bot/venv/bin/python bot.py
-root      635273       1  0 09:43 ?        00:00:00 /usr/bin/python3 /root/MT5-PropFirm-Bot/futures_bot/bot.py
-
---- Token file ---
--rw-r--r-- 1 root root 815 Apr 23 09:50 /root/MT5-PropFirm-Bot/configs/.tradovate_token.json
+# Load .env: prefer repo copy (has fresh tokens written by workflows)
+if [ -f "$REPO/.env" ]; then
+  set -a; source "$REPO/.env"; set +a
+elif [ -f "$STABLE/.env" ]; then
+  set -a; source "$STABLE/.env"; set +a
+fi
+# Configs too — fall back to stable copy if the repo one was wiped
+if [ ! -d "$BOT_DIR/configs" ] && [ -d "$STABLE/configs" ]; then
+  cp -r "$STABLE/configs" "$BOT_DIR/configs"
+fi
+mkdir -p logs status
+export PYTHONUNBUFFERED=1
+echo "[wrapper] BOT_DIR=$BOT_DIR TRADOVATE_PASS_set=${TRADOVATE_PASS:+yes} bot.py=$(stat -c %s futures_bot/bot.py)B"
+exec /usr/bin/python3 "$BOT_DIR/futures_bot/bot.py"
 
 --- Git state on VPS ---
 Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
-HEAD: 263c8d3 Check bot state after v155
+HEAD: 7714e89 Check cwd, configs, wrapper content
+configs in this commit:
 
-=== Check Complete ===
+--- Running bot log (last 20) ---
+2026-04-23 09:44:44,153 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
+2026-04-23 09:44:44,153 [tradovate_client] INFO: Trying pre-set access token from environment...
+2026-04-23 09:44:44,296 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
+2026-04-23 09:44:44,411 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-23 09:44:44,412 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-23 09:44:44,526 [tradovate_client] INFO: CAPTCHA required, attempting browser auth via Playwright...
+2026-04-23 09:44:47,035 [tradovate_client] INFO: Opening Tradovate login page...
+2026-04-23 09:44:53,898 [tradovate_client] INFO: Login submitted, waiting for token...
+2026-04-23 09:44:55,016 [tradovate_client] INFO: Browser auth: token captured successfully
+2026-04-23 09:44:55,017 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
+2026-04-23 09:44:55,144 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 09:44:55,145 [tradovate_client] INFO: Environment token is valid
+2026-04-23 09:44:55,147 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 09:44:55,240 [bot] INFO: Bot started successfully
+2026-04-23 09:44:55,240 [bot] INFO: Trading symbols: ['MESM6']
+2026-04-23 09:44:55,240 [bot] INFO: Timeframe: 5min
+2026-04-23 09:44:55,240 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 10:00:01,490 [bot] INFO: Stopping bot: Signal received
+2026-04-23 10:00:02,352 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-23 10:00:02,353 [bot] INFO: Bot stopped
+
+--- Current positions on account ---
+
+=== Done ===
