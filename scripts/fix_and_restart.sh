@@ -44,7 +44,9 @@ echo "auth_cooldown: $(grep -c 'auth_cooldown' futures_bot/core/tradovate_client
 echo "wait_for_selector: $(grep -c 'wait_for_selector' futures_bot/core/tradovate_client.py)"
 echo "mkdir in status_writer: $(grep -c 'mkdir' futures_bot/core/status_writer.py)"
 
-# Service file with PYTHONPATH
+# Service file — MUST use wrapper (see CLAUDE.md Iron Rule #9).
+# Running `python3 -m futures_bot.bot` directly breaks with "No module named
+# futures_bot.bot" because /opt/futures_bot_stable is the intentional fallback.
 cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
 [Unit]
 Description=TradeDay Futures Trading Bot
@@ -52,17 +54,21 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/root/MT5-PropFirm-Bot
-ExecStart=/usr/bin/python3 -m futures_bot.bot
-Restart=on-failure
-RestartSec=60
-Environment=PYTHONUNBUFFERED=1
-Environment=PYTHONPATH=/root/MT5-PropFirm-Bot
-EnvironmentFile=/root/MT5-PropFirm-Bot/.env
+ExecStart=/usr/local/sbin/futures-bot-wrapper.sh
+ExecStopPost=/bin/bash -c 'logger -t futures-bot "Stopped: result=$SERVICE_RESULT code=$EXIT_CODE status=$EXIT_STATUS"; echo "$(date -u +%%Y-%%m-%%dT%%H:%%M:%%SZ) stopped: result=$SERVICE_RESULT code=$EXIT_CODE status=$EXIT_STATUS" >> /var/log/futures-bot-stops.log'
+Restart=always
+RestartSec=2
+TimeoutStopSec=5
+StartLimitBurst=0
 
 [Install]
 WantedBy=multi-user.target
 SVCEOF
+
+# Keep the /opt stable copy fresh — wrapper falls back to it when /root gets wiped
+rsync -a --delete /root/MT5-PropFirm-Bot/futures_bot/ /opt/futures_bot_stable/futures_bot/ 2>/dev/null || true
+cp /root/MT5-PropFirm-Bot/configs/bot_config.json /opt/futures_bot_stable/configs/ 2>/dev/null || true
+cp /root/MT5-PropFirm-Bot/configs/restricted_events.json /opt/futures_bot_stable/configs/ 2>/dev/null || true
 
 # Restart
 systemctl daemon-reload
