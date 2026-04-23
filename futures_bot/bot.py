@@ -581,14 +581,26 @@ class FuturesBot:
             self._last_bar_time[sym] = ""
 
     def _to_bar(self, data: dict):
-        """Convert API bar data to strategy Bar format."""
+        """Convert API bar data to strategy Bar format.
+        Tradovate WS chart bars expose volume as upVolume + downVolume
+        (plus bidVolume + offerVolume); REST bars may have a plain "volume".
+        Sum whatever is present so VWAP can actually be computed.
+        """
+        volume = data.get("volume")
+        if volume in (None, 0):
+            volume = (
+                (data.get("upVolume") or 0)
+                + (data.get("downVolume") or 0)
+                + (data.get("bidVolume") or 0)
+                + (data.get("offerVolume") or 0)
+            )
         return VWAPBar(
             timestamp=data.get("timestamp", ""),
             open=data.get("open", 0),
             high=data.get("high", 0),
             low=data.get("low", 0),
             close=data.get("close", 0),
-            volume=data.get("volume", 0),
+            volume=volume or 1,
         )
 
     def _get_sleep_seconds(self) -> int:
