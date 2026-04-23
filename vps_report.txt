@@ -1,4 +1,71 @@
 === Account Balance Check ===
-Timestamp: 2026-04-23 12:23:59 UTC
+Timestamp: 2026-04-23 12:25:12 UTC
 
-Could not parse token
+API: https://demo.tradovateapi.com/v1  Account: 45373493
+
+--- /account/list ---
+[
+    {
+        "id": 45373493,
+        "name": "ELTDER260326211630296397",
+        "userId": 266203,
+        "accountType": "Customer",
+        "restricted": false,
+        "closed": false,
+        "clearingHouseId": 4,
+        "riskCategoryId": 122,
+        "autoLiqProfileId": 14,
+        "marginAccountType": "Speculator",
+        "legalStatus": "Individual",
+        "archived": false,
+        "timestamp": "2026-03-26T21:16:33Z",
+        "active": true
+    }
+]
+
+--- Cash balance snapshot ---
+{
+    "totalCashValue": 51291.44,
+    "totalPnL": 0.0,
+    "initialMargin": 0.0,
+    "maintenanceMargin": 0.0,
+    "netLiq": 51291.44,
+    "openPnL": 0.0,
+    "realizedPnL": 0.0,
+    "weekRealizedPnL": -116.65,
+    "currencyCashAvailWithdrawalUSD": 51291.44,
+    "netLiqSOD": 51291.44,
+    "totalCashValueSOD": 51291.44,
+    "cashUSD": 51291.44,
+    "cashSODUSD": 51291.44,
+    "fullInitialMargin": 0.0,
+    "fullInitialMarginSOD": 0.0,
+    "autoLiqLevel": -5000.0
+}
+
+--- Positions ---
+[
+    {
+        "id": 472310967435,
+        "accountId": 45373493,
+        "contractId": 4327108,
+        "timestamp": "2026-04-21T21:32:51.134Z",
+        "tradeDate": {
+            "year": 2026,
+            "month": 4,
+            "day": 22
+        },
+        "netPos": 0,
+        "bought": 0,
+        "boughtValue": 0.0,
+        "sold": 0,
+        "soldValue": 0.0,
+        "archived": false,
+        "prevPos": 0
+    }
+]
+
+--- Recent fills (trade history) ---
+[]
+
+=== Done ===
