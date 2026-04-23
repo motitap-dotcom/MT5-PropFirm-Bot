@@ -1,54 +1,53 @@
 #!/bin/bash
-echo "=== v161 trend-day fix verify ==="
-echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+echo "=== Live strategy check ==="
+echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 echo ""
 
 PID=$(systemctl show futures-bot --property=MainPID --value)
 CWD=$(readlink /proc/$PID/cwd 2>/dev/null)
 echo "Active: $(systemctl is-active futures-bot)"
-echo "PID: $PID"
-echo "CWD: $CWD"
+echo "PID: $PID  CWD: $CWD"
 echo "Uptime: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
 echo ""
 
-echo "--- Does running code have the fixes? ---"
-grep -c "len(self._bars) >= 6" "$CWD/futures_bot/strategies/vwap_mean_reversion.py" 2>/dev/null && echo "trend-day fix: YES" || echo "trend-day fix: NO"
-grep -c "backfill strategy state" "$CWD/futures_bot/bot.py" 2>/dev/null && echo "backfill fix: YES" || echo "backfill fix: NO"
+echo "--- config RSI thresholds ---"
+python3 -c "
+import json
+c = json.load(open('$CWD/configs/bot_config.json'))
+print('rsi_oversold:', c['vwap']['rsi_oversold'])
+print('rsi_overbought:', c['vwap']['rsi_overbought'])
+" 2>/dev/null
 echo ""
 
-LOG="$CWD/logs/bot.log"
-echo "--- Last 50 lines of bot log ---"
-tail -50 "$LOG" 2>/dev/null
+echo "--- diagnostic log lines (what strategy sees) ---"
+grep -iE "Price=|VWAP=|ATR filter|Signal" "$CWD/logs/bot.log" 2>/dev/null | tail -30
 echo ""
 
-echo "--- Strategy + trade activity ---"
-grep -iE "Price=|VWAP=|RSI=|signal|entry|order|trade|Trend day" "$LOG" 2>/dev/null | tail -20
+echo "--- Last 30 lines overall ---"
+tail -30 "$CWD/logs/bot.log" 2>/dev/null
 echo ""
 
-echo "--- Positions + recent fills ---"
+echo "--- Positions + fills ---"
 TOKEN=$(python3 -c "import json;print(json.load(open('$CWD/configs/.tradovate_token.json')).get('access_token',''))" 2>/dev/null)
-[ -z "$TOKEN" ] && TOKEN=$(python3 -c "import json;print(json.load(open('/root/MT5-PropFirm-Bot/configs/.tradovate_token.json')).get('access_token',''))" 2>/dev/null)
 BASE="https://demo.tradovateapi.com/v1"
 
-echo "Positions:"
 curl -s -H "Authorization: Bearer $TOKEN" "$BASE/position/list" | python3 -c "
 import sys, json
-data = json.load(sys.stdin)
-open_ones = [p for p in data if p.get('netPos',0) != 0]
-print(f'  {len(open_ones)} open')
+d = json.load(sys.stdin)
+open_ones = [p for p in d if p.get('netPos',0) != 0]
+print(f'Open positions: {len(open_ones)}')
 for p in open_ones:
-    print(f\"    contract={p.get('contractId')} netPos={p.get('netPos')} avg={p.get('avgPrice')}\")" 2>/dev/null
+    print(f\"  contract={p.get('contractId')} netPos={p.get('netPos')}\")" 2>/dev/null
 
-echo "Recent fills today:"
 curl -s -H "Authorization: Bearer $TOKEN" "$BASE/fill/list" | python3 -c "
 import sys, json
 from datetime import datetime, timezone
-data = json.load(sys.stdin)
+d = json.load(sys.stdin)
 today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
-fills = [f for f in data if f.get('timestamp','').startswith(today)]
-print(f'  {len(fills)} fills today (total in list: {len(data)})')
+fills = [f for f in d if f.get('timestamp','').startswith(today)]
+print(f'Fills today: {len(fills)}')
 for f in fills[-5:]:
-    print(f\"    {f.get('timestamp')} {f.get('action')} qty={f.get('qty')} price={f.get('price')}\")" 2>/dev/null
+    print(f\"  {f.get('timestamp')} {f.get('action')} qty={f.get('qty')} price={f.get('price')}\")" 2>/dev/null
 echo ""
 
 echo "=== Done ==="
