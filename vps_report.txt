@@ -1,78 +1,398 @@
-=== Investigate 5-min kill source ===
-Timestamp: 2026-04-23 13:37:01 UTC
+=== Full content of /root/tradovate-bot/server_cron.sh ===
 
---- Crontab ---
-*/5 * * * * cd /root/Tradovate-Bot && bash /root/tradovate-bot/server_cron.sh >> /var/log/tradovate-cron.log 2>&1
-*/2 * * * * /opt/hyrotrader-bot/scripts/auto_deploy.sh
-@reboot nohup bash /root/telegram_relay.sh > /var/log/telegram_relay.log 2>&1 &
-*/2 * * * * /root/PropFirmBot/scripts/watchdog.sh  # PropFirmBot watchdog
-0 6 * * * /root/PropFirmBot/scripts/daily_report.sh  # PropFirmBot daily report
-@reboot /root/start_mt5_screen.sh
-@reboot sleep 30 && /bin/bash /root/mt5_startup.sh > /dev/null 2>&1
-*/2 * * * * /bin/bash /root/mt5_watchdog.sh
+Size: 12779 bytes
 
---- /root/tradovate-bot/server_cron.sh references ---
-16:SERVICE="tradovate-bot"
-99:            systemctl restart "$SERVICE"
-122:    systemctl restart "$SERVICE" 2>/dev/null || true
-129:if ! systemctl is-active --quiet "$SERVICE" 2>/dev/null; then
-145:        echo "[$(date)] Fix the issue manually, then: rm $RESTART_LOG && systemctl restart $SERVICE"
-148:        systemctl restart "$SERVICE" 2>/dev/null
-150:        if systemctl is-active --quiet "$SERVICE" 2>/dev/null; then
-153:            echo "[$(date)] systemctl restart FAILED. Falling back to keep_alive.sh..."
-168:if systemctl is-active --quiet "$SERVICE" 2>/dev/null; then
-170:    BOT_PID=$(systemctl show "$SERVICE" --property=MainPID --value 2>/dev/null || echo "")
-171:    ACTIVE_ENTER=$(systemctl show "$SERVICE" --property=ActiveEnterTimestamp --value 2>/dev/null || echo "")
+#!/bin/bash
+# server_cron.sh — Pulls latest code, restarts bot on code changes, pushes status via GitHub API.
+#
+# Required env var:
+#   GH_PAT — GitHub Personal Access Token (repo scope) for pushing status
+#
+# Auto-installed by deploy workflow. Manual setup:
+#   */5 * * * * cd /root/tradovate-bot && . .gh_pat 2>/dev/null; bash server_cron.sh >> /var/log/tradovate-cron.log 2>&1
+#
+# Use set -u (catch unset vars) but NOT set -e (don't exit on failure).
+# This cron must ALWAYS reach the auto-heal and status sections, even if
+# git fetch or pip fails due to transient network issues.
+set -u
 
---- /root/MT5-PropFirm-Bot/server_cron.sh references ---
-4:# */5 * * * * cd /root/MT5-PropFirm-Bot && bash server_cron.sh >> /var/log/futures-bot-cron.log 2>&1
-8:SERVICE="futures-bot"
-15:CRON_LOG="/var/log/futures-bot-cron.log"
-48:        systemctl restart "$SERVICE"
-60:if ! systemctl is-active --quiet "$SERVICE" 2>/dev/null; then
-75:        systemctl restart "$SERVICE" 2>/dev/null
-77:        if systemctl is-active --quiet "$SERVICE" 2>/dev/null; then
-90:if systemctl is-active --quiet "$SERVICE" 2>/dev/null; then
-92:    BOT_PID=$(systemctl show "$SERVICE" --property=MainPID --value 2>/dev/null || echo "")
-93:    BOT_UPTIME=$(systemctl show "$SERVICE" --property=ActiveEnterTimestamp --value 2>/dev/null || echo "")
+BOT_DIR="${BOT_DIR:-/root/tradovate-bot}"
+SERVICE="tradovate-bot"
+STATUS_FILE="server_status.json"
 
---- /root/mt5_watchdog.sh ---
+cd "$BOT_DIR" || { echo "[$(date)] FATAL: $BOT_DIR not found"; exit 1; }
 
---- /root/PropFirmBot/scripts/watchdog.sh ---
-23:    systemctl restart x11vnc.service 2>/dev/null || \
-44:    systemctl restart mt5.service 2>/dev/null || true
+# ── 0a. Log rotation: keep cron log under 5MB ──
+CRON_LOG="/var/log/tradovate-cron.log"
+if [ -f "$CRON_LOG" ]; then
+    LOG_SIZE=$(stat -f%z "$CRON_LOG" 2>/dev/null || stat -c%s "$CRON_LOG" 2>/dev/null || echo "0")
+    if [ "$LOG_SIZE" -gt 5242880 ] 2>/dev/null; then
+        # Keep last 1000 lines, rotate old log
+        tail -1000 "$CRON_LOG" > "${CRON_LOG}.tmp" && mv "${CRON_LOG}.tmp" "$CRON_LOG"
+        echo "[$(date)] Cron log rotated (was ${LOG_SIZE} bytes)"
+    fi
+fi
 
---- /opt/hyrotrader-bot/scripts/auto_deploy.sh ---
+# ── 0b. Source GH_PAT early so it's available for status push ──
+if [ -z "${GH_PAT:-}" ] && [ -f "$BOT_DIR/.gh_pat" ]; then
+    # shellcheck disable=SC1091
+    . "$BOT_DIR/.gh_pat" 2>/dev/null || true
+    if [ -z "${GH_PAT:-}" ]; then
+        echo "[$(date)] Warning: .gh_pat exists but GH_PAT is still empty. Check file format (should be: export GH_PAT=...)"
+    fi
+fi
 
---- Journal events for futures-bot stop/kill (last 30 min) ---
-Apr 23 13:11:06 vmi3096165 futures-bot-wrapper.sh[682601]: 2026-04-23 13:11:06,252 [bot] INFO: Stopping bot: Signal received
-Apr 23 13:11:06 vmi3096165 futures-bot-wrapper.sh[682601]: 2026-04-23 13:11:06,633 [bot] INFO: Bot stopped
-Apr 23 13:16:07 vmi3096165 futures-bot-wrapper.sh[683713]: 2026-04-23 13:16:07,130 [bot] INFO: Stopping bot: Signal received
-Apr 23 13:16:07 vmi3096165 futures-bot-wrapper.sh[683713]: 2026-04-23 13:16:07,542 [bot] INFO: Bot stopped
-Apr 23 13:21:08 vmi3096165 futures-bot-wrapper.sh[684829]: 2026-04-23 13:21:08,133 [bot] INFO: Stopping bot: Signal received
-Apr 23 13:21:08 vmi3096165 futures-bot-wrapper.sh[684829]: 2026-04-23 13:21:08,511 [bot] INFO: Bot stopped
-Apr 23 13:26:12 vmi3096165 futures-bot-wrapper.sh[685949]: 2026-04-23 13:26:12,181 [bot] INFO: Stopping bot: Signal received
-Apr 23 13:26:12 vmi3096165 futures-bot-wrapper.sh[685949]: 2026-04-23 13:26:12,618 [bot] INFO: Bot stopped
-Apr 23 13:31:13 vmi3096165 futures-bot-wrapper.sh[687138]: 2026-04-23 13:31:13,133 [bot] INFO: Stopping bot: Signal received
-Apr 23 13:31:13 vmi3096165 futures-bot-wrapper.sh[687138]: 2026-04-23 13:31:13,521 [bot] INFO: Bot stopped
-Apr 23 13:32:43 vmi3096165 systemd[1]: futures-bot.service: State 'stop-sigterm' timed out. Killing.
-Apr 23 13:32:43 vmi3096165 systemd[1]: futures-bot.service: Killing process 687138 (python3) with signal SIGKILL.
-Apr 23 13:32:43 vmi3096165 systemd[1]: futures-bot.service: Failed to kill control group /system.slice/futures-bot.service, ignoring: Invalid argument
-Apr 23 13:32:43 vmi3096165 systemd[1]: futures-bot.service: Main process exited, code=killed, status=9/KILL
-Apr 23 13:36:13 vmi3096165 futures-bot-wrapper.sh[688536]: 2026-04-23 13:36:13,862 [bot] INFO: Stopping bot: Signal received
-Apr 23 13:36:14 vmi3096165 futures-bot-wrapper.sh[688536]: 2026-04-23 13:36:14,289 [bot] INFO: Bot stopped
+# ── 0c. Auto-detect deploy branch: prefer main, fall back to old branch ──
+if [ -n "${DEPLOY_BRANCH:-}" ]; then
+    BRANCH="$DEPLOY_BRANCH"
+elif git ls-remote --heads origin main 2>/dev/null | grep -q main; then
+    BRANCH="main"
+    CURRENT=$(git branch --show-current 2>/dev/null || echo "")
+    if [ -n "$CURRENT" ] && [ "$CURRENT" != "main" ]; then
+        echo "[$(date)] Switching from $CURRENT to main..."
+        git fetch origin main 2>/dev/null && git checkout -B main origin/main || echo "[$(date)] Warning: failed to switch to main"
+    fi
+else
+    BRANCH="main"
+fi
 
---- Log tail (what was bot doing just before kill?) ---
-Current bot CWD: /opt/futures_bot_stable
-2026-04-23 13:32:43,926 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-23 13:32:43,926 [tradovate_client] INFO: Saved token is still valid
-2026-04-23 13:32:43,927 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-23 13:32:44,028 [bot] INFO: Bot started successfully
-2026-04-23 13:32:44,028 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-23 13:32:44,028 [bot] INFO: Timeframe: 5min
-2026-04-23 13:32:44,029 [bot] INFO: New trading day: 2026-04-23
-2026-04-23 13:36:13,862 [bot] INFO: Stopping bot: Signal received
-2026-04-23 13:36:14,289 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-23 13:36:14,289 [bot] INFO: Bot stopped
+# Auto-detect repo from git remote
+GITHUB_REPO="${GITHUB_REPO:-$(git remote get-url origin | sed -E 's|.*github\.com[:/]||; s|\.git$||')}"
+
+# ── 0d. Ensure git remote uses HTTPS (SSH protocol may fail without deploy key) ──
+CURRENT_URL=$(git remote get-url origin 2>/dev/null || echo "")
+if echo "$CURRENT_URL" | grep -q "git@github.com"; then
+    HTTPS_URL="https://github.com/${GITHUB_REPO}.git"
+    echo "[$(date)] Switching remote from SSH to HTTPS: $HTTPS_URL"
+    git remote set-url origin "$HTTPS_URL"
+elif [ -n "${GH_PAT:-}" ] && ! echo "$CURRENT_URL" | grep -q "x-access-token"; then
+    # If PAT is available and not already embedded, use authenticated HTTPS
+    git remote set-url origin "https://x-access-token:${GH_PAT}@github.com/${GITHUB_REPO}.git"
+fi
+
+# ── 1. Pull latest code ──
+echo "[$(date)] Checking for updates on $BRANCH..."
+if git fetch origin "$BRANCH" 2>/dev/null; then
+    LOCAL=$(git rev-parse HEAD)
+    REMOTE=$(git rev-parse "origin/$BRANCH" 2>/dev/null || echo "$LOCAL")
+    CODE_UPDATED="false"
+
+    if [ "$LOCAL" != "$REMOTE" ]; then
+        # Check whether any executable/runtime file changed.  Status-only
+        # commits (system_status.json, server_status.json, README.md, docs/)
+        # should NOT trigger a bot restart — they get committed every few
+        # minutes by GitHub Actions and would kill any data accumulation.
+        CHANGED_CODE=$(git diff --name-only "$LOCAL" "$REMOTE" 2>/dev/null | \
+            grep -vE '^(system_status\.json|server_status\.json|live_status\.json|bot_health\.json|connection_status\.json|trade_journal\.json|server_manage_result\.json|server_report\.json|\.github/|docs/|.*\.md$)' || true)
+
+        echo "[$(date)] New commits found. Changed runtime files:"
+        echo "$CHANGED_CODE" | sed 's/^/  /'
+        git reset --hard "origin/$BRANCH"
+        echo "[$(date)] Now at: $(git log -1 --oneline)"
+
+        if [ -n "$CHANGED_CODE" ]; then
+            CODE_UPDATED="true"
+
+            # Update dependencies if needed
+            if [ -f venv/bin/pip ]; then
+                venv/bin/pip install -r requirements.txt -q 2>&1 | tail -3 || true
+            fi
+
+            # Restart bot
+            echo "[$(date)] Runtime code changed — restarting bot..."
+            systemctl restart "$SERVICE"
+            sleep 5
+        else
+            echo "[$(date)] Only status/docs files changed — NOT restarting bot."
+        fi
+    else
+        echo "[$(date)] No changes."
+    fi
+else
+    echo "[$(date)] Warning: git fetch failed (network issue?). Skipping code update."
+    LOCAL=$(git rev-parse HEAD 2>/dev/null || echo "unknown")
+    REMOTE="$LOCAL"
+    CODE_UPDATED="false"
+fi
+
+# ── 1b. Ensure Playwright is installed (needed for CAPTCHA bypass) ──
+PYTHON="${BOT_DIR}/venv/bin/python3"
+if [ -f "$PYTHON" ] && ! "$PYTHON" -c "import playwright" 2>/dev/null; then
+    echo "[$(date)] Playwright not installed — installing for CAPTCHA bypass..."
+    "${BOT_DIR}/venv/bin/pip" install playwright -q 2>&1 | tail -3 || true
+    "$PYTHON" -m playwright install chromium 2>&1 | tail -5 || true
+    echo "[$(date)] Playwright installation done."
+    # Restart bot to pick up new auth method
+    systemctl restart "$SERVICE" 2>/dev/null || true
+    sleep 5
+fi
+
+# ── 1c. Auto-heal: restart bot if it's not running ──
+# Circuit breaker: track restart attempts to detect crash loops
+RESTART_LOG="$BOT_DIR/.restart_history"
+if ! systemctl is-active --quiet "$SERVICE" 2>/dev/null; then
+    # Record this restart attempt
+    echo "$(date +%s)" >> "$RESTART_LOG" 2>/dev/null || true
+
+    # Count restarts in last 30 minutes (6 cron cycles)
+    RECENT_RESTARTS=0
+    CUTOFF=$(($(date +%s) - 1800))
+    if [ -f "$RESTART_LOG" ]; then
+        RECENT_RESTARTS=$(awk -v cutoff="$CUTOFF" '$1 > cutoff' "$RESTART_LOG" 2>/dev/null | wc -l)
+        # Prune old entries (keep last 30 min only)
+        awk -v cutoff="$CUTOFF" '$1 > cutoff' "$RESTART_LOG" > "${RESTART_LOG}.tmp" 2>/dev/null && \
+            mv "${RESTART_LOG}.tmp" "$RESTART_LOG" 2>/dev/null || true
+    fi
+
+    if [ "$RECENT_RESTARTS" -ge 5 ]; then
+        echo "[$(date)] CRASH LOOP DETECTED: $RECENT_RESTARTS restarts in 30 min. Skipping restart."
+        echo "[$(date)] Fix the issue manually, then: rm $RESTART_LOG && systemctl restart $SERVICE"
+    else
+        echo "[$(date)] Bot is DOWN (restart #$RECENT_RESTARTS in 30min) — attempting auto-restart..."
+        systemctl restart "$SERVICE" 2>/dev/null
+        sleep 5
+        if systemctl is-active --quiet "$SERVICE" 2>/dev/null; then
+            echo "[$(date)] Auto-restart SUCCEEDED."
+        else
+            echo "[$(date)] systemctl restart FAILED. Falling back to keep_alive.sh..."
+            if [ -f "$BOT_DIR/keep_alive.sh" ] && ! pgrep -f "keep_alive.sh" > /dev/null 2>&1; then
+                cd "$BOT_DIR"
+                nohup bash keep_alive.sh >> /var/log/tradovate-keepalive.log 2>&1 &
+                echo "[$(date)] keep_alive.sh launched as fallback (PID=$!)"
+            fi
+        fi
+    fi
+fi
+
+# ── 2. Collect status ──
+BOT_ACTIVE="false"
+BOT_PID=""
+BOT_UPTIME=""
+
+if systemctl is-active --quiet "$SERVICE" 2>/dev/null; then
+    BOT_ACTIVE="true"
+    BOT_PID=$(systemctl show "$SERVICE" --property=MainPID --value 2>/dev/null || echo "")
+    ACTIVE_ENTER=$(systemctl show "$SERVICE" --property=ActiveEnterTimestamp --value 2>/dev/null || echo "")
+    [ -n "$ACTIVE_ENTER" ] && BOT_UPTIME="$ACTIVE_ENTER"
+fi
+
+LAST_LOG=$(journalctl -u "$SERVICE" --no-pager -n 5 2>/dev/null | tail -5 || echo "no logs")
+DISK_USAGE=$(df -h / 2>/dev/null | tail -1 | awk '{print $5}' || echo "unknown")
+MEMORY=$(free -m 2>/dev/null | awk '/^Mem:/{printf "%dMB/%dMB (%.0f%%)", $3, $2, $3/$2*100}' || echo "unknown")
+
+LIVE_STATUS="{}"
+[ -f "$BOT_DIR/live_status.json" ] && LIVE_STATUS=$(cat "$BOT_DIR/live_status.json" 2>/dev/null || echo "{}")
+
+# ── 2b. Run health checks (connection_check > bot_health_check > verify_bot) ──
+HEALTH_DATA="{}"
+PYTHON="${BOT_DIR}/venv/bin/python3"
+[ ! -f "$PYTHON" ] && PYTHON="python3"
+
+if [ -f "$BOT_DIR/connection_check.py" ]; then
+    echo "[$(date)] Running connection check..."
+    $PYTHON "$BOT_DIR/connection_check.py" >> /var/log/tradovate-cron.log 2>&1 || true
+    [ -f "$BOT_DIR/connection_status.json" ] && HEALTH_DATA=$(cat "$BOT_DIR/connection_status.json" 2>/dev/null || echo "{}")
+elif [ -f "$BOT_DIR/bot_health_check.py" ]; then
+    echo "[$(date)] Running health check..."
+    $PYTHON "$BOT_DIR/bot_health_check.py" --quick >> /var/log/tradovate-cron.log 2>&1 || true
+    [ -f "$BOT_DIR/bot_health.json" ] && HEALTH_DATA=$(cat "$BOT_DIR/bot_health.json" 2>/dev/null || echo "{}")
+elif [ -f "$BOT_DIR/verify_bot.py" ]; then
+    $PYTHON "$BOT_DIR/verify_bot.py" --server > /dev/null 2>&1 || true
+    [ -f "$BOT_DIR/verify_report.json" ] && HEALTH_DATA=$(cat "$BOT_DIR/verify_report.json" 2>/dev/null || echo "{}")
+fi
+
+# ── 2c. Check for ping request and respond ──
+PING_RESPONSE="{}"
+if [ -f "$BOT_DIR/ping_request.json" ]; then
+    PING_ID=$(python3 -c "import json; print(json.load(open('$BOT_DIR/ping_request.json')).get('ping_id',''))" 2>/dev/null || echo "")
+    if [ -n "$PING_ID" ]; then
+        PING_RESPONSE=$(python3 -c "
+import json
+from datetime import datetime, timezone
+print(json.dumps({
+    'ping_id': '$PING_ID',
+    'pong_at': datetime.now(timezone.utc).isoformat(),
+    'bot_active': $BOT_ACTIVE,
+    'server': '$(hostname 2>/dev/null || echo unknown)',
+}))
+" 2>/dev/null || echo '{}')
+        echo "[$(date)] Ping $PING_ID received — responding."
+    fi
+fi
+
+# ── 3. Write server_status.json ──
+cat > "$STATUS_FILE" <<STATUSEOF
+{
+  "timestamp": "$(date -u '+%Y-%m-%dT%H:%M:%SZ')",
+  "server_time": "$(date '+%Y-%m-%d %H:%M:%S %Z')",
+  "bot_active": $BOT_ACTIVE,
+  "bot_pid": "$BOT_PID",
+  "bot_uptime_since": "$BOT_UPTIME",
+  "git_commit": "$(git log -1 --format='%h %s')",
+  "git_branch": "$(git branch --show-current 2>/dev/null || echo 'detached')",
+  "code_updated": ${CODE_UPDATED:-false},
+  "disk_usage": "$DISK_USAGE",
+  "memory": "$MEMORY",
+  "last_log": $(echo "$LAST_LOG" | python3 -c "import sys,json; print(json.dumps(sys.stdin.read().strip()))" 2>/dev/null || echo '""'),
+  "live_status": $LIVE_STATUS,
+  "health_check": $HEALTH_DATA,
+  "ping_response": $PING_RESPONSE
+}
+STATUSEOF
+
+echo "[$(date)] Status: bot_active=$BOT_ACTIVE, pid=$BOT_PID"
+
+# ── 4. Push status to GitHub via API (directly to main, no git push needed) ──
+if [ -z "${GH_PAT:-}" ]; then
+    echo "[$(date)] No GH_PAT set — status written locally only. To fix: echo 'export GH_PAT=ghp_...' > $BOT_DIR/.gh_pat"
+    exit 0
+fi
+
+# Include health verdict in commit message
+HEALTH_VERDICT=$(python3 -c "import json; print(json.load(open('connection_status.json')).get('verdict',{}).get('overall','?'))" 2>/dev/null || \
+                 python3 -c "import json; print(json.load(open('bot_health.json')).get('verdict',{}).get('overall','?'))" 2>/dev/null || echo "?")
+COMMIT_MSG="bot-status: $(date -u '+%Y-%m-%d %H:%M UTC') | active=$BOT_ACTIVE | health=$HEALTH_VERDICT"
+API_URL="https://api.github.com/repos/$GITHUB_REPO/contents/$STATUS_FILE"
+
+# Push function: fetches current SHA, builds payload, pushes
+push_status() {
+    local file_sha
+    file_sha=$(curl -sf -H "Authorization: token $GH_PAT" \
+      "${API_URL}?ref=main" 2>/dev/null | \
+      python3 -c "import sys,json; print(json.load(sys.stdin).get('sha',''))" 2>/dev/null || echo "")
+
+    local payload
+    payload=$(STATUS_FILE="$STATUS_FILE" COMMIT_MSG="$COMMIT_MSG" FILE_SHA="$file_sha" python3 << 'PYEOF'
+import json, base64, os
+with open(os.environ['STATUS_FILE'], 'rb') as f:
+    content = base64.b64encode(f.read()).decode()
+payload = {'message': os.environ['COMMIT_MSG'], 'content': content, 'branch': 'main'}
+sha = os.environ.get('FILE_SHA', '')
+if sha:
+    payload['sha'] = sha
+print(json.dumps(payload))
+PYEOF
+    )
+
+    curl -sf -X PUT \
+      -H "Authorization: token $GH_PAT" \
+      -H "Accept: application/vnd.github.v3+json" \
+      -H "Content-Type: application/json" \
+      "$API_URL" \
+      -d "$payload" > /dev/null 2>&1
+}
+
+# Retry up to 3 times
+PUSH_OK="false"
+for i in 1 2 3; do
+    if push_status; then
+        PUSH_OK="true"
+        echo "[$(date)] Status pushed via API (attempt $i)."
+        break
+    else
+        echo "[$(date)] API push attempt $i failed. Retrying in ${i}s..."
+        sleep "$i"
+    fi
+done
+
+if [ "$PUSH_OK" = "false" ]; then
+    echo "[$(date)] Push failed after 3 attempts. Will retry next cycle."
+fi
+
+echo "[$(date)] Done."
+
+=== Full content of /root/MT5-PropFirm-Bot/server_cron.sh (for comparison) ===
+#!/bin/bash
+# server_cron.sh — Auto-heal bot, collect status, push to GitHub API.
+# Installed by auto-merge-deploy workflow.
+# */5 * * * * cd /root/MT5-PropFirm-Bot && bash server_cron.sh >> /var/log/futures-bot-cron.log 2>&1
+set -u
+
+BOT_DIR="${BOT_DIR:-/root/MT5-PropFirm-Bot}"
+SERVICE="futures-bot"
+STATUS_FILE="server_status.json"
+BRANCH="main"
+
+cd "$BOT_DIR" || { echo "[$(date)] FATAL: $BOT_DIR not found"; exit 1; }
+
+# ── Log rotation: keep under 5MB ──
+CRON_LOG="/var/log/futures-bot-cron.log"
+if [ -f "$CRON_LOG" ]; then
+    LOG_SIZE=$(stat -c%s "$CRON_LOG" 2>/dev/null || echo "0")
+    if [ "$LOG_SIZE" -gt 5242880 ] 2>/dev/null; then
+        tail -1000 "$CRON_LOG" > "${CRON_LOG}.tmp" && mv "${CRON_LOG}.tmp" "$CRON_LOG"
+        echo "[$(date)] Cron log rotated (was ${LOG_SIZE} bytes)"
+    fi
+fi
+
+# ── Source GH_PAT ──
+if [ -z "${GH_PAT:-}" ] && [ -f "$BOT_DIR/.gh_pat" ]; then
+    . "$BOT_DIR/.gh_pat" 2>/dev/null || true
+fi
+
+# Auto-detect repo from git remote
+GITHUB_REPO="${GITHUB_REPO:-$(git remote get-url origin | sed -E 's|.*github\.com[:/]||; s|\.git$||')}"
+
+=== Recent tradovate cron log (last 60 lines) ===
+
+[5/5] Live Status & System
+  live_status.json: exists (age: 27s)
+  Balance: $51240.82
+  Day P&L: $0.0
+  Trades today: 0
+  Locked: False
+  Active symbols: ['MNQ', 'MES', 'MGC', 'MCL', 'SIL']
+  Disk: 19% | Memory: 14.1%
+
+============================================================
+  VERDICT: HEALTHY
+  Bot: ALIVE | Token: OK | Balance: OK | Log: STALE
+============================================================
+
+Report: /root/tradovate-bot/connection_status.json
+[Thu Apr 23 13:30:05 UTC 2026] Status: bot_active=true, pid=353509
+[Thu Apr 23 13:30:05 UTC 2026] No GH_PAT set — status written locally only. To fix: echo 'export GH_PAT=ghp_...' > /root/tradovate-bot/.gh_pat
+[Thu Apr 23 13:35:02 UTC 2026] Checking for updates on main...
+[Thu Apr 23 13:35:03 UTC 2026] No changes.
+[Thu Apr 23 13:35:03 UTC 2026] Running connection check...
+============================================================
+  CONNECTION CHECK — Server Health Report
+  2026-04-23 13:35:03 UTC
+============================================================
+
+  Ping ID: None — RECEIVED
+
+[1/5] Bot Process
+  Status: RUNNING (service=active, pid=353509)
+
+[2/5] Auth Token
+  Token: VALID (71 min remaining)
+
+[3/5] Account & Balance
+  Balance: $51,158.18
+  Net Liq: $50,873.18
+  Open positions: 1
+  Active orders: 2
+
+[4/5] Bot Activity
+  No status lines found in log
+
+[5/5] Live Status & System
+  live_status.json: exists (age: 22s)
+  Balance: $50873.18
+  Day P&L: $-367.6399999999994
+  Trades today: 2
+  Locked: False
+  Active symbols: ['MNQ', 'MES', 'MGC', 'MCL', 'SIL']
+  Disk: 19% | Memory: 14.1%
+
+============================================================
+  VERDICT: HEALTHY
+  Bot: ALIVE | Token: OK | Balance: OK | Log: STALE
+============================================================
+
+Report: /root/tradovate-bot/connection_status.json
+[Thu Apr 23 13:35:05 UTC 2026] Status: bot_active=true, pid=353509
+[Thu Apr 23 13:35:05 UTC 2026] No GH_PAT set — status written locally only. To fix: echo 'export GH_PAT=ghp_...' > /root/tradovate-bot/.gh_pat
 
 === Done ===
