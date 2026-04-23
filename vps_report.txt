@@ -1,45 +1,57 @@
-=== Quick v158 verification ===
-Timestamp: 2026-04-23 14:09:37 UTC
+=== Trading activity check ===
+Timestamp: 2026-04-23 14:43:38 UTC
+NY Time: 2026-04-23 10:43:38 EDT
 
---- Service config ---
-ExecStart=/usr/local/sbin/futures-bot-wrapper.sh
-ExecStopPost=/bin/bash -c 'logger -t futures-bot "Service stopped: SERVICE_RESULT=$SERVICE_RESULT EXIT_CODE=$EXIT_CODE EXIT_STATUS=$EXIT_STATUS"; echo "$(date -u +%%Y-%%m-%%dT%%H:%%M:%%SZ) stopped: result=$SERVICE_RESULT code=$EXIT_CODE status=$EXIT_STATUS" >> /var/log/futures-bot-stops.log'
-Restart=always
-RestartSec=2
-
---- Current state ---
+--- Bot state ---
 Active: active
-PID: 697790
+PID: 703509
 CWD: /opt/futures_bot_stable
-Started: Thu 2026-04-23 14:07:51 UTC
+Uptime since: Thu 2026-04-23 14:31:38 UTC
 
---- STOP LOG (what killed it?) ---
+--- Recent stops (kill pattern) ---
 2026-04-23T13:55:30Z stopped: result=timeout code=killed status=KILL
 2026-04-23T13:57:47Z stopped: result=timeout code=killed status=KILL
 2026-04-23T14:02:49Z stopped: result=success code=exited status=0
 2026-04-23T14:07:51Z stopped: result=success code=exited status=0
+2026-04-23T14:11:55Z stopped: result=signal code=killed status=KILL
+2026-04-23T14:31:38Z stopped: result=timeout code=killed status=KILL
 
---- Recent journal (last 5 min) ---
-Apr 23 14:06:23 vmi3096165 systemd[1]: Stopping futures-bot.service - TradeDay Futures Trading Bot...
-Apr 23 14:06:23 vmi3096165 futures-bot-wrapper.sh[696544]: 2026-04-23 14:06:23,134 [bot] INFO: Stopping bot: Signal received
-Apr 23 14:06:23 vmi3096165 futures-bot-wrapper.sh[696544]: 2026-04-23 14:06:23,574 [tradovate_client] INFO: Disconnected from Tradovate
-Apr 23 14:06:23 vmi3096165 futures-bot-wrapper.sh[696544]: 2026-04-23 14:06:23,574 [bot] INFO: Bot stopped
-Apr 23 14:07:51 vmi3096165 systemd[1]: futures-bot.service: Deactivated successfully.
-Apr 23 14:07:51 vmi3096165 systemd[1]: Stopped futures-bot.service - TradeDay Futures Trading Bot.
-Apr 23 14:07:51 vmi3096165 systemd[1]: Started futures-bot.service - TradeDay Futures Trading Bot.
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: [wrapper] repo copy missing, falling back to /opt/futures_bot_stable
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: [wrapper] BOT_DIR=/opt/futures_bot_stable TRADOVATE_PASS_set=yes bot.py=24016B
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: 2026-04-23 14:07:51,483 [bot] INFO: ============================================================
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: 2026-04-23 14:07:51,483 [bot] INFO: TradeDay Futures Bot Starting
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: 2026-04-23 14:07:51,483 [bot] INFO: ============================================================
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: 2026-04-23 14:07:51,483 [news_filter] INFO: Loaded 26 restricted events
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: 2026-04-23 14:07:51,484 [tradovate_client] INFO: Loaded saved token from file, verifying...
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: 2026-04-23 14:07:51,633 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: 2026-04-23 14:07:51,634 [tradovate_client] INFO: Saved token is still valid
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: 2026-04-23 14:07:51,634 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: 2026-04-23 14:07:51,778 [bot] INFO: Bot started successfully
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: 2026-04-23 14:07:51,778 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: 2026-04-23 14:07:51,779 [bot] INFO: Timeframe: 5min
-Apr 23 14:07:51 vmi3096165 futures-bot-wrapper.sh[697790]: 2026-04-23 14:07:51,779 [bot] INFO: New trading day: 2026-04-23
+--- Positions + fills (via Tradovate API) ---
+Open positions:
+  (none open)
+
+Orders:
+  (no active orders)
+  total orders in history: 0
+
+Recent fills (today):
+  (no fills today. Total fills in list: 0)
+
+--- Bot log: signals/trades from last 10 min ---
+Log file: /root/MT5-PropFirm-Bot/logs/bot.log
+2026-04-23 09:43:12,504 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-23 09:43:42,672 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 09:43:43,449 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-23 09:43:43,682 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-23 09:44:44,153 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 10:00:01,490 [bot] INFO: Stopping bot: Signal received
+2026-04-23 11:45:55,245 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 11:45:56,355 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-23 11:45:56,585 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-23 11:46:26,669 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 11:57:30,977 [bot] INFO: Stopping bot: Signal received
+2026-04-23 11:57:40,005 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 12:15:51,110 [bot] INFO: Stopping bot: Signal received
+2026-04-23 14:11:56,227 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 14:11:57,330 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
+2026-04-23 14:11:57,559 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-04-23 14:12:27,628 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 14:31:33,107 [bot] INFO: Stopping bot: Signal received
+
+--- Balance ---
+  totalCashValue: $51291.44
+  realizedPnL today: $0.00
+  openPnL: $0.00
+  weekRealizedPnL: $-116.65
 
 === Done ===
