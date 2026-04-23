@@ -1,6 +1,6 @@
 #!/bin/bash
-# v172 - restart with relaxed entry (no candle color)
-echo "=== Fix & Restart v172 ==="
+# v173 - relax to 0.5SD triggers
+echo "=== Fix & Restart v173 ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 rsync -a --delete /root/MT5-PropFirm-Bot/futures_bot/ /opt/futures_bot_stable/futures_bot/
 cp /root/MT5-PropFirm-Bot/configs/bot_config.json /opt/futures_bot_stable/configs/ 2>/dev/null
@@ -12,6 +12,6 @@ CWD=$(readlink /proc/$PID/cwd 2>/dev/null)
 echo "Active: $(systemctl is-active futures-bot)  PID: $PID  CWD: $CWD"
 echo ""
 echo "--- Log tail ---"
-tail -25 "$CWD/logs/bot.log" 2>/dev/null
+tail -30 "$CWD/logs/bot.log" 2>/dev/null
 echo ""
 echo "=== Done ==="
