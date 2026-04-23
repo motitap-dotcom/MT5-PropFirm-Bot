@@ -1,43 +1,32 @@
 #!/bin/bash
-# v159 - fast restart: TimeoutStopSec=3s so kills don't stall
-echo "=== Fix & Restart v159 ==="
+# v160 - restart with new MD WS code + sync to /opt stable copy
+echo "=== Fix & Restart v160 ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
 echo ""
-echo "--- BEFORE ---"
-echo "Active: $(systemctl is-active futures-bot)"
-
-cat > /etc/systemd/system/futures-bot.service << 'SVCEOF'
-[Unit]
-Description=TradeDay Futures Trading Bot
-After=network.target
-
-[Service]
-Type=simple
-ExecStart=/usr/local/sbin/futures-bot-wrapper.sh
-ExecStopPost=/bin/bash -c 'logger -t futures-bot "Stopped: result=$SERVICE_RESULT code=$EXIT_CODE status=$EXIT_STATUS"; echo "$(date -u +%%Y-%%m-%%dT%%H:%%M:%%SZ) stopped: result=$SERVICE_RESULT code=$EXIT_CODE status=$EXIT_STATUS" >> /var/log/futures-bot-stops.log'
-Restart=always
-RestartSec=2
-TimeoutStopSec=5
-StartLimitBurst=0
-
-[Install]
-WantedBy=multi-user.target
-SVCEOF
-
-systemctl daemon-reload
-systemctl reset-failed futures-bot 2>/dev/null
+echo "--- Verify new code is in place ---"
+if grep -q "MD WebSocket connect failed" /root/MT5-PropFirm-Bot/futures_bot/core/tradovate_client.py 2>/dev/null; then
+  echo "NEW CODE confirmed in /root/MT5-PropFirm-Bot"
+else
+  echo "NEW CODE NOT FOUND - aborting"
+  exit 1
+fi
 
 echo ""
-echo "--- New service config ---"
-systemctl cat futures-bot | grep -E "ExecStart|Restart|Timeout"
+echo "--- Sync /opt/futures_bot_stable from /root (so fallback also has new code) ---"
+rsync -a --delete /root/MT5-PropFirm-Bot/futures_bot/ /opt/futures_bot_stable/futures_bot/
+cp /root/MT5-PropFirm-Bot/configs/bot_config.json /opt/futures_bot_stable/configs/ 2>/dev/null
+cp /root/MT5-PropFirm-Bot/configs/restricted_events.json /opt/futures_bot_stable/configs/ 2>/dev/null
+cp /root/MT5-PropFirm-Bot/requirements.txt /opt/futures_bot_stable/ 2>/dev/null
+echo "Sync done"
+echo ""
+
+echo "--- Restart bot ---"
+systemctl restart futures-bot
+sleep 10
 
 echo ""
-echo "--- Stop log (who killed in last hour) ---"
-tail -20 /var/log/futures-bot-stops.log 2>/dev/null || echo "no log"
-
-echo ""
-echo "--- Current state (NOT restarting - let it keep running) ---"
+echo "--- AFTER ---"
 echo "Active: $(systemctl is-active futures-bot)"
 PID=$(systemctl show futures-bot --property=MainPID --value)
 echo "PID: $PID"
@@ -45,6 +34,15 @@ echo "PID: $PID"
   echo "CWD: $(readlink /proc/$PID/cwd 2>/dev/null)"
   echo "Started: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
 }
+
+echo ""
+echo "--- Recent bot log (last 25 lines) ---"
+CWD=$(readlink /proc/$PID/cwd 2>/dev/null)
+[ -n "$CWD" ] && tail -25 "$CWD/logs/bot.log" 2>/dev/null
+
+echo ""
+echo "--- Look for MD WebSocket connection in log ---"
+grep -iE "MD WebSocket|md_ws|mode: None|OperationNotSupported" "$CWD/logs/bot.log" 2>/dev/null | tail -10
 
 echo ""
 echo "=== Done at $(date -u +'%Y-%m-%d %H:%M:%S UTC') ==="
