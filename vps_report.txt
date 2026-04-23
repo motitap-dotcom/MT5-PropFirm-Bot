@@ -1,57 +1,74 @@
-=== Trading activity check ===
-Timestamp: 2026-04-23 14:43:38 UTC
-NY Time: 2026-04-23 10:43:38 EDT
+=== WebSocket / market data check ===
+Timestamp: 2026-04-23 14:48:27 UTC
 
---- Bot state ---
-Active: active
-PID: 703509
-CWD: /opt/futures_bot_stable
-Uptime since: Thu 2026-04-23 14:31:38 UTC
+PID: 707130, CWD: /opt/futures_bot_stable
+Uptime since: Thu 2026-04-23 14:46:42 UTC
 
---- Recent stops (kill pattern) ---
-2026-04-23T13:55:30Z stopped: result=timeout code=killed status=KILL
-2026-04-23T13:57:47Z stopped: result=timeout code=killed status=KILL
-2026-04-23T14:02:49Z stopped: result=success code=exited status=0
-2026-04-23T14:07:51Z stopped: result=success code=exited status=0
-2026-04-23T14:11:55Z stopped: result=signal code=killed status=KILL
-2026-04-23T14:31:38Z stopped: result=timeout code=killed status=KILL
+Log: /opt/futures_bot_stable/logs/bot.log
 
---- Positions + fills (via Tradovate API) ---
-Open positions:
-  (none open)
+--- ALL log lines from current uptime (last 14:31 start) ---
+2026-04-23 14:31:38,992 [bot] INFO: ============================================================
+2026-04-23 14:31:38,995 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 14:31:38,995 [bot] INFO: ============================================================
+2026-04-23 14:31:38,997 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 14:31:39,001 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 14:31:39,162 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 14:31:39,163 [tradovate_client] INFO: Saved token is still valid
+2026-04-23 14:31:39,164 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 14:31:39,280 [bot] INFO: Bot started successfully
+2026-04-23 14:31:39,280 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 14:31:39,280 [bot] INFO: Timeframe: 5min
+2026-04-23 14:31:39,280 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 14:46:38,832 [bot] INFO: Stopping bot: Signal received
+2026-04-23 14:46:39,155 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-23 14:46:39,155 [bot] INFO: Bot stopped
+2026-04-23 14:46:43,351 [bot] INFO: ============================================================
+2026-04-23 14:46:43,351 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 14:46:43,351 [bot] INFO: ============================================================
+2026-04-23 14:46:43,352 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 14:46:43,353 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 14:46:43,535 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 14:46:43,536 [tradovate_client] INFO: Saved token is still valid
+2026-04-23 14:46:43,545 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 14:46:43,649 [bot] INFO: Bot started successfully
+2026-04-23 14:46:43,649 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 14:46:43,650 [bot] INFO: Timeframe: 5min
+2026-04-23 14:46:43,650 [bot] INFO: New trading day: 2026-04-23
 
-Orders:
-  (no active orders)
-  total orders in history: 0
+--- websocket / market data specific errors ---
+2026-04-23 13:37:44,471 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 13:37:44,700 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 13:42:44,805 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 13:42:45,045 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 13:47:45,732 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 13:47:45,986 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 13:52:46,802 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 13:52:47,090 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 13:55:31,247 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 13:55:31,559 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 13:57:47,679 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 13:57:47,966 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 14:02:49,601 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 14:02:49,831 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 14:07:51,483 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 14:07:51,778 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 14:31:38,997 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 14:31:39,280 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 14:46:43,352 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 14:46:43,649 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
 
-Recent fills (today):
-  (no fills today. Total fills in list: 0)
+--- ALL errors in log (last 50 lines that contain ERROR or WARNING) ---
+2026-04-22 16:28:57,947 [tradovate_client] WARNING: POST /cashBalance/getcashbalancesnapshot got 401, renewing token and retrying...
+2026-04-22 16:28:58,063 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-22 16:28:58,064 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
+2026-04-22 16:28:58,202 [tradovate_client] WARNING: API auth failed (Incorrect username or password. Please try again, noting that passwords are case-sensitive.); trying Playwright browser auth as fallback...
+2026-04-23 10:00:26,529 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
+2026-04-23 10:00:26,529 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
 
---- Bot log: signals/trades from last 10 min ---
-Log file: /root/MT5-PropFirm-Bot/logs/bot.log
-2026-04-23 09:43:12,504 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-23 09:43:42,672 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 09:43:43,449 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-23 09:43:43,682 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-23 09:44:44,153 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 10:00:01,490 [bot] INFO: Stopping bot: Signal received
-2026-04-23 11:45:55,245 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 11:45:56,355 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-23 11:45:56,585 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-23 11:46:26,669 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 11:57:30,977 [bot] INFO: Stopping bot: Signal received
-2026-04-23 11:57:40,005 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 12:15:51,110 [bot] INFO: Stopping bot: Signal received
-2026-04-23 14:11:56,227 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 14:11:57,330 [tradovate_client] WARNING: GET /position/list got 401, renewing token and retrying...
-2026-04-23 14:11:57,559 [bot] ERROR: Error closing positions: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-23 14:12:27,628 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 14:31:33,107 [bot] INFO: Stopping bot: Signal received
+--- Check TCP connections from the bot ---
 
---- Balance ---
-  totalCashValue: $51291.44
-  realizedPnL today: $0.00
-  openPnL: $0.00
-  weekRealizedPnL: $-116.65
+--- Tradovate API reachability ---
+demo REST: 404 (0.167935s)
+demo WS: 400 (0.175447s)
 
 === Done ===
