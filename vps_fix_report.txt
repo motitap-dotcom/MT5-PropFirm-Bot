@@ -1,25 +1,40 @@
-=== Fix & Restart v159 ===
-2026-04-23 14:11:55 UTC
+=== Fix & Restart v19 - RSI 48/52 for more signals ===
+2026-04-23 20:32:43 UTC
+Current: eaa70be Merge pull request #26 from motitap-dotcom/claude/debug-bot-trades-DrRkj
+Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
 
---- BEFORE ---
-Active: deactivating
+--- .env check ---
+TRADOVATE_USER: SET
+TRADOVATE_PASS: SET
+TELEGRAM_TOKEN: SET
+TELEGRAM_CHAT_ID: SET
 
---- New service config ---
-ExecStart=/usr/local/sbin/futures-bot-wrapper.sh
-Restart=always
-RestartSec=2
-TimeoutStopSec=5
+--- Token check ---
+Token file: exists (815 bytes)
+Playwright: OK
 
---- Stop log (who killed in last hour) ---
-2026-04-23T13:55:30Z stopped: result=timeout code=killed status=KILL
-2026-04-23T13:57:47Z stopped: result=timeout code=killed status=KILL
-2026-04-23T14:02:49Z stopped: result=success code=exited status=0
-2026-04-23T14:07:51Z stopped: result=success code=exited status=0
+--- Code verification ---
+auth_cooldown: 3
+wait_for_selector: 1
+mkdir in status_writer: 3
 
---- Current state (NOT restarting - let it keep running) ---
-Active: active
-PID: 699014
-CWD: /root/MT5-PropFirm-Bot
-Started: Thu 2026-04-23 14:11:55 UTC
+--- Result ---
+Status: active
+PID: 791901
 
-=== Done at 2026-04-23 14:11:55 UTC ===
+--- First 15 log lines after restart ---
+2026-04-23 20:32:45,075 [bot] INFO: Config validation passed
+2026-04-23 20:32:45,076 [bot] INFO: ============================================================
+2026-04-23 20:32:45,076 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 20:32:45,076 [bot] INFO: ============================================================
+2026-04-23 20:32:45,076 [bot] ERROR: Fatal error (attempt 1/5): TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
+Traceback (most recent call last):
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 833, in main
+    await bot.start()
+  File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 191, in start
+    self.client = TradovateClient(
+                  ^^^^^^^^^^^^^^^^
+TypeError: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
+2026-04-23 20:32:45,080 [bot] INFO: Stopping bot: Fatal: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
+2026-04-23 20:32:45,080 [bot] INFO: Bot stopped
+2026-04-23 20:32:45,080 [bot] INFO: Retrying in 30s...
