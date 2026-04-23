@@ -1,11 +1,10 @@
 #!/bin/bash
-# v164 - force restart with bars logging
-echo "=== Fix & Restart v164 ==="
+# v165 - restart with MD subscribe on startup
+echo "=== Fix & Restart v165 ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
 echo ""
-echo "--- Verify new code is there ---"
-grep -c "got .* bars from /md/getChart" /root/MT5-PropFirm-Bot/futures_bot/bot.py 2>/dev/null && echo "bars-log: YES" || echo "bars-log: NO"
+grep -c "MD subscribe" /root/MT5-PropFirm-Bot/futures_bot/bot.py 2>/dev/null && echo "subscribe fix: YES" || echo "subscribe fix: NO"
 echo ""
 
 echo "--- Sync /root to /opt ---"
@@ -17,7 +16,7 @@ echo ""
 
 echo "--- Restart ---"
 systemctl restart futures-bot
-sleep 12
+sleep 15
 
 PID=$(systemctl show futures-bot --property=MainPID --value)
 CWD=$(readlink /proc/$PID/cwd 2>/dev/null)
@@ -25,8 +24,8 @@ echo "Active: $(systemctl is-active futures-bot)"
 echo "PID: $PID  CWD: $CWD"
 echo ""
 
-echo "--- Log tail after restart (30 lines) ---"
-tail -30 "$CWD/logs/bot.log" 2>/dev/null
+echo "--- Log tail - look for 'got X bars' ---"
+tail -40 "$CWD/logs/bot.log" 2>/dev/null
 
 echo ""
 echo "=== Done at $(date -u +'%Y-%m-%d %H:%M:%S UTC') ==="
