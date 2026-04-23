@@ -199,8 +199,14 @@ class VWAPMeanReversion:
         return sum(b.volume for b in window) / len(window)
 
     def check_trend_day(self, current_hour_et: int):
-        """Call after the configured check hour to detect a trend day."""
-        if current_hour_et >= self.trend_day_check_hour and not self._vwap_crossed:
+        """Call after the configured check hour to detect a trend day.
+
+        Requires at least 6 bars before flagging — a freshly started bot with
+        empty history must not be treated as trend day (see Iron Rule #9).
+        """
+        if (current_hour_et >= self.trend_day_check_hour
+                and len(self._bars) >= 6
+                and not self._vwap_crossed):
             self._trend_day_detected = True
             logger.info(
                 f"Trend day detected: VWAP not crossed by {self.trend_day_check_hour:02d}:00 ET"

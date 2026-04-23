@@ -53,8 +53,8 @@
 
   "vwap": {
     "rsi_period": 14,
-    "rsi_oversold": 30,
-    "rsi_overbought": 70,
+    "rsi_oversold": 40,
+    "rsi_overbought": 60,
     "max_consecutive_losses": 3,
     "min_atr": 2.0,
     "max_atr": 8.0,
@@ -64,7 +64,7 @@
     "tp1_size_pct": 0.60,
     "tp2_size_pct": 0.40,
     "trailing_atr_after_tp1": 1.0,
-    "min_volume_ratio": 1.0,
+    "min_volume_ratio": 0.0,
     "trend_day_check_hour": 11
   },
 

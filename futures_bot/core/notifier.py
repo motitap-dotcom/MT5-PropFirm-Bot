@@ -157,3 +157,13 @@ class TelegramNotifier:
             f"<b>NEWS ALERT</b>\nFlattening for: {event_name}",
             critical=True,
         )
+
+    async def data_stale_alert(self, symbols: list):
+        """Alert when market data has been empty for multiple cycles."""
+        await self.send(
+            f"<b>⚠️ NO MARKET DATA</b>\n"
+            f"Bot is running but /md/getChart returned 0 bars for "
+            f"{len(symbols)} cycles on: {', '.join(symbols)}\n"
+            f"Check MD WebSocket connection.",
+            critical=True,
+        )

@@ -81,6 +81,8 @@ class FuturesBot:
         self.active_strategy: dict = {}  # per symbol: "vwap" or "orb"
         self._last_bar_time: dict = {}  # track last processed bar per symbol
         self._processed_fills: set = set()  # track processed fill IDs
+        self._empty_bars_streak: dict = {}  # per-symbol consecutive empty /md/getChart
+        self._data_stale_alerted: bool = False  # dedupe stale-data alerts
 
         # Trading state
         self.symbols: list = self.config.get("symbols", ["MESM6"])
@@ -404,7 +406,20 @@ class FuturesBot:
             )
             if not bars_data:
                 logger.warning(f"{symbol}: No bars returned from API")
+                self._empty_bars_streak[symbol] = self._empty_bars_streak.get(symbol, 0) + 1
+                stale = [s for s, c in self._empty_bars_streak.items() if c >= 3]
+                if stale and not self._data_stale_alerted and self.notifier:
+                    self._data_stale_alerted = True
+                    try:
+                        await self.notifier.data_stale_alert(stale)
+                    except Exception as e:
+                        logger.warning(f"Stale data alert failed: {e}")
                 return
+            self._empty_bars_streak[symbol] = 0
+            if self._data_stale_alerted and all(
+                v == 0 for v in self._empty_bars_streak.values()
+            ):
+                self._data_stale_alerted = False
 
             # Only process NEW bars (avoid re-feeding old data)
             latest_bar = bars_data[-1]
