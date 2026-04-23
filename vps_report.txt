@@ -1,58 +1,47 @@
-=== v161 trend-day fix verify ===
-Timestamp: 2026-04-23 15:54:03 UTC
+=== Live strategy check ===
+2026-04-23 16:04:06 UTC
 
 Active: active
-PID: 716964
-CWD: /root/MT5-PropFirm-Bot
-Uptime: Thu 2026-04-23 15:27:12 UTC
+PID: 724104  CWD: /root/MT5-PropFirm-Bot
+Uptime: Thu 2026-04-23 15:57:36 UTC
 
---- Does running code have the fixes? ---
-1
-trend-day fix: YES
-1
-backfill fix: YES
+--- config RSI thresholds ---
+rsi_oversold: 40
+rsi_overbought: 60
 
---- Last 50 lines of bot log ---
-2026-04-23 15:08:38,388 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:08:38,388 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
-2026-04-23 15:08:38,388 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:08:38,388 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
-2026-04-23 15:08:38,388 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:08:38,388 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
-2026-04-23 15:13:39,556 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:13:39,557 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:13:39,557 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:13:39,557 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:13:39,557 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:13:39,557 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:13:40,536 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-23 15:18:40,680 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:18:40,681 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:18:40,681 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:18:40,681 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:18:40,681 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:18:40,681 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:18:41,725 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-23 15:23:41,881 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:23:41,882 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:23:41,882 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:23:41,882 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:23:41,882 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:23:41,882 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:23:42,879 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+--- diagnostic log lines (what strategy sees) ---
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7140.50 VWAP=7144.41 dist=-0.66SD RSI=52.0 ATR=4.89
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7141.75 VWAP=7144.28 dist=-0.44SD RSI=56.8 ATR=4.82
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7139.00 VWAP=7144.09 dist=-0.88SD RSI=46.0 ATR=4.73
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7140.25 VWAP=7143.89 dist=-0.64SD RSI=46.8 ATR=4.88
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7143.25 VWAP=7143.95 dist=-0.13SD RSI=51.7 ATR=5.59
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7142.00 VWAP=7143.85 dist=-0.36SD RSI=40.3 ATR=5.38
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.50 VWAP=7144.14 dist=+1.06SD RSI=49.0 ATR=5.96
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7149.00 VWAP=7144.49 dist=+0.91SD RSI=40.2 ATR=6.09
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7150.25 VWAP=7144.71 dist=+1.12SD RSI=44.6 ATR=6.12
+2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7144.00 VWAP=7144.96 dist=-0.21SD RSI=37.9 ATR=6.62
+2026-04-22 13:45:23,992 [strategy.vwap] INFO: Price=7147.75 VWAP=7145.04 dist=+0.62SD RSI=48.3 ATR=6.57
+2026-04-22 13:45:23,992 [strategy.vwap] INFO: Price=7145.50 VWAP=7145.20 dist=+0.07SD RSI=45.3 ATR=6.70
+2026-04-22 13:50:28,504 [strategy.vwap] INFO: Price=7145.00 VWAP=7145.41 dist=-0.10SD RSI=49.7 ATR=7.00
+2026-04-22 13:55:33,123 [strategy.vwap] INFO: Price=7150.75 VWAP=7145.57 dist=+1.32SD RSI=59.0 ATR=7.46
+2026-04-22 13:58:03,363 [bot] INFO: Stopping bot: Signal received
+2026-04-22 14:55:03,325 [bot] INFO: Stopping bot: Signal received
+2026-04-22 15:08:43,817 [bot] INFO: Stopping bot: Signal received
+2026-04-22 15:14:37,757 [bot] INFO: Stopping bot: Signal received
+2026-04-22 15:20:17,532 [bot] INFO: Stopping bot: Signal received
+2026-04-22 15:45:18,604 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:02:52,811 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:08:10,820 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:14:33,761 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:18:22,173 [bot] INFO: Stopping bot: Signal received
+2026-04-23 10:00:01,490 [bot] INFO: Stopping bot: Signal received
+2026-04-23 11:57:30,977 [bot] INFO: Stopping bot: Signal received
+2026-04-23 12:15:51,110 [bot] INFO: Stopping bot: Signal received
+2026-04-23 14:31:33,107 [bot] INFO: Stopping bot: Signal received
 2026-04-23 15:27:07,302 [bot] INFO: Stopping bot: Signal received
-2026-04-23 15:27:07,779 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-23 15:27:07,779 [bot] INFO: Bot stopped
-2026-04-23 15:27:12,921 [bot] INFO: ============================================================
-2026-04-23 15:27:12,921 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 15:27:12,921 [bot] INFO: ============================================================
-2026-04-23 15:27:12,922 [news_filter] INFO: Loaded 26 restricted events
-2026-04-23 15:27:12,923 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-04-23 15:27:13,073 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-23 15:27:13,074 [tradovate_client] INFO: Saved token is still valid
-2026-04-23 15:27:13,077 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-23 15:27:13,425 [tradovate_client] INFO: MD WebSocket connected
-2026-04-23 15:27:13,517 [bot] INFO: Bot started successfully
+2026-04-23 15:57:31,194 [bot] INFO: Stopping bot: Signal received
+
+--- Last 30 lines overall ---
 2026-04-23 15:27:13,517 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
 2026-04-23 15:27:13,518 [bot] INFO: Timeframe: 5min
 2026-04-23 15:27:13,518 [bot] INFO: New trading day: 2026-04-23
@@ -63,33 +52,29 @@ backfill fix: YES
 2026-04-23 15:43:58,493 [tradovate_client] INFO: MD WebSocket connected
 2026-04-23 15:47:19,178 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 2026-04-23 15:52:20,278 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-23 15:57:21,384 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-23 15:57:31,194 [bot] INFO: Stopping bot: Signal received
+2026-04-23 15:57:31,702 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-23 15:57:31,703 [bot] INFO: Bot stopped
+2026-04-23 15:57:36,724 [bot] INFO: ============================================================
+2026-04-23 15:57:36,724 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 15:57:36,724 [bot] INFO: ============================================================
+2026-04-23 15:57:36,724 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 15:57:36,725 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 15:57:36,868 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 15:57:36,868 [tradovate_client] INFO: Saved token is still valid
+2026-04-23 15:57:36,869 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 15:57:37,157 [tradovate_client] INFO: MD WebSocket connected
+2026-04-23 15:57:37,256 [bot] INFO: Bot started successfully
+2026-04-23 15:57:37,256 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 15:57:37,257 [bot] INFO: Timeframe: 5min
+2026-04-23 15:57:37,257 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 16:02:38,339 [tradovate_client] INFO: Token expiring in 26min, renewing...
+2026-04-23 16:02:38,517 [tradovate_client] INFO: Token renewed successfully
+2026-04-23 16:02:39,640 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 
---- Strategy + trade activity ---
-2026-04-23 15:13:39,556 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:13:39,557 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:13:39,557 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:13:39,557 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:13:39,557 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:13:39,557 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:18:40,680 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:18:40,681 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:18:40,681 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:18:40,681 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:18:40,681 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:18:40,681 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:23:41,881 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:23:41,882 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:23:41,882 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:23:41,882 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:23:41,882 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:23:41,882 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 15:27:07,302 [bot] INFO: Stopping bot: Signal received
-2026-04-23 15:27:12,921 [bot] INFO: TradeDay Futures Bot Starting
-
---- Positions + recent fills ---
-Positions:
-  0 open
-Recent fills today:
-  0 fills today (total in list: 0)
+--- Positions + fills ---
+Open positions: 0
+Fills today: 0
 
 === Done ===
