@@ -1,1 +1,1 @@
-Trigger VPS check - 2026-04-22 17:30 UTC (read-only diagnostic)
+Trigger VPS check - 2026-04-23 post v155 restore
