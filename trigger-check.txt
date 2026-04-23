@@ -1,1 +1,1 @@
-Check v166 fresh auth
+Check v167 auth JSON
