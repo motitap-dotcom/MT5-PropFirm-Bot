@@ -1,16 +1,15 @@
 === Live strategy check ===
-2026-04-23 16:22:51 UTC
+2026-04-23 16:32:45 UTC
 
 Active: active
-PID: 728818  CWD: /root/MT5-PropFirm-Bot
-Uptime: Thu 2026-04-23 16:15:41 UTC
+PID: 731020  CWD: /root/MT5-PropFirm-Bot
+Uptime: Thu 2026-04-23 16:24:27 UTC
 
 --- config RSI thresholds ---
 rsi_oversold: 40
 rsi_overbought: 60
 
 --- diagnostic log lines (what strategy sees) ---
-2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7139.00 VWAP=7144.09 dist=-0.88SD RSI=46.0 ATR=4.73
 2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7140.25 VWAP=7143.89 dist=-0.64SD RSI=46.8 ATR=4.88
 2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7143.25 VWAP=7143.95 dist=-0.13SD RSI=51.7 ATR=5.59
 2026-04-22 13:45:23,991 [strategy.vwap] INFO: Price=7142.00 VWAP=7143.85 dist=-0.36SD RSI=40.3 ATR=5.38
@@ -40,38 +39,39 @@ rsi_overbought: 60
 2026-04-23 15:57:31,194 [bot] INFO: Stopping bot: Signal received
 2026-04-23 16:05:57,292 [bot] INFO: Stopping bot: Signal received
 2026-04-23 16:15:35,971 [bot] INFO: Stopping bot: Signal received
+2026-04-23 16:24:22,419 [bot] INFO: Stopping bot: Signal received
 
 --- Last 30 lines overall ---
-2026-04-23 16:15:36,470 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
-2026-04-23 16:15:36,471 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-23 16:15:36,472 [bot] INFO: Bot stopped
-2026-04-23 16:15:38,795 [tradovate_client] INFO: MD WebSocket connected
-2026-04-23 16:15:41,529 [bot] INFO: ============================================================
-2026-04-23 16:15:41,530 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 16:15:41,530 [bot] INFO: ============================================================
-2026-04-23 16:15:41,530 [news_filter] INFO: Loaded 26 restricted events
-2026-04-23 16:15:41,530 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-04-23 16:15:41,682 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-23 16:15:41,682 [tradovate_client] INFO: Saved token is still valid
-2026-04-23 16:15:41,683 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-23 16:15:42,017 [tradovate_client] INFO: MD WebSocket connected
-2026-04-23 16:15:42,114 [bot] INFO: Bot started successfully
-2026-04-23 16:15:42,114 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-23 16:15:42,114 [bot] INFO: Timeframe: 5min
-2026-04-23 16:15:42,114 [bot] INFO: New trading day: 2026-04-23
-2026-04-23 16:15:42,607 [bot] INFO: MESM6: got 0 bars from /md/getChart
-2026-04-23 16:15:42,725 [bot] INFO: MNQM6: got 0 bars from /md/getChart
-2026-04-23 16:15:42,840 [bot] INFO: MCLM6: got 0 bars from /md/getChart
-2026-04-23 16:15:42,955 [bot] INFO: MGCM6: got 0 bars from /md/getChart
-2026-04-23 16:15:43,069 [bot] INFO: MYMM6: got 0 bars from /md/getChart
-2026-04-23 16:15:43,182 [bot] INFO: M2KM6: got 0 bars from /md/getChart
-2026-04-23 16:20:43,691 [bot] INFO: MESM6: got 0 bars from /md/getChart
-2026-04-23 16:20:43,805 [bot] INFO: MNQM6: got 0 bars from /md/getChart
-2026-04-23 16:20:43,918 [bot] INFO: MCLM6: got 0 bars from /md/getChart
-2026-04-23 16:20:44,032 [bot] INFO: MGCM6: got 0 bars from /md/getChart
-2026-04-23 16:20:44,148 [bot] INFO: MYMM6: got 0 bars from /md/getChart
-2026-04-23 16:20:44,264 [bot] INFO: M2KM6: got 0 bars from /md/getChart
-2026-04-23 16:20:44,267 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-23 16:24:28,906 [tradovate_client] INFO: Subscribed to market data: MCLM6
+2026-04-23 16:24:28,906 [tradovate_client] INFO: Subscribed to market data: MGCM6
+2026-04-23 16:24:28,906 [tradovate_client] INFO: Subscribed to market data: MYMM6
+2026-04-23 16:24:28,906 [tradovate_client] INFO: Subscribed to market data: M2KM6
+2026-04-23 16:24:28,906 [bot] INFO: Bot started successfully
+2026-04-23 16:24:28,906 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 16:24:28,906 [bot] INFO: Timeframe: 5min
+2026-04-23 16:24:28,906 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 16:24:29,485 [bot] INFO: MESM6: got 0 bars from /md/getChart
+2026-04-23 16:24:29,604 [bot] INFO: MNQM6: got 0 bars from /md/getChart
+2026-04-23 16:24:29,729 [bot] INFO: MCLM6: got 0 bars from /md/getChart
+2026-04-23 16:24:29,847 [bot] INFO: MGCM6: got 0 bars from /md/getChart
+2026-04-23 16:24:29,962 [bot] INFO: MYMM6: got 0 bars from /md/getChart
+2026-04-23 16:24:30,082 [bot] INFO: M2KM6: got 0 bars from /md/getChart
+2026-04-23 16:24:30,082 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-23 16:24:59,016 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-23 16:25:01,323 [tradovate_client] INFO: MD WebSocket connected
+2026-04-23 16:25:31,453 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-23 16:25:33,747 [tradovate_client] INFO: MD WebSocket connected
+2026-04-23 16:26:03,860 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-23 16:26:06,174 [tradovate_client] INFO: MD WebSocket connected
+2026-04-23 16:26:36,293 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-23 16:26:38,594 [tradovate_client] INFO: MD WebSocket connected
+2026-04-23 16:29:30,715 [bot] INFO: MESM6: got 0 bars from /md/getChart
+2026-04-23 16:29:30,829 [bot] INFO: MNQM6: got 0 bars from /md/getChart
+2026-04-23 16:29:30,946 [bot] INFO: MCLM6: got 0 bars from /md/getChart
+2026-04-23 16:29:31,060 [bot] INFO: MGCM6: got 0 bars from /md/getChart
+2026-04-23 16:29:31,179 [bot] INFO: MYMM6: got 0 bars from /md/getChart
+2026-04-23 16:29:31,296 [bot] INFO: M2KM6: got 0 bars from /md/getChart
+2026-04-23 16:29:31,296 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 
 --- Positions + fills ---
 Open positions: 0
