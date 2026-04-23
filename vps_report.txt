@@ -1,10 +1,10 @@
 === Examine WORKING Tradovate-Bot - how does IT get market data? ===
-2026-04-23 17:51:55 UTC
+2026-04-23 18:03:29 UTC
 
 --- our bot status ---
 Active: active
-PID: 750157
-Uptime: Thu 2026-04-23 17:45:39 UTC
+PID: 752617
+Uptime: Thu 2026-04-23 17:54:19 UTC
 
 --- Other bot source files ---
 /root/tradovate-bot/alerts.py
@@ -96,35 +96,35 @@ Uptime: Thu 2026-04-23 17:45:39 UTC
 /root/tradovate-bot/test_all.py-    from tradovate_api import MarketDataStream
 
 --- Our bot log tail (did v166 fresh auth work?) ---
-2026-04-23 17:45:40,180 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 17:45:40,181 [bot] INFO: ============================================================
-2026-04-23 17:45:40,181 [news_filter] INFO: Loaded 26 restricted events
-2026-04-23 17:45:40,182 [tradovate_client] INFO: Trying pre-set access token from environment...
-2026-04-23 17:45:40,329 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
-2026-04-23 17:45:40,330 [tradovate_client] INFO: Environment token is valid
-2026-04-23 17:45:40,331 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
-2026-04-23 17:45:40,640 [tradovate_client] WARNING: MD WebSocket authorize returned non-200: a[{"s":401,"i":1,"d":"\"Access is denied\""}]
-2026-04-23 17:45:40,735 [bot] WARNING: MD subscribe MESM6 failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-23 17:45:40,735 [bot] WARNING: MD subscribe MNQM6 failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-23 17:45:40,735 [bot] WARNING: MD subscribe MCLM6 failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-23 17:45:40,735 [bot] WARNING: MD subscribe MGCM6 failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-23 17:45:40,735 [bot] WARNING: MD subscribe MYMM6 failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-23 17:45:40,736 [bot] WARNING: MD subscribe M2KM6 failed: received 1000 (OK) Bye; then sent 1000 (OK) Bye
-2026-04-23 17:45:40,736 [bot] INFO: Bot started successfully
-2026-04-23 17:45:40,736 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-23 17:45:40,736 [bot] INFO: Timeframe: 5min
-2026-04-23 17:45:40,736 [bot] INFO: New trading day: 2026-04-23
-2026-04-23 17:45:41,242 [bot] INFO: MESM6: got 0 bars from /md/getChart
-2026-04-23 17:45:41,358 [bot] INFO: MNQM6: got 0 bars from /md/getChart
-2026-04-23 17:45:41,472 [bot] INFO: MCLM6: got 0 bars from /md/getChart
-2026-04-23 17:45:41,591 [bot] INFO: MGCM6: got 0 bars from /md/getChart
-2026-04-23 17:45:41,704 [bot] INFO: MYMM6: got 0 bars from /md/getChart
-2026-04-23 17:45:41,821 [bot] INFO: M2KM6: got 0 bars from /md/getChart
-2026-04-23 17:50:42,447 [bot] INFO: MESM6: got 0 bars from /md/getChart
-2026-04-23 17:50:42,564 [bot] INFO: MNQM6: got 0 bars from /md/getChart
-2026-04-23 17:50:42,680 [bot] INFO: MCLM6: got 0 bars from /md/getChart
-2026-04-23 17:50:42,794 [bot] INFO: MGCM6: got 0 bars from /md/getChart
-2026-04-23 17:50:42,912 [bot] INFO: MYMM6: got 0 bars from /md/getChart
-2026-04-23 17:50:43,028 [bot] INFO: M2KM6: got 0 bars from /md/getChart
+2026-04-23 17:54:28,077 [tradovate_client] INFO: Login submitted, waiting for token...
+2026-04-23 17:54:29,247 [tradovate_client] INFO: Browser auth: token captured successfully
+2026-04-23 17:54:29,249 [tradovate_client] INFO: Authenticated successfully via browser (CAPTCHA bypassed)
+2026-04-23 17:54:29,371 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 17:54:29,373 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 17:54:29,895 [tradovate_client] WARNING: MD WebSocket connect failed (REST bars may not work): no close frame received or sent
+2026-04-23 17:54:30,038 [bot] WARNING: MD subscribe MESM6 failed: no close frame received or sent
+2026-04-23 17:54:30,040 [bot] WARNING: MD subscribe MNQM6 failed: no close frame received or sent
+2026-04-23 17:54:30,040 [bot] WARNING: MD subscribe MCLM6 failed: no close frame received or sent
+2026-04-23 17:54:30,041 [bot] WARNING: MD subscribe MGCM6 failed: no close frame received or sent
+2026-04-23 17:54:30,041 [bot] WARNING: MD subscribe MYMM6 failed: no close frame received or sent
+2026-04-23 17:54:30,041 [bot] WARNING: MD subscribe M2KM6 failed: no close frame received or sent
+2026-04-23 17:54:30,041 [bot] INFO: Bot started successfully
+2026-04-23 17:54:30,041 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 17:54:30,041 [bot] INFO: Timeframe: 5min
+2026-04-23 17:54:30,041 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 17:54:30,583 [bot] INFO: MESM6: got 0 bars from /md/getChart
+2026-04-23 17:54:30,706 [bot] INFO: MNQM6: got 0 bars from /md/getChart
+2026-04-23 17:54:30,820 [bot] INFO: MCLM6: got 0 bars from /md/getChart
+2026-04-23 17:54:30,934 [bot] INFO: MGCM6: got 0 bars from /md/getChart
+2026-04-23 17:54:31,056 [bot] INFO: MYMM6: got 0 bars from /md/getChart
+2026-04-23 17:54:31,182 [bot] INFO: M2KM6: got 0 bars from /md/getChart
+2026-04-23 17:54:31,183 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+2026-04-23 17:59:31,831 [bot] INFO: MESM6: got 0 bars from /md/getChart
+2026-04-23 17:59:31,944 [bot] INFO: MNQM6: got 0 bars from /md/getChart
+2026-04-23 17:59:32,058 [bot] INFO: MCLM6: got 0 bars from /md/getChart
+2026-04-23 17:59:32,178 [bot] INFO: MGCM6: got 0 bars from /md/getChart
+2026-04-23 17:59:32,293 [bot] INFO: MYMM6: got 0 bars from /md/getChart
+2026-04-23 17:59:32,410 [bot] INFO: M2KM6: got 0 bars from /md/getChart
+2026-04-23 17:59:32,410 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 
 === Done ===
