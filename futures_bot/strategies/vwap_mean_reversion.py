@@ -130,10 +130,13 @@ class VWAPMeanReversion:
            (prev.close > vwap_data.vwap and current.close < vwap_data.vwap):
             self._vwap_crossed = True
 
-        # LONG signal (candle-color confirmation dropped for more entries)
-        if (current.low <= vwap_data.lower_1sd and
-                rsi < self.rsi_oversold):
-            sl = vwap_data.lower_2sd - 2  # 2 points below -2SD
+        # Use 0.5SD midpoint between VWAP and +/-1SD for more entries
+        long_trigger = (vwap_data.vwap + vwap_data.lower_1sd) / 2
+        short_trigger = (vwap_data.vwap + vwap_data.upper_1sd) / 2
+
+        # LONG signal
+        if (current.low <= long_trigger and rsi < self.rsi_oversold):
+            sl = vwap_data.lower_2sd - 2
             tp1 = vwap_data.vwap
             tp2 = vwap_data.upper_1sd
             return TradeSetup(
@@ -144,9 +147,8 @@ class VWAPMeanReversion:
                 take_profit_2=tp2,
             )
 
-        # SHORT signal (candle-color confirmation dropped for more entries)
-        if (current.high >= vwap_data.upper_1sd and
-                rsi > self.rsi_overbought):
+        # SHORT signal
+        if (current.high >= short_trigger and rsi > self.rsi_overbought):
             sl = vwap_data.upper_2sd + 2
             tp1 = vwap_data.vwap
             tp2 = vwap_data.lower_1sd
