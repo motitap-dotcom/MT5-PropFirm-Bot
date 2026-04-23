@@ -1,43 +1,34 @@
 #!/bin/bash
-echo "=== Account Balance Check ==="
+echo "=== Bot activity check ==="
 echo "Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+echo "NY Time: $(TZ=America/New_York date '+%Y-%m-%d %H:%M:%S %Z')"
 echo ""
 
-TOKEN_FILE=/root/MT5-PropFirm-Bot/configs/.tradovate_token.json
-if [ ! -f "$TOKEN_FILE" ]; then
-  echo "Token file missing"
-  exit 1
-fi
-
-TOKEN=$(python3 -c "import json;print(json.load(open('$TOKEN_FILE')).get('access_token',''))" 2>/dev/null)
-if [ -z "$TOKEN" ]; then
-  echo "Could not parse token. File contents:"
-  cat "$TOKEN_FILE" | head -c 200
-  echo ""
-  exit 1
-fi
-
-BASE="https://demo.tradovateapi.com/v1"
-ACC_ID=45373493
-echo "API: $BASE  Account: $ACC_ID"
+BOTPID=$(systemctl show futures-bot --property=MainPID --value 2>/dev/null)
+echo "PID: $BOTPID"
+[ -n "$BOTPID" ] && [ "$BOTPID" != "0" ] && {
+  echo "CWD: $(readlink /proc/$BOTPID/cwd 2>/dev/null)"
+  echo "Active: $(systemctl is-active futures-bot)"
+  echo "Started: $(ps -o lstart= -p $BOTPID 2>/dev/null)"
+}
 echo ""
 
-echo "--- /account/list ---"
-curl -s -H "Authorization: Bearer $TOKEN" "$BASE/account/list" | python3 -m json.tool 2>&1 | head -30
+echo "--- Full current log (last 100 lines) ---"
+CWD=$(readlink /proc/$BOTPID/cwd 2>/dev/null)
+tail -100 "$CWD/logs/bot.log" 2>/dev/null
 echo ""
 
-echo "--- Cash balance snapshot ---"
-curl -s -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-  -X POST "$BASE/cashBalance/getCashBalanceSnapshot" \
-  -d "{\"accountId\": $ACC_ID}" | python3 -m json.tool 2>&1 | head -40
-echo ""
-
-echo "--- Positions ---"
-curl -s -H "Authorization: Bearer $TOKEN" "$BASE/position/list" | python3 -m json.tool 2>&1 | head -40
-echo ""
-
-echo "--- Recent fills (trade history) ---"
-curl -s -H "Authorization: Bearer $TOKEN" "$BASE/fill/list" | python3 -m json.tool 2>&1 | head -60
+echo "--- Bot config: trading hours + session ---"
+python3 -c "
+import json
+c = json.load(open('/root/MT5-PropFirm-Bot/configs/bot_config.json'))
+import pprint
+print('live:', c.get('live'))
+print('symbols:', c.get('symbols'))
+print('timeframe:', c.get('timeframe'))
+pprint.pprint(c.get('risk_manager', {}))
+pprint.pprint(c.get('session', {}))
+" 2>/dev/null
 echo ""
 
 echo "=== Done ==="
