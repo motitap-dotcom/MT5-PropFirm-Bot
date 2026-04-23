@@ -59,7 +59,7 @@ class RiskManager:
         self.session_start: time = time(9, 30)   # 9:30 AM ET
         self.session_end: time = time(15, 30)     # 3:30 PM ET
         self.flatten_time: time = time(15, 45)    # 3:45 PM ET - force close
-        self.no_new_trades_after: time = time(15, 0)  # 3:00 PM ET
+        self.no_new_trades_after: time = time(15, 25)  # 3:25 PM ET (extended)
 
         # Dead zone (low volume lunch)
         self.dead_zone_start: time = time(12, 0)
