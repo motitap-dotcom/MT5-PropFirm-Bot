@@ -251,6 +251,14 @@ class TradovateClient:
                     self._parse_expiry(browser_result.get("expirationTime", ""))
                     self._save_token()
                     logger.info("Authenticated successfully via browser (CAPTCHA bypassed)")
+                    # Browser auth often only returns accessToken (no mdAccessToken)
+                    # so force a renew call which always returns both tokens.
+                    if self.md_access_token == self.access_token:
+                        logger.info("Exchanging browser token for MD-scoped token pair...")
+                        try:
+                            await self._renew_token_safe()
+                        except Exception as e:
+                            logger.warning(f"Post-browser token exchange failed: {e}")
                     return
                 else:
                     raise ConnectionError(
