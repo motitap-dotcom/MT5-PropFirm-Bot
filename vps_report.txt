@@ -1,71 +1,119 @@
-=== Account Balance Check ===
-Timestamp: 2026-04-23 12:25:12 UTC
+=== Bot activity check ===
+Timestamp: 2026-04-23 13:35:38 UTC
+NY Time: 2026-04-23 09:35:38 EDT
 
-API: https://demo.tradovateapi.com/v1  Account: 45373493
+PID: 688536
+CWD: /opt/futures_bot_stable
+Active: active
+Started: Thu Apr 23 13:32:42 2026
 
---- /account/list ---
-[
-    {
-        "id": 45373493,
-        "name": "ELTDER260326211630296397",
-        "userId": 266203,
-        "accountType": "Customer",
-        "restricted": false,
-        "closed": false,
-        "clearingHouseId": 4,
-        "riskCategoryId": 122,
-        "autoLiqProfileId": 14,
-        "marginAccountType": "Speculator",
-        "legalStatus": "Individual",
-        "archived": false,
-        "timestamp": "2026-03-26T21:16:33Z",
-        "active": true
-    }
-]
+--- Full current log (last 100 lines) ---
+2026-04-23 13:01:18,767 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 13:01:18,922 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 13:01:18,922 [tradovate_client] INFO: Saved token is still valid
+2026-04-23 13:01:18,923 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 13:01:19,029 [bot] INFO: Bot started successfully
+2026-04-23 13:01:19,029 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 13:01:19,029 [bot] INFO: Timeframe: 5min
+2026-04-23 13:01:19,029 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 13:06:06,211 [bot] INFO: Stopping bot: Signal received
+2026-04-23 13:06:06,596 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-23 13:06:06,596 [bot] INFO: Bot stopped
+2026-04-23 13:06:19,671 [bot] INFO: ============================================================
+2026-04-23 13:06:19,671 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 13:06:19,672 [bot] INFO: ============================================================
+2026-04-23 13:06:19,672 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 13:06:19,672 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 13:06:19,839 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 13:06:19,840 [tradovate_client] INFO: Saved token is still valid
+2026-04-23 13:06:19,840 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 13:06:19,943 [bot] INFO: Bot started successfully
+2026-04-23 13:06:19,944 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 13:06:19,944 [bot] INFO: Timeframe: 5min
+2026-04-23 13:06:19,944 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 13:11:06,252 [bot] INFO: Stopping bot: Signal received
+2026-04-23 13:11:06,633 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-23 13:11:06,633 [bot] INFO: Bot stopped
+2026-04-23 13:11:20,525 [bot] INFO: ============================================================
+2026-04-23 13:11:20,525 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 13:11:20,525 [bot] INFO: ============================================================
+2026-04-23 13:11:20,525 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 13:11:20,526 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 13:11:20,671 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 13:11:20,671 [tradovate_client] INFO: Saved token is still valid
+2026-04-23 13:11:20,671 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 13:11:20,801 [bot] INFO: Bot started successfully
+2026-04-23 13:11:20,802 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 13:11:20,802 [bot] INFO: Timeframe: 5min
+2026-04-23 13:11:20,802 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 13:16:07,130 [bot] INFO: Stopping bot: Signal received
+2026-04-23 13:16:07,542 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-23 13:16:07,542 [bot] INFO: Bot stopped
+2026-04-23 13:16:21,420 [bot] INFO: ============================================================
+2026-04-23 13:16:21,420 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 13:16:21,420 [bot] INFO: ============================================================
+2026-04-23 13:16:21,420 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 13:16:21,420 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 13:16:21,573 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 13:16:21,573 [tradovate_client] INFO: Saved token is still valid
+2026-04-23 13:16:21,575 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 13:16:21,670 [bot] INFO: Bot started successfully
+2026-04-23 13:16:21,670 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 13:16:21,670 [bot] INFO: Timeframe: 5min
+2026-04-23 13:16:21,670 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 13:21:08,133 [bot] INFO: Stopping bot: Signal received
+2026-04-23 13:21:08,510 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-23 13:21:08,511 [bot] INFO: Bot stopped
+2026-04-23 13:21:22,557 [bot] INFO: ============================================================
+2026-04-23 13:21:22,557 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 13:21:22,557 [bot] INFO: ============================================================
+2026-04-23 13:21:22,559 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 13:21:22,560 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 13:21:22,560 [tradovate_client] INFO: Token expiring in 30min, renewing...
+2026-04-23 13:21:22,708 [tradovate_client] INFO: Token renewed successfully
+2026-04-23 13:21:22,830 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 13:21:22,831 [tradovate_client] INFO: Saved token is still valid
+2026-04-23 13:21:22,831 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 13:21:22,910 [bot] INFO: Bot started successfully
+2026-04-23 13:21:22,911 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 13:21:22,911 [bot] INFO: Timeframe: 5min
+2026-04-23 13:21:22,911 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 13:26:12,181 [bot] INFO: Stopping bot: Signal received
+2026-04-23 13:26:12,618 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-23 13:26:12,618 [bot] INFO: Bot stopped
+2026-04-23 13:26:23,515 [bot] INFO: ============================================================
+2026-04-23 13:26:23,515 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 13:26:23,515 [bot] INFO: ============================================================
+2026-04-23 13:26:23,516 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 13:26:23,516 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 13:26:23,664 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 13:26:23,664 [tradovate_client] INFO: Saved token is still valid
+2026-04-23 13:26:23,665 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 13:26:23,762 [bot] INFO: Bot started successfully
+2026-04-23 13:26:23,764 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 13:26:23,764 [bot] INFO: Timeframe: 5min
+2026-04-23 13:26:23,765 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 13:31:13,133 [bot] INFO: Stopping bot: Signal received
+2026-04-23 13:31:13,511 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-23 13:31:13,521 [bot] INFO: Bot stopped
+2026-04-23 13:32:43,756 [bot] INFO: ============================================================
+2026-04-23 13:32:43,756 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 13:32:43,756 [bot] INFO: ============================================================
+2026-04-23 13:32:43,757 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 13:32:43,758 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 13:32:43,926 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 13:32:43,926 [tradovate_client] INFO: Saved token is still valid
+2026-04-23 13:32:43,927 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 13:32:44,028 [bot] INFO: Bot started successfully
+2026-04-23 13:32:44,028 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 13:32:44,028 [bot] INFO: Timeframe: 5min
+2026-04-23 13:32:44,029 [bot] INFO: New trading day: 2026-04-23
 
---- Cash balance snapshot ---
-{
-    "totalCashValue": 51291.44,
-    "totalPnL": 0.0,
-    "initialMargin": 0.0,
-    "maintenanceMargin": 0.0,
-    "netLiq": 51291.44,
-    "openPnL": 0.0,
-    "realizedPnL": 0.0,
-    "weekRealizedPnL": -116.65,
-    "currencyCashAvailWithdrawalUSD": 51291.44,
-    "netLiqSOD": 51291.44,
-    "totalCashValueSOD": 51291.44,
-    "cashUSD": 51291.44,
-    "cashSODUSD": 51291.44,
-    "fullInitialMargin": 0.0,
-    "fullInitialMarginSOD": 0.0,
-    "autoLiqLevel": -5000.0
-}
-
---- Positions ---
-[
-    {
-        "id": 472310967435,
-        "accountId": 45373493,
-        "contractId": 4327108,
-        "timestamp": "2026-04-21T21:32:51.134Z",
-        "tradeDate": {
-            "year": 2026,
-            "month": 4,
-            "day": 22
-        },
-        "netPos": 0,
-        "bought": 0,
-        "boughtValue": 0.0,
-        "sold": 0,
-        "soldValue": 0.0,
-        "archived": false,
-        "prevPos": 0
-    }
-]
-
---- Recent fills (trade history) ---
-[]
+--- Bot config: trading hours + session ---
+live: False
+symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+timeframe: 5min
+{}
+{}
 
 === Done ===
