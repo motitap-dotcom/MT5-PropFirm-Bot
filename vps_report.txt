@@ -1,0 +1,67 @@
+=== TradeDay Futures Bot - Status Check ===
+Timestamp: 2026-04-23 08:26:50 UTC
+
+--- System ---
+ 08:26:50 up 1 day, 18:46,  1 user,  load average: 0.71, 0.67, 0.58
+               total        used        free      shared  buff/cache   available
+Mem:           7.8Gi       1.1Gi       6.3Gi        18Mi       698Mi       6.7Gi
+Swap:          4.0Gi       512Ki       4.0Gi
+
+--- Bot Process ---
+Bot service: NOT RUNNING
+No bot process found
+
+--- Python ---
+Python 3.12.3
+Name: aiohttp
+Version: 3.13.3
+Name: websockets
+Version: 16.0
+
+--- Bot Logs (last 30 lines) ---
+2026-04-22 16:10:34,944 [bot] INFO: ============================================================
+2026-04-22 16:10:34,944 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-22 16:10:34,944 [bot] INFO: ============================================================
+2026-04-22 16:10:34,945 [news_filter] INFO: Loaded 26 restricted events
+2026-04-22 16:10:34,945 [tradovate_client] INFO: Trying pre-set access token from environment...
+2026-04-22 16:10:35,086 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-22 16:10:35,091 [tradovate_client] INFO: Environment token is valid
+2026-04-22 16:10:35,102 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-22 16:10:35,238 [bot] INFO: Bot started successfully
+2026-04-22 16:10:35,239 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-22 16:10:35,239 [bot] INFO: Timeframe: 5min
+2026-04-22 16:10:35,239 [bot] INFO: New trading day: 2026-04-22
+2026-04-22 16:14:33,761 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:14:34,124 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 16:14:34,124 [bot] INFO: Bot stopped
+2026-04-22 16:16:37,378 [bot] INFO: ============================================================
+2026-04-22 16:16:37,378 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-22 16:16:37,378 [bot] INFO: ============================================================
+2026-04-22 16:16:37,378 [news_filter] INFO: Loaded 26 restricted events
+2026-04-22 16:16:37,379 [tradovate_client] INFO: Trying pre-set access token from environment...
+2026-04-22 16:16:37,531 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-22 16:16:37,531 [tradovate_client] INFO: Environment token is valid
+2026-04-22 16:16:37,532 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-22 16:16:37,632 [bot] INFO: Bot started successfully
+2026-04-22 16:16:37,632 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-22 16:16:37,632 [bot] INFO: Timeframe: 5min
+2026-04-22 16:16:37,632 [bot] INFO: New trading day: 2026-04-22
+2026-04-22 16:18:22,173 [bot] INFO: Stopping bot: Signal received
+2026-04-22 16:18:22,529 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-22 16:18:22,529 [bot] INFO: Bot stopped
+
+--- Status JSON ---
+{
+  "timestamp": "",
+  "bot": "TradeDay Futures Bot",
+  "platform": "Tradovate",
+  "guardian": {},
+  "positions": [],
+  "risk": {}
+}
+
+--- Network Check ---
+Tradovate API: 404
+Telegram API: 302
+
+=== Check Complete ===
