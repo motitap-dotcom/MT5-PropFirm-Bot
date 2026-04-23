@@ -1,63 +1,63 @@
 === v169 verify ===
-2026-04-23 18:16:35 UTC
-Active: active  PID: 755824  CWD: /opt/futures_bot_stable
-Uptime: Thu 2026-04-23 18:07:03 UTC
+2026-04-23 18:26:35 UTC
+Active: active  PID: 758728  CWD: /root/MT5-PropFirm-Bot
+Uptime: Thu 2026-04-23 18:18:21 UTC
 
 --- Does running code have WS getChart? ---
 1
 YES
 
 --- Log: last 50 lines (look for 'Subscribing to chart', 'got X bars', 'Price=') ---
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/futures_bot_stable/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
-    if self._md_ws and not self._md_ws.open:
-                           ^^^^^^^^^^^^^^^^
-AttributeError: 'ClientConnection' object has no attribute 'open'
-2026-04-23 18:12:17,093 [bot] ERROR: Error processing MNQM6: 'ClientConnection' object has no attribute 'open'
-Traceback (most recent call last):
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 294, in _process_symbol
-    bars_data = await self.client.get_historical_bars(
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/futures_bot_stable/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
-    if self._md_ws and not self._md_ws.open:
-                           ^^^^^^^^^^^^^^^^
-AttributeError: 'ClientConnection' object has no attribute 'open'
-2026-04-23 18:12:17,093 [bot] ERROR: Error processing MCLM6: 'ClientConnection' object has no attribute 'open'
-Traceback (most recent call last):
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 294, in _process_symbol
-    bars_data = await self.client.get_historical_bars(
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/futures_bot_stable/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
-    if self._md_ws and not self._md_ws.open:
-                           ^^^^^^^^^^^^^^^^
-AttributeError: 'ClientConnection' object has no attribute 'open'
-2026-04-23 18:12:17,094 [bot] ERROR: Error processing MGCM6: 'ClientConnection' object has no attribute 'open'
-Traceback (most recent call last):
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 294, in _process_symbol
-    bars_data = await self.client.get_historical_bars(
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/futures_bot_stable/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
-    if self._md_ws and not self._md_ws.open:
-                           ^^^^^^^^^^^^^^^^
-AttributeError: 'ClientConnection' object has no attribute 'open'
-2026-04-23 18:12:17,095 [bot] ERROR: Error processing MYMM6: 'ClientConnection' object has no attribute 'open'
-Traceback (most recent call last):
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 294, in _process_symbol
-    bars_data = await self.client.get_historical_bars(
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/futures_bot_stable/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
-    if self._md_ws and not self._md_ws.open:
-                           ^^^^^^^^^^^^^^^^
-AttributeError: 'ClientConnection' object has no attribute 'open'
-2026-04-23 18:12:17,095 [bot] ERROR: Error processing M2KM6: 'ClientConnection' object has no attribute 'open'
-Traceback (most recent call last):
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 294, in _process_symbol
-    bars_data = await self.client.get_historical_bars(
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/futures_bot_stable/futures_bot/core/tradovate_client.py", line 907, in get_historical_bars
-    if self._md_ws and not self._md_ws.open:
-                           ^^^^^^^^^^^^^^^^
-AttributeError: 'ClientConnection' object has no attribute 'open'
+2026-04-23 18:18:25,188 [strategy.vwap] INFO: Price=2767.50 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=13.9 ATR=5.56
+2026-04-23 18:18:25,188 [strategy.vwap] INFO: Price=2774.10 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=26.1 ATR=5.96
+2026-04-23 18:18:25,188 [strategy.vwap] INFO: Price=2766.70 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=23.0 ATR=6.49
+2026-04-23 18:18:25,192 [strategy.vwap] INFO: Price=2756.20 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=15.9 ATR=7.14
+2026-04-23 18:18:25,192 [strategy.vwap] INFO: Price=2755.40 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=16.0 ATR=7.63
+2026-04-23 18:18:25,192 [strategy.vwap] INFO: Price=2771.50 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=31.8 ATR=9.11
+2026-04-23 18:18:25,192 [strategy.vwap] INFO: Price=2776.60 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=36.7 ATR=9.54
+2026-04-23 18:18:25,192 [strategy.vwap] INFO: ATR filter: 10.01 outside range 2.0-10.0
+2026-04-23 18:18:25,192 [strategy.vwap] INFO: ATR filter: 10.23 outside range 2.0-10.0
+2026-04-23 18:18:25,192 [strategy.vwap] INFO: Price=2782.50 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=46.4 ATR=9.67
+2026-04-23 18:18:25,192 [strategy.vwap] INFO: Price=2782.40 VWAP=0.00 -1SD=0.00 +1SD=0.00 RSI=53.0 ATR=9.18
+2026-04-23 18:23:25,458 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-23 18:23:25,459 [bot] INFO: Switching MESM6 to ORB strategy (trend day)
+2026-04-23 18:23:25,459 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-23 18:23:25,459 [bot] INFO: Switching MNQM6 to ORB strategy (trend day)
+2026-04-23 18:23:25,459 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-23 18:23:25,459 [bot] INFO: Switching MCLM6 to ORB strategy (trend day)
+2026-04-23 18:23:25,459 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-23 18:23:25,459 [bot] INFO: Switching MGCM6 to ORB strategy (trend day)
+2026-04-23 18:23:25,459 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-23 18:23:25,459 [bot] INFO: Switching MYMM6 to ORB strategy (trend day)
+2026-04-23 18:23:25,465 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
+2026-04-23 18:23:25,466 [bot] INFO: Switching M2KM6 to ORB strategy (trend day)
+2026-04-23 18:23:25,700 [tradovate_client] WARNING: MD WebSocket is closed, clearing subscriptions for reconnect
+2026-04-23 18:23:25,996 [tradovate_client] INFO: MD WebSocket connected
+2026-04-23 18:23:25,996 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-23 18:23:26,108 [tradovate_client] INFO: Chart subscription active: MESM6 (id=1381952)
+2026-04-23 18:23:26,334 [tradovate_client] INFO: MESM6: Received 50 historical bars via WebSocket
+2026-04-23 18:23:26,334 [bot] INFO: MESM6: got 50 bars from /md/getChart
+2026-04-23 18:23:26,335 [tradovate_client] INFO: Subscribing to chart data: MNQM6 (5min)
+2026-04-23 18:23:26,446 [tradovate_client] INFO: Chart subscription active: MNQM6 (id=1381954)
+2026-04-23 18:23:26,735 [tradovate_client] INFO: MNQM6: Received 50 historical bars via WebSocket
+2026-04-23 18:23:26,735 [bot] INFO: MNQM6: got 50 bars from /md/getChart
+2026-04-23 18:23:26,736 [tradovate_client] INFO: Subscribing to chart data: MCLM6 (5min)
+2026-04-23 18:23:26,847 [tradovate_client] INFO: Chart subscription active: MCLM6 (id=1381956)
+2026-04-23 18:23:27,074 [tradovate_client] INFO: MCLM6: Received 50 historical bars via WebSocket
+2026-04-23 18:23:27,074 [bot] INFO: MCLM6: got 50 bars from /md/getChart
+2026-04-23 18:23:27,075 [tradovate_client] INFO: Subscribing to chart data: MGCM6 (5min)
+2026-04-23 18:23:27,185 [tradovate_client] INFO: Chart subscription active: MGCM6 (id=1381958)
+2026-04-23 18:23:27,439 [tradovate_client] INFO: MGCM6: Received 50 historical bars via WebSocket
+2026-04-23 18:23:27,439 [bot] INFO: MGCM6: got 50 bars from /md/getChart
+2026-04-23 18:23:27,439 [tradovate_client] INFO: Subscribing to chart data: MYMM6 (5min)
+2026-04-23 18:23:27,550 [tradovate_client] INFO: Chart subscription active: MYMM6 (id=1381962)
+2026-04-23 18:23:27,786 [tradovate_client] INFO: MYMM6: Received 50 historical bars via WebSocket
+2026-04-23 18:23:27,787 [bot] INFO: MYMM6: got 50 bars from /md/getChart
+2026-04-23 18:23:27,787 [tradovate_client] INFO: Subscribing to chart data: M2KM6 (5min)
+2026-04-23 18:23:27,898 [tradovate_client] INFO: Chart subscription active: M2KM6 (id=1381964)
+2026-04-23 18:23:28,132 [tradovate_client] INFO: M2KM6: Received 50 historical bars via WebSocket
+2026-04-23 18:23:28,133 [bot] INFO: M2KM6: got 50 bars from /md/getChart
+2026-04-23 18:23:28,133 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
 
 --- Positions ---
 Open positions: 0
