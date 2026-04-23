@@ -1,4 +1,25 @@
-=== Fix & Restart ===
-Timestamp: 2026-04-07 11:33:42 UTC
-Restarted
-Status: active
+=== Fix & Restart v159 ===
+2026-04-23 14:11:55 UTC
+
+--- BEFORE ---
+Active: deactivating
+
+--- New service config ---
+ExecStart=/usr/local/sbin/futures-bot-wrapper.sh
+Restart=always
+RestartSec=2
+TimeoutStopSec=5
+
+--- Stop log (who killed in last hour) ---
+2026-04-23T13:55:30Z stopped: result=timeout code=killed status=KILL
+2026-04-23T13:57:47Z stopped: result=timeout code=killed status=KILL
+2026-04-23T14:02:49Z stopped: result=success code=exited status=0
+2026-04-23T14:07:51Z stopped: result=success code=exited status=0
+
+--- Current state (NOT restarting - let it keep running) ---
+Active: active
+PID: 699014
+CWD: /root/MT5-PropFirm-Bot
+Started: Thu 2026-04-23 14:11:55 UTC
+
+=== Done at 2026-04-23 14:11:55 UTC ===
