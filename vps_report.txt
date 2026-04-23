@@ -1,27 +1,12 @@
 === Check v3: full startup log ===
-Timestamp: 2026-04-23 11:55:19 UTC
+Timestamp: 2026-04-23 12:05:03 UTC
 
-PID: 663621
+PID: 666645
 CWD: /root/MT5-PropFirm-Bot
-Started: Thu Apr 23 11:45:54 2026
+Started: Thu Apr 23 11:57:39 2026
 
 --- Current bot log: last 60 lines ---
 Log file: /root/MT5-PropFirm-Bot/logs/bot.log
-2026-04-23 11:45:55,246 [tradovate_client] INFO: Loaded saved token from file, verifying...
-2026-04-23 11:45:55,246 [tradovate_client] INFO: Token expiring in -41min, renewing...
-2026-04-23 11:45:55,401 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-23 11:45:55,401 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-23 11:45:55,538 [tradovate_client] INFO: Saved token invalid, attempting renewal...
-2026-04-23 11:45:55,652 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-23 11:45:55,652 [tradovate_client] INFO: Trying pre-set access token from environment...
-2026-04-23 11:45:55,767 [tradovate_client] WARNING: GET /account/list got 401, renewing token and retrying...
-2026-04-23 11:45:55,885 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-23 11:45:55,885 [tradovate_client] WARNING: Renewal failed, falling back to full authentication...
-2026-04-23 11:45:56,000 [tradovate_client] INFO: Environment token invalid, attempting renewal...
-2026-04-23 11:45:56,118 [tradovate_client] WARNING: Token renewal failed (401): Expired Access Token
-2026-04-23 11:45:56,118 [tradovate_client] INFO: All tokens failed, attempting user/password authentication...
-2026-04-23 11:45:56,232 [bot] ERROR: Failed to connect: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-23 11:45:56,233 [bot] ERROR: Fatal error (attempt 1/5): Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
 Traceback (most recent call last):
   File "/root/MT5-PropFirm-Bot/futures_bot/bot.py", line 619, in main
     await bot.start()
@@ -67,11 +52,23 @@ ConnectionError: Authentication failed: Incorrect username or password. Please t
 2026-04-23 11:46:39,067 [bot] INFO: Trading symbols: ['MESM6']
 2026-04-23 11:46:39,067 [bot] INFO: Timeframe: 5min
 2026-04-23 11:46:39,067 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 11:57:30,977 [bot] INFO: Stopping bot: Signal received
+2026-04-23 11:57:31,352 [tradovate_client] INFO: Disconnected from Tradovate
+2026-04-23 11:57:31,352 [bot] INFO: Bot stopped
+2026-04-23 11:57:40,005 [bot] INFO: ============================================================
+2026-04-23 11:57:40,005 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 11:57:40,005 [bot] INFO: ============================================================
+2026-04-23 11:57:40,006 [news_filter] INFO: Loaded 26 restricted events
+2026-04-23 11:57:40,006 [tradovate_client] INFO: Loaded saved token from file, verifying...
+2026-04-23 11:57:40,229 [tradovate_client] INFO: Account: ELTDER260326211630296397 (id=45373493)
+2026-04-23 11:57:40,229 [tradovate_client] INFO: Saved token is still valid
+2026-04-23 11:57:40,230 [tradovate_client] INFO: Connected to Tradovate (DEMO) as TD_Motitap, account_id=45373493
+2026-04-23 11:57:40,333 [bot] INFO: Bot started successfully
+2026-04-23 11:57:40,333 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 11:57:40,333 [bot] INFO: Timeframe: 5min
+2026-04-23 11:57:40,334 [bot] INFO: New trading day: 2026-04-23
 
 --- Grep: config loading + symbols in this log ---
-2026-04-22 16:10:35,239 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
-2026-04-22 16:10:35,239 [bot] INFO: New trading day: 2026-04-22
-2026-04-22 16:16:37,378 [bot] INFO: TradeDay Futures Bot Starting
 2026-04-22 16:16:37,632 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
 2026-04-22 16:16:37,632 [bot] INFO: New trading day: 2026-04-22
 2026-04-23 09:43:11,495 [bot] INFO: TradeDay Futures Bot Starting
@@ -89,6 +86,9 @@ ConnectionError: Authentication failed: Incorrect username or password. Please t
 2026-04-23 11:46:26,669 [news_filter] WARNING: No restricted events file found at configs/restricted_events.json
 2026-04-23 11:46:39,067 [bot] INFO: Trading symbols: ['MESM6']
 2026-04-23 11:46:39,067 [bot] INFO: New trading day: 2026-04-23
+2026-04-23 11:57:40,005 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 11:57:40,333 [bot] INFO: Trading symbols: ['MESM6', 'MNQM6', 'MCLM6', 'MGCM6', 'MYMM6', 'M2KM6']
+2026-04-23 11:57:40,334 [bot] INFO: New trading day: 2026-04-23
 
 --- Config file content (first 5 lines) ---
 {
