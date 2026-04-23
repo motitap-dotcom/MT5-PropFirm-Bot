@@ -40,8 +40,8 @@
 
   "vwap": {
     "rsi_period": 14,
-    "rsi_oversold": 35,
-    "rsi_overbought": 65,
+    "rsi_oversold": 40,
+    "rsi_overbought": 60,
     "max_consecutive_losses": 3,
     "min_atr": 2.0,
     "max_atr": 8.0,
