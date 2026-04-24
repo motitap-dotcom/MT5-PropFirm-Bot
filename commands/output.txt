@@ -1,49 +1,39 @@
-=== Status 2026-04-24 14:57 UTC | NY 10:57 ===
-Active: active  PID: 1031214  CWD: /root/MT5-PropFirm-Bot
-Uptime: Fri 2026-04-24 13:43:23 UTC
+=== Check v176 2026-04-24 15:06 UTC | NY 11:06 ===
+Active: active  PID: 1049490  CWD: /opt/futures_bot_stable
+Uptime: Fri 2026-04-24 14:59:24 UTC
 
---- Trade-related log lines (last 25) ---
-2026-04-23 17:54:19,818 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 18:06:55,308 [bot] INFO: Stopping bot: Signal received
-2026-04-23 18:18:22,135 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 18:28:46,836 [bot] INFO: Stopping bot: Signal received
-2026-04-23 19:07:51,194 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 19:07:54,247 [tradovate_client] INFO: Market order placed: Sell 1 MYMM6, orderId=472310967812
-2026-04-23 19:07:54,541 [bot] INFO: TRADE: Sell 1 MYMM6 @ 49459.00 SL=49695.96 TP=49383.25 Risk=$118.48 Strategy=VWAP Mean Reversion
-2026-04-23 19:12:59,894 [tradovate_client] INFO: Market order placed: Sell 1 MYMM6, orderId=472310967835
-2026-04-23 19:13:00,136 [bot] INFO: TRADE: Sell 1 MYMM6 @ 49480.00 SL=49695.92 TP=49383.49 Risk=$107.96 Strategy=VWAP Mean Reversion
-2026-04-23 19:18:03,368 [bot] INFO: Position sync: 2 -> 1
-2026-04-23 19:18:03,600 [tradovate_client] INFO: Market order placed: Sell 1 MYMM6, orderId=472310967856
-2026-04-23 19:18:03,843 [bot] INFO: TRADE: Sell 1 MYMM6 @ 49478.00 SL=49696.01 TP=49384.38 Risk=$109.01 Strategy=VWAP Mean Reversion
-2026-04-23 19:23:06,652 [bot] INFO: Position sync: 2 -> 1
-2026-04-23 19:38:37,356 [bot] INFO: Stopping bot: Signal received
-2026-04-23 19:38:37,740 [tradovate_client] INFO: Market order placed: Buy 3 MYMM6, orderId=472310967877
-2026-04-23 20:32:45,076 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 20:33:15,086 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 20:34:15,128 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 20:36:15,186 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-23 20:41:15,277 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-24 13:43:24,338 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-24 13:43:56,001 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-24 13:44:11,021 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.79SD RSI=88.7 entry=7168.50 sl=7183.06 tp1=7160.72 tp2=7145.99
-2026-04-24 13:44:11,021 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.27SD RSI=86.2 entry=7184.25 sl=7197.03 tp1=7168.05 tp2=7148.89
-2026-04-24 13:44:11,021 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.72SD RSI=75.2 entry=7177.75 sl=7197.64 tp1=7168.62 tp2=7149.55
+--- ATR config ---
+    "MES": {"min_atr": 2.0, "max_atr": 12.0},
+    "MNQ": {"min_atr": 10.0, "max_atr": 80.0},
+    "MCL": {"min_atr": 0.05, "max_atr": 0.40},
+--
+    "MES": {"max_range_points": 15.0, "min_range_points": 3.0, "buffer_ticks": 2.0},
+    "MNQ": {"max_range_points": 60.0, "min_range_points": 10.0, "buffer_ticks": 5.0},
+    "MCL": {"max_range_points": 0.50, "min_range_points": 0.05, "buffer_ticks": 0.03},
+    "MES": {"min_atr": 2.0, "max_atr": 12.0},
+    "MNQ": {"min_atr": 10.0, "max_atr": 80.0},
 
---- Last strategy snapshots ---
-2026-04-24 14:09:13,127 [strategy.vwap] INFO: Price=7155.50 VWAP=7162.23 dist=-0.69SD RSI=42.9 ATR=7.39
-2026-04-24 14:14:13,510 [strategy.vwap] INFO: Price=7160.50 VWAP=7162.01 dist=-0.16SD RSI=45.4 ATR=7.88
-2026-04-24 14:19:13,913 [strategy.vwap] INFO: Price=7158.00 VWAP=7161.85 dist=-0.41SD RSI=43.9 ATR=8.12
-2026-04-24 14:24:14,317 [strategy.vwap] INFO: Price=7157.50 VWAP=7161.75 dist=-0.46SD RSI=42.1 ATR=8.07
-2026-04-24 14:29:14,711 [strategy.vwap] INFO: Price=7155.50 VWAP=7161.48 dist=-0.65SD RSI=36.5 ATR=8.45
-2026-04-24 14:34:15,109 [strategy.vwap] INFO: Price=7155.25 VWAP=7161.23 dist=-0.65SD RSI=38.5 ATR=8.52
-2026-04-24 14:39:15,482 [strategy.vwap] INFO: Price=7162.75 VWAP=7161.20 dist=+0.17SD RSI=50.2 ATR=8.93
-2026-04-24 14:44:15,870 [strategy.vwap] INFO: Price=7164.75 VWAP=7161.25 dist=+0.39SD RSI=62.2 ATR=8.23
-2026-04-24 14:49:16,255 [strategy.vwap] INFO: Price=7164.75 VWAP=7161.42 dist=+0.38SD RSI=57.8 ATR=8.20
-2026-04-24 14:54:16,634 [strategy.vwap] INFO: Price=7168.00 VWAP=7161.53 dist=+0.74SD RSI=65.8 ATR=8.09
+--- Trade signals + recent strategy ---
+2026-04-24 14:59:30,603 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.30SD RSI=39.0 entry=49350.00 sl=49175.53 tp1=49374.25 tp2=49494.25
+2026-04-24 14:59:30,954 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.95SD RSI=39.8 entry=2792.40 sl=2786.30 tp1=2796.42 tp2=2802.77
+2026-04-24 14:59:30,954 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-0.96SD RSI=37.5 entry=2792.30 sl=2786.25 tp1=2796.37 tp2=2802.71
+2026-04-24 14:59:30,954 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.33SD RSI=32.9 entry=2788.40 sl=2783.05 tp1=2794.52 tp2=2801.40
+2026-04-24 14:59:30,954 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.63SD RSI=37.5 entry=2779.20 sl=2773.64 tp1=2791.21 tp2=2802.28
+2026-04-24 14:59:30,955 [strategy.vwap] INFO: >>> LONG SIGNAL: dist=-1.07SD RSI=37.0 entry=2781.10 sl=2770.64 tp1=2789.69 tp2=2801.69
+2026-04-24 15:04:31,671 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.92SD RSI=76.9 entry=7169.50 sl=7182.44 tp1=7161.82 tp2=7149.35
+2026-04-24 15:04:31,671 [bot] INFO: MESM6: SIGNAL SHORT from VWAP Mean Reversion | entry=7169.50 sl=7182.44
+2026-04-24 15:04:32,365 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.99SD RSI=69.5 entry=4739.80 sl=4757.27 tp1=4726.56 tp2=4706.59
+2026-04-24 15:04:32,365 [bot] INFO: MGCM6: SIGNAL SHORT from VWAP Mean Reversion | entry=4739.80 sl=4757.27
+
+2026-04-24 14:59:30,955 [strategy.vwap] INFO: Price=2789.90 VWAP=2789.17 dist=+0.10SD RSI=56.3 ATR=6.34
+2026-04-24 14:59:30,955 [strategy.vwap] INFO: Price=2790.50 VWAP=2789.18 dist=+0.19SD RSI=64.0 ATR=6.11
+2026-04-24 15:04:31,671 [strategy.vwap] INFO: Price=7169.50 VWAP=7161.82 dist=+0.92SD RSI=76.9 ATR=7.98
+2026-04-24 15:04:32,364 [strategy.vwap] INFO: Price=27291.00 VWAP=27237.61 dist=+1.40SD RSI=74.9 ATR=48.32
+2026-04-24 15:04:32,364 [strategy.vwap] INFO: Price=95.36 VWAP=95.17 dist=+0.34SD RSI=48.4 ATR=0.41
+2026-04-24 15:04:32,364 [strategy.vwap] INFO: Price=4739.80 VWAP=4726.56 dist=+0.99SD RSI=69.5 ATR=8.17
+2026-04-24 15:04:32,365 [strategy.vwap] INFO: Price=49306.00 VWAP=49370.06 dist=-0.83SD RSI=51.3 ATR=54.14
+2026-04-24 15:04:32,365 [strategy.vwap] INFO: Price=2791.40 VWAP=2789.20 dist=+0.31SD RSI=87.5 ATR=5.45
 
 --- Account ---
-Open positions: 0
-Fills today (2026-04-24): 0
-Balance: $51,355.08  Day PnL: $+0.00  Open PnL: $+0.00
 
 === Done ===
