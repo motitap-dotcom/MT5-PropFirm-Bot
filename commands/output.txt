@@ -1,150 +1,43 @@
-=== Deep check 2026-04-24 13:41 UTC ===
-PID: 1029821  CWD: /opt/futures_bot_stable
+=== Check after v175 2026-04-24 13:50 UTC ===
+Active: active  PID: 1031214  CWD: /root/MT5-PropFirm-Bot
 
---- Does /root have latest code? ---
--rw-r--r-- 1 root root 34355 Apr 24 13:41 /root/MT5-PropFirm-Bot/futures_bot/bot.py
+--- Does tradovate_client accept kwargs? ---
 1
-3
 
---- Why is wrapper falling back to /opt? ---
-#!/bin/bash
-# Wrapper invoked by systemd's ExecStart. Lives in /usr/local/sbin to survive
-# wipes of /root/MT5-PropFirm-Bot. If the repo copy is present it takes
-# precedence; otherwise we fall back to the stable copy at /opt.
-set -e
-STABLE=/opt/futures_bot_stable
-REPO=/root/MT5-PropFirm-Bot
+--- Log tail ---
+2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7169.75 VWAP=7169.19 dist=+0.05SD RSI=66.4 ATR=7.86
+2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7172.00 VWAP=7169.22 dist=+0.24SD RSI=67.5 ATR=8.00
+2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7175.25 VWAP=7169.41 dist=+0.51SD RSI=63.4 ATR=7.43
+2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7174.50 VWAP=7169.63 dist=+0.44SD RSI=56.9 ATR=6.86
+2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7174.50 VWAP=7169.77 dist=+0.43SD RSI=54.5 ATR=6.82
+2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7173.75 VWAP=7169.85 dist=+0.36SD RSI=56.1 ATR=6.46
+2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7168.75 VWAP=7169.86 dist=-0.10SD RSI=30.4 ATR=5.73
+2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7165.50 VWAP=7169.61 dist=-0.39SD RSI=16.8 ATR=5.91
+2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7164.00 VWAP=7169.52 dist=-0.53SD RSI=17.6 ATR=5.75
+2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7158.00 VWAP=7169.04 dist=-1.07SD RSI=17.9 ATR=6.07
+2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7156.50 VWAP=7168.45 dist=-1.15SD RSI=18.8 ATR=6.00
+2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7162.50 VWAP=7168.25 dist=-0.56SD RSI=35.9 ATR=6.16
+2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7165.25 VWAP=7168.15 dist=-0.28SD RSI=41.6 ATR=6.09
+2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7164.50 VWAP=7168.09 dist=-0.35SD RSI=40.7 ATR=6.12
+2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7165.75 VWAP=7168.04 dist=-0.23SD RSI=44.3 ATR=6.23
+2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7169.25 VWAP=7168.04 dist=+0.12SD RSI=46.2 ATR=6.23
+2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7166.25 VWAP=7168.01 dist=-0.18SD RSI=37.5 ATR=6.34
+2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7162.50 VWAP=7167.87 dist=-0.56SD RSI=34.6 ATR=5.93
+2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7153.75 VWAP=7166.52 dist=-1.33SD RSI=28.3 ATR=6.36
+2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7158.50 VWAP=7165.64 dist=-0.74SD RSI=35.3 ATR=6.75
+2026-04-24 13:44:11,022 [bot] INFO: MESM6: New bar 2026-04-24T13:40Z | O=7158.5 H=7160.75 L=7154.75 C=7155.25 V=13014
+2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7155.25 VWAP=7165.17 dist=-1.04SD RSI=36.5 ATR=6.79
+2026-04-24 13:45:10,794 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
+2026-04-24 13:45:13,128 [tradovate_client] INFO: MD WebSocket connected
+2026-04-24 13:45:13,128 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-24 13:45:13,243 [tradovate_client] INFO: Chart subscription active: MESM6 (id=1604694)
+2026-04-24 13:45:13,467 [tradovate_client] INFO: MESM6: Received 100 historical bars via WebSocket
+2026-04-24 13:49:11,025 [bot] INFO: === Trading cycle 09:49 ET | Guardian: ACTIVE ===
+2026-04-24 13:49:11,409 [bot] INFO: MESM6: New bar 2026-04-24T13:45Z | O=7155.0 H=7159.25 L=7152.25 C=7157.0 V=13793
+2026-04-24 13:49:11,410 [strategy.vwap] INFO: Price=7157.00 VWAP=7164.69 dist=-0.81SD RSI=41.2 ATR=6.66
 
-# Pick the side that still has bot.py
-if [ -f "$REPO/futures_bot/bot.py" ]; then
-  BOT_DIR="$REPO"
-elif [ -f "$STABLE/futures_bot/bot.py" ]; then
-  BOT_DIR="$STABLE"
-  echo "[wrapper] repo copy missing, falling back to $STABLE"
-else
-  echo "[wrapper] FATAL: no bot.py found in $REPO or $STABLE" >&2
-  exit 1
-fi
-
-cd "$BOT_DIR"
-
---- Full bot log from last 10 min ---
-    await bot.start()
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 191, in start
-    self.client = TradovateClient(
-                  ^^^^^^^^^^^^^^^^
-TypeError: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:34:04,965 [bot] INFO: Stopping bot: Fatal: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:34:04,965 [bot] INFO: Bot stopped
-2026-04-24 13:34:04,965 [bot] INFO: Retrying in 30s...
-2026-04-24 13:34:34,994 [bot] INFO: Config validation passed
-2026-04-24 13:34:34,994 [bot] INFO: ============================================================
-2026-04-24 13:34:34,995 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-24 13:34:34,995 [bot] INFO: ============================================================
-2026-04-24 13:34:34,995 [bot] ERROR: Fatal error (attempt 2/5): TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-Traceback (most recent call last):
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 833, in main
-    await bot.start()
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 191, in start
-    self.client = TradovateClient(
-                  ^^^^^^^^^^^^^^^^
-TypeError: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:34:34,995 [bot] INFO: Stopping bot: Fatal: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:34:34,995 [bot] INFO: Bot stopped
-2026-04-24 13:34:34,995 [bot] INFO: Retrying in 60s...
-2026-04-24 13:35:35,007 [bot] INFO: Config validation passed
-2026-04-24 13:35:35,007 [bot] INFO: ============================================================
-2026-04-24 13:35:35,008 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-24 13:35:35,008 [bot] INFO: ============================================================
-2026-04-24 13:35:35,008 [bot] ERROR: Fatal error (attempt 3/5): TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-Traceback (most recent call last):
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 833, in main
-    await bot.start()
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 191, in start
-    self.client = TradovateClient(
-                  ^^^^^^^^^^^^^^^^
-TypeError: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:35:35,008 [bot] INFO: Stopping bot: Fatal: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:35:35,008 [bot] INFO: Bot stopped
-2026-04-24 13:35:35,008 [bot] INFO: Retrying in 120s...
-2026-04-24 13:37:35,102 [bot] INFO: Config validation passed
-2026-04-24 13:37:35,103 [bot] INFO: ============================================================
-2026-04-24 13:37:35,103 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-24 13:37:35,103 [bot] INFO: ============================================================
-2026-04-24 13:37:35,103 [bot] ERROR: Fatal error (attempt 4/5): TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-Traceback (most recent call last):
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 833, in main
-    await bot.start()
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 191, in start
-    self.client = TradovateClient(
-                  ^^^^^^^^^^^^^^^^
-TypeError: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:37:35,103 [bot] INFO: Stopping bot: Fatal: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:37:35,103 [bot] INFO: Bot stopped
-2026-04-24 13:37:35,103 [bot] INFO: Retrying in 300s...
-2026-04-24 13:38:59,614 [bot] INFO: Stopping bot: Signal received
-2026-04-24 13:38:59,614 [bot] INFO: Bot stopped
-2026-04-24 13:39:05,230 [bot] INFO: Config validation passed
-2026-04-24 13:39:05,230 [bot] INFO: ============================================================
-2026-04-24 13:39:05,230 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-24 13:39:05,230 [bot] INFO: ============================================================
-2026-04-24 13:39:05,230 [bot] ERROR: Fatal error (attempt 1/5): TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-Traceback (most recent call last):
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 833, in main
-    await bot.start()
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 191, in start
-    self.client = TradovateClient(
-                  ^^^^^^^^^^^^^^^^
-TypeError: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:39:05,231 [bot] INFO: Stopping bot: Fatal: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:39:05,231 [bot] INFO: Bot stopped
-2026-04-24 13:39:05,231 [bot] INFO: Retrying in 30s...
-2026-04-24 13:39:35,267 [bot] INFO: Config validation passed
-2026-04-24 13:39:35,270 [bot] INFO: ============================================================
-2026-04-24 13:39:35,270 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-24 13:39:35,271 [bot] INFO: ============================================================
-2026-04-24 13:39:35,271 [bot] ERROR: Fatal error (attempt 2/5): TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-Traceback (most recent call last):
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 833, in main
-    await bot.start()
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 191, in start
-    self.client = TradovateClient(
-                  ^^^^^^^^^^^^^^^^
-TypeError: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:39:35,271 [bot] INFO: Stopping bot: Fatal: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:39:35,271 [bot] INFO: Bot stopped
-2026-04-24 13:39:35,291 [bot] INFO: Retrying in 60s...
-2026-04-24 13:40:35,338 [bot] INFO: Config validation passed
-2026-04-24 13:40:35,339 [bot] INFO: ============================================================
-2026-04-24 13:40:35,339 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-24 13:40:35,339 [bot] INFO: ============================================================
-2026-04-24 13:40:35,339 [bot] ERROR: Fatal error (attempt 3/5): TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-Traceback (most recent call last):
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 833, in main
-    await bot.start()
-  File "/opt/futures_bot_stable/futures_bot/bot.py", line 191, in start
-    self.client = TradovateClient(
-                  ^^^^^^^^^^^^^^^^
-TypeError: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:40:35,339 [bot] INFO: Stopping bot: Fatal: TradovateClient.__init__() got an unexpected keyword argument 'token_refresh_threshold_seconds'
-2026-04-24 13:40:35,339 [bot] INFO: Bot stopped
-2026-04-24 13:40:35,339 [bot] INFO: Retrying in 120s...
-
---- Stop log ---
-2026-04-24T12:53:54Z stopped: result=timeout code=killed status=KILL
-2026-04-24T12:58:54Z stopped: result=timeout code=killed status=KILL
-2026-04-24T13:03:58Z stopped: result=timeout code=killed status=KILL
-2026-04-24T13:09:02Z stopped: result=timeout code=killed status=KILL
-2026-04-24T13:14:02Z stopped: result=timeout code=killed status=KILL
-2026-04-24T13:19:02Z stopped: result=timeout code=killed status=KILL
-2026-04-24T13:24:03Z stopped: result=timeout code=killed status=KILL
-2026-04-24T13:29:04Z stopped: result=timeout code=killed status=KILL
-2026-04-24T13:34:04Z stopped: result=timeout code=killed status=KILL
-2026-04-24T13:39:04Z stopped: result=timeout code=killed status=KILL
-
---- Git state ---
-Branch: claude/claude-md-mm3qa8i9848jcovk-X3DTU
-HEAD: ad26046 Deep check after merge
-Main: c69f168 VPS fix report 2026-04-23 20:32 UTC
+--- Positions + fills ---
+Open: 0
+Fills today: 0
 
 === Done ===
