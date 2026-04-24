@@ -82,7 +82,13 @@ class TradovateClient:
     WEB_SEC = ""
 
     def __init__(self, username: str, password: str, live: bool = False,
-                 organization: str = ""):
+                 organization: str = "", **kwargs):
+        # Accept extra kwargs (e.g. token_refresh_threshold_seconds) for
+        # forward-compat with the post-audit bot.py. Anything not used here
+        # is ignored so a version mismatch won't crash startup.
+        self.token_refresh_threshold_seconds = kwargs.get(
+            "token_refresh_threshold_seconds", 3600
+        )
         self.username = username
         self.password = password
         self.live = live
