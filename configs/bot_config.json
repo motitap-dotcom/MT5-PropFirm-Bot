@@ -43,10 +43,10 @@
   },
 
   "vwap_per_symbol": {
-    "MES": {"min_atr": 2.0, "max_atr": 8.0},
-    "MNQ": {"min_atr": 10.0, "max_atr": 50.0},
-    "MCL": {"min_atr": 0.05, "max_atr": 0.30},
-    "MGC": {"min_atr": 1.0, "max_atr": 6.0},
+    "MES": {"min_atr": 2.0, "max_atr": 12.0},
+    "MNQ": {"min_atr": 10.0, "max_atr": 80.0},
+    "MCL": {"min_atr": 0.05, "max_atr": 0.40},
+    "MGC": {"min_atr": 1.0, "max_atr": 10.0},
     "MYM": {"min_atr": 20.0, "max_atr": 80.0},
     "M2K": {"min_atr": 2.0, "max_atr": 10.0}
   },
@@ -57,7 +57,7 @@
     "rsi_overbought": 60,
     "max_consecutive_losses": 3,
     "min_atr": 2.0,
-    "max_atr": 8.0,
+    "max_atr": 12.0,
     "atr_period": 14,
     "sl_atr_multiplier": 0.5,
     "tp2_sd_multiplier": 1.5,
