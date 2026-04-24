@@ -1,43 +1,49 @@
-=== Check after v175 2026-04-24 13:50 UTC ===
+=== Status 2026-04-24 14:08 UTC | NY 10:08 ===
 Active: active  PID: 1031214  CWD: /root/MT5-PropFirm-Bot
+Uptime: Fri 2026-04-24 13:43:23 UTC
 
---- Does tradovate_client accept kwargs? ---
-1
+--- Trade-related log lines (last 25) ---
+2026-04-23 17:54:19,818 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 18:06:55,308 [bot] INFO: Stopping bot: Signal received
+2026-04-23 18:18:22,135 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 18:28:46,836 [bot] INFO: Stopping bot: Signal received
+2026-04-23 19:07:51,194 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 19:07:54,247 [tradovate_client] INFO: Market order placed: Sell 1 MYMM6, orderId=472310967812
+2026-04-23 19:07:54,541 [bot] INFO: TRADE: Sell 1 MYMM6 @ 49459.00 SL=49695.96 TP=49383.25 Risk=$118.48 Strategy=VWAP Mean Reversion
+2026-04-23 19:12:59,894 [tradovate_client] INFO: Market order placed: Sell 1 MYMM6, orderId=472310967835
+2026-04-23 19:13:00,136 [bot] INFO: TRADE: Sell 1 MYMM6 @ 49480.00 SL=49695.92 TP=49383.49 Risk=$107.96 Strategy=VWAP Mean Reversion
+2026-04-23 19:18:03,368 [bot] INFO: Position sync: 2 -> 1
+2026-04-23 19:18:03,600 [tradovate_client] INFO: Market order placed: Sell 1 MYMM6, orderId=472310967856
+2026-04-23 19:18:03,843 [bot] INFO: TRADE: Sell 1 MYMM6 @ 49478.00 SL=49696.01 TP=49384.38 Risk=$109.01 Strategy=VWAP Mean Reversion
+2026-04-23 19:23:06,652 [bot] INFO: Position sync: 2 -> 1
+2026-04-23 19:38:37,356 [bot] INFO: Stopping bot: Signal received
+2026-04-23 19:38:37,740 [tradovate_client] INFO: Market order placed: Buy 3 MYMM6, orderId=472310967877
+2026-04-23 20:32:45,076 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 20:33:15,086 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 20:34:15,128 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 20:36:15,186 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-23 20:41:15,277 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-24 13:43:24,338 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-24 13:43:56,001 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-24 13:44:11,021 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.79SD RSI=88.7 entry=7168.50 sl=7183.06 tp1=7160.72 tp2=7145.99
+2026-04-24 13:44:11,021 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.27SD RSI=86.2 entry=7184.25 sl=7197.03 tp1=7168.05 tp2=7148.89
+2026-04-24 13:44:11,021 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.72SD RSI=75.2 entry=7177.75 sl=7197.64 tp1=7168.62 tp2=7149.55
 
---- Log tail ---
-2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7169.75 VWAP=7169.19 dist=+0.05SD RSI=66.4 ATR=7.86
-2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7172.00 VWAP=7169.22 dist=+0.24SD RSI=67.5 ATR=8.00
-2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7175.25 VWAP=7169.41 dist=+0.51SD RSI=63.4 ATR=7.43
-2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7174.50 VWAP=7169.63 dist=+0.44SD RSI=56.9 ATR=6.86
-2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7174.50 VWAP=7169.77 dist=+0.43SD RSI=54.5 ATR=6.82
-2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7173.75 VWAP=7169.85 dist=+0.36SD RSI=56.1 ATR=6.46
-2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7168.75 VWAP=7169.86 dist=-0.10SD RSI=30.4 ATR=5.73
-2026-04-24 13:44:11,021 [strategy.vwap] INFO: Price=7165.50 VWAP=7169.61 dist=-0.39SD RSI=16.8 ATR=5.91
-2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7164.00 VWAP=7169.52 dist=-0.53SD RSI=17.6 ATR=5.75
-2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7158.00 VWAP=7169.04 dist=-1.07SD RSI=17.9 ATR=6.07
-2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7156.50 VWAP=7168.45 dist=-1.15SD RSI=18.8 ATR=6.00
-2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7162.50 VWAP=7168.25 dist=-0.56SD RSI=35.9 ATR=6.16
-2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7165.25 VWAP=7168.15 dist=-0.28SD RSI=41.6 ATR=6.09
-2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7164.50 VWAP=7168.09 dist=-0.35SD RSI=40.7 ATR=6.12
-2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7165.75 VWAP=7168.04 dist=-0.23SD RSI=44.3 ATR=6.23
+--- Last strategy snapshots ---
 2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7169.25 VWAP=7168.04 dist=+0.12SD RSI=46.2 ATR=6.23
 2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7166.25 VWAP=7168.01 dist=-0.18SD RSI=37.5 ATR=6.34
 2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7162.50 VWAP=7167.87 dist=-0.56SD RSI=34.6 ATR=5.93
 2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7153.75 VWAP=7166.52 dist=-1.33SD RSI=28.3 ATR=6.36
 2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7158.50 VWAP=7165.64 dist=-0.74SD RSI=35.3 ATR=6.75
-2026-04-24 13:44:11,022 [bot] INFO: MESM6: New bar 2026-04-24T13:40Z | O=7158.5 H=7160.75 L=7154.75 C=7155.25 V=13014
 2026-04-24 13:44:11,022 [strategy.vwap] INFO: Price=7155.25 VWAP=7165.17 dist=-1.04SD RSI=36.5 ATR=6.79
-2026-04-24 13:45:10,794 [tradovate_client] WARNING: MD WebSocket disconnected, reconnecting in 2s...
-2026-04-24 13:45:13,128 [tradovate_client] INFO: MD WebSocket connected
-2026-04-24 13:45:13,128 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
-2026-04-24 13:45:13,243 [tradovate_client] INFO: Chart subscription active: MESM6 (id=1604694)
-2026-04-24 13:45:13,467 [tradovate_client] INFO: MESM6: Received 100 historical bars via WebSocket
-2026-04-24 13:49:11,025 [bot] INFO: === Trading cycle 09:49 ET | Guardian: ACTIVE ===
-2026-04-24 13:49:11,409 [bot] INFO: MESM6: New bar 2026-04-24T13:45Z | O=7155.0 H=7159.25 L=7152.25 C=7157.0 V=13793
 2026-04-24 13:49:11,410 [strategy.vwap] INFO: Price=7157.00 VWAP=7164.69 dist=-0.81SD RSI=41.2 ATR=6.66
+2026-04-24 13:54:11,778 [strategy.vwap] INFO: Price=7152.50 VWAP=7164.27 dist=-1.24SD RSI=38.8 ATR=6.88
+2026-04-24 13:59:12,358 [strategy.vwap] INFO: Price=7154.00 VWAP=7163.43 dist=-0.97SD RSI=45.7 ATR=6.75
+2026-04-24 14:04:12,749 [strategy.vwap] INFO: Price=7150.00 VWAP=7162.67 dist=-1.29SD RSI=43.4 ATR=7.18
 
---- Positions + fills ---
-Open: 0
-Fills today: 0
+--- Account ---
+Open positions: 0
+Fills today (2026-04-24): 0
+Balance: $51,355.08  Day PnL: $+0.00  Open PnL: $+0.00
 
 === Done ===
