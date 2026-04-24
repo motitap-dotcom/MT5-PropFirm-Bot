@@ -1,100 +1,23 @@
-=== v149 post-audit 2026-04-23 20:00 UTC ===
+=== Status 2026-04-24 13:39:45 UTC ===
+NY Time: 09:39 EDT
 
---- SERVICE ---
-Service: deactivating
-PID:     783071
-Uptime:  Thu 2026-04-23 19:58:52 UTC
+Active: active
+PID: 1029821  CWD: /opt/futures_bot_stable
+Uptime: Fri 2026-04-24 13:39:04 UTC
+Git: 98d8bbd Status check after market reopen
 
---- CODE ---
-Branch:  claude/claude-md-mm3qa8i9848jcovk-X3DTU
-Commit:  14ab786 Merge main: keep WS market data + today's critical fixes on top of audit refactor
+--- Last trade-related log lines ---
+2026-04-24 13:30:34,843 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-24 13:32:34,919 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-24 13:33:59,509 [bot] INFO: Stopping bot: Signal received
+2026-04-24 13:34:04,963 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-24 13:34:34,995 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-24 13:35:35,008 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-24 13:37:35,103 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-24 13:38:59,614 [bot] INFO: Stopping bot: Signal received
+2026-04-24 13:39:05,230 [bot] INFO: TradeDay Futures Bot Starting
+2026-04-24 13:39:35,270 [bot] INFO: TradeDay Futures Bot Starting
 
---- CONFIG VALIDATION (latest log match) ---
-2026-04-13 20:23:50,431 [bot] INFO: Config validation passed
-2026-04-14 14:16:17,388 [bot] INFO: Config validation passed
-2026-04-14 15:21:53,732 [bot] INFO: Config validation passed
-2026-04-17 14:14:14,146 [bot] INFO: Config validation passed
-2026-04-17 14:14:45,616 [bot] INFO: Config validation passed
-2026-04-17 14:35:52,323 [bot] INFO: Config validation passed
-2026-04-21 14:11:25,203 [bot] INFO: Config validation passed
-2026-04-21 14:11:56,693 [bot] INFO: Config validation passed
-2026-04-22 10:03:09,515 [bot] INFO: Config validation passed
-2026-04-22 10:03:41,092 [bot] INFO: Config validation passed
+--- Positions + fills (live from Tradovate) ---
 
---- NEW FILES CHECK ---
--rw-r--r-- 1 root root 2856 Apr 23 20:00 futures_bot/core/trade_logger.py
-  trade_logger.py: OK
--rwxr-xr-x 1 root root 3474 Apr 23 20:00 scripts/weekly_review.sh
-  weekly_review.sh: OK
-
---- STATUS / DASHBOARD ---
-dashboard.txt (age: 5s):
-============================================================
-TradeDay Futures Bot — 2026-04-22T09:52:03.355081+00:00
-============================================================
-State            : CAUTION
-Balance          : $0.00
-Total PnL        : $+0.00
-Daily PnL        : $+0.00   Trades today: 0
-Trading days     : 0/5
-DD used / left   : $0.00 / $0.00
-To profit target : $0.00
-Consistency OK   : True
-Reason           : —
-------------------------------------------------------------
-Active strategy  : {}
-Open positions   : 0
-============================================================
-
-status.json (age: 5s):
-  state: None
-  balance: None
-  dd_used: None
-
---- TRADE LOG ---
-1 logs/trades_log.csv
-timestamp_utc,symbol,strategy,direction,contracts,entry,sl,tp,exit,pnl,r_multiple,reason,daily_pnl_after,balance_after
-
---- RECENT BOT LOG (last 40 lines) ---
-2026-04-23 19:18:06,076 [bot] WARNING: NO TAKE PROFIT found for MYMM6! Placing emergency TP...
-2026-04-23 19:18:06,197 [tradovate_client] INFO: Limit order: Buy 1 MYMM6 @ 49384.38100926731
-2026-04-23 19:18:06,197 [bot] INFO: Emergency TP placed at 49384.38100926731
-2026-04-23 19:18:06,296 [bot] INFO: M2KM6: got 50 bars from /md/getChart
-2026-04-23 19:18:06,298 [strategy.vwap] INFO: Price=2780.00 VWAP=2778.20 -1SD=2764.17 +1SD=2792.23 RSI=51.8 ATR=4.01
-2026-04-23 19:18:06,299 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-23 19:23:06,512 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 19:23:06,512 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 19:23:06,652 [bot] INFO: Position sync: 2 -> 1
-2026-04-23 19:23:06,773 [bot] INFO: MESM6: got 50 bars from /md/getChart
-2026-04-23 19:23:06,775 [bot] INFO: MNQM6: got 50 bars from /md/getChart
-2026-04-23 19:23:06,777 [strategy.vwap] INFO: Price=26910.75 VWAP=26961.46 -1SD=26846.15 +1SD=27076.76 RSI=48.1 ATR=34.18
-2026-04-23 19:23:06,779 [bot] INFO: MCLM6: got 50 bars from /md/getChart
-2026-04-23 19:23:06,779 [bot] INFO: MGCM6: got 50 bars from /md/getChart
-2026-04-23 19:23:06,779 [strategy.vwap] INFO: ATR filter: 6.26 outside range 1.0-6.0
-2026-04-23 19:23:06,779 [bot] INFO: MYMM6: got 50 bars from /md/getChart
-2026-04-23 19:23:06,779 [strategy.vwap] INFO: Price=49473.00 VWAP=49384.68 -1SD=49230.02 +1SD=49539.35 RSI=59.3 ATR=45.71
-2026-04-23 19:23:06,779 [bot] INFO: M2KM6: got 50 bars from /md/getChart
-2026-04-23 19:23:06,779 [strategy.vwap] INFO: Price=2779.20 VWAP=2778.20 -1SD=2764.19 +1SD=2792.22 RSI=42.5 ATR=3.71
-2026-04-23 19:23:06,779 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-23 19:38:37,356 [bot] INFO: Stopping bot: Signal received
-2026-04-23 19:38:37,740 [tradovate_client] INFO: Market order placed: Buy 3 MYMM6, orderId=472310967877
-2026-04-23 19:38:37,977 [tradovate_client] INFO: Cancelled order 472310967832
-2026-04-23 19:38:38,098 [tradovate_client] INFO: Cancelled order 472310967847
-2026-04-23 19:38:38,218 [tradovate_client] INFO: Cancelled order 472310967812
-2026-04-23 19:38:38,334 [tradovate_client] INFO: Cancelled order 472310967853
-2026-04-23 19:38:38,450 [tradovate_client] INFO: Cancelled order 472310967877
-2026-04-23 19:38:38,567 [tradovate_client] INFO: Cancelled order 472310967874
-2026-04-23 19:38:38,690 [tradovate_client] INFO: Cancelled order 472310967826
-2026-04-23 19:38:38,810 [tradovate_client] INFO: Cancelled order 472310967868
-2026-04-23 19:38:38,927 [tradovate_client] INFO: Cancelled order 472310967865
-2026-04-23 19:38:39,043 [tradovate_client] INFO: Cancelled order 472310967850
-2026-04-23 19:38:39,160 [tradovate_client] INFO: Cancelled order 472310967829
-2026-04-23 19:38:39,276 [tradovate_client] INFO: Cancelled order 472310967835
-2026-04-23 19:38:39,392 [tradovate_client] INFO: Cancelled order 472310967856
-2026-04-23 19:38:39,507 [tradovate_client] INFO: Cancelled order 472310967871
-2026-04-23 19:38:39,623 [tradovate_client] INFO: Cancelled order 472310967844
-2026-04-23 19:38:39,739 [tradovate_client] INFO: Cancelled order 472310967823
-2026-04-23 19:38:39,996 [tradovate_client] INFO: Disconnected from Tradovate
-2026-04-23 19:38:39,996 [bot] INFO: Bot stopped
-
-=== END v149 ===
+=== Done ===
