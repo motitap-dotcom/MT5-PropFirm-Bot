@@ -1,48 +1,53 @@
 #!/bin/bash
-# Trigger: v149 — post-audit validation check (READ-ONLY, no restart)
+# READ-ONLY check - status + positions + recent trades
 cd /root/MT5-PropFirm-Bot
-echo "=== v149 post-audit $(date -u '+%Y-%m-%d %H:%M UTC') ==="
+echo "=== Status $(date -u '+%Y-%m-%d %H:%M:%S UTC') ==="
+echo "NY Time: $(TZ=America/New_York date '+%H:%M %Z')"
 echo ""
-echo "--- SERVICE ---"
-echo "Service: $(systemctl is-active futures-bot)"
-echo "PID:     $(systemctl show futures-bot --property=MainPID --value)"
-echo "Uptime:  $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
+
+PID=$(systemctl show futures-bot --property=MainPID --value)
+CWD=$(readlink /proc/$PID/cwd 2>/dev/null)
+echo "Active: $(systemctl is-active futures-bot)"
+echo "PID: $PID  CWD: $CWD"
+echo "Uptime: $(systemctl show futures-bot --property=ActiveEnterTimestamp --value)"
+echo "Git: $(git log -1 --oneline)"
 echo ""
-echo "--- CODE ---"
-echo "Branch:  $(git rev-parse --abbrev-ref HEAD)"
-echo "Commit:  $(git log -1 --oneline)"
+
+echo "--- Last trade-related log lines ---"
+LOG="$CWD/logs/bot.log"
+[ ! -f "$LOG" ] && LOG=/root/MT5-PropFirm-Bot/logs/bot.log
+grep -iE "TRADE|SIGNAL|order placed|Position" "$LOG" 2>/dev/null | tail -10
 echo ""
-echo "--- CONFIG VALIDATION (latest log match) ---"
-grep -E "(Config validation|ValueError|validation failed)" logs/bot.log 2>/dev/null | tail -10
+
+echo "--- Positions + fills (live from Tradovate) ---"
+TOKEN=$(python3 -c "import json;print(json.load(open('$CWD/configs/.tradovate_token.json')).get('access_token',''))" 2>/dev/null)
+[ -z "$TOKEN" ] && TOKEN=$(python3 -c "import json;print(json.load(open('/root/MT5-PropFirm-Bot/configs/.tradovate_token.json')).get('access_token',''))" 2>/dev/null)
+BASE="https://demo.tradovateapi.com/v1"
+
+curl -s -H "Authorization: Bearer $TOKEN" "$BASE/position/list" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+opn = [p for p in d if p.get('netPos',0) != 0]
+print(f'Open positions: {len(opn)}')
+for p in opn:
+    print(f\"  id={p.get('id')} contract={p.get('contractId')} netPos={p.get('netPos')} bought={p.get('bought',0)} sold={p.get('sold',0)}\")" 2>/dev/null
+
+curl -s -H "Authorization: Bearer $TOKEN" "$BASE/fill/list" | python3 -c "
+import sys, json
+from datetime import datetime, timezone
+d = json.load(sys.stdin)
+today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+f = [x for x in d if x.get('timestamp','').startswith(today)]
+print(f'Fills today: {len(f)}')
+for fill in f[-10:]:
+    print(f\"  {fill.get('timestamp')} {fill.get('action')} qty={fill.get('qty')} price={fill.get('price')}\")" 2>/dev/null
+
+curl -s -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -X POST "$BASE/cashBalance/getCashBalanceSnapshot" -d '{"accountId":45373493}' | \
+  python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+print(f\"Balance: \${d.get('totalCashValue', 0):,.2f}  Day PnL: \${d.get('realizedPnL', 0):+.2f}  Open PnL: \${d.get('openPnL', 0):+.2f}\")" 2>/dev/null
+
 echo ""
-echo "--- NEW FILES CHECK ---"
-ls -la futures_bot/core/trade_logger.py 2>/dev/null && echo "  trade_logger.py: OK" || echo "  trade_logger.py: MISSING"
-ls -la scripts/weekly_review.sh 2>/dev/null && echo "  weekly_review.sh: OK" || echo "  weekly_review.sh: MISSING"
-echo ""
-echo "--- STATUS / DASHBOARD ---"
-if [ -f status/dashboard.txt ]; then
-  echo "dashboard.txt (age: $(( $(date +%s) - $(stat -c %Y status/dashboard.txt) ))s):"
-  cat status/dashboard.txt
-else
-  echo "dashboard.txt: NOT YET RENDERED"
-fi
-echo ""
-if [ -f status/status.json ]; then
-  echo "status.json (age: $(( $(date +%s) - $(stat -c %Y status/status.json) ))s):"
-  python3 -c "import json; d=json.load(open('status/status.json')); print('  state:', d.get('guardian',{}).get('state')); print('  balance:', d.get('guardian',{}).get('balance')); print('  dd_used:', d.get('guardian',{}).get('drawdown_used'))" 2>/dev/null
-else
-  echo "status.json: MISSING"
-fi
-echo ""
-echo "--- TRADE LOG ---"
-if [ -f logs/trades_log.csv ]; then
-  wc -l logs/trades_log.csv
-  head -1 logs/trades_log.csv
-else
-  echo "trades_log.csv: NOT YET CREATED"
-fi
-echo ""
-echo "--- RECENT BOT LOG (last 40 lines) ---"
-tail -40 logs/bot.log 2>/dev/null
-echo ""
-echo "=== END v149 ==="
+echo "=== Done ==="
