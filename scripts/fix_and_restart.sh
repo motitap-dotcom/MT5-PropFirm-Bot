@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "=== Fix & Restart v175 - sync new code + restart ==="
+echo "=== Fix & Restart v176 - wider ATR + restart ==="
 echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 cd /root/MT5-PropFirm-Bot
 
