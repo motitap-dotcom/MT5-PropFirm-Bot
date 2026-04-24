@@ -1,5 +1,6 @@
 #!/bin/bash
 cd /root/MT5-PropFirm-Bot
+# Check mid-morning
 echo "=== Status $(date -u '+%Y-%m-%d %H:%M UTC') | NY $(TZ=America/New_York date '+%H:%M') ==="
 PID=$(systemctl show futures-bot --property=MainPID --value)
 CWD=$(readlink /proc/$PID/cwd 2>/dev/null)
