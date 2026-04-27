@@ -1,428 +1,121 @@
-=== Trade investigation 2026-04-27 14:19 UTC | NY 10:19 ===
-Active: active  PID: 2049423
-Restart history (last 10 stops):
-2026-04-27T13:31:44Z stopped: result=timeout code=killed status=KILL
-2026-04-27T13:36:45Z stopped: result=timeout code=killed status=KILL
-2026-04-27T13:41:45Z stopped: result=timeout code=killed status=KILL
-2026-04-27T13:46:46Z stopped: result=timeout code=killed status=KILL
-2026-04-27T13:51:49Z stopped: result=timeout code=killed status=KILL
-2026-04-27T13:56:50Z stopped: result=timeout code=killed status=KILL
-2026-04-27T14:01:52Z stopped: result=timeout code=killed status=KILL
-2026-04-27T14:06:52Z stopped: result=timeout code=killed status=KILL
-2026-04-27T14:11:56Z stopped: result=success code=exited status=0
-2026-04-27T14:16:57Z stopped: result=timeout code=killed status=KILL
+=== Order rejection investigation 2026-04-27 14:21 UTC ===
+--- Full order details for first 5 orders today ---
+{
+  "id": 482844494015,
+  "accountId": 45373493,
+  "contractId": 3961353,
+  "timestamp": "2026-04-27T13:30:16.052Z",
+  "action": "Buy",
+  "ordStatus": "Rejected",
+  "archived": false,
+  "external": false,
+  "admin": false
+}
+---
+{
+  "id": 482844494017,
+  "accountId": 45373493,
+  "contractId": 3961353,
+  "timestamp": "2026-04-27T13:30:16.179Z",
+  "action": "Sell",
+  "ordStatus": "Rejected",
+  "archived": false,
+  "external": false,
+  "admin": false
+}
+---
+{
+  "id": 482844494019,
+  "accountId": 45373493,
+  "contractId": 3961353,
+  "timestamp": "2026-04-27T13:30:16.315Z",
+  "action": "Sell",
+  "ordStatus": "Rejected",
+  "archived": false,
+  "external": false,
+  "admin": false
+}
+---
+{
+  "id": 482844494021,
+  "accountId": 45373493,
+  "contractId": 3961353,
+  "timestamp": "2026-04-27T13:30:18.550Z",
+  "action": "Sell",
+  "ordStatus": "Rejected",
+  "archived": false,
+  "external": false,
+  "admin": false
+}
+---
+{
+  "id": 482844494023,
+  "accountId": 45373493,
+  "contractId": 3961353,
+  "timestamp": "2026-04-27T13:30:18.665Z",
+  "action": "Sell",
+  "ordStatus": "Rejected",
+  "archived": false,
+  "external": false,
+  "admin": false
+}
+---
 
---- ALL today's trade-related events ---
-2026-04-27 00:02:26,125 [bot] INFO: Stopping bot: Signal received
-2026-04-27 00:02:28,946 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 00:07:27,106 [bot] INFO: Stopping bot: Signal received
-2026-04-27 00:07:30,921 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 00:12:29,227 [bot] INFO: Stopping bot: Signal received
-2026-04-27 00:12:32,864 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 00:17:29,940 [bot] INFO: Stopping bot: Signal received
-2026-04-27 00:17:34,961 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 00:22:34,108 [bot] INFO: Stopping bot: Signal received
-2026-04-27 00:22:36,846 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 00:27:35,320 [bot] INFO: Stopping bot: Signal received
-2026-04-27 00:27:38,808 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 00:32:37,101 [bot] INFO: Stopping bot: Signal received
-2026-04-27 00:32:40,695 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 00:37:37,490 [bot] INFO: Stopping bot: Signal received
-2026-04-27 00:37:42,655 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 00:42:37,601 [bot] INFO: Stopping bot: Signal received
-2026-04-27 00:42:43,155 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 00:47:37,621 [bot] INFO: Stopping bot: Signal received
-2026-04-27 00:47:43,133 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 00:52:40,105 [bot] INFO: Stopping bot: Signal received
-2026-04-27 00:52:45,107 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 00:57:40,850 [bot] INFO: Stopping bot: Signal received
-2026-04-27 00:57:46,399 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 01:02:41,104 [bot] INFO: Stopping bot: Signal received
-2026-04-27 01:02:46,668 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 01:07:43,101 [bot] INFO: Stopping bot: Signal received
-2026-04-27 01:07:48,646 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 01:12:44,109 [bot] INFO: Stopping bot: Signal received
-2026-04-27 01:12:49,648 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 01:17:47,134 [bot] INFO: Stopping bot: Signal received
-2026-04-27 01:17:51,723 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 01:22:47,630 [bot] INFO: Stopping bot: Signal received
-2026-04-27 01:22:53,209 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 01:27:48,104 [bot] INFO: Stopping bot: Signal received
-2026-04-27 01:27:53,677 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 01:32:48,605 [bot] INFO: Stopping bot: Signal received
-2026-04-27 01:32:54,167 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 01:37:50,107 [bot] INFO: Stopping bot: Signal received
-2026-04-27 01:37:55,645 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 01:42:51,112 [bot] INFO: Stopping bot: Signal received
-2026-04-27 01:42:56,649 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 01:47:54,098 [bot] INFO: Stopping bot: Signal received
-2026-04-27 01:47:58,555 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 01:52:56,103 [bot] INFO: Stopping bot: Signal received
-2026-04-27 01:53:00,478 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 01:57:57,107 [bot] INFO: Stopping bot: Signal received
-2026-04-27 01:58:02,699 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 02:02:59,109 [bot] INFO: Stopping bot: Signal received
-2026-04-27 02:03:04,752 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 02:08:01,979 [bot] INFO: Stopping bot: Signal received
-2026-04-27 02:08:06,740 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 02:13:04,119 [bot] INFO: Stopping bot: Signal received
-2026-04-27 02:13:08,713 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 02:18:05,058 [bot] INFO: Stopping bot: Signal received
-2026-04-27 02:18:10,511 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 02:23:07,106 [bot] INFO: Stopping bot: Signal received
-2026-04-27 02:23:12,562 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 02:28:07,603 [bot] INFO: Stopping bot: Signal received
-2026-04-27 02:28:13,158 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 02:33:08,699 [bot] INFO: Stopping bot: Signal received
-2026-04-27 02:33:14,132 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 02:38:09,117 [bot] INFO: Stopping bot: Signal received
-2026-04-27 02:38:14,692 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 02:43:10,106 [bot] INFO: Stopping bot: Signal received
-2026-04-27 02:43:15,631 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 02:48:10,352 [bot] INFO: Stopping bot: Signal received
-2026-04-27 02:48:15,866 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 02:53:10,844 [bot] INFO: Stopping bot: Signal received
-2026-04-27 02:53:16,440 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 02:58:12,167 [bot] INFO: Stopping bot: Signal received
-2026-04-27 02:58:17,686 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 03:03:14,127 [bot] INFO: Stopping bot: Signal received
-2026-04-27 03:03:19,616 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 03:08:17,106 [bot] INFO: Stopping bot: Signal received
-2026-04-27 03:08:21,564 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 03:13:19,120 [bot] INFO: Stopping bot: Signal received
-2026-04-27 03:13:23,469 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 03:18:21,121 [bot] INFO: Stopping bot: Signal received
-2026-04-27 03:18:25,525 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 03:23:22,860 [bot] INFO: Stopping bot: Signal received
-2026-04-27 03:23:27,513 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 03:28:23,713 [bot] INFO: Stopping bot: Signal received
-2026-04-27 03:28:29,248 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 03:33:23,855 [bot] INFO: Stopping bot: Signal received
-2026-04-27 03:33:29,418 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 03:38:24,098 [bot] INFO: Stopping bot: Signal received
-2026-04-27 03:38:29,693 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 03:43:27,103 [bot] INFO: Stopping bot: Signal received
-2026-04-27 03:43:31,589 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 03:48:27,337 [bot] INFO: Stopping bot: Signal received
-2026-04-27 03:48:32,878 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 03:53:27,847 [bot] INFO: Stopping bot: Signal received
-2026-04-27 03:53:33,380 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 03:58:29,100 [bot] INFO: Stopping bot: Signal received
-2026-04-27 03:58:34,670 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 04:03:29,112 [bot] INFO: Stopping bot: Signal received
-2026-04-27 04:03:34,667 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 04:08:30,127 [bot] INFO: Stopping bot: Signal received
-2026-04-27 04:08:35,539 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 04:13:32,113 [bot] INFO: Stopping bot: Signal received
-2026-04-27 04:13:36,425 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 04:18:32,632 [bot] INFO: Stopping bot: Signal received
-2026-04-27 04:18:37,350 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 04:23:32,869 [bot] INFO: Stopping bot: Signal received
-2026-04-27 04:23:38,216 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 04:28:33,121 [bot] INFO: Stopping bot: Signal received
-2026-04-27 04:28:38,660 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 04:33:33,602 [bot] INFO: Stopping bot: Signal received
-2026-04-27 04:33:39,144 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 04:38:34,134 [bot] INFO: Stopping bot: Signal received
-2026-04-27 04:38:39,661 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 04:43:34,134 [bot] INFO: Stopping bot: Signal received
-2026-04-27 04:43:39,610 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 04:48:35,552 [bot] INFO: Stopping bot: Signal received
-2026-04-27 04:48:40,489 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 04:53:37,105 [bot] INFO: Stopping bot: Signal received
-2026-04-27 04:53:41,328 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 04:58:41,124 [bot] INFO: Stopping bot: Signal received
-2026-04-27 04:58:42,153 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 05:03:41,608 [bot] INFO: Stopping bot: Signal received
-2026-04-27 05:03:43,107 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 05:08:41,769 [bot] INFO: Stopping bot: Signal received
-2026-04-27 05:08:43,918 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 05:13:42,122 [bot] INFO: Stopping bot: Signal received
-2026-04-27 05:13:44,772 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 05:18:42,365 [bot] INFO: Stopping bot: Signal received
-2026-04-27 05:18:45,654 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 05:23:45,112 [bot] INFO: Stopping bot: Signal received
-2026-04-27 05:23:46,465 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 05:23:47,562 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-27 05:24:18,060 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 05:28:47,105 [bot] INFO: Stopping bot: Signal received
-2026-04-27 05:28:52,692 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 05:33:51,103 [bot] INFO: Stopping bot: Signal received
-2026-04-27 05:33:53,568 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 05:38:51,364 [bot] INFO: Stopping bot: Signal received
-2026-04-27 05:38:54,357 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 05:43:52,046 [bot] INFO: Stopping bot: Signal received
-2026-04-27 05:43:55,153 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 05:48:53,105 [bot] INFO: Stopping bot: Signal received
-2026-04-27 05:48:55,919 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 05:53:53,117 [bot] INFO: Stopping bot: Signal received
-2026-04-27 05:53:56,773 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 05:58:57,101 [bot] INFO: Stopping bot: Signal received
-2026-04-27 05:58:57,581 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 06:04:01,405 [bot] INFO: Stopping bot: Signal received
-2026-04-27 06:04:06,878 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 06:09:01,436 [bot] INFO: Stopping bot: Signal received
-2026-04-27 06:09:06,900 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 06:14:01,983 [bot] INFO: Stopping bot: Signal received
-2026-04-27 06:14:07,405 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 06:19:04,195 [bot] INFO: Stopping bot: Signal received
-2026-04-27 06:19:08,399 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 06:24:04,359 [bot] INFO: Stopping bot: Signal received
-2026-04-27 06:24:09,370 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 06:29:07,125 [bot] INFO: Stopping bot: Signal received
-2026-04-27 06:29:10,121 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 06:34:07,142 [bot] INFO: Stopping bot: Signal received
-2026-04-27 06:34:10,844 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 06:39:08,829 [bot] INFO: Stopping bot: Signal received
-2026-04-27 06:39:11,711 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 06:44:11,126 [bot] INFO: Stopping bot: Signal received
-2026-04-27 06:44:12,534 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 06:49:17,104 [bot] INFO: Stopping bot: Signal received
-2026-04-27 06:49:22,757 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 06:49:23,841 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-27 06:49:54,319 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 06:54:18,250 [bot] INFO: Stopping bot: Signal received
-2026-04-27 06:54:23,665 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 06:59:18,611 [bot] INFO: Stopping bot: Signal received
-2026-04-27 06:59:24,134 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 07:04:19,103 [bot] INFO: Stopping bot: Signal received
-2026-04-27 07:04:24,542 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 07:09:19,854 [bot] INFO: Stopping bot: Signal received
-2026-04-27 07:09:25,396 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 07:14:21,832 [bot] INFO: Stopping bot: Signal received
-2026-04-27 07:14:26,261 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 07:19:27,126 [bot] INFO: Stopping bot: Signal received
-2026-04-27 07:19:32,832 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 07:24:28,112 [bot] INFO: Stopping bot: Signal received
-2026-04-27 07:24:33,656 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 07:29:30,329 [bot] INFO: Stopping bot: Signal received
-2026-04-27 07:29:34,558 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 07:34:31,098 [bot] INFO: Stopping bot: Signal received
-2026-04-27 07:34:35,449 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 07:39:37,100 [bot] INFO: Stopping bot: Signal received
-2026-04-27 07:39:42,647 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 07:44:45,100 [bot] INFO: Stopping bot: Signal received
-2026-04-27 07:44:50,676 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 07:49:47,098 [bot] INFO: Stopping bot: Signal received
-2026-04-27 07:49:51,555 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 07:54:50,106 [bot] INFO: Stopping bot: Signal received
-2026-04-27 07:54:52,291 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 07:59:51,948 [bot] INFO: Stopping bot: Signal received
-2026-04-27 07:59:53,106 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 08:04:52,101 [bot] INFO: Stopping bot: Signal received
-2026-04-27 08:04:53,993 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 08:09:53,534 [bot] INFO: Stopping bot: Signal received
-2026-04-27 08:09:54,810 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 08:14:55,107 [bot] INFO: Stopping bot: Signal received
-2026-04-27 08:14:55,686 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 08:14:56,781 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-27 08:15:27,339 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 08:19:57,119 [bot] INFO: Stopping bot: Signal received
-2026-04-27 08:20:03,432 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 08:24:59,104 [bot] INFO: Stopping bot: Signal received
-2026-04-27 08:25:04,413 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 08:30:01,844 [bot] INFO: Stopping bot: Signal received
-2026-04-27 08:30:05,297 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 08:35:02,823 [bot] INFO: Stopping bot: Signal received
-2026-04-27 08:35:06,268 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 08:40:02,947 [bot] INFO: Stopping bot: Signal received
-2026-04-27 08:40:07,289 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 08:45:03,169 [bot] INFO: Stopping bot: Signal received
-2026-04-27 08:45:08,255 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 08:50:03,286 [bot] INFO: Stopping bot: Signal received
-2026-04-27 08:50:08,732 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 08:55:04,842 [bot] INFO: Stopping bot: Signal received
-2026-04-27 08:55:09,804 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 09:00:07,125 [bot] INFO: Stopping bot: Signal received
-2026-04-27 09:00:10,737 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 09:05:07,367 [bot] INFO: Stopping bot: Signal received
-2026-04-27 09:05:11,615 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 09:10:08,108 [bot] INFO: Stopping bot: Signal received
-2026-04-27 09:10:12,546 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 09:15:10,130 [bot] INFO: Stopping bot: Signal received
-2026-04-27 09:15:13,508 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 09:20:17,097 [bot] INFO: Stopping bot: Signal received
-2026-04-27 09:20:22,855 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 09:25:25,107 [bot] INFO: Stopping bot: Signal received
-2026-04-27 09:25:30,751 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 09:30:27,110 [bot] INFO: Stopping bot: Signal received
-2026-04-27 09:30:31,777 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 09:35:29,105 [bot] INFO: Stopping bot: Signal received
-2026-04-27 09:35:32,659 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 09:40:29,131 [bot] INFO: Stopping bot: Signal received
-2026-04-27 09:40:33,536 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 09:40:34,622 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-27 09:41:05,171 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 09:45:33,115 [bot] INFO: Stopping bot: Signal received
-2026-04-27 09:45:38,701 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 09:50:37,107 [bot] INFO: Stopping bot: Signal received
-2026-04-27 09:50:39,604 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 09:55:37,357 [bot] INFO: Stopping bot: Signal received
-2026-04-27 09:55:40,523 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 10:00:37,581 [bot] INFO: Stopping bot: Signal received
-2026-04-27 10:00:41,403 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 10:05:40,108 [bot] INFO: Stopping bot: Signal received
-2026-04-27 10:05:42,340 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 10:10:40,361 [bot] INFO: Stopping bot: Signal received
-2026-04-27 10:10:43,152 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 10:15:40,735 [bot] INFO: Stopping bot: Signal received
-2026-04-27 10:15:44,078 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 10:20:44,208 [bot] INFO: Stopping bot: Signal received
-2026-04-27 10:20:44,930 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 10:25:44,358 [bot] INFO: Stopping bot: Signal received
-2026-04-27 10:25:45,815 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 10:30:44,855 [bot] INFO: Stopping bot: Signal received
-2026-04-27 10:30:46,705 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 10:35:45,166 [bot] INFO: Stopping bot: Signal received
-2026-04-27 10:35:47,492 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 10:40:47,118 [bot] INFO: Stopping bot: Signal received
-2026-04-27 10:40:48,345 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 10:45:49,133 [bot] INFO: Stopping bot: Signal received
-2026-04-27 10:45:54,716 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 10:50:52,107 [bot] INFO: Stopping bot: Signal received
-2026-04-27 10:50:55,628 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 10:55:52,132 [bot] INFO: Stopping bot: Signal received
-2026-04-27 10:55:56,485 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 11:00:53,428 [bot] INFO: Stopping bot: Signal received
-2026-04-27 11:00:57,422 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 11:05:53,614 [bot] INFO: Stopping bot: Signal received
-2026-04-27 11:05:58,242 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 11:05:59,364 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-27 11:06:29,812 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 11:10:55,094 [bot] INFO: Stopping bot: Signal received
-2026-04-27 11:11:00,708 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 11:15:57,103 [bot] INFO: Stopping bot: Signal received
-2026-04-27 11:16:01,613 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 11:20:57,359 [bot] INFO: Stopping bot: Signal received
-2026-04-27 11:21:02,766 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 11:25:57,406 [bot] INFO: Stopping bot: Signal received
-2026-04-27 11:26:03,023 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 11:30:59,114 [bot] INFO: Stopping bot: Signal received
-2026-04-27 11:31:04,139 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 11:36:01,135 [bot] INFO: Stopping bot: Signal received
-2026-04-27 11:36:05,060 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 11:41:01,712 [bot] INFO: Stopping bot: Signal received
-2026-04-27 11:41:05,994 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 11:46:05,115 [bot] INFO: Stopping bot: Signal received
-2026-04-27 11:46:06,919 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 11:51:07,106 [bot] INFO: Stopping bot: Signal received
-2026-04-27 11:51:07,888 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 11:56:09,113 [bot] INFO: Stopping bot: Signal received
-2026-04-27 11:56:14,697 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 12:01:10,016 [bot] INFO: Stopping bot: Signal received
-2026-04-27 12:01:15,449 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 12:06:13,121 [bot] INFO: Stopping bot: Signal received
-2026-04-27 12:06:16,319 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 12:11:15,133 [bot] INFO: Stopping bot: Signal received
-2026-04-27 12:11:17,274 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 12:16:17,169 [bot] INFO: Stopping bot: Signal received
-2026-04-27 12:16:18,238 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 12:21:20,146 [bot] INFO: Stopping bot: Signal received
-2026-04-27 12:21:25,972 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 12:26:23,108 [bot] INFO: Stopping bot: Signal received
-2026-04-27 12:26:26,947 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 12:31:24,118 [bot] INFO: Stopping bot: Signal received
-2026-04-27 12:31:27,883 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 12:31:28,990 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-27 12:31:59,472 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 12:36:24,613 [bot] INFO: Stopping bot: Signal received
-2026-04-27 12:36:30,189 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 12:41:24,639 [bot] INFO: Stopping bot: Signal received
-2026-04-27 12:41:30,157 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 12:46:25,120 [bot] INFO: Stopping bot: Signal received
-2026-04-27 12:46:30,677 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 12:51:27,111 [bot] INFO: Stopping bot: Signal received
-2026-04-27 12:51:31,625 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 12:56:30,120 [bot] INFO: Stopping bot: Signal received
-2026-04-27 12:56:32,542 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 13:01:31,816 [bot] INFO: Stopping bot: Signal received
-2026-04-27 13:01:33,421 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 13:06:34,208 [bot] INFO: Stopping bot: Signal received
-2026-04-27 13:06:39,653 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 13:11:37,096 [bot] INFO: Stopping bot: Signal received
-2026-04-27 13:11:40,480 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 13:16:37,119 [bot] INFO: Stopping bot: Signal received
-2026-04-27 13:16:41,415 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 13:21:38,841 [bot] INFO: Stopping bot: Signal received
-2026-04-27 13:21:42,316 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 13:26:38,863 [bot] INFO: Stopping bot: Signal received
-2026-04-27 13:26:43,258 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 13:30:16,116 [tradovate_client] INFO: Market order placed: Buy 1 MGCM6, orderId=482844494015
-2026-04-27 13:30:16,372 [bot] INFO: TRADE: Buy 1 MGCM6 @ 4715.10 SL=4707.59 TP=4718.30 Risk=$75.15 Strategy=VWAP Mean Reversion
-2026-04-27 13:30:19,678 [tradovate_client] INFO: Market order placed: Buy 3 M2KM6, orderId=482844494025
-2026-04-27 13:30:19,912 [bot] INFO: TRADE: Buy 3 M2KM6 @ 2797.40 SL=2791.66 TP=2797.35 Risk=$86.06 Strategy=VWAP Mean Reversion
-2026-04-27 13:31:39,114 [bot] INFO: Stopping bot: Signal received
-2026-04-27 13:31:44,655 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 13:36:39,856 [bot] INFO: Stopping bot: Signal received
-2026-04-27 13:36:45,402 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 13:36:47,111 [tradovate_client] INFO: Market order placed: Buy 2 MNQM6, orderId=482844494055
-2026-04-27 13:36:47,346 [bot] INFO: TRADE: Buy 2 MNQM6 @ 27372.50 SL=27341.42 TP=27423.38 Risk=$124.34 Strategy=VWAP Mean Reversion
-2026-04-27 13:36:50,216 [tradovate_client] INFO: Market order placed: Sell 2 MCLM6, orderId=482844494065
-2026-04-27 13:36:50,448 [bot] INFO: TRADE: Sell 2 MCLM6 @ 96.36 SL=96.90 TP=95.68 Risk=$108.60 Strategy=VWAP Mean Reversion
-2026-04-27 13:41:40,122 [bot] INFO: Stopping bot: Signal received
-2026-04-27 13:41:45,731 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 13:41:47,164 [tradovate_client] INFO: Market order placed: Sell 3 MESM6, orderId=482844494095
-2026-04-27 13:41:47,402 [bot] INFO: TRADE: Sell 3 MESM6 @ 7196.50 SL=7200.48 TP=7191.18 Risk=$59.67 Strategy=VWAP Mean Reversion
-2026-04-27 13:41:50,952 [tradovate_client] INFO: Market order placed: Buy 3 MGCM6, orderId=482844494105
-2026-04-27 13:41:51,189 [bot] INFO: TRADE: Buy 3 MGCM6 @ 4708.40 SL=4704.28 TP=4717.05 Risk=$123.47 Strategy=VWAP Mean Reversion
-2026-04-27 13:46:40,885 [bot] INFO: Stopping bot: Signal received
-2026-04-27 13:46:46,453 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 13:51:44,115 [bot] INFO: Stopping bot: Signal received
-2026-04-27 13:51:49,625 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 13:51:52,072 [tradovate_client] INFO: Market order placed: Buy 3 MGCM6, orderId=482844494175
-2026-04-27 13:51:52,309 [bot] INFO: TRADE: Buy 3 MGCM6 @ 4706.70 SL=4702.60 TP=4716.33 Risk=$123.04 Strategy=VWAP Mean Reversion
-2026-04-27 13:56:44,863 [bot] INFO: Stopping bot: Signal received
-2026-04-27 13:56:50,407 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 13:56:51,492 [bot] INFO: Stopping bot: Fatal: Authentication failed: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
-2026-04-27 13:57:21,949 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 14:01:47,120 [bot] INFO: Stopping bot: Signal received
-2026-04-27 14:01:52,731 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 14:06:47,359 [bot] INFO: Stopping bot: Signal received
-2026-04-27 14:06:52,902 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 14:11:51,110 [bot] INFO: Stopping bot: Signal received
-2026-04-27 14:11:56,483 [bot] INFO: TradeDay Futures Bot Starting
-2026-04-27 14:16:52,108 [bot] INFO: Stopping bot: Signal received
-2026-04-27 14:16:57,668 [bot] INFO: TradeDay Futures Bot Starting
+--- Order rejection messages from log ---
 
---- Every fill from Tradovate today (with full detail) ---
-Total fills today: 0
+--- All log lines around first trade attempt ---
+2026-04-27 13:30:13,655 [bot] INFO: === Trading cycle 09:30 ET | Guardian: ACTIVE ===
+2026-04-27 13:30:14,584 [tradovate_client] INFO: MD WebSocket connected
+2026-04-27 13:30:14,585 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
+2026-04-27 13:30:14,706 [tradovate_client] INFO: Chart subscription active: MESM6 (id=181106)
+2026-04-27 13:30:14,925 [tradovate_client] INFO: MESM6: Received 50 historical bars via WebSocket
+2026-04-27 13:30:14,926 [bot] INFO: MESM6: Warming up strategy with 50 historical bars
+2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7193.75 VWAP=7190.52 dist=+1.45SD RSI=63.1 ATR=2.29
+2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7193.75 VWAP=7190.72 dist=+1.32SD RSI=65.1 ATR=2.32
+2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7194.50 VWAP=7191.18 dist=+1.32SD RSI=62.1 ATR=2.34
+2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7194.75 VWAP=7191.34 dist=+1.33SD RSI=72.5 ATR=2.23
+2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7194.25 VWAP=7191.49 dist=+1.06SD RSI=75.5 ATR=2.25
+2026-04-27 13:30:14,926 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.06SD RSI=75.5 entry=7194.25 sl=7197.83 tp1=7191.49 tp2=7187.57
+2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7195.75 VWAP=7191.68 dist=+1.53SD RSI=78.2 ATR=2.25
+2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7197.00 VWAP=7192.02 dist=+1.74SD RSI=81.4 ATR=2.38
+2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7196.75 VWAP=7192.24 dist=+1.52SD RSI=77.8 ATR=2.34
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.52SD RSI=77.8 entry=7196.75 sl=7199.36 tp1=7192.24 tp2=7187.79
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7196.25 VWAP=7192.50 dist=+1.22SD RSI=73.6 ATR=2.36
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.22SD RSI=73.6 entry=7196.25 sl=7199.81 tp1=7192.50 tp2=7187.90
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7196.50 VWAP=7192.67 dist=+1.24SD RSI=81.6 ATR=2.29
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7197.00 VWAP=7192.86 dist=+1.32SD RSI=79.5 ATR=2.20
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7197.50 VWAP=7193.00 dist=+1.40SD RSI=78.0 ATR=2.18
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7197.00 VWAP=7193.13 dist=+1.20SD RSI=65.6 ATR=2.09
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.20SD RSI=65.6 entry=7197.00 sl=7200.63 tp1=7193.13 tp2=7188.28
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7196.50 VWAP=7193.24 dist=+1.01SD RSI=70.0 ATR=2.00
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.01SD RSI=70.0 entry=7196.50 sl=7200.70 tp1=7193.24 tp2=7188.39
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7196.00 VWAP=7193.36 dist=+0.82SD RSI=64.5 ATR=2.04
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.82SD RSI=64.5 entry=7196.00 sl=7200.80 tp1=7193.36 tp2=7188.55
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7193.75 VWAP=7193.43 dist=+0.10SD RSI=50.0 ATR=2.16
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7195.25 VWAP=7193.50 dist=+0.57SD RSI=53.5 ATR=2.23
+2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7194.50 VWAP=7193.53 dist=+0.32SD RSI=48.9 ATR=2.30
 
---- Today's orders (active + filled) ---
-Orders today: 35
-  13:36:52 Buy  ?        qty= 0 status=Rejected   contract=3643471
-  13:30:18 Sell ?        qty= 0 status=Rejected   contract=3961353
-  13:41:53 Sell ?        qty= 0 status=Rejected   contract=3961353
-  13:51:54 Sell ?        qty= 0 status=Rejected   contract=3961353
-  13:30:19 Buy  ?        qty= 0 status=Rejected   contract=4327107
-  13:41:53 Sell ?        qty= 0 status=Rejected   contract=3961353
-  13:41:51 Sell ?        qty= 0 status=Rejected   contract=3961353
-  13:30:22 Sell ?        qty= 0 status=Rejected   contract=4327107
-  13:36:47 Sell ?        qty= 0 status=Rejected   contract=4327110
-  13:41:47 Buy  ?        qty= 0 status=Rejected   contract=4327108
-  13:30:16 Sell ?        qty= 0 status=Rejected   contract=3961353
-  13:36:49 Sell ?        qty= 0 status=Rejected   contract=4327110
-  13:36:49 Sell ?        qty= 0 status=Rejected   contract=4327110
-  13:30:16 Sell ?        qty= 0 status=Rejected   contract=3961353
-  13:51:54 Sell ?        qty= 0 status=Rejected   contract=3961353
+--- Account info ---
+[
+    {
+        "id": 45373493,
+        "name": "ELTDER260326211630296397",
+        "userId": 266203,
+        "accountType": "Customer",
+        "restricted": false,
+        "closed": false,
+        "clearingHouseId": 4,
+        "riskCategoryId": 570,
+        "autoLiqProfileId": 14,
+        "marginAccountType": "Speculator",
+        "legalStatus": "Individual",
+        "archived": false,
+        "timestamp": "2026-03-26T21:16:33Z",
+        "active": true
+    }
+]
 
---- Account: PnL by snapshot ---
-  Balance: $50,944.30
-  Day realized PnL: $+0.00
-  Open PnL: $+0.00
-  Week realized: $+0.00
-  Net Liq: $50,944.30
-  Initial margin: $0.00
-
---- Current strategy state (per symbol) ---
-2026-04-27 14:17:00,678 [strategy.vwap] INFO: Price=2808.40 VWAP=2800.51 dist=+1.78SD RSI=63.8 ATR=3.36
-2026-04-27 14:17:00,678 [strategy.vwap] INFO: Price=2807.00 VWAP=2801.98 dist=+1.02SD RSI=64.5 ATR=3.51
-2026-04-27 14:17:00,678 [strategy.vwap] INFO: Price=2798.30 VWAP=2801.87 dist=-0.77SD RSI=50.7 ATR=4.14
-2026-04-27 14:17:00,678 [strategy.vwap] INFO: Price=2793.30 VWAP=2800.99 dist=-1.60SD RSI=43.9 ATR=4.55
-2026-04-27 14:17:00,678 [strategy.vwap] INFO: Price=2804.10 VWAP=2800.87 dist=+0.72SD RSI=56.4 ATR=5.27
-2026-04-27 14:17:00,678 [strategy.vwap] INFO: Price=2802.10 VWAP=2801.12 dist=+0.22SD RSI=53.2 ATR=5.51
-2026-04-27 14:17:00,678 [strategy.vwap] INFO: Price=2803.60 VWAP=2801.23 dist=+0.55SD RSI=56.1 ATR=5.69
-2026-04-27 14:17:00,679 [strategy.vwap] INFO: Price=2800.00 VWAP=2801.24 dist=-0.29SD RSI=55.3 ATR=5.81
-2026-04-27 14:17:00,679 [strategy.vwap] INFO: Price=2801.70 VWAP=2801.26 dist=+0.11SD RSI=56.2 ATR=6.04
-2026-04-27 14:17:00,679 [strategy.vwap] INFO: Price=2799.60 VWAP=2801.26 dist=-0.40SD RSI=54.0 ATR=6.16
+--- Restricted/closed status ---
+restricted: False  closed: False  active: True  locked: None
 
 === Done ===
