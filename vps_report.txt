@@ -1,121 +1,80 @@
-=== Order rejection investigation 2026-04-27 14:21 UTC ===
---- Full order details for first 5 orders today ---
+=== Reject reason hunt 2026-04-27 14:23 UTC ===
+--- Order extension info (rejection reason lives here) ---
+Order versions today: 0
+
+--- commandReport for first order (placement details) ---
+First rejected orderId: 482844494177
+Command reports today: 35
 {
-  "id": 482844494015,
-  "accountId": 45373493,
-  "contractId": 3961353,
-  "timestamp": "2026-04-27T13:30:16.052Z",
-  "action": "Buy",
-  "ordStatus": "Rejected",
-  "archived": false,
-  "external": false,
-  "admin": false
+  "id": 482844494178,
+  "commandId": 482844494177,
+  "timestamp": "2026-04-27T13:51:52.133Z",
+  "commandStatus": "RiskRejected",
+  "rejectReason": "MaxOrderQtyLimitReached",
+  "text": "Your maximum order quantity has been met. Please change your quantity to place the order. If you would like to request an increase, please submit a risk change request in the Account Settings Limit: 0 Current: 3. Scope: all Rule #3665"
 }
 ---
 {
-  "id": 482844494017,
-  "accountId": 45373493,
-  "contractId": 3961353,
-  "timestamp": "2026-04-27T13:30:16.179Z",
-  "action": "Sell",
-  "ordStatus": "Rejected",
-  "archived": false,
-  "external": false,
-  "admin": false
+  "id": 482844494016,
+  "commandId": 482844494015,
+  "timestamp": "2026-04-27T13:30:16.058Z",
+  "commandStatus": "RiskRejected",
+  "rejectReason": "MaxOrderQtyLimitReached",
+  "text": "Your maximum order quantity has been met. Please change your quantity to place the order. If you would like to request an increase, please submit a risk change request in the Account Settings Limit: 0 Current: 1. Scope: all Rule #3665"
 }
 ---
 {
-  "id": 482844494019,
-  "accountId": 45373493,
-  "contractId": 3961353,
-  "timestamp": "2026-04-27T13:30:16.315Z",
-  "action": "Sell",
-  "ordStatus": "Rejected",
-  "archived": false,
-  "external": false,
-  "admin": false
+  "id": 482844494102,
+  "commandId": 482844494101,
+  "timestamp": "2026-04-27T13:41:49.578Z",
+  "commandStatus": "RiskRejected",
+  "rejectReason": "MaxOrderQtyLimitReached",
+  "text": "Your maximum order quantity has been met. Please change your quantity to place the order. If you would like to request an increase, please submit a risk change request in the Account Settings Limit: 0 Current: 3. Scope: all Rule #3665"
 }
 ---
 {
-  "id": 482844494021,
-  "accountId": 45373493,
-  "contractId": 3961353,
-  "timestamp": "2026-04-27T13:30:18.550Z",
-  "action": "Sell",
-  "ordStatus": "Rejected",
-  "archived": false,
-  "external": false,
-  "admin": false
+  "id": 482844494074,
+  "commandId": 482844494073,
+  "timestamp": "2026-04-27T13:36:52.741Z",
+  "commandStatus": "RiskRejected",
+  "rejectReason": "MaxOrderQtyLimitReached",
+  "text": "Your maximum order quantity has been met. Please change your quantity to place the order. If you would like to request an increase, please submit a risk change request in the Account Settings Limit: 0 Current: 2. Scope: all Rule #3665"
 }
 ---
 {
-  "id": 482844494023,
-  "accountId": 45373493,
-  "contractId": 3961353,
-  "timestamp": "2026-04-27T13:30:18.665Z",
-  "action": "Sell",
-  "ordStatus": "Rejected",
-  "archived": false,
-  "external": false,
-  "admin": false
+  "id": 482844494056,
+  "commandId": 482844494055,
+  "timestamp": "2026-04-27T13:36:47.055Z",
+  "commandStatus": "RiskRejected",
+  "rejectReason": "MaxOrderQtyLimitReached",
+  "text": "Your maximum order quantity has been met. Please change your quantity to place the order. If you would like to request an increase, please submit a risk change request in the Account Settings Limit: 0 Current: 2. Scope: all Rule #3665"
 }
 ---
 
---- Order rejection messages from log ---
+--- Max position permission check ---
+Expecting value: line 1 column 1 (char 0)
 
---- All log lines around first trade attempt ---
-2026-04-27 13:30:13,655 [bot] INFO: === Trading cycle 09:30 ET | Guardian: ACTIVE ===
-2026-04-27 13:30:14,584 [tradovate_client] INFO: MD WebSocket connected
-2026-04-27 13:30:14,585 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
-2026-04-27 13:30:14,706 [tradovate_client] INFO: Chart subscription active: MESM6 (id=181106)
-2026-04-27 13:30:14,925 [tradovate_client] INFO: MESM6: Received 50 historical bars via WebSocket
-2026-04-27 13:30:14,926 [bot] INFO: MESM6: Warming up strategy with 50 historical bars
-2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7193.75 VWAP=7190.52 dist=+1.45SD RSI=63.1 ATR=2.29
-2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7193.75 VWAP=7190.72 dist=+1.32SD RSI=65.1 ATR=2.32
-2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7194.50 VWAP=7191.18 dist=+1.32SD RSI=62.1 ATR=2.34
-2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7194.75 VWAP=7191.34 dist=+1.33SD RSI=72.5 ATR=2.23
-2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7194.25 VWAP=7191.49 dist=+1.06SD RSI=75.5 ATR=2.25
-2026-04-27 13:30:14,926 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.06SD RSI=75.5 entry=7194.25 sl=7197.83 tp1=7191.49 tp2=7187.57
-2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7195.75 VWAP=7191.68 dist=+1.53SD RSI=78.2 ATR=2.25
-2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7197.00 VWAP=7192.02 dist=+1.74SD RSI=81.4 ATR=2.38
-2026-04-27 13:30:14,926 [strategy.vwap] INFO: Price=7196.75 VWAP=7192.24 dist=+1.52SD RSI=77.8 ATR=2.34
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.52SD RSI=77.8 entry=7196.75 sl=7199.36 tp1=7192.24 tp2=7187.79
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7196.25 VWAP=7192.50 dist=+1.22SD RSI=73.6 ATR=2.36
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.22SD RSI=73.6 entry=7196.25 sl=7199.81 tp1=7192.50 tp2=7187.90
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7196.50 VWAP=7192.67 dist=+1.24SD RSI=81.6 ATR=2.29
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7197.00 VWAP=7192.86 dist=+1.32SD RSI=79.5 ATR=2.20
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7197.50 VWAP=7193.00 dist=+1.40SD RSI=78.0 ATR=2.18
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7197.00 VWAP=7193.13 dist=+1.20SD RSI=65.6 ATR=2.09
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.20SD RSI=65.6 entry=7197.00 sl=7200.63 tp1=7193.13 tp2=7188.28
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7196.50 VWAP=7193.24 dist=+1.01SD RSI=70.0 ATR=2.00
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=1.01SD RSI=70.0 entry=7196.50 sl=7200.70 tp1=7193.24 tp2=7188.39
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7196.00 VWAP=7193.36 dist=+0.82SD RSI=64.5 ATR=2.04
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: >>> SHORT SIGNAL: dist=0.82SD RSI=64.5 entry=7196.00 sl=7200.80 tp1=7193.36 tp2=7188.55
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7193.75 VWAP=7193.43 dist=+0.10SD RSI=50.0 ATR=2.16
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7195.25 VWAP=7193.50 dist=+0.57SD RSI=53.5 ATR=2.23
-2026-04-27 13:30:14,927 [strategy.vwap] INFO: Price=7194.50 VWAP=7193.53 dist=+0.32SD RSI=48.9 ATR=2.30
-
---- Account info ---
+--- Account risk ---
 [
     {
-        "id": 45373493,
-        "name": "ELTDER260326211630296397",
-        "userId": 266203,
-        "accountType": "Customer",
-        "restricted": false,
-        "closed": false,
-        "clearingHouseId": 4,
-        "riskCategoryId": 570,
-        "autoLiqProfileId": 14,
-        "marginAccountType": "Speculator",
-        "legalStatus": "Individual",
+        "id": 482844490263,
+        "accountId": 45373493,
+        "timestamp": "2026-04-26T21:03:32.124Z",
+        "tradeDate": {
+            "year": 2026,
+            "month": 4,
+            "day": 26
+        },
+        "currencyId": 1,
+        "amount": 50944.3,
+        "realizedPnL": 0.0,
+        "weekRealizedPnL": 0.0,
         "archived": false,
-        "timestamp": "2026-03-26T21:16:33Z",
-        "active": true
+        "amountSOD": 50944.3
     }
 ]
 
---- Restricted/closed status ---
-restricted: False  closed: False  active: True  locked: None
+--- contractMaximums for our symbols ---
+Expecting value: line 1 column 1 (char 0)
 
 === Done ===
