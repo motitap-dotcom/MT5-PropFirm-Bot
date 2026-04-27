@@ -1,69 +1,30 @@
-=== v169 verify ===
-2026-04-23 19:14:55 UTC
-Active: active  PID: 771091  CWD: /root/MT5-PropFirm-Bot
-Uptime: Thu 2026-04-23 19:07:50 UTC
+=== Status 2026-04-27 14:16 UTC ===
+NY: 2026-04-27 10:16 EDT
 
---- Does running code have WS getChart? ---
-1
-YES
+Active: active
+PID: 2048187  CWD: /opt/futures_bot_stable
+Uptime: Mon 2026-04-27 14:11:56 UTC
 
---- Log: last 50 lines (look for 'Subscribing to chart', 'got X bars', 'Price=') ---
-2026-04-23 19:07:57,340 [strategy.vwap] INFO: Price=2783.00 VWAP=2778.21 -1SD=2763.82 +1SD=2792.59 RSI=86.2 ATR=6.61
-2026-04-23 19:07:57,340 [strategy.vwap] INFO: Price=2777.20 VWAP=2778.21 -1SD=2763.98 +1SD=2792.45 RSI=76.0 ATR=6.44
-2026-04-23 19:07:57,340 [strategy.vwap] INFO: Price=2776.30 VWAP=2778.19 -1SD=2764.07 +1SD=2792.30 RSI=59.0 ATR=5.04
-2026-04-23 19:07:57,340 [strategy.vwap] INFO: Price=2779.10 VWAP=2778.19 -1SD=2764.10 +1SD=2792.27 RSI=55.1 ATR=4.68
-2026-04-23 19:07:57,340 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
-2026-04-23 19:12:57,495 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 19:12:57,495 [bot] INFO: Switching MESM6 to ORB strategy (trend day)
-2026-04-23 19:12:57,495 [strategy.vwap] INFO: Trend day detected: VWAP not crossed by 11:00 ET
-2026-04-23 19:12:57,495 [bot] INFO: Switching MCLM6 to ORB strategy (trend day)
-2026-04-23 19:12:57,724 [tradovate_client] WARNING: MD WebSocket is closed, clearing subscriptions for reconnect
-2026-04-23 19:12:58,032 [tradovate_client] INFO: MD WebSocket connected
-2026-04-23 19:12:58,032 [tradovate_client] INFO: Subscribing to chart data: MESM6 (5min)
-2026-04-23 19:12:58,146 [tradovate_client] INFO: Chart subscription active: MESM6 (id=1395352)
-2026-04-23 19:12:58,376 [tradovate_client] INFO: MESM6: Received 50 historical bars via WebSocket
-2026-04-23 19:12:58,377 [bot] INFO: MESM6: got 50 bars from /md/getChart
-2026-04-23 19:12:58,377 [tradovate_client] INFO: Subscribing to chart data: MNQM6 (5min)
-2026-04-23 19:12:58,490 [tradovate_client] INFO: Chart subscription active: MNQM6 (id=1395354)
-2026-04-23 19:12:58,732 [tradovate_client] INFO: MNQM6: Received 50 historical bars via WebSocket
-2026-04-23 19:12:58,733 [bot] INFO: MNQM6: got 50 bars from /md/getChart
-2026-04-23 19:12:58,733 [strategy.vwap] INFO: Price=26893.75 VWAP=26962.13 -1SD=26846.19 +1SD=27078.07 RSI=46.3 ATR=38.43
-2026-04-23 19:12:58,733 [tradovate_client] INFO: Subscribing to chart data: MCLM6 (5min)
-2026-04-23 19:12:58,851 [tradovate_client] INFO: Chart subscription active: MCLM6 (id=1395358)
-2026-04-23 19:12:59,074 [tradovate_client] INFO: MCLM6: Received 50 historical bars via WebSocket
-2026-04-23 19:12:59,074 [bot] INFO: MCLM6: got 50 bars from /md/getChart
-2026-04-23 19:12:59,075 [tradovate_client] INFO: Subscribing to chart data: MGCM6 (5min)
-2026-04-23 19:12:59,188 [tradovate_client] INFO: Chart subscription active: MGCM6 (id=1395366)
-2026-04-23 19:12:59,427 [tradovate_client] INFO: MGCM6: Received 50 historical bars via WebSocket
-2026-04-23 19:12:59,428 [bot] INFO: MGCM6: got 50 bars from /md/getChart
-2026-04-23 19:12:59,428 [strategy.vwap] INFO: ATR filter: 6.98 outside range 1.0-6.0
-2026-04-23 19:12:59,428 [tradovate_client] INFO: Subscribing to chart data: MYMM6 (5min)
-2026-04-23 19:12:59,538 [tradovate_client] INFO: Chart subscription active: MYMM6 (id=1395372)
-2026-04-23 19:12:59,775 [tradovate_client] INFO: MYMM6: Received 50 historical bars via WebSocket
-2026-04-23 19:12:59,775 [bot] INFO: MYMM6: got 50 bars from /md/getChart
-2026-04-23 19:12:59,776 [strategy.vwap] INFO: Price=49480.00 VWAP=49383.49 -1SD=49228.27 +1SD=49538.70 RSI=65.2 ATR=52.43
-2026-04-23 19:12:59,894 [tradovate_client] INFO: Market order placed: Sell 1 MYMM6, orderId=472310967835
-2026-04-23 19:13:00,015 [tradovate_client] INFO: Stop order: Buy 1 MYMM6 @ stop=49695.918438988076
-2026-04-23 19:13:00,136 [tradovate_client] INFO: Limit order: Buy 1 MYMM6 @ 49383.48843112548
-2026-04-23 19:13:00,136 [bot] INFO: TRADE: Sell 1 MYMM6 @ 49480.00 SL=49695.92 TP=49383.49 Risk=$107.96 Strategy=VWAP Mean Reversion
-2026-04-23 19:13:02,282 [bot] WARNING: NO STOP LOSS found for MYMM6! Placing emergency SL...
-2026-04-23 19:13:02,420 [tradovate_client] INFO: Stop order: Buy 1 MYMM6 @ stop=49695.918438988076
-2026-04-23 19:13:02,423 [bot] INFO: Emergency SL placed at 49695.918438988076
-2026-04-23 19:13:02,423 [bot] WARNING: NO TAKE PROFIT found for MYMM6! Placing emergency TP...
-2026-04-23 19:13:02,544 [tradovate_client] INFO: Limit order: Buy 1 MYMM6 @ 49383.48843112548
-2026-04-23 19:13:02,545 [bot] INFO: Emergency TP placed at 49383.48843112548
-2026-04-23 19:13:02,703 [tradovate_client] INFO: Subscribing to chart data: M2KM6 (5min)
-2026-04-23 19:13:02,814 [tradovate_client] INFO: Chart subscription active: M2KM6 (id=1395390)
-2026-04-23 19:13:03,042 [tradovate_client] INFO: M2KM6: Received 50 historical bars via WebSocket
-2026-04-23 19:13:03,045 [bot] INFO: M2KM6: got 50 bars from /md/getChart
-2026-04-23 19:13:03,045 [strategy.vwap] INFO: Price=2778.30 VWAP=2778.19 -1SD=2764.13 +1SD=2792.25 RSI=49.4 ATR=4.25
-2026-04-23 19:13:03,046 [status_writer] ERROR: Failed to write status: [Errno 2] No such file or directory: 'status/status.json'
+--- Today's trades from log ---
+2026-04-27 13:30:16,372 [bot] INFO: TRADE: Buy 1 MGCM6 @ 4715.10 SL=4707.59 TP=4718.30 Risk=$75.15 Strategy=VWAP Mean Reversion
+2026-04-27 13:30:19,912 [bot] INFO: TRADE: Buy 3 M2KM6 @ 2797.40 SL=2791.66 TP=2797.35 Risk=$86.06 Strategy=VWAP Mean Reversion
+2026-04-27 13:36:47,346 [bot] INFO: TRADE: Buy 2 MNQM6 @ 27372.50 SL=27341.42 TP=27423.38 Risk=$124.34 Strategy=VWAP Mean Reversion
+2026-04-27 13:36:50,448 [bot] INFO: TRADE: Sell 2 MCLM6 @ 96.36 SL=96.90 TP=95.68 Risk=$108.60 Strategy=VWAP Mean Reversion
+2026-04-27 13:41:47,402 [bot] INFO: TRADE: Sell 3 MESM6 @ 7196.50 SL=7200.48 TP=7191.18 Risk=$59.67 Strategy=VWAP Mean Reversion
+2026-04-27 13:41:51,189 [bot] INFO: TRADE: Buy 3 MGCM6 @ 4708.40 SL=4704.28 TP=4717.05 Risk=$123.47 Strategy=VWAP Mean Reversion
+2026-04-27 13:51:52,309 [bot] INFO: TRADE: Buy 3 MGCM6 @ 4706.70 SL=4702.60 TP=4716.33 Risk=$123.04 Strategy=VWAP Mean Reversion
 
---- Positions ---
-Open positions: 1
-  4393747 netPos=-2
-Fills today: 2
-  2026-04-23T19:07:54.152Z Sell qty=1 price=49472.0
-  2026-04-23T19:12:59.838Z Sell qty=1 price=49472.0
+--- Today's strategy snapshots (last 6) ---
+2026-04-27 14:11:59,646 [strategy.vwap] INFO: Price=2793.30 VWAP=2800.97 dist=-1.60SD RSI=43.9 ATR=4.55
+2026-04-27 14:11:59,646 [strategy.vwap] INFO: Price=2804.10 VWAP=2800.86 dist=+0.72SD RSI=56.4 ATR=5.27
+2026-04-27 14:11:59,646 [strategy.vwap] INFO: Price=2802.10 VWAP=2801.11 dist=+0.22SD RSI=53.2 ATR=5.51
+2026-04-27 14:11:59,646 [strategy.vwap] INFO: Price=2803.60 VWAP=2801.22 dist=+0.55SD RSI=56.1 ATR=5.69
+2026-04-27 14:11:59,646 [strategy.vwap] INFO: Price=2800.00 VWAP=2801.23 dist=-0.29SD RSI=55.3 ATR=5.81
+2026-04-27 14:11:59,646 [strategy.vwap] INFO: Price=2800.70 VWAP=2801.22 dist=-0.12SD RSI=55.3 ATR=5.79
+
+--- Account balance + positions ---
+Open positions: 0
+Fills today: 0
+Balance: $50,944.30  Day PnL: $+0.00  Open PnL: $+0.00  Week PnL: $+0.00
 
 === Done ===
