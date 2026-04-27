@@ -1,6 +1,6 @@
 #!/bin/bash
 cd /root/MT5-PropFirm-Bot
-echo "=== Check v176 $(date -u '+%Y-%m-%d %H:%M UTC') | NY $(TZ=America/New_York date '+%H:%M') ==="
+echo "=== Live Status $(date -u '+%Y-%m-%d %H:%M UTC') | NY $(TZ=America/New_York date '+%H:%M %Z') ==="
 PID=$(systemctl show futures-bot --property=MainPID --value)
 CWD=$(readlink /proc/$PID/cwd 2>/dev/null)
 echo "Active: $(systemctl is-active futures-bot)  PID: $PID  CWD: $CWD"
